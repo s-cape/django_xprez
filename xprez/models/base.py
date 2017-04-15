@@ -74,6 +74,7 @@ class Content(models.Model):
             self.content_type = self.__class__.__name__.lower()
         return super(Content, self).save(*args, **kwargs)
 
+    @classmethod
     def _count_new_content_position(cls, page):
         result = page.contents.all().aggregate(Max('position'))
         if result['position__max'] is not None:
