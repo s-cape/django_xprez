@@ -1,0 +1,10 @@
+{% extends 'xprez/contents/base.html' %}
+{% load humanize %}
+
+{% block content %}
+    <div class="xprez-module">
+        <span class="codehilite">
+          {{ content.get_highlighted_code|safe }}
+        </span>
+    </div>
+{% endblock %}
