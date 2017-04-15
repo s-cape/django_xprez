@@ -1,0 +1,44 @@
+{#<div class="xprez-form-row">#}
+{#    {{ form.name.errors }}#}
+{#    <div class="xprez-cell-label xprez-required">#}
+{#        {{ form.name.label_tag }}#}
+{#    </div>#}
+{#    <div class="xprez-cell">#}
+{#        <div class="xprez-multi-field">{{ form.name }}</div>#}
+{#        <div class="xprez-multi-field xprez-required error">#}
+{#            {{ form.job_title.label_tag }}#}
+{#            <div class="xprez-multi-field-cell">#}
+{#                {{ form.job_title }}#}
+{#                <span class="xprez-sub-info">This field is required</span>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+<div class="xprez-form-row">
+    <div class="xprez-cell-label {% if field_1.field.required %}xprez-required{% endif %} {% if field_1.errors %}error{% endif %}">
+        {{ field_1.label_tag }}
+    </div>
+    <div class="xprez-cell">
+        <div class="xprez-multi-field {% if field_1.errors %}error{% endif %}">{{ field_1 }}
+            {% include 'xprez/admin/form/field_errors.html' with field=field_1 %}
+        </div>
+
+        <div class="xprez-multi-field {% if field_2.field.required %}xprez-required{% endif %} {% if field_2.errors %}error{% endif %}">
+            {{ field_2.label_tag }}
+            <div class="xprez-multi-field-cell">
+                {{ field_2 }}
+                {% include 'xprez/admin/form/field_errors.html' with field=field_2 %}
+            </div>
+        </div>
+        {% if field_3 %}
+            <div class="xprez-multi-field {% if field_3.field.required %}xprez-required{% endif %} {% if field_3.errors %}error{% endif %}">
+                {{ field_3.label_tag }}
+                <div class="xprez-multi-field-cell">
+                    {{ field_3 }}
+                    {% include 'xprez/admin/form/field_errors.html' with field=field_3 %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

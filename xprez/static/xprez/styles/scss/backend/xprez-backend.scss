@@ -1,0 +1,241 @@
+
+
+// SCSS imports
+@import "../config";
+@import "../library/mixins";
+@import "icons";
+@import "photo-gallery"; 
+@import "messaging"; 
+@import "form-elements"; 
+@import "../frontend/layout"; 
+@import "../frontend/article-text"; 
+
+
+// GENERAL LAYOUT
+.xprez {
+	@include boxSizing;
+	@include sans($font-b);
+	font-size: $basefont-b;
+	font-weight: 400;
+	min-width: $min-width;
+	padding: 0;
+	margin-top: $g;
+}
+.xprez-module {
+	@include borderRadius(2px);
+	border: 1px solid $b-gray-4;
+	
+	margin: $g 0;
+	&.collapsed .xprez-module__collapse-cont {
+		display: none;
+	}
+}
+.xprez-module__title {
+	background: $b-gray-2;
+	text-align: center;
+	h2 {
+		@include type-b(12px);
+		color: darken($b-gray-7,15%);
+		cursor: move;
+	}
+	.xprez-icon-btn-collapse {
+		float: left;
+		margin-top: 2px;
+		margin-left: 2px;
+	}
+	.xprez-icon-btn-remove {
+		float: right;
+		margin-top: 2px;
+		margin-right: 2px;
+	}
+}
+.xprez-module__options {
+	background: $b-gray-2;
+	text-align: center;
+	padding: 2px 2px 5px;
+	line-height: 28px;
+	&.hidden {
+		display: none;
+	}
+}
+.xprez-module__content {
+	background: white;
+	border-top: 1px solid $b-gray-4; 
+	//min-height: 200px;
+	padding: 15px;
+}
+//
+.xprez-module__options-group {
+	@include reset_list;
+	display: inline-block;
+	padding: 0 10px;
+	border-left: 1px solid $b-gray-5;
+	&:first-child {
+		border-left: none;
+	}
+	li {
+		display: inline-block;
+		vertical-align: middle;
+	}
+}
+//
+.xprez-add {
+	text-align: center;
+	h2 {
+		@include type-b(13px,2,2,2);
+		color: $b-gray-7;
+		font-weight: normal;
+	}
+}
+.xprez-add__list {
+	@include reset_list;
+	li {
+		display: inline-block;
+		cursor: pointer;
+		width: 60px;
+		padding: 0 5px;
+		vertical-align: top;
+		&:hover {
+			.xprez-add__label { color: $b-blue; }
+			[class^="xprez-icon-btn-add"], [class*=" xprez-icon-btn-add"] {
+				background: $b-blue;
+			}
+		}
+	}
+}
+.xprez-add__label {
+	@include type-b(12px,0.9,.5,1);
+	display: inline-block;
+	color: $b-gray-7;
+}
+
+
+// 
+// Icon Buttons
+// 
+
+[class^="xprez-icon-btn-"], [class*=" xprez-icon-btn-"] {
+	width: 28px;
+	text-align: center;
+	cursor: pointer;
+	color: $b-gray-7;
+	display: inline-block;
+	vertical-align: middle;
+	@include borderRadius(2px);
+	&:before {
+		font-size: 20px;
+		line-height: 28px;
+	}
+	&:hover {
+		background: $b-gray-4;
+	}
+	&.active {
+		color: white;
+		background: $b-gray-7;
+	}
+}
+.xprez-icon-btn-remove:before {content: "\e872";}
+.xprez-icon-btn-collapse:before {
+	content: "\e5c6"; 
+	font-size: 28px;
+	.collapsed & { content: "\e5c5";}
+}
+.xprez-icon-btn-remove.active{
+	background: $b-red;
+}
+
+.xprez-icon-btn-layout_1:before {content: "\e8f3";}
+.xprez-icon-btn-layout_2:before	{content: "\e8f2";}
+.xprez-icon-btn-layout_3:before	{content: "\e8f0";}
+.xprez-icon-btn-layout_4:before	{content: "\e42a";}
+.xprez-icon-btn-crop:before	{content: "\e3be";}
+
+// Text Buttons
+
+.xprez-option-btn {
+	@include type-b(12px, 28px);
+	@include borderRadius(2px);
+	display: inline-block;
+	color: $b-gray-7;
+	padding: 0 7px;
+	letter-spacing: 0.02em;
+	cursor: pointer;
+	&:hover {
+		background: $b-gray-4;
+	}
+	&.active {
+		color: white;
+		background: $b-gray-7;
+	}
+}
+
+// Add icon buttons
+[class^="xprez-icon-btn-add"], [class*=" xprez-icon-btn-add"] {
+	@include transition;
+	width: 60px;
+	cursor: pointer;
+	color: white;
+	display: inline-block;
+	background: $b-gray-7;
+	@include borderRadius(30px);
+	&:before {
+		font-size: 25px;
+		line-height: 60px;
+	}
+	&:hover {
+		background: $b-purple;
+	}
+	&.active {
+		color: white;
+		background: $b-gray-8;
+	}
+}
+.xprez-icon-btn-add-text_content:before {content: "\e235";}
+.xprez-icon-btn-add-text_box:before {content: "\e8b0";}
+.xprez-icon-btn-add-code_template:before {content: "\e8be";}
+.xprez-icon-btn-add-numbers:before {content: "\e3d4";}
+.xprez-icon-btn-add-video:before {content: "\e8da";}
+.xprez-icon-btn-add-gallery:before {content: "\e432";}
+.xprez-icon-btn-add-feature_boxes:before {content: "\e875";}
+.xprez-icon-btn-add-code:before {content: "\e86f";}
+.xprez-icon-btn-add-quote:before {content: "\e0b7";}
+.xprez-icon-btn-add-linked_article:before {content: "\e86e";}
+.xprez-icon-btn-add-downloads:before {content: "\e2c0";}
+
+// Option forms
+.xprez-option-label {
+	@include type-b(12px, 28px);
+	display: inline-block;
+	color: $b-gray-7;
+	letter-spacing: 0.02em;
+}
+.xprez .xprez-option-input {
+	@include sans($font-b);
+	@include borderRadius(2px);
+	@include boxShadow(none);
+	@include boxSizing;
+	@include type-b(12px, 20px);
+	height: auto;
+	width: 150px;
+	vertical-align: middle;
+	padding: 3px 5px;
+	border: 1px solid $b-gray-4;
+}
+
+// medium editor layout 
+
+.xprez {
+	.medium-editor {
+		margin: 0 30px;
+	}
+	.medium-editor-simple {
+		margin: 0;
+	}
+}
+
+
+
+
+
+
+

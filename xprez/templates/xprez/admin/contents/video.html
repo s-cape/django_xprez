@@ -1,0 +1,21 @@
+{% extends 'xprez/admin/contents/base.html' %}
+
+{% block options %}
+    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-width">
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_FULL }}">Full width</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_MID }}">Mid width</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_TEXT }}">Text width</span></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="xprez-form-table">
+        {% include 'xprez/admin/form/row.html' with field=content.admin_form.url %}
+        {% include 'xprez/admin/form/row.html' with field=content.admin_form.poster_image %}
+    </div>
+{% endblock %}
+
+{% block hidden_form %}
+{{ block.super }}
+{{ content.admin_form.width }}
+{% endblock %}

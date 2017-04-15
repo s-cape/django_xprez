@@ -1,0 +1,60 @@
+{% extends 'xprez/admin/contents/base.html' %}
+
+{% block options %}
+    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-columns">
+        <li><span class="xprez-icon-btn-layout_1 js-option" data-formfield_value="1"></span></li>
+        <li><span class="xprez-icon-btn-layout_2 js-option" data-formfield_value="2"></span></li>
+        <li><span class="xprez-icon-btn-layout_3 js-option" data-formfield_value="3"></span></li>
+        <li><span class="xprez-icon-btn-layout_4 js-option" data-formfield_value="4"></span></li>
+    </ul>
+
+    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-width">
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_FULL }}">Full width</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_MID }}">Mid width</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_TEXT }}">Text width</span></li>
+    </ul>
+
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-icon-btn-crop js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-crop"></span></li>
+    </ul>
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-divided">Connected Edges</span></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="js-dropzone js-dropzone-{{ content.pk }} xprez-gallery__dropzone" data-content_pk="{{ content.pk }}" data-uploadurl="{% url 'xprez:gallery_ajax_upload_item' content.pk %}">
+        Drop files here or click to choose images from disk<br>
+    </div>
+    <div class="js-item-container" data-content_pk="{{ content.pk }}">
+        {% for item in content.get_formset_queryset %}
+            {% include content.admin_formset_item_template_name with number=forloop.counter0 %}
+        {% endfor %}
+    </div>
+
+
+{% endblock %}
+
+{% block errors %}
+    {{ block.super }}
+    {% if content.formset.total_error_count > 0 %}
+        {{ content.formset.errors }}
+    {% endif %}
+{% endblock %}
+
+{% block hidden_form %}
+    {{ content.admin_form }}
+    <div class="js-item-formset">
+        {{ content.formset }}
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        $(function () {
+            var $container = $('.js-content-{{ content.pk }}');
+            activateAjaxUploadFormset($container, '{{ content.identifier }}s');
+        });
+    </script>
+{% endblock %}

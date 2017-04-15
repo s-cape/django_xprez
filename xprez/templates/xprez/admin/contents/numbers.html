@@ -1,0 +1,25 @@
+{% extends 'xprez/admin/contents/base.html' %}
+
+
+{% block options_class %}hidden{% endblock %}
+
+{% block content %}
+    <div style="display: none;">
+    {{ content.formset.management_form }}
+    </div>
+    {% for form in content.formset %}
+        <div class="xprez-form-table js-quoteform-{{ forloop.counter0 }}">
+            <span style="display: none">
+            {{ form.id }}
+            {{ form.DELETE }}
+            </span>
+            {% include 'xprez/admin/form/multi_row.html' with field_1=form.number field_2=form.suffix field_3=form.title %}
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block js %}
+
+{% endblock %}

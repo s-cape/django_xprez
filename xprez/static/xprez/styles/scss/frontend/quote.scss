@@ -1,0 +1,79 @@
+.xprez-quote {
+	&.xprez-quote-boxed {
+		background: $super-light-gray;
+	}
+}
+.xprez-quote-box {
+	@include s-width;
+	@include xprez-mobile-extra-space;
+	@include clearfix;
+	text-align: center;
+	.xprez-quote-boxed & {
+		padding-top: $g*4;
+		padding-bottom: $g*4;
+		@media only screen and (max-width: ($typobreakS)) {
+			padding-top: $g*2;
+			padding-bottom: $g*2;
+		}
+	}
+}
+.xprez-quote-title {
+	margin-bottom: $g*2;
+	@media only screen and (max-width: ($typobreakM)) {
+		margin-bottom: $g*1;
+	}
+}
+.xprez-qoute__img {
+	width: 140px;
+	height: auto;
+	@include borderRadius(70px);
+}
+.xprez-quote__name {
+	@include type(16px,1.5);
+	font-weight: 700;
+}
+.xprez-quote__job-title {
+	@include type(13px,1.5);
+	font-style: italic;
+	color: $gray;
+	max-width: 250px;
+	@include center_block;
+}
+.xprez-quote__quote {
+	margin-top: $g*1.5;
+	h4 {
+		@include type(28px,2,0,1);
+		@include type-min(20px,2,0,1);
+		letter-spacing: -0.01em;
+	}
+	p {
+		@include serif;
+		@include type(18px,2, 0, 1);
+		@include type-min(16px,1.5, 0, 1);
+		font-style: italic;
+	}
+}
+.xprez-quote-cols-2 {
+	.xprez-quote__item {
+		@include boxSizing;
+		width: 45%;
+		float: left;
+	    &:last-child {
+	    	float: right;
+	    }
+	    @media only screen and (max-width: $typobreakM) {
+	    	width: auto;
+			float: none;
+			&:last-child {
+				margin-top: $g*2;
+			}
+	    }
+		p {
+			@include type(16px,1.7, 0, 1);
+		}
+		.xprez-qoute__img {
+			width: 100px;
+			@include borderRadius(50px);
+		}
+	}
+}

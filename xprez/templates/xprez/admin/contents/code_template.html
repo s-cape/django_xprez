@@ -1,0 +1,7 @@
+{% extends 'xprez/admin/contents/base.html' %}
+{% block options_class %}hidden{% endblock %}
+{% block content %}
+    <div class="xprez-form-table">
+        {% include 'xprez/admin/form/row.html' with field=content.admin_form.template_name %}
+    </div>
+{% endblock %}

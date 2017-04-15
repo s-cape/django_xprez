@@ -1,0 +1,121 @@
+.xprez-gallery__item {
+	position: relative;
+	display: inline-block;
+	width: 220px;
+	margin: 0 10px 10px 0;
+	input[type=text] {
+		@include boxSizing();
+		@include placeholder($b-gray-6);
+		@include boxShadow(none);
+		@include borderRadius(0px);
+		@include type (13px,1);
+		width: 100%;
+		padding: 10px 3px;
+		margin-top: 5px;
+		border: none;
+		border-bottom: 1px solid transparent;
+		//text-align: center;
+		&:hover {
+			border-bottom-color: $b-gray-3;
+		}
+		&:focus {
+			border-bottom: 1px solid $b-blue-high;
+			//background: $b-gray-3;
+			color: $b-gray-8;
+		}
+	}
+	.xprez-icon-btn-remove {
+		position: absolute;
+		right: 0;
+		display: none;
+		&:before { color: white; }
+
+		&:hover {
+			background: none;
+		 	&:before { color: $b-red; }
+		}
+		&.active {
+			background: $b-red;
+			display: block;
+		}
+	}
+	&:hover {
+		.xprez-icon-btn-remove {
+			display: block;
+		}
+	}
+}
+.xprez-gallery__img {
+	cursor: move;
+}
+.xprez-gallery__dropzone {
+	border: 1px dotted $b-gray-5;
+	@include borderRadius(2px);
+	@include type(16px);
+	text-align: center;
+	padding: $g*1.5 15px;
+	color: $b-gray-6;
+	margin-bottom: $g;
+	cursor: pointer;
+	font-style: italic;
+	overflow: hidden;
+	&:hover {
+		color: $b-gray-8;
+		border-color:  $b-blue-high;
+	}
+}
+
+/// Drop Zone module (while loading images)
+
+.xprez .dz-preview {
+	position: relative;
+	display: inline-block;
+	margin: 5px 10px 5px 0;
+	.dz-details, .dz-success-mark, .dz-error-mark {
+		display: none;
+	}
+	.dz-success-mark {
+		svg {
+			width: 30px;
+		}
+		#Oval-2 {
+			fill: green;
+		}
+	} 
+	.dz-error-mark {
+		svg {
+			width: 30px;
+		}
+		#Oval-2 {
+			fill: $b-red;
+		}
+	}
+	.dz-image {
+		opacity: 0.5;
+	}
+	.dz-progress {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 5px;
+		background: white;
+		border-top: 2px solid white;
+		.dz-upload {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			height: 100%;
+			background: $b-blue-high;
+		}
+	}
+}
+.xprez .dz-processing .dz-image {
+	opacity: 1;
+}
+
+
+
+
+
+

@@ -1,0 +1,57 @@
+@font-face {
+  font-family: 'xprez';
+  src:  url('../fonts/xprez.eot?tihpyk');
+  src:  url('../fonts/xprez.eot?tihpyk#iefix') format('embedded-opentype'),
+    url('../fonts/xprez.ttf?tihpyk') format('truetype'),
+    url('../fonts/xprez.woff?tihpyk') format('woff'),
+    url('../fonts/xprez.svg?tihpyk#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="xprez-icon-"], [class*=" xprez-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'xprez' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.xprez-icon-add_circle:before { content: "\e147";}
+.xprez-icon-control_point:before {content: "\e3ba";}
+.xprez-icon-arrow_right:before {content: "\e5c5";}
+.xprez-icon-arrow_down:before {content: "\e5c6";}
+.xprez-icon-linked_article:before {content: "\e86e";}
+.xprez-icon-cancel:before {content: "\e5c9";}
+.xprez-icon-quote:before {content: "\e0b7";}
+.xprez-icon-close:before {content: "\e5cd";}
+.xprez-icon-code:before {content: "\e86f";}
+.xprez-icon-crop:before {content: "\e3be";}
+.xprez-icon-delete:before {content: "\e872";}
+.xprez-icon-feature_boxes:before {content: "\e875";}
+.xprez-icon-done:before {content: "\e876";}
+.xprez-icon-numbers:before {content: "\e3d4";}
+.xprez-icon-text_content:before {content: "\e235";}
+.xprez-icon-video:before {content: "\e8da";}
+.xprez-icon-gallery:before {content: "\e432";}
+.xprez-icon-text_box:before {content: "\e8b0";}
+.xprez-icon-code_template:before {content: "\e8be";}
+.xprez-icon-videocam:before {content: "\e04b";}
+.xprez-icon-layout_4:before {content: "\e42a";}
+.xprez-icon-layout_stream:before {content: "\e42b";}
+.xprez-icon-layout_3:before {content: "\e8f0";}
+.xprez-icon-layout_2:before {content: "\e8f2";}
+.xprez-icon-layout_1:before {content: "\e8f3";}
+.xprez-icon-play_arrow:before {content: "\e037";}
+.xprez-icon-play_circle_filled:before {content: "\e038";}
+.xprez-icon-play_circle_outline:before {content: "\e039";}
+.xprez-icon-cloud_download:before {content: "\e2c0";}
+.xprez-icon-btn-add-files:before {content: "\e226";}
+

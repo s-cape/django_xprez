@@ -1,0 +1,25 @@
+{
+  "name": "counter.up",
+  "homepage": "https://github.com/chris-verclytte/Counter-Up",
+  "authors": [
+    "Benjamin Intal",
+    "Jeremy Paris"
+  ],
+  "description": "Counter-Up is a lightweight jQuery plugin that counts up to a targeted number when the number becomes visible. Supports Waypoint v3",
+  "main": "jquery.counterup.min.js",
+  "moduleType": [],
+  "keywords": [
+    "jquery",
+    "counter",
+    "up",
+    "counterup"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

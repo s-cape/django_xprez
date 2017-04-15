@@ -1,0 +1,46 @@
+.xprez-numbers {
+	text-align: center;
+	padding: $g*2 0 $g*1; 
+	@media only screen and (max-width: ($breakS)) {
+		padding: $g*1 0 0;
+	}
+}
+.xprez-number-item {
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 30px $g*2;
+	
+	@media only screen and (max-width: ($breakM)) {
+		min-width: 130px;
+	}
+	@media only screen and (max-width: ($breakS)) {
+		min-width: 120px;
+		margin: 0 10px $g*1.5;
+	}
+}
+.xprez-number-item {
+	
+}
+.xprez-number {
+	@include type(50px,4);
+	@include type-min(40px,2);
+	@include condensed;
+	.wf-active & {
+		@include type(70px,4);
+	}
+}
+.xprez-number-title {
+	@include type(12px,1.2);
+	text-transform: uppercase;
+	font-weight: bold;
+	max-width: 100px;
+	display: inline-block;
+	&:before {
+		content:'';
+		display: block;
+		height: 1px;
+		background: $light-gray;
+		width: 16px;
+		margin: $g auto $g;
+	}
+}

@@ -1,0 +1,14 @@
+{
+  "name": "xprez",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "medium-editor": "~5.15.0",
+    "medium-editor-insert-plugin": "~2.2.4",
+    "photoswipe": "~4.1.1",
+    "froogaloop": "1.0.0",
+    "rangy": "^1.3.0",
+    "picturefill": "~3.0.3",
+    "counter.up": "1.1.0"
+  }
+}

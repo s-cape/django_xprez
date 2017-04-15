@@ -1,0 +1,142 @@
+function activateAddContentLinks() {
+    var $contentsContainer = $('.js-contents-container');
+    $('.js-add-content').each(function (index, el) {
+        var $el = $(el);
+        $el.click(function () {
+            $.get($el.data('url'), function (data) {
+                $contentsContainer.append(data.template);
+                var $content = $('.js-content-' + data.content_pk);
+                activateFormfieldControllers($content);
+                activateCollapsers($content);
+
+            });
+        });
+    });
+}
+
+
+function activateCheckboxControllers($scope) {
+    $scope.find('.js-checkbox_controller').each(function (index, el) {
+        var $el = $(el);
+        var $checkbox = $($el.data('formfield_selector'));
+        if ($checkbox.is(':checked')) {
+            $el.addClass('active');
+            $el.trigger('activated');
+        }
+        else {
+            $el.trigger('deactivated');
+        }
+        $el.click(function () {
+            if ($checkbox.is(':checked')) {
+                $checkbox.prop('checked', false);
+                $el.removeClass('active');
+                $el.trigger('deactivated');
+
+            }
+            else {
+                $checkbox.prop('checked', true);
+                $el.addClass('active');
+                $el.trigger('activated');
+
+            }
+        });
+    });
+}
+
+function activateSelectControllers($scope) {
+    $scope.find('.js-select_controller').each(function (index, el) {
+        var $el = $(el);
+        var $options = $el.find('.js-option');
+        var $formField = $($el.data('formfield_selector'));
+        $el.find('.js-option[data-formfield_value="' + $formField.val() + '"]').addClass('active');
+        $options.click(function () {
+            var $this = $(this);
+            $options.removeClass('active');
+            $this.addClass('active');
+            $formField.val($this.data('formfield_value'));
+        });
+    });
+}
+
+function activateCollapsers($scope) {
+    $scope.find('.js-collapser').each(function (index, el) {
+        var $collapsible = $(this).parent().parent('.xprez-module');
+        $(this).click(function () {
+            $collapsible.toggleClass('collapsed')
+        });
+
+    });
+}
+
+function activateTextControllers($scope) {
+    $scope.find('.js-text_controller').each(function (index, el) {
+        var $el = $(el);
+        var $formField = $($el.data('formfield_selector'));
+        $el.val($formField.val());
+        $el.on("change paste keyup", function () {
+            $formField.val($el.val());
+        })
+    });
+}
+
+
+function activateDeleteButtons($scope) {
+    $scope.find('.js-delete-content').each(function (index, el) {
+        var $el = $(el);
+        var url = $el.data('url');
+        $el.on('click', function () {
+            if (confirm("Are you sure you wish to delete this block?")) {
+                $.post(url);
+                $('.js-content-'+$el.data('pk')).remove();
+            }
+        });
+
+    })
+}
+
+//
+// function hideErrorsForDeletedContents() {
+//     $('.js-content').each(function (index, el) {
+//         var $el = $(el);
+//         var $delete = $el.find('#id_content-' + $el.data('pk') + '-delete');
+//         if ($delete.is(':checked')) {
+//             $el.removeClass('xprez-module--error');
+//             $el.find('.xprez-cell, .xprez-multi-field').removeClass('error');
+//             $el.find('.xprez-sub-info').hide();
+//         }
+//
+//     });
+//
+// }
+
+
+function activateFormfieldControllers($scope) {
+    activateCheckboxControllers($scope);
+    activateSelectControllers($scope);
+    activateTextControllers($scope);
+    activateDeleteButtons($scope);
+}
+
+$(function () {
+    var $container = $('.js-contents-container');
+    activateAddContentLinks();
+    activateFormfieldControllers($container);
+    activateCollapsers($container);
+    // hideErrorsForDeletedContents();
+
+    $($container).sortable({
+        'handle': '.js-sortable-handler',
+        update: function (event, ui) {
+            $('.js-content').each(function (index, el) {
+                var $el = $(el);
+                var $positionForm = $('#id_content-' + $el.data('pk') + '-position');
+                $positionForm.val(index);
+            });
+        }
+
+    });
+
+    $('.js-collapse_all').click(function () {
+        $('.xprez-module').addClass('collapsed');
+    });
+});

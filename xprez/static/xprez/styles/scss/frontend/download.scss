@@ -1,0 +1,50 @@
+.xprez-download {
+	@include boxSizing;
+	@include clearfix;
+	background: $super-light-gray;
+	max-width: 100%;
+	@include cont-width($s-width + $m-space*6);
+	padding: $g*3 $m-space*3;
+
+	@media only screen and (max-width: ($breakM+200)) {
+		padding: $g*2 $m-space;
+	}
+	@media only screen and (max-width: ($breakS)) {
+		padding: $g*2 $s-space;
+	}
+}
+.xprez-download-item {
+	margin: $g*.5 30px 0 0;
+	display: table-row;
+	@media only screen and (max-width: (520px)) {
+		display: block;
+		margin-right: 0;
+	}
+	.btn {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		white-space: nowrap;	
+	}
+	h4 {
+		@include type(16px,1.5, 0, 1);
+		@include type-min(14px,1.5, 0, 1);
+		@include sans;
+		font-weight: bold;
+		display: table-cell;
+		padding-left: 20px;
+		@media only screen and (max-width: (520px)) {
+			display: block;
+			font-weight: normal;
+			padding-left: 20px;
+		}
+	}
+	.xprez-download-btn {
+		display: table-cell;
+		padding: 10px 0;
+		@media only screen and (max-width: (520px)) {
+			display: block;
+			.btn { display: block;}
+		}
+	}
+	
+}

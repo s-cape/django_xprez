@@ -1,0 +1,38 @@
+@mixin cont-width($w) {
+	@include boxSizing;
+	max-width: $w;
+	margin-left: auto;
+	margin-right: auto;
+}
+@mixin full-width () {
+	@include cont-width(100%)
+}
+.xprez-full-width {
+	@include full-width;
+}
+@mixin m-width() {
+	@include cont-width($m-width)
+}
+.xprez-m-width {
+	@include m-width;
+}
+@mixin s-width {
+	@include cont-width($s-width)
+}
+.xprez-s-width {
+	@include s-width; 
+}
+@mixin xprez-mobile-extra-space {
+	@media only screen and (max-width: ($s-width + $m-space*2)) {
+		padding: 0 $m-space;
+	}
+	@media only screen and (max-width: ($breakS)) {
+		padding: 0 $s-space;
+	}
+}
+.xprez-module {
+	clear: both;
+	&:last-child {
+		//margin-bottom: $g*6;
+	}
+}

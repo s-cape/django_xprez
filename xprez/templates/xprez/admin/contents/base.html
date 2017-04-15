@@ -1,0 +1,35 @@
+<div class="xprez-module {% if content.admin_has_errors %}xprez-module--error{% endif %} js-content js-content-{{ content.pk }}" data-pk="{{ content.pk }}">
+    {% block js %}{% endblock %}
+    <div style="display: none;">
+        {% block hidden_form %}
+            {{ content.admin_form.position }}
+            {{ content.admin_form.delete }}
+        {% endblock %}
+    </div>
+    <div class="xprez-module__title js-sortable-handler">
+        <span class="xprez-icon-btn-collapse js-collapser"></span>
+        <span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_delete_content' content.pk %}"></span>
+        <h2>{{ content.verbose_name }}</h2>
+    </div>
+    <div class="xprez-module__collapse-cont">
+        <div class="xprez-module__options {% block options_class %}{% endblock %}">
+            {% block options %}
+
+            {% endblock %}
+        </div>
+
+        <div class="xprez-module__content">
+            {% block errors %}
+                {% if content.admin_form.non_field_errors %}
+                    <ul class="xprez-error-list">
+                        {% for error in content.admin_form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endblock %}
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>

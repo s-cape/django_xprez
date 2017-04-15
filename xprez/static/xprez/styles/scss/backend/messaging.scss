@@ -1,0 +1,10 @@
+.xprez-module.xprez-module--error {
+	border-color: lighten($b-red,15%);
+}
+.xprez-error-list {
+	//display: none;
+	color: $b-red;
+	@include reset_list;
+	@include type-b(13px,1);
+	margin-bottom: $g;
+}

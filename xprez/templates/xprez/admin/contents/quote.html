@@ -1,0 +1,68 @@
+{% extends 'xprez/admin/contents/base.html' %}
+
+{% block options %}
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-option-btn js-checkbox_controller js-two" data-formfield_selector="#id_content-{{ content.pk }}-display_two">Two comments</span></li>
+    </ul>
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-box">Box</span></li>
+
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div style="display: none;">
+    {{ content.formset.management_form }}
+    </div>
+    <div class="xprez-form-table">
+            {% include 'xprez/admin/form/row.html' with field=content.admin_form.title %}
+
+    </div>
+    {% for form in content.formset %}
+        <div class="xprez-form-table js-quoteform-{{ forloop.counter0 }}">
+            <span style="display: none">
+            {{ form.id }}
+            {{ form.DELETE }}
+            </span>
+            {% include 'xprez/admin/form/multi_row.html' with field_1=form.name field_2=form.job_title %}
+            {% include 'xprez/admin/form/row.html' with field=form.image %}
+            {% include 'xprez/admin/form/row.html' with field=form.title %}
+            {% include 'xprez/admin/form/row.html' with field=form.quote %}
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block hidden_form %}
+    {{ block.super }}
+    {{ content.admin_form.display_two }}
+    {{ content.admin_form.box }}
+
+
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        $(function () {
+            var $content = $('.js-content-{{ content.pk }}');
+            var $jsTwo = $content.find('.js-two');
+            var $2ndQuote = $content.find('.js-quoteform-1');
+            var $2ndDelete = $2ndQuote.find('input[type=checkbox]');
+            if (!$jsTwo.hasClass('active')) {
+                $2ndQuote.hide();
+                $2ndDelete.prop('checked', true);
+            }
+            $jsTwo.on('activated', function () {
+                $2ndQuote.show();
+                $2ndDelete.prop('checked', false);
+            });
+            $jsTwo.on('deactivated', function () {
+                $2ndDelete.prop('checked', true);
+                $2ndQuote.hide();
+            });
+
+
+        });
+    </script>
+{% endblock %}

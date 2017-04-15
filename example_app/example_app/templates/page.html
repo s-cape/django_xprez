@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load xprez %}
+{% block script_extra %}
+    {% xprez_front_media %}
+{% endblock %}
+
+{% block content %}
+    {% include 'xprez/includes/photoswipe.html' %}
+
+    <ul class="">
+    {% for page in pages %}
+        <li><a href="{{ page.get_absolute_url }}">{{ page }}</a></li>
+    {% endfor %}
+    </ul>
+    {% include 'xprez/container.html' with contents=page.contents.all %}
+{% endblock %}
+

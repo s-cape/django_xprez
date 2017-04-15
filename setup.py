@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+from setuptools import setup, find_packages
+
+PACKAGE = "xprez"
+NAME = "django_xprez"
+DESCRIPTION = "Django CMS for presentation websites"
+AUTHOR = "Michal Májský, Martin Kappel, Jakub Dolejšek, Michal Tilsch - s-cape.cz & mimatik.com"
+AUTHOR_EMAIL = "michal.majsky@s-cape.cz"
+URL = "https://www.s-cape.cz"
+VERSION = '0.0.1'
+LICENSE = "Mozilla Public License 2.0 (MPL 2.0)"
+
+setup(
+    name=NAME,
+    version=VERSION,
+    description=DESCRIPTION,
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    license=LICENSE,
+    url=URL,
+    packages=["xprez"],
+    include_package_data=True,
+    classifiers=[
+        # "Development Status :: 5 - Production/Stable",
+        "Environment :: Web Environment",
+        "Framework :: Django",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+    ],
+    install_requires=[
+        "html5lib",
+        "beautifulsoup4",
+        "Pillow>=3.0.0",
+        "sorl-thumbnail",
+        "django>=1.10"
+    ],
+    # test_suite="runtests.run_tests",
+)

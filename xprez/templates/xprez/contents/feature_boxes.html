@@ -1,0 +1,18 @@
+{% extends 'xprez/contents/base.html' %}
+
+{% block content %}
+<div class="xprez-module xprez-feature-boxes">
+    {% if content.box_1 %}
+    <div class="xprez-feature-box-1">{{ content.box_1|safe }}</div>
+    {% endif %}
+    
+    {% if content.box_2 %}
+    <div class="xprez-feature-box-2">{{ content.box_2|safe }}</div>
+    {% endif %}
+    
+    {% if content.box_3 %}
+    <div class="xprez-feature-box-3">{{ content.box_3|safe }}</div>
+    {% endif %}
+</div>
+{% endblock %}
+

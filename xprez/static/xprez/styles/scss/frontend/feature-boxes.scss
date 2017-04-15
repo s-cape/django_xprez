@@ -1,0 +1,24 @@
+$fb-space : 10px;
+
+.xprez-feature-boxes {
+	@include clearfix; 
+	@include cont-width($m-width + $fb-space*4);
+	padding: 0 10px;
+}
+[class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
+	@include boxSizing;
+	float: left;
+	width: 33.33%;
+	width: calc(33.33% - 20px);
+	margin: 0 10px;
+	background: $super-light-gray;
+	padding: $g*2 40px;
+	@media only screen and (max-width: ($s-width + $m-space*2)) {
+       float: none;
+       width: auto;
+       margin: 10px 0;
+    }
+    @media only screen and (max-width: $typobreakS) {
+       padding: $g*1 20px;
+    }
+}

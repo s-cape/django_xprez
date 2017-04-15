@@ -1,0 +1,29 @@
+{% extends 'xprez/admin/contents/base.html' %}
+
+{% block options_class %}hidden{% endblock %}
+
+{% block content %}
+    <div class="xprez-form-table">
+        {% include 'xprez/admin/form/row.html' with field=content.admin_form.box_1 %}
+    </div>
+    <div class="xprez-form-table">
+        {% include 'xprez/admin/form/row.html' with field=content.admin_form.box_2 %}
+    </div>
+    <div class="xprez-form-table">
+        {% include 'xprez/admin/form/row.html' with field=content.admin_form.box_3 %}
+    </div>
+{#    {{ content.admin_form.box_1 }}#}
+{#    {{ content.admin_form.box_2 }}#}
+{#    {{ content.admin_form.box_3 }}#}
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        jqueryME(document).ready(function () {
+            initializeMediumEditors(jqueryME('.js-content-{{ content.pk }}'));
+        });
+    </script>
+{% endblock %}
+
+

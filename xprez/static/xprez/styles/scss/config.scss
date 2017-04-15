@@ -1,0 +1,66 @@
+// 
+// FRONTEND
+// 
+
+	// breakpoints
+	$breakS: 430px; 
+	$breakM: 650px;
+	$breakL: 1024px;   
+
+	// margins
+	$l-space: 90px;
+	$m-space: 25px;
+	$s-space: 10px;
+	$xs-space: 7px;
+
+	// layout widths
+	$full-width: 100%;
+	$m-width: 1260px;
+	$s-width: 700px;  
+
+	// typo 18/32
+	$typobreakS: $breakS;
+	$typobreakM: $breakM;
+	$typobreakL: $breakL;
+
+	// grid
+	$g: 16px;
+	$basefont: 18px;  
+
+	$sans:  "acumin-pro", Helvetica ,Arial , sans-serif;
+	$serif:  Georgia, serif;
+	$condensed: "trumpgothicpro",sans-serif;
+
+	//colors
+	$white: #FFF;
+	$black: #1E1E21;
+	$light-gray: #D2D2D3;
+	$super-light-gray: #F6F6F6;
+	$gray: #78747D;
+	$txt-gray: #37383C;
+	$txt-box-gray: #CAD1DB;
+
+// 
+// BACKEND
+// 
+
+	$min-width: 400px;
+	$g-b: 16px;
+	$basefont-b: 14px;
+	$font-b: Arial, Helvetica, sans-serif;
+
+	// colors 
+	$b-gray-1: #F8F9FA;
+	// $b-gray-2: #F1F3F5;
+	$b-gray-2: #F6F7F8;
+	$b-gray-3: #E9ECEF;
+	$b-gray-4: #DEE2E6;
+	$b-gray-5: #CED4DA;
+	$b-gray-6: #ADB5BD;
+	$b-gray-7: #868E96;
+	$b-gray-8: #343A40;
+
+	$b-purple: #7950F2;
+	$b-blue: #359CBA;
+	$b-blue-high: #006CE7;
+	$b-red: #D10420;

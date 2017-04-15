@@ -1,0 +1,17 @@
+{% extends 'xprez/contents/base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="xprez-module xprez-numbers">
+    {% for number in content.numbers.all %}
+        {% if number.number %}
+        <div class="xprez-number-item js-number-container">
+            <div class="xprez-number">
+            	<span class="xprez-number-digits js-counter-up">{{ number.number|intcomma }}</span>{% if number.suffix %}<span class="xprez-number-suffix">{{ number.suffix }}</span>{% endif %}
+            </div>
+            <div class="xprez-number-title">{{ number.title }}</div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

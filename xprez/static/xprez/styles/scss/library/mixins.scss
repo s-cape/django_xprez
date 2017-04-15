@@ -1,0 +1,231 @@
+@import "lib-prefixer";
+
+@mixin filter($p: blur(10px) ){
+   @include prefixer(filter, $p );
+}
+
+$media-hdpi: "(min--moz-device-pixel-ratio: 1.5),
+  (-o-min-device-pixel-ratio: 150/100),
+  (-webkit-min-device-pixel-ratio: 1.5),
+  (min-device-pixel-ratio: 1.5),
+  (min-resolution: 1.5dppx)";
+
+@mixin spriteBg( $l: 0, $t: 0, $img: $sprtIcons, $imgHD: $sprtIcons-hdpi, $bgs: 500px auto, $bgcolor: transparent ) {
+    background: url($img) $l $t no-repeat $bgcolor; background-size: $bgs;
+    @media only screen and #{$media-hdpi} {
+         background: url($imgHD) $l $t no-repeat $bgcolor; background-size: $bgs;
+    }
+}
+
+/* vendors */
+@mixin boxShadowP( $x: 0, $y: 0, $b: 10px, $color: rgba(0,0,0,0.7), $spread: 0px){
+    @include prefixer(box-shadow,$x $y $b $spread $color,webkit moz spec)
+}
+@mixin boxShadow( $u ){
+    @include prefixer(box-shadow,$u,webkit moz spec)
+}
+
+@mixin roundCorners( $r: 10px){
+    @include prefixer(border-radius,$r,webkit moz spec);
+}
+@mixin borderRadius($corners: 0 0 0 0){
+    @include prefixer(border-radius,$corners,webkit moz spec );
+}
+
+@mixin verticalGradient($c1,$c2) {
+    background-image: linear-gradient(top, $c1 0%, $c2 80%);
+    background-image: -o-linear-gradient(top, $c1 0%, $c2 80%);
+    background-image: -moz-linear-gradient(top, $c1 0%, $c2 80%);
+    background-image: -webkit-linear-gradient(top, $c1 0%, $c2 80%);
+    background-image: -ms-linear-gradient(top, $c1 0%, $c2 80%);
+}
+
+/* animation */
+@mixin rotatation($pos:50%) {
+        0% { width: 0%; }
+        100% { width: $pos;  animation-timing-function: ease-out; }
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+@mixin transition( $p: all , $t: 0.5s,$timing: ease){
+    @include prefixer(transition-property, $p);
+    @include prefixer(transition-duration, $t);
+    @include prefixer(transition-timing-function, $timing);
+}
+@mixin transition2( $p: all  0.25s ease-in-out){
+    @include prefixer(transition, $p);
+}
+@mixin animation( $name: spin, $t: 1s, $it: linear ){
+    @include prefixer(animation,$name $t $it infinite);
+}
+@mixin perspective($p:800px){
+    @include prefixer(perspective, $p);
+}
+@mixin transform3d( $p: scale(0.5), $o: top left, $s: preserve-3d ) {
+    @include prefixer(transform, $p);
+    @include prefixer(transform-origin, $o);
+    @include prefixer(transform-style, $s);
+}
+@mixin transform( $p) {
+    @include prefixer(transform, $p);
+}
+@mixin placeholder($c,$fs: italic ) {
+    &::-webkit-input-placeholder { color: $c; font-style: italic; }
+    &::-moz-placeholder { color: $c; font-style: italic; }
+    &:-ms-input-placeholder { color: $c; font-style: italic; }
+    &:-moz-placeholder { color: $c; font-style: italic;}
+}
+@mixin boxSizing($p:border-box) {
+    -moz-box-sizing:$p;
+   box-sizing:$p;
+}
+@mixin underline( $pos:19px, $bgcolor: #FFF, $color:#000 ) {
+    text-decoration: none; 
+    background-image: -webkit-linear-gradient(top, rgba(0,0,0,0) 75%,$color 75%);
+    background-image: linear-gradient(to bottom, transparent 75%,$color 75%);
+    background-repeat: repeat-x;
+    background-size: 2px 2px;
+    background-position: 0 $pos;
+    //text-shadow: 1px 0px $bgcolor, -1px 0px $bgcolor;
+    &:hover {  
+        // background-image: none;
+    }
+}
+@mixin reset_list(){
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+@mixin hover($c, $h){
+    color: $c;
+    &:hover { color: $h}
+}
+@mixin textbox_shadow {
+    background-color: rgba(0,0,0,.11);
+    @include boxShadow(0px 0px 40px 20px rgba(0,0,0,0.11));
+}
+@mixin clearfix {
+    &:before,
+    &:after {
+        content: " "; /* 1 */
+        display: table; /* 2 */
+    }
+    &:after {
+        clear: both;
+    }
+    *zoom: 1; 
+}
+@mixin center_block {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+// 
+// TYPOGRAPHY
+//
+
+@mixin sans($f: $sans) { font-family:  $f; }
+@mixin serif($f: $serif) { font-family:  $f; }
+@mixin condensed($f: $condensed) { font-family:  $f; }
+@mixin type(
+    $fsize:     $basefont, // px / font-size
+    $lheight:   2, // grid multiplier or px / line-height
+    $mtop:      0, // grid multiplier or px / margin-top
+    $mbot:      0 // grid multiplier or px / margin-bottom
+    ) {
+        font-size: $fsize/$basefont*1em;
+        @if unitless($lheight) { 
+            line-height: $lheight*$g/$fsize*1em; 
+        } @else {
+            line-height: $lheight/$fsize*1em; 
+        }
+        @if unitless($mtop) { 
+            margin-top: $mtop*$g/$fsize*1em;
+        } @else {
+            margin-top: $mtop/$fsize*1em;
+        }
+        @if unitless($mbot) {
+            margin-bottom: $mbot*$g/$fsize*1em;
+        } @else {
+            margin-bottom: $mbot/$fsize*1em;
+        } 
+    }
+
+@mixin type-mid(
+    $fsize:     $basefont, // px / font-size
+    $lheight:   2, // grid multiplier or px / line-height
+    $mtop:      0, // grid multiplier or px / margin-top
+    $mbot:      0 // grid multiplier or px / margin-bottom
+    ) {
+    @media only screen and (max-width: $typobreakM) {
+        font-size: $fsize/$basefont*1em;
+        @if unitless($lheight) { 
+            line-height: $lheight*$g/$fsize*1em; 
+        } @else {
+            line-height: $lheight/$fsize*1em; 
+        }
+        @if unitless($mtop) { 
+            margin-top: $mtop*$g/$fsize*1em;
+        } @else {
+            margin-top: $mtop/$fsize*1em;
+        }
+        @if unitless($mbot) {
+            margin-bottom: $mbot*$g/$fsize*1em;
+        } @else {
+            margin-bottom: $mbot/$fsize*1em;
+        } 
+    }
+}
+@mixin type-min(
+    $fsize:     $basefont, // px / font-size
+    $lheight:   2, // grid multiplier or px / line-height
+    $mtop:      0, // grid multiplier or px / margin-top
+    $mbot:      0 // grid multiplier or px / margin-bottom
+    ) {
+    @media only screen and (max-width: $typobreakS) {
+        font-size: $fsize/$basefont*1em;
+        @if unitless($lheight) { 
+            line-height: $lheight*$g/$fsize*1em; 
+        } @else {
+            line-height: $lheight/$fsize*1em; 
+        }
+        @if unitless($mtop) { 
+            margin-top: $mtop*$g/$fsize*1em;
+        } @else {
+            margin-top: $mtop/$fsize*1em;
+        }
+        @if unitless($mbot) {
+            margin-bottom: $mbot*$g/$fsize*1em;
+        } @else {
+            margin-bottom: $mbot/$fsize*1em;
+        } 
+    }
+}
+@mixin type-b(
+    $fsize:     $basefont-b, // px / font-size
+    $lheight:   2, // grid multiplier or px / line-height
+    $mtop:      0, // grid multiplier or px / margin-top
+    $mbot:      0 // grid multiplier or px / margin-bottom
+    ) {
+    
+        font-size: $fsize;
+        @if unitless($lheight) { 
+            line-height: $lheight*$g-b/$fsize*1em; 
+        } @else {
+            line-height: $lheight/$fsize*1em; 
+        }
+        @if unitless($mtop) { 
+            margin-top: $mtop*$g-b/$fsize*1em;
+        } @else {
+            margin-top: $mtop/$fsize*1em;
+        }
+        @if unitless($mbot) {
+            margin-bottom: $mbot*$g-b/$fsize*1em;
+        } @else {
+            margin-bottom: $mbot/$fsize*1em;
+        } 
+    
+}
+

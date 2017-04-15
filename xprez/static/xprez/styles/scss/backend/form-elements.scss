@@ -1,0 +1,97 @@
+.xprez-form-table {
+	display: table;
+	width: 100%;
+	label {
+		@include type-b(12px);
+		color: $b-gray-7;
+	}
+	& + & {
+		margin-top: $g;
+		border-top: 1px solid $b-gray-4;
+		padding-top: $g;
+	}
+	&.ui-sortable-helper {
+		background: darken($super-light-gray,5%);
+	}
+	&.ui-sortable-handle {
+		cursor: move;
+	}
+}
+.xprez-form-row {
+	display: table-row;
+}
+.xprez-cell-label {
+	display: table-cell;
+	width: 120px;
+	text-align: right;
+	//border-right: 1px solid $b-gray-3;
+	padding: 5px 10px 0 0;
+	vertical-align: top;
+}
+.xprez-cell {
+	display: table-cell;
+	padding: 5px 10px;
+	label {
+		display: inline-block;
+		text-align: right;
+		padding: 0 5px;
+	}
+	.clearable-file-input {
+		padding-left: 10px;
+	}
+}
+.xprez-cell-info {
+	@include type-b(12px);
+}
+.xprez-multi-field {
+	float: left;
+	margin-right: 10px;
+	&:last-child {
+		margin-right: 0;
+	}
+	label {
+		float: left;
+		margin-right: 10px;
+	}
+}
+.xprez-multi-field-cell {
+	float: left;
+}
+.xprez-sub-info {
+	display: block;
+	@include type-b(11px, 1.5);
+	padding-left: 5px;
+	.error & {
+		color: $b-red;
+	}
+}
+.xprez-required {
+	label {
+		&:after {
+		    content: '*';
+			margin: 0 0 0 5px;
+			position: absolute;
+			color: $b-gray-6;	
+		}
+	}
+}
+
+
+/// form tags
+
+input, textarea {
+	.error & {
+		border-color: $b-red;
+	}
+	//@include boxSizing;
+	&.long {
+		width: 500px;
+	}
+	&.short {
+		width: 50px;
+	}
+
+}
+textarea {
+	height: 100px;
+}
