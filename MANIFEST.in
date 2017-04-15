@@ -2,3 +2,4 @@ include LICENSE
 include README.rst
 recursive-include xprez/static *
 recursive-include xprez/templates *
+recursive-include xprez/medium_editor/static *
