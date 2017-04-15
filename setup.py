@@ -30,8 +30,8 @@ setup(
         "Programming Language :: Python",
     ],
     install_requires=[
-        "html5lib",
-        "beautifulsoup4",
+        "html5lib>=1.0b3",
+        "beautifulsoup4>=4.5.3",
         "Pillow>=3.0.0",
         "sorl-thumbnail",
         "django>=1.10"
