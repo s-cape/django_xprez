@@ -55,18 +55,36 @@ class Content(models.Model):
         obj = getattr(self, self.content_type.lower())
         return obj
 
+    def copy(self, for_page=None):
+        if not for_page:
+            for_page = self.page
+
+        initial = dict([
+            (field.name, getattr(self, field.name))
+            for field in self._meta.fields if not field.primary_key
+        ])
+        inst = self.__class__(**initial)
+        inst.position = self._count_new_content_position(for_page)
+        inst.page = for_page
+        inst.save()
+        return inst
+
     def save(self, *args, **kwargs):
         if not self.pk:
             self.content_type = self.__class__.__name__.lower()
         return super(Content, self).save(*args, **kwargs)
 
-    @classmethod
-    def create_for_page(cls, page):
+    def _count_new_content_position(cls, page):
         result = page.contents.all().aggregate(Max('position'))
         if result['position__max'] is not None:
             position = result['position__max'] + 1
         else:
             position = 0
+        return position
+
+    @classmethod
+    def create_for_page(cls, page):
+        position = cls._count_new_content_position(page)
         return cls.objects.create(page=page, position=position)
 
     def build_admin_form(self, data=None, files=None):
@@ -107,6 +125,7 @@ class Content(models.Model):
 
 
 class FormsetContent(Content):
+
     formset_factory = NotImplemented
 
     class Meta:
@@ -129,6 +148,11 @@ class FormsetContent(Content):
 
     def admin_has_errors(self):
         return super(FormsetContent, self).admin_has_errors() or self.formset.total_error_count() > 0
+
+    def copy(self, for_page=None):
+        inst = super(FormsetContent, self).copy(for_page)
+        # todo
+        return inst
 
 
 class AjaxUploadFormsetContent(FormsetContent):

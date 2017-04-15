@@ -1,6 +1,6 @@
 function activateAddContentLinks() {
     var $contentsContainer = $('.js-contents-container');
-    $('.js-add-content').each(function (index, el) {
+    $('.js-add-content, .js-copy-content').each(function (index, el) {
         var $el = $(el);
         $el.click(function () {
             $.get($el.data('url'), function (data) {
@@ -93,6 +93,8 @@ function activateDeleteButtons($scope) {
 
     })
 }
+
+
 
 //
 // function hideErrorsForDeletedContents() {

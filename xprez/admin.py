@@ -182,6 +182,12 @@ class XprezAdmin(admin.ModelAdmin):
         content.build_admin_form()
         return JsonResponse({'template': content.render_admin(), 'content_pk': content.pk})
 
+    def copy_content_view(self, request, content_pk):
+        content = models.Content.objects.get(pk=content_pk).polymorph()
+        new_content = content.copy()
+        new_content.build_admin_form()
+        return JsonResponse({'template': new_content.render_admin(), 'content_pk': new_content.pk})
+
     @csrf_exempt
     def delete_content_view(self, request, content_pk):
         if request.method == 'POST':
@@ -194,6 +200,8 @@ class XprezAdmin(admin.ModelAdmin):
         my_urls = [
             url(r'^ajax/add-content/(?P<page_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$', self.admin_site.admin_view(self.add_content_view), name='ajax_add_content'),
             url(r'^ajax/delete-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.delete_content_view), name='ajax_delete_content'),
+            url(r'^ajax/copy-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.copy_content_view), name='ajax_copy_content'),
+
         ]
         return my_urls + urls
 
