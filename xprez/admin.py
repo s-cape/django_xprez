@@ -162,6 +162,7 @@ class XprezAdmin(admin.ModelAdmin):
             preserved_filters=self.get_preserved_filters(request),
             contents=contents,
             copy_url_name='admin:' + self.model._meta.model_name + '_copy',
+            copy_supported=hasattr(obj, 'copy'),
         )
 
         # Hide the "Save" and "Save and continue" buttons if "Save as New" was
