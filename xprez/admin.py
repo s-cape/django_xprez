@@ -16,6 +16,7 @@ from django.contrib.admin import helpers
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.apps import apps
+from django.shortcuts import redirect
 
 from . import models
 from . import contents_manager
@@ -159,7 +160,8 @@ class XprezAdmin(admin.ModelAdmin):
             inline_admin_formsets=inline_formsets,
             errors=helpers.AdminErrorList(form, formsets) or not all_content_forms_valid,
             preserved_filters=self.get_preserved_filters(request),
-            contents=contents
+            contents=contents,
+            copy_url_name='admin:' + self.model._meta.model_name + '_copy',
         )
 
         # Hide the "Save" and "Save and continue" buttons if "Save as New" was
@@ -188,6 +190,12 @@ class XprezAdmin(admin.ModelAdmin):
         new_content.build_admin_form()
         return JsonResponse({'template': new_content.render_admin(), 'content_pk': new_content.pk})
 
+    def copy_view(self, request, page_pk):
+        inst = self.model.objects.get(pk=page_pk)
+        copy = inst.copy()
+        info = (copy._meta.app_label, copy._meta.model_name)
+        return redirect('admin:%s_%s_change' % info, copy.pk)
+
     @csrf_exempt
     def delete_content_view(self, request, content_pk):
         if request.method == 'POST':
@@ -198,6 +206,7 @@ class XprezAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(XprezAdmin, self).get_urls()
         my_urls = [
+            url(r'^%s/copy/(?P<page_pk>\d+)/$' % self.model._meta.model_name, self.admin_site.admin_view(self.copy_view), name=self.model._meta.model_name+'_copy'),
             url(r'^ajax/add-content/(?P<page_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$', self.admin_site.admin_view(self.add_content_view), name='ajax_add_content'),
             url(r'^ajax/delete-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.delete_content_view), name='ajax_delete_content'),
             url(r'^ajax/copy-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.copy_content_view), name='ajax_copy_content'),

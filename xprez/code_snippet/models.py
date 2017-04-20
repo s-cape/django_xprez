@@ -45,6 +45,4 @@ class CodeSnippet(Content):
         return highlight(self.code, lexer_map[self.lang](), HtmlFormatter(style='colorful'))
 
 
-
-
 contents_manager.register(CodeSnippet)

@@ -11,7 +11,10 @@ from ..utils import import_class
 
 
 class ContentsContainer(models.Model):
-    pass
+
+    def copy_contents(self, for_container):
+        for content in self.contents.all():
+            content.polymorph().copy(for_container)
 
 
 class Content(models.Model):
@@ -152,7 +155,8 @@ class FormsetContent(Content):
 
     def copy(self, for_page=None):
         inst = super(FormsetContent, self).copy(for_page)
-        # todo
+        for item in self.get_formset_queryset():
+            item.copy(inst)
         return inst
 
 
@@ -188,3 +192,22 @@ class AjaxUploadFormsetContent(FormsetContent):
         return [
             url(r'^%s/upload-item/(?P<content_pk>\d+)/' % cls_name, cls.upload_file_view, name='%s_ajax_upload_item' % cls_name),
         ]
+
+
+class ContentItem(models.Model):
+    content_foreign_key = NotImplemented
+
+    class Meta:
+        abstract = True
+
+    def copy(self, for_content):
+        if not for_content:
+            for_content = getattr(self, self.content_foreign_key)
+        initial = dict([
+            (field.name, getattr(self, field.name))
+            for field in self._meta.fields if not field.primary_key
+        ])
+        inst = self.__class__(**initial)
+        setattr(inst, self.content_foreign_key, for_content)
+        inst.save()
+
