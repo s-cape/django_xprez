@@ -673,7 +673,8 @@ textarea {
     position: absolute;
     top: 0;
     right: 60px;
-    left: 60px; }
+    left: 60px;
+    margin: 0; }
   .xprez-module__title .xprez-icon-btn-collapse {
     float: left;
     margin-top: 2px;
