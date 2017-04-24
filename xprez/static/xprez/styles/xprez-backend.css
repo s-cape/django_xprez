@@ -660,14 +660,20 @@ textarea {
 
 .xprez-module__title {
   background: #f6f7f8;
-  text-align: center; }
+  text-align: center;
+  overflow: hidden;
+  position: relative; }
   .xprez-module__title h2 {
     font-size: 12px;
     line-height: 2.66667em;
     margin-top: 0em;
     margin-bottom: 0em;
     color: #60686f;
-    cursor: move; }
+    cursor: move;
+    position: absolute;
+    top: 0;
+    right: 60px;
+    left: 60px; }
   .xprez-module__title .xprez-icon-btn-collapse {
     float: left;
     margin-top: 2px;

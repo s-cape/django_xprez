@@ -33,10 +33,16 @@
 .xprez-module__title {
 	background: $b-gray-2;
 	text-align: center;
+	overflow: hidden;
+	position: relative;
 	h2 {
 		@include type-b(12px);
 		color: darken($b-gray-7,15%);
 		cursor: move;
+		position: absolute;
+		top: 0;
+		right: 60px;
+		left: 60px;
 	}
 	.xprez-icon-btn-collapse {
 		float: left;
