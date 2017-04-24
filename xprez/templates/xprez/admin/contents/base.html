@@ -7,9 +7,9 @@
         {% endblock %}
     </div>
     <div class="xprez-module__title js-sortable-handler">
-        <span class="xprez-icon-btn-collapse js-collapser"></span>
-        <span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_delete_content' content.pk %}"></span>
-        <span style="float: right; margin-right: 20px;" class="xprez-icon-btn-copy js-copy-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_copy_content' content.pk %}">copy</span>
+        <span class="xprez-icon-btn-collapse js-collapser" title="Collapse"></span>
+        <span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_delete_content' content.pk %}" title="Remove"></span>
+        <span class="xprez-icon-btn-copy js-copy-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_copy_content' content.pk %}" title="Copy and paste the module to the end"></span>
 
         <h2>{{ content.verbose_name }}</h2>
     </div>

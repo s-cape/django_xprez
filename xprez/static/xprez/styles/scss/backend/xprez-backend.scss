@@ -48,6 +48,11 @@
 		margin-top: 2px;
 		margin-right: 2px;
 	}
+	.xprez-icon-btn-copy {
+		float: right;
+		margin-top: 2px;
+		margin-right: 2px;
+	}
 }
 .xprez-module__options {
 	background: $b-gray-2;
@@ -149,6 +154,7 @@
 .xprez-icon-btn-layout_3:before	{content: "\e8f0";}
 .xprez-icon-btn-layout_4:before	{content: "\e42a";}
 .xprez-icon-btn-crop:before	{content: "\e3be";}
+.xprez-icon-btn-copy:before { content: "\e14d"; }
 
 // Text Buttons
 
