@@ -43,3 +43,10 @@
 
 
 {% endblock %}
+
+{% block object-tools-items %}
+    {% if copy_supported %}
+        <li><a href="{% url copy_url_name original.pk %}">Copy</a></li>
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

@@ -8,7 +8,7 @@ from django.template.defaultfilters import striptags
 from ..medium_editor.widgets import MediumEditorWidget
 from ..medium_editor.utils import parse_text, render_text_parsed
 
-from .base import Content, FormsetContent, AjaxUploadFormsetContent
+from .base import Content, FormsetContent, AjaxUploadFormsetContent, ContentItem
 
 from .. import contents_manager
 
@@ -65,7 +65,8 @@ class QuoteContent(FormsetContent):
         return True
 
 
-class Quote(models.Model):
+class Quote(ContentItem):
+    content_foreign_key = 'content'
     content = models.ForeignKey(QuoteContent, related_name='quotes')
     name = models.CharField(max_length=255)
     job_title = models.CharField(max_length=255)
@@ -120,7 +121,8 @@ class Gallery(AjaxUploadFormsetContent):
         return self.photos.all().count()
 
 
-class Photo(models.Model):
+class Photo(ContentItem):
+    content_foreign_key = 'gallery'
     gallery = models.ForeignKey(Gallery, related_name='photos')
     image = models.ImageField(upload_to='photos')
     description = models.CharField(max_length=255, blank=True, null=True)
@@ -202,7 +204,8 @@ class NumbersContent(FormsetContent):
         js = ('xprez/libs/jquery.waypoints.min.js', 'xprez/libs/counter.up/jquery.counterup.js', 'xprez/js/numbers.js')
 
 
-class Number(models.Model):
+class Number(ContentItem):
+    content_foreign_key = 'content'
     content = models.ForeignKey(NumbersContent, related_name='numbers')
     number = models.IntegerField(null=True, blank=True)
     suffix = models.CharField(max_length=10, null=True, blank=True)
@@ -271,7 +274,8 @@ class DownloadContent(AjaxUploadFormsetContent):
         return self.attachments.all().count()
 
 
-class Attachment(models.Model):
+class Attachment(ContentItem):
+    content_foreign_key = 'content'
     content = models.ForeignKey(DownloadContent, related_name='attachments')
     file = models.FileField(upload_to='files')
     name = models.CharField(max_length=100, blank=True)
