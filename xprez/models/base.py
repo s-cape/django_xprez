@@ -151,7 +151,7 @@ class FormsetContent(Content):
         return self.admin_form.is_valid() and self.formset.is_valid()
 
     def admin_has_errors(self):
-        return super(FormsetContent, self).admin_has_errors() or self.formset.total_error_count() > 0
+        return super(FormsetContent, self).admin_has_errors() or (self.formset.total_error_count() > 0 and not self.formset.is_valid())
 
     def copy(self, for_page=None):
         inst = super(FormsetContent, self).copy(for_page)
