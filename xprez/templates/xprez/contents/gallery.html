@@ -9,7 +9,15 @@
      -->
 
         {% for photo in content.published_photos %}
-            <div class="xprez-photo-item js-photo" data-original_url="{{ photo.image.url }}" data-original_width="{{ photo.image.width }}" data-original_height="{{ photo.image.height }}" data-title="{% if photo.description %}{{ photo.description }}{% endif %}">
+            <div class="xprez-photo-item js-photo" 
+                {% thumbnail photo.image "2000x2000" upscale=false quality=70 as thumb %}
+                data-original_url="{{ thumb.url }}" 
+                data-original_width="{{ thumb.width }}" 
+                data-original_height="{{ thumb.height }}" 
+                {% endthumbnail %}
+
+
+                data-title="{% if photo.description %}{{ photo.description }}{% endif %}">
         
                 {% if content.columns == 4 %}
                     {% if content.crop %}
