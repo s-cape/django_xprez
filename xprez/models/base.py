@@ -185,6 +185,9 @@ class AjaxUploadFormsetContent(FormsetContent):
                 'form': item_form.as_p(),
                 'template': render_to_string(cls.admin_formset_item_template_name, {'item': item, 'content': content, 'number': queryset.count() - 1})
             })
+        return JsonResponse(status=400, data={
+            'error': 'No files uploaded'
+        })
 
     @classmethod
     def get_urls(cls):
