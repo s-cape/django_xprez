@@ -170,7 +170,7 @@ class Video(Content):
         return self.url
 
     class FrontMedia:
-        js = ('xprez/js/video.js', 'xprez/libs/froogaloop/froogaloop.min.js',)
+        js = ('xprez/js/video.js', '//www.youtube.com/iframe_api', 'xprez/libs/froogaloop/froogaloop.min.js',)
 
 
 class CodeInput(Content):
