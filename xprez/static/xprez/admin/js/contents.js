@@ -58,6 +58,38 @@ function activateSelectControllers($scope) {
     });
 }
 
+function activateMultipleSelectControllers($scope) {
+    $scope.find('.js-multiple_select_controller').each(function (index, el) {
+        var $el = $(el);
+        var $options = $el.find('.js-option');
+        var $formField = $($el.data('formfield_selector'));
+        var values = $formField.val();
+        for (var i=0; i < values.length; i++) {
+            $el.find('.js-option[data-formfield_value="' + values[i] + '"]').addClass('active');
+        }
+        $options.click(function () {
+            var $this = $(this);
+            var val = $this.data('formfield_value');
+            var values = $formField.val();
+            if (values === null) {
+                values = [];
+            }
+            if ($this.hasClass('active')) {
+                $this.removeClass('active');
+                var index = values.indexOf(val);
+                values.splice(index, 1);
+            }
+            else {
+                $this.addClass('active');
+                values.push(val);
+            }
+            $formField.val(values);
+
+        });
+
+    });
+}
+
 function activateCollapsers($scope) {
     $scope.find('.js-collapser').each(function (index, el) {
         var $collapsible = $(this).parent().parent('.xprez-module');
@@ -87,13 +119,12 @@ function activateDeleteButtons($scope) {
         $el.on('click', function () {
             if (confirm("Are you sure you wish to delete this block?")) {
                 $.post(url);
-                $('.js-content-'+$el.data('pk')).remove();
+                $('.js-content-' + $el.data('pk')).remove();
             }
         });
 
     })
 }
-
 
 
 //
@@ -115,6 +146,7 @@ function activateDeleteButtons($scope) {
 function activateFormfieldControllers($scope) {
     activateCheckboxControllers($scope);
     activateSelectControllers($scope);
+    activateMultipleSelectControllers($scope);
     activateTextControllers($scope);
     activateDeleteButtons($scope);
 }
