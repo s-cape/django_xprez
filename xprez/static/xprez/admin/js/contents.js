@@ -64,8 +64,10 @@ function activateMultipleSelectControllers($scope) {
         var $options = $el.find('.js-option');
         var $formField = $($el.data('formfield_selector'));
         var values = $formField.val();
-        for (var i=0; i < values.length; i++) {
-            $el.find('.js-option[data-formfield_value="' + values[i] + '"]').addClass('active');
+        if (values) {
+            for (var i=0; i < values.length; i++) {
+                $el.find('.js-option[data-formfield_value="' + values[i] + '"]').addClass('active');
+            }
         }
         $options.click(function () {
             var $this = $(this);
