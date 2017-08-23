@@ -25,3 +25,10 @@ Quick start
 
 4. ... todo
 
+
+TODO
+-------
+
+- fix template content to save only relative path to database
+- check template content raising UnicodeDecodeError
+
