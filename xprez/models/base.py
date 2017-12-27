@@ -31,7 +31,7 @@ class Content(models.Model):
         (SIZE_TEXT, 'text'),
     )
 
-    page = models.ForeignKey(xprez_settings.XPREZ_CONTAINER_MODEL_CLASS, related_name='contents')
+    page = models.ForeignKey(xprez_settings.XPREZ_CONTAINER_MODEL_CLASS, on_delete=models.CASCADE, related_name='contents')
     position = models.PositiveSmallIntegerField()
     content_type = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True, verbose_name='created')

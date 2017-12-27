@@ -67,7 +67,7 @@ class QuoteContent(FormsetContent):
 
 class Quote(ContentItem):
     content_foreign_key = 'content'
-    content = models.ForeignKey(QuoteContent, related_name='quotes')
+    content = models.ForeignKey(QuoteContent, related_name='quotes', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     job_title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='quotes', null=True, blank=True)
@@ -123,7 +123,7 @@ class Gallery(AjaxUploadFormsetContent):
 
 class Photo(ContentItem):
     content_foreign_key = 'gallery'
-    gallery = models.ForeignKey(Gallery, related_name='photos')
+    gallery = models.ForeignKey(Gallery, related_name='photos', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='photos')
     description = models.CharField(max_length=255, blank=True, null=True)
     position = models.PositiveSmallIntegerField()
@@ -206,7 +206,7 @@ class NumbersContent(FormsetContent):
 
 class Number(ContentItem):
     content_foreign_key = 'content'
-    content = models.ForeignKey(NumbersContent, related_name='numbers')
+    content = models.ForeignKey(NumbersContent, related_name='numbers', on_delete=models.CASCADE)
     number = models.IntegerField(null=True, blank=True)
     suffix = models.CharField(max_length=10, null=True, blank=True)
     title = models.CharField(max_length=100, blank=True)
@@ -276,7 +276,7 @@ class DownloadContent(AjaxUploadFormsetContent):
 
 class Attachment(ContentItem):
     content_foreign_key = 'content'
-    content = models.ForeignKey(DownloadContent, related_name='attachments')
+    content = models.ForeignKey(DownloadContent, related_name='attachments', on_delete=models.CASCADE)
     file = models.FileField(upload_to='files')
     name = models.CharField(max_length=100, blank=True)
     position = models.PositiveSmallIntegerField()
