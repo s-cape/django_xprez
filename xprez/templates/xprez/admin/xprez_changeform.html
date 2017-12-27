@@ -1,4 +1,4 @@
-{% extends 'admin/change_form.html' %}
+{% extends change_form_extend_template %}
 {% load static i18n %}
 {% block extrahead %}
     {{ block.super }}
@@ -14,7 +14,7 @@
 
 {% block inline_field_sets %}
     {{ block.super }}
-    {% if original %}
+    {% if show_xprez_toolbar %}
         <div class="xprez">
             <div class="xprez-top"><span class="xprez-option-btn js-collapse_all">Collapse All Boxes</span></div>
             <div class="js-contents-container">
@@ -26,7 +26,7 @@
                 <h2>+ Add new piece of content +</h2>
                 <ul class="xprez-add__list">
                     {% for content_type in content_types %}
-                        <li class="js-add-content" data-url="{% url 'admin:ajax_add_content' original.pk content_type.identifier %}">
+                        <li class="js-add-content" data-url="{% url 'admin:ajax_add_content' original.pk content_type.identifier %}?{{ request.GET.urlencode }}">
                             <span class="xprez-icon-btn-add-{{ content_type.icon_name }}"></span>
                             <span class="xprez-add__label">{{ content_type.verbose_name }}</span>
                         </li>

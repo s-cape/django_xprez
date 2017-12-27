@@ -24,7 +24,7 @@ from .settings import XPREZ_CONTAINER_MODEL_CLASS
 
 
 class XprezAdmin(admin.ModelAdmin):
-
+    change_form_extend_template = 'admin/change_form.html'
     change_form_template = 'xprez/admin/xprez_changeform.html'
     allowed_contents = '__all__'
     excluded_contents = None
@@ -43,6 +43,12 @@ class XprezAdmin(admin.ModelAdmin):
                     content_types.remove(ct)
         return content_types
 
+    def _get_container_instance(self, request, object_pk):
+        return self.get_object(request, object_pk)
+
+    def _show_xprez_toolbar(self, request, object_pk=None):
+        return bool(object_pk)
+
     def change_view(self, request, object_id, form_url='', extra_context=None):
         if not extra_context:
             extra_context = {}
@@ -51,6 +57,7 @@ class XprezAdmin(admin.ModelAdmin):
         extra_context.update({
             'content_types': self._get_allowed_contents(),
             'contents_media': contents_media,
+            'change_form_extend_template': self.change_form_extend_template
         })
         return super(XprezAdmin, self).change_view(request, object_id, form_url, extra_context)
 
@@ -90,7 +97,7 @@ class XprezAdmin(admin.ModelAdmin):
             form = ModelForm(request.POST, request.FILES, instance=obj)
             contents = []
             all_content_forms_valid = True
-            if obj:
+            if obj and obj.contents:
                 for content in obj.contents.all():
                     content = content.polymorph()
                     content.build_admin_form(request.POST, request.FILES)
@@ -127,12 +134,11 @@ class XprezAdmin(admin.ModelAdmin):
             else:
                 form = ModelForm(instance=obj)
                 contents = []
-                for content in obj.contents.all():
-                    content = content.polymorph()
-                    content.build_admin_form()
-                    contents.append(content)
-                # for content in obj.contents.filter(is_published=False):
-                #     content.delete()
+                if obj.contents:
+                    for content in obj.contents.all():
+                        content = content.polymorph()
+                        content.build_admin_form()
+                        contents.append(content)
                 formsets, inline_instances = self._create_formsets(request, obj, change=True)
 
         adminForm = helpers.AdminForm(
@@ -163,6 +169,8 @@ class XprezAdmin(admin.ModelAdmin):
             contents=contents,
             copy_url_name='admin:' + self.model._meta.model_name + '_copy',
             copy_supported=hasattr(obj, 'copy'),
+            change_form_extend_template=self.change_form_extend_template,
+            show_xprez_toolbar=self._show_xprez_toolbar(request, object_id)
         )
 
         # Hide the "Save" and "Save and continue" buttons if "Save as New" was
@@ -179,9 +187,10 @@ class XprezAdmin(admin.ModelAdmin):
 
     def add_content_view(self, request, page_pk, content_type):
         content_class = models.contents_manager.get(content_type)
-        app_label, model_name = XPREZ_CONTAINER_MODEL_CLASS.split('.')
-        page = get_object_or_404(apps.get_model(app_label, model_name), pk=page_pk)
-        content = content_class.create_for_page(page)
+        # app_label, model_name = XPREZ_CONTAINER_MODEL_CLASS.split('.')
+        # klass = apps.get_model(app_label, model_name)
+        container = self._get_container_instance(request, page_pk)
+        content = content_class.create_for_page(container)
         content.build_admin_form()
         return JsonResponse({'template': content.render_admin(), 'content_pk': content.pk})
 
