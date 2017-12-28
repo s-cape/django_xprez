@@ -44,7 +44,10 @@ class XprezAdmin(admin.ModelAdmin):
         return content_types
 
     def _get_container_instance(self, request, object_pk):
-        return self.get_object(request, object_pk)
+        app_label, model_name = XPREZ_CONTAINER_MODEL_CLASS.split('.')
+        klass = apps.get_model(app_label, model_name)
+        return klass.objects.get(pk=object_pk)
+        # return self.get_object(request, object_pk)
 
     def _show_xprez_toolbar(self, request, object_pk=None):
         return bool(object_pk)
@@ -187,8 +190,7 @@ class XprezAdmin(admin.ModelAdmin):
 
     def add_content_view(self, request, page_pk, content_type):
         content_class = models.contents_manager.get(content_type)
-        # app_label, model_name = XPREZ_CONTAINER_MODEL_CLASS.split('.')
-        # klass = apps.get_model(app_label, model_name)
+
         container = self._get_container_instance(request, page_pk)
         content = content_class.create_for_page(container)
         content.build_admin_form()
