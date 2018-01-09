@@ -8,7 +8,7 @@
     {{ content.crop }}
      -->
 
-        {% for photo in content.published_photos %}
+        {% for photo in content.photos.all %}
             <div class="xprez-photo-item js-photo" 
                 {% thumbnail photo.image "2000x2000" upscale=false quality=70 as thumb %}
                 data-original_url="{{ thumb.url }}" 

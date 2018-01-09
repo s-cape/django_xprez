@@ -114,9 +114,6 @@ class Gallery(AjaxUploadFormsetContent):
         js = ('xprez/libs/photoswipe/dist/photoswipe.min.js', 'xprez/libs/photoswipe/dist/photoswipe-ui-default.min.js', 'xprez/js/photoswipe.js')
         css = ('xprez/libs/photoswipe/dist/photoswipe.css', 'xprez/libs/photoswipe/dist/default-skin/default-skin.css')
 
-    def published_photos(self):
-        return self.photos.all()
-
     def show_front(self):
         return self.photos.all().count()
 
