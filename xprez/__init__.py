@@ -44,7 +44,7 @@ class ContentTypeManager:
         self._registry[content_class.identifier()] = content_class
 
     def unregister(self, content_class):
-        del self._registry[content_class.content_type.identifier()]
+        del self._registry[content_class.identifier()]
 
 
 contents_manager = ContentTypeManager()

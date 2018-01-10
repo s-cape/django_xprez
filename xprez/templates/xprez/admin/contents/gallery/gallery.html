@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="js-dropzone js-dropzone-{{ content.pk }} xprez-gallery__dropzone" data-content_pk="{{ content.pk }}" data-uploadurl="{% url 'xprez:gallery_ajax_upload_item' content.pk %}">
+    <div class="js-dropzone js-dropzone-{{ content.pk }} xprez-gallery__dropzone" data-content_pk="{{ content.pk }}" data-uploadurl="{% block upload_url %}{% url 'xprez:gallery_ajax_upload_item' content.pk %}{% endblock %}">
         Drop files here or click to choose images from disk<br>
     </div>
     <div class="js-item-container" data-content_pk="{{ content.pk }}">
