@@ -52,17 +52,24 @@ class XprezAdmin(admin.ModelAdmin):
     def _show_xprez_toolbar(self, request, object_pk=None):
         return bool(object_pk)
 
-    def change_view(self, request, object_id, form_url='', extra_context=None):
+    def _add_xprez_context(self, extra_context=None):
         if not extra_context:
             extra_context = {}
         contents_media = contents_manager.admin_media()
-
         extra_context.update({
             'content_types': self._get_allowed_contents(),
             'contents_media': contents_media,
             'change_form_extend_template': self.change_form_extend_template
         })
+        return extra_context
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = self._add_xprez_context(extra_context)
         return super(XprezAdmin, self).change_view(request, object_id, form_url, extra_context)
+
+    def add_view(self, request, form_url='', extra_context=None):
+        extra_context = self._add_xprez_context(extra_context)
+        return super(XprezAdmin, self).add_view(request, form_url, extra_context)
 
     @csrf_protect_m
     @transaction.atomic
