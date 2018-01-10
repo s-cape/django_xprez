@@ -58,7 +58,7 @@ class Content(models.Model):
         obj = getattr(self, self.content_type.lower())
         return obj
 
-    def copy(self, for_page=None):
+    def copy(self, for_page=None, save=True):
         if not for_page:
             for_page = self.page
 
@@ -69,7 +69,8 @@ class Content(models.Model):
         inst = self.__class__(**initial)
         inst.position = self._count_new_content_position(for_page)
         inst.page = for_page
-        inst.save()
+        if save:
+            inst.save()
         return inst
 
     def save(self, *args, **kwargs):
@@ -203,7 +204,7 @@ class ContentItem(models.Model):
     class Meta:
         abstract = True
 
-    def copy(self, for_content):
+    def copy(self, for_content, save=True):
         if not for_content:
             for_content = getattr(self, self.content_foreign_key)
         initial = dict([
@@ -212,5 +213,7 @@ class ContentItem(models.Model):
         ])
         inst = self.__class__(**initial)
         setattr(inst, self.content_foreign_key, for_content)
-        inst.save()
+        if save:
+            inst.save()
+        return inst
 
