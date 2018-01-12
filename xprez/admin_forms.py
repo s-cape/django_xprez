@@ -2,8 +2,6 @@ try:
     import urlparse
 except ImportError:
     import urllib.parse as urlparse
-from os import listdir
-from os.path import isfile, join
 
 from django.utils.translation import ugettext_lazy as _
 from django import forms
@@ -13,7 +11,6 @@ from .models import (
     NumbersContent, Number, FeatureBoxes, CodeTemplate, DownloadContent, Attachment
 )
 from .medium_editor.widgets import MediumEditorWidget
-from xprez.settings import XPREZ_CODE_TEMPLATES_DIRS
 
 
 class BaseContentForm(forms.ModelForm):
@@ -122,13 +119,6 @@ class FeatureBoxesForm(BaseContentForm):
 
 
 class CodeTemplateForm(BaseContentForm):
-
-    def __init__(self, *args, **kwargs):
-        super(CodeTemplateForm, self).__init__(*args, **kwargs)
-        file_choices = []
-        for dir_path in XPREZ_CODE_TEMPLATES_DIRS:
-            file_choices += [(join(dir_path, f), f) for f in listdir(dir_path) if isfile(join(dir_path, f))]
-        self.fields['template_name'] = forms.ChoiceField(choices=file_choices, required=False, widget=forms.Select(attrs={'class': 'ignore-changes'}))
 
     class Meta:
         model = CodeTemplate

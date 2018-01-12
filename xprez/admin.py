@@ -8,7 +8,6 @@ from django.forms import all_valid
 from django.http import Http404
 from django.http import HttpResponse, JsonResponse
 from django.conf.urls import url
-from django.shortcuts import get_object_or_404
 from django.contrib.admin.utils import unquote
 from django.utils.encoding import force_text
 from django.utils.html import escape
@@ -17,10 +16,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.apps import apps
 from django.shortcuts import redirect
+from django import forms
 
 from . import models
 from . import contents_manager
 from .settings import XPREZ_CONTAINER_MODEL_CLASS
+from .models.fields import TemplatePathField
 
 
 class XprezAdmin(admin.ModelAdmin):
@@ -247,3 +248,10 @@ class GalleryAdmin(admin.ModelAdmin):
 @admin.register(models.Photo)
 class PhotoAdmin(admin.ModelAdmin):
     list_display = ('id', 'image', 'position', )
+
+
+@admin.register(models.CodeTemplate)
+class CodeTemplateAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        TemplatePathField: {'widget': forms.TextInput}
+    }

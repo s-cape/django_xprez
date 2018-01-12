@@ -3,13 +3,15 @@
 from django.db import models
 from django.template import Template, Context
 from django.template.defaultfilters import striptags
-
+from django.template.loader import get_template
 
 from ..medium_editor.widgets import MediumEditorWidget
 from ..medium_editor.utils import parse_text, render_text_parsed
+from .. import settings
+
 
 from .base import Content, FormsetContent, AjaxUploadFormsetContent, ContentItem
-
+from .fields import TemplatePathField
 from .. import contents_manager
 
 
@@ -233,21 +235,14 @@ class CodeTemplate(Content):
     icon_name = 'code_template'
     form_class = 'xprez.admin_forms.CodeTemplateForm'
 
-    template_name = models.CharField(max_length=255, null=True, blank=True)
+    template_name = TemplatePathField(template_dir=settings.XPREZ_CODE_TEMPLATES_DIR, prefix=settings.XPREZ_CODE_TEMPLATES_PREFIX, max_length=255, null=True, blank=True)
 
     def show_front(self):
         return self.template_name
 
     def render_front(self):
         if self.show_front():
-            try:
-                with open(self.template_name, 'r') as my_file:
-                    data = my_file.read()
-                tpl = Template(data)
-                ctx = Context({})
-                return tpl.render(ctx)
-            except IOError:
-                return u'Invalid template: %s' % self.template_name
+            get_template(self.template_name).render({})
         else:
             return ''
 
