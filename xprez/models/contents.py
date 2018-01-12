@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.template import Template, Context
+from django.template import Template, Context, TemplateDoesNotExist
 from django.template.defaultfilters import striptags
 from django.template.loader import get_template
 
@@ -242,7 +242,10 @@ class CodeTemplate(Content):
 
     def render_front(self):
         if self.show_front():
-            get_template(self.template_name).render({})
+            try:
+                get_template(self.template_name).render({})
+            except TemplateDoesNotExist:
+                return 'Invalid Template'
         else:
             return ''
 
