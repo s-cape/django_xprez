@@ -44,6 +44,10 @@
 		&:first-child {
 			margin-top: 0;
 		}
+		span {
+			font-weight: bold !important;
+			color: $gray;
+		}
 	}
 	h4 {
 		@include type(18px,2, 0, 1);
