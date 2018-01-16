@@ -473,6 +473,11 @@ textarea {
     .xprez-feature-boxes h3:first-child, .medium-editor-simple h3:first-child,
     .xprez-download h3:first-child {
       margin-top: 0; }
+    .xprez-text-content h3 span, .medium-editor h3 span,
+    .xprez-feature-boxes h3 span, .medium-editor-simple h3 span,
+    .xprez-download h3 span {
+      font-weight: bold !important;
+      color: #78747d; }
   .xprez-text-content h4, .medium-editor h4,
   .xprez-feature-boxes h4, .medium-editor-simple h4,
   .xprez-download h4 {
