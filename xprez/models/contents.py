@@ -243,7 +243,7 @@ class CodeTemplate(Content):
     def render_front(self):
         if self.show_front():
             try:
-                get_template(self.template_name).render({})
+                return get_template(self.template_name).render({})
             except TemplateDoesNotExist:
                 return 'Invalid Template'
         else:
