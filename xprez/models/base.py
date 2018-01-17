@@ -22,6 +22,8 @@ class Content(models.Model):
     admin_template_name = NotImplemented
     front_template_name = NotImplemented
     verbose_name = NotImplemented
+    icon_name = NotImplemented
+
     SIZE_FULL = 'full'
     SIZE_MID = 'mid'
     SIZE_TEXT = 'text'
@@ -92,14 +94,17 @@ class Content(models.Model):
         position = cls._count_new_content_position(page)
         return cls.objects.create(page=page, position=position)
 
+    def get_form_prefix(self):
+        return 'content-' + str(self.pk)
+
     def build_admin_form(self, data=None, files=None):
         form_class = import_class(self.form_class)
-        self.admin_form = form_class(instance=self, prefix='content-' + str(self.pk), data=data, files=files)
+        self.admin_form = form_class(instance=self, prefix=self.get_form_prefix(), data=data, files=files)
 
     def is_admin_form_valid(self):
         return self.admin_form.is_valid()
 
-    def save_admin_form(self):
+    def save_admin_form(self, request):
         inst = self.admin_form.save(commit=False)
         inst.save()
 
@@ -144,8 +149,8 @@ class FormsetContent(Content):
         FormSet = import_class(self.formset_factory)
         self.formset = FormSet(instance=self, queryset=self.get_formset_queryset(), data=data, files=files, prefix='{}s-{}'.format(self.identifier(), self.pk))
 
-    def save_admin_form(self):
-        super(FormsetContent, self).save_admin_form()
+    def save_admin_form(self, request):
+        super(FormsetContent, self).save_admin_form(request)
         self.formset.save()
 
     def is_admin_form_valid(self):

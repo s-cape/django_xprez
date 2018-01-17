@@ -1,0 +1,11 @@
+{% extends 'xprez/contents/base.html' %}
+{% load thumbnail xprez %}
+
+{% block content %}
+    <div class="xprez-module xprez-text-content">
+        <div class="img {{ content.image_alignment }}">
+            {{ content.image.url|build_absolute_uri }}
+        </div>
+        {{ content.render_text }}
+    </div>
+{% endblock %}

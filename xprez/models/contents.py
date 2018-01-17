@@ -106,8 +106,8 @@ class Gallery(AjaxUploadFormsetContent):
     def get_formset_queryset(self):
         return self.photos.all()
 
-    def save_admin_form(self):
-        super(Gallery, self).save_admin_form()
+    def save_admin_form(self, request):
+        super(Gallery, self).save_admin_form(request)
         for index, photo in enumerate(self.photos.all()):
             photo.position = index
             photo.save()
@@ -159,7 +159,7 @@ class Video(Content):
     video_type = models.CharField(choices=TYPE_CHOICES, max_length=50)
     video_id = models.CharField(max_length=200)
 
-    def save_admin_form(self):
+    def save_admin_form(self, request):
         inst = self.admin_form.save(commit=False)
         inst.video_type = self.admin_form.video_type
         inst.video_id = self.admin_form.video_id
@@ -303,6 +303,47 @@ class Attachment(ContentItem):
         ordering = ('position', )
 
 
+class TextImageBase(Content):
+    form_class = 'xprez.admin_forms.TextImageForm'
+    admin_template_name = 'xprez/admin/contents/text_image.html'
+    front_template_name = 'xprez/contents/text_image.html'
+    verbose_name = 'Image + Text'
+    icon_name = 'text_image'
+
+    ALIGNMENT_LEFT = 'left'
+    ALIGNMENT_RIGHT = 'right'
+    IMAGE_ALIGNMENT_CHOICES = (
+        (ALIGNMENT_LEFT, 'Left'),
+        (ALIGNMENT_RIGHT, 'Right'),
+    )
+
+    image = models.ImageField(upload_to='text_image_images')
+    text = models.TextField()
+    image_alignment = models.CharField(choices=IMAGE_ALIGNMENT_CHOICES, default=ALIGNMENT_LEFT, max_length=15)
+
+    class AdminMedia:
+        js = MediumEditorWidget.Media.js
+        css = MediumEditorWidget.Media.css['all']
+
+    class Meta:
+        abstract = True
+
+    def show_front(self):
+        return striptags(self.text) != ''
+
+    def get_parsed_text(self):
+        return parse_text(self.text)
+
+    def render_text(self):
+        return render_text_parsed(self.get_parsed_text())
+
+
+class TextImage(TextImageBase):
+
+    class Meta:
+        abstract = False
+
+
 contents_manager.register(MediumEditor)
 contents_manager.register(QuoteContent)
 contents_manager.register(Gallery)
@@ -312,6 +353,7 @@ contents_manager.register(NumbersContent)
 contents_manager.register(FeatureBoxes)
 contents_manager.register(CodeInput)
 contents_manager.register(CodeTemplate)
+contents_manager.register(TextImage)
 
 
 

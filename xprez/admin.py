@@ -119,7 +119,7 @@ class XprezAdmin(admin.ModelAdmin):
                 form_validated = True
                 new_object = self.save_form(request, form, change=not add)
                 for content in contents:
-                    content.save_admin_form()
+                    content.save_admin_form(request)
             else:
                 form_validated = False
                 new_object = form.instance

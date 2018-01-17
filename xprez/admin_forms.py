@@ -8,22 +8,14 @@ from django import forms
 from django.forms import inlineformset_factory
 from .models import (
     Gallery, MediumEditor, Photo, QuoteContent, Quote, Video, CodeInput,
-    NumbersContent, Number, FeatureBoxes, CodeTemplate, DownloadContent, Attachment
+    NumbersContent, Number, FeatureBoxes, CodeTemplate, DownloadContent, Attachment,
+    TextImage
 )
 from .medium_editor.widgets import MediumEditorWidget
 
 
 class BaseContentForm(forms.ModelForm):
     pass
-    # delete = forms.BooleanField(initial=False, required=False)
-
-    # def should_be_deleted(self):
-    #     return self.data.get(str(self.prefix)+'-delete') == 'on'
-
-    # def is_valid(self):
-    #     if self.should_be_deleted():
-    #         return True
-    #     return super(BaseContentForm, self).is_valid()
 
 
 class GalleryForm(BaseContentForm):
@@ -131,6 +123,15 @@ class DownloadContentForm(BaseContentForm):
         fields = ('position', 'title')
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Files'})
+        }
+
+
+class TextImageForm(BaseContentForm):
+    class Meta:
+        model = TextImage
+        fields = ('position', 'image', 'text', 'image_alignment', )
+        widgets = {
+            'text': MediumEditorWidget(simple=True),
         }
 
 

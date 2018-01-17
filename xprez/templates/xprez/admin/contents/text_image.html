@@ -1,0 +1,34 @@
+{% extends 'xprez/admin/contents/base.html' %}
+{% load thumbnail %}
+
+{% block options %}
+    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-image_alignment">
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.ALIGNMENT_LEFT }}">Image on Left</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.ALIGNMENT_RIGHT }}">Image on Right</span></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="xprez-form-table">
+        {% if content.image %}
+            {% thumbnail content.image "200x200" as thumb %}
+                <img src="{{ thumb.url }}" />
+            {% endthumbnail %}
+        {% endif %}
+        {% include 'xprez/admin/form/row.html' with field=content.admin_form.image %}
+        {% include 'xprez/admin/form/row.html' with field=content.admin_form.text %}
+    </div>
+{% endblock %}
+
+{% block hidden_form %}
+{{ block.super }}
+{{ content.admin_form.image_alignment }}
+{% endblock %}
+
+{% block js %}
+    <script>
+        jqueryME(document).ready(function () {
+            initializeMediumEditors(jqueryME('.js-content-{{ content.pk }}'));
+        });
+    </script>
+{% endblock %}

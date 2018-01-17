@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 from django import template
 from .. import contents_manager
+from ..utils import build_absolute_uri as build_abs_uri
 register = template.Library()
 
 
@@ -33,7 +34,7 @@ def medium_content_image(context, url, align, width, height, caption=None):
     lightbox = threshold_size['width'] < width or threshold_size['height'] < height
 
     image_context = {
-        'url': url,
+        'url': build_abs_uri(url),
         'align': align,
         'width': width,
         'height': height,
@@ -43,3 +44,9 @@ def medium_content_image(context, url, align, width, height, caption=None):
     }
 
     return image_context
+
+
+@register.filter()
+def build_absolute_uri(url):
+    return build_abs_uri(url)
+
