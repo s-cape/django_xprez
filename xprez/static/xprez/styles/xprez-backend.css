@@ -179,7 +179,12 @@
     display: block; }
 
 .xprez-gallery__img {
-  cursor: move; }
+  cursor: move;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  border: 0; }
 
 .xprez-gallery__dropzone {
   border: 1px dotted #ced4da;
