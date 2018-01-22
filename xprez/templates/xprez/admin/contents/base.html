@@ -1,4 +1,4 @@
-<div class="xprez-module {% if content.admin_has_errors %}xprez-module--error{% endif %} js-content js-content-{{ content.pk }}" data-pk="{{ content.pk }}">
+<div class="xprez-module {% if content.admin_has_errors %}xprez-module--error{% endif %} js-content js-content-{{ content.pk }} {% block extra_class %}{% endblock %}" data-pk="{{ content.pk }}">
     {% block js %}{% endblock %}
     <div style="display: none;">
         {% block hidden_form %}

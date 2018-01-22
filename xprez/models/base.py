@@ -113,7 +113,7 @@ class Content(models.Model):
 
     def show_front(self):
         """
-        We may want to display content on frontent only when certain its attributes are filled 
+        We may want to display content on frontend only when certain its attributes are filled
         """
         return True
 

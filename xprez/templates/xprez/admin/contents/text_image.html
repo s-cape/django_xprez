@@ -8,6 +8,8 @@
     </ul>
 {% endblock %}
 
+{% block extra_class %}image-{{ content.image_alignment }}{% endblock %}
+
 {% block content %}
     <div class="xprez-form-table">
         {% if content.image %}
