@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.apps import apps
 from django.shortcuts import redirect
 from django import forms
+from django.conf import settings as django_settings
 
 from . import models
 from . import contents_manager
@@ -44,6 +45,14 @@ class XprezAdmin(admin.ModelAdmin):
                     content_types.remove(ct)
         return content_types
 
+    def _get_ui_css_class(self):
+        if 'suit' in django_settings.INSTALLED_APPS:
+            return 'suit'
+        elif 'grapelli' in django_settings.INSTALLED_APPS:
+            return 'grapelli'
+        return 'default-admin'
+
+
     def _get_container_instance(self, request, object_pk):
         app_label, model_name = XPREZ_CONTAINER_MODEL_CLASS.split('.')
         klass = apps.get_model(app_label, model_name)
@@ -60,7 +69,8 @@ class XprezAdmin(admin.ModelAdmin):
         extra_context.update({
             'content_types': self._get_allowed_contents(),
             'contents_media': contents_media,
-            'change_form_extend_template': self.change_form_extend_template
+            'change_form_extend_template': self.change_form_extend_template,
+            'ui_css_class': self._get_ui_css_class(),
         })
         return extra_context
 

@@ -15,7 +15,7 @@
 {% block inline_field_sets %}
     {{ block.super }}
     {% if show_xprez_toolbar %}
-        <div class="xprez">
+        <div class="xprez {{ ui_css_class }}">
             <div class="xprez-top"><span class="xprez-option-btn js-collapse_all">Collapse All Boxes</span></div>
             <div class="js-contents-container">
                 {% for content in contents %}
