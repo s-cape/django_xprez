@@ -652,7 +652,8 @@ textarea {
   font-weight: 400;
   min-width: 400px;
   padding: 0;
-  margin-top: 16px; }
+  margin-top: 16px;
+  margin-bottom: 48px; }
 
 .xprez-module {
   -webkit-border-radius: 2px;

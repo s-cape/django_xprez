@@ -20,6 +20,7 @@
 	min-width: $min-width;
 	padding: 0;
 	margin-top: $g;
+	margin-bottom: $g*3;
 }
 .xprez-module {
 	@include borderRadius(2px);
