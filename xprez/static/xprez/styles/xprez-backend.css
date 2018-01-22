@@ -122,6 +122,9 @@
 .xprez-icon-copy:before {
   content: "\e14d"; }
 
+.xprez-icon-btn-add-text_image:before {
+  content: "\e060"; }
+
 .xprez-gallery__item {
   position: relative;
   display: inline-block;
@@ -891,6 +894,9 @@ textarea {
 
 .xprez-icon-btn-add-downloads:before {
   content: "\e2c0"; }
+
+.xprez-icon-btn-add-text_image:before {
+  content: "\e060"; }
 
 .xprez-option-label {
   font-size: 12px;

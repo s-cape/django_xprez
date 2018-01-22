@@ -122,6 +122,9 @@
 .xprez-icon-copy:before {
   content: "\e14d"; }
 
+.xprez-icon-btn-add-text_image:before {
+  content: "\e060"; }
+
 .xprez-full-width {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
