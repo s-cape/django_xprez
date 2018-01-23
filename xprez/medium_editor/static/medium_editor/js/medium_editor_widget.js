@@ -26,24 +26,35 @@ function initializeMediumEditors($scope) {
             this.classApplier.toggleSelection();
         }
     });
-    var editorOptions = {
+
+    var buttonsFull = [
+        'bold',
+        'italic',
+        'anchor',
+        'h2',
+        'h3',
+        'quote',
+        'smalltext',
+        'unorderedlist',
+        'orderedlist'
+    ];
+
+    var buttonsSimple = [
+        'bold',
+        'italic',
+        'anchor',
+        'h4',
+        'unorderedlist',
+    ];
+
+    var editorOptionsBase = {
         buttonLabels: 'fontawesome',
         disableDoubleReturn: true,
         extensions: {
             'smalltext': new SmallTextButton()
         },
         toolbar: {
-            buttons: [
-                'bold',
-                'italic',
-                'anchor',
-                'h2',
-                'h3',
-                'quote',
-                // {name: 'pre', action: 'append-pre', aria: 'small', tagNames: ['pre'], contentDefault: '<b>0101</b>', contentFA: 'small'},
-                'smalltext',
-                'unorderedlist',
-                'orderedlist']
+            buttons: []
         },
         anchor: {
             linkValidation: true,
@@ -52,9 +63,14 @@ function initializeMediumEditors($scope) {
         }
     };
 
+    var editorOptionsFull = Object.assign({}, editorOptionsBase);
+    var editorOptionsSimple = Object.assign({}, editorOptionsBase);
+    editorOptionsFull.toolbar.buttons = buttonsFull;
+    editorOptionsSimple.toolbar.buttons = buttonsSimple;
+
     $scope.find('.medium-editor-simple').each(function (index) {
         var textarea = jqueryME(this);
-        var editor1 = new MediumEditor(this, editorOptions);
+        var editor1 = new MediumEditor(this, editorOptionsSimple);
         jqueryME(this).parents('form').submit(function () {
             textarea.val(editor1.serialize()[editor1.elements[0].id].value);
         });
@@ -62,7 +78,7 @@ function initializeMediumEditors($scope) {
 
     $scope.find('.medium-editor').each(function (index) {
         var textarea = jqueryME(this);
-        var editor = new MediumEditor(this, editorOptions);
+        var editor = new MediumEditor(this, editorOptionsFull);
         jqueryME($(this)).mediumInsert({
             editor: editor,
             addons: {
