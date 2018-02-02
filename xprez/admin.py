@@ -244,24 +244,24 @@ class XprezAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-
-@admin.register(models.Content)
-class ContentAdmin(admin.ModelAdmin):
-    list_display = ('position', 'content_type', 'page', )
-
-
-@admin.register(models.Gallery)
-class GalleryAdmin(admin.ModelAdmin):
-    list_display = ('id', )
-
-
-@admin.register(models.Photo)
-class PhotoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'image', 'position', )
-
-
-@admin.register(models.CodeTemplate)
-class CodeTemplateAdmin(admin.ModelAdmin):
-    formfield_overrides = {
-        TemplatePathField: {'widget': forms.TextInput}
-    }
+#
+# @admin.register(models.Content)
+# class ContentAdmin(admin.ModelAdmin):
+#     list_display = ('position', 'content_type', 'page', )
+#
+#
+# @admin.register(models.Gallery)
+# class GalleryAdmin(admin.ModelAdmin):
+#     list_display = ('id', )
+#
+#
+# @admin.register(models.Photo)
+# class PhotoAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'image', 'position', )
+#
+#
+# @admin.register(models.CodeTemplate)
+# class CodeTemplateAdmin(admin.ModelAdmin):
+#     formfield_overrides = {
+#         TemplatePathField: {'widget': forms.TextInput}
+#     }
