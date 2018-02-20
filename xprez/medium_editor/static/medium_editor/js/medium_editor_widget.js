@@ -44,7 +44,7 @@ function initializeMediumEditors($scope) {
         'italic',
         'anchor',
         'h4',
-        'unorderedlist',
+        'unorderedlist'
     ];
 
     var editorOptionsBase = {
@@ -63,8 +63,8 @@ function initializeMediumEditors($scope) {
         }
     };
 
-    var editorOptionsFull = Object.assign({}, editorOptionsBase);
-    var editorOptionsSimple = Object.assign({}, editorOptionsBase);
+    var editorOptionsFull = jqueryME.extend(true, {}, editorOptionsBase);
+    var editorOptionsSimple = jqueryME.extend(true, {}, editorOptionsBase);
     editorOptionsFull.toolbar.buttons = buttonsFull;
     editorOptionsSimple.toolbar.buttons = buttonsSimple;
 
