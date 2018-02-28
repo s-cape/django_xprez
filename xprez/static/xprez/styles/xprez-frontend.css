@@ -598,7 +598,7 @@
     @media only screen and (max-width: 800px) {
       .xprez-text-image > div {
         float: none;
-        width: auto; } }
+        width: 100%; } }
 
 .xprez-text-image-right .xprez-text-image--image {
   float: right; }

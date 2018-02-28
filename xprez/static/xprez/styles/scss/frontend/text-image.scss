@@ -10,7 +10,7 @@ $ti-break-m: 800px;
 		width: 50%;
 		@media only screen and (max-width: ($ti-break-m)) {
 		 	float: none;
-		 	width: auto;
+		 	width: 100%;
 		}
 	}
 }
