@@ -1,20 +1,20 @@
-.article-header__cont {
+.article-header__cont, .xprez-text-content, 
+.medium-editor, .xprez-feature-boxes, 
+.medium-editor-simple, .xprez-download {
 	@include s-width;
 	@include xprez-mobile-extra-space;
 }
 
 // Xprez basic text styles
 
-.xprez-text-content,  
+.xprez-text-content, .xprez-text-image,   
 .xprez-feature-boxes {
 	@include clearfix;
 }
 
-.xprez-text-content, .medium-editor, 
-.xprez-feature-boxes, .medium-editor-simple,
-.xprez-download  { 
-	@include s-width;
-	@include xprez-mobile-extra-space;
+.xprez-text-content, .xprez-text-image, 
+.medium-editor, .xprez-feature-boxes, 
+.medium-editor-simple, .xprez-download  { 
 	p {
 		@include type(18px,2, 0, 1);
 		@include type-min(16px,1.5, 0, 1);

@@ -2,10 +2,10 @@
 {% load thumbnail xprez %}
 
 {% block content %}
-    <div class="xprez-module xprez-text-content">
-        <div class="img {{ content.image_alignment }}">
-            {{ content.image.url|build_absolute_uri }}
+    <div class="xprez-module xprez-text-image xprez-text-image-{{ content.image_alignment }}">
+        <div class="xprez-text-image--image">
+            <img src="{{ content.image.url|build_absolute_uri }}" alt="">
         </div>
-        {{ content.render_text }}
+        <div class="xprez-text-image--text">{{ content.render_text }}</div>
     </div>
 {% endblock %}

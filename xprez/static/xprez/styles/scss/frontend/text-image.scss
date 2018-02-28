@@ -1,0 +1,30 @@
+.xprez-text-image {
+	@include m-width;
+	& > div {
+		@include boxSizing;
+		float: left;
+		width: 50%;
+	}
+}
+.xprez-text-image-right {
+	.xprez-text-image--image {
+		float: right;
+	}
+}
+.xprez-text-image--image {
+	img {
+		width: 100%;
+	}
+	.xprez-text-image-left & {
+		padding-right: $m-space;
+		@media only screen and (max-width: ($g-break-m)) {
+			padding-right: $s-space;
+		}
+	}
+	.xprez-text-image-right & {
+		padding-left: $m-space;
+		@media only screen and (max-width: ($g-break-m)) {
+			padding-left: $s-space;
+		}
+	}
+}
