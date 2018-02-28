@@ -4,7 +4,15 @@
 {% block content %}
     <div class="xprez-module xprez-text-image xprez-text-image-{{ content.image_alignment }}">
         <div class="xprez-text-image--image">
-            <img src="{{ content.image.url|build_absolute_uri }}" alt="">
+            <img src="{% thumbnail content.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                            {% endthumbnail %}{% thumbnail content.image "800x800" quality=70 as thumb %}
+                                {{ thumb.url|build_absolute_uri }} 800w,
+                            {% endthumbnail %}{% thumbnail content.image "1200x1200" quality=70 as thumb %}
+                                {{ thumb.url|build_absolute_uri }} 1200w
+                            {% endthumbnail %}"
+                        sizes="(min-width: 1270px) 605px, (min-width: 800px) 50vw, 100vw" 
+                        class="" />
         </div>
         <div class="xprez-text-image--text">{{ content.render_text }}</div>
     </div>

@@ -595,23 +595,54 @@
     box-sizing: border-box;
     float: left;
     width: 50%; }
+    @media only screen and (max-width: 800px) {
+      .xprez-text-image > div {
+        float: none;
+        width: auto; } }
 
 .xprez-text-image-right .xprez-text-image--image {
   float: right; }
 
+@media only screen and (max-width: 800px) {
+  .xprez-text-image--image {
+    margin-bottom: 32px; } }
 .xprez-text-image--image img {
   width: 100%; }
 .xprez-text-image-left .xprez-text-image--image {
   padding-right: 25px; }
   @media only screen and (max-width: 800px) {
     .xprez-text-image-left .xprez-text-image--image {
-      padding-right: 10px; } }
+      padding-right: 0; } }
 .xprez-text-image-right .xprez-text-image--image {
   padding-left: 25px; }
   @media only screen and (max-width: 800px) {
     .xprez-text-image-right .xprez-text-image--image {
-      padding-left: 10px; } }
+      padding-left: 0; } }
 
+.xprez-text-image-right .xprez-text-image--text {
+  padding-right: 25px; }
+  @media only screen and (max-width: 1310px) {
+    .xprez-text-image-right .xprez-text-image--text {
+      padding: 0 25px; } }
+  @media only screen and (max-width: 430px) {
+    .xprez-text-image-right .xprez-text-image--text {
+      padding: 0 10px; } }
+.xprez-text-image-left .xprez-text-image--text {
+  padding-left: 25px; }
+  @media only screen and (max-width: 1310px) {
+    .xprez-text-image-left .xprez-text-image--text {
+      padding: 0 25px; } }
+  @media only screen and (max-width: 430px) {
+    .xprez-text-image-left .xprez-text-image--text {
+      padding: 0 10px; } }
+
+@media only screen and (min-width: 800px) {
+  .flexbox .xprez-text-image {
+    display: flex; }
+    .flexbox .xprez-text-image > div {
+      align-self: center; }
+    .flexbox .xprez-text-image.xprez-text-image-right {
+      flex-direction: row-reverse; } }
 .xprez-text-content-boxed {
   -moz-box-sizing: border-box;
   box-sizing: border-box;

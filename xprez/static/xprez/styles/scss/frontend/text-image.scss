@@ -1,9 +1,17 @@
+// text-image breakpoints
+
+$ti-break-m: 800px;
+
 .xprez-text-image {
 	@include m-width;
 	& > div {
 		@include boxSizing;
 		float: left;
 		width: 50%;
+		@media only screen and (max-width: ($ti-break-m)) {
+		 	float: none;
+		 	width: auto;
+		}
 	}
 }
 .xprez-text-image-right {
@@ -12,19 +20,63 @@
 	}
 }
 .xprez-text-image--image {
+	@media only screen and (max-width: ($ti-break-m)) {
+		margin-bottom: $g*2;
+	}
 	img {
 		width: 100%;
 	}
 	.xprez-text-image-left & {
 		padding-right: $m-space;
-		@media only screen and (max-width: ($g-break-m)) {
-			padding-right: $s-space;
+		@media only screen and (max-width: ($ti-break-m)) {
+			padding-right: 0;
 		}
 	}
 	.xprez-text-image-right & {
 		padding-left: $m-space;
-		@media only screen and (max-width: ($g-break-m)) {
-			padding-left: $s-space;
+		@media only screen and (max-width: ($ti-break-m)) {
+			padding-left: 0;
 		}
 	}
 }
+@mixin xprez-text-image-text-space {
+	@media only screen and (max-width: ($m-width + $m-space*2)) {
+		padding: 0 $m-space;
+	}
+	@media only screen and (max-width: ($breakS)) {
+		padding: 0 $s-space;
+	}
+}
+.xprez-text-image--text {
+	.xprez-text-image-right & {
+		padding-right: $m-space;
+		@include xprez-text-image-text-space;
+	}
+	.xprez-text-image-left & {
+		padding-left: $m-space;
+		@include xprez-text-image-text-space;
+
+	}
+}
+
+// flexbox layout 
+
+@media only screen and (min-width: ($ti-break-m)) {
+	.flexbox {
+		.xprez-text-image {
+			display: flex;
+			& > div {
+				align-self: center;
+			}
+			&.xprez-text-image-right {
+				flex-direction: row-reverse;
+			}
+		}
+	}
+}
+
+
+
+
+
+
