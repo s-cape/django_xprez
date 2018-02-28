@@ -11,14 +11,23 @@
 {% block extra_class %}image-{{ content.image_alignment }}{% endblock %}
 
 {% block content %}
-    <div class="xprez-form-table">
-        {% if content.image %}
-            {% thumbnail content.image "200x200" as thumb %}
-                <img src="{{ thumb.url }}" />
-            {% endthumbnail %}
-        {% endif %}
-        {% include 'xprez/admin/form/row.html' with field=content.admin_form.image %}
-        {% include 'xprez/admin/form/row.html' with field=content.admin_form.text %}
+    <div class="xprez-flexbox-cont">
+        <div class="xprez-image-text-image">
+            {% if content.image %}
+                <div class="xprez-form-row">
+                    <div class="xprez-cell-label">
+                        {% thumbnail content.image "400x400" as thumb %}
+                            <img src="{{ thumb.url }}" />
+                        {% endthumbnail %}
+                    </div>
+                </div>
+            {% endif %}
+            {% include 'xprez/admin/form/row.html' with field=content.admin_form.image %}
+        </div>
+        <div class="xprez-image-text-text">
+            {% include 'xprez/admin/form/row.html' with field=content.admin_form.text %}
+        </div>
+        
     </div>
 {% endblock %}
 

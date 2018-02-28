@@ -1,0 +1,40 @@
+.xprez-image-text-image,
+.xprez-image-text-text {
+	@include boxSizing;
+
+	.xprez-cell-label {
+		width: auto;
+		text-align: left;
+		display: block;
+		img {
+			width: 100%;
+			max-width: 500px;
+		}
+	}
+	.xprez-cell {
+		width: auto;
+		display: block;
+		padding-left: 0;
+		a {
+			word-break: break-all;
+		}
+	}
+}
+.xprez-image-text-text {
+
+}
+.xprez-image-text-image {	
+	@media only screen and (min-width: 600px) {
+		float: left;
+		width: 50%;
+		padding-right: 20px;
+		.image-right & {
+			float: right;
+			padding-right: 0px;
+			padding-left: 20px;
+		}
+	}
+	.xprez-form-row {
+		display: block;
+	}
+}

@@ -339,6 +339,40 @@ input.short, textarea.short {
 textarea {
   height: 100px; }
 
+.xprez-image-text-image,
+.xprez-image-text-text {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  .xprez-image-text-image .xprez-cell-label,
+  .xprez-image-text-text .xprez-cell-label {
+    width: auto;
+    text-align: left;
+    display: block; }
+    .xprez-image-text-image .xprez-cell-label img,
+    .xprez-image-text-text .xprez-cell-label img {
+      width: 100%;
+      max-width: 500px; }
+  .xprez-image-text-image .xprez-cell,
+  .xprez-image-text-text .xprez-cell {
+    width: auto;
+    display: block;
+    padding-left: 0; }
+    .xprez-image-text-image .xprez-cell a,
+    .xprez-image-text-text .xprez-cell a {
+      word-break: break-all; }
+
+@media only screen and (min-width: 600px) {
+  .xprez-image-text-image {
+    float: left;
+    width: 50%;
+    padding-right: 20px; }
+    .image-right .xprez-image-text-image {
+      float: right;
+      padding-right: 0px;
+      padding-left: 20px; } }
+.xprez-image-text-image .xprez-form-row {
+  display: block; }
+
 .xprez-full-width {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -701,7 +735,8 @@ textarea {
 .xprez-module__content {
   background: white;
   border-top: 1px solid #dee2e6;
-  padding: 15px; }
+  padding: 15px;
+  overflow: hidden; }
 
 .xprez-module__options-group {
   list-style: none;
