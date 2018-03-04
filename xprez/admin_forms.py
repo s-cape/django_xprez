@@ -104,9 +104,9 @@ class FeatureBoxesForm(BaseContentForm):
         model = FeatureBoxes
         fields = ('position', 'box_1', 'box_2', 'box_3')
         widgets = {
-            'box_1': MediumEditorWidget(simple=True),
-            'box_2': MediumEditorWidget(simple=True),
-            'box_3': MediumEditorWidget(simple=True),
+            'box_1': MediumEditorWidget(mode=MediumEditorWidget.SIMPLE),
+            'box_2': MediumEditorWidget(mode=MediumEditorWidget.SIMPLE),
+            'box_3': MediumEditorWidget(mode=MediumEditorWidget.SIMPLE),
         }
 
 
@@ -131,7 +131,7 @@ class TextImageForm(BaseContentForm):
         model = TextImage
         fields = ('position', 'image', 'text', 'image_alignment', )
         widgets = {
-            'text': MediumEditorWidget(simple=True),
+            'text': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
         }
 
 

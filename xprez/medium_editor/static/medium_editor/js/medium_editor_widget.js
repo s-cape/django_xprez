@@ -65,12 +65,21 @@ function initializeMediumEditors($scope) {
 
     var editorOptionsFull = jqueryME.extend(true, {}, editorOptionsBase);
     var editorOptionsSimple = jqueryME.extend(true, {}, editorOptionsBase);
+
     editorOptionsFull.toolbar.buttons = buttonsFull;
     editorOptionsSimple.toolbar.buttons = buttonsSimple;
 
     $scope.find('.medium-editor-simple').each(function (index) {
         var textarea = jqueryME(this);
         var editor1 = new MediumEditor(this, editorOptionsSimple);
+        jqueryME(this).parents('form').submit(function () {
+            textarea.val(editor1.serialize()[editor1.elements[0].id].value);
+        });
+    });
+
+    $scope.find('.medium-editor-no-insert-plugin').each(function (index) {
+        var textarea = jqueryME(this);
+        var editor1 = new MediumEditor(this, editorOptionsFull);
         jqueryME(this).parents('form').submit(function () {
             textarea.val(editor1.serialize()[editor1.elements[0].id].value);
         });

@@ -3,6 +3,11 @@ from django.urls import reverse_lazy
 
 
 class MediumEditorWidget(forms.widgets.Textarea):
+    FULL = 'full'
+    SIMPLE = 'simple'
+    FULL_NO_INSERT_PLUGIN = 'full_no_insert_plugin'
+    MODE_CHOICES = [FULL, SIMPLE, FULL_NO_INSERT_PLUGIN]
+
     class Media:
         css = {
             'all': (
@@ -27,11 +32,14 @@ class MediumEditorWidget(forms.widgets.Textarea):
             'medium_editor/js/medium_editor_widget.js',
         )
 
-    def __init__(self, simple=False, file_upload_dir=None, attrs=None):
-        if simple is True:
+    def __init__(self, mode='full', file_upload_dir=None, attrs=None):
+        assert mode in self.MODE_CHOICES
+        if mode == self.SIMPLE:
             css_class = 'medium-editor-simple ignore-changes'
-        else:
+        elif mode == self.FULL:
             css_class = 'medium-editor ignore-changes'
+        else:
+            css_class = 'medium-editor-no-insert-plugin'
         default_attrs = {'cols': '40', 'rows': '10', 'class': css_class, }
         if attrs:
             default_attrs.update(attrs)
