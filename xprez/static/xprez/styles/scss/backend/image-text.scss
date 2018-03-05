@@ -21,7 +21,7 @@
 	}
 }
 .xprez-image-text-text {
-
+	font-size: 18px;
 }
 .xprez-image-text-image {	
 	@media only screen and (min-width: 600px) {
@@ -38,3 +38,29 @@
 		display: block;
 	}
 }
+.xprez-image-text-text {
+	@media only screen and (min-width: 600px) {
+		float: right;
+		width: 50%;
+		.image-right & {
+			float: left;
+		}
+	}
+	.xprez-form-row {
+		display: block;
+	}
+}
+// .xprez-module-text-image {
+// 	.xprez-form-row {
+// 		display: block;
+// 		&:before,
+// 		&:after {
+// 		    content: " "; /* 1 */
+// 		    display: table; /* 2 */
+// 		}
+
+// 		&:after {
+// 		    clear: both;
+// 		}
+// 	}
+// }

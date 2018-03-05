@@ -361,6 +361,9 @@ textarea {
     .xprez-image-text-text .xprez-cell a {
       word-break: break-all; }
 
+.xprez-image-text-text {
+  font-size: 18px; }
+
 @media only screen and (min-width: 600px) {
   .xprez-image-text-image {
     float: left;
@@ -371,6 +374,15 @@ textarea {
       padding-right: 0px;
       padding-left: 20px; } }
 .xprez-image-text-image .xprez-form-row {
+  display: block; }
+
+@media only screen and (min-width: 600px) {
+  .xprez-image-text-text {
+    float: right;
+    width: 50%; }
+    .image-right .xprez-image-text-text {
+      float: left; } }
+.xprez-image-text-text .xprez-form-row {
   display: block; }
 
 .xprez-full-width {

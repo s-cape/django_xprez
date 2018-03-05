@@ -8,10 +8,10 @@
     </ul>
 {% endblock %}
 
-{% block extra_class %}image-{{ content.image_alignment }}{% endblock %}
+{% block extra_class %}image-{{ content.image_alignment }} xprez-module-text-image{% endblock %}
 
 {% block content %}
-    <div class="xprez-flexbox-cont">
+    <div class="xprez-flexbox-cont ">
         <div class="xprez-image-text-image">
             {% if content.image %}
                 <div class="xprez-form-row">
@@ -24,7 +24,7 @@
             {% endif %}
             {% include 'xprez/admin/form/row.html' with field=content.admin_form.image %}
         </div>
-        <div class="xprez-image-text-text">
+        <div class="xprez-image-text-text xprez-text-image">
             {% include 'xprez/admin/form/row.html' with field=content.admin_form.text %}
         </div>
 
