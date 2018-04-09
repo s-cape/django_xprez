@@ -104,9 +104,9 @@ class FeatureBoxesForm(BaseContentForm):
         model = FeatureBoxes
         fields = ('position', 'box_1', 'box_2', 'box_3')
         widgets = {
-            'box_1': MediumEditorWidget(mode=MediumEditorWidget.SIMPLE),
-            'box_2': MediumEditorWidget(mode=MediumEditorWidget.SIMPLE),
-            'box_3': MediumEditorWidget(mode=MediumEditorWidget.SIMPLE),
+            'box_1': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
+            'box_2': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
+            'box_3': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
         }
 
 
