@@ -1,5 +1,5 @@
 {% extends 'xprez/contents/base.html' %}
-{% load thumbnail %}
+{% load thumbnail xprez %}
 
 {% block content %}
 <div class="xprez-module xprez-video {{ content.width }}-width {% if content.poster_image %}js-video-with-poster{% endif %}">
@@ -9,27 +9,27 @@
             <style>
                 .xprez-video-poster-{{ content.video_id }} {
                     {% thumbnail content.poster_image "500x278" crop="50%" quality=70 as thumb %}
-                    background-image: url({{ thumb.url }});
+                    background-image: url({{ thumb.url|build_absolute_uri }});
                     {% endthumbnail %}
                 }
                 @media only screen and (min-width: 400px) {
                     .xprez-video-poster-{{ content.video_id }} {
                     {% thumbnail content.poster_image "1000x555" crop="50%" quality=70 as thumb %}
-                    background-image: url({{ thumb.url }});
+                    background-image: url({{ thumb.url|build_absolute_uri }});
                     {% endthumbnail %}
                     }
                 }
                 @media only screen and (min-width: 800px) {
                     .xprez-video-poster-{{ content.video_id }} {
                     {% thumbnail content.poster_image "1400x777" crop="50%" quality=70 as thumb %}
-                    background-image: url({{ thumb.url }});
+                    background-image: url({{ thumb.url|build_absolute_uri }});
                     {% endthumbnail %}
                     }
                 }
                 @media only screen and (min-width: 1200px) {
                     .xprez-video-poster-{{ content.video_id }} {
                     {% thumbnail content.poster_image "1700x944" crop="50%" quality=70 as thumb %}
-                    background-image: url({{ thumb.url }});
+                    background-image: url({{ thumb.url|build_absolute_uri }});
                     {% endthumbnail %}
                     }
                 }
