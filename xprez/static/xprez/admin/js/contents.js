@@ -71,7 +71,7 @@ function activateMultipleSelectControllers($scope) {
         }
         $options.click(function () {
             var $this = $(this);
-            var val = $this.data('formfield_value');
+            var val = $this.data('formfield_value').toString();
             var values = $formField.val();
             if (values === null) {
                 values = [];
