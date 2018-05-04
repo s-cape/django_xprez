@@ -143,10 +143,10 @@ class Photo(ContentItem):
 
 
 class Video(Content):
-    TYPE_CHOICES = {
+    TYPE_CHOICES = (
         ('youtube', 'YouTube'),
         ('vimeo', 'Vimeo'),
-    }
+    )
     admin_template_name = 'xprez/admin/contents/video.html'
     front_template_name = 'xprez/contents/video.html'
     verbose_name = 'Video'
