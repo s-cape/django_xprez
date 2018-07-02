@@ -1,6 +1,6 @@
-.article-header__cont, .xprez-text-content, 
-.medium-editor, .xprez-feature-boxes, 
-.medium-editor-simple, .xprez-download {
+.article-header__cont,
+.medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin, 
+.xprez-feature-boxes, .xprez-download, .xprez-text-content {
 	@include s-width;
 	@include xprez-mobile-extra-space;
 }
@@ -12,9 +12,9 @@
 	@include clearfix;
 }
 
-.xprez-text-content, .xprez-text-image, 
-.medium-editor, .xprez-feature-boxes, 
-.medium-editor-simple, .xprez-download  { 
+.xprez-text-content,  
+.medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
+.xprez-feature-boxes, .xprez-download, .xprez-text-image  { 
 	p {
 		@include type(18px,2, 0, 1);
 		@include type-min(16px,1.5, 0, 1);
@@ -103,7 +103,8 @@
 
 // Specific styles for feature boxes & simple medium editor 
 
-.xprez-feature-boxes, .medium-editor-simple  {
+.xprez-feature-boxes, .medium-editor-simple,
+.medium-editor-no-insert-plugin  {
 	h2 {
 		margin-top: .5*$g;
 		margin-bottom: .5*$g;

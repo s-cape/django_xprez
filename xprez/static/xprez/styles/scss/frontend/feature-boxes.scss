@@ -1,10 +1,16 @@
 $fb-space : 10px;
 
-.xprez-feature-boxes {
-	@include clearfix; 
-	@include cont-width($m-width + $fb-space*4);
-	padding: 0 10px;
-}
+.xprez-feature-boxes { 
+ 	@include cont-width($m-width + $fb-space*4);
+ 	padding: 0 10px;
+	.no-flexbox & {
+		@include clearfix; 
+	}
+	.flexbox & {
+		display: flex;
+		flex-wrap: wrap;
+	} 
+ }
 [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
 	@include boxSizing;
 	float: left;
@@ -13,7 +19,7 @@ $fb-space : 10px;
 	margin: 0 10px;
 	background: $super-light-gray;
 	padding: $g*2 40px;
-	@media only screen and (max-width: ($s-width + $m-space*2)) {
+	@media only screen and (max-width: 850px) {
        float: none;
        width: auto;
        margin: 10px 0;

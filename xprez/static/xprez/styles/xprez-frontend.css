@@ -307,23 +307,23 @@
       .xprez-cols-4 .xprez-photo-item:nth-child(2n+3) {
         clear: left; } }
 
-.article-header__cont, .xprez-text-content,
-.medium-editor, .xprez-feature-boxes,
-.medium-editor-simple, .xprez-download {
+.article-header__cont,
+.medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
+.xprez-feature-boxes, .xprez-download, .xprez-text-content {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto; }
   @media only screen and (max-width: 750px) {
-    .article-header__cont, .xprez-text-content,
-    .medium-editor, .xprez-feature-boxes,
-    .medium-editor-simple, .xprez-download {
+    .article-header__cont,
+    .medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
+    .xprez-feature-boxes, .xprez-download, .xprez-text-content {
       padding: 0 25px; } }
   @media only screen and (max-width: 430px) {
-    .article-header__cont, .xprez-text-content,
-    .medium-editor, .xprez-feature-boxes,
-    .medium-editor-simple, .xprez-download {
+    .article-header__cont,
+    .medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
+    .xprez-feature-boxes, .xprez-download, .xprez-text-content {
       padding: 0 10px; } }
 
 .xprez-text-content, .xprez-text-image,
@@ -340,25 +340,25 @@
   .xprez-feature-boxes:after {
     clear: both; }
 
-.xprez-text-content p, .xprez-text-image p,
-.medium-editor p, .xprez-feature-boxes p,
-.medium-editor-simple p, .xprez-download p {
+.xprez-text-content p,
+.medium-editor p, .medium-editor-simple p, .medium-editor-no-insert-plugin p,
+.xprez-feature-boxes p, .xprez-download p, .xprez-text-image p {
   font-size: 1em;
   line-height: 1.77778em;
   margin-top: 0em;
   margin-bottom: 0.88889em;
   font-family: "acumin-pro", Helvetica, Arial, sans-serif; }
   @media only screen and (max-width: 430px) {
-    .xprez-text-content p, .xprez-text-image p,
-    .medium-editor p, .xprez-feature-boxes p,
-    .medium-editor-simple p, .xprez-download p {
+    .xprez-text-content p,
+    .medium-editor p, .medium-editor-simple p, .medium-editor-no-insert-plugin p,
+    .xprez-feature-boxes p, .xprez-download p, .xprez-text-image p {
       font-size: 0.88889em;
       line-height: 1.5em;
       margin-top: 0em;
       margin-bottom: 1em; } }
-.xprez-text-content h2, .xprez-text-image h2,
-.medium-editor h2, .xprez-feature-boxes h2,
-.medium-editor-simple h2, .xprez-download h2 {
+.xprez-text-content h2,
+.medium-editor h2, .medium-editor-simple h2, .medium-editor-no-insert-plugin h2,
+.xprez-feature-boxes h2, .xprez-download h2, .xprez-text-image h2 {
   font-size: 3.05556em;
   line-height: 1.16364em;
   margin-top: 1.16364em;
@@ -368,33 +368,33 @@
   letter-spacing: -0.04em;
   margin-left: 0; }
   @media only screen and (max-width: 650px) {
-    .xprez-text-content h2, .xprez-text-image h2,
-    .medium-editor h2, .xprez-feature-boxes h2,
-    .medium-editor-simple h2, .xprez-download h2 {
+    .xprez-text-content h2,
+    .medium-editor h2, .medium-editor-simple h2, .medium-editor-no-insert-plugin h2,
+    .xprez-feature-boxes h2, .xprez-download h2, .xprez-text-image h2 {
       font-size: 2.22222em;
       line-height: 1.2em;
       margin-top: 1.2em;
       margin-bottom: 0.8em; } }
   @media only screen and (max-width: 430px) {
-    .xprez-text-content h2, .xprez-text-image h2,
-    .medium-editor h2, .xprez-feature-boxes h2,
-    .medium-editor-simple h2, .xprez-download h2 {
+    .xprez-text-content h2,
+    .medium-editor h2, .medium-editor-simple h2, .medium-editor-no-insert-plugin h2,
+    .xprez-feature-boxes h2, .xprez-download h2, .xprez-text-image h2 {
       font-size: 1.66667em;
       line-height: 1.33333em;
       margin-top: 1.33333em;
       margin-bottom: 0.8em; } }
-  .xprez-text-content h2:first-child, .xprez-text-image h2:first-child,
-  .medium-editor h2:first-child, .xprez-feature-boxes h2:first-child,
-  .medium-editor-simple h2:first-child, .xprez-download h2:first-child {
+  .xprez-text-content h2:first-child,
+  .medium-editor h2:first-child, .medium-editor-simple h2:first-child, .medium-editor-no-insert-plugin h2:first-child,
+  .xprez-feature-boxes h2:first-child, .xprez-download h2:first-child, .xprez-text-image h2:first-child {
     margin-top: 0; }
-  .xprez-text-content h2 span, .xprez-text-image h2 span,
-  .medium-editor h2 span, .xprez-feature-boxes h2 span,
-  .medium-editor-simple h2 span, .xprez-download h2 span {
+  .xprez-text-content h2 span,
+  .medium-editor h2 span, .medium-editor-simple h2 span, .medium-editor-no-insert-plugin h2 span,
+  .xprez-feature-boxes h2 span, .xprez-download h2 span, .xprez-text-image h2 span {
     font-weight: bold !important;
     color: #78747d; }
-.xprez-text-content h3, .xprez-text-image h3,
-.medium-editor h3, .xprez-feature-boxes h3,
-.medium-editor-simple h3, .xprez-download h3 {
+.xprez-text-content h3,
+.medium-editor h3, .medium-editor-simple h3, .medium-editor-no-insert-plugin h3,
+.xprez-feature-boxes h3, .xprez-download h3, .xprez-text-image h3 {
   font-size: 1.66667em;
   line-height: 1.33333em;
   margin-top: 1.6em;
@@ -402,25 +402,25 @@
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
   padding-left: 0; }
   @media only screen and (max-width: 650px) {
-    .xprez-text-content h3, .xprez-text-image h3,
-    .medium-editor h3, .xprez-feature-boxes h3,
-    .medium-editor-simple h3, .xprez-download h3 {
+    .xprez-text-content h3,
+    .medium-editor h3, .medium-editor-simple h3, .medium-editor-no-insert-plugin h3,
+    .xprez-feature-boxes h3, .xprez-download h3, .xprez-text-image h3 {
       font-size: 1.27778em;
       line-height: 1.3913em;
       margin-top: 1.3913em;
       margin-bottom: 0.69565em; } }
-  .xprez-text-content h3:first-child, .xprez-text-image h3:first-child,
-  .medium-editor h3:first-child, .xprez-feature-boxes h3:first-child,
-  .medium-editor-simple h3:first-child, .xprez-download h3:first-child {
+  .xprez-text-content h3:first-child,
+  .medium-editor h3:first-child, .medium-editor-simple h3:first-child, .medium-editor-no-insert-plugin h3:first-child,
+  .xprez-feature-boxes h3:first-child, .xprez-download h3:first-child, .xprez-text-image h3:first-child {
     margin-top: 0; }
-  .xprez-text-content h3 span, .xprez-text-image h3 span,
-  .medium-editor h3 span, .xprez-feature-boxes h3 span,
-  .medium-editor-simple h3 span, .xprez-download h3 span {
+  .xprez-text-content h3 span,
+  .medium-editor h3 span, .medium-editor-simple h3 span, .medium-editor-no-insert-plugin h3 span,
+  .xprez-feature-boxes h3 span, .xprez-download h3 span, .xprez-text-image h3 span {
     font-weight: bold !important;
     color: #78747d; }
-.xprez-text-content h4, .xprez-text-image h4,
-.medium-editor h4, .xprez-feature-boxes h4,
-.medium-editor-simple h4, .xprez-download h4 {
+.xprez-text-content h4,
+.medium-editor h4, .medium-editor-simple h4, .medium-editor-no-insert-plugin h4,
+.xprez-feature-boxes h4, .xprez-download h4, .xprez-text-image h4 {
   font-size: 1em;
   line-height: 1.77778em;
   margin-top: 0em;
@@ -428,53 +428,53 @@
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
   font-weight: bold; }
   @media only screen and (max-width: 430px) {
-    .xprez-text-content h4, .xprez-text-image h4,
-    .medium-editor h4, .xprez-feature-boxes h4,
-    .medium-editor-simple h4, .xprez-download h4 {
+    .xprez-text-content h4,
+    .medium-editor h4, .medium-editor-simple h4, .medium-editor-no-insert-plugin h4,
+    .xprez-feature-boxes h4, .xprez-download h4, .xprez-text-image h4 {
       font-size: 0.88889em;
       line-height: 1.5em;
       margin-top: 0em;
       margin-bottom: 1em; } }
-.xprez-text-content small, .xprez-text-image small,
-.medium-editor small, .xprez-feature-boxes small,
-.medium-editor-simple small, .xprez-download small {
+.xprez-text-content small,
+.medium-editor small, .medium-editor-simple small, .medium-editor-no-insert-plugin small,
+.xprez-feature-boxes small, .xprez-download small, .xprez-text-image small {
   font-size: 80%; }
-.xprez-text-content ul, .xprez-text-content ol, .xprez-text-image ul, .xprez-text-image ol,
+.xprez-text-content ul, .xprez-text-content ol,
 .medium-editor ul,
-.medium-editor ol, .xprez-feature-boxes ul, .xprez-feature-boxes ol,
-.medium-editor-simple ul,
-.medium-editor-simple ol, .xprez-download ul, .xprez-download ol {
+.medium-editor ol, .medium-editor-simple ul, .medium-editor-simple ol, .medium-editor-no-insert-plugin ul, .medium-editor-no-insert-plugin ol,
+.xprez-feature-boxes ul,
+.xprez-feature-boxes ol, .xprez-download ul, .xprez-download ol, .xprez-text-image ul, .xprez-text-image ol {
   margin: 16px 0;
   padding: 0 0 0 50px; }
   @media only screen and (max-width: 430px) {
-    .xprez-text-content ul, .xprez-text-content ol, .xprez-text-image ul, .xprez-text-image ol,
+    .xprez-text-content ul, .xprez-text-content ol,
     .medium-editor ul,
-    .medium-editor ol, .xprez-feature-boxes ul, .xprez-feature-boxes ol,
-    .medium-editor-simple ul,
-    .medium-editor-simple ol, .xprez-download ul, .xprez-download ol {
+    .medium-editor ol, .medium-editor-simple ul, .medium-editor-simple ol, .medium-editor-no-insert-plugin ul, .medium-editor-no-insert-plugin ol,
+    .xprez-feature-boxes ul,
+    .xprez-feature-boxes ol, .xprez-download ul, .xprez-download ol, .xprez-text-image ul, .xprez-text-image ol {
       padding-left: 30px; } }
-  .xprez-text-content ul li, .xprez-text-content ol li, .xprez-text-image ul li, .xprez-text-image ol li,
+  .xprez-text-content ul li, .xprez-text-content ol li,
   .medium-editor ul li,
-  .medium-editor ol li, .xprez-feature-boxes ul li, .xprez-feature-boxes ol li,
-  .medium-editor-simple ul li,
-  .medium-editor-simple ol li, .xprez-download ul li, .xprez-download ol li {
+  .medium-editor ol li, .medium-editor-simple ul li, .medium-editor-simple ol li, .medium-editor-no-insert-plugin ul li, .medium-editor-no-insert-plugin ol li,
+  .xprez-feature-boxes ul li,
+  .xprez-feature-boxes ol li, .xprez-download ul li, .xprez-download ol li, .xprez-text-image ul li, .xprez-text-image ol li {
     font-size: 1em;
     line-height: 1.77778em;
     margin-top: 0em;
     margin-bottom: 0em; }
     @media only screen and (max-width: 430px) {
-      .xprez-text-content ul li, .xprez-text-content ol li, .xprez-text-image ul li, .xprez-text-image ol li,
+      .xprez-text-content ul li, .xprez-text-content ol li,
       .medium-editor ul li,
-      .medium-editor ol li, .xprez-feature-boxes ul li, .xprez-feature-boxes ol li,
-      .medium-editor-simple ul li,
-      .medium-editor-simple ol li, .xprez-download ul li, .xprez-download ol li {
+      .medium-editor ol li, .medium-editor-simple ul li, .medium-editor-simple ol li, .medium-editor-no-insert-plugin ul li, .medium-editor-no-insert-plugin ol li,
+      .xprez-feature-boxes ul li,
+      .xprez-feature-boxes ol li, .xprez-download ul li, .xprez-download ol li, .xprez-text-image ul li, .xprez-text-image ol li {
         font-size: 0.88889em;
         line-height: 1.5em;
         margin-top: 0em;
         margin-bottom: 1em; } }
-.xprez-text-content .btn, .xprez-text-image .btn,
-.medium-editor .btn, .xprez-feature-boxes .btn,
-.medium-editor-simple .btn, .xprez-download .btn {
+.xprez-text-content .btn,
+.medium-editor .btn, .medium-editor-simple .btn, .medium-editor-no-insert-plugin .btn,
+.xprez-feature-boxes .btn, .xprez-download .btn, .xprez-text-image .btn {
   display: inline-block;
   background: #37383c;
   font-size: 0.72222em;
@@ -495,38 +495,42 @@
   text-decoration: none;
   letter-spacing: 0.1em; }
   @media only screen and (max-width: 430px) {
-    .xprez-text-content .btn, .xprez-text-image .btn,
-    .medium-editor .btn, .xprez-feature-boxes .btn,
-    .medium-editor-simple .btn, .xprez-download .btn {
+    .xprez-text-content .btn,
+    .medium-editor .btn, .medium-editor-simple .btn, .medium-editor-no-insert-plugin .btn,
+    .xprez-feature-boxes .btn, .xprez-download .btn, .xprez-text-image .btn {
       padding: 16px 20px; } }
-  .xprez-text-content .btn:active, .xprez-text-image .btn:active,
-  .medium-editor .btn:active, .xprez-feature-boxes .btn:active,
-  .medium-editor-simple .btn:active, .xprez-download .btn:active {
+  .xprez-text-content .btn:active,
+  .medium-editor .btn:active, .medium-editor-simple .btn:active, .medium-editor-no-insert-plugin .btn:active,
+  .xprez-feature-boxes .btn:active, .xprez-download .btn:active, .xprez-text-image .btn:active {
     transform: scale(0.95); }
-  .xprez-text-content .btn:hover, .xprez-text-image .btn:hover,
-  .medium-editor .btn:hover, .xprez-feature-boxes .btn:hover,
-  .medium-editor-simple .btn:hover, .xprez-download .btn:hover {
+  .xprez-text-content .btn:hover,
+  .medium-editor .btn:hover, .medium-editor-simple .btn:hover, .medium-editor-no-insert-plugin .btn:hover,
+  .xprez-feature-boxes .btn:hover, .xprez-download .btn:hover, .xprez-text-image .btn:hover {
     color: #37383c;
     background-color: #d2d2d3; }
-  .xprez-text-content .btn.btn-white, .xprez-text-image .btn.btn-white,
-  .medium-editor .btn.btn-white, .xprez-feature-boxes .btn.btn-white,
-  .medium-editor-simple .btn.btn-white, .xprez-download .btn.btn-white {
+  .xprez-text-content .btn.btn-white,
+  .medium-editor .btn.btn-white, .medium-editor-simple .btn.btn-white, .medium-editor-no-insert-plugin .btn.btn-white,
+  .xprez-feature-boxes .btn.btn-white, .xprez-download .btn.btn-white, .xprez-text-image .btn.btn-white {
     background: white;
     color: #37383c; }
-    .xprez-text-content .btn.btn-white:hover, .xprez-text-image .btn.btn-white:hover,
-    .medium-editor .btn.btn-white:hover, .xprez-feature-boxes .btn.btn-white:hover,
-    .medium-editor-simple .btn.btn-white:hover, .xprez-download .btn.btn-white:hover {
+    .xprez-text-content .btn.btn-white:hover,
+    .medium-editor .btn.btn-white:hover, .medium-editor-simple .btn.btn-white:hover, .medium-editor-no-insert-plugin .btn.btn-white:hover,
+    .xprez-feature-boxes .btn.btn-white:hover, .xprez-download .btn.btn-white:hover, .xprez-text-image .btn.btn-white:hover {
       color: #37383c; }
 
-.xprez-feature-boxes h2, .medium-editor-simple h2 {
+.xprez-feature-boxes h2, .medium-editor-simple h2,
+.medium-editor-no-insert-plugin h2 {
   margin-top: 8px;
   margin-bottom: 8px; }
-  .xprez-feature-boxes h2:first-child, .medium-editor-simple h2:first-child {
+  .xprez-feature-boxes h2:first-child, .medium-editor-simple h2:first-child,
+  .medium-editor-no-insert-plugin h2:first-child {
     margin-top: 0; }
-.xprez-feature-boxes h3, .medium-editor-simple h3 {
+.xprez-feature-boxes h3, .medium-editor-simple h3,
+.medium-editor-no-insert-plugin h3 {
   margin-top: 8px;
   margin-bottom: 8px; }
-  .xprez-feature-boxes h3:first-child, .medium-editor-simple h3:first-child {
+  .xprez-feature-boxes h3:first-child, .medium-editor-simple h3:first-child,
+  .medium-editor-no-insert-plugin h3:first-child {
     margin-top: 0; }
 
 .medium-editor {
@@ -791,20 +795,24 @@
     border-radius: 50px; }
 
 .xprez-feature-boxes {
-  *zoom: 1;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 1300px;
   margin-left: auto;
   margin-right: auto;
   padding: 0 10px; }
-  .xprez-feature-boxes:before, .xprez-feature-boxes:after {
-    content: " ";
-    /* 1 */
-    display: table;
-    /* 2 */ }
-  .xprez-feature-boxes:after {
-    clear: both; }
+  .no-flexbox .xprez-feature-boxes {
+    *zoom: 1; }
+    .no-flexbox .xprez-feature-boxes:before, .no-flexbox .xprez-feature-boxes:after {
+      content: " ";
+      /* 1 */
+      display: table;
+      /* 2 */ }
+    .no-flexbox .xprez-feature-boxes:after {
+      clear: both; }
+  .flexbox .xprez-feature-boxes {
+    display: flex;
+    flex-wrap: wrap; }
 
 [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
   -moz-box-sizing: border-box;
@@ -815,7 +823,7 @@
   margin: 0 10px;
   background: #f6f6f6;
   padding: 32px 40px; }
-  @media only screen and (max-width: 750px) {
+  @media only screen and (max-width: 850px) {
     [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
       float: none;
       width: auto;
