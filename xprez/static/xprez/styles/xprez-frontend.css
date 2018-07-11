@@ -817,20 +817,28 @@
 [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  float: left;
   width: 33.33%;
-  width: calc(33.33% - 20px);
+  width: calc(33.33% - 20px );
   margin: 0 10px;
   background: #f6f6f6;
   padding: 32px 40px; }
-  @media only screen and (max-width: 850px) {
+  [class^="xprez-feature-box-"] .no-flexbox, [class*=" xprez-feature-box-"] .no-flexbox {
+    float: left; }
+  @media only screen and (max-width: 750px) {
     [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
-      float: none;
-      width: auto;
-      margin: 10px 0; } }
+      width: 100%;
+      margin: 10px 0; }
+      [class^="xprez-feature-box-"] .no-flexbox, [class*=" xprez-feature-box-"] .no-flexbox {
+        float: none; } }
   @media only screen and (max-width: 430px) {
     [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
       padding: 16px 20px; } }
+
+.xprez-feature-boxes + .xprez-feature-boxes {
+  margin-top: 20px; }
+  @media only screen and (max-width: 750px) {
+    .xprez-feature-boxes + .xprez-feature-boxes {
+      margin-top: 0; } }
 
 .xprez-video.full-width {
   -moz-box-sizing: border-box;

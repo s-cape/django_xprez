@@ -1,4 +1,5 @@
 $fb-space : 10px;
+$fb-stream-break: 750px;
 
 .xprez-feature-boxes { 
  	@include cont-width($m-width + $fb-space*4);
@@ -12,19 +13,28 @@ $fb-space : 10px;
 	} 
  }
 [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
+	.no-flexbox { float: left; }
 	@include boxSizing;
-	float: left;
+	
 	width: 33.33%;
-	width: calc(33.33% - 20px);
+	width: calc(33.33% - 20px );
 	margin: 0 10px;
 	background: $super-light-gray;
 	padding: $g*2 40px;
-	@media only screen and (max-width: 850px) {
-       float: none;
-       width: auto;
+	@media only screen and (max-width: $fb-stream-break) {
+		.no-flexbox { float: none; }
+       width: 100%;
        margin: 10px 0;
     }
     @media only screen and (max-width: $typobreakS) {
        padding: $g*1 20px;
     }
+}
+.xprez-feature-boxes {
+	& + .xprez-feature-boxes {
+		margin-top: $fb-space*2;
+		@media only screen and (max-width: $fb-stream-break) {
+			margin-top: 0;
+		}
+	}
 }
