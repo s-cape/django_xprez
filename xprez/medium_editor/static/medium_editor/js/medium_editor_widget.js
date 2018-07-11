@@ -57,7 +57,7 @@ function initializeMediumEditors($scope) {
             buttons: []
         },
         anchor: {
-            linkValidation: true,
+            linkValidation: false,
             customClassOption: 'btn btn-large',
             customClassOptionText: 'Button'
         }
