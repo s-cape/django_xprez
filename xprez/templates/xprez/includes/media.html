@@ -1,8 +1,8 @@
 {% load static %}
 {% for js in contents_media.js %}
-    <script type="text/javascript" src="{% if '//' in js %}{{ js }}{% else %}{% static js %}{% endif %}"></script>
+    <script type="text/javascript" src="{% if '//' in js %}{{ js }}{% else %}{% if USE_ABSOLUTE_URI %}{{ BASE_URL }}{% endif %}{% static js %}{% endif %}"></script>
 {% endfor %}
-<link rel="stylesheet" href="{% static 'xprez/admin/libs/jquery_ui/jquery-ui.min.css' %}">
+<link rel="stylesheet" href="{% if USE_ABSOLUTE_URI %}{{ BASE_URL }}{% endif %}{% static 'xprez/admin/libs/jquery_ui/jquery-ui.min.css' %}">
 {% for css in contents_media.css %}
-    <link rel="stylesheet" href="{% if '//' in css %}{{ css }}{% else %}{% static css %}{% endif %}">
+    <link rel="stylesheet" href="{% if '//' in css %}{{ css }}{% else %}{% if USE_ABSOLUTE_URI %}{{ BASE_URL }}{% endif %}{% static css %}{% endif %}">
 {% endfor %}

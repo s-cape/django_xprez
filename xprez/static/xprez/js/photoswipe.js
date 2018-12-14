@@ -26,7 +26,7 @@ function openPhotoSwipe($gallery, index) {
     gallery.init();
 }
 
-$(function () {
+function initGallery() {
     $('body').each(function (index, el) {
         var $gallery = $(el);
         $gallery.find('.js-photo').each(function (index, el) {
@@ -36,4 +36,9 @@ $(function () {
         });
 
     });
+}
+
+
+$(function () {
+    initGallery()
 });

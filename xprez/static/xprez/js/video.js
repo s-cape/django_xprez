@@ -1,6 +1,3 @@
-
-
-
 function handlePoster($contents) {
     $contents.each(function (index, el) {
         var $el = $(el);
@@ -33,8 +30,11 @@ function handlePoster($contents) {
 
 }
 
+function initPosters() {
+    handlePoster($('.js-video-with-poster'));
+}
+
 
 $(function () {
-    handlePoster($('.js-video-with-poster'));
-
+    initPosters()
 });
