@@ -207,7 +207,7 @@
 .xprez-gallery {
   *zoom: 1; }
   .xprez-gallery.xprez-photo-connect-false {
-    padding: 0 10px; }
+    padding: 0 16px; }
     @media only screen and (max-width: 800px) {
       .xprez-gallery.xprez-photo-connect-false {
         padding: 0 7px; } }
@@ -224,7 +224,7 @@
     margin-left: auto;
     margin-right: auto; }
     .xprez-gallery.mid-width.xprez-photo-connect-false {
-      max-width: 1300px; }
+      max-width: 1324px; }
   .xprez-gallery.text-width {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -232,7 +232,7 @@
     margin-left: auto;
     margin-right: auto; }
     .xprez-gallery.text-width.xprez-photo-connect-false {
-      max-width: 740px; }
+      max-width: 764px; }
   .xprez-gallery img {
     width: 100%;
     display: block; }
@@ -266,7 +266,7 @@
   box-sizing: border-box;
   cursor: pointer; }
   .xprez-photo-connect-false .xprez-photo-item {
-    padding: 10px; }
+    padding: 16px; }
     @media only screen and (max-width: 800px) {
       .xprez-photo-connect-false .xprez-photo-item {
         padding: 7px; } }
@@ -315,16 +315,16 @@
   max-width: 700px;
   margin-left: auto;
   margin-right: auto; }
-  @media only screen and (max-width: 750px) {
+  @media only screen and (max-width: 748px) {
     .article-header__cont,
     .medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
     .xprez-feature-boxes, .xprez-download, .xprez-text-content {
-      padding: 0 25px; } }
+      padding: 0 24px; } }
   @media only screen and (max-width: 430px) {
     .article-header__cont,
     .medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
     .xprez-feature-boxes, .xprez-download, .xprez-text-content {
-      padding: 0 10px; } }
+      padding: 0 16px; } }
 
 .xprez-text-content, .xprez-text-image,
 .xprez-feature-boxes {
@@ -613,32 +613,32 @@
 .xprez-text-image--image img {
   width: 100%; }
 .xprez-text-image-left .xprez-text-image--image {
-  padding-right: 25px; }
+  padding-right: 24px; }
   @media only screen and (max-width: 800px) {
     .xprez-text-image-left .xprez-text-image--image {
       padding-right: 0; } }
 .xprez-text-image-right .xprez-text-image--image {
-  padding-left: 25px; }
+  padding-left: 24px; }
   @media only screen and (max-width: 800px) {
     .xprez-text-image-right .xprez-text-image--image {
       padding-left: 0; } }
 
 .xprez-text-image-right .xprez-text-image--text {
-  padding-right: 25px; }
-  @media only screen and (max-width: 1310px) {
+  padding-right: 24px; }
+  @media only screen and (max-width: 1308px) {
     .xprez-text-image-right .xprez-text-image--text {
-      padding: 0 25px; } }
+      padding: 0 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-text-image-right .xprez-text-image--text {
-      padding: 0 10px; } }
+      padding: 0 16px; } }
 .xprez-text-image-left .xprez-text-image--text {
-  padding-left: 25px; }
-  @media only screen and (max-width: 1310px) {
+  padding-left: 24px; }
+  @media only screen and (max-width: 1308px) {
     .xprez-text-image-left .xprez-text-image--text {
-      padding: 0 25px; } }
+      padding: 0 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-text-image-left .xprez-text-image--text {
-      padding: 0 10px; } }
+      padding: 0 16px; } }
 
 @media only screen and (min-width: 800px) {
   .flexbox .xprez-text-image {
@@ -652,7 +652,7 @@
   box-sizing: border-box;
   background: #f6f6f6;
   max-width: 100%;
-  padding: 48px 90px; }
+  padding: 48px 88px; }
   .xprez-text-content-boxed.full-width {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -668,16 +668,16 @@
   .xprez-text-content-boxed.text-width {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    max-width: 850px;
+    max-width: 844px;
     margin-left: auto;
     margin-right: auto;
-    padding: 48px 75px; }
+    padding: 48px 72px; }
   @media only screen and (max-width: 850px) {
     .xprez-text-content-boxed.full-width, .xprez-text-content-boxed.mid-width, .xprez-text-content-boxed.text-width {
-      padding: 32px 25px; } }
+      padding: 32px 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-text-content-boxed.full-width, .xprez-text-content-boxed.mid-width, .xprez-text-content-boxed.text-width {
-      padding: 32px 10px; } }
+      padding: 32px 16px; } }
 
 .xprez-quote.xprez-quote-boxed {
   background: #f6f6f6; }
@@ -690,12 +690,12 @@
   margin-right: auto;
   *zoom: 1;
   text-align: center; }
-  @media only screen and (max-width: 750px) {
+  @media only screen and (max-width: 748px) {
     .xprez-quote-box {
-      padding: 0 25px; } }
+      padding: 0 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-quote-box {
-      padding: 0 10px; } }
+      padding: 0 16px; } }
   .xprez-quote-box:before, .xprez-quote-box:after {
     content: " ";
     /* 1 */
@@ -984,10 +984,10 @@
   max-width: 100%;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  max-width: 850px;
+  max-width: 844px;
   margin-left: auto;
   margin-right: auto;
-  padding: 48px 75px; }
+  padding: 48px 72px; }
   .xprez-download:before, .xprez-download:after {
     content: " ";
     /* 1 */
@@ -997,10 +997,10 @@
     clear: both; }
   @media only screen and (max-width: 850px) {
     .xprez-download {
-      padding: 32px 25px; } }
+      padding: 32px 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-download {
-      padding: 32px 10px; } }
+      padding: 32px 16px; } }
 
 .xprez-download-item {
   margin: 8px 30px 0 0;
