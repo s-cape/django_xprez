@@ -207,7 +207,7 @@
 .xprez-gallery {
   *zoom: 1; }
   .xprez-gallery.xprez-photo-connect-false {
-    padding: 0 16px; }
+    padding: 0 14px; }
     @media only screen and (max-width: 800px) {
       .xprez-gallery.xprez-photo-connect-false {
         padding: 0 7px; } }
@@ -224,7 +224,7 @@
     margin-left: auto;
     margin-right: auto; }
     .xprez-gallery.mid-width.xprez-photo-connect-false {
-      max-width: 1324px; }
+      max-width: 1316px; }
   .xprez-gallery.text-width {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -232,7 +232,7 @@
     margin-left: auto;
     margin-right: auto; }
     .xprez-gallery.text-width.xprez-photo-connect-false {
-      max-width: 764px; }
+      max-width: 756px; }
   .xprez-gallery img {
     width: 100%;
     display: block; }
@@ -266,7 +266,7 @@
   box-sizing: border-box;
   cursor: pointer; }
   .xprez-photo-connect-false .xprez-photo-item {
-    padding: 16px; }
+    padding: 14px; }
     @media only screen and (max-width: 800px) {
       .xprez-photo-connect-false .xprez-photo-item {
         padding: 7px; } }
@@ -324,7 +324,7 @@
     .article-header__cont,
     .medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
     .xprez-feature-boxes, .xprez-download, .xprez-text-content {
-      padding: 0 16px; } }
+      padding: 0 14px; } }
 
 .xprez-text-content, .xprez-text-image,
 .xprez-feature-boxes {
@@ -630,7 +630,7 @@
       padding: 0 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-text-image-right .xprez-text-image--text {
-      padding: 0 16px; } }
+      padding: 0 14px; } }
 .xprez-text-image-left .xprez-text-image--text {
   padding-left: 24px; }
   @media only screen and (max-width: 1308px) {
@@ -638,7 +638,7 @@
       padding: 0 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-text-image-left .xprez-text-image--text {
-      padding: 0 16px; } }
+      padding: 0 14px; } }
 
 @media only screen and (min-width: 800px) {
   .flexbox .xprez-text-image {
@@ -677,7 +677,7 @@
       padding: 32px 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-text-content-boxed.full-width, .xprez-text-content-boxed.mid-width, .xprez-text-content-boxed.text-width {
-      padding: 32px 16px; } }
+      padding: 32px 14px; } }
 
 .xprez-quote.xprez-quote-boxed {
   background: #f6f6f6; }
@@ -695,7 +695,7 @@
       padding: 0 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-quote-box {
-      padding: 0 16px; } }
+      padding: 0 14px; } }
   .xprez-quote-box:before, .xprez-quote-box:after {
     content: " ";
     /* 1 */
@@ -1000,7 +1000,7 @@
       padding: 32px 24px; } }
   @media only screen and (max-width: 430px) {
     .xprez-download {
-      padding: 32px 16px; } }
+      padding: 32px 14px; } }
 
 .xprez-download-item {
   margin: 8px 30px 0 0;
