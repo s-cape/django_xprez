@@ -4,12 +4,15 @@ from __future__ import unicode_literals
 from django import template
 from .. import contents_manager
 from ..utils import build_absolute_uri as build_abs_uri
+from ..settings import XPREZ_BASE_URL, XPREZ_USE_ABSOLUTE_URI
 register = template.Library()
 
 
 @register.inclusion_tag('xprez/includes/media.html')
 def xprez_front_media():
     return {
+        'BASE_URL': XPREZ_BASE_URL,
+        'USE_ABSOLUTE_URI': XPREZ_USE_ABSOLUTE_URI,
         'contents_media': contents_manager.front_media(),
     }
 
