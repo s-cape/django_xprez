@@ -1,5 +1,5 @@
 {% extends 'xprez/contents/base.html' %}
-{% load thumbnail static %}
+{% load thumbnail xprez static %}
 
 {% block content %}
     <div class="xprez-module xprez-quote xprez-quote-cols-{{ content.quotes.all|length }} {% if content.box %}xprez-quote-boxed{% endif %} ">
@@ -11,10 +11,11 @@
                 <div class="xprez-quote__item">
                     {% if quote.image %}
                         {% thumbnail quote.image "210x210" crop="25%" as thumb %}
-                        <img src="{{ thumb.url }}" class="xprez-qoute__img"/>
+                        <img src="{{ thumb.url|build_absolute_uri }}" class="xprez-qoute__img"/>
                         {% endthumbnail %}
                     {% else %}
-                        <img src="{% static "xprez/img/avatar.svg" %}" class="xprez-qoute__img"/>
+                        {% static "xprez/img/avatar.svg" as avatar_url %}
+                        <img src="{{ avatar_url|build_absolute_uri }}" class="xprez-qoute__img"/>
                     {% endif %}
             
                     <div class="xprez-quote__name">{{ quote.name }}</div>
