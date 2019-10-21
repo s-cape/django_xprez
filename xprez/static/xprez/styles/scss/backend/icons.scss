@@ -1,10 +1,9 @@
 @font-face {
   font-family: 'xprez';
-  src:  url('../fonts/xprez.eot?tihpyk');
-  src:  url('../fonts/xprez.eot?tihpyk#iefix') format('embedded-opentype'),
-    url('../fonts/xprez.ttf?tihpyk') format('truetype'),
-    url('../fonts/xprez.woff?tihpyk') format('woff'),
-    url('../fonts/xprez.svg?tihpyk#icomoon') format('svg');
+  src:  url('fonts/xprez.eot?oma97s#iefix') format('embedded-opentype'),
+        url('fonts/xprez.ttf?oma97s') format('truetype'),
+        url('fonts/xprez.woff?oma97s') format('woff'),
+        url('fonts/xprez.svg?oma97s#xprez') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -49,6 +48,8 @@
 .xprez-icon-layout_3:before {content: "\e8f0";}
 .xprez-icon-layout_2:before {content: "\e8f2";}
 .xprez-icon-layout_1:before {content: "\e8f3";}
+.xprez-icon-layout_6:before {content: "\e900";}
+.xprez-icon-layout_8:before {content: "\e901";}
 .xprez-icon-play_arrow:before {content: "\e037";}
 .xprez-icon-play_circle_filled:before {content: "\e038";}
 .xprez-icon-play_circle_outline:before {content: "\e039";}
@@ -56,4 +57,4 @@
 .xprez-icon-btn-add-files:before {content: "\e226";}
 .xprez-icon-copy:before { content: "\e14d"; }
 .xprez-icon-btn-add-text_image:before { content: "\e060";}
-
+.xprez-icon-eye:before { content: "\e902"; }
