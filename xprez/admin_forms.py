@@ -15,19 +15,19 @@ from .medium_editor.widgets import MediumEditorWidget
 
 
 class BaseContentForm(forms.ModelForm):
-    pass
+    fields = ('position', 'visible', )
 
 
 class GalleryForm(BaseContentForm):
     class Meta:
         model = Gallery
-        fields = ('width', 'columns', 'divided', 'crop', 'position')
+        fields = ('width', 'columns', 'divided', 'crop', 'position', 'visible')
 
 
 class MediumEditorForm(BaseContentForm):
     class Meta:
         model = MediumEditor
-        fields = ('text', 'position', 'box', 'width', 'css_class')
+        fields = ('text', 'position', 'box', 'width', 'css_class', 'visible')
         widgets = {
             'text': MediumEditorWidget(file_upload_dir='medium_editor_uploads')
         }
@@ -46,7 +46,7 @@ class QuoteForm(forms.ModelForm):
 class QuoteContentForm(BaseContentForm):
     class Meta:
         model = QuoteContent
-        fields = ('display_two', 'position', 'title', 'box')
+        fields = ('display_two', 'position', 'title', 'box', 'visible')
 
 
 class VideoForm(BaseContentForm):
@@ -71,7 +71,7 @@ class VideoForm(BaseContentForm):
 
     class Meta:
         model = Video
-        fields = ('poster_image', 'url', 'position', 'width')
+        fields = ('poster_image', 'url', 'position', 'width', 'visible')
         widgets = {
             'url': forms.URLInput(attrs={'class': 'long'}),
         }
@@ -80,13 +80,13 @@ class VideoForm(BaseContentForm):
 class CodeInputForm(BaseContentForm):
     class Meta:
         model = CodeInput
-        fields = ('code', 'position')
+        fields = ('code', 'position', 'visible')
 
 
 class NumbersContentForm(BaseContentForm):
     class Meta:
         model = NumbersContent
-        fields = ('position', )
+        fields = ('position', 'visible')
 
 
 class NumberForm(forms.ModelForm):
@@ -96,13 +96,13 @@ class NumberForm(forms.ModelForm):
             'number': forms.NumberInput(attrs={'class': 'short'}),
             'suffix': forms.TextInput(attrs={'class': 'short'}),
         }
-        fields = ('id', 'number', 'suffix', 'title')
+        fields = ('id', 'number', 'suffix', 'title', )
 
 
 class FeatureBoxesForm(BaseContentForm):
     class Meta:
         model = FeatureBoxes
-        fields = ('position', 'box_1', 'box_2', 'box_3')
+        fields = ('position', 'box_1', 'box_2', 'box_3', 'visible')
         widgets = {
             'box_1': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
             'box_2': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
@@ -114,13 +114,13 @@ class CodeTemplateForm(BaseContentForm):
 
     class Meta:
         model = CodeTemplate
-        fields = ('position', 'template_name', )
+        fields = ('position', 'template_name', 'visible')
 
 
 class DownloadContentForm(BaseContentForm):
     class Meta:
         model = DownloadContent
-        fields = ('position', 'title')
+        fields = ('position', 'title', 'visible')
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Files'})
         }
@@ -129,7 +129,7 @@ class DownloadContentForm(BaseContentForm):
 class TextImageForm(BaseContentForm):
     class Meta:
         model = TextImage
-        fields = ('position', 'image', 'text', 'image_alignment', )
+        fields = ('position', 'image', 'text', 'image_alignment', 'css_class', 'visible')
         widgets = {
             'text': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
         }

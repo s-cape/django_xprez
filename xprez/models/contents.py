@@ -322,6 +322,7 @@ class TextImageBase(Content):
     image = models.ImageField(upload_to='text_image_images')
     text = models.TextField()
     image_alignment = models.CharField(choices=IMAGE_ALIGNMENT_CHOICES, default=ALIGNMENT_LEFT, max_length=15)
+    css_class = models.CharField(max_length=100, null=True, blank=True)
 
     class AdminMedia:
         js = MediumEditorWidget.Media.js

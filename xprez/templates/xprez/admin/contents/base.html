@@ -4,10 +4,13 @@
         {% block hidden_form %}
             {{ content.admin_form.position }}
             {{ content.admin_form.delete }}
+            {{ content.admin_form.visible }}
+
         {% endblock %}
     </div>
     <div class="xprez-module__title js-sortable-handler">
         <span class="xprez-icon-btn-collapse js-collapser" title="Collapse"></span>
+        <span style="float: right;" class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible">Visible</span> {# todo: kaplik #}
         <span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_delete_content' content.pk %}" title="Remove"></span>
         <span class="xprez-icon-btn-copy js-copy-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_copy_content' content.pk %}" title="Copy and paste the module to the end"></span>
 

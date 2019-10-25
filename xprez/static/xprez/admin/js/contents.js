@@ -128,21 +128,9 @@ function activateDeleteButtons($scope) {
     })
 }
 
+function activateIsVisibleButtons($scope) {
 
-//
-// function hideErrorsForDeletedContents() {
-//     $('.js-content').each(function (index, el) {
-//         var $el = $(el);
-//         var $delete = $el.find('#id_content-' + $el.data('pk') + '-delete');
-//         if ($delete.is(':checked')) {
-//             $el.removeClass('xprez-module--error');
-//             $el.find('.xprez-cell, .xprez-multi-field').removeClass('error');
-//             $el.find('.xprez-sub-info').hide();
-//         }
-//
-//     });
-//
-// }
+}
 
 
 function activateFormfieldControllers($scope) {

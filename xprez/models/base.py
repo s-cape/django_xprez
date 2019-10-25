@@ -38,6 +38,7 @@ class Content(models.Model):
     content_type = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True, verbose_name='created')
     changed = models.DateTimeField(auto_now=True, editable=False, db_index=True, verbose_name='changed')
+    visible = models.BooleanField(default=True)
 
     class Meta:
         ordering = ('position',)

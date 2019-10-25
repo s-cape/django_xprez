@@ -2,7 +2,7 @@
 {% load thumbnail xprez %}
 
 {% block content %}
-    <div class="xprez-module xprez-text-image xprez-text-image-{{ content.image_alignment }}">
+    <div class="xprez-module xprez-text-image xprez-text-image-{{ content.image_alignment }} {{ content.css_class }}">
         <div class="xprez-text-image--image">
             <img src="{% thumbnail content.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
                         srcset="{{ thumb.url|build_absolute_uri }} 400w,

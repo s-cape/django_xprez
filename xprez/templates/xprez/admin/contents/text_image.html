@@ -6,6 +6,13 @@
         <li><span class="xprez-option-btn js-option js-align-option" data-formfield_value="{{ content.ALIGNMENT_LEFT }}">Image on Left</span></li>
         <li><span class="xprez-option-btn js-option js-align-option" data-formfield_value="{{ content.ALIGNMENT_RIGHT }}">Image on Right</span></li>
     </ul>
+
+    <ul class="xprez-module__options-group js-box-show">
+        <li>
+            <label for="" class="xprez-option-label">css class:</label>
+            <input type="text" class="xprez-option-input js-text_controller" data-formfield_selector="#id_content-{{ content.pk }}-css_class">
+        </li>
+    </ul>
 {% endblock %}
 
 {% block extra_class %}image-{{ content.image_alignment }} xprez-module-text-image{% endblock %}
@@ -34,6 +41,7 @@
 {% block hidden_form %}
     {{ block.super }}
     {{ content.admin_form.image_alignment }}
+    {{ content.admin_form.css_class }}
 {% endblock %}
 
 {% block js %}
