@@ -128,11 +128,6 @@ function activateDeleteButtons($scope) {
     })
 }
 
-function activateIsVisibleButtons($scope) {
-
-}
-
-
 function activateFormfieldControllers($scope) {
     activateCheckboxControllers($scope);
     activateSelectControllers($scope);
