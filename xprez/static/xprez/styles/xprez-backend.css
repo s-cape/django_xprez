@@ -15,7 +15,7 @@
 
 @font-face {
   font-family: 'xprez';
-  src: url("fonts/xprez.eot?oma97s#iefix") format("embedded-opentype"), url("fonts/xprez.ttf?oma97s") format("truetype"), url("fonts/xprez.woff?oma97s") format("woff"), url("fonts/xprez.svg?oma97s#xprez") format("svg");
+  src: url("../fonts/xprez.eot?oma97s#iefix") format("embedded-opentype"), url("../fonts/xprez.ttf?oma97s") format("truetype"), url("../fonts/xprez.woff?oma97s") format("woff"), url("../fonts/xprez.svg?oma97s#xprez") format("svg");
   font-weight: normal;
   font-style: normal; }
 

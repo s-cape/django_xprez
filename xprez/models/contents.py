@@ -88,6 +88,8 @@ class Gallery(AjaxUploadFormsetContent):
         (2, '2'),
         (3, '3'),
         (4, '4'),
+        (6, '6'),
+        (8, '8'),
     )
 
     form_class = 'xprez.admin_forms.GalleryForm'
