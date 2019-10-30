@@ -3,19 +3,22 @@
 @-moz-keyframes spin {
   100% {
     -moz-transform: rotate(360deg); } }
+
 @-webkit-keyframes spin {
   100% {
     -webkit-transform: rotate(360deg); } }
+
 @keyframes spin {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
+
 @font-face {
   font-family: 'xprez';
-  src: url("../fonts/xprez.eot?tihpyk");
-  src: url("../fonts/xprez.eot?tihpyk#iefix") format("embedded-opentype"), url("../fonts/xprez.ttf?tihpyk") format("truetype"), url("../fonts/xprez.woff?tihpyk") format("woff"), url("../fonts/xprez.svg?tihpyk#icomoon") format("svg");
+  src: url("../fonts/xprez.eot?oma97s#iefix") format("embedded-opentype"), url("../fonts/xprez.ttf?oma97s") format("truetype"), url("../fonts/xprez.woff?oma97s") format("woff"), url("../fonts/xprez.svg?oma97s#xprez") format("svg");
   font-weight: normal;
   font-style: normal; }
+
 [class^="xprez-icon-"], [class*=" xprez-icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'xprez' !important;
@@ -104,6 +107,12 @@
 .xprez-icon-layout_1:before {
   content: "\e8f3"; }
 
+.xprez-icon-layout_6:before {
+  content: "\e900"; }
+
+.xprez-icon-layout_8:before {
+  content: "\e901"; }
+
 .xprez-icon-play_arrow:before {
   content: "\e037"; }
 
@@ -125,8 +134,12 @@
 .xprez-icon-btn-add-text_image:before {
   content: "\e060"; }
 
+.xprez-icon-eye:before {
+  content: "\e902"; }
+
 .xprez-full-width {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 100%;
   margin-left: auto;
@@ -134,6 +147,7 @@
 
 .xprez-m-width {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 1260px;
   margin-left: auto;
@@ -141,6 +155,7 @@
 
 .xprez-s-width {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 700px;
   margin-left: auto;
@@ -160,6 +175,7 @@
   @media only screen and (max-width: 430px) {
     .xprez-module + .xprez-module {
       margin-top: 32px; } }
+
 .xprez-module + .xprez-gallery {
   margin-top: 80px; }
   @media only screen and (max-width: 1024px) {
@@ -171,6 +187,7 @@
   @media only screen and (max-width: 430px) {
     .xprez-module + .xprez-gallery {
       margin-top: 24px; } }
+
 .xprez-module + .xprez-gallery.text-width {
   margin-top: 48px; }
   @media only screen and (max-width: 1024px) {
@@ -182,11 +199,13 @@
   @media only screen and (max-width: 430px) {
     .xprez-module + .xprez-gallery.text-width {
       margin-top: 24px; } }
+
 .xprez-module:last-child {
   margin-bottom: 80px; }
   @media only screen and (max-width: 430px) {
     .xprez-module:last-child {
       margin-bottom: 32px; } }
+
 .xprez-module.xprez-quote-boxed:last-child, .xprez-module.xprez-photo-connect-true.full-width:last-child {
   margin-bottom: 0; }
 
@@ -201,6 +220,7 @@
   @media only screen and (max-width: 430px) {
     .xprez-gallery + .xprez-module {
       margin-top: 32px; } }
+
 .xprez-gallery + .xprez-gallery {
   margin-top: 0; }
 
@@ -213,12 +233,14 @@
         padding: 0 7px; } }
   .xprez-gallery.full-width {
     -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     max-width: 100%;
     margin-left: auto;
     margin-right: auto; }
   .xprez-gallery.mid-width {
     -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     max-width: 1260px;
     margin-left: auto;
@@ -227,6 +249,7 @@
       max-width: 1316px; }
   .xprez-gallery.text-width {
     -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     max-width: 700px;
     margin-left: auto;
@@ -263,6 +286,7 @@
 
 .xprez-photo-item {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   cursor: pointer; }
   .xprez-photo-connect-false .xprez-photo-item {
@@ -311,6 +335,7 @@
 .medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
 .xprez-feature-boxes, .xprez-download, .xprez-text-content {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 700px;
   margin-left: auto;
@@ -356,6 +381,7 @@
       line-height: 1.5em;
       margin-top: 0em;
       margin-bottom: 1em; } }
+
 .xprez-text-content h2,
 .medium-editor h2, .medium-editor-simple h2, .medium-editor-no-insert-plugin h2,
 .xprez-feature-boxes h2, .xprez-download h2, .xprez-text-image h2 {
@@ -391,7 +417,8 @@
   .medium-editor h2 span, .medium-editor-simple h2 span, .medium-editor-no-insert-plugin h2 span,
   .xprez-feature-boxes h2 span, .xprez-download h2 span, .xprez-text-image h2 span {
     font-weight: bold !important;
-    color: #78747d; }
+    color: #78747D; }
+
 .xprez-text-content h3,
 .medium-editor h3, .medium-editor-simple h3, .medium-editor-no-insert-plugin h3,
 .xprez-feature-boxes h3, .xprez-download h3, .xprez-text-image h3 {
@@ -417,7 +444,8 @@
   .medium-editor h3 span, .medium-editor-simple h3 span, .medium-editor-no-insert-plugin h3 span,
   .xprez-feature-boxes h3 span, .xprez-download h3 span, .xprez-text-image h3 span {
     font-weight: bold !important;
-    color: #78747d; }
+    color: #78747D; }
+
 .xprez-text-content h4,
 .medium-editor h4, .medium-editor-simple h4, .medium-editor-no-insert-plugin h4,
 .xprez-feature-boxes h4, .xprez-download h4, .xprez-text-image h4 {
@@ -435,10 +463,12 @@
       line-height: 1.5em;
       margin-top: 0em;
       margin-bottom: 1em; } }
+
 .xprez-text-content small,
 .medium-editor small, .medium-editor-simple small, .medium-editor-no-insert-plugin small,
 .xprez-feature-boxes small, .xprez-download small, .xprez-text-image small {
   font-size: 80%; }
+
 .xprez-text-content ul, .xprez-text-content ol,
 .medium-editor ul,
 .medium-editor ol, .medium-editor-simple ul, .medium-editor-simple ol, .medium-editor-no-insert-plugin ul, .medium-editor-no-insert-plugin ol,
@@ -472,17 +502,19 @@
         line-height: 1.5em;
         margin-top: 0em;
         margin-bottom: 1em; } }
+
 .xprez-text-content .btn,
 .medium-editor .btn, .medium-editor-simple .btn, .medium-editor-no-insert-plugin .btn,
 .xprez-feature-boxes .btn, .xprez-download .btn, .xprez-text-image .btn {
   display: inline-block;
-  background: #37383c;
+  background: #37383C;
   font-size: 0.72222em;
   line-height: 1.84615em;
   margin-top: 0em;
   margin-bottom: 0em;
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -490,7 +522,7 @@
   text-shadow: none;
   border: none;
   text-transform: uppercase;
-  color: white;
+  color: #FFF;
   padding: 20px 30px;
   text-decoration: none;
   letter-spacing: 0.1em; }
@@ -502,21 +534,23 @@
   .xprez-text-content .btn:active,
   .medium-editor .btn:active, .medium-editor-simple .btn:active, .medium-editor-no-insert-plugin .btn:active,
   .xprez-feature-boxes .btn:active, .xprez-download .btn:active, .xprez-text-image .btn:active {
+    -webkit-transform: scale(0.95);
+    -ms-transform: scale(0.95);
     transform: scale(0.95); }
   .xprez-text-content .btn:hover,
   .medium-editor .btn:hover, .medium-editor-simple .btn:hover, .medium-editor-no-insert-plugin .btn:hover,
   .xprez-feature-boxes .btn:hover, .xprez-download .btn:hover, .xprez-text-image .btn:hover {
-    color: #37383c;
-    background-color: #d2d2d3; }
+    color: #37383C;
+    background-color: #D2D2D3; }
   .xprez-text-content .btn.btn-white,
   .medium-editor .btn.btn-white, .medium-editor-simple .btn.btn-white, .medium-editor-no-insert-plugin .btn.btn-white,
   .xprez-feature-boxes .btn.btn-white, .xprez-download .btn.btn-white, .xprez-text-image .btn.btn-white {
-    background: white;
-    color: #37383c; }
+    background: #FFF;
+    color: #37383C; }
     .xprez-text-content .btn.btn-white:hover,
     .medium-editor .btn.btn-white:hover, .medium-editor-simple .btn.btn-white:hover, .medium-editor-no-insert-plugin .btn.btn-white:hover,
     .xprez-feature-boxes .btn.btn-white:hover, .xprez-download .btn.btn-white:hover, .xprez-text-image .btn.btn-white:hover {
-      color: #37383c; }
+      color: #37383C; }
 
 .xprez-feature-boxes h2, .medium-editor-simple h2,
 .medium-editor-no-insert-plugin h2 {
@@ -525,6 +559,7 @@
   .xprez-feature-boxes h2:first-child, .medium-editor-simple h2:first-child,
   .medium-editor-no-insert-plugin h2:first-child {
     margin-top: 0; }
+
 .xprez-feature-boxes h3, .medium-editor-simple h3,
 .medium-editor-no-insert-plugin h3 {
   margin-top: 8px;
@@ -545,6 +580,7 @@
 
 .medium-insert-embeds figure {
   margin: 32px 0; }
+
 .medium-insert-embeds .video {
   position: relative;
   padding-top: 55%; }
@@ -590,12 +626,14 @@
 
 .xprez-text-image {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 1260px;
   margin-left: auto;
   margin-right: auto; }
   .xprez-text-image > div {
     -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     float: left;
     width: 50%; }
@@ -610,13 +648,16 @@
 @media only screen and (max-width: 800px) {
   .xprez-text-image--image {
     margin-bottom: 32px; } }
+
 .xprez-text-image--image img {
   width: 100%; }
+
 .xprez-text-image-left .xprez-text-image--image {
   padding-right: 24px; }
   @media only screen and (max-width: 800px) {
     .xprez-text-image-left .xprez-text-image--image {
       padding-right: 0; } }
+
 .xprez-text-image-right .xprez-text-image--image {
   padding-left: 24px; }
   @media only screen and (max-width: 800px) {
@@ -631,6 +672,7 @@
   @media only screen and (max-width: 430px) {
     .xprez-text-image-right .xprez-text-image--text {
       padding: 0 14px; } }
+
 .xprez-text-image-left .xprez-text-image--text {
   padding-left: 24px; }
   @media only screen and (max-width: 1308px) {
@@ -642,31 +684,43 @@
 
 @media only screen and (min-width: 800px) {
   .flexbox .xprez-text-image {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex; }
     .flexbox .xprez-text-image > div {
+      -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
       align-self: center; }
     .flexbox .xprez-text-image.xprez-text-image-right {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
       flex-direction: row-reverse; } }
+
 .xprez-text-content-boxed {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  background: #f6f6f6;
+  background: #F6F6F6;
   max-width: 100%;
   padding: 48px 88px; }
   .xprez-text-content-boxed.full-width {
     -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     max-width: 100%;
     margin-left: auto;
     margin-right: auto; }
   .xprez-text-content-boxed.mid-width {
     -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     max-width: 1260px;
     margin-left: auto;
     margin-right: auto; }
   .xprez-text-content-boxed.text-width {
     -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     max-width: 844px;
     margin-left: auto;
@@ -680,10 +734,11 @@
       padding: 32px 14px; } }
 
 .xprez-quote.xprez-quote-boxed {
-  background: #f6f6f6; }
+  background: #F6F6F6; }
 
 .xprez-quote-box {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 700px;
   margin-left: auto;
@@ -737,7 +792,7 @@
   margin-top: 0em;
   margin-bottom: 0em;
   font-style: italic;
-  color: #78747d;
+  color: #78747D;
   max-width: 250px;
   margin-left: auto;
   margin-right: auto; }
@@ -772,6 +827,7 @@
 
 .xprez-quote-cols-2 .xprez-quote__item {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   width: 45%;
   float: left; }
@@ -796,6 +852,7 @@
 
 .xprez-feature-boxes {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 1300px;
   margin-left: auto;
@@ -811,16 +868,20 @@
     .no-flexbox .xprez-feature-boxes:after {
       clear: both; }
   .flexbox .xprez-feature-boxes {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap; }
 
 [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   width: 33.33%;
-  width: calc(33.33% - 20px );
+  width: calc(33.33% - 20px);
   margin: 0 10px;
-  background: #f6f6f6;
+  background: #F6F6F6;
   padding: 32px 40px; }
   [class^="xprez-feature-box-"] .no-flexbox, [class*=" xprez-feature-box-"] .no-flexbox {
     float: left; }
@@ -842,18 +903,23 @@
 
 .xprez-video.full-width {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 100%;
   margin-left: auto;
   margin-right: auto; }
+
 .xprez-video.mid-width {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 1260px;
   margin-left: auto;
   margin-right: auto; }
+
 .xprez-video.text-width {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   max-width: 700px;
   margin-left: auto;
@@ -920,6 +986,8 @@
         margin-left: -30px;
         margin-top: -30px; } }
   [class^="xprez-video-poster-"]:hover:after, [class*=" xprez-video-poster-"]:hover:after {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
     transform: scale(1.1); }
 
 .xprez-numbers {
@@ -972,15 +1040,16 @@
     content: '';
     display: block;
     height: 1px;
-    background: #d2d2d3;
+    background: #D2D2D3;
     width: 16px;
     margin: 16px auto 16px; }
 
 .xprez-download {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   *zoom: 1;
-  background: #f6f6f6;
+  background: #F6F6F6;
   max-width: 100%;
   -moz-box-sizing: border-box;
   box-sizing: border-box;

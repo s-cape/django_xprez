@@ -773,6 +773,10 @@ textarea {
     float: right;
     margin-top: 2px;
     margin-right: 2px; }
+  .xprez-module__title .xprez-icon-btn-eye {
+    float: right;
+    margin-top: 2px;
+    margin-right: 2px; }
 
 .xprez-module__options {
   background: #F6F7F8;
@@ -876,6 +880,15 @@ textarea {
 
 .xprez-icon-btn-layout_4:before {
   content: "\e42a"; }
+
+.xprez-icon-btn-layout_6:before {
+  content: "\e900"; }
+
+.xprez-icon-btn-layout_8:before {
+  content: "\e901"; }
+
+.xprez-icon-btn-eye:before {
+  content: "\e902"; }
 
 .xprez-icon-btn-crop:before {
   content: "\e3be"; }

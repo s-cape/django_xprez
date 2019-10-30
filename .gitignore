@@ -54,3 +54,4 @@ target/
 .idea/
 .eggs/
 testdb
+/prepros-6.config

@@ -4,12 +4,12 @@
 @import "../config";
 @import "../library/mixins";
 @import "icons";
-@import "photo-gallery"; 
-@import "messaging"; 
-@import "form-elements"; 
-@import "image-text"; 
-@import "../frontend/layout"; 
-@import "../frontend/article-text"; 
+@import "photo-gallery";
+@import "messaging";
+@import "form-elements";
+@import "image-text";
+@import "../frontend/layout";
+@import "../frontend/article-text";
 
 
 // GENERAL LAYOUT
@@ -26,7 +26,7 @@
 .xprez-module {
 	@include borderRadius(2px);
 	border: 1px solid $b-gray-4;
-	
+
 	margin: $g 0;
 	&.collapsed .xprez-module__collapse-cont {
 		display: none;
@@ -62,6 +62,11 @@
 		margin-top: 2px;
 		margin-right: 2px;
 	}
+    .xprez-icon-btn-eye {
+		float: right;
+		margin-top: 2px;
+		margin-right: 2px;
+	}
 }
 .xprez-module__options {
 	background: $b-gray-2;
@@ -74,7 +79,7 @@
 }
 .xprez-module__content {
 	background: white;
-	border-top: 1px solid $b-gray-4; 
+	border-top: 1px solid $b-gray-4;
 	//min-height: 200px;
 	padding: 15px;
 	overflow: hidden;
@@ -125,9 +130,9 @@
 }
 
 
-// 
+//
 // Icon Buttons
-// 
+//
 
 [class^="xprez-icon-btn-"], [class*=" xprez-icon-btn-"] {
 	width: 28px;
@@ -151,7 +156,7 @@
 }
 .xprez-icon-btn-remove:before {content: "\e872";}
 .xprez-icon-btn-collapse:before {
-	content: "\e5c6"; 
+	content: "\e5c6";
 	font-size: 28px;
 	.collapsed & { content: "\e5c5";}
 }
@@ -163,6 +168,9 @@
 .xprez-icon-btn-layout_2:before	{content: "\e8f2";}
 .xprez-icon-btn-layout_3:before	{content: "\e8f0";}
 .xprez-icon-btn-layout_4:before	{content: "\e42a";}
+.xprez-icon-btn-layout_6:before	{content: "\e900";}
+.xprez-icon-btn-layout_8:before	{content: "\e901";}
+.xprez-icon-btn-eye:before	{content: "\e902";}
 .xprez-icon-btn-crop:before	{content: "\e3be";}
 .xprez-icon-btn-copy:before { content: "\e14d"; }
 
@@ -239,7 +247,7 @@
 	border: 1px solid $b-gray-4;
 }
 
-// medium editor layout 
+// medium editor layout
 
 .xprez {
 	.medium-editor {
