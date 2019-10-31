@@ -55,3 +55,4 @@ target/
 .eggs/
 testdb
 /prepros-6.config
+/xprez/prepros-6.config
