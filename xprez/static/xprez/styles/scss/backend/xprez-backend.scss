@@ -26,7 +26,6 @@
 .xprez-module {
 	@include borderRadius(2px);
 	border: 1px solid $b-gray-4;
-
 	margin: $g 0;
 	&.collapsed .xprez-module__collapse-cont {
 		display: none;
@@ -43,8 +42,8 @@
 		cursor: move;
 		position: absolute;
 		top: 0;
-		right: 60px;
-		left: 60px;
+		right: 90px;
+		left: 90px;
 		margin: 0;
 	}
 	.xprez-icon-btn-collapse {
@@ -170,9 +169,37 @@
 .xprez-icon-btn-layout_4:before	{content: "\e42a";}
 .xprez-icon-btn-layout_6:before	{content: "\e900";}
 .xprez-icon-btn-layout_8:before	{content: "\e901";}
-.xprez-icon-btn-eye:before	{content: "\e902";}
 .xprez-icon-btn-crop:before	{content: "\e3be";}
 .xprez-icon-btn-copy:before { content: "\e14d"; }
+
+.xprez-icon-btn-eye	{
+	position: relative;
+	&:before {
+		content: "\e902";
+		color: $b-blue-high;
+	}
+	&:after {
+		content: '';
+		position: absolute;
+		left: 10%;
+		top: 50%;
+		width: 80%;
+		height: 2px;
+		background: $b-blue-high;
+		@include transform(rotate(-45deg));
+		transform-origin: 40% 0%;
+		@include borderRadius(5px);
+	}
+}
+.xprez-icon-btn-eye.active	{
+	background: none;
+	&:before {
+		color: $b-gray-7;
+	}
+	&:after {
+		display: none;
+	}
+}
 
 // Text Buttons
 
