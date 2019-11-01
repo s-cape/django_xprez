@@ -25,16 +25,18 @@
 	.xprez-icon-btn-remove {
 		position: absolute;
 		right: 0;
+		background: $b-gray-7;
 		display: none;
 		&:before { color: white; }
-
 		&:hover {
-			background: none;
-		 	&:before { color: $b-red; }
+			background: $black;
 		}
 		&.active {
 			background: $b-red;
 			display: block;
+			&:hover {
+				&:before { color: $white }
+			}
 		}
 	}
 	&:hover {

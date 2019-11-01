@@ -3,6 +3,9 @@
 	background: $super-light-gray;
 	max-width: 100%;
 	padding: $g*3 $l-space;
+	p:last-child {
+		margin-bottom: 0;
+	}
 	&.full-width {
 		@include full-width;
 	}
