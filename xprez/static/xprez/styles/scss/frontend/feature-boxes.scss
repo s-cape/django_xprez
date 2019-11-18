@@ -10,8 +10,11 @@ $fb-stream-break-l: 1200px;
 	}
 	.flexbox & {
 		display: flex;
+		//flex-wrap: wrap;
+	}
+	@media only screen and (max-width: $fb-stream-break-m) {
 		flex-wrap: wrap;
-	} 
+	}
  }
 [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
 	.no-flexbox { float: left; }
@@ -28,8 +31,8 @@ $fb-stream-break-l: 1200px;
     }
 	@media only screen and (max-width: $fb-stream-break-m) {
 		.no-flexbox { float: none; }
-       width: 100%;
-       margin: 10px 0;
+        width: 100%;
+        margin: 10px 0;
     }
     @media only screen and (max-width: $typobreakS) {
        padding: $g*1 20px;
