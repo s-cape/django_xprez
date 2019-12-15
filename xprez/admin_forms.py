@@ -9,8 +9,8 @@ from django.forms import inlineformset_factory
 from .models import (
     Gallery, MediumEditor, Photo, QuoteContent, Quote, Video, CodeInput,
     NumbersContent, Number, FeatureBoxes, CodeTemplate, DownloadContent, Attachment,
-    TextImage
-)
+    TextImage,
+    GridBoxes)
 from .medium_editor.widgets import MediumEditorWidget
 
 
@@ -134,6 +134,14 @@ class TextImageForm(BaseContentForm):
             'text': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
         }
 
+
+class GridBoxesForm(BaseContentForm):
+    class Meta:
+        model = GridBoxes
+        fields = ('position', 'visible', 'columns', 'margin', 'text_size', 'padded', 'content_centered', 'edge_images', 'boxes_filled', 'border', 'boxes')
+        widgets = {
+            'boxes': forms.Textarea,
+        }
 
 AttachmentFormSet = inlineformset_factory(DownloadContent, Attachment, fields=('id', 'name', 'position'), extra=0, can_delete=True)
 PhotoFormSet = inlineformset_factory(Gallery, Photo, fields=('id', 'description', 'position'), extra=0, can_delete=True)

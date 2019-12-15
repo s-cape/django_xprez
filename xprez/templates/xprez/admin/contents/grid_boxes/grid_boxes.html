@@ -1,0 +1,128 @@
+{% extends 'xprez/admin/contents/base.html' %}
+
+{% block options %}
+    <ul class="xprez-module__options-group js-select_controller"
+        data-formfield_selector="#id_content-{{ content.pk }}-columns">
+        <li><span class="xprez-icon-btn-layout_1 js-option" data-formfield_value="1"></span></li>
+        <li><span class="xprez-icon-btn-layout_2 js-option" data-formfield_value="2"></span></li>
+        <li><span class="xprez-icon-btn-layout_3 js-option" data-formfield_value="3"></span></li>
+        <li><span class="xprez-icon-btn-layout_4 js-option" data-formfield_value="4"></span></li>
+        <li><span class="xprez-icon-btn-layout_6 js-option" data-formfield_value="6"></span></li>
+        <li><span class="xprez-icon-btn-layout_8 js-option" data-formfield_value="8"></span></li>
+
+    </ul>
+
+    <ul class="xprez-module__options-group js-select_controller"
+        data-formfield_selector="#id_content-{{ content.pk }}-margin">
+        <li><span class="xprez-option-btn js-option" data-formfield_value="none">none</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="m">m</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="l">l</span></li>
+    </ul>
+
+    <ul class="xprez-module__options-group js-select_controller"
+        data-formfield_selector="#id_content-{{ content.pk }}-text_size">
+        <li><span class="xprez-option-btn js-option" data-formfield_value="xs">xs</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="s">s</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="m">m</span></li>
+    </ul>
+
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-option-btn js-checkbox_controller"
+                  data-formfield_selector="#id_content-{{ content.pk }}-padded">Padded</span></li>
+    </ul>
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-option-btn js-checkbox_controller"
+                  data-formfield_selector="#id_content-{{ content.pk }}-content_centered">Content centered</span></li>
+    </ul>
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-option-btn js-checkbox_controller"
+                  data-formfield_selector="#id_content-{{ content.pk }}-edge_images">edge images</span></li>
+    </ul>
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-option-btn js-checkbox_controller"
+                  data-formfield_selector="#id_content-{{ content.pk }}-boxes_filled">boxes_filled</span></li>
+    </ul>
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-option-btn js-checkbox_controller"
+                  data-formfield_selector="#id_content-{{ content.pk }}-border">border</span></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="js-box-tpl" style="display: none;">
+        {% include 'xprez/admin/contents/grid_boxes/box.html' %}
+    </div>
+
+    <div class="js-boxes">
+        {% for box_content in content.boxes %}
+            {% include 'xprez/admin/contents/grid_boxes/box.html' %}
+        {% endfor %}
+    </div>
+    <div style="border-top: 1px solid gray; margin-top: 50px;">
+        <a href="#" class="js-add-another">Add another box</a>
+    </div>
+{% endblock %}
+
+{% block hidden_form %}
+        {{ content.admin_form }}
+{% endblock %}
+
+{% block js %}
+    <script>
+
+        var initBoxActions = function ($actionsScope) {
+            $actionsScope.find('.js-grid-box-delete').click(function (e) {
+                e.preventDefault()
+                $(this).parent('.js-box-wrapper').remove();
+            });
+            $actionsScope.find('.js-grid-box-move-up').click(function (e) {
+                e.preventDefault()
+                var $me = $(this).parent('.js-box-wrapper');
+                var $aboveMe = $me.prev('.js-box-wrapper');
+                if ($aboveMe.length) {
+                    $me.after($aboveMe);
+                }
+            });
+
+            $actionsScope.find('.js-grid-box-move-down').click(function (e) {
+                e.preventDefault()
+                var $me = $(this).parent('.js-box-wrapper');
+                var $belowMe = $me.next('.js-box-wrapper');
+                if ($belowMe.length) {
+                    $me.before($belowMe);
+                }
+            });
+
+
+        };
+
+        jqueryME(document).ready(function () {
+            initializeMediumEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
+        });
+
+        $(function () {
+            var $scope = $('.js-content-{{ content.pk }}');
+            initBoxActions($scope.find('.js-boxes'));
+            $('form').submit(function (e) {
+                var boxes{{ content.pk }} = []
+                $scope.find('.js-boxes textarea.js-grid-box').each(function (index, element) {
+                    boxes{{ content.pk }}.push($(element).val())
+                })
+                $('#id_content-{{ content.pk }}-boxes').val(boxes{{ content.pk }}.toString())
+            })
+
+            var $addAnotherBtn = $scope.find('.js-add-another');
+
+            $addAnotherBtn.click(function (e) {
+                e.preventDefault();
+                $scope.find('.js-boxes').append($scope.find('.js-box-tpl').html())
+                initializeMediumEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes:last'));
+                initBoxActions($scope.find('.js-boxes:last'));
+            });
+
+            {% if not content.boxes %}
+                $addAnotherBtn.trigger('click');
+            {% endif %}
+        })
+    </script>
+{% endblock %}

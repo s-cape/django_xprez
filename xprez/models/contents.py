@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.template import Template, Context, TemplateDoesNotExist
 from django.template.defaultfilters import striptags
 from django.template.loader import get_template
+from django.utils.functional import cached_property
 
 from ..medium_editor.widgets import MediumEditorWidget
 from ..medium_editor.utils import parse_text, render_text_parsed
@@ -347,6 +348,51 @@ class TextImage(TextImageBase):
         abstract = False
 
 
+class GridBoxes(Content):
+    form_class = 'xprez.admin_forms.GridBoxesForm'
+    admin_template_name = 'xprez/admin/contents/grid_boxes/grid_boxes.html'
+    front_template_name = 'xprez/contents/grid_boxes.html'
+    verbose_name = 'Grid Boxes'
+    icon_name = 'grid_boxes'
+    MARGIN_CHOICES = (
+        ('none', 'none'),
+        ('m', 'm'),
+        ('l', 'l'),
+    )
+
+    TEXT_SIZE_CHOICES = (
+        ('xs', 'xs'),
+        ('s', 's'),
+        ('m', 'm'),
+    )
+
+    class AdminMedia:
+        js = MediumEditorWidget.Media.js
+        css = MediumEditorWidget.Media.css['all']
+
+    columns = models.PositiveSmallIntegerField(default=2)
+    margin = models.CharField(max_length=4, choices=MARGIN_CHOICES, default='m')
+    text_size = models.CharField(max_length=2, choices=TEXT_SIZE_CHOICES, default='m')
+
+    padded = models.BooleanField(default=True)
+    content_centered = models.BooleanField(default=False)
+    edge_images = models.BooleanField(default=False)
+    boxes_filled = models.BooleanField(default=True)
+    border = models.BooleanField(default=True)
+    boxes = ArrayField(models.TextField(), null=True)
+
+    @cached_property
+    def rendered_boxes(self):
+        boxes = []
+        for box_content in self.boxes:
+            if striptags(box_content != ''):
+                boxes.append(render_text_parsed(parse_text(box_content)))
+        return boxes
+
+    def show_front(self):
+        return self.rendered_boxes
+
+
 contents_manager.register(MediumEditor)
 contents_manager.register(QuoteContent)
 contents_manager.register(Gallery)
@@ -357,20 +403,4 @@ contents_manager.register(FeatureBoxes)
 contents_manager.register(CodeInput)
 contents_manager.register(CodeTemplate)
 contents_manager.register(TextImage)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+contents_manager.register(GridBoxes)
