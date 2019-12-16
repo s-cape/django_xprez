@@ -1,5 +1,3 @@
-
-
 // SCSS imports
 @import "../config";
 @import "../library/mixins";
@@ -8,6 +6,7 @@
 @import "messaging";
 @import "form-elements";
 @import "image-text";
+@import "grid-boxes";
 @import "../frontend/layout";
 @import "../frontend/article-text";
 
@@ -174,6 +173,8 @@
 .xprez-icon-btn-align-center:before {content: "\e903";}
 .xprez-icon-btn-background:before {content: "\e905";}
 .xprez-icon-btn-border:before {content: "\e957";}
+.xprez-icon-btn-chevron-small-down:before { content: "\e906";}
+.xprez-icon-btn-chevron-small-up:before {content: "\e907";}
 
 .xprez-icon-btn-eye	{
 	position: relative;
@@ -220,6 +221,11 @@
 	&.active {
 		color: white;
 		background: $b-gray-7;
+	}
+	[class^="xprez-icon"] {
+		margin-right: 5px;
+		font-size: 20px;
+		vertical-align: middle;
 	}
 }
 
@@ -286,6 +292,9 @@
 	}
 	.medium-editor-simple {
 		margin: 0;
+	}
+	h3 {
+		color: inherit;
 	}
 }
 

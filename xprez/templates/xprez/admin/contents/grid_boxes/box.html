@@ -1,7 +1,9 @@
-<div style="border: 1px solid red;" class="js-box-wrapper">
+<div class="js-box-wrapper xprez-grid-boxes-admin-wrapper">
     <textarea class="medium-editor js-grid-box" data-file-upload="/medium-editor/file-upload/medium_editor_uploads/"
               data-file-delete="/medium-editor/file-delete/">{{ box_content }}</textarea>
-    <a href="#" class="xprez-option-btn js-grid-box-move-up">Up</a>
-    <a href="#" class="xprez-option-btn js-grid-box-move-down">Down</a>
-    <a href="#" class="xprez-option-btn js-grid-box-delete">Delete</a>
+    <div class="xprez-grid-boxes-admin-buttons">
+        <span href="#" class="js-grid-box-move-up xprez-icon-btn-chevron-small-up" title="Move up"></span>
+        <span href="#" class="js-grid-box-move-down xprez-icon-btn-chevron-small-down" title="Move down"></span>
+        <span href="#" class="xprez-icon-btn-remove js-grid-box-delete" title="Remove box"></span>
+    </div>
 </div>

@@ -54,13 +54,13 @@
         {% include 'xprez/admin/contents/grid_boxes/box.html' %}
     </div>
 
-    <div class="js-boxes">
+    <div class="js-boxes xprez-grid-boxes-admin-grid">
         {% for box_content in content.boxes %}
             {% include 'xprez/admin/contents/grid_boxes/box.html' %}
         {% endfor %}
     </div>
-    <div style="border-top: 1px solid gray; margin-top: 50px;">
-        <a href="#" class="js-add-another">Add another box</a>
+    <div class="">
+        <span href="#" class="js-add-another xprez-option-btn"><span class="xprez-icon-control_point"></span><span>Add another box</span></span>
     </div>
 {% endblock %}
 
@@ -74,11 +74,11 @@
         var initBoxActions = function ($actionsScope) {
             $actionsScope.find('.js-grid-box-delete').click(function (e) {
                 e.preventDefault()
-                $(this).parent('.js-box-wrapper').remove();
+                $(this).parent().parent('.js-box-wrapper').remove();
             });
             $actionsScope.find('.js-grid-box-move-up').click(function (e) {
                 e.preventDefault()
-                var $me = $(this).parent('.js-box-wrapper');
+                var $me = $(this).parent().parent('.js-box-wrapper');
                 var $aboveMe = $me.prev('.js-box-wrapper');
                 if ($aboveMe.length) {
                     $me.after($aboveMe);
@@ -87,7 +87,7 @@
 
             $actionsScope.find('.js-grid-box-move-down').click(function (e) {
                 e.preventDefault()
-                var $me = $(this).parent('.js-box-wrapper');
+                var $me = $(this).parent().parent('.js-box-wrapper');
                 var $belowMe = $me.next('.js-box-wrapper');
                 if ($belowMe.length) {
                     $me.before($belowMe);
