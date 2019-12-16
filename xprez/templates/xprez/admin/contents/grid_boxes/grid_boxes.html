@@ -3,27 +3,29 @@
 {% block options %}
     <ul class="xprez-module__options-group js-select_controller"
         data-formfield_selector="#id_content-{{ content.pk }}-columns">
-        <li><span class="xprez-icon-btn-layout_1 js-option" data-formfield_value="1"></span></li>
-        <li><span class="xprez-icon-btn-layout_2 js-option" data-formfield_value="2"></span></li>
-        <li><span class="xprez-icon-btn-layout_3 js-option" data-formfield_value="3"></span></li>
-        <li><span class="xprez-icon-btn-layout_4 js-option" data-formfield_value="4"></span></li>
-        <li><span class="xprez-icon-btn-layout_6 js-option" data-formfield_value="6"></span></li>
-        <li><span class="xprez-icon-btn-layout_8 js-option" data-formfield_value="8"></span></li>
+<!--        <li><span class="xprez-icon-btn-layout_1 js-option" data-formfield_value="1"  title="1 column"></span></li>-->
+        <li><span class="xprez-icon-btn-layout_2 js-option" data-formfield_value="2" title="2 columns"></span></li>
+        <li><span class="xprez-icon-btn-layout_3 js-option" data-formfield_value="3" title="3 columns"></span></li>
+        <li><span class="xprez-icon-btn-layout_4 js-option" data-formfield_value="4" title="4 columns"></span></li>
+        <li><span class="xprez-icon-btn-layout_6 js-option" data-formfield_value="6" title="6 columns"></span></li>
+        <li><span class="xprez-icon-btn-layout_8 js-option" data-formfield_value="8" title="8 columns"></span></li>
 
     </ul>
 
     <ul class="xprez-module__options-group js-select_controller"
         data-formfield_selector="#id_content-{{ content.pk }}-margin">
-        <li><span class="xprez-option-btn js-option" data-formfield_value="none">none</span></li>
-        <li><span class="xprez-option-btn js-option" data-formfield_value="m">m</span></li>
-        <li><span class="xprez-option-btn js-option" data-formfield_value="l">l</span></li>
+        <li>Margin: </li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="none">None</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="m">M</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="l">L</span></li>
     </ul>
 
     <ul class="xprez-module__options-group js-select_controller"
         data-formfield_selector="#id_content-{{ content.pk }}-text_size">
-        <li><span class="xprez-option-btn js-option" data-formfield_value="xs">xs</span></li>
-        <li><span class="xprez-option-btn js-option" data-formfield_value="s">s</span></li>
-        <li><span class="xprez-option-btn js-option" data-formfield_value="m">m</span></li>
+        <li>Text size:</li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="xs">XS</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="s">S</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="m">M</span></li>
     </ul>
 
     <ul class="xprez-module__options-group">
@@ -32,19 +34,18 @@
     </ul>
     <ul class="xprez-module__options-group">
         <li><span class="xprez-option-btn js-checkbox_controller"
-                  data-formfield_selector="#id_content-{{ content.pk }}-content_centered">Content centered</span></li>
+                  data-formfield_selector="#id_content-{{ content.pk }}-edge_images">Image to edges</span></li>
     </ul>
     <ul class="xprez-module__options-group">
-        <li><span class="xprez-option-btn js-checkbox_controller"
-                  data-formfield_selector="#id_content-{{ content.pk }}-edge_images">edge images</span></li>
+        <li><span class="xprez-icon-btn-align-center js-checkbox_controller"
+                  data-formfield_selector="#id_content-{{ content.pk }}-content_centered" title="Centered content"></span></li>
     </ul>
+
     <ul class="xprez-module__options-group">
-        <li><span class="xprez-option-btn js-checkbox_controller"
-                  data-formfield_selector="#id_content-{{ content.pk }}-boxes_filled">boxes_filled</span></li>
-    </ul>
-    <ul class="xprez-module__options-group">
-        <li><span class="xprez-option-btn js-checkbox_controller"
-                  data-formfield_selector="#id_content-{{ content.pk }}-border">border</span></li>
+        <li><span class="xprez-icon-btn-background js-checkbox_controller"
+                  data-formfield_selector="#id_content-{{ content.pk }}-boxes_filled" title="Background"></span></li>
+        <li><span class="xprez-icon-btn-border js-checkbox_controller"
+                  data-formfield_selector="#id_content-{{ content.pk }}-border" title="Border"></span></li>
     </ul>
 {% endblock %}
 

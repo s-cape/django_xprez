@@ -15,7 +15,9 @@
         {% if content.border %}border{% endif %}
     ">
         {% for box in content.rendered_boxes %}
+        <div class="xprez-grid-box">
             {{ box }}
+        </div>
         {% endfor %}
     </div>
 {% endblock %}
