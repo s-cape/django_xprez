@@ -26,14 +26,18 @@
 {% endblock %}
 
 {% block content %}
+    {% block dropzone %}
     <div class="js-dropzone js-dropzone-{{ content.pk }} xprez-gallery__dropzone" data-content_pk="{{ content.pk }}" data-uploadurl="{% block upload_url %}{% url 'xprez:gallery_ajax_upload_item' content.pk %}{% endblock %}">
         Drop files here or click to choose images from disk<br>
     </div>
+    {% endblock %}
+    {% block items %}
     <div class="js-item-container" data-content_pk="{{ content.pk }}">
         {% for item in content.get_formset_queryset %}
             {% include content.admin_formset_item_template_name with number=forloop.counter0 %}
         {% endfor %}
     </div>
+    {% endblock %}
 
 
 {% endblock %}
