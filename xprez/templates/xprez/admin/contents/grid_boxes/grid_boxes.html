@@ -3,7 +3,7 @@
 {% block options %}
     <ul class="xprez-module__options-group js-select_controller"
         data-formfield_selector="#id_content-{{ content.pk }}-columns">
-<!--        <li><span class="xprez-icon-btn-layout_1 js-option" data-formfield_value="1"  title="1 column"></span></li>-->
+        <!--        <li><span class="xprez-icon-btn-layout_1 js-option" data-formfield_value="1"  title="1 column"></span></li>-->
         <li><span class="xprez-icon-btn-layout_2 js-option" data-formfield_value="2" title="2 columns"></span></li>
         <li><span class="xprez-icon-btn-layout_3 js-option" data-formfield_value="3" title="3 columns"></span></li>
         <li><span class="xprez-icon-btn-layout_4 js-option" data-formfield_value="4" title="4 columns"></span></li>
@@ -14,7 +14,7 @@
 
     <ul class="xprez-module__options-group js-select_controller"
         data-formfield_selector="#id_content-{{ content.pk }}-margin">
-        <li>Margin: </li>
+        <li>Margin:</li>
         <li><span class="xprez-option-btn js-option" data-formfield_value="none">None</span></li>
         <li><span class="xprez-option-btn js-option" data-formfield_value="m">M</span></li>
         <li><span class="xprez-option-btn js-option" data-formfield_value="l">L</span></li>
@@ -38,7 +38,8 @@
     </ul>
     <ul class="xprez-module__options-group">
         <li><span class="xprez-icon-btn-align-center js-checkbox_controller"
-                  data-formfield_selector="#id_content-{{ content.pk }}-content_centered" title="Centered content"></span></li>
+                  data-formfield_selector="#id_content-{{ content.pk }}-content_centered"
+                  title="Centered content"></span></li>
     </ul>
 
     <ul class="xprez-module__options-group">
@@ -65,65 +66,20 @@
 {% endblock %}
 
 {% block hidden_form %}
-        {{ content.admin_form }}
+    {{ content.admin_form }}
 {% endblock %}
 
 {% block js %}
     <script>
-
-        var initBoxActions = function ($actionsScope) {
-            $actionsScope.find('.js-grid-box-delete').click(function (e) {
-                e.preventDefault()
-                $(this).parent().parent('.js-box-wrapper').remove();
-            });
-            $actionsScope.find('.js-grid-box-move-up').click(function (e) {
-                e.preventDefault()
-                var $me = $(this).parent().parent('.js-box-wrapper');
-                var $aboveMe = $me.prev('.js-box-wrapper');
-                if ($aboveMe.length) {
-                    $me.after($aboveMe);
-                }
-            });
-
-            $actionsScope.find('.js-grid-box-move-down').click(function (e) {
-                e.preventDefault()
-                var $me = $(this).parent().parent('.js-box-wrapper');
-                var $belowMe = $me.next('.js-box-wrapper');
-                if ($belowMe.length) {
-                    $me.before($belowMe);
-                }
-            });
-
-
-        };
-
         jqueryME(document).ready(function () {
             initializeMediumEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
         });
 
         $(function () {
             var $scope = $('.js-content-{{ content.pk }}');
-            initBoxActions($scope.find('.js-boxes'));
-            $('form').submit(function (e) {
-                var boxes{{ content.pk }} = []
-                $scope.find('.js-boxes textarea.js-grid-box').each(function (index, element) {
-                    boxes{{ content.pk }}.push($(element).val())
-                })
-                $('#id_content-{{ content.pk }}-boxes').val(boxes{{ content.pk }}.toString())
-            })
-
-            var $addAnotherBtn = $scope.find('.js-add-another');
-
-            $addAnotherBtn.click(function (e) {
-                e.preventDefault();
-                $scope.find('.js-boxes').append($scope.find('.js-box-tpl').html())
-                initializeMediumEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes:last'));
-                initBoxActions($scope.find('.js-boxes:last'));
-            });
-
-            {% if not content.boxes %}
-                $addAnotherBtn.trigger('click');
-            {% endif %}
+            var boxesCount = {{ content.boxes|length }};
+            var contentID = {{ content.pk }};
+            initGridBox($scope, contentID, boxesCount);
         })
     </script>
 {% endblock %}

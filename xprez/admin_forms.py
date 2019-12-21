@@ -2,6 +2,7 @@ try:
     import urlparse
 except ImportError:
     import urllib.parse as urlparse
+import json
 
 from django.utils.translation import ugettext_lazy as _
 from django import forms
@@ -136,12 +137,11 @@ class TextImageForm(BaseContentForm):
 
 
 class GridBoxesForm(BaseContentForm):
+
     class Meta:
         model = GridBoxes
         fields = ('position', 'visible', 'columns', 'margin', 'text_size', 'padded', 'content_centered', 'edge_images', 'boxes_filled', 'border', 'boxes')
-        widgets = {
-            'boxes': forms.Textarea,
-        }
+
 
 AttachmentFormSet = inlineformset_factory(DownloadContent, Attachment, fields=('id', 'name', 'position'), extra=0, can_delete=True)
 PhotoFormSet = inlineformset_factory(Gallery, Photo, fields=('id', 'description', 'position'), extra=0, can_delete=True)

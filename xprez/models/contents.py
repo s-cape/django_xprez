@@ -367,7 +367,7 @@ class GridBoxes(Content):
     )
 
     class AdminMedia:
-        js = MediumEditorWidget.Media.js
+        js = list(MediumEditorWidget.Media.js) + ['xprez/admin/js/grid_boxes.js', ]
         css = MediumEditorWidget.Media.css['all']
 
     columns = models.PositiveSmallIntegerField(default=2)
