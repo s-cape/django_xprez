@@ -1,7 +1,8 @@
+{% load xprez %}
 <div class="xprez-frontend">
-{% for content in contents %}
-    {% if content.visible %}
-        {{ content.polymorph.render_front }}
-    {% endif %}
-{% endfor %}
+    {% for content in contents %}
+        {% if content.visible %}
+            {% xprez_content_render_front content %}
+        {% endif %}
+    {% endfor %}
 </div>
