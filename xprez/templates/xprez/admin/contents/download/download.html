@@ -25,6 +25,7 @@
 {% endblock %}
 
 {% block hidden_form %}
+    {{ content.admin_form.visible }}
     {{ content.admin_form.position }}
     <div class="js-item-formset">
         {{ content.formset }}
