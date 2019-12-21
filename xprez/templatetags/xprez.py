@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+
+import warnings
+
 from django import template
+
 from .. import contents_manager
-from ..utils import build_absolute_uri as build_abs_uri
 from ..settings import XPREZ_BASE_URL, XPREZ_USE_ABSOLUTE_URI
+from ..utils import build_absolute_uri as build_abs_uri
+
 register = template.Library()
 
 
@@ -15,6 +20,16 @@ def xprez_front_media():
         'USE_ABSOLUTE_URI': XPREZ_USE_ABSOLUTE_URI,
         'contents_media': contents_manager.front_media(),
     }
+
+
+@register.simple_tag(takes_context=True)
+def xprez_content_render_front(context, content):
+    polymorph = content.polymorph()
+    try:
+        return polymorph.render_front(extra_context=context.flatten())
+    except TypeError:
+        warnings.warn("Deprecation warning: {} render_front() should accept context attribute.".format(type(polymorph)), DeprecationWarning)
+        return polymorph.render_front()
 
 
 @register.inclusion_tag('xprez/includes/medium_image.html', takes_context=True)
@@ -52,4 +67,3 @@ def medium_content_image(context, url, align, width, height, caption=None):
 @register.filter()
 def build_absolute_uri(url):
     return build_abs_uri(url)
-

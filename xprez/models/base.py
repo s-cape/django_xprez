@@ -128,9 +128,11 @@ class Content(models.Model):
         """
         return True
 
-    def render_front(self):
+    def render_front(self, extra_context={}):
         if self.show_front():
-            return render_to_string(self.front_template_name, {'content': self})
+            context = {'content': self}
+            context.update(extra_context)
+            return render_to_string(self.front_template_name, context)
         return ''
 
     def admin_has_errors(self):
