@@ -44,7 +44,7 @@ var handleFormSubmit = function ($scope, contentID) {
         $scope.find('.js-boxes textarea.js-grid-box').each(function (index, element) {
             boxes.push($(element).val())
         })
-        var value = boxes.toString()
+        var value = JSON.stringify(boxes)
         $('#id_content-' + contentID + '-boxes').val(value)
     })
 }

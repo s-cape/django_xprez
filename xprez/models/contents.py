@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.template import Template, Context, TemplateDoesNotExist
 from django.template.defaultfilters import striptags
@@ -379,7 +379,7 @@ class GridBoxes(Content):
     edge_images = models.BooleanField(default=False)
     boxes_filled = models.BooleanField(default=True)
     border = models.BooleanField(default=True)
-    boxes = ArrayField(models.TextField(), null=True)
+    boxes = JSONField(null=True)
 
     @cached_property
     def rendered_boxes(self):
