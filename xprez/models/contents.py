@@ -240,10 +240,10 @@ class CodeTemplate(Content):
     def show_front(self):
         return self.template_name
 
-    def render_front(self, extra_context={}):
+    def render_front(self, extra_context=None):
         if self.show_front():
-            context = {'content': self}
-            context.update(extra_context)
+            context = extra_context or {}
+            context['content'] = self
             try:
                 return get_template(self.template_name).render(context=context)
             except TemplateDoesNotExist:
