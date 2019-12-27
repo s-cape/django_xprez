@@ -6,9 +6,11 @@
     {% include 'xprez/admin/form/row.html' with field=content.admin_form.title %}
     </div>
 
-    <div class="js-dropzone js-dropzone-{{ content.pk }} xprez-gallery__dropzone" data-content_pk="{{ content.pk }}" data-uploadurl="{% url 'xprez:downloadcontent_ajax_upload_item' content.pk %}">
-        Drop files here or click to choose files from disk<br>
-    </div>
+    {% block dropzone %}
+        <div class="js-dropzone js-dropzone-{{ content.pk }} xprez-gallery__dropzone" data-content_pk="{{ content.pk }}" data-uploadurl="{% block upload_url %}{% url 'xprez:downloadcontent_ajax_upload_item' content.pk %}{% endblock %}">
+            Drop files here or click to choose files from disk<br>
+        </div>
+    {% endblock %}
 
     <div class="js-item-container" data-content_pk="{{ content.pk }}">
         {% for item in content.attachments.all %}
