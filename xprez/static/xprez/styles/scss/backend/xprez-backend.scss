@@ -1,5 +1,3 @@
-
-
 // SCSS imports
 @import "../config";
 @import "../library/mixins";
@@ -8,6 +6,7 @@
 @import "messaging";
 @import "form-elements";
 @import "image-text";
+@import "grid-boxes";
 @import "../frontend/layout";
 @import "../frontend/article-text";
 
@@ -171,6 +170,12 @@
 .xprez-icon-btn-layout_8:before	{content: "\e901";}
 .xprez-icon-btn-crop:before	{content: "\e3be";}
 .xprez-icon-btn-copy:before { content: "\e14d"; }
+.xprez-icon-btn-align-center:before {content: "\e903";}
+.xprez-icon-btn-background:before {content: "\e905";}
+.xprez-icon-btn-border:before {content: "\e957";}
+.xprez-icon-btn-chevron-small-down:before { content: "\e906";}
+.xprez-icon-btn-chevron-small-up:before {content: "\e907";}
+.xprez-icon-btn-edit-pencil:before { content: "\e908"; }
 
 .xprez-icon-btn-eye	{
 	position: relative;
@@ -218,6 +223,11 @@
 		color: white;
 		background: $b-gray-7;
 	}
+	[class^="xprez-icon"] {
+		margin-right: 5px;
+		font-size: 20px;
+		vertical-align: middle;
+	}
 }
 
 // Add icon buttons
@@ -253,6 +263,7 @@
 .xprez-icon-btn-add-linked_article:before {content: "\e86e";}
 .xprez-icon-btn-add-downloads:before {content: "\e2c0";}
 .xprez-icon-btn-add-text_image:before {content: "\e060";}
+.xprez-icon-btn-add-grid_boxes:before {content: "\e904";}
 
 // Option forms
 .xprez-option-label {
@@ -282,6 +293,9 @@
 	}
 	.medium-editor-simple {
 		margin: 0;
+	}
+	h3 {
+		color: inherit;
 	}
 }
 
