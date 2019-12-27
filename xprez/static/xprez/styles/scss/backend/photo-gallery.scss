@@ -26,8 +26,8 @@
 		position: absolute;
 		right: 0;
 		text-align: right;
-		display: none;
 		[class*='xprez-icon-btn-'] {
+			display: none;
 			background: $b-gray-7;
 			&:before { color: white; }
 			&:hover {
@@ -35,6 +35,7 @@
 			}
 			&.active {
 				background: $b-red;
+				display: block !important;
 				&:hover {
 					&:before { color: $white }
 				}
