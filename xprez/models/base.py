@@ -128,10 +128,10 @@ class Content(models.Model):
         """
         return True
 
-    def render_front(self, extra_context={}):
+    def render_front(self, extra_context=None):
         if self.show_front():
-            context = {'content': self}
-            context.update(extra_context)
+            context = extra_context or {}
+            context['content'] = self
             return render_to_string(self.front_template_name, context)
         return ''
 
