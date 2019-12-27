@@ -22,25 +22,27 @@
 			color: $b-gray-8;
 		}
 	}
-	.xprez-icon-btn-remove {
+	.xprez-gallery-photo-buttons {
 		position: absolute;
 		right: 0;
-		background: $b-gray-7;
+		text-align: right;
 		display: none;
-		&:before { color: white; }
-		&:hover {
-			background: $black;
-		}
-		&.active {
-			background: $b-red;
-			display: block;
+		[class*='xprez-icon-btn-'] {
+			background: $b-gray-7;
+			&:before { color: white; }
 			&:hover {
-				&:before { color: $white }
+				background: $black;
+			}
+			&.active {
+				background: $b-red;
+				&:hover {
+					&:before { color: $white }
+				}
 			}
 		}
 	}
 	&:hover {
-		.xprez-icon-btn-remove {
+		.xprez-gallery-photo-buttons {
 			display: block;
 		}
 	}
