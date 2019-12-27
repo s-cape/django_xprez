@@ -35,7 +35,7 @@
 			}
 			&.active {
 				background: $b-red;
-				display: block !important;
+				display: inline-block;
 				&:hover {
 					&:before { color: $white }
 				}
@@ -43,8 +43,8 @@
 		}
 	}
 	&:hover {
-		.xprez-gallery-photo-buttons {
-			display: block;
+		[class*='xprez-icon-btn-'] {
+			display: inline-block;
 		}
 	}
 }
