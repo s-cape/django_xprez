@@ -1,5 +1,12 @@
 {% extends change_form_extend_template %}
 {% load static i18n %}
+
+{% block content %}
+    {% with has_file_field=True %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
 {% block extrahead %}
     {{ block.super }}
     <script>
