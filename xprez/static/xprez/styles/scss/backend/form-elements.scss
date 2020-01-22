@@ -1,15 +1,17 @@
 .xprez-form-table {
 	display: table;
 	width: 100%;
+	padding-top: $g;
+	padding-bottom: $g;
 	label {
 		@include type-b(12px);
 		color: $b-gray-7;
 	}
 	& + & {
-		margin-top: $g;
 		border-top: 1px solid $b-gray-4;
-		padding-top: $g;
+
 	}
+
 	&.ui-sortable-helper {
 		background: darken($super-light-gray,5%);
 	}
@@ -19,8 +21,6 @@
 }
 .xprez-title-form-table {
 	border-bottom: 1px solid $b-gray-4;
-	padding-bottom: 8px;
-	margin-bottom: 8px;
 }
 .xprez-form-row {
 	display: table-row;
