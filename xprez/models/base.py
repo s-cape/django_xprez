@@ -1,16 +1,26 @@
+from django.conf.urls import url
+from django.contrib.admin.views.decorators import staff_member_required
 from django.db import models
 from django.db.models import Max
-from django.contrib.admin.views.decorators import staff_member_required
-from django.utils.decorators import method_decorator
 from django.http import JsonResponse
-from django.conf.urls import url
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 
 from .. import settings as xprez_settings
 from ..utils import import_class
 
 
 class ContentsContainer(models.Model):
+    content_type = models.CharField(max_length=100, editable=False)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.content_type = self.__class__.__name__.lower()
+        super().save(*args, **kwargs)
+
+    def polymorph(self):
+        obj = getattr(self, self.content_type.lower())
+        return obj
 
     def copy_contents(self, for_container):
         for content in self.contents.all():
@@ -118,9 +128,11 @@ class Content(models.Model):
         """
         return True
 
-    def render_front(self):
+    def render_front(self, extra_context=None):
         if self.show_front():
-            return render_to_string(self.front_template_name, {'content': self})
+            context = extra_context or {}
+            context['content'] = self
+            return render_to_string(self.front_template_name, context)
         return ''
 
     def admin_has_errors(self):
@@ -222,4 +234,3 @@ class ContentItem(models.Model):
         if save:
             inst.save()
         return inst
-

@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.template import Template, Context, TemplateDoesNotExist
+from django.template import Context, Template, TemplateDoesNotExist
 from django.template.defaultfilters import striptags
 from django.template.loader import get_template
 from django.utils.functional import cached_property
 
-from ..medium_editor.widgets import MediumEditorWidget
+from .. import contents_manager, settings
 from ..medium_editor.utils import parse_text, render_text_parsed
-from .. import settings
-
-
-from .base import Content, FormsetContent, AjaxUploadFormsetContent, ContentItem
+from ..medium_editor.widgets import MediumEditorWidget
+from .base import (AjaxUploadFormsetContent, Content, ContentItem,
+                   FormsetContent)
 from .fields import TemplatePathField
-from .. import contents_manager
 
 
 class MediumEditor(Content):
@@ -243,10 +241,12 @@ class CodeTemplate(Content):
     def show_front(self):
         return self.template_name
 
-    def render_front(self):
+    def render_front(self, extra_context=None):
         if self.show_front():
+            context = extra_context or {}
+            context['content'] = self
             try:
-                return get_template(self.template_name).render({})
+                return get_template(self.template_name).render(context=context)
             except TemplateDoesNotExist:
                 return 'Invalid Template'
         else:
