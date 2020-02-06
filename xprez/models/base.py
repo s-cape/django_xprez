@@ -101,9 +101,9 @@ class Content(models.Model):
         return position
 
     @classmethod
-    def create_for_page(cls, page):
+    def create_for_page(cls, page, **kwargs):
         position = cls._count_new_content_position(page)
-        return cls.objects.create(page=page, position=position)
+        return cls.objects.create(page=page, position=position, **kwargs)
 
     def get_form_prefix(self):
         return 'content-' + str(self.pk)
