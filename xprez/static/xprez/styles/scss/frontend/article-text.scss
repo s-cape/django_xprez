@@ -12,10 +12,12 @@
 	@include clearfix;
 }
 
-.xprez-text-content,  
-.medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
-.xprez-feature-boxes, .xprez-download, .xprez-text-image,
-.xprez-grid-box {
+// derecated:
+//.xprez-text-content,
+//.medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
+//.xprez-feature-boxes, .xprez-download, .xprez-text-image
+
+.xprez-module {
 	p {
 		@include type(18px,2, 0, 1);
 		@include type-min(16px,1.5, 0, 1);
@@ -67,7 +69,32 @@
 	    }
 		li {
 			@include type(18px,2,0,0);
-			@include type-min(16px,1.5, 0, 1);
+		}
+	}
+	blockquote {
+		@include type(36px,3, 3, 3);
+		@include type-min(21px,2, 1, 1);
+		@include sans;
+		margin-left: 0;
+		margin-right: 0;
+		margin-top: $g*3;
+		padding-left: 0;
+		border: none;
+		color: inherit;
+
+		&:before {
+			width: 60px;
+			content:'';
+			display: block;
+			border-top: 6px solid $light-gray;
+			margin-bottom: $g;
+		}
+		&:after {
+			width: 60px;
+			content:'';
+			display: block;
+			border-bottom: 6px solid $light-gray;
+			margin-top: $g;
 		}
 	}
 	.btn {
@@ -105,8 +132,7 @@
 // Specific styles for feature boxes & simple medium editor 
 
 .xprez-feature-boxes, .medium-editor-simple,
-.medium-editor-no-insert-plugin,
-.xprez-grid-box {
+.medium-editor-no-insert-plugin  {
 	h2 {
 		margin-top: .5*$g;
 		margin-bottom: .5*$g;
