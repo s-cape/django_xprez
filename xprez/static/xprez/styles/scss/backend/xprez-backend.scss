@@ -83,7 +83,7 @@
 	overflow: hidden;
 }
 //
-.xprez-module__options-group {
+.xprez-module .xprez-module__options-group {
 	@include reset_list;
 	display: inline-block;
 	padding: 0 10px;
