@@ -4,15 +4,15 @@ except ImportError:
     import urllib.parse as urlparse
 import json
 
-from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.forms import inlineformset_factory
-from .models import (
-    Gallery, MediumEditor, Photo, QuoteContent, Quote, Video, CodeInput,
-    NumbersContent, Number, FeatureBoxes, CodeTemplate, DownloadContent, Attachment,
-    TextImage,
-    GridBoxes)
+from django.utils.translation import ugettext_lazy as _
+
 from .medium_editor.widgets import MediumEditorWidget
+from .models import (Attachment, CodeInput, CodeTemplate, DownloadContent,
+                     FeatureBoxes, Gallery, GridBoxes, MediumEditor, Number,
+                     NumbersContent, Photo, Quote, QuoteContent, TextImage,
+                     Video)
 
 
 class BaseContentForm(forms.ModelForm):
@@ -140,7 +140,7 @@ class GridBoxesForm(BaseContentForm):
 
     class Meta:
         model = GridBoxes
-        fields = ('position', 'visible', 'columns', 'margin', 'text_size', 'padded', 'content_centered', 'edge_images', 'boxes_filled', 'border', 'boxes')
+        fields = ('position', 'visible', 'columns', 'margin', 'width', 'text_size', 'padded', 'content_centered', 'edge_images', 'boxes_filled', 'border', 'boxes')
 
 
 AttachmentFormSet = inlineformset_factory(DownloadContent, Attachment, fields=('id', 'name', 'position'), extra=0, can_delete=True)

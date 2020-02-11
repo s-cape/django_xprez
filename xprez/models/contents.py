@@ -354,6 +354,7 @@ class GridBoxes(Content):
     front_template_name = 'xprez/contents/grid_boxes.html'
     verbose_name = 'Grid Boxes'
     icon_name = 'grid_boxes'
+
     MARGIN_CHOICES = (
         ('none', 'none'),
         ('m', 'm'),
@@ -372,6 +373,7 @@ class GridBoxes(Content):
 
     columns = models.PositiveSmallIntegerField(default=2)
     margin = models.CharField(max_length=4, choices=MARGIN_CHOICES, default='m')
+    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
     text_size = models.CharField(max_length=2, choices=TEXT_SIZE_CHOICES, default='m')
 
     padded = models.BooleanField(default=True)
