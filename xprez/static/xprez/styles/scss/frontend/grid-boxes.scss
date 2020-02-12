@@ -1,4 +1,4 @@
-$gb-margin-s: $s-space;
+$gb-margin-s: 20px;
 $gb-margin-m: $m-space;
 $gb-margin-l: $m-space*2;
 $gb-padding: $m-space;
@@ -80,11 +80,22 @@ $gb-padding: $m-space;
     }
 
     // images to edges
-    &.edge_images.padded .medium-insert-images-center {
-        margin-left: - $m-space;
-        margin-right: - $m-space;
-        &:first-child {
-            margin-top: - $m-space;
+    &.edge_images.padded {
+        .medium-insert-images-center {
+            margin-left: - $m-space;
+            margin-right: - $m-space;
+            &:first-child {
+                margin-top: - $m-space;
+            }
+        }
+        &.columns-6, &.columns-8 {
+            .medium-insert-images-center {
+                margin-left: - $s-space;
+                margin-right: - $s-space;
+                &:first-child {
+                    margin-top: - $s-space;
+                }
+            }
         }
     }
 
@@ -150,23 +161,23 @@ $gb-padding: $m-space;
         }
 
     // text size and adjustments
-    .xprez-grid-box {
+    .xprez-grid-box, .xprez-grid-boxes-admin-wrapper {
         h2 {
             margin-top: 0.5em;
-            margin-bottom: 0.1em;
+            margin-bottom: 0.2em;
             &:first-child {
                 margin-top: 0;}
         }
         h3 {
-            margin-top: 0.3em;
-            margin-bottom: 0.3em;
+            margin-top: 0.4em;
+            margin-bottom: 0.4em;
             &:first-child {
                 margin-top: 0;}
         }
         p {
             margin-bottom: 0.5em;
             &:last-child {
-                margin-bottom: 0;}
+                margin-bottom: 0.2em;}
         }
         .btn {
             margin-top: 0.5em;
@@ -177,13 +188,13 @@ $gb-padding: $m-space;
     &.textsize-m .xprez-grid-box {
         font-size: 0.93rem;
         p, ul, li  {
-            line-height: 1.5;
+            line-height: 1.7;
         }
     }
     &.textsize-s .xprez-grid-box {
         font-size: 0.8rem;
         p, ul, li  {
-            line-height: 1.5;
+            line-height: 1.7;
         }
         .medium-insert-images figure {
             margin-bottom: $g*.5;
