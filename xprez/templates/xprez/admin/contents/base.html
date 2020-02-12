@@ -1,6 +1,8 @@
 <div class="xprez-module {% if content.admin_has_errors %}xprez-module--error{% endif %} js-content js-content-{{ content.pk }} {% block extra_class %}{% endblock %}" data-pk="{{ content.pk }}">
     <div class="xprez-add xprez-add-before">
-        {% include "../includes/add_list.html" with before_content=content %}
+        <div class="xprez-add__cont">
+            {% include "../includes/add_list.html" with before_content=content %}
+        </div>
     </div>
 
     {% block js %}{% endblock %}

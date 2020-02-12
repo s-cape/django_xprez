@@ -7,9 +7,11 @@
 @import "form-elements";
 @import "image-text";
 @import "grid-boxes";
+@import "add-module";
 @import "../frontend/layout";
 @import "../frontend/article-text";
 @import "../frontend/grid-boxes";
+
 
 
 // GENERAL LAYOUT
@@ -19,7 +21,7 @@
 	font-size: $basefont-b;
 	font-weight: 400;
 	min-width: $min-width;
-	padding: 0;
+	padding: 0 40px 0 0;
 	margin-top: $g;
 	margin-bottom: $g*3;
 }
@@ -27,6 +29,7 @@
 	@include borderRadius(2px);
 	border: 1px solid $b-gray-4;
 	margin: $g 0;
+	position: relative;
 	&.collapsed .xprez-module__collapse-cont {
 		display: none;
 	}
@@ -115,9 +118,9 @@
 		padding: 0 5px;
 		vertical-align: top;
 		&:hover {
-			.xprez-add__label { color: $b-blue; }
+			.xprez-add__label { color: $b-blue-high; }
 			[class^="xprez-icon-btn-add"], [class*=" xprez-icon-btn-add"] {
-				background: $b-blue;
+				background: $b-blue-high;
 			}
 		}
 	}
@@ -233,7 +236,7 @@
 
 // Add icon buttons
 [class^="xprez-icon-btn-add"], [class*=" xprez-icon-btn-add"] {
-	@include transition;
+	@include transition(all,300ms);
 	width: 60px;
 	cursor: pointer;
 	color: white;
