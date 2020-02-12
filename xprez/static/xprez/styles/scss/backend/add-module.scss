@@ -47,7 +47,7 @@
             @include flexbox;
             @include align-items(center);
             @include justify-content(center);
-            opacity: 0.1;
+            opacity: 1;
             cursor: pointer;
         }
         .xprez-add__list {
