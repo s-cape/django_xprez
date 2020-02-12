@@ -1,14 +1,22 @@
-function activateAddContentLinks() {
+function activateAddContentLinks($scope) {
     var $contentsContainer = $('.js-contents-container');
-    $('.js-add-content, .js-copy-content').each(function (index, el) {
+    $scope.find('.js-add-content, .js-copy-content').each(function (index, el) {
         var $el = $(el);
         $el.click(function () {
             $.get($el.data('url'), function (data) {
-                $contentsContainer.append(data.template);
+                var insertBefore = $el.data('insert-before');
+                if (data.updated_content_positions) {
+                    console.log('TODO: update positions')
+                }
+                if (insertBefore) {
+                    $(data.template).insertBefore($(insertBefore))
+                } else {
+                    $contentsContainer.append(data.template);
+                }
                 var $content = $('.js-content-' + data.content_pk);
+                activateAddContentLinks($content);
                 activateFormfieldControllers($content);
                 activateCollapsers($content);
-
             });
         });
     });
@@ -138,7 +146,7 @@ function activateFormfieldControllers($scope) {
 
 $(function () {
     var $container = $('.js-contents-container');
-    activateAddContentLinks();
+    activateAddContentLinks($('.js-xprez-add,.js-contents-container'));
     activateFormfieldControllers($container);
     activateCollapsers($container);
     // hideErrorsForDeletedContents();

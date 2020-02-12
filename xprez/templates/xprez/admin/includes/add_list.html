@@ -1,0 +1,15 @@
+<ul class="xprez-add__list">
+    {% for content_type in content_types %}
+        <li class="js-add-content"
+            {% if before_content %}
+            data-insert-before=".js-content-{{ before_content.pk }}"
+            data-url="{% url 'admin:ajax_add_content_before' before_content.pk content_type.identifier %}?{{ request.GET.urlencode }}"
+            {% else %}
+            data-url="{% url 'admin:ajax_add_content' original.pk content_type.identifier %}?{{ request.GET.urlencode }}"
+            {% endif %}
+        >
+            <span class="xprez-icon-btn-add-{{ content_type.icon_name }}"></span>
+            <span class="xprez-add__label">{{ content_type.verbose_name }}</span>
+        </li>
+    {% endfor %}
+</ul>

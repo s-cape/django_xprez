@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db import models
-from django.db.models import Max
+from django.db.models import F, Max
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
@@ -101,16 +101,21 @@ class Content(models.Model):
         return position
 
     @classmethod
-    def create_for_page(cls, page, **kwargs):
-        position = cls._count_new_content_position(page)
+    def create_for_page(cls, page, position=None, **kwargs):
+        if position is None:  # add to end
+            position = cls._count_new_content_position(page)
+        else:  # add on specific position
+            if page.contents.filter(position=position).exists():
+                page.contents.filter(position__gte=position).update(position=F('position') + 1)
         return cls.objects.create(page=page, position=position, **kwargs)
 
     def get_form_prefix(self):
         return 'content-' + str(self.pk)
 
-    def build_admin_form(self, data=None, files=None):
+    def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class(self.form_class)
         self.admin_form = form_class(instance=self, prefix=self.get_form_prefix(), data=data, files=files)
+        self.admin_form.admin = admin
 
     def is_admin_form_valid(self):
         return self.admin_form.is_valid()
@@ -120,7 +125,10 @@ class Content(models.Model):
         inst.save()
 
     def render_admin(self):
-        return render_to_string(self.admin_template_name, {'content': self})
+        return render_to_string(self.admin_template_name, {
+            'content': self,
+            'content_types': self.admin_form.admin._get_allowed_contents(),
+        })
 
     def show_front(self):
         """
@@ -157,8 +165,8 @@ class FormsetContent(Content):
     def get_formset_queryset(self):
         raise NotImplementedError()
 
-    def build_admin_form(self, data=None, files=None):
-        super(FormsetContent, self).build_admin_form(data)
+    def build_admin_form(self, admin, data=None, files=None):
+        super(FormsetContent, self).build_admin_form(admin, data)
         FormSet = import_class(self.formset_factory)
         self.formset = FormSet(instance=self, queryset=self.get_formset_queryset(), data=data, files=files, prefix='{}s-{}'.format(self.identifier(), self.pk))
 

@@ -1,11 +1,14 @@
 <div class="xprez-module {% if content.admin_has_errors %}xprez-module--error{% endif %} js-content js-content-{{ content.pk }} {% block extra_class %}{% endblock %}" data-pk="{{ content.pk }}">
+    <div class="xprez-add xprez-add-before">
+        {% include "../includes/add_list.html" with before_content=content %}
+    </div>
+
     {% block js %}{% endblock %}
     <div style="display: none;">
         {% block hidden_form %}
             {{ content.admin_form.position }}
             {{ content.admin_form.delete }}
             {{ content.admin_form.visible }}
-
         {% endblock %}
     </div>
     <div class="xprez-module__title js-sortable-handler">

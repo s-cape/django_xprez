@@ -1,28 +1,26 @@
+from django import forms
+from django.apps import apps
+from django.conf import settings as django_settings
+from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.admin import helpers
 from django.contrib.admin.exceptions import DisallowedModelAdminToField
-from django.contrib.admin.options import TO_FIELD_VAR, IS_POPUP_VAR
+from django.contrib.admin.options import IS_POPUP_VAR, TO_FIELD_VAR
+from django.contrib.admin.utils import unquote
 from django.contrib.auth.admin import csrf_protect_m
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.forms import all_valid
-from django.http import Http404
-from django.http import HttpResponse, JsonResponse
-from django.conf.urls import url
-from django.contrib.admin.utils import unquote
+from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import redirect
 from django.utils.encoding import force_text
 from django.utils.html import escape
-from django.contrib.admin import helpers
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from django.apps import apps
-from django.shortcuts import redirect
-from django import forms
-from django.conf import settings as django_settings
 
-from . import models
-from . import contents_manager
-from .settings import XPREZ_CONTAINER_MODEL_CLASS
+from . import contents_manager, models
 from .models.fields import TemplatePathField
+from .settings import XPREZ_CONTAINER_MODEL_CLASS
 
 
 class XprezAdmin(admin.ModelAdmin):
@@ -51,7 +49,6 @@ class XprezAdmin(admin.ModelAdmin):
         elif 'grapelli' in django_settings.INSTALLED_APPS:
             return 'grapelli'
         return 'default-admin'
-
 
     def _get_container_instance(self, request, object_pk):
         app_label, model_name = XPREZ_CONTAINER_MODEL_CLASS.split('.')
@@ -121,7 +118,7 @@ class XprezAdmin(admin.ModelAdmin):
             if obj and obj.contents:
                 for content in obj.contents.all():
                     content = content.polymorph()
-                    content.build_admin_form(request.POST, request.FILES)
+                    content.build_admin_form(self, request.POST, request.FILES)
                     if not content.is_admin_form_valid():
                         all_content_forms_valid = False
                     contents.append(content)
@@ -158,7 +155,7 @@ class XprezAdmin(admin.ModelAdmin):
                 if obj.contents:
                     for content in obj.contents.all():
                         content = content.polymorph()
-                        content.build_admin_form()
+                        content.build_admin_form(self)
                         contents.append(content)
                 formsets, inline_instances = self._create_formsets(request, obj, change=True)
 
@@ -211,13 +208,28 @@ class XprezAdmin(admin.ModelAdmin):
 
         container = self._get_container_instance(request, page_pk)
         content = content_class.create_for_page(container)
-        content.build_admin_form()
+        content.build_admin_form(self)
         return JsonResponse({'template': content.render_admin(), 'content_pk': content.pk})
+
+    def add_content_before_view(self, request, before_content_pk, content_type):
+        content_class = models.contents_manager.get(content_type)
+
+        before_content = models.Content.objects.get(pk=before_content_pk)
+        container = before_content.page
+        content = content_class.create_for_page(container, position=before_content.position)
+        content.build_admin_form(self)
+
+        updated_contents_positions = dict([(c.id, c.position) for c in container.contents.all()])
+        return JsonResponse({
+            'template': content.render_admin(),
+            'content_pk': content.pk,
+            'updated_content_positions': updated_contents_positions
+        })
 
     def copy_content_view(self, request, content_pk):
         content = models.Content.objects.get(pk=content_pk).polymorph()
         new_content = content.copy()
-        new_content.build_admin_form()
+        new_content.build_admin_form(self)
         return JsonResponse({'template': new_content.render_admin(), 'content_pk': new_content.pk})
 
     def copy_view(self, request, page_pk):
@@ -236,8 +248,9 @@ class XprezAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(XprezAdmin, self).get_urls()
         my_urls = [
-            url(r'^%s/copy/(?P<page_pk>\d+)/$' % self.model._meta.model_name, self.admin_site.admin_view(self.copy_view), name=self.model._meta.model_name+'_copy'),
+            url(r'^%s/copy/(?P<page_pk>\d+)/$' % self.model._meta.model_name, self.admin_site.admin_view(self.copy_view), name=self.model._meta.model_name + '_copy'),
             url(r'^ajax/add-content/(?P<page_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$', self.admin_site.admin_view(self.add_content_view), name='ajax_add_content'),
+            url(r'^ajax/add-content-before/(?P<before_content_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$', self.admin_site.admin_view(self.add_content_before_view), name='ajax_add_content_before'),
             url(r'^ajax/delete-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.delete_content_view), name='ajax_delete_content'),
             url(r'^ajax/copy-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.copy_content_view), name='ajax_copy_content'),
 
