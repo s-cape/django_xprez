@@ -28,9 +28,10 @@ var initAddAnotherBtn = function ($scope, contentID, boxesCount) {
 
     $addAnotherBtn.click(function (e) {
         e.preventDefault();
-        $scope.find('.js-boxes').append($scope.find('.js-box-tpl').html())
-        initializeMediumEditors(jqueryME('.js-content-' + contentID + ' .js-boxes:last'));
-        initBoxActions($scope.find('.js-boxes:last'));
+        var $box = $($scope.find('.js-box-tpl').html());
+        $scope.find('.js-boxes').append($box);
+        initializeMediumEditors($box);
+        initBoxActions($box);
     });
 
     if (boxesCount === 0) {
