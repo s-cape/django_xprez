@@ -214,7 +214,6 @@ $gb-padding: $m-space;
     &.centered .xprez-grid-box * {
         text-align: center;
     }
-
 }
 
 //
@@ -230,4 +229,7 @@ $gb-padding: $m-space;
             margin-top: 0;
         }
     }
+}
+.nothing {
+    color: inherit;
 }
