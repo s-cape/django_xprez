@@ -5,9 +5,6 @@ function activateAddContentLinks($scope) {
         $el.click(function () {
             $.get($el.data('url'), function (data) {
                 var insertBefore = $el.data('insert-before');
-                if (data.updated_content_positions) {
-                    console.log('TODO: update positions')
-                }
                 if (insertBefore) {
                     $(data.template).insertBefore($(insertBefore))
                 } else {
@@ -17,6 +14,12 @@ function activateAddContentLinks($scope) {
                 activateAddContentLinks($content);
                 activateFormfieldControllers($content);
                 activateCollapsers($content);
+
+                if (data.updated_content_positions) {
+                    for (id in data.updated_content_positions) {
+                        $contentsContainer.find('#id_content-'+id+'-position').val(data.updated_content_positions[id]);
+                    }
+                }
             });
         });
     });

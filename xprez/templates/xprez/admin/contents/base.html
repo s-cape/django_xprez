@@ -4,7 +4,7 @@
     </div>
 
     {% block js %}{% endblock %}
-    <div style="display: none;">
+    <div {# style="display: none;" #}>
         {% block hidden_form %}
             {{ content.admin_form.position }}
             {{ content.admin_form.delete }}
