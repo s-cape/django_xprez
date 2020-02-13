@@ -1,6 +1,5 @@
 .xprez-add-before {
-    position: absolute;
-    width: 100%;
+    position: relative;
     opacity: 0.1;
     z-index: 10;
     @include transition(opacity,150ms);
@@ -52,6 +51,7 @@
             cursor: pointer;
         }
         .xprez-add__list {
+            border-radius: 2px;
             display: none;
             visibility: hidden;
             position: relative;
@@ -63,7 +63,6 @@
             margin-right: 0px;
             opacity: 0;
             width: 290px;
-            display: none;
             @include flex-wrap(wrap);
             @include transition();
             [class*=" xprez-icon-btn-add"], [class^=xprez-icon-btn-add] {

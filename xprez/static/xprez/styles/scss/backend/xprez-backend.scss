@@ -29,7 +29,6 @@
 	@include borderRadius(2px);
 	border: 1px solid $b-gray-4;
 	margin: $g 0;
-	position: relative;
 	&.collapsed .xprez-module__collapse-cont {
 		display: none;
 	}
