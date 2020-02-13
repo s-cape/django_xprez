@@ -2,10 +2,11 @@
     position: absolute;
     width: 100%;
     opacity: 0.1;
-    z-index: 10;
+    z-index: 100;
     @include transition(opacity,150ms);
     &:hover {
         opacity: 1;
+        z-index: 1000;
         &:after,
         .xprez-add__cont:before {
             opacity: 1;
@@ -56,32 +57,48 @@
             position: relative;
             z-index: 10;
             background: $b-gray-2;
-            padding: 15px 10px 5px;
-            box-shadow:0px 10px 25px rgba(0,0,0,0.1),0px 0px 35px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            box-shadow:0px 10px 15px rgba(0,0,0,0.2),0px 0px 45px rgba(0,0,0,0.1);
             margin-top: -50px;
             margin-right: 0px;
             opacity: 0;
-            max-width: 380px;
-            width: 100%;
+            width: 290px;
+            @include flexbox;
+            @include flex-wrap(wrap);
             @include transition();
             [class*=" xprez-icon-btn-add"], [class^=xprez-icon-btn-add] {
-                width: 50px;
-                height: 50px;
+                color: $b-gray-8;
+                background: transparent;
+                width: auto;
+                height: auto;
+                margin-right: 6px;
                 &:before {
                     font-size: 20px;
-                    line-height: 50px;
+                    line-height: inherit;
                 }
             }
-            li {
-                width: 50px;
-            }
             .xprez-add__label {
-                margin-bottom: 1em;
+                margin: 0;
+                color: $b-gray-8;
+            }
+            li {
+                @include boxSizing();
+                width: 50%;
+                display: block;
+                text-align: left;
+                padding: 3px 20px 3px 13px;
+                white-space: nowrap;
+                &:hover {
+                    [class*=" xprez-icon-btn-add"], [class^=xprez-icon-btn-add], .xprez-add__label {
+                        //color: $b-blue-high;
+                    }
+                    background: $b-gray-3;
+                }
             }
         }
         &:hover {
             .xprez-add__list {
-                display: block;
+                @include flexbox;
                 visibility: visible;
                 opacity: 1;
             }
