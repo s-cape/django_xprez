@@ -2,7 +2,7 @@
     position: absolute;
     width: 100%;
     opacity: 0.1;
-    z-index: 100;
+    z-index: 10;
     @include transition(opacity,150ms);
     &:hover {
         opacity: 1;
@@ -63,7 +63,7 @@
             margin-right: 0px;
             opacity: 0;
             width: 290px;
-            @include flexbox;
+            display: none;
             @include flex-wrap(wrap);
             @include transition();
             [class*=" xprez-icon-btn-add"], [class^=xprez-icon-btn-add] {
