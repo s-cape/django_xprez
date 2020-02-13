@@ -20,14 +20,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 from . import contents_manager, models
 from .models.fields import TemplatePathField
-from .settings import XPREZ_CONTAINER_MODEL_CLASS
+from .settings import (XPREZ_CONTAINER_MODEL_CLASS,
+                       XPREZ_DEFAULT_ALLOWED_CONTENTS,
+                       XPREZ_DEFAULT_EXCLUDED_CONTENTS)
 
 
 class XprezAdmin(admin.ModelAdmin):
     change_form_extend_template = 'admin/change_form.html'
     change_form_template = 'xprez/admin/xprez_changeform.html'
-    allowed_contents = '__all__'
-    excluded_contents = None
+    allowed_contents = XPREZ_DEFAULT_ALLOWED_CONTENTS
+    excluded_contents = XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
     def _get_allowed_contents(self):
         content_types = []
