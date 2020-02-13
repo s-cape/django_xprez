@@ -185,6 +185,10 @@ $gb-padding: $m-space;
             font-size: 0.85em;
         }
     }
+    &:not(.padded):not(.centered) {
+        p, ul, ol, h3, h2 {
+            padding-right: 15%;}
+    }
     &.textsize-m .xprez-grid-box {
         font-size: 0.93rem;
         p, ul, li  {
