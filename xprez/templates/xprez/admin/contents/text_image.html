@@ -20,16 +20,20 @@
 {% block content %}
     <div class="xprez-flexbox-cont ">
         <div class="xprez-image-text-image">
-            {% if content.image %}
-                <div class="xprez-form-row">
-                    <div class="xprez-cell-label">
-                        {% thumbnail content.image "400x400" as thumb %}
-                            <img src="{{ thumb.url }}"/>
-                        {% endthumbnail %}
+            {% block image_preview %}
+                {% if content.image %}
+                    <div class="xprez-form-row">
+                        <div class="xprez-cell-label">
+                            {% thumbnail content.image "400x400" as thumb %}
+                                <img src="{{ thumb.url }}"/>
+                            {% endthumbnail %}
+                        </div>
                     </div>
-                </div>
-            {% endif %}
-            {% include 'xprez/admin/form/row.html' with field=content.admin_form.image %}
+                {% endif %}
+            {% endblock %}
+            {% block image_input %}
+                {% include 'xprez/admin/form/row.html' with field=content.admin_form.image %}
+            {% endblock %}
         </div>
         <div class="xprez-image-text-text xprez-text-image">
             {% include 'xprez/admin/form/row.html' with field=content.admin_form.text %}
