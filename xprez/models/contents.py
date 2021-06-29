@@ -7,6 +7,7 @@ from django.template.loader import get_template
 from django.utils.functional import cached_property
 
 from .. import contents_manager, settings
+from ..ck_editor.widgets import CkEditorWidget
 from ..medium_editor.utils import parse_text, render_text_parsed
 from ..medium_editor.widgets import MediumEditorWidget
 from .base import (AjaxUploadFormsetContent, Content, ContentItem,
@@ -29,6 +30,32 @@ class MediumEditor(Content):
     class AdminMedia:
         js = MediumEditorWidget.Media.js
         css = MediumEditorWidget.Media.css['all']
+
+    def show_front(self):
+        return striptags(self.text) != ''
+
+    def get_parsed_text(self):
+        return parse_text(self.text)
+
+    def render_text(self):
+        return render_text_parsed(self.get_parsed_text())
+
+
+class CkEditor(Content):
+    form_class = 'xprez.admin_forms.CkEditorForm'
+    admin_template_name = 'xprez/admin/contents/ck_editor.html'
+    front_template_name = 'xprez/contents/ck_editor.html'
+    icon_name = 'text_content'
+    verbose_name = 'Text Content (CK)'  # TODO
+
+    text = models.TextField()
+    css_class = models.CharField(max_length=100, null=True, blank=True)
+    box = models.BooleanField(default=False)
+    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
+
+    class AdminMedia:
+        js = CkEditorWidget.Media.js
+        css = CkEditorWidget.Media.css['all']
 
     def show_front(self):
         return striptags(self.text) != ''
@@ -396,6 +423,7 @@ class GridBoxes(Content):
 
 
 contents_manager.register(MediumEditor)
+contents_manager.register(CkEditor)
 contents_manager.register(QuoteContent)
 contents_manager.register(Gallery)
 contents_manager.register(DownloadContent)

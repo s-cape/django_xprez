@@ -2,6 +2,7 @@ from django.conf import settings as django_settings
 
 DEFAULT_ALLOWED_CONTENTS = [
     'mediumeditor',
+    'ckeditor',
     'quotecontent',
     'gallery',
     'downloadcontent',

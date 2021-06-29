@@ -8,11 +8,12 @@ from django import forms
 from django.forms import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
 
+from .ck_editor.widgets import CkEditorWidget
 from .medium_editor.widgets import MediumEditorWidget
-from .models import (Attachment, CodeInput, CodeTemplate, DownloadContent,
-                     FeatureBoxes, Gallery, GridBoxes, MediumEditor, Number,
-                     NumbersContent, Photo, Quote, QuoteContent, TextImage,
-                     Video)
+from .models import (Attachment, CkEditor, CodeInput, CodeTemplate,
+                     DownloadContent, FeatureBoxes, Gallery, GridBoxes,
+                     MediumEditor, Number, NumbersContent, Photo, Quote,
+                     QuoteContent, TextImage, Video)
 
 
 class BaseContentForm(forms.ModelForm):
@@ -31,6 +32,15 @@ class MediumEditorForm(BaseContentForm):
         fields = ('text', 'position', 'box', 'width', 'css_class', 'visible')
         widgets = {
             'text': MediumEditorWidget(file_upload_dir='medium_editor_uploads')
+        }
+
+
+class CkEditorForm(BaseContentForm):
+    class Meta:
+        model = CkEditor
+        fields = ('text', 'position', 'box', 'width', 'css_class', 'visible')
+        widgets = {
+            'text': CkEditorWidget(file_upload_dir='ck_editor_uploads')
         }
 
 
