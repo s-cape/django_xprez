@@ -10,8 +10,11 @@ function initializeCkEditors($scope) {
         if ($textarea.hasClass('ck-editor-full')) {
             var config = {
                 initialData: $textarea.val(),
-                toolbar: ['bold', 'italic', '|', 'link', 'blockQuote', 'bulletedList', 'numberedList', 'heading', 'fontsize'],
+                blockToolbar: ['MediaEmbed'],
+                toolbar: ['bold', 'italic', '|', 'link', 'blockQuote', 'bulletedList', 'numberedList', 'heading'],
                 // toolbar: ['bold', 'italic', '|', 'link', 'paragraph', 'heading2', 'heading3'],  // not working, not sure why
+                // plugins: [ 'Heading'],
+                // plugins: [ Heading, Paragraph, HeadingButtonsUI, ParagraphButtonUI ],
                 link: {
                     decorators: {
                         toggleDownloadable: {
@@ -60,6 +63,8 @@ function initializeCkEditors($scope) {
                     $textarea.val(editor.getData());
                 });
             });
+
+        console.log(BalloonEditor.builtinPlugins.map( plugin => plugin.pluginName ));
 
         // $(this).parents('form').submit(function () {
         //     console.log('data');
