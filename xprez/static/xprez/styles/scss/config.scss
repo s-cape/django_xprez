@@ -3,64 +3,63 @@
 // 
 
 	// breakpoints
-	$breakS: 430px; 
-	$breakM: 650px;
-	$breakL: 1024px;   
+	$breakS: 430px !default;
+	$breakM: 650px !default;
+	$breakL: 1024px !default;
 
 	// margins
-	$l-space: 88px;
-	$m-space: 28px;
-	$s-space: 14px;
-	$xs-space: 7px;
+	$l-space: 88px !default;
+	$m-space: 28px !default;
+	$s-space: 14px !default;
+	$xs-space: 7px !default;
 
 	// layout widths
-	$full-width: 100%;
-	$m-width: 1260px;
-	$s-width: 700px;  
+	$full-width: 100% !default;
+	$m-width: 1260px !default;
+	$s-width: 700px !default;
 
 	// typo 18/32
-	$typobreakS: $breakS;
-	$typobreakM: $breakM;
-	$typobreakL: $breakL;
+	$typobreakS: $breakS !default;
+	$typobreakM: $breakM !default;
+	$typobreakL: $breakL !default;
 
 	// grid
-	$g: 16px;
-	$basefont: 18px;  
+	$g: 16px !default;
+	$basefont: 18px !default;
 
-	$sans:  "acumin-pro", Helvetica ,Arial , sans-serif;
-	$serif:  Georgia, serif;
-	$condensed: "trumpgothicpro",sans-serif;
+	$sans:  "acumin-pro", Helvetica ,Arial , sans-serif !default;
+	$serif:  Georgia, serif !default;
+	$condensed: "trumpgothicpro",sans-serif !default;
 
 	//colors
-	$white: #FFF;
-	$black: #1E1E21;
-	$light-gray: #D2D2D3;
-	$super-light-gray: #F6F6F6;
-	$gray: #78747D;
-	$txt-gray: #37383C;
-	$txt-box-gray: #CAD1DB;
+	$white: #FFF !default;
+	$black: #1E1E21 !default;
+	$light-gray: #D2D2D3 !default;
+	$super-light-gray: #F6F6F6 !default;
+	$gray: #78747D !default;
+	$txt-gray: #37383C !default;
+	$txt-box-gray: #CAD1DB !default;
 
 // 
 // BACKEND
 // 
 
-	$min-width: 400px;
-	$g-b: 16px;
-	$basefont-b: 14px;
-	$font-b: Arial, Helvetica, sans-serif;
+	$min-width: 400px !default;
+	$g-b: 16px !default;
+	$basefont-b: 14px !default;
+	$font-b: Arial, Helvetica, sans-serif !default;
 
 	// colors 
-	$b-gray-1: #F8F9FA;
-	// $b-gray-2: #F1F3F5;
-	$b-gray-2: #F6F7F8;
-	$b-gray-3: #E9ECEF;
-	$b-gray-4: #DEE2E6;
-	$b-gray-5: #CED4DA;
-	$b-gray-6: #ADB5BD;
-	$b-gray-7: #868E96;
-	$b-gray-8: #343A40;
+	$b-gray-1: #F8F9FA !default;
+	$b-gray-2: #F6F7F8 !default;
+	$b-gray-3: #E9ECEF !default;
+	$b-gray-4: #DEE2E6 !default;
+	$b-gray-5: #CED4DA !default;
+	$b-gray-6: #ADB5BD !default;
+	$b-gray-7: #868E96 !default;
+	$b-gray-8: #343A40 !default;
 
-	$b-purple: #7950F2;
-	$b-blue: #359CBA;
-	$b-blue-high: #1D5EC7;
-	$b-red: #D10420;
+	$b-purple: #7950F2 !default;
+	$b-blue: #359CBA !default;
+	$b-blue-high: #1D5EC7 !default;
+	$b-red: #D10420 !default;
