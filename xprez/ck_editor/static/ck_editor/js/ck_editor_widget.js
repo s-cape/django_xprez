@@ -10,11 +10,12 @@ function initializeCkEditors($scope) {
         if ($textarea.hasClass('ck-editor-full')) {
             var config = {
                 initialData: $textarea.val(),
-                blockToolbar: ['MediaEmbed'],
-                toolbar: ['bold', 'italic', '|', 'link', 'blockQuote', 'bulletedList', 'numberedList', 'heading'],
-                // toolbar: ['bold', 'italic', '|', 'link', 'paragraph', 'heading2', 'heading3'],  // not working, not sure why
-                // plugins: [ 'Heading'],
-                // plugins: [ Heading, Paragraph, HeadingButtonsUI, ParagraphButtonUI ],
+                // blockToolbar: ['paragraph', 'heading2', 'heading3', '|', 'blockQuote', 'bulletedList', 'numberedList', '|', 'imageUpload', 'MediaEmbed'],
+                // toolbar: ['bold', 'italic', 'link', '|', 'paragraph', 'heading2', 'heading3', '|', 'blockQuote', 'bulletedList', 'numberedList', '|', 'imageUpload', 'MediaEmbed'],
+
+                blockToolbar: ['heading', '|', 'blockQuote', 'bulletedList', 'numberedList', '|', 'imageUpload', 'MediaEmbed'],
+                toolbar: ['bold', 'italic', 'link', '|', 'heading', '|', 'blockQuote', 'bulletedList', 'numberedList', '|', 'imageUpload', 'MediaEmbed'],
+
                 link: {
                     decorators: {
                         toggleDownloadable: {
@@ -27,7 +28,7 @@ function initializeCkEditors($scope) {
                         openInNewTab: {
                             mode: 'manual',
                             label: 'Open in a new tab',
-                            defaultValue: false,         // This option will be selected by default.
+                            defaultValue: false,
                             attributes: {
                                 target: '_blank',
                             }
@@ -48,6 +49,17 @@ function initializeCkEditors($scope) {
                         'big'
                     ]
                 },
+                image: {
+                    toolbar: [ 'imageTextAlternative', 'toggleImageCaption', '|', 'imageStyle:alignLeft', 'imageStyle:block', 'imageStyle:alignRight' ],
+                    styles: [
+                        'block',
+                        'alignLeft',
+                        'alignRight'
+                    ]
+                },
+                simpleUpload: {
+                    uploadUrl: $textarea.data('file-upload')
+                }
             }
         } else if ($textarea.hasClass('ck-editor-simple')) {
 
@@ -56,7 +68,7 @@ function initializeCkEditors($scope) {
         }
 
 
-        BalloonEditor
+        BalloonBlockEditor
             .create($editorRoot[0], config)
             .then(function(editor) {
                 $form.submit(function () {
@@ -64,7 +76,7 @@ function initializeCkEditors($scope) {
                 });
             });
 
-        console.log(BalloonEditor.builtinPlugins.map( plugin => plugin.pluginName ));
+        console.log(BalloonBlockEditor.builtinPlugins.map( plugin => plugin.pluginName ));
 
         // $(this).parents('form').submit(function () {
         //     console.log('data');

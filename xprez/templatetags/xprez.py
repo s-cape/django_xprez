@@ -34,6 +34,15 @@ def xprez_content_render_front(context, content):
 
 @register.inclusion_tag('xprez/includes/medium_image.html', takes_context=True)
 def medium_content_image(context, url, align, width, height, caption=None):
+    return _editor_content_image(context, url, align, width, height, caption=caption, alt=None)
+
+
+@register.inclusion_tag('xprez/includes/ckeditor_image.html', takes_context=True)
+def ckeditor_content_image(context, url, align, width, height, caption=None, alt=None):
+    return _editor_content_image(context, url, align, width, height, caption=caption, alt=alt)
+
+
+def _editor_content_image(context, url, align, width, height, caption=None, alt=None):
     MAX_SIZE = {
         'center': (1000, 1000),
         'left': (450, 450),
@@ -59,6 +68,7 @@ def medium_content_image(context, url, align, width, height, caption=None):
         'lightbox': lightbox,
         'max_size': '%sx%s' % (max_size['width'], max_size['height']),
         'caption': caption,
+        'alt': alt,
     }
 
     return image_context

@@ -8,7 +8,7 @@
     {% if content.css_class %}{{ content.css_class }}{% endif %}
 ">  
     {% if content.box %}<div class="xprez-text-content-boxed__content">{% endif %}
-    {{ content.render_text }}
+        {{ parsed_text }}
     {% if content.box %}</div>{% endif %}
 </div>
 {% endblock %}

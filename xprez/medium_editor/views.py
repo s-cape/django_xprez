@@ -1,22 +1,21 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from os import path, makedirs
-import random
+# import random
+from os import makedirs, path
 
-
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from xprez.utils import random_string
 
-from django.conf import settings
+# def random_string(length, include_special_chars=False):
+#     chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+#     if include_special_chars:
+#         chars += "!@#$%^&*(-_=+)"
+#     return ''.join([random.choice(chars) for i in range(length)])
 
-
-def random_string(length, include_special_chars=False):
-    chars = "abcdefghijklmnopqrstuvwxyz0123456789"
-    if include_special_chars:
-        chars += "!@#$%^&*(-_=+)"
-    return ''.join([random.choice(chars) for i in range(length)])
 
 @csrf_exempt
 @staff_member_required
@@ -43,8 +42,7 @@ def medium_file_upload(request, directory):
 @csrf_exempt
 @staff_member_required
 def medium_file_delete(request):
-    # do nothing, protoze realne nechceme aby soubor smazal
-
+    # do nothing, we want to keep the file
 
     # full_path = request.POST.get('file')
     # if full_path:

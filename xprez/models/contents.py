@@ -1,18 +1,33 @@
 # -*- coding: utf-8 -*-
+from os import makedirs, path
+
+from django.conf import settings as django_settings
+from django.conf.urls import url
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.template import Context, Template, TemplateDoesNotExist
+from django.http import JsonResponse
+from django.template import TemplateDoesNotExist
 from django.template.defaultfilters import striptags
 from django.template.loader import get_template
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
+from django.views.decorators.csrf import csrf_exempt
+from xprez.utils import random_string
 
 from .. import contents_manager, settings
+from ..ck_editor import parse_text as ckeditor_parse_text
 from ..ck_editor.widgets import CkEditorWidget
-from ..medium_editor.utils import parse_text, render_text_parsed
+from ..medium_editor.utils import parse_text as medium_editor_parse_text
+from ..medium_editor.utils import \
+    render_text_parsed as medium_editor_render_text_parsed
 from ..medium_editor.widgets import MediumEditorWidget
 from .base import (AjaxUploadFormsetContent, Content, ContentItem,
                    FormsetContent)
 from .fields import TemplatePathField
+
+PHOTOSWIPE_JS = ('xprez/libs/photoswipe/dist/photoswipe.min.js', 'xprez/libs/photoswipe/dist/photoswipe-ui-default.min.js', 'xprez/js/photoswipe.js')
+PHOTOSWIPE_CSS = ('xprez/libs/photoswipe/dist/photoswipe.css', 'xprez/libs/photoswipe/dist/default-skin/default-skin.css')
 
 
 class MediumEditor(Content):
@@ -35,10 +50,10 @@ class MediumEditor(Content):
         return striptags(self.text) != ''
 
     def get_parsed_text(self):
-        return parse_text(self.text)
+        return medium_editor_parse_text(self.text)
 
     def render_text(self):
-        return render_text_parsed(self.get_parsed_text())
+        return medium_editor_render_text_parsed(self.get_parsed_text())
 
 
 class CkEditor(Content):
@@ -54,17 +69,46 @@ class CkEditor(Content):
     width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
 
     class AdminMedia:
-        js = CkEditorWidget.Media.js
-        css = CkEditorWidget.Media.css['all']
+        js = CkEditorWidget.Media.js + PHOTOSWIPE_JS
+        css = CkEditorWidget.Media.css['all'] + PHOTOSWIPE_CSS
 
     def show_front(self):
         return striptags(self.text) != ''
 
-    def get_parsed_text(self):
-        return parse_text(self.text)
+    def render_front(self, extra_context={}):
+        extra_context['parsed_text'] = ckeditor_parse_text.render_text_parsed(
+            ckeditor_parse_text.parse_text(self.text, extra_context['request'])
+        )
+        return super().render_front(extra_context=extra_context)
 
-    def render_text(self):
-        return render_text_parsed(self.get_parsed_text())
+    @classmethod
+    @method_decorator(staff_member_required)
+    @method_decorator(csrf_exempt)
+    def file_upload_view(cls, request, directory):
+        if request.method == 'POST':
+            file_data = request.FILES['upload']
+            name = file_data.name
+            random_dir_name = random_string(16)
+            full_directory = path.join(django_settings.MEDIA_ROOT, directory, random_dir_name)
+            if not path.isdir(full_directory):
+                makedirs(full_directory)
+
+            with open(path.join(full_directory, name), 'wb+') as destination:
+                for chunk in file_data.chunks():
+                    destination.write(chunk)
+
+            filename = path.join(directory, random_dir_name, name)
+
+            return JsonResponse({
+                'url': django_settings.MEDIA_URL + filename
+            })
+
+    @classmethod
+    def get_urls(cls):
+        cls_name = cls.__name__.lower()
+        return [
+            url(r'^{}/file-upload/(?P<directory>[/\w-]+)/$'.format(cls_name), cls.file_upload_view, name='ckeditor_file_upload'),
+        ]
 
 
 class QuoteContent(FormsetContent):
@@ -141,8 +185,8 @@ class Gallery(AjaxUploadFormsetContent):
             photo.save()
 
     class FrontMedia:
-        js = ('xprez/libs/photoswipe/dist/photoswipe.min.js', 'xprez/libs/photoswipe/dist/photoswipe-ui-default.min.js', 'xprez/js/photoswipe.js')
-        css = ('xprez/libs/photoswipe/dist/photoswipe.css', 'xprez/libs/photoswipe/dist/default-skin/default-skin.css')
+        js = PHOTOSWIPE_JS
+        css = PHOTOSWIPE_CSS
 
     def show_front(self):
         return self.photos.all().count()
@@ -363,10 +407,10 @@ class TextImageBase(Content):
         return striptags(self.text) != ''
 
     def get_parsed_text(self):
-        return parse_text(self.text)
+        return medium_editor_parse_text(self.text)
 
     def render_text(self):
-        return render_text_parsed(self.get_parsed_text())
+        return medium_editor_render_text_parsed(self.get_parsed_text())
 
 
 class TextImage(TextImageBase):
@@ -415,7 +459,7 @@ class GridBoxes(Content):
         boxes = []
         for box_content in self.boxes:
             if striptags(box_content != ''):
-                boxes.append(render_text_parsed(parse_text(box_content)))
+                boxes.append(medium_editor_render_text_parsed(medium_editor_parse_text(box_content)))
         return boxes
 
     def show_front(self):
