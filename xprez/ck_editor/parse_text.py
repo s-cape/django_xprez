@@ -13,7 +13,6 @@ except ImportError:
 
 
 def parse_text(text_source, request):
-    print('ck parse')
     if not text_source:
         return ''
     soup = BeautifulSoup(text_source, 'html5lib')

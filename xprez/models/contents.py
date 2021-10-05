@@ -73,6 +73,7 @@ class CkEditor(Content):
         css = CkEditorWidget.Media.css['all'] + PHOTOSWIPE_CSS
 
     def show_front(self):
+        # TODO: not working for single image inserted in editor
         return striptags(self.text) != ''
 
     def render_front(self, extra_context={}):
