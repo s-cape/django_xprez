@@ -25,6 +25,7 @@ def parse_text(text_source, request):
             last_p.extract()
 
     for tag in soup.find_all('figure', attrs={'class': 'image'}):
+
         tag_img = tag.find('img')
         if tag_img:
             url = tag_img.get('src')
@@ -53,7 +54,18 @@ def parse_text(text_source, request):
 
             alt_text = tag_img.get('alt')
 
-            tag.replaceWith('{%% ckeditor_content_image "%s" "%s" %s %s "%s" "%s" %%}' % (url, align, width, height, caption, alt_text))
+            tag_link = tag.find('a')
+            if tag_link:
+                link_url = tag_link.get('href')
+                link_new_window = tag_link.get('target') == '_blank'
+            else:
+                link_url = ""
+                link_new_window = False
+
+            tag.replaceWith('{%% ckeditor_content_image "%s" "%s" %s %s caption="%s" alt_text="%s" link_url="%s" link_new_window=%s %%}' % (
+                url, align, width, height, caption, alt_text, link_url,
+                'True' if link_new_window else 'False',
+            ))
 
     for tag in soup.find_all(attrs={'contenteditable': True}):
         del tag['contenteditable']

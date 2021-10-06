@@ -3,8 +3,10 @@
 {# TODO: rename medium-insert-* to something more generic #}
 <div class="medium-insert-images medium-insert-images-{{ align }} {% if lightbox %}medium-insert-images-lightbox{% endif %}">
     <figure>
-        {% if lightbox %}
-            {% thumbnail url "1800x1200" format="JPEG" quality=90 as full %}
+        {% if link_url %}
+            <a href="{{ link_url }}" {% if link_new_window %}target="_blank"{% endif %}>
+        {% elif lightbox %}
+            {% thumbnail url "1800x1200" format="JPEG" quality=90 filename_stem=alt as full %}
             <a
                 href="{{ full.url|build_absolute_uri }}"
                 data-original_url="{{ full.url|build_absolute_uri }}"
@@ -23,9 +25,9 @@
                     {% endthumbnail %}"
                 sizes="(min-width: 755px) 700px,
                         98vw" 
-                {% if alt %}alt="{{ alt }}"{% endif %}
+                {% if alt_text %}alt="{{ alt_text }}"{% endif %}
                 />
-        {% if lightbox %}
+        {% if link_url or lightbox %}
             </a>
         {% endif %}
         {% if caption %}

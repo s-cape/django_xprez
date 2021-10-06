@@ -34,15 +34,15 @@ def xprez_content_render_front(context, content):
 
 @register.inclusion_tag('xprez/includes/medium_image.html', takes_context=True)
 def medium_content_image(context, url, align, width, height, caption=None):
-    return _editor_content_image(context, url, align, width, height, caption=caption, alt=None)
+    return _editor_content_image(context, url, align, width, height, caption=caption)
 
 
 @register.inclusion_tag('xprez/includes/ckeditor_image.html', takes_context=True)
-def ckeditor_content_image(context, url, align, width, height, caption=None, alt=None):
-    return _editor_content_image(context, url, align, width, height, caption=caption, alt=alt)
+def ckeditor_content_image(context, url, align, width, height, caption=None, alt_text=None, link_url='', link_new_window=False):
+    return _editor_content_image(context, url, align, width, height, caption=caption, alt_text=alt_text, link_url=link_url, link_new_window=link_new_window)
 
 
-def _editor_content_image(context, url, align, width, height, caption=None, alt=None):
+def _editor_content_image(context, url, align, width, height, caption=None, alt_text=None, link_url='', link_new_window=False):
     MAX_SIZE = {
         'center': (1000, 1000),
         'left': (450, 450),
@@ -67,8 +67,10 @@ def _editor_content_image(context, url, align, width, height, caption=None, alt=
         'height': height,
         'lightbox': lightbox,
         'max_size': '%sx%s' % (max_size['width'], max_size['height']),
+        'link_url': link_url,
+        'link_new_window': link_new_window,
         'caption': caption,
-        'alt': alt,
+        'alt_text': alt_text,
     }
 
     return image_context

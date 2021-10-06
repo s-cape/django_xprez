@@ -19,7 +19,7 @@ Quick start
     ]
 ```
 
-2. Make sure request context processor is enabled:
+2. Make sure request context processor is enabled in settings:
 
 
 ```
@@ -37,15 +37,20 @@ Quick start
 ```
 
 
-2. Include the xprez URLconf in your project urls.py like this:
+3. (optional) Change sorl thumbnail backend in settings - for seo-friendly thumbnail filenames:
+
+```
+    THUMBNAIL_BACKEND = 'xprez.contrib.sorl_thumbnail.thumbnail_backend.NamingThumbnailBackend'
+```
+
+
+4. Include the xprez URLconf in your project urls.py like this:
 
 ```
     url(r'^xprez/', include('xprez.urls')),
 ```
 
-3. Run `python manage.py migrate` to create xprez models.
-
-4. ... todo
+5. Run `python manage.py migrate` to create xprez models.
 
 
 Development
