@@ -50,7 +50,7 @@ function initializeCkEditors($scope) {
                     ]
                 },
                 image: {
-                    toolbar: [ 'imageTextAlternative', 'toggleImageCaption', '|', 'imageStyle:alignLeft', 'imageStyle:block', 'imageStyle:alignRight' ],
+                    toolbar: [ 'imageTextAlternative', 'toggleImageCaption', '|', 'imageStyle:alignLeft', 'imageStyle:block', 'imageStyle:alignRight', '|', 'linkImage' ],
                     styles: [
                         'block',
                         'alignLeft',
