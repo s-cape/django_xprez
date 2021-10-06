@@ -38,6 +38,6 @@
     "webpack-cli": "^4.8.0"
   },
   "scripts": {
-    "build": "rm -rf ../../static/ck_editor/libs/ckeditor/translations/ && webpack --mode production"
+    "build": "webpack --mode production && cp -r ./build/* ../../static/ck_editor/libs/ck_editor/ && rm -r ./build "
   }
 }

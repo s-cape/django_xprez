@@ -23,7 +23,7 @@ module.exports = {
 		// The name under which the editor will be exported.
 		library: 'BalloonBlockEditor',
 
-		path: path.resolve( __dirname, '../../static/ck_editor/libs/ck_editor/' ),
+		path: path.resolve( __dirname, 'build/' ),
 		filename: 'ckeditor.js',
 		libraryTarget: 'umd',
 		libraryExport: 'default'
