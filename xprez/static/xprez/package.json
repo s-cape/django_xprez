@@ -1,0 +1,21 @@
+{
+    "name": "project_name",
+    "description": "project_name website",
+    "repository": "git",
+    "license": "CC-BY-NC-ND-4.0",
+    "devDependencies": {
+        "@popperjs/core": "^2.6.0",
+        "autoprefixer": "^10.2.4",
+        "npm-run-all": "^4.1.5",
+        "postcss": "^8.2.5",
+        "postcss-cli": "^8.3.1",
+        "sass": "^1.32.8"
+    },
+    "scripts": {
+        "css-prefix": "postcss styles/*.css --use autoprefixer --no-map --replace",
+        "css-compile-build": "sass --style compressed --no-error-css --no-source-map  styles/scss/frontend:styles styles/scss/backend:styles",
+        "css-compile-watch": "sass --watch --style expanded --source-map --error-css  styles/scss/frontend:styles styles/scss/backend:styles",
+        "watch": "npm-run-all css-compile-watch",
+        "build": "npm-run-all css-compile-build css-prefix"
+    }
+}

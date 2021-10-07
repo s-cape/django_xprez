@@ -56,11 +56,17 @@ Quick start
 Development
 -----------
 
-To re-build ckeditor:
+To rebuild ckeditor:
 
     cd xprez/ck_editor/assets/ckeditor5
     npm install
     npm run build
+
+To rebuild css styles
+
+    cd xprez/static/xprez
+    npm install
+    npm run build (or `watch` for developing)
 
 
 TODO

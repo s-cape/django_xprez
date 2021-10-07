@@ -1,3 +1,4 @@
+@use "sass:math";
 @import "lib-prefixer";
 
 @mixin filter($p: blur(10px) ){
@@ -131,11 +132,11 @@ $media-hdpi: "(min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 15
     $mtop:      0, // grid multiplier or px / margin-top
     $mbot:      0 // grid multiplier or px / margin-bottom
     ) {
-        font-size: $fsize/$basefont*1em;
+        font-size: math.div($fsize,$basefont) * 1em;
         @if unitless($lheight) { 
-            line-height: $lheight*$g/$fsize*1em; 
+            line-height: math.div($lheight*$g, $fsize) * 1em;
         } @else {
-            line-height: $lheight/$fsize*1em; 
+            line-height: math.div($lheight, $fsize) * 1em;
         }
         @if unitless($mtop) { 
             margin-top: $mtop*$g/$fsize*1em;
