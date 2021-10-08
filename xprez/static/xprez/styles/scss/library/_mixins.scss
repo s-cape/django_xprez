@@ -139,14 +139,14 @@ $media-hdpi: "(min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 15
             line-height: math.div($lheight, $fsize) * 1em;
         }
         @if unitless($mtop) { 
-            margin-top: $mtop*$g/$fsize*1em;
+            margin-top: $mtop * math.div($g, $fsize) * 1em;
         } @else {
-            margin-top: $mtop/$fsize*1em;
+            margin-top: math.div($mtop, $fsize) * 1em;
         }
         @if unitless($mbot) {
-            margin-bottom: $mbot*$g/$fsize*1em;
+            margin-bottom: $mbot * math.div($g, $fsize) * 1em;
         } @else {
-            margin-bottom: $mbot/$fsize*1em;
+            margin-bottom: math.div($mbot, $fsize) * 1em;
         } 
     }
 
@@ -157,21 +157,21 @@ $media-hdpi: "(min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 15
     $mbot:      0 // grid multiplier or px / margin-bottom
     ) {
     @media only screen and (max-width: $typobreakM) {
-        font-size: $fsize/$basefont*1em;
+        font-size: math.div($fsize, $basefont) * 1em;
         @if unitless($lheight) { 
-            line-height: $lheight*$g/$fsize*1em; 
+            line-height: $lheight * math.div($g, $fsize) * 1em;
         } @else {
-            line-height: $lheight/$fsize*1em; 
+            line-height: math.div($lheight, $fsize) * 1em;
         }
         @if unitless($mtop) { 
-            margin-top: $mtop*$g/$fsize*1em;
+            margin-top: $mtop * math.div($g, $fsize) * 1em;
         } @else {
-            margin-top: $mtop/$fsize*1em;
+            margin-top: math.div($mtop, $fsize) * 1em;
         }
         @if unitless($mbot) {
-            margin-bottom: $mbot*$g/$fsize*1em;
+            margin-bottom: $mbot * math.div($g, $fsize) * 1em;
         } @else {
-            margin-bottom: $mbot/$fsize*1em;
+            margin-bottom: math.div($mbot, $fsize) * 1em;
         } 
     }
 }
@@ -182,21 +182,21 @@ $media-hdpi: "(min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 15
     $mbot:      0 // grid multiplier or px / margin-bottom
     ) {
     @media only screen and (max-width: $typobreakS) {
-        font-size: $fsize/$basefont*1em;
+        font-size: math.div($fsize, $basefont) * 1em;
         @if unitless($lheight) { 
-            line-height: $lheight*$g/$fsize*1em; 
+            line-height: $lheight * math.div($g, $fsize) * 1em;
         } @else {
-            line-height: $lheight/$fsize*1em; 
+            line-height: math.div($lheight, $fsize) * 1em;
         }
         @if unitless($mtop) { 
-            margin-top: $mtop*$g/$fsize*1em;
+            margin-top: $mtop * math.div($g, $fsize) * 1em;
         } @else {
-            margin-top: $mtop/$fsize*1em;
+            margin-top: math.div($mtop, $fsize) * 1em;
         }
         @if unitless($mbot) {
-            margin-bottom: $mbot*$g/$fsize*1em;
+            margin-bottom: $mbot * math.div($g, $fsize) * 1em;
         } @else {
-            margin-bottom: $mbot/$fsize*1em;
+            margin-bottom: math.div($mbot, $fsize) * 1em;
         } 
     }
 }
@@ -209,19 +209,19 @@ $media-hdpi: "(min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 15
     
         font-size: $fsize;
         @if unitless($lheight) { 
-            line-height: $lheight*$g-b/$fsize*1em; 
+            line-height: $lheight * math.div($g-b, $fsize) * 1em;
         } @else {
-            line-height: $lheight/$fsize*1em; 
+            line-height: math.div($lheight, $fsize) * 1em;
         }
         @if unitless($mtop) { 
-            margin-top: $mtop*$g-b/$fsize*1em;
+            margin-top: $mtop * math.div($g-b, $fsize) * 1em;
         } @else {
-            margin-top: $mtop/$fsize*1em;
+            margin-top: math.div($mtop, $fsize) * 1em;
         }
         @if unitless($mbot) {
-            margin-bottom: $mbot*$g-b/$fsize*1em;
+            margin-bottom: $mbot * math.div($g-b, $fsize) * 1em;
         } @else {
-            margin-bottom: $mbot/$fsize*1em;
+            margin-bottom: math.div($mbot, $fsize) * 1em;
         } 
 }
 // FLEXBOX
