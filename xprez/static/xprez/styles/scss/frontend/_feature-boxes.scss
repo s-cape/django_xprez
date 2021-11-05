@@ -18,7 +18,7 @@ $fb-stream-break-l: 1200px;
  }
 [class^="xprez-feature-box-"], [class*=" xprez-feature-box-"] {
 	.no-flexbox { float: left; }
-	@include boxSizing;
+	box-sizing: border-box;
 	
 	width: 33.33%;
 	width: calc(33.3% - 20px );
@@ -34,7 +34,7 @@ $fb-stream-break-l: 1200px;
         width: 100%;
         margin: 10px 0;
     }
-    @media only screen and (max-width: $typobreakS) {
+    @media only screen and (max-width: $typo-break-s) {
        padding: $g*1 20px;
     }
 }

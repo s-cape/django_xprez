@@ -4,10 +4,10 @@
 	width: 220px;
 	margin: 0 10px 10px 0;
 	input[type=text] {
-		@include boxSizing(content-box);
+		box-sizing: content-box;
 		@include placeholder($b-gray-6);
-		@include boxShadow(none);
-		@include borderRadius(0px);
+		box-shadow: none;
+		border-radius: 0px;
 		@include type (13px,1);
 		width: 100%;
 		padding: 3px 3px;

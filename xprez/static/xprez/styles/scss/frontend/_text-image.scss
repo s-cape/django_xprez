@@ -5,7 +5,7 @@ $ti-break-m: 800px;
 .xprez-text-image {
 	@include m-width;
 	& > div {
-		@include boxSizing;
+		box-sizing: border-box;
 		float: left;
 		width: 50%;
 		@media only screen and (max-width: ($ti-break-m)) {
@@ -43,7 +43,7 @@ $ti-break-m: 800px;
 	@media only screen and (max-width: ($m-width + $m-space*2)) {
 		padding: 0 $m-space;
 	}
-	@media only screen and (max-width: ($breakS)) {
+	@media only screen and (max-width: ($break-s)) {
 		padding: 0 $s-space;
 	}
 }

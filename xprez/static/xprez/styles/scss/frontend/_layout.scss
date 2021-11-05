@@ -1,5 +1,5 @@
 @mixin cont-width($w) {
-	@include boxSizing;
+	box-sizing: border-box;
 	max-width: $w;
 	margin-left: auto;
 	margin-right: auto;
@@ -26,7 +26,7 @@
 	@media only screen and (max-width: ($s-width + $m-space*2)) {
 		padding: 0 $m-space;
 	}
-	@media only screen and (max-width: ($breakS)) {
+	@media only screen and (max-width: ($break-s)) {
 		padding: 0 $s-space;
 	}
 }

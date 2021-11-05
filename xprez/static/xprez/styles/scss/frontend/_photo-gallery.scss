@@ -43,7 +43,7 @@ $g-break-xs: 400px;
 	opacity: 0.7;
 }
 .xprez-photo-item {
-	@include boxSizing;
+	box-sizing: border-box;
 	cursor: pointer;
 	.xprez-photo-connect-false & {
 		padding: $s-space;

@@ -81,7 +81,7 @@
                 color: $b-gray-8;
             }
             li {
-                @include boxSizing();
+                box-sizing: border-box;
                 width: 50%;
                 display: block;
                 text-align: left;

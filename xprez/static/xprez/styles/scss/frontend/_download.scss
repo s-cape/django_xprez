@@ -1,15 +1,15 @@
 .xprez-download {
-	@include boxSizing;
+	box-sizing: border-box;
 	@include clearfix;
 	background: $super-light-gray;
 	max-width: 100%;
 	@include cont-width($s-width + $m-space*6);
 	padding: $g*3 $m-space*3;
 
-	@media only screen and (max-width: ($breakM+200)) {
+	@media only screen and (max-width: ($break-m+200)) {
 		padding: $g*2 $m-space;
 	}
-	@media only screen and (max-width: ($breakS)) {
+	@media only screen and (max-width: ($break-s)) {
 		padding: $g*2 $s-space;
 	}
 }

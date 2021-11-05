@@ -11,18 +11,18 @@ $gb-padding: $m-space;
     &.mid-width {   @include m-width; }
     &.text-width {  @include s-width; }
 
-    @include flexbox;
-    @include flex-wrap(wrap);
-    @include justify-content(center);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 
     // basic box style
     .xprez-grid-box {
         width: 25%;
-        @include boxSizing();
-        @include flexbox;
+        box-sizing: border-box;
+        display: flex;
     }
     .xprez-grid-box-inner {
-        @include flex(1);
+        flex: 1;
         overflow: hidden;
     }
 

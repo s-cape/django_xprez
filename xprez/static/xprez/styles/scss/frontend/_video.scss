@@ -43,13 +43,13 @@
 		font-size: 130px;
 		margin-left: -65px;
 		margin-top: -65px;
-		@include transition(all,0.3s);
-		@media only screen and (max-width: $typobreakM) {
+		transition: all 0.3s;
+		@media only screen and (max-width: $typo-break-m) {
 			font-size: 80px;
 			margin-left: -40px;
 			margin-top: -40px;
 		}
-		@media only screen and (max-width: $typobreakS) {
+		@media only screen and (max-width: $typo-break-s) {
 			font-size: 60px;
 			margin-left: -30px;
 			margin-top: -30px;

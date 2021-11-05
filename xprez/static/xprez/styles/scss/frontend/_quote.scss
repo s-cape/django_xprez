@@ -11,7 +11,7 @@
 	.xprez-quote-boxed & {
 		padding-top: $g*4;
 		padding-bottom: $g*4;
-		@media only screen and (max-width: ($typobreakS)) {
+		@media only screen and (max-width: ($typo-break-s)) {
 			padding-top: $g*2;
 			padding-bottom: $g*2;
 		}
@@ -19,14 +19,14 @@
 }
 .xprez-quote-title {
 	margin-bottom: $g*2;
-	@media only screen and (max-width: ($typobreakM)) {
+	@media only screen and (max-width: ($typo-break-m)) {
 		margin-bottom: $g*1;
 	}
 }
 .xprez-qoute__img {
 	width: 140px;
 	height: auto;
-	@include borderRadius(70px);
+	border-radius: 70px;
 }
 .xprez-quote__name {
 	@include type(16px,1.5);
@@ -37,7 +37,7 @@
 	font-style: italic;
 	color: $gray;
 	max-width: 250px;
-	@include center_block;
+	margin: 0 auto;
 }
 .xprez-quote__quote {
 	margin-top: $g*1.5;
@@ -55,13 +55,13 @@
 }
 .xprez-quote-cols-2 {
 	.xprez-quote__item {
-		@include boxSizing;
+		box-sizing: border-box;
 		width: 45%;
 		float: left;
 	    &:last-child {
 	    	float: right;
 	    }
-	    @media only screen and (max-width: $typobreakM) {
+	    @media only screen and (max-width: $typo-break-m) {
 	    	width: auto;
 			float: none;
 			&:last-child {
@@ -73,7 +73,7 @@
 		}
 		.xprez-qoute__img {
 			width: 100px;
-			@include borderRadius(50px);
+			border-radius: 50px;
 		}
 	}
 }

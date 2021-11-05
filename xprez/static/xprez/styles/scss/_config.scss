@@ -3,9 +3,9 @@
 // 
 
 	// breakpoints
-	$breakS: 430px !default;
-	$breakM: 650px !default;
-	$breakL: 1024px !default;
+	$break-l: 1024px !default;
+	$break-m: 650px !default;
+	$break-s: 430px !default;
 
 	// margins
 	$l-space: 88px !default;
@@ -19,13 +19,15 @@
 	$s-width: 700px !default;
 
 	// typo 18/32
-	$typobreakS: $breakS !default;
-	$typobreakM: $breakM !default;
-	$typobreakL: $breakL !default;
+	$typo-break-l: $break-l !default;
+	$typo-break-m: $break-m !default;
+	$typo-break-s: $break-s !default;
 
 	// grid
-	$g: 16px !default;
-	$basefont: 18px !default;
+	// $g: 16px !default; - TODO check, if this is possible with older projects
+	$g: 1rem !default;
+	$base-font-size: 1rem !default;
+	$basefont: $base-font-size;
 
 	$sans:  "acumin-pro", Helvetica ,Arial , sans-serif !default;
 	$serif:  Georgia, serif !default;
@@ -34,11 +36,70 @@
 	//colors
 	$white: #FFF !default;
 	$black: #1E1E21 !default;
+	$gray: #78747D !default;
 	$light-gray: #D2D2D3 !default;
 	$super-light-gray: #F6F6F6 !default;
-	$gray: #78747D !default;
 	$txt-gray: #37383C !default;
 	$txt-box-gray: #CAD1DB !default;
+
+	//
+	// TEXT MODULE
+	//
+
+	$use-xprez-text-styles: true !default;
+
+	$text-module-base-lh: 1.5 !default;
+
+	$text-module-heading-letter-spacing: -0.04em !default;
+	$text-module-heading-weight: 700 !default;
+	$text-module-heading-emphasis-weight: 700 !default;
+	$text-module-heading-emphasis-color: $gray !default;
+
+	$text-module-column-width: $s-width !default;
+	$text-module-p-size: $base-font-size !default;
+	$text-module-p-lh: $text-module-base-lh !default;
+	$text-module-p-mt: null !default;
+	$text-module-p-mb: 1em !default;
+
+	$text-module-h2-fluid-size: 2.2rem !default;
+	$text-module-h2-lh: 1.25 !default;
+	$text-module-h2-mt: 4em !default;
+	$text-module-h2-mb: 0.5em !default;
+	$text-module-h2-weight: $text-module-heading-weight !default;
+
+	$text-module-h3-fluid-size: 1rem !default;
+	$text-module-h3-lh: 1.25 !default;
+	$text-module-h3-mt: 1.5em !default;
+	$text-module-h3-mb: 0.5em !default;
+	$text-module-h3-weight: $text-module-heading-weight !default;
+
+	$text-module-h4-size: 1.125rem !default;
+	$text-module-h4-lh: 1.5rem !default;
+	$text-module-h4-mt: 1em !default;
+	$text-module-h4-mb: 0 !default;
+	$text-module-h4-weight: $text-module-heading-weight !default;
+
+	$text-module-small-size: 0.875em !default;
+
+	$text-module-list-mt: 1rem !default;
+	$text-module-list-mb: 1rem !default;
+	$text-module-list-h: 0rem !default;
+	$text-module-list-ps: 3rem !default;
+	$text-module-list-row-size: $base-font-size !default;
+	$text-module-list-row-lh: $text-module-base-lh !default;
+	$text-module-list-row-mt: null !default;
+	$text-module-list-row-mb: 0.5em !default;
+
+	$use-xprez-blockquote-box-style: true !default;
+	$text-module-blockquote-fluid-size: 1rem !default;
+	$text-module-blockquote-lh: 1.5 !default;
+	$text-module-blockquote-mt: 3rem !default;
+	$text-module-blockquote-mb: 3rem !default;
+	$text-module-blockquote-ms: 0 !default;
+	$text-module-blockquote-me: 0 !default;
+	$text-module-blockquote-box-dash-bg: $light-gray !default;
+
+
 
 // 
 // BACKEND

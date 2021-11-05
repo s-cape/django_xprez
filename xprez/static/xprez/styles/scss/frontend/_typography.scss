@@ -1,0 +1,256 @@
+@use "sass:math";
+
+.article-header__cont,
+.medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
+.ck,
+.xprez-feature-boxes, .xprez-download, .xprez-text-content {
+	@include cont-width($text-module-column-width);
+	@include xprez-mobile-extra-space;
+}
+
+// Xprez basic text styles
+
+.xprez-text-content, .xprez-text-image,   
+.xprez-feature-boxes {
+	@include clearfix;
+}
+
+.xprez-module {
+	p {
+		@if $use-xprez-text-styles {
+			@include type(	$text-module-p-size,
+							$text-module-p-lh,
+							$text-module-p-mt,
+							$text-module-p-mb);
+			@include sans;
+		}
+		color: violet !Important;
+	}
+
+	h2 {
+		@if $use-xprez-text-styles {
+			@include type-fluid($text-module-h2-fluid-size,
+								$text-module-h2-lh,
+								$text-module-h2-mt,
+								$text-module-h2-mb);
+			@include sans;
+			font-weight: $text-module-h2-weight;
+			letter-spacing: $text-module-heading-letter-spacing;
+			&:first-child {
+				margin-top: 0;
+			}
+		}
+		margin-left: 0;
+		span, strong {
+			font-weight: $text-module-heading-emphasis-weight !important;
+			color: $text-module-heading-emphasis-color;
+		}
+	}
+
+	h3 {
+		@if $use-xprez-text-styles {
+			@include type-fluid($text-module-h3-fluid-size,
+								$text-module-h3-lh,
+								$text-module-h3-mt,
+								$text-module-h3-mb);
+			@include sans;
+			font-weight: $text-module-h3-weight;
+			letter-spacing: $text-module-heading-letter-spacing;
+			&:first-child {
+				margin-top: 0;
+			}
+		}
+		padding-left: 0;
+
+		span, strong {
+			font-weight: $text-module-heading-emphasis-weight !important;
+			color: $text-module-heading-emphasis-color;
+		}
+	}
+
+	h4 {
+		@if $use-xprez-text-styles {
+			@include type(	$text-module-h4-size,
+							$text-module-h4-lh,
+							$text-module-h4-mt,
+							$text-module-h4-mb);
+			@include sans;
+			font-weight: $text-module-heading-emphasis-weight !important;
+			&:first-child {
+				margin-top: 0;
+			}
+		}
+	}
+
+	small {
+		font-size:$text-module-small-size;
+	}
+
+	ul, ol {
+		@if $use-xprez-text-styles {
+			margin: $text-module-list-mt $text-module-list-h $text-module-list-mb;
+			padding: 0 0 0 $text-module-list-ps;
+			@include media-breakpoint-down($typo-break-s) {
+				padding-left: math.div($text-module-list-ps, 2);
+			}
+			li {
+				@include type(	$text-module-list-row-size,
+								$text-module-list-row-lh,
+								$text-module-list-row-mt,
+								$text-module-list-row-mb);
+			}
+		}
+	}
+
+	blockquote {
+		@if $use-xprez-text-styles {
+			&, p {
+				@include type-fluid($text-module-blockquote-fluid-size,
+									$text-module-blockquote-lh,
+									null,
+									null);
+				@include sans;
+			}
+			padding-left: 0;
+			border: none;
+			color: inherit;
+
+			@if $use-xprez-blockquote-box-style {
+				& {
+					margin: $text-module-blockquote-mt $text-module-blockquote-ms $text-module-blockquote-mb $text-module-blockquote-me;
+				}
+
+				&:before {
+					width: 60px;
+					content:'';
+					display: block;
+					border-top: 6px solid $text-module-blockquote-box-dash-bg;
+					margin-bottom: $g;
+				}
+
+				&:after {
+					width: 60px;
+					content:'';
+					display: block;
+					border-bottom: 6px solid $text-module-blockquote-box-dash-bg;
+					margin-top: $g;
+				}
+			}
+
+		}
+	}
+
+	.btn {
+		display: inline-block;
+		background: $txt-gray;
+		@include type(13px,1.5);
+		@include sans;
+		box-sizing: border-box;
+		border-radius: 0;
+		text-shadow: none;
+		border: none;
+		color: $white;
+		padding: $g*1.25 30px;
+		text-decoration: none;
+		letter-spacing: 0.1em;
+		@media only screen and (max-width: $typo-break-s) {
+	       padding: $g*1 20px;
+	    }
+		&:active {
+			transform: scale(0.95);
+		}
+		&:hover {
+			color: $txt-gray;
+			background-color: $light-gray;
+		}
+		&.btn-white {
+			background: $white;
+			color: $txt-gray;
+			&:hover { color: $txt-gray; }
+		}
+	}
+}
+
+// Specific styles for feature boxes & simple medium editor 
+
+.xprez-feature-boxes, .medium-editor-simple,
+.medium-editor-no-insert-plugin  {
+	h2 {
+		margin-top: .5*$g;
+		margin-bottom: .5*$g;
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+	h3 {
+		margin-top: .5*$g;
+		margin-bottom: .5*$g;
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+}
+
+// Medium Editor frontend specific style overrides
+
+.medium-editor {
+	font-size: $basefont;
+	padding-top: $g*1;
+	@include sans;
+}
+.medium-insert-images {
+	figure {
+		margin: $g*2 0;
+		img {
+			width: 100%;
+		}
+	}
+}
+.medium-insert-embeds {
+	figure { margin: $g*2 0; }
+	.video {
+		position: relative;
+		padding-top: 55%;
+		iframe {
+			position: absolute;
+			top: 0; right: 0;
+			height: 100%;
+			width: 100%;
+			display: block;
+		}
+	}
+}
+.medium-insert-images-right, .medium-insert-embeds-right {
+	max-width: 33.33%;
+	margin: 0 0 $g 30px;
+	float: right;
+	figure {
+		margin: $g*.5 0 $g 0;
+	}
+}
+.medium-insert-images-left, .medium-insert-embeds-left {
+	max-width: 33.33%;
+	margin: 0 30px $g 0;
+	float: left;
+	figure {
+		margin: $g*.5 0 $g 0;
+	}
+}
+
+.medium-insert-images, .medium-insert-embeds {
+	figcaption {
+		@include type(15px,1.3);
+		@include type-min(13px,1);
+		font-style: italic;
+		display: block;
+		text-align: center;
+		padding: .5*$g 10px 0;
+		margin-bottom: $g;
+		opacity: 0.7;
+	}
+}
+
+
+
+
+

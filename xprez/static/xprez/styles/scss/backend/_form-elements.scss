@@ -88,7 +88,6 @@ input, textarea {
 	.error & {
 		border-color: $b-red;
 	}
-	//@include boxSizing;
 	&.long {
 		width: 500px;
 	}

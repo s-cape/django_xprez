@@ -16,7 +16,7 @@
 
 // GENERAL LAYOUT
 .xprez {
-	@include boxSizing;
+	box-sizing: border-box;
 	@include sans($font-b);
 	font-size: $basefont-b;
 	font-weight: 400;
@@ -280,7 +280,7 @@
 	@include sans($font-b);
 	@include borderRadius(2px);
 	@include boxShadow(none);
-	@include boxSizing;
+	box-sizing: border-box;
 	@include type-b(12px, 20px);
 	height: auto;
 	width: 150px;

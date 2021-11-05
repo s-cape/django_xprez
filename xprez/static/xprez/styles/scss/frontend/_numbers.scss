@@ -1,7 +1,7 @@
 .xprez-numbers {
 	text-align: center;
 	padding: $g*2 0 $g*1; 
-	@media only screen and (max-width: ($breakS)) {
+	@media only screen and (max-width: ($break-s)) {
 		padding: $g*1 0 0;
 	}
 }
@@ -10,10 +10,10 @@
 	vertical-align: top;
 	margin: 0 30px $g*2;
 	
-	@media only screen and (max-width: ($breakM)) {
+	@media only screen and (max-width: ($break-m)) {
 		min-width: 130px;
 	}
-	@media only screen and (max-width: ($breakS)) {
+	@media only screen and (max-width: ($break-s)) {
 		min-width: 120px;
 		margin: 0 10px $g*1.5;
 	}

@@ -2,13 +2,13 @@
 
 @mixin relation($o,$l,$m,$s) { // grid multiples
 	margin-top: $g*$o;
-	@media only screen and (max-width: $typobreakL) {
+	@media only screen and (max-width: $typo-break-l) {
        margin-top: $g*$l;
     }
-    @media only screen and (max-width: $typobreakM) {
+    @media only screen and (max-width: $typo-break-m) {
        margin-top: $g*$m;
     }
-    @media only screen and (max-width: $typobreakS) {
+    @media only screen and (max-width: $typo-break-s) {
        margin-top: $g*$s;
     }
 }
@@ -24,7 +24,7 @@
 	}
 	&:last-child {
 		margin-bottom: $g*5;
-		@media only screen and (max-width: $typobreakS) {
+		@media only screen and (max-width: $typo-break-s) {
 	       margin-bottom: $g*2;
 	    }
 	}
