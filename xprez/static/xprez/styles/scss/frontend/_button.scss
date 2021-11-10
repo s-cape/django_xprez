@@ -1,0 +1,34 @@
+.xprez-module {
+	.btn {
+		@if $use-xprez-button-styles {
+			display: inline-block;
+			background: $txt-gray;
+			@include type(13px,1.5);
+			@include sans;
+			box-sizing: border-box;
+			border-radius: 0;
+			text-shadow: none;
+			border: none;
+			color: $white;
+			padding: $g*1.25 30px;
+			text-decoration: none;
+			letter-spacing: 0.1em;
+			@media only screen and (max-width: $typo-break-s) {
+				padding: $g*1 20px;
+			}
+			&:active {
+				transform: scale(0.95);
+			}
+			&:hover {
+				color: $txt-gray;
+				background-color: $light-gray;
+			}
+			&.btn-white {
+				background: $white;
+				color: $txt-gray;
+				&:hover { color: $txt-gray; }
+			}
+		}
+
+	}
+}

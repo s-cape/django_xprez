@@ -18,11 +18,18 @@ function initializeCkEditors($scope) {
 
                 link: {
                     decorators: {
-                        toggleDownloadable: {
+                        toggleButtonPrimary: {
                             mode: 'manual',
-                            label: 'Button',
+                            label: 'Primary button',
                             attributes: {
-                                class: 'button'
+                                class: 'btn btn-primary'
+                            }
+                        },
+                        toggleButtonSecondary: {
+                            mode: 'manual',
+                            label: 'Secondary button',
+                            attributes: {
+                                class: 'btn btn-secondary'
                             }
                         },
                         openInNewTab: {

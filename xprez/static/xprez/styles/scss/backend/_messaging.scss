@@ -2,9 +2,9 @@
 	border-color: lighten($b-red,15%);
 }
 .xprez-error-list {
-	//display: none;
 	color: $b-red;
-	@include reset_list;
+	padding-left: 0;
+	list-style: none;
 	@include type-b(13px,1);
 	margin-bottom: $g;
 }
