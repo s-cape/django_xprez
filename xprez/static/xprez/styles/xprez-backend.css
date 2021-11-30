@@ -709,6 +709,9 @@ textarea {
   clear: both;
 }
 
+.xprez-module {
+  color: #1E1E21;
+}
 .xprez-module p {
   font-size: 1rem;
   line-height: 1.5;
@@ -846,6 +849,10 @@ textarea {
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
 }
 
+.ck-widget.image, .ck-widget.media {
+  margin: 2rem 0;
+}
+
 .medium-insert-images figure {
   margin: 2rem 0;
 }
@@ -869,25 +876,30 @@ textarea {
   display: block;
 }
 
-.medium-insert-images-right, .medium-insert-embeds-right {
+.medium-insert-images-right, .medium-insert-embeds-right,
+.ck-widget.image-style-align-right {
   max-width: 33.33%;
   margin: 0 0 1rem 30px;
   float: right;
 }
-.medium-insert-images-right figure, .medium-insert-embeds-right figure {
+.medium-insert-images-right figure, .medium-insert-embeds-right figure,
+.ck-widget.image-style-align-right figure {
   margin: 0.5rem 0 1rem 0;
 }
 
-.medium-insert-images-left, .medium-insert-embeds-left {
+.medium-insert-images-left, .medium-insert-embeds-left,
+.ck-widget.image-style-align-left {
   max-width: 33.33%;
   margin: 0 30px 1rem 0;
   float: left;
 }
-.medium-insert-images-left figure, .medium-insert-embeds-left figure {
+.medium-insert-images-left figure, .medium-insert-embeds-left figure,
+.ck-widget.image-style-align-left figure {
   margin: 0.5rem 0 1rem 0;
 }
 
-.medium-insert-images figcaption, .medium-insert-embeds figcaption {
+.medium-insert-images figcaption, .medium-insert-embeds figcaption,
+.ck-widget.image figcaption {
   font-size: 15px;
   line-height: 1.3;
   font-style: italic;
@@ -896,9 +908,11 @@ textarea {
   padding: 0.5rem 10px 0;
   margin-bottom: 1rem;
   opacity: 0.7;
+  background: none;
 }
 @media (max-width: 430px) {
-  .medium-insert-images figcaption, .medium-insert-embeds figcaption {
+  .medium-insert-images figcaption, .medium-insert-embeds figcaption,
+.ck-widget.image figcaption {
     font-size: 13px;
     line-height: 1;
   }
@@ -1230,7 +1244,6 @@ textarea {
 }
 
 .xprez-module {
-  border: 2px;
   border: 1px solid #DEE2E6;
   margin: 1rem 0;
 }

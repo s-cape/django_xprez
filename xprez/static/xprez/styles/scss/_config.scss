@@ -26,8 +26,6 @@
 	// grid
 	// $g: 16px !default; - TODO check, if this is possible with older projects
 	$g: 1rem !default;
-	$base-font-size: 1rem !default;
-	$basefont: $base-font-size;
 
 	$sans:  "acumin-pro", Helvetica ,Arial , sans-serif !default;
 	$serif:  Georgia, serif !default;
@@ -42,13 +40,21 @@
 	$txt-gray: #37383C !default;
 	$txt-box-gray: #CAD1DB !default;
 
+	// base settings
+	$base-box-bg: $super-light-gray !default;
+	$base-text-color:  $black !default;
+	$base-font-size: 1rem !default;
+	$base-lh: 1.5 !default;
+	$basefont: $base-font-size;
+
 	//
 	// TEXT MODULE
 	//
 
 	$use-xprez-text-styles: true !default;
 
-	$text-module-base-lh: 1.5 !default;
+	$xprez-base-color: $base-text-color !default;
+	$text-module-base-lh: $base-lh !default;
 
 	$text-module-heading-letter-spacing: -0.04em !default;
 	$text-module-heading-weight: 700 !default;
@@ -122,8 +128,33 @@
 	$button-secondary-hover-bg: darken($light-gray,10%) !default;
 	$button-secondary-hover-text-color: $txt-gray !default;
 
-
 	//
+	// QUOTE
+	//
+
+	$quote-width: $s-width !default;
+	$quote-2-cols-width: $m-width !default;
+
+	$quote-box-bg: $base-box-bg !default;
+	$quote-box-padding-v:  4rem !default;
+	$quote-head-title-mb:  2rem !default;
+	$quote-avatar-width:  150px !default;
+	$quote-avatar-name-size:  $base-font-size !default;
+
+	$quote-title-fluid-size: $text-module-h3-fluid-size !default;
+	$quote-title-lh: $text-module-h3-lh !default;
+	$quote-title-mt: 0 !default;
+	$quote-title-mb: 0.5em !default;
+	$quote-title-weight: $text-module-heading-weight !default;
+
+	$quote-text-font-family: $serif !default;
+	$quote-text-font-style: italic !default;
+	$quote-text-size: 1.125rem !default;
+	$quote-text-lh: null !default;
+	$quote-text-mt: 0 !default;
+	$quote-text-mb: 1em !default;
+
+//
 // BACKEND
 // 
 
