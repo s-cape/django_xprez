@@ -718,7 +718,7 @@ textarea {
 .xprez-module h2 {
   font-size: calc(2.2rem + 1rem);
   line-height: 1.25;
-  margin-top: 4em;
+  margin-top: 1em;
   margin-bottom: 0.5em;
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
   font-weight: 700;
@@ -796,6 +796,7 @@ textarea {
   font-size: calc(1rem + 1rem);
   line-height: 1.5;
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
+  font-style: normal;
 }
 @media (max-width: 900px) {
   .xprez-module blockquote, .xprez-module blockquote p {
@@ -818,40 +819,6 @@ textarea {
   display: block;
   border-bottom: 6px solid #D2D2D3;
   margin-top: 1rem;
-}
-.xprez-module .btn {
-  display: inline-block;
-  background: #37383C;
-  font-size: 13px;
-  line-height: 1.5;
-  font-family: "acumin-pro", Helvetica, Arial, sans-serif;
-  box-sizing: border-box;
-  border-radius: 0;
-  text-shadow: none;
-  border: none;
-  color: #FFF;
-  padding: 1.25rem 30px;
-  text-decoration: none;
-  letter-spacing: 0.1em;
-}
-@media only screen and (max-width: 430px) {
-  .xprez-module .btn {
-    padding: 1rem 20px;
-  }
-}
-.xprez-module .btn:active {
-  transform: scale(0.95);
-}
-.xprez-module .btn:hover {
-  color: #37383C;
-  background-color: #D2D2D3;
-}
-.xprez-module .btn.btn-white {
-  background: #FFF;
-  color: #37383C;
-}
-.xprez-module .btn.btn-white:hover {
-  color: #37383C;
 }
 
 .xprez-feature-boxes h2, .medium-editor-simple h2,
@@ -935,6 +902,50 @@ textarea {
     font-size: 13px;
     line-height: 1;
   }
+}
+
+.xprez-module .btn {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-family: "acumin-pro", Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+  border-radius: 0px;
+  text-shadow: none;
+  border: none;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0.05em;
+  padding: 1.25em 1.75em;
+  color: #FFF;
+  background: #37383C;
+  box-shadow: none;
+}
+@media only screen and (max-width: 430px) {
+  .xprez-module .btn {
+    padding: 0.9375em 1.3125em;
+  }
+}
+.xprez-module .btn:active {
+  transform: scale(0.95);
+}
+.xprez-module .btn:hover {
+  color: #FFF;
+  background: #4f5157;
+}
+.xprez-module .btn.btn-secondary {
+  color: #37383C;
+  background: #D2D2D3;
+}
+.xprez-module .btn.btn-secondary:hover {
+  color: #37383C;
+  background: #b8b8ba;
+}
+.xprez-module .btn.btn-white {
+  background: #FFF;
+  color: #37383C;
+}
+.xprez-module .btn.btn-white:hover {
+  color: #37383C;
 }
 
 .xprez-grid-boxes {

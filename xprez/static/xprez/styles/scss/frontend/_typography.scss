@@ -109,10 +109,12 @@
 									null,
 									null);
 				@include sans;
+				font-style: normal;
 			}
 			padding-left: 0;
 			border: none;
 			color: inherit;
+
 
 			@if $use-xprez-blockquote-box-style {
 				& {

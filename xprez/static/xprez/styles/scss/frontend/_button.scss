@@ -2,27 +2,43 @@
 	.btn {
 		@if $use-xprez-button-styles {
 			display: inline-block;
-			background: $txt-gray;
-			@include type(13px,1.5);
-			@include sans;
+			@include type($button-size);
+			font-family: $button-font-family;
 			box-sizing: border-box;
-			border-radius: 0;
-			text-shadow: none;
-			border: none;
-			color: $white;
-			padding: $g*1.25 30px;
-			text-decoration: none;
-			letter-spacing: 0.1em;
+			border-radius: $button-border-radius;
+			text-shadow: $button-text-shadow;
+			border: $button-border;
+			text-decoration: $button-text-transform;
+			text-transform: $button-text-transform;
+			letter-spacing: $button-letter-spacing;
+			padding: $button-padding-v $button-padding-h;
+			color: $button-primary-text-color;
+			background: $button-primary-bg;
+			box-shadow: $button-box-shadow;
+
 			@media only screen and (max-width: $typo-break-s) {
-				padding: $g*1 20px;
+				padding: ($button-padding-v * 0.75) ($button-padding-h * 0.75);
 			}
+
 			&:active {
 				transform: scale(0.95);
 			}
+
 			&:hover {
-				color: $txt-gray;
-				background-color: $light-gray;
+				color: $button-primary-hover-text-color;
+				background: $button-primary-hover-bg;
 			}
+
+			&.btn-secondary {
+				color: $button-secondary-text-color;
+				background: $button-secondary-bg;
+
+				&:hover {
+					color: $button-secondary-hover-text-color;
+					background: $button-secondary-hover-bg;
+				}
+			}
+
 			&.btn-white {
 				background: $white;
 				color: $txt-gray;

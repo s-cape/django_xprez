@@ -63,7 +63,7 @@
 
 	$text-module-h2-fluid-size: 2.2rem !default;
 	$text-module-h2-lh: 1.25 !default;
-	$text-module-h2-mt: 4em !default;
+	$text-module-h2-mt: 1em !default;
 	$text-module-h2-mb: 0.5em !default;
 	$text-module-h2-weight: $text-module-heading-weight !default;
 
@@ -100,11 +100,30 @@
 	$text-module-blockquote-box-dash-bg: $light-gray !default;
 
 	// button
+	$use-xprez-button-styles: true !default;
+	$button-size: $base-font-size * 0.875 !default;
+	$button-font-family: $sans !default;
+	$button-border-radius: 0px !default;
+	$button-border: none !default;
+	$button-text-shadow: none !default;
+	$button-text-decoration: none !default;
+	$button-text-transform: none !default;
+	$button-letter-spacing: 0.05em !default;
+	$button-box-shadow: none !default;
+	$button-padding-v: 1.25em;
+	$button-padding-h: 1.75em;
 
-	$use-xprez-button-styles: false !default;
+	$button-primary-bg: $txt-gray !default;
+	$button-primary-text-color: $white !default;
+	$button-primary-hover-bg: lighten($txt-gray, 10%) !default;
+	$button-primary-hover-text-color: $white !default;
+	$button-secondary-bg: $light-gray !default;
+	$button-secondary-text-color: $txt-gray !default;
+	$button-secondary-hover-bg: darken($light-gray,10%) !default;
+	$button-secondary-hover-text-color: $txt-gray !default;
 
 
-// 
+	//
 // BACKEND
 // 
 
