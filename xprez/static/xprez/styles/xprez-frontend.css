@@ -1,10 +1,10 @@
 /* Error: Undefined variable.
  *    ,
- * 30 |     @include type($numbers-digit-size, null);
- *    |                   ^^^^^^^^^^^^^^^^^^^
+ * 49 |         color: $video-button-color;
+ *    |                ^^^^^^^^^^^^^^^^^^^
  *    '
- *   styles/scss/frontend/_numbers.scss 30:16       @import
- *   styles/scss/frontend/xprez-frontend.scss 23:9  root stylesheet */
+ *   styles/scss/frontend/_video.scss 49:10         @import
+ *   styles/scss/frontend/xprez-frontend.scss 22:9  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -14,5 +14,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a    \2577 \a 30 \2502      @include type($numbers-digit-size, null);\a    \2502                    ^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles/scss/frontend/_numbers.scss 30:16       @import\a   styles/scss/frontend/xprez-frontend.scss 23:9  root stylesheet";
+  content: "Error: Undefined variable.\a    \2577 \a 49 \2502          color: $video-button-color;\a    \2502                 ^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles/scss/frontend/_video.scss 49:10         @import\a   styles/scss/frontend/xprez-frontend.scss 22:9  root stylesheet";
 }

@@ -14,29 +14,36 @@ $gb-padding: $m-space;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    border: 0 !important;
 
     // basic box style
+
     .xprez-grid-box {
         width: 25%;
         box-sizing: border-box;
         display: flex;
     }
+
     .xprez-grid-box-inner {
         flex: 1;
         overflow: hidden;
     }
 
     // box margins switch
+
     &.margin-m {
         padding-left: $gb-margin-m*.5;
         padding-right: $gb-margin-m*.5;
+
         &.mid-width { max-width: $m-width + $gb-margin-m*2; }
         &.text-width { max-width: $s-width + $gb-margin-m*2; }
         .xprez-grid-box { padding: $gb-margin-m*.5; }
     }
+
     &.margin-l {
         padding-left: $gb-margin-l*.5;
         padding-right: $gb-margin-l*.5;
+
         &.mid-width     { max-width: $m-width + $gb-margin-l*2; }
         &.text-width    { max-width: $s-width + $gb-margin-l*2; }
         .xprez-grid-box { padding: $gb-margin-l*.5; }
@@ -44,32 +51,39 @@ $gb-padding: $m-space;
         @media screen and (max-width: 1150px) {
             padding-left: $gb-margin-m*.5;
             padding-right: $gb-margin-m*.5;
+
             .xprez-grid-box { padding: $gb-margin-m*.5; }
         }
     }
+
     &.margin-l, &.margin-m {
         @media only screen and (max-width: (600px)) {
             padding-left: $gb-margin-s*.5;
             padding-right: $gb-margin-s*.5;
+
             .xprez-grid-box { padding: $gb-margin-s*.5; }
         }
     }
 
     // box backgound switch
+
     &.boxes_filled .xprez-grid-box-inner {
         background: $b-gray-3;
     }
 
     // box border switch
+
     &.border .xprez-grid-box-inner {
         border: 1px solid $b-gray-4;
     }
 
     // box padding switch
+
     &.padded {
         .xprez-grid-box-inner {
             padding: $m-space;
         }
+
         &.columns-6, &.columns-8 {
             &.textsize-s, &.textsize-s {
                 .xprez-grid-box-inner {
@@ -80,18 +94,22 @@ $gb-padding: $m-space;
     }
 
     // images to edges
+
     &.edge_images.padded {
         .medium-insert-images-center {
             margin-left: - $m-space;
             margin-right: - $m-space;
+
             &:first-child {
                 margin-top: - $m-space;
             }
         }
+
         &.columns-6, &.columns-8 {
             .medium-insert-images-center {
                 margin-left: - $s-space;
                 margin-right: - $s-space;
+
                 &:first-child {
                     margin-top: - $s-space;
                 }
@@ -100,9 +118,11 @@ $gb-padding: $m-space;
     }
 
     // grid sizes
+
     &.columns-2 {
         .xprez-grid-box { width: 50%; }
     }
+
     &.columns-3 {
         .xprez-grid-box { width: 33.3%; }
     }
@@ -116,105 +136,133 @@ $gb-padding: $m-space;
         .xprez-grid-box { width: 12.5%; }
     }
 
-        // sizes - mobile modifications
-        &.full-width, &.mid-width {
-            &.columns-2 .xprez-grid-box {
-                @media screen and (max-width: 800px) { width: 100% }
-            }
-            &.columns-3 .xprez-grid-box {
-                @media screen and (max-width: 900px) { width: 50% }
-                @media screen and (max-width: 600px) { width: 100% }
-            }
-            &.columns-4 .xprez-grid-box {
-                @media screen and (max-width: 1000px) { width: 50% }
-                @media screen and (max-width: 500px) { width: 100% }
-            }
-            &.columns-6 .xprez-grid-box {
-                @media screen and (max-width: 1000px) { width: 33.3% }
-                @media screen and (max-width: 600px) { width: 50% }
-            }
-            &.columns-8 .xprez-grid-box {
-                @media screen and (max-width: 900px) { width: 25% }
-                @media screen and (max-width: 450px) { width: 50% }
-            }
-        }
-        &.text-width {
-            &.columns-2 .xprez-grid-box {
-                @media screen and (max-width: 600px) { width: 100% }
-            }
-            &.columns-3 .xprez-grid-box {
-                @media screen and (max-width: 600px) { width: 50% }
-                @media screen and (max-width: 400px) { width: 100% }
-            }
-            &.columns-4 .xprez-grid-box {
-                @media screen and (max-width: 650px) { width: 50% }
-                @media screen and (max-width: 500px) { width: 100% }
-            }
-            &.columns-6 .xprez-grid-box {
-                @media screen and (max-width: 650px) { width: 33.3% }
-                @media screen and (max-width: 400px) { width: 50% }
-            }
-            &.columns-8 .xprez-grid-box {
-                @media screen and (max-width: 650px) { width: 25% }
-                //@media screen and (max-width: 30px) { width: 50% }
-            }
+    // sizes - mobile modifications
+
+    &.full-width, &.mid-width {
+        &.columns-2 .xprez-grid-box {
+            @media screen and (max-width: 800px) { width: 100% }
         }
 
+        &.columns-3 .xprez-grid-box {
+            @media screen and (max-width: 900px) { width: 50% }
+            @media screen and (max-width: 600px) { width: 100% }
+        }
+
+        &.columns-4 .xprez-grid-box {
+            @media screen and (max-width: 1000px) { width: 50% }
+            @media screen and (max-width: 500px) { width: 100% }
+        }
+
+        &.columns-6 .xprez-grid-box {
+            @media screen and (max-width: 1000px) { width: 33.3% }
+            @media screen and (max-width: 600px) { width: 50% }
+        }
+
+        &.columns-8 .xprez-grid-box {
+            @media screen and (max-width: 900px) { width: 25% }
+            @media screen and (max-width: 450px) { width: 50% }
+        }
+    }
+
+    &.text-width {
+
+        &.columns-2 .xprez-grid-box {
+            @media screen and (max-width: 600px) { width: 100% }
+        }
+
+        &.columns-3 .xprez-grid-box {
+            @media screen and (max-width: 600px) { width: 50% }
+            @media screen and (max-width: 400px) { width: 100% }
+        }
+
+        &.columns-4 .xprez-grid-box {
+            @media screen and (max-width: 650px) { width: 50% }
+            @media screen and (max-width: 500px) { width: 100% }
+        }
+
+        &.columns-6 .xprez-grid-box {
+            @media screen and (max-width: 650px) { width: 33.3% }
+            @media screen and (max-width: 400px) { width: 50% }
+        }
+
+        &.columns-8 .xprez-grid-box {
+            @media screen and (max-width: 650px) { width: 25% }
+            //@media screen and (max-width: 30px) { width: 50% }
+        }
+    }
+
     // text size and adjustments
+
     .xprez-grid-box, .xprez-grid-boxes-admin-wrapper {
         h2 {
             margin-top: 0.5em;
             margin-bottom: 0.2em;
+
             &:first-child {
                 margin-top: 0;}
         }
+
         h3 {
             margin-top: 0.4em;
             margin-bottom: 0.4em;
+
             &:first-child {
                 margin-top: 0;}
         }
+
         p {
             margin-bottom: 0.5em;
+
             &:last-child {
                 margin-bottom: 0.2em;}
         }
+
         .btn {
             margin-top: 0.5em;
             padding: 0.5em 1.2em;
             font-size: 0.85em;
         }
     }
+
     &:not(.padded):not(.centered) {
         p, ul, ol, h3, h2 {
             padding-right: 15%;}
     }
+
     &.textsize-m .xprez-grid-box {
         font-size: 0.93rem;
+
         p, ul, li  {
             line-height: 1.7;
         }
     }
+
     &.textsize-s .xprez-grid-box {
         font-size: 0.8rem;
+
         p, ul, li  {
             line-height: 1.7;
         }
+
         .medium-insert-images figure {
             margin-bottom: $g*.5;
         }
     }
+
     &.textsize-xs .xprez-grid-box {
         font-size: 0.7rem;
+
         p, ul, li  {
             line-height: 1.5;
         }
+
         .medium-insert-images figure {
             margin-bottom: $g*.5;
         }
     }
 
     // centering
+
     &.centered .xprez-grid-box * {
         text-align: center;
     }
@@ -223,17 +271,20 @@ $gb-padding: $m-space;
 //
 //  Medium editor specific Grid boxes tweaks
 //
+
 .xprez-grid-box {
     .medium-insert-images {
         figure {
             margin-top: 1.25em;
             margin-bottom: 1.25em;
         }
+
         &:first-child figure {
             margin-top: 0;
         }
     }
 }
+
 .nothing {
     color: inherit;
 }

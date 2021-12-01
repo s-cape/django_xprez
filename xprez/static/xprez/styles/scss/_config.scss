@@ -7,7 +7,12 @@
 	$break-m: 650px !default;
 	$break-s: 430px !default;
 
-	// margins
+	// typo breakpoints
+	$typo-break-l: $break-l !default;
+	$typo-break-m: $break-m !default;
+	$typo-break-s: $break-s !default;
+
+	// spacing
 	$l-space: 88px !default;
 	$m-space: 28px !default;
 	$s-space: 14px !default;
@@ -17,11 +22,6 @@
 	$full-width: 100% !default;
 	$m-width: 1260px !default;
 	$s-width: 700px !default;
-
-	// typo 18/32
-	$typo-break-l: $break-l !default;
-	$typo-break-m: $break-m !default;
-	$typo-break-s: $break-s !default;
 
 	// grid
 	// $g: 16px !default; - TODO check, if this is possible with older projects
@@ -156,7 +156,7 @@
 	$numbers-digit-weight: 600 !default;
 
 	$numbers-suffix-weight: 500 !default;
-	$numbers-suffix-size: $numbers-digit-size * 0.6 !default;
+	$numbers-suffix-size: $numbers-digit-size * 1 !default;
 	$numbers-suffix-ml: 0.25em !default;
 	$numbers-suffix-opacity: 0.8 !default;
 
@@ -194,6 +194,13 @@
 	$quote-text-lh: null !default;
 	$quote-text-mt: 0 !default;
 	$quote-text-mb: 1em !default;
+
+	//
+	// VIDEO
+	//
+
+	$video-button-color: white !default;
+	$video-button-size: 130px !default;
 
 //
 // BACKEND

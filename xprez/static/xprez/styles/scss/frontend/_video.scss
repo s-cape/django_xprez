@@ -1,17 +1,23 @@
+@use "sass:math";
+
 .xprez-video {
 	&.full-width {
 		@include full-width;
 	}
+
 	&.mid-width {
 		@include m-width;
 	}
+
 	&.text-width {
 		@include s-width;
 	}
-} 
+}
+
 .xprez-video-item {
 	position: relative;
 	padding-top: 55%;
+
 	iframe {
 		position: absolute;
 		top: 0; right: 0;
@@ -20,6 +26,7 @@
 		display: block;
 	}
 }
+
 [class^="xprez-video-poster-"], [class*=" xprez-video-poster-"] {
 	cursor: pointer;
 	position: absolute;
@@ -30,6 +37,7 @@
 	z-index: 2;
 	background-position: center center;
 	background-size: cover;
+
 	&:after {
 		position: absolute;
 		line-height: 1;
@@ -38,23 +46,21 @@
 		left: 50%;
 		content: "\e038";
 		z-index: 3;
-		color: white;
+		color: $video-button-color;
 		text-shadow: 0 0 40px rgba(0,0,0,0.1);
-		font-size: 130px;
-		margin-left: -65px;
-		margin-top: -65px;
+		font-size: $video-button-size;
+		margin-left: -1 * math.div($video-button-size, 2);
+		margin-top: -1 * math.div($video-button-size, 2);
 		transition: all 0.3s;
+
 		@media only screen and (max-width: $typo-break-m) {
-			font-size: 80px;
-			margin-left: -40px;
-			margin-top: -40px;
+			font-size: $video-button-size * 0.65;
+			margin-left: $video-button-size * 0.65 * -0.5;
+			margin-top: $video-button-size * 0.65 * -0.5;
 		}
-		@media only screen and (max-width: $typo-break-s) {
-			font-size: 60px;
-			margin-left: -30px;
-			margin-top: -30px;
-		}
+
 	}
+
 	&:hover:after {
 		transform: scale(1.1);
 	}

@@ -966,6 +966,7 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  border: 0 !important;
 }
 .xprez-grid-boxes.full-width {
   box-sizing: border-box;
@@ -1313,6 +1314,7 @@ textarea {
   display: inline-block;
   padding: 0 10px;
   border-left: 1px solid #CED4DA;
+  margin: 0;
 }
 .xprez-module .xprez-module__options-group:first-child {
   border-left: none;
@@ -1320,6 +1322,7 @@ textarea {
 .xprez-module .xprez-module__options-group li {
   display: inline-block;
   vertical-align: middle;
+  font-size: 12px;
 }
 
 .xprez-add {
