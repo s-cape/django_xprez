@@ -1,10 +1,12 @@
 .xprez-numbers {
 	text-align: center;
-	padding: $g*2 0 $g*1; 
+	padding: $g*2 0 $g*1;
+
 	@media only screen and (max-width: ($break-s)) {
 		padding: $g*1 0 0;
 	}
 }
+
 .xprez-number-item {
 	display: inline-block;
 	vertical-align: top;
@@ -18,28 +20,40 @@
 		margin: 0 10px $g*1.5;
 	}
 }
-.xprez-number-item {
-	
-}
+
 .xprez-number {
-	@include type(50px,4);
-	@include type-min(40px,2);
 	@include condensed;
-	.wf-active & {
-		@include type(70px,4);
-	}
+	line-height: 1;
 }
+
+.xprez-number-digits {
+	@include type($numbers-digit-size, null);
+	@include type-min($numbers-digit-size * 0.75, null);
+	font-weight: $numbers-digit-weight;
+}
+
+.xprez-number-suffix {
+	@include type($numbers-suffix-size, null);
+	@include type-min($numbers-suffix-size * 0.75, null);
+	font-weight: $numbers-suffix-weight;
+	margin-left: $numbers-suffix-ml;
+	opacity: $numbers-suffix-opacity;
+}
+
 .xprez-number-title {
-	@include type(12px,1.2);
-	text-transform: uppercase;
-	font-weight: bold;
+	@include type($numbers-description-size, $numbers-description-lh);
+	text-transform: $numbers-description-text-transform;
+	font-weight: $numbers-description-weight;
+	font-style: $numbers-description-style;
+	opacity: $numbers-description-opacity;
 	max-width: 100px;
 	display: inline-block;
+
 	&:before {
 		content:'';
 		display: block;
 		height: 1px;
-		background: $light-gray;
+		background: $numbers-stroke-bg;
 		width: 16px;
 		margin: $g auto $g;
 	}

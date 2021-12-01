@@ -29,7 +29,7 @@
 
 	$sans:  "acumin-pro", Helvetica ,Arial , sans-serif !default;
 	$serif:  Georgia, serif !default;
-	$condensed: "trumpgothicpro",sans-serif !default;
+	$condensed: "trumpgothicpro", "Arial", sans-serif !default;
 
 	//colors
 	$white: #FFF !default;
@@ -147,6 +147,27 @@
 	$download-name-size: $base-font-size !default;
 	$download-name-lh: null !default;
 	$download-name-weight: normal !default;
+
+	//
+	// NUMBERS
+	//
+
+	$numbers-digit-size: 3.5rem !default;
+	$numbers-digit-weight: 600 !default;
+
+	$numbers-suffix-weight: 500 !default;
+	$numbers-suffix-size: $numbers-digit-size * 0.6 !default;
+	$numbers-suffix-ml: 0.25em !default;
+	$numbers-suffix-opacity: 0.8 !default;
+
+	$numbers-description-size: 0.75rem !default;
+	$numbers-description-lh: 1.25 !default;
+	$numbers-description-weight: bold !default;
+	$numbers-description-text-transform: uppercase !default;
+	$numbers-description-style: none !default;
+	$numbers-description-opacity: 0.5 !default;
+
+	$numbers-stroke-bg: $light-gray !default;
 
 	//
 	// QUOTE
