@@ -6,7 +6,7 @@
         {% for att in content.attachments.all %}
             <div class="xprez-download-item">
             	<div class="xprez-download-btn">
-            		<a href="{{ att.file.url }}" class="btn btn-white" download="{{ att.get_name }}{% if att.get_extension %}.{{ att.get_extension }}{% endif %}">Download {{ att.get_extension }}</a>
+            		<a href="{{ att.file.url }}" class="btn btn-secondary btn-download" download="{{ att.get_name }}{% if att.get_extension %}.{{ att.get_extension }}{% endif %}">Download {{ att.get_extension }}</a>
             	</div>
             	<h4>{{ att.get_name }}</h4>
             </div>

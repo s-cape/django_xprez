@@ -1228,8 +1228,8 @@
 }
 
 .xprez-download {
-  box-sizing: border-box;
   *zoom: 1;
+  box-sizing: border-box;
   background: #F6F6F6;
   max-width: 100%;
   box-sizing: border-box;
@@ -1268,20 +1268,26 @@
     margin-right: 0;
   }
 }
-.xprez-download-item .btn {
-  padding-top: 10px;
-  padding-bottom: 10px;
+.xprez-download-item .btn, .xprez-download-item .btn.btn-secondary {
   white-space: nowrap;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+@media (max-width: 520px) {
+  .xprez-download-item .btn, .xprez-download-item .btn.btn-secondary {
+    display: block;
+  }
 }
 .xprez-download-item h4 {
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 1rem;
   margin-top: 0;
-  margin-bottom: 1;
+  margin-bottom: 0;
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
-  font-weight: bold;
+  font-weight: normal !important;
   display: table-cell;
   padding-left: 20px;
+  word-break: break-word;
 }
 @media (max-width: 430px) {
   .xprez-download-item h4 {
@@ -1291,22 +1297,19 @@
     margin-bottom: 1;
   }
 }
-@media only screen and (max-width: 520px) {
+@media (max-width: 520px) {
   .xprez-download-item h4 {
     display: block;
     font-weight: normal;
-    padding-left: 20px;
+    padding-left: 0;
   }
 }
 .xprez-download-item .xprez-download-btn {
   display: table-cell;
-  padding: 10px 0;
+  padding: 0.5rem 0;
 }
-@media only screen and (max-width: 520px) {
+@media (max-width: 520px) {
   .xprez-download-item .xprez-download-btn {
-    display: block;
-  }
-  .xprez-download-item .xprez-download-btn .btn {
     display: block;
   }
 }

@@ -105,8 +105,12 @@
 	$text-module-blockquote-me: 0 !default;
 	$text-module-blockquote-box-dash-bg: $light-gray !default;
 
-	// button
+	//
+	// BUTTON
+	//
+
 	$use-xprez-button-styles: true !default;
+
 	$button-size: $base-font-size * 0.875 !default;
 	$button-font-family: $sans !default;
 	$button-border-radius: 0px !default;
@@ -127,6 +131,22 @@
 	$button-secondary-text-color: $txt-gray !default;
 	$button-secondary-hover-bg: darken($light-gray,10%) !default;
 	$button-secondary-hover-text-color: $txt-gray !default;
+
+	//
+	// DOWNLOAD
+	//
+
+	$download-box-bg: $base-box-bg !default;
+	$download-cell-padding-v: 0.5rem !default;
+
+	$download-button-size: $base-font-size * 0.875 !default;
+	$download-button-padding-v: 0.5rem !default;
+	$download-button-bg: null !default;
+	$download-button-hover-bg: null !default;
+
+	$download-name-size: $base-font-size !default;
+	$download-name-lh: null !default;
+	$download-name-weight: normal !default;
 
 	//
 	// QUOTE

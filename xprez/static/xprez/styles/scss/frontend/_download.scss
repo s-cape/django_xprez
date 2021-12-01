@@ -1,50 +1,73 @@
+$download-break: 520px;
+
 .xprez-download {
-	box-sizing: border-box;
 	@include clearfix;
-	background: $super-light-gray;
+	box-sizing: border-box;
+	background: $download-box-bg;
 	max-width: 100%;
+
 	@include cont-width($s-width + $m-space*6);
 	padding: $g*3 $m-space*3;
 
 	@media only screen and (max-width: ($break-m+200)) {
 		padding: $g*2 $m-space;
 	}
+
 	@media only screen and (max-width: ($break-s)) {
 		padding: $g*2 $s-space;
 	}
 }
+
 .xprez-download-item {
 	margin: $g*.5 30px 0 0;
 	display: table-row;
+
 	@media only screen and (max-width: (520px)) {
 		display: block;
 		margin-right: 0;
 	}
-	.btn {
-		padding-top: 10px;
-		padding-bottom: 10px;
-		white-space: nowrap;	
+
+	.btn, .btn.btn-secondary {
+		white-space: nowrap;
+
+		@include media-breakpoint-down($download-break) {
+			display: block;
+		}
+
+		@if $use-xprez-button-styles {
+			padding-top: $download-button-padding-v;
+			padding-bottom: $download-button-padding-v;
+			background: $download-button-bg;
+			font-size: $download-button-size;
+
+			&:hover {
+				background: $download-button-hover-bg;
+			}
+		}
 	}
+
 	h4 {
-		@include type(16px,1.5, 0, 1);
-		@include type-min(14px,1.5, 0, 1);
+		@include type($download-name-size, $download-name-lh, 0, 0);
+		@include type-min(14px, 1.5, 0, 1);
 		@include sans;
-		font-weight: bold;
+		font-weight: $download-name-weight !important;
 		display: table-cell;
 		padding-left: 20px;
-		@media only screen and (max-width: (520px)) {
+		word-break: break-word;
+
+		@include media-breakpoint-down($download-break) {
 			display: block;
 			font-weight: normal;
-			padding-left: 20px;
+			padding-left: 0;
 		}
 	}
+
 	.xprez-download-btn {
 		display: table-cell;
-		padding: 10px 0;
-		@media only screen and (max-width: (520px)) {
+		padding: $download-cell-padding-v 0;
+
+		@include media-breakpoint-down($download-break) {
 			display: block;
-			.btn { display: block;}
 		}
 	}
-	
 }
