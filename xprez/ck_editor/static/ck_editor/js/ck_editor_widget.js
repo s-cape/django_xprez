@@ -2,12 +2,14 @@
 
 
 function initializeCkEditors($scope) {
-    $scope.find('.ck-editor').each(function(index) {
+    $scope.find('.js-ck-editor-source').each(function(index) {
         var $textarea = $(this);
         var $editorRoot = $textarea.parent().siblings('.js-ck-editor-root');
         var $form = $editorRoot.parents('form');
 
-        if ($textarea.hasClass('ck-editor-full')) {
+        if ($textarea.data('ck-editor-variant') == 'simple') {
+            console.log('TODO: ckeditor simple config')
+        } else {
             var config = {
                 initialData: $textarea.val(),
                 // blockToolbar: ['paragraph', 'heading2', 'heading3', '|', 'blockQuote', 'bulletedList', 'numberedList', '|', 'imageUpload', 'MediaEmbed'],
@@ -69,12 +71,7 @@ function initializeCkEditors($scope) {
                 },
                 placeholder: 'Type your text',
             }
-        } else if ($textarea.hasClass('ck-editor-simple')) {
-
-        } else {
-
         }
-
 
         BalloonBlockEditor
             .create($editorRoot[0], config)
@@ -84,7 +81,7 @@ function initializeCkEditors($scope) {
                 });
             });
 
-        console.log(BalloonBlockEditor.builtinPlugins.map( plugin => plugin.pluginName ));
+        // console.log(BalloonBlockEditor.builtinPlugins.map( plugin => plugin.pluginName ));
 
         // $(this).parents('form').submit(function () {
         //     console.log('data');

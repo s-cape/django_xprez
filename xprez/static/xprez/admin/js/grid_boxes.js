@@ -30,7 +30,8 @@ var initAddAnotherBtn = function ($scope, contentID, boxesCount) {
         e.preventDefault();
         var $box = $($scope.find('.js-box-tpl').html());
         $scope.find('.js-boxes').append($box);
-        initializeMediumEditors($box);
+        // initializeMediumEditors($box);
+        initializeCkEditors($box);
         initBoxActions($box);
     });
 
@@ -42,11 +43,14 @@ var initAddAnotherBtn = function ($scope, contentID, boxesCount) {
 var handleFormSubmit = function ($scope, contentID) {
     $('form').submit(function (e) {
         var boxes = []
-        $scope.find('.js-boxes textarea.js-grid-box').each(function (index, element) {
-            boxes.push($(element).val())
-        })
-        var value = JSON.stringify(boxes)
-        $('#id_content-' + contentID + '-boxes').val(value)
+        // $scope.find('.js-boxes textarea.js-grid-box').each(function (index, element) {
+        //     boxes.push($(element).val())
+        // });
+        $scope.find('.js-boxes .js-ck-editor-root').each(function (index, element) {
+            boxes.push($(element).html());
+        });
+        var value = JSON.stringify(boxes);
+        $('#id_content-' + contentID + '-boxes').val(value);
     })
 }
 
