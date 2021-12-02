@@ -44,7 +44,10 @@ var handleFormSubmit = function ($scope, contentID, editors) {
     $('form').submit(function (e) {
         var boxes = []
         for (var ii=0; ii<editors.length; ii++) {
-            boxes.push(editors[ii].getData());
+            var editor = editors[ii];
+            if ($(editor.sourceElement).is(':visible')) {
+                boxes.push(editors[ii].getData());
+            }
         }
 
         var value = JSON.stringify(boxes);
