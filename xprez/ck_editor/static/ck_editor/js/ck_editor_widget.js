@@ -70,7 +70,10 @@ function initializeCkEditors($scope) {
                 simpleUpload: {
                     uploadUrl: $textarea.data('file-upload')
                 },
-                placeholder: 'Type your text'
+                placeholder: 'Type your text',
+                mediaEmbed: {
+                    previewsInData: true
+                }
             }
         }
 
