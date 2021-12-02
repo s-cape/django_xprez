@@ -517,17 +517,17 @@ textarea {
   display: flex;
   flex-direction: column;
 }
-.xprez .xprez-grid-boxes-admin-wrapper .medium-editor {
+.xprez .xprez-grid-boxes-admin-wrapper .medium-editor, .xprez .xprez-grid-boxes-admin-wrapper .ck-editor {
   font-size: 14px;
   line-height: 0.75rem;
   margin: 0;
   padding-top: 0;
   flex: 1;
 }
-.xprez .xprez-grid-boxes-admin-wrapper .medium-editor .medium-insert-buttons-show {
+.xprez .xprez-grid-boxes-admin-wrapper .medium-editor .medium-insert-buttons-show, .xprez .xprez-grid-boxes-admin-wrapper .ck-editor .medium-insert-buttons-show {
   margin-left: 20px;
 }
-.xprez .xprez-grid-boxes-admin-wrapper .medium-editor .medium-insert-images figure {
+.xprez .xprez-grid-boxes-admin-wrapper .medium-editor .medium-insert-images figure, .xprez .xprez-grid-boxes-admin-wrapper .ck-editor .medium-insert-images figure {
   margin: 8px 0;
 }
 
@@ -649,6 +649,14 @@ textarea {
 
 .ck-placeholder {
   font-style: italic;
+}
+
+.ck.ck-editor__editable_inline > :first-child {
+  margin-top: 0;
+}
+
+.ck.ck-editor__editable_inline > :last-child {
+  margin-bottom: 0;
 }
 
 .xprez .medium-editor {
@@ -1187,6 +1195,7 @@ textarea {
   }
 }
 .xprez-grid-boxes .xprez-grid-box h2, .xprez-grid-boxes .xprez-grid-boxes-admin-wrapper h2 {
+  font-size: 3.125em;
   margin-top: 0.5em;
   margin-bottom: 0.2em;
 }
@@ -1194,6 +1203,7 @@ textarea {
   margin-top: 0;
 }
 .xprez-grid-boxes .xprez-grid-box h3, .xprez-grid-boxes .xprez-grid-boxes-admin-wrapper h3 {
+  font-size: 2em;
   margin-top: 0.4em;
   margin-bottom: 0.4em;
 }
@@ -1201,39 +1211,34 @@ textarea {
   margin-top: 0;
 }
 .xprez-grid-boxes .xprez-grid-box p, .xprez-grid-boxes .xprez-grid-boxes-admin-wrapper p {
+  font-size: 1em;
   margin-bottom: 0.5em;
 }
 .xprez-grid-boxes .xprez-grid-box p:last-child, .xprez-grid-boxes .xprez-grid-boxes-admin-wrapper p:last-child {
   margin-bottom: 0.2em;
 }
+.xprez-grid-boxes .xprez-grid-box ul, .xprez-grid-boxes .xprez-grid-box li, .xprez-grid-boxes .xprez-grid-box ol, .xprez-grid-boxes .xprez-grid-box blockquote, .xprez-grid-boxes .xprez-grid-boxes-admin-wrapper ul, .xprez-grid-boxes .xprez-grid-boxes-admin-wrapper li, .xprez-grid-boxes .xprez-grid-boxes-admin-wrapper ol, .xprez-grid-boxes .xprez-grid-boxes-admin-wrapper blockquote {
+  font-size: 1em;
+}
 .xprez-grid-boxes .xprez-grid-box .btn, .xprez-grid-boxes .xprez-grid-boxes-admin-wrapper .btn {
   margin-top: 0.5em;
-  padding: 0.5em 1.2em;
-  font-size: 0.85em;
+  font-size: 0.875em;
+  padding: 0.75em 1.25em;
 }
 .xprez-grid-boxes:not(.padded):not(.centered) p, .xprez-grid-boxes:not(.padded):not(.centered) ul, .xprez-grid-boxes:not(.padded):not(.centered) ol, .xprez-grid-boxes:not(.padded):not(.centered) h3, .xprez-grid-boxes:not(.padded):not(.centered) h2 {
   padding-right: 15%;
 }
 .xprez-grid-boxes.textsize-m .xprez-grid-box {
-  font-size: 0.93rem;
-}
-.xprez-grid-boxes.textsize-m .xprez-grid-box p, .xprez-grid-boxes.textsize-m .xprez-grid-box ul, .xprez-grid-boxes.textsize-m .xprez-grid-box li {
-  line-height: 1.7;
+  font-size: 1rem;
 }
 .xprez-grid-boxes.textsize-s .xprez-grid-box {
-  font-size: 0.8rem;
-}
-.xprez-grid-boxes.textsize-s .xprez-grid-box p, .xprez-grid-boxes.textsize-s .xprez-grid-box ul, .xprez-grid-boxes.textsize-s .xprez-grid-box li {
-  line-height: 1.7;
+  font-size: 0.875rem;
 }
 .xprez-grid-boxes.textsize-s .xprez-grid-box .medium-insert-images figure {
   margin-bottom: 0.5rem;
 }
 .xprez-grid-boxes.textsize-xs .xprez-grid-box {
-  font-size: 0.7rem;
-}
-.xprez-grid-boxes.textsize-xs .xprez-grid-box p, .xprez-grid-boxes.textsize-xs .xprez-grid-box ul, .xprez-grid-boxes.textsize-xs .xprez-grid-box li {
-  line-height: 1.5;
+  font-size: 0.8rem;
 }
 .xprez-grid-boxes.textsize-xs .xprez-grid-box .medium-insert-images figure {
   margin-bottom: 0.5rem;

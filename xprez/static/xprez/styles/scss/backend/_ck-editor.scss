@@ -5,3 +5,11 @@
 .ck-placeholder {
 	font-style: italic;
 }
+
+.ck.ck-editor__editable_inline>:first-child {
+	margin-top: 0;
+}
+
+.ck.ck-editor__editable_inline>:last-child {
+	margin-bottom: 0;
+}

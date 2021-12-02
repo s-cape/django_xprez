@@ -106,6 +106,22 @@
 	$text-module-blockquote-box-dash-bg: $light-gray !default;
 
 	//
+	// GRID BOXES
+	//
+
+	// sizes should be em because of scaling
+	$gridbox-h2-size: 3.125em !default;
+	$gridbox-h3-size: 2em !default;
+	$gridbox-base-size: 1em !default;
+	$gridbox-button-size: 0.875em !default;
+
+	$gridbox-m-scale: 1 !default;
+	$gridbox-s-scale: 0.875 !default;
+	$gridbox-xs-scale: 0.8 !default;
+
+	$gridbox-use-small-buttons: true !default;
+
+	//
 	// BUTTON
 	//
 
