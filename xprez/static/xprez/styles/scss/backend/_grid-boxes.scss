@@ -8,8 +8,8 @@
     margin-right: 15px;
     display: flex;
     flex-direction: column;
-    .xprez & .medium-editor {
-       font-size: 14px;
+    .xprez & .medium-editor, .xprez & .ck-editor {
+        font-size: 14px;
         line-height: $g*.75;
         margin: 0;
         padding-top: 0;

@@ -78,7 +78,8 @@
 {% block js %}
     <script>
         jqueryME(document).ready(function () {
-            initializeMediumEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
+            initializeCkEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
+            // initializeMediumEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
         });
 
         $(function () {

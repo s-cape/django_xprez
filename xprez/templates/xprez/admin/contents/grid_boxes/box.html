@@ -1,6 +1,19 @@
 <div class="js-box-wrapper xprez-grid-boxes-admin-wrapper">
+    {% comment %}
     <textarea class="medium-editor js-grid-box" data-file-upload="/medium-editor/file-upload/medium_editor_uploads/"
               data-file-delete="/medium-editor/file-delete/">{{ box_content }}</textarea>
+    {% endcomment %}
+    <div style="display: none">
+        <textarea
+            class="js-grid-box js-ck-editor-source"
+            data-ck-editor-variant="full"
+            data-file-upload="{% url 'xprez:gridboxes_file_upload' 'ck_editor_uploads' %}"
+        >
+            {{ box_content }}
+        </textarea>
+    </div>
+    <div class="ck-editor js-ck-editor-root"></div>
+
     <div class="xprez-grid-boxes-admin-buttons">
         <span href="#" class="js-grid-box-move-up xprez-icon-btn-chevron-small-up" title="Move up"></span>
         <span href="#" class="js-grid-box-move-down xprez-icon-btn-chevron-small-down" title="Move down"></span>

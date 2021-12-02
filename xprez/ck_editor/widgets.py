@@ -11,7 +11,7 @@ class CkEditorWidget(forms.widgets.Textarea):
     class Media:
         css = {
             'all': (
-                'ck_editor/css/ck_editor_widget.css',
+                # 'ck_editor/css/ck_editor_widget.css',
             )
         }
         js = (
@@ -22,13 +22,11 @@ class CkEditorWidget(forms.widgets.Textarea):
 
     def __init__(self, mode='full', file_upload_dir=None, attrs=None):
         assert mode in self.MODE_CHOICES
-        if mode == self.SIMPLE:
-            css_class = 'ck-editor ck-editor-simple ignore-changes'
-        elif mode == self.FULL:
-            css_class = 'ck-editor ck-editor-full ignore-changes'
-        else:
-            css_class = 'ck-editor ck-editor-no-insert-plugin'
-        default_attrs = {'cols': '40', 'rows': '10', 'class': css_class, }
+        default_attrs = {
+            'class': 'js-ck-editor-source',
+            'data-ck-editor-variant': mode,
+            'cols': '40', 'rows': '10',
+        }
         if attrs:
             default_attrs.update(attrs)
 

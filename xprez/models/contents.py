@@ -56,32 +56,7 @@ class MediumEditor(Content):
         return medium_editor_render_text_parsed(self.get_parsed_text())
 
 
-class CkEditor(Content):
-    form_class = 'xprez.admin_forms.CkEditorForm'
-    admin_template_name = 'xprez/admin/contents/ck_editor.html'
-    front_template_name = 'xprez/contents/ck_editor.html'
-    icon_name = 'text_content'
-    verbose_name = 'Text Content (CK)'  # TODO
-
-    text = models.TextField()
-    css_class = models.CharField(max_length=100, null=True, blank=True)
-    box = models.BooleanField(default=False)
-    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
-
-    class AdminMedia:
-        js = CkEditorWidget.Media.js + PHOTOSWIPE_JS
-        css = CkEditorWidget.Media.css['all'] + PHOTOSWIPE_CSS
-
-    def show_front(self):
-        # TODO: not working for single image inserted in editor
-        return striptags(self.text) != ''
-
-    def render_front(self, extra_context={}):
-        extra_context['parsed_text'] = ckeditor_parse_text.render_text_parsed(
-            ckeditor_parse_text.parse_text(self.text, extra_context['request'])
-        )
-        return super().render_front(extra_context=extra_context)
-
+class CkEditorFileUploadMixin:
     @classmethod
     @method_decorator(staff_member_required)
     @method_decorator(csrf_exempt)
@@ -107,9 +82,38 @@ class CkEditor(Content):
     @classmethod
     def get_urls(cls):
         cls_name = cls.__name__.lower()
+        print('{}_file_upload'.format(cls_name))
+
         return [
-            url(r'^{}/file-upload/(?P<directory>[/\w-]+)/$'.format(cls_name), cls.file_upload_view, name='ckeditor_file_upload'),
+            url(r'^{}/file-upload/(?P<directory>[/\w-]+)/$'.format(cls_name), cls.file_upload_view, name='{}_file_upload'.format(cls_name)),
         ]
+
+
+class CkEditor(CkEditorFileUploadMixin, Content):
+    form_class = 'xprez.admin_forms.CkEditorForm'
+    admin_template_name = 'xprez/admin/contents/ck_editor.html'
+    front_template_name = 'xprez/contents/ck_editor.html'
+    icon_name = 'text_content'
+    verbose_name = 'Text Content (CK)'  # TODO
+
+    text = models.TextField()
+    css_class = models.CharField(max_length=100, null=True, blank=True)
+    box = models.BooleanField(default=False)
+    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
+
+    class AdminMedia:
+        js = CkEditorWidget.Media.js + PHOTOSWIPE_JS
+        css = CkEditorWidget.Media.css['all'] + PHOTOSWIPE_CSS
+
+    def show_front(self):
+        # TODO: not working for single image inserted in editor
+        return striptags(self.text) != ''
+
+    def render_front(self, extra_context={}):
+        extra_context['parsed_text'] = ckeditor_parse_text.render_text_parsed(
+            ckeditor_parse_text.parse_text(self.text, extra_context['request'])
+        )
+        return super().render_front(extra_context=extra_context)
 
 
 class QuoteContent(FormsetContent):
@@ -420,7 +424,7 @@ class TextImage(TextImageBase):
         abstract = False
 
 
-class GridBoxes(Content):
+class GridBoxes(CkEditorFileUploadMixin, Content):
     form_class = 'xprez.admin_forms.GridBoxesForm'
     admin_template_name = 'xprez/admin/contents/grid_boxes/grid_boxes.html'
     front_template_name = 'xprez/contents/grid_boxes.html'
@@ -440,8 +444,8 @@ class GridBoxes(Content):
     )
 
     class AdminMedia:
-        js = list(MediumEditorWidget.Media.js) + ['xprez/admin/js/grid_boxes.js', ]
-        css = MediumEditorWidget.Media.css['all']
+        js = CkEditorWidget.Media.js + ('xprez/admin/js/grid_boxes.js',)
+        css = CkEditorWidget.Media.css['all']
 
     columns = models.PositiveSmallIntegerField(default=2)
     margin = models.CharField(max_length=4, choices=MARGIN_CHOICES, default='m')
