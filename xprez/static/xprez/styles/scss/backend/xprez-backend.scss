@@ -9,6 +9,9 @@
 @import "image-text";
 @import "grid-boxes";
 @import "add-module";
+@import "ck-editor";
+@import "medium-editor";
+
 @import "../frontend/layout";
 @import "../frontend/typography";
 @import "../frontend/editor_media";
@@ -28,6 +31,7 @@
 	margin-top: $g;
 	margin-bottom: $g*3;
 }
+
 .xprez-module {
 	border: 1px solid $b-gray-4;
 	margin: $g 0;
@@ -35,11 +39,13 @@
 		display: none;
 	}
 }
+
 .xprez-module__title {
 	background: $b-gray-2;
 	text-align: center;
 	overflow: hidden;
 	position: relative;
+
 	h2 {
 		@include type-b(12px);
 		color: darken($b-gray-7,15%);
@@ -50,36 +56,43 @@
 		left: 90px;
 		margin: 0;
 	}
+
 	.xprez-icon-btn-collapse {
 		float: left;
 		margin-top: 2px;
 		margin-left: 2px;
 	}
+
 	.xprez-icon-btn-remove {
 		float: right;
 		margin-top: 2px;
 		margin-right: 2px;
 	}
+
 	.xprez-icon-btn-copy {
 		float: right;
 		margin-top: 2px;
 		margin-right: 2px;
 	}
+
     .xprez-icon-btn-eye {
 		float: right;
 		margin-top: 2px;
 		margin-right: 2px;
 	}
 }
+
 .xprez-module__options {
 	background: $b-gray-2;
 	text-align: center;
 	padding: 2px 2px 5px;
 	line-height: 28px;
+
 	&.hidden {
 		display: none;
 	}
 }
+
 .xprez-module__content {
 	background: white;
 	border-top: 1px solid $b-gray-4;
@@ -87,7 +100,9 @@
 	padding: 15px;
 	overflow: hidden;
 }
+
 //
+
 .xprez-module .xprez-module__options-group {
 	list-style: none;
 	display: inline-block;
@@ -98,38 +113,47 @@
 	&:first-child {
 		border-left: none;
 	}
+
 	li {
 		display: inline-block;
 		vertical-align: middle;
 		font-size: 12px;
 	}
 }
+
 //
+
 .xprez-add {
 	text-align: center;
+
 	h2 {
 		@include type-b(13px,2,2,2);
 		color: $b-gray-7;
 		font-weight: normal;
 	}
 }
+
 .xprez-add__list {
 	padding-left: 0;
 	list-style: none;
+
 	li {
 		display: inline-block;
 		cursor: pointer;
 		width: 60px;
 		padding: 0 5px;
 		vertical-align: top;
+
 		&:hover {
 			.xprez-add__label { color: $b-blue-high; }
+
 			[class^="xprez-icon-btn-add"], [class*=" xprez-icon-btn-add"] {
 				background: $b-blue-high;
 			}
 		}
 	}
 }
+
 .xprez-add__label {
 	@include type-b(12px,0.9,.5,1);
 	display: inline-block;
@@ -149,24 +173,30 @@
 	display: inline-block;
 	vertical-align: middle;
 	border-radius: 2px;
+
 	&:before {
 		font-size: 20px;
 		line-height: 28px;
 	}
+
 	&:hover {
 		background: $b-gray-4;
 	}
+
 	&.active {
 		color: white;
 		background: $b-gray-7;
 	}
 }
 .xprez-icon-btn-remove:before {content: "\e872";}
+
 .xprez-icon-btn-collapse:before {
 	content: "\e5c6";
 	font-size: 28px;
+
 	.collapsed & { content: "\e5c5";}
 }
+
 .xprez-icon-btn-remove.active{
 	background: $b-red;
 }
@@ -188,10 +218,12 @@
 
 .xprez-icon-btn-eye	{
 	position: relative;
+
 	&:before {
 		content: "\e902";
 		color: $b-blue-high;
 	}
+
 	&:after {
 		content: '';
 		position: absolute;
@@ -205,11 +237,14 @@
 		border-radius: 5px;
 	}
 }
+
 .xprez-icon-btn-eye.active	{
 	background: none;
+
 	&:before {
 		color: $b-gray-7;
 	}
+
 	&:after {
 		display: none;
 	}
@@ -240,6 +275,7 @@
 }
 
 // Add icon buttons
+
 [class^="xprez-icon-btn-add"], [class*=" xprez-icon-btn-add"] {
 	transition: all 300ms;
 	width: 60px;
@@ -293,20 +329,6 @@
 	vertical-align: middle;
 	padding: 3px 5px;
 	border: 1px solid $b-gray-4;
-}
-
-// medium editor layout
-
-.xprez {
-	.medium-editor {
-		margin: 0 30px;
-	}
-	.medium-editor-simple {
-		margin: 0;
-	}
-	h3 {
-		color: inherit;
-	}
 }
 
 

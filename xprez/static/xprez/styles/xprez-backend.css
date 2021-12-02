@@ -450,6 +450,10 @@ textarea {
   height: 100px;
 }
 
+.xprez-flexbox-cont {
+  display: flex;
+}
+
 .xprez-image-text-image .xprez-cell-label,
 .xprez-image-text-text .xprez-cell-label {
   width: auto;
@@ -478,13 +482,11 @@ textarea {
 
 @media only screen and (min-width: 600px) {
   .xprez-image-text-image {
-    float: left;
     width: 50%;
     padding-right: 20px;
   }
   .image-right .xprez-image-text-image {
-    float: right;
-    padding-right: 0px;
+    order: 2;
     padding-left: 20px;
   }
 }
@@ -494,11 +496,10 @@ textarea {
 
 @media only screen and (min-width: 600px) {
   .xprez-image-text-text {
-    float: right;
     width: 50%;
   }
   .image-right .xprez-image-text-text {
-    float: left;
+    order: 1;
   }
 }
 .xprez-image-text-text .xprez-form-row {
@@ -640,6 +641,27 @@ textarea {
   display: flex;
   visibility: visible;
   opacity: 1;
+}
+
+.ck-content {
+  margin: 0 30px;
+}
+
+.ck-placeholder {
+  font-style: italic;
+}
+
+.xprez .medium-editor {
+  margin: 0 30px;
+}
+.xprez .medium-editor-simple {
+  margin: 0;
+}
+.xprez .medium-editor-placeholder:after {
+  margin-left: 0;
+}
+.xprez h3 {
+  color: inherit;
 }
 
 .xprez-full-width {
@@ -845,7 +867,6 @@ textarea {
 
 .medium-editor {
   font-size: 1rem;
-  padding-top: 1rem;
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
 }
 
@@ -1613,16 +1634,6 @@ textarea {
   vertical-align: middle;
   padding: 3px 5px;
   border: 1px solid #DEE2E6;
-}
-
-.xprez .medium-editor {
-  margin: 0 30px;
-}
-.xprez .medium-editor-simple {
-  margin: 0;
-}
-.xprez h3 {
-  color: inherit;
 }
 
 /*# sourceMappingURL=xprez-backend.css.map */

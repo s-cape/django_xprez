@@ -66,7 +66,8 @@ function initializeCkEditors($scope) {
                 },
                 simpleUpload: {
                     uploadUrl: $textarea.data('file-upload')
-                }
+                },
+                placeholder: 'Type your text',
             }
         } else if ($textarea.hasClass('ck-editor-simple')) {
 

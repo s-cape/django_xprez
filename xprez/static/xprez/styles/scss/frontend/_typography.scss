@@ -45,6 +45,7 @@
 			}
 		}
 		margin-left: 0;
+
 		span, strong {
 			font-weight: $text-module-heading-emphasis-weight !important;
 			color: $text-module-heading-emphasis-color;
@@ -80,6 +81,7 @@
 							$text-module-h4-mb);
 			@include sans;
 			font-weight: $text-module-heading-emphasis-weight !important;
+
 			&:first-child {
 				margin-top: 0;
 			}
@@ -154,13 +156,16 @@
 	h2 {
 		margin-top: .5*$g;
 		margin-bottom: .5*$g;
+
 		&:first-child {
 			margin-top: 0;
 		}
 	}
+
 	h3 {
 		margin-top: .5*$g;
 		margin-bottom: .5*$g;
+
 		&:first-child {
 			margin-top: 0;
 		}
@@ -171,7 +176,6 @@
 
 .medium-editor {
 	font-size: $basefont;
-	padding-top: $g*1;
 	@include sans;
 }
 
