@@ -52,7 +52,7 @@ def parse_text(text_source, request):
             else:
                 caption = ''
 
-            alt_text = tag_img.get('alt')
+            alt_text = tag_img.get('alt', '')
 
             tag_link = tag.find('a')
             if tag_link:

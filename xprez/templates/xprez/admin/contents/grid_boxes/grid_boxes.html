@@ -78,15 +78,11 @@
 {% block js %}
     <script>
         jqueryME(document).ready(function () {
-            initializeCkEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
-            // initializeMediumEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
-        });
-
-        $(function () {
+            var editors = initializeCkEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
             var $scope = $('.js-content-{{ content.pk }}');
             var boxesCount = {{ content.boxes|length }};
             var contentID = {{ content.pk }};
-            initGridBox($scope, contentID, boxesCount);
-        })
+            initGridBox($scope, contentID, boxesCount, editors);
+        });
     </script>
 {% endblock %}

@@ -15,7 +15,7 @@
         {% if content.boxes_filled %}boxes_filled{% endif %}
         {% if content.border %}border{% endif %}
     ">
-        {% for box in content.rendered_boxes %}
+        {% for box in rendered_boxes %}
         <div class="xprez-grid-box">
             <div class="xprez-grid-box-inner">{{ box }}</div>
         </div>
