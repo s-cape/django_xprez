@@ -2,7 +2,6 @@
 
 
 function initializeCkEditors($scope) {
-    var editors = [];
     $scope.find('.js-ck-editor-source').each(function(index) {
         var $textarea = $(this);
         var $editorRoot = $textarea.parent().siblings('.js-ck-editor-root');
@@ -83,7 +82,6 @@ function initializeCkEditors($scope) {
                 $form.submit(function () {
                     $textarea.val(editor.getData());
                 });
-                editors.push(editor);
             });
 
         // console.log(BalloonBlockEditor.builtinPlugins.map( plugin => plugin.pluginName ));
@@ -96,7 +94,6 @@ function initializeCkEditors($scope) {
         // });
     });
 
-    return editors;
     /*
     rangy.init();
 

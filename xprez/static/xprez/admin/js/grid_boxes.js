@@ -40,24 +40,20 @@ var initAddAnotherBtn = function ($scope, contentID, boxesCount) {
     }
 }
 
-var handleFormSubmit = function ($scope, contentID, editors) {
+var handleFormSubmit = function ($scope, contentID) {
     $('form').submit(function (e) {
         var boxes = []
-        for (var ii=0; ii<editors.length; ii++) {
-            var editor = editors[ii];
-            if ($(editor.sourceElement).is(':visible')) {
-                boxes.push(editors[ii].getData());
-            }
-        }
-
-        var value = JSON.stringify(boxes);
-        $('#id_content-' + contentID + '-boxes').val(value);
-    })
+        $scope.find('.js-boxes .js-ck-editor-root').each(function (index, element) {
+            boxes.push($(element)[0].ckeditorInstance.getData())
+        });
+        var value = JSON.stringify(boxes)
+        $('#id_content-' + contentID + '-boxes').val(value)
+    });
 }
 
 
-var initGridBox = function ($scope, contentID, boxesCount, editors) {
+var initGridBox = function ($scope, contentID, boxesCount) {
     initBoxActions($scope.find('.js-boxes'));
     initAddAnotherBtn($scope, contentID, boxesCount);
-    handleFormSubmit($scope, contentID, editors);
+    handleFormSubmit($scope, contentID);
 }
