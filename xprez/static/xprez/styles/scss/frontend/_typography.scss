@@ -27,7 +27,7 @@
 							$text-module-p-lh,
 							$text-module-p-mt,
 							$text-module-p-mb);
-			@include sans;
+			font-family: $body-font-family;
 		}
 	}
 
@@ -37,7 +37,7 @@
 								$text-module-h2-lh,
 								$text-module-h2-mt,
 								$text-module-h2-mb);
-			@include sans;
+			font-family: $heading-font-family;
 			font-weight: $text-module-h2-weight;
 			letter-spacing: $text-module-heading-letter-spacing;
 			&:first-child {
@@ -58,7 +58,7 @@
 								$text-module-h3-lh,
 								$text-module-h3-mt,
 								$text-module-h3-mb);
-			@include sans;
+			font-family: $heading-font-family;
 			font-weight: $text-module-h3-weight;
 			letter-spacing: $text-module-heading-letter-spacing;
 			&:first-child {
@@ -79,7 +79,7 @@
 							$text-module-h4-lh,
 							$text-module-h4-mt,
 							$text-module-h4-mb);
-			@include sans;
+			font-family: $heading-font-family;
 			font-weight: $text-module-heading-emphasis-weight !important;
 
 			&:first-child {
@@ -115,7 +115,7 @@
 									$text-module-blockquote-lh,
 									null,
 									null);
-				@include sans;
+				font-family: $body-font-family;
 				font-style: normal;
 			}
 			padding-left: 0;
@@ -176,7 +176,7 @@
 
 .medium-editor {
 	font-size: $basefont;
-	@include sans;
+	font-family: $body-font-family;
 }
 
 
