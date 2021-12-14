@@ -20,6 +20,7 @@
 
 	// layout widths
 	$full-width: 100% !default;
+	$l-width: 1400px !default;
 	$m-width: 1260px !default;
 	$s-width: 700px !default;
 
@@ -219,6 +220,17 @@
 
 	$video-button-color: white !default;
 	$video-button-size: 130px !default;
+
+	//
+	// TEXT-IMAGE
+	//
+
+	$textimage-module-width: $m-width !default;
+	$textimage-breakpoint: 800px !default;
+	$textimage-text-column-spacing: $m-space * 4 !default;
+	$textimage-image-column-spacing: $m-space * 2 !default;
+	$textimage-text-max-width: 600px !default;
+
 
 //
 // BACKEND
