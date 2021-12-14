@@ -8,6 +8,8 @@ class CkEditorWidget(forms.widgets.Textarea):
     FULL_NO_INSERT_PLUGIN = 'full_no_insert_plugin'
     MODE_CHOICES = [FULL, SIMPLE, FULL_NO_INSERT_PLUGIN]
 
+    template_name = 'xprez/widgets/ck_editor.html'
+
     class Media:
         css = {
             'all': (

@@ -142,7 +142,7 @@ class TextImageForm(BaseContentForm):
         model = TextImage
         fields = ('position', 'image', 'text', 'image_alignment', 'css_class', 'visible')
         widgets = {
-            'text': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
+            'text': CkEditorWidget(mode=CkEditorWidget.FULL_NO_INSERT_PLUGIN),
         }
 
 

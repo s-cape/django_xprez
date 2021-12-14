@@ -1,0 +1,7 @@
+<div style="display: none">
+    {% include 'django/forms/widgets/textarea.html' %}
+</div>
+<div class="ck-editor js-ck-editor-root js-ck-editor-root-{{ widget.name }}"></div>
+<script>
+    initializeCkEditor($('#id_{{ widget.name }}'), $('.js-ck-editor-root-{{ widget.name }}'));
+</script>

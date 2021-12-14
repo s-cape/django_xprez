@@ -20,12 +20,7 @@
 {% endblock %}
 
 {% block content %}
-    {# <div class="js-ck-editor-input-wrapper-{{ content.pk }}"> #}
-    <div style="display: none">
-        {{ content.admin_form.text }}
-    </div>
-    <div class="ck-editor js-ck-editor-root"></div>
-    {# </div> #}
+    {{ content.admin_form.text }}
 {% endblock %}
 
 {% block hidden_form %}
@@ -33,16 +28,11 @@
     {{ content.admin_form.width }}
     {{ content.admin_form.box }}
     {{ content.admin_form.css_class }}
-
 {% endblock %}
 
 
 {% block js %}
     <script>
-        $(document).ready(function () {
-            initializeCkEditors($('.js-content-{{ content.pk }}'));
-        });
-
         $(function () {
             var $jsBox = $('.js-content-{{ content.pk }}').find('.js-box');
             var $boxOptions = $('.js-content-{{ content.pk }}').find('.js-box-show');

@@ -399,20 +399,29 @@ class TextImageBase(Content):
     css_class = models.CharField(max_length=100, null=True, blank=True)
 
     class AdminMedia:
-        js = MediumEditorWidget.Media.js
-        css = MediumEditorWidget.Media.css['all']
+        js = CkEditorWidget.Media.js
+        css = CkEditorWidget.Media.css['all']
 
     class Meta:
         abstract = True
 
     def show_front(self):
-        return striptags(self.text) != ''
+        return True
 
-    def get_parsed_text(self):
-        return medium_editor_parse_text(self.text)
+    def render_front(self, extra_context={}):
+        extra_context['parsed_text'] = ckeditor_parse_text.render_text_parsed(
+            ckeditor_parse_text.parse_text(self.text, extra_context['request'])
+        )
+        return super().render_front(extra_context=extra_context)
 
-    def render_text(self):
-        return medium_editor_render_text_parsed(self.get_parsed_text())
+    # def show_front(self):
+    #     return striptags(self.text) != ''
+
+    # def get_parsed_text(self):
+    #     return medium_editor_parse_text(self.text)
+
+    # def render_text(self):
+    #     return medium_editor_render_text_parsed(self.get_parsed_text())
 
 
 class TextImage(TextImageBase):
