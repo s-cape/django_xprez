@@ -43,15 +43,12 @@ var initAddAnotherBtn = function ($scope, contentID, boxesCount) {
 var handleFormSubmit = function ($scope, contentID) {
     $('form').submit(function (e) {
         var boxes = []
-        // $scope.find('.js-boxes textarea.js-grid-box').each(function (index, element) {
-        //     boxes.push($(element).val())
-        // });
         $scope.find('.js-boxes .js-ck-editor-root').each(function (index, element) {
-            boxes.push($(element).html());
+            boxes.push($(element)[0].ckeditorInstance.getData())
         });
-        var value = JSON.stringify(boxes);
-        $('#id_content-' + contentID + '-boxes').val(value);
-    })
+        var value = JSON.stringify(boxes)
+        $('#id_content-' + contentID + '-boxes').val(value)
+    });
 }
 
 

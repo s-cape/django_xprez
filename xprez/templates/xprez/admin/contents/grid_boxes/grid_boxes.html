@@ -79,14 +79,10 @@
     <script>
         jqueryME(document).ready(function () {
             initializeCkEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
-            // initializeMediumEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
-        });
-
-        $(function () {
             var $scope = $('.js-content-{{ content.pk }}');
             var boxesCount = {{ content.boxes|length }};
             var contentID = {{ content.pk }};
             initGridBox($scope, contentID, boxesCount);
-        })
+        });
     </script>
 {% endblock %}

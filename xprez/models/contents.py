@@ -11,7 +11,6 @@ from django.template import TemplateDoesNotExist
 from django.template.defaultfilters import striptags
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
-from django.utils.functional import cached_property
 from django.views.decorators.csrf import csrf_exempt
 from xprez.utils import random_string
 
@@ -82,8 +81,6 @@ class CkEditorFileUploadMixin:
     @classmethod
     def get_urls(cls):
         cls_name = cls.__name__.lower()
-        print('{}_file_upload'.format(cls_name))
-
         return [
             url(r'^{}/file-upload/(?P<directory>[/\w-]+)/$'.format(cls_name), cls.file_upload_view, name='{}_file_upload'.format(cls_name)),
         ]
@@ -459,16 +456,23 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
     border = models.BooleanField(default=True)
     boxes = JSONField(null=True)
 
-    @cached_property
-    def rendered_boxes(self):
+    def render_front(self, extra_context={}):
         boxes = []
         for box_content in self.boxes:
             if striptags(box_content != ''):
-                boxes.append(medium_editor_render_text_parsed(medium_editor_parse_text(box_content)))
-        return boxes
+                # boxes.append(medium_editor_render_text_parsed(medium_editor_parse_text(box_content)))
+                boxes.append(ckeditor_parse_text.render_text_parsed(
+                    ckeditor_parse_text.parse_text(box_content, extra_context['request'])
+                ))
+
+        extra_context['rendered_boxes'] = boxes
+        return super().render_front(extra_context=extra_context)
 
     def show_front(self):
-        return self.rendered_boxes
+        for box_content in self.boxes:
+            if striptags(box_content != ''):
+                return True
+        return False
 
 
 contents_manager.register(MediumEditor)
