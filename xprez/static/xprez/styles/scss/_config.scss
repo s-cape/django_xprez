@@ -75,18 +75,21 @@
 	$text-module-h2-mt: 1em !default;
 	$text-module-h2-mb: 0.5em !default;
 	$text-module-h2-weight: $text-module-heading-weight !default;
+	$text-module-h2-color: null !default;
 
 	$text-module-h3-fluid-size: 1rem !default;
 	$text-module-h3-lh: 1.25 !default;
 	$text-module-h3-mt: 1.5em !default;
 	$text-module-h3-mb: 0.5em !default;
 	$text-module-h3-weight: $text-module-heading-weight !default;
+	$text-module-h3-color: null !default;
 
 	$text-module-h4-size: 1.125rem !default;
 	$text-module-h4-lh: 1.5rem !default;
 	$text-module-h4-mt: 1em !default;
 	$text-module-h4-mb: 0 !default;
 	$text-module-h4-weight: $text-module-heading-weight !default;
+	$text-module-h4-color: null !default;
 
 	$text-module-small-size: 0.875em !default;
 
@@ -94,8 +97,8 @@
 	$text-module-list-mb: 1rem !default;
 	$text-module-list-h: 0rem !default;
 	$text-module-list-ps: 3rem !default;
-	$text-module-list-row-size: $base-font-size !default;
-	$text-module-list-row-lh: $text-module-base-lh !default;
+	$text-module-list-row-size: $text-module-p-size !default;
+	$text-module-list-row-lh: $text-module-p-lh !default;
 	$text-module-list-row-mt: null !default;
 	$text-module-list-row-mb: 0.5em !default;
 
