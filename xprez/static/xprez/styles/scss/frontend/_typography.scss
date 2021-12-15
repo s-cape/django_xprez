@@ -147,6 +147,16 @@
 
 		}
 	}
+
+	figure.media {
+		&:not(:first-child) {
+			margin-top: $text-module-media-mt;
+		}
+
+		&:not(:last-child) {
+			margin-bottom: $text-module-media-mb;
+		}
+	}
 }
 
 // Specific styles for feature boxes & simple medium editor 

@@ -108,11 +108,14 @@
 	$text-module-blockquote-me: 0 !default;
 	$text-module-blockquote-box-dash-bg: $light-gray !default;
 
+	$text-module-media-mt: 2rem !default;
+	$text-module-media-mb: 2rem !default;
+
 	//
 	// GRID BOXES
 	//
 
-	// sizes should be em because of scaling
+	// sizes should be em because of scaling and are independent on $use-xprez-text-styles setting
 	$gridbox-h2-size: 3.125em !default;
 	$gridbox-h3-size: 2em !default;
 	$gridbox-base-size: 1em !default;
