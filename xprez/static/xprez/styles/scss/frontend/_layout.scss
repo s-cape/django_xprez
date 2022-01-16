@@ -6,7 +6,7 @@
 }
 
 @mixin full-width () {
-	@include cont-width(100%)
+	@include cont-width($full-width)
 }
 
 .xprez-full-width {

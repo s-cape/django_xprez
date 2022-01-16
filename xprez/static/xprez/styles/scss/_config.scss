@@ -28,6 +28,9 @@
 	// $g: 16px !default; - TODO check, if this is possible with older projects
 	$g: 1rem !default;
 
+	// modules spacing
+	$module-spacing-base: $g !default;
+
 	$sans:  "acumin-pro", Helvetica ,Arial , sans-serif !default;
 	$serif:  Georgia, serif !default;
 	$condensed: "trumpgothicpro", "Arial", sans-serif !default;
@@ -119,9 +122,11 @@
 	//
 
 	// sizes should be em because of scaling and are independent on $use-xprez-text-styles setting
+	$gridbox-base-size: $base-font-size;
+
 	$gridbox-h2-size: 3.125em !default;
 	$gridbox-h3-size: 2em !default;
-	$gridbox-base-size: 1em !default;
+	$gridbox-base-relative-size: 1em !default;
 	$gridbox-button-size: 0.875em !default;
 
 	$gridbox-m-scale: 1 !default;

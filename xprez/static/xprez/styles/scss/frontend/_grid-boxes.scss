@@ -213,7 +213,7 @@ $gb-padding: $m-space;
         }
 
         p {
-            font-size: $gridbox-base-size;
+            font-size: $gridbox-base-relative-size;
             margin-bottom: 0.5em;
 
             &:last-child {
@@ -221,7 +221,7 @@ $gb-padding: $m-space;
         }
 
         ul, li, ol, blockquote {
-            font-size: $gridbox-base-size;
+            font-size: $gridbox-base-relative-size;
         }
 
         .btn {
@@ -240,7 +240,7 @@ $gb-padding: $m-space;
     }
 
     &.textsize-m .xprez-grid-box {
-        font-size: $gridbox-m-scale * 1rem;
+        font-size: $gridbox-m-scale * $gridbox-base-size;
 
         //p, ul, li  {
         //    line-height: 1.7;
@@ -248,7 +248,7 @@ $gb-padding: $m-space;
     }
 
     &.textsize-s .xprez-grid-box {
-        font-size: $gridbox-s-scale * 1rem;
+        font-size: $gridbox-s-scale * $gridbox-base-size;
 
         //p, ul, li  {
         //    line-height: 1.7;
@@ -260,7 +260,7 @@ $gb-padding: $m-space;
     }
 
     &.textsize-xs .xprez-grid-box {
-        font-size: $gridbox-xs-scale * 1rem;
+        font-size: $gridbox-xs-scale * $gridbox-base-size;
 
         //p, ul, li  {
         //    line-height: 1.5;

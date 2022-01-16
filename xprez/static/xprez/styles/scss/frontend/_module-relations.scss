@@ -1,33 +1,40 @@
 // content blocks relations
 
 @mixin relation($o,$l,$m,$s) { // grid multiples
-	margin-top: $g*$o;
+	margin-top: $module-spacing-base * $o;
+
 	@media only screen and (max-width: $typo-break-l) {
-       margin-top: $g*$l;
+       margin-top: $module-spacing-base * $l;
     }
+
     @media only screen and (max-width: $typo-break-m) {
-       margin-top: $g*$m;
+       margin-top: $module-spacing-base * $m;
     }
+
     @media only screen and (max-width: $typo-break-s) {
-       margin-top: $g*$s;
+       margin-top: $module-spacing-base * $s;
     }
 }
 .xprez-module {
 	& + .xprez-module {
 		@include relation(5,4,3,2);
 	}
+
 	& + .xprez-gallery {
 		@include relation(5,3,2,1.5);
 	}
+
 	& + .xprez-gallery.text-width {
 		@include relation(3,1.5,1.5,1.5);
 	}
+
 	&:last-child {
 		margin-bottom: $g*5;
 		@media only screen and (max-width: $typo-break-s) {
 	       margin-bottom: $g*2;
 	    }
 	}
+
 	&.xprez-quote-boxed:last-child,
 	&.xprez-photo-connect-true.full-width:last-child {
 		margin-bottom: 0;
@@ -37,6 +44,7 @@
 	& + .xprez-module {
 		@include relation(5,4,3,2);
 	}
+
 	& + & {
 		margin-top: 0;
 	}
