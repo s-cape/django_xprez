@@ -1,7 +1,4 @@
-$gb-margin-s: 20px;
-$gb-margin-m: $m-space;
-$gb-margin-l: $m-space*2;
-$gb-padding: $m-space;
+
 
 // TODO:
 //      - padding v moblinich rozlisenich u jednotlivejch sirek
@@ -32,62 +29,66 @@ $gb-padding: $m-space;
     // box margins switch
 
     &.margin-m {
-        padding-left: $gb-margin-m*.5;
-        padding-right: $gb-margin-m*.5;
+        padding-left: $gridbox-margin-m*.5;
+        padding-right: $gridbox-margin-m*.5;
 
-        &.mid-width { max-width: $m-width + $gb-margin-m*2; }
-        &.text-width { max-width: $s-width + $gb-margin-m*2; }
-        .xprez-grid-box { padding: $gb-margin-m*.5; }
+        &.mid-width { max-width: $m-width + $gridbox-margin-m*2; }
+        &.text-width { max-width: $s-width + $gridbox-margin-m*2; }
+        .xprez-grid-box { padding: $gridbox-margin-m*.5; }
     }
 
     &.margin-l {
-        padding-left: $gb-margin-l*.5;
-        padding-right: $gb-margin-l*.5;
+        padding-left: $gridbox-margin-l*.5;
+        padding-right: $gridbox-margin-l*.5;
 
-        &.mid-width     { max-width: $m-width + $gb-margin-l*2; }
-        &.text-width    { max-width: $s-width + $gb-margin-l*2; }
-        .xprez-grid-box { padding: $gb-margin-l*.5; }
+        &.mid-width     { max-width: $m-width + $gridbox-margin-l*2; }
+        &.text-width    { max-width: $s-width + $gridbox-margin-l*2; }
+        .xprez-grid-box { padding: $gridbox-margin-l*.5; }
 
         @media screen and (max-width: 1150px) {
-            padding-left: $gb-margin-m*.5;
-            padding-right: $gb-margin-m*.5;
+            padding-left: $gridbox-margin-m*.5;
+            padding-right: $gridbox-margin-m*.5;
 
-            .xprez-grid-box { padding: $gb-margin-m*.5; }
+            .xprez-grid-box { padding: $gridbox-margin-m*.5; }
         }
     }
 
     &.margin-l, &.margin-m {
         @media only screen and (max-width: (600px)) {
-            padding-left: $gb-margin-s*.5;
-            padding-right: $gb-margin-s*.5;
+            padding-left: $gridbox-margin-s*.5;
+            padding-right: $gridbox-margin-s*.5;
 
-            .xprez-grid-box { padding: $gb-margin-s*.5; }
+            .xprez-grid-box { padding: $gridbox-margin-s*.5; }
         }
     }
 
     // box backgound switch
 
     &.boxes_filled .xprez-grid-box-inner {
-        background: $b-gray-3;
+        background: $gridbox-background;
     }
 
     // box border switch
 
     &.border .xprez-grid-box-inner {
-        border: 1px solid $b-gray-4;
+        border: 1px solid $gridbox-border;
     }
 
     // box padding switch
 
     &.padded {
         .xprez-grid-box-inner {
-            padding: $m-space;
+            padding: $gridbox-padding;
+
+            @media (max-width: $break-s) {
+                padding: $gridbox-padding * .5;
+            }
         }
 
         &.columns-6, &.columns-8 {
             &.textsize-s, &.textsize-s {
                 .xprez-grid-box-inner {
-                    padding: $s-space;
+                    padding: $gridbox-padding * .5;
                 }
             }
         }
@@ -97,21 +98,21 @@ $gb-padding: $m-space;
 
     &.edge_images.padded {
         .medium-insert-images-center {
-            margin-left: - $m-space;
-            margin-right: - $m-space;
+            margin-left: - $gridbox-padding;
+            margin-right: - $gridbox-padding;
 
             &:first-child {
-                margin-top: - $m-space;
+                margin-top: - $gridbox-padding;
             }
         }
 
         &.columns-6, &.columns-8 {
             .medium-insert-images-center {
-                margin-left: - $s-space;
-                margin-right: - $s-space;
+                margin-left: - ($gridbox-padding * .5);
+                margin-right: - ($gridbox-padding * .5);
 
                 &:first-child {
-                    margin-top: - $s-space;
+                    margin-top: -($gridbox-padding * .5);
                 }
             }
         }

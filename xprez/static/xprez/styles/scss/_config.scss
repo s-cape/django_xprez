@@ -1,4 +1,4 @@
-// 
+//
 // FRONTEND
 // 
 
@@ -47,6 +47,20 @@
 	$super-light-gray: #F6F6F6 !default;
 	$txt-gray: #37383C !default;
 	$txt-box-gray: #CAD1DB !default;
+
+	$b-gray-1: #F8F9FA !default;
+	$b-gray-2: #F6F7F8 !default;
+	$b-gray-3: #E9ECEF !default;
+	$b-gray-4: #DEE2E6 !default;
+	$b-gray-5: #CED4DA !default;
+	$b-gray-6: #ADB5BD !default;
+	$b-gray-7: #868E96 !default;
+	$b-gray-8: #343A40 !default;
+
+	$b-purple: #7950F2 !default;
+	$b-blue: #359CBA !default;
+	$b-blue-high: #1D5EC7 !default;
+	$b-red: #D10420 !default;
 
 	// base settings
 	$base-box-bg: $super-light-gray !default;
@@ -136,6 +150,15 @@
 	$gridbox-xs-scale: 0.8 !default;
 
 	$gridbox-use-small-buttons: true !default;
+
+	$gridbox-margin-s: 16px !default;
+	$gridbox-margin-m: $gridbox-margin-s * 2 !default;
+	$gridbox-margin-l: $gridbox-margin-s * 4 !default;
+	$gridbox-padding: $gridbox-margin-s * 2 !default;
+
+	$gridbox-background: $b-gray-3 !default;
+	$gridbox-border: 1px solid $b-gray-4 !default;
+
 
 	//
 	// BUTTON
@@ -254,17 +277,3 @@
 	$basefont-b: 14px !default;
 	$font-b: Arial, Helvetica, sans-serif !default;
 
-	// colors 
-	$b-gray-1: #F8F9FA !default;
-	$b-gray-2: #F6F7F8 !default;
-	$b-gray-3: #E9ECEF !default;
-	$b-gray-4: #DEE2E6 !default;
-	$b-gray-5: #CED4DA !default;
-	$b-gray-6: #ADB5BD !default;
-	$b-gray-7: #868E96 !default;
-	$b-gray-8: #343A40 !default;
-
-	$b-purple: #7950F2 !default;
-	$b-blue: #359CBA !default;
-	$b-blue-high: #1D5EC7 !default;
-	$b-red: #D10420 !default;
