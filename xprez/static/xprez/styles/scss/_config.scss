@@ -1,4 +1,4 @@
-// 
+//
 // FRONTEND
 // 
 
@@ -18,14 +18,20 @@
 	$s-space: 14px !default;
 	$xs-space: 7px !default;
 
+	$mobile-edge-space: $s-space !default;
+
 	// layout widths
 	$full-width: 100% !default;
+	$l-width: 1400px !default;
 	$m-width: 1260px !default;
 	$s-width: 700px !default;
 
 	// grid
 	// $g: 16px !default; - TODO check, if this is possible with older projects
 	$g: 1rem !default;
+
+	// modules spacing
+	$module-spacing-base: $g !default;
 
 	$sans:  "acumin-pro", Helvetica ,Arial , sans-serif !default;
 	$serif:  Georgia, serif !default;
@@ -41,6 +47,20 @@
 	$super-light-gray: #F6F6F6 !default;
 	$txt-gray: #37383C !default;
 	$txt-box-gray: #CAD1DB !default;
+
+	$b-gray-1: #F8F9FA !default;
+	$b-gray-2: #F6F7F8 !default;
+	$b-gray-3: #E9ECEF !default;
+	$b-gray-4: #DEE2E6 !default;
+	$b-gray-5: #CED4DA !default;
+	$b-gray-6: #ADB5BD !default;
+	$b-gray-7: #868E96 !default;
+	$b-gray-8: #343A40 !default;
+
+	$b-purple: #7950F2 !default;
+	$b-blue: #359CBA !default;
+	$b-blue-high: #1D5EC7 !default;
+	$b-red: #D10420 !default;
 
 	// base settings
 	$base-box-bg: $super-light-gray !default;
@@ -74,18 +94,21 @@
 	$text-module-h2-mt: 1em !default;
 	$text-module-h2-mb: 0.5em !default;
 	$text-module-h2-weight: $text-module-heading-weight !default;
+	$text-module-h2-color: null !default;
 
 	$text-module-h3-fluid-size: 1rem !default;
 	$text-module-h3-lh: 1.25 !default;
 	$text-module-h3-mt: 1.5em !default;
 	$text-module-h3-mb: 0.5em !default;
 	$text-module-h3-weight: $text-module-heading-weight !default;
+	$text-module-h3-color: null !default;
 
 	$text-module-h4-size: 1.125rem !default;
 	$text-module-h4-lh: 1.5rem !default;
 	$text-module-h4-mt: 1em !default;
 	$text-module-h4-mb: 0 !default;
 	$text-module-h4-weight: $text-module-heading-weight !default;
+	$text-module-h4-color: null !default;
 
 	$text-module-small-size: 0.875em !default;
 
@@ -93,8 +116,8 @@
 	$text-module-list-mb: 1rem !default;
 	$text-module-list-h: 0rem !default;
 	$text-module-list-ps: 3rem !default;
-	$text-module-list-row-size: $base-font-size !default;
-	$text-module-list-row-lh: $text-module-base-lh !default;
+	$text-module-list-row-size: $text-module-p-size !default;
+	$text-module-list-row-lh: $text-module-p-lh !default;
 	$text-module-list-row-mt: null !default;
 	$text-module-list-row-mb: 0.5em !default;
 
@@ -107,14 +130,19 @@
 	$text-module-blockquote-me: 0 !default;
 	$text-module-blockquote-box-dash-bg: $light-gray !default;
 
+	$text-module-media-mt: 2rem !default;
+	$text-module-media-mb: 2rem !default;
+
 	//
 	// GRID BOXES
 	//
 
-	// sizes should be em because of scaling
+	// sizes should be em because of scaling and are independent on $use-xprez-text-styles setting
+	$gridbox-base-size: $base-font-size;
+
 	$gridbox-h2-size: 3.125em !default;
 	$gridbox-h3-size: 2em !default;
-	$gridbox-base-size: 1em !default;
+	$gridbox-base-relative-size: 1em !default;
 	$gridbox-button-size: 0.875em !default;
 
 	$gridbox-m-scale: 1 !default;
@@ -122,6 +150,15 @@
 	$gridbox-xs-scale: 0.8 !default;
 
 	$gridbox-use-small-buttons: true !default;
+
+	$gridbox-margin-s: 16px !default;
+	$gridbox-margin-m: $gridbox-margin-s * 2 !default;
+	$gridbox-margin-l: $gridbox-margin-s * 4 !default;
+	$gridbox-padding: $gridbox-margin-s * 2 !default;
+
+	$gridbox-background: $b-gray-3 !default;
+	$gridbox-border: 1px solid $b-gray-4 !default;
+
 
 	//
 	// BUTTON
@@ -220,6 +257,17 @@
 	$video-button-color: white !default;
 	$video-button-size: 130px !default;
 
+	//
+	// TEXT-IMAGE
+	//
+
+	$textimage-module-width: $m-width !default;
+	$textimage-breakpoint: 800px !default;
+	$textimage-text-column-spacing: $m-space * 4 !default;
+	$textimage-image-column-spacing: $m-space * 2 !default;
+	$textimage-text-max-width: 600px !default;
+
+
 //
 // BACKEND
 // 
@@ -229,17 +277,3 @@
 	$basefont-b: 14px !default;
 	$font-b: Arial, Helvetica, sans-serif !default;
 
-	// colors 
-	$b-gray-1: #F8F9FA !default;
-	$b-gray-2: #F6F7F8 !default;
-	$b-gray-3: #E9ECEF !default;
-	$b-gray-4: #DEE2E6 !default;
-	$b-gray-5: #CED4DA !default;
-	$b-gray-6: #ADB5BD !default;
-	$b-gray-7: #868E96 !default;
-	$b-gray-8: #343A40 !default;
-
-	$b-purple: #7950F2 !default;
-	$b-blue: #359CBA !default;
-	$b-blue-high: #1D5EC7 !default;
-	$b-red: #D10420 !default;

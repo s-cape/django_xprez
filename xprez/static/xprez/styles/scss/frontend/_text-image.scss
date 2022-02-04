@@ -1,13 +1,17 @@
+@use "sass:math";
+
 // text-image breakpoints
 
-$ti-break-m: 800px;
+$ti-break-m: $textimage-breakpoint;
 
 .xprez-text-image {
-	@include m-width;
+	@include cont-width($textimage-module-width);
+
 	& > div {
 		box-sizing: border-box;
 		float: left;
 		width: 50%;
+
 		@media only screen and (max-width: ($ti-break-m)) {
 		 	float: none;
 		 	width: 100%;
@@ -15,59 +19,75 @@ $ti-break-m: 800px;
 	}
 }
 .xprez-text-image-right {
+
 	.xprez-text-image--image {
 		float: right;
 	}
 }
 .xprez-text-image--image {
+
 	@media only screen and (max-width: ($ti-break-m)) {
-		margin-bottom: $g*2;
+		margin-bottom: $g * 2;
 	}
+
 	img {
 		width: 100%;
 	}
+
 	.xprez-text-image-left & {
-		padding-right: $m-space;
+		padding-right: $textimage-image-column-spacing;
+
 		@media only screen and (max-width: ($ti-break-m)) {
 			padding-right: 0;
 		}
 	}
+
 	.xprez-text-image-right & {
-		padding-left: $m-space;
+		padding-left: $textimage-image-column-spacing;
+
 		@media only screen and (max-width: ($ti-break-m)) {
 			padding-left: 0;
 		}
 	}
 }
+
 @mixin xprez-text-image-text-space {
-	@media only screen and (max-width: ($m-width + $m-space*2)) {
-		padding: 0 $m-space;
+
+	@media only screen and (max-width: ($textimage-module-width + $textimage-text-column-spacing * 2)) {
+		padding: 0 ($textimage-text-column-spacing * 0.5);
 	}
+
 	@media only screen and (max-width: ($break-s)) {
 		padding: 0 $s-space;
 	}
 }
 .xprez-text-image--text {
+	max-width: $textimage-text-max-width;
+
 	.xprez-text-image-right & {
-		padding-right: $m-space;
+		padding-right: $textimage-text-column-spacing;
 		@include xprez-text-image-text-space;
 	}
-	.xprez-text-image-left & {
-		padding-left: $m-space;
-		@include xprez-text-image-text-space;
 
+	.xprez-text-image-left & {
+		padding-left: $textimage-text-column-spacing;
+		@include xprez-text-image-text-space;
 	}
 }
 
 // flexbox layout 
 
 @media only screen and (min-width: ($ti-break-m)) {
+
 	.flexbox {
+
 		.xprez-text-image {
 			display: flex;
+
 			& > div {
 				align-self: center;
 			}
+
 			&.xprez-text-image-right {
 				flex-direction: row-reverse;
 			}

@@ -40,6 +40,8 @@
 			font-family: $heading-font-family;
 			font-weight: $text-module-h2-weight;
 			letter-spacing: $text-module-heading-letter-spacing;
+			color: $text-module-h2-color;
+
 			&:first-child {
 				margin-top: 0;
 			}
@@ -61,6 +63,8 @@
 			font-family: $heading-font-family;
 			font-weight: $text-module-h3-weight;
 			letter-spacing: $text-module-heading-letter-spacing;
+			color: $text-module-h3-color;
+
 			&:first-child {
 				margin-top: 0;
 			}
@@ -81,6 +85,7 @@
 							$text-module-h4-mb);
 			font-family: $heading-font-family;
 			font-weight: $text-module-heading-emphasis-weight !important;
+			color: $text-module-h4-color;
 
 			&:first-child {
 				margin-top: 0;
@@ -145,6 +150,16 @@
 				}
 			}
 
+		}
+	}
+
+	figure.media {
+		&:not(:first-child) {
+			margin-top: $text-module-media-mt;
+		}
+
+		&:not(:last-child) {
+			margin-bottom: $text-module-media-mb;
 		}
 	}
 }
