@@ -16,19 +16,20 @@ from .models import (Attachment, CodeInput, CodeTemplate, DownloadContent,
 
 
 class BaseContentForm(forms.ModelForm):
-    fields = ('position', 'visible', )
+    class Meta:
+        fields = ('position', 'visible', 'css_class', 'margin_top', 'margin_bottom')
 
 
 class GalleryForm(BaseContentForm):
     class Meta:
         model = Gallery
-        fields = ('width', 'columns', 'divided', 'crop', 'position', 'visible')
+        fields = ('width', 'columns', 'divided', 'crop',) + BaseContentForm.Meta.fields
 
 
 class MediumEditorForm(BaseContentForm):
     class Meta:
         model = MediumEditor
-        fields = ('text', 'position', 'box', 'width', 'css_class', 'visible')
+        fields = ('text', 'box', 'width',) + BaseContentForm.Meta.fields
         widgets = {
             'text': MediumEditorWidget(file_upload_dir='medium_editor_uploads')
         }
@@ -47,7 +48,7 @@ class QuoteForm(forms.ModelForm):
 class QuoteContentForm(BaseContentForm):
     class Meta:
         model = QuoteContent
-        fields = ('display_two', 'position', 'title', 'box', 'visible')
+        fields = ('display_two', 'title', 'box',) + BaseContentForm.Meta.fields
 
 
 class VideoForm(BaseContentForm):
@@ -72,7 +73,7 @@ class VideoForm(BaseContentForm):
 
     class Meta:
         model = Video
-        fields = ('poster_image', 'url', 'position', 'width', 'visible')
+        fields = ('poster_image', 'url', 'width',) + BaseContentForm.Meta.fields
         widgets = {
             'url': forms.URLInput(attrs={'class': 'long'}),
         }
@@ -81,13 +82,13 @@ class VideoForm(BaseContentForm):
 class CodeInputForm(BaseContentForm):
     class Meta:
         model = CodeInput
-        fields = ('code', 'position', 'visible')
+        fields = ('code',) + BaseContentForm.Meta.fields
 
 
 class NumbersContentForm(BaseContentForm):
     class Meta:
         model = NumbersContent
-        fields = ('position', 'visible')
+        fields = BaseContentForm.Meta.fields
 
 
 class NumberForm(forms.ModelForm):
@@ -103,7 +104,7 @@ class NumberForm(forms.ModelForm):
 class FeatureBoxesForm(BaseContentForm):
     class Meta:
         model = FeatureBoxes
-        fields = ('position', 'box_1', 'box_2', 'box_3', 'visible')
+        fields = ('box_1', 'box_2', 'box_3',) + BaseContentForm.Meta.fields
         widgets = {
             'box_1': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
             'box_2': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
@@ -115,13 +116,13 @@ class CodeTemplateForm(BaseContentForm):
 
     class Meta:
         model = CodeTemplate
-        fields = ('position', 'template_name', 'visible')
+        fields = ('template_name',) + BaseContentForm.Meta.fields
 
 
 class DownloadContentForm(BaseContentForm):
     class Meta:
         model = DownloadContent
-        fields = ('position', 'title', 'visible')
+        fields = ('title',) + BaseContentForm.Meta.fields
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Files'})
         }
@@ -130,7 +131,7 @@ class DownloadContentForm(BaseContentForm):
 class TextImageForm(BaseContentForm):
     class Meta:
         model = TextImage
-        fields = ('position', 'image', 'text', 'image_alignment', 'css_class', 'visible')
+        fields = ('image', 'text', 'image_alignment',) + BaseContentForm.Meta.fields
         widgets = {
             'text': MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
         }

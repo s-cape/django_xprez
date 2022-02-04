@@ -1,19 +1,19 @@
 {% extends 'xprez/contents/base.html' %}
 {% load thumbnail xprez %}
 
-{% block content %}
-    <div class="xprez-module xprez-text-image xprez-text-image-{{ content.image_alignment }} {{ content.css_class }}">
-        <div class="xprez-text-image--image">
-            <img src="{% thumbnail content.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail content.image "800x800" quality=75 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail content.image "1200x1200" quality=75 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1200w
-                            {% endthumbnail %}"
-                        sizes="(min-width: 1270px) 605px, (min-width: 800px) 50vw, 100vw" 
-                        class="" />
-        </div>
-        <div class="xprez-text-image--text">{{ content.render_text }}</div>
+{% block css_class_extra %}xprez-text-image xprez-text-image-{{ content.image_alignment }}{% endblock %}
+
+{% block content_in %}
+    <div class="xprez-text-image--image">
+        <img src="{% thumbnail content.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail content.image "800x800" quality=75 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail content.image "1200x1200" quality=75 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1200w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 1270px) 605px, (min-width: 800px) 50vw, 100vw"
+                    class="" />
     </div>
+    <div class="xprez-text-image--text">{{ content.render_text }}</div>
 {% endblock %}

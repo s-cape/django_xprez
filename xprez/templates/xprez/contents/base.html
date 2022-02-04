@@ -1,6 +1,8 @@
-
 {% block content %}
-
+    <div class="xprez-module xprez-module-margin-top-{{ content.margin_top }} xprez-module-margin-bottom-{{ content.margin_bottom }} {{ content.css_class|default:"" }} {% block css_class_extra %}{% endblock %}">
+        {% block content_in %}
+        {% endblock %}
+    </div>
 {% endblock %}
 
 {% block js %} {% endblock %}
