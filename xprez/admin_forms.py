@@ -8,6 +8,7 @@ from django import forms
 from django.forms import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
 
+from . import settings
 from .ck_editor.widgets import CkEditorWidget
 from .medium_editor.widgets import MediumEditorWidget
 from .models import (Attachment, CkEditor, CodeInput, CodeTemplate,
@@ -142,11 +143,14 @@ class TextImageForm(BaseContentForm):
         model = TextImage
         fields = ('position', 'image', 'text', 'image_alignment', 'css_class', 'visible')
         widgets = {
-            'text': CkEditorWidget(mode=CkEditorWidget.FULL_NO_INSERT_PLUGIN),
+            'text': CkEditorWidget(config=settings.XPREZ_CKEDITOR_CONFIG_FULL_NO_INSERT_PLUGIN),
         }
 
 
 class GridBoxesForm(BaseContentForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ckeditor_widget_tpl = CkEditorWidget(config=settings.XPREZ_CKEDITOR_CONFIG_FULL)  # TODO: cleanup
 
     class Meta:
         model = GridBoxes

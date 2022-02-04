@@ -1,13 +1,11 @@
+import json
+
 from django import forms
-from django.urls import reverse_lazy
+from django.urls import reverse
+from xprez import settings
 
 
 class CkEditorWidget(forms.widgets.Textarea):
-    FULL = 'full'
-    SIMPLE = 'simple'
-    FULL_NO_INSERT_PLUGIN = 'full_no_insert_plugin'
-    MODE_CHOICES = [FULL, SIMPLE, FULL_NO_INSERT_PLUGIN]
-
     template_name = 'xprez/widgets/ck_editor.html'
 
     class Media:
@@ -22,17 +20,18 @@ class CkEditorWidget(forms.widgets.Textarea):
             'ck_editor/js/ck_editor_widget.js',
         )
 
-    def __init__(self, mode='full', file_upload_dir=None, attrs=None):
-        assert mode in self.MODE_CHOICES
+    def __init__(self, config=None, file_upload_dir=None, attrs=None):
+        if config is None:
+            config = settings.XPREZ_CKEDITOR_CONFIG_FULL
+
+        if 'simpleUpload' in config and config['simpleUpload'].get('uploadUrl') is None:
+            config['simpleUpload']['uploadUrl'] = reverse('xprez:ckeditor_file_upload', args=[file_upload_dir])
+
         default_attrs = {
             'class': 'js-ck-editor-source',
-            'data-ck-editor-variant': mode,
-            'cols': '40', 'rows': '10',
+            'data-ck-editor-config': json.dumps(config),
         }
         if attrs:
             default_attrs.update(attrs)
-
-        if file_upload_dir:
-            default_attrs['data-file-upload'] = reverse_lazy('xprez:ckeditor_file_upload', args=[file_upload_dir])
 
         super(CkEditorWidget, self).__init__(default_attrs)

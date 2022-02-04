@@ -1,8 +1,6 @@
-from django.utils.module_loading import autodiscover_modules
-
 from collections import OrderedDict
 
-from .utils import remove_duplicates
+from django.utils.module_loading import autodiscover_modules
 
 
 class ContentTypeManager:
@@ -20,6 +18,8 @@ class ContentTypeManager:
         return urls
 
     def _collect_media(self, media_class_name):
+        from .utils import remove_duplicates
+
         js = []
         css = []
         for key, content in self._registry.items():
