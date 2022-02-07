@@ -45,6 +45,7 @@
 	text-align: center;
 	overflow: hidden;
 	position: relative;
+	padding-bottom: 3px;
 
 	h2 {
 		@include type-b(12px);
@@ -52,9 +53,16 @@
 		cursor: move;
 		position: absolute;
 		top: 0;
-		right: 90px;
-		left: 90px;
+		right: 120px;
+		left: 120px;
 		margin: 0;
+		font-weight: normal;
+
+		i {
+			font-style: normal;
+			opacity: 0.9;
+			margin-left: .5rem;
+		}
 	}
 
 	.xprez-icon-btn-collapse {
@@ -63,19 +71,10 @@
 		margin-left: 2px;
 	}
 
-	.xprez-icon-btn-remove {
-		float: right;
-		margin-top: 2px;
-		margin-right: 2px;
-	}
-
-	.xprez-icon-btn-copy {
-		float: right;
-		margin-top: 2px;
-		margin-right: 2px;
-	}
-
-    .xprez-icon-btn-eye {
+	.xprez-icon-btn-remove,
+	.xprez-icon-btn-copy,
+	.xprez-icon-btn-eye,
+	.xprez-icon-btn-dots-horizontal-triple {
 		float: right;
 		margin-top: 2px;
 		margin-right: 2px;
@@ -85,12 +84,20 @@
 .xprez-module__options {
 	background: $b-gray-2;
 	text-align: center;
-	padding: 2px 2px 5px;
+	padding: 2px;
 	line-height: 28px;
 
 	&.hidden {
 		display: none;
 	}
+
+	li {
+		margin: .5rem 0;
+	}
+}
+
+.xprez-module__common-options {
+	background: rgba(0,0,0,0.02);
 }
 
 .xprez-module__content {
@@ -215,6 +222,7 @@
 .xprez-icon-btn-chevron-small-down:before { content: "\e906";}
 .xprez-icon-btn-chevron-small-up:before {content: "\e907";}
 .xprez-icon-btn-edit-pencil:before { content: "\e908"; }
+.xprez-icon-btn-dots-horizontal-triple:before { content: "\e90b"; }
 
 .xprez-icon-btn-eye	{
 	position: relative;

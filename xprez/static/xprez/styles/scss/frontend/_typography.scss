@@ -2,7 +2,6 @@
 
 .article-header__cont,
 .medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
-.ck,
 .xprez-feature-boxes, .xprez-download, .xprez-text-content {
 	@include cont-width($text-module-column-width);
 	@include xprez-mobile-extra-space;
