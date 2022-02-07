@@ -1,14 +1,14 @@
 {% extends 'xprez/contents/base.html' %}
 
-{% block content %}
 
-<div class="xprez-module xprez-text-content  
+{% block css_class_extra %}
+    xprez-text-content  
     {% if content.width %}{{ content.width }}-width{% endif %} 
     {% if content.box %}xprez-text-content-boxed{% endif %} 
-    {% if content.css_class %}{{ content.css_class }}{% endif %}
-">  
+{% endblock %}
+
+{% block content_in %}
     {% if content.box %}<div class="xprez-text-content-boxed__content">{% endif %}
         {{ parsed_text }}
     {% if content.box %}</div>{% endif %}
-</div>
 {% endblock %}
