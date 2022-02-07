@@ -14,6 +14,7 @@ function activateAddContentLinks($scope) {
                 activateAddContentLinks($content);
                 activateFormfieldControllers($content);
                 activateCollapsers($content);
+                activateCommonOptions($content);
 
                 if (data.updated_content_positions) {
                     for (id in data.updated_content_positions) {
@@ -113,6 +114,29 @@ function activateCollapsers($scope) {
     });
 }
 
+function activateCommonOptions($scope) {
+    $scope.find('.js-common-options-toggle').each(function (index, el) {
+        var $toggle = $(this);
+        var $commonOptions = $toggle.closest('.js-content').find('.js-common-options');
+
+        function setVisibility() {
+            var active = $toggle.hasClass('active');
+            $commonOptions.toggle(active);
+
+            if (active) {
+                $toggle.parent().parent('.xprez-module').removeClass('collapsed');
+            }
+        }
+
+        setVisibility();
+
+        $toggle.click(function() {
+            $toggle.toggleClass('active');
+            setVisibility();
+        });
+    });
+}
+
 function activateTextControllers($scope) {
     $scope.find('.js-text_controller').each(function (index, el) {
         var $el = $(el);
@@ -152,6 +176,7 @@ $(function () {
     activateAddContentLinks($('.js-xprez-add,.js-contents-container'));
     activateFormfieldControllers($container);
     activateCollapsers($container);
+    activateCommonOptions($container);
     // hideErrorsForDeletedContents();
 
     $($container).sortable({

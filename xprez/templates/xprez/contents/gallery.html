@@ -1,173 +1,172 @@
 {% extends 'xprez/contents/base.html' %}
 {% load thumbnail xprez %}
-{% block content %}
 
-    <div class="xprez-module xprez-gallery {{ content.width }}-width xprez-photo-connect-{{ content.divided|lower }} xprez-cols-{{ content.columns }} js-content-{{ content.pk }} js-gallery">
-        {% for photo in content.photos.all %}
-            <div class="xprez-photo-item js-photo" 
-                {% thumbnail photo.image "2000x2000" upscale=false quality=70 as thumb %}
-                data-original_url="{{ thumb.url|build_absolute_uri }}"
-                data-original_width="{{ thumb.width }}" 
-                data-original_height="{{ thumb.height }}" 
-                {% endthumbnail %}
-                data-title="{% if photo.description %}{{ photo.description }}{% endif %}">
-                {% if content.columns == 8 %}
-                    {% if content.crop %}
-                    <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1000w
-                            {% endthumbnail %}"
-                        sizes="(min-width: 800px) 13vw, 25vw"
-                        class="xprez-photo" />
-                    {% else %}
-                        <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                                {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
-                                    {{ thumb.url|build_absolute_uri }} 800w,
-                                {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
-                                    {{ thumb.url|build_absolute_uri }} 1000w
-                                {% endthumbnail %}"
-                            sizes="(min-width: 800px) 13vw,25vw"
-                            class="xprez-photo" />
-                    {% endif %}
-                {% elif content.columns == 6 %}
-                    {% if content.crop %}
-                    <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1000w
-                            {% endthumbnail %}"
-                        sizes="(min-width: 800px) 17vw, 25vw"
-                        class="xprez-photo" />
-                    {% else %}
-                        <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                                {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
-                                    {{ thumb.url|build_absolute_uri }} 800w,
-                                {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
-                                    {{ thumb.url|build_absolute_uri }} 1000w
-                                {% endthumbnail %}"
-                            sizes="(min-width: 800px) 17vw,25vw"
-                            class="xprez-photo" />
-                    {% endif %}
-                {% elif content.columns == 4 %}
-                    {% if content.crop %}
-                    <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1000w
-                            {% endthumbnail %}"
-                        sizes="(min-width: 800px) 25vw,
-                                50vw" 
-                        class="xprez-photo" />
-                    {% else %}
-                    <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1000w
-                            {% endthumbnail %}"
-                        sizes="(min-width: 800px) 25vw,
-                                50vw" 
-                        class="xprez-photo" />
-                    {% endif %}
-                {% elif content.columns == 3 %}
-                    {% if content.crop %}
-                    <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1000w
-                            {% endthumbnail %}"
-                        sizes="(min-width: 800px) 33.3vw,
-                                50vw" 
-                        class="xprez-photo" />
-                    {% else %}
-                    <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1000w
-                            {% endthumbnail %}"
-                        sizes="(min-width: 800px) 33.3vw,
-                                50vw" 
-                        class="xprez-photo" />
-                    {% endif %}
-                {% elif content.columns == 2 %}
-                    {% if content.crop %}
-                    <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri}} 1000w,
-                            {% endthumbnail %}{% thumbnail photo.image "1500x1150" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1500w
-                            {% endthumbnail %}"
-                        sizes="(min-width: 500px) 50vw,
-                                100vw" 
-                        class="xprez-photo" />
-                    {% else %}
-                    <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1000w,
-                            {% endthumbnail %}{% thumbnail photo.image "1500x1500" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1500w
-                            {% endthumbnail %}"
-                        sizes="(min-width: 500px) 50vw,
-                                100vw" 
-                        class="xprez-photo" />
-                    {% endif %}
+{% block css_class_extra %}xprez-gallery {{ content.width }}-width xprez-photo-connect-{{ content.divided|lower }} xprez-cols-{{ content.columns }} js-content-{{ content.pk }} js-gallery{% endblock %}
+
+{% block content_in %}
+    {% for photo in content.photos.all %}
+        <div class="xprez-photo-item js-photo"
+            {% thumbnail photo.image "2000x2000" upscale=false quality=70 as thumb %}
+            data-original_url="{{ thumb.url|build_absolute_uri }}"
+            data-original_width="{{ thumb.width }}"
+            data-original_height="{{ thumb.height }}"
+            {% endthumbnail %}
+            data-title="{% if photo.description %}{{ photo.description }}{% endif %}">
+            {% if content.columns == 8 %}
+                {% if content.crop %}
+                <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1000w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 800px) 13vw, 25vw"
+                    class="xprez-photo" />
                 {% else %}
-                    {% if content.crop %}
-                    <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
-                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                            {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 800w,
-                            {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1000w,
-                            {% endthumbnail %}{% thumbnail photo.image "1500x1150" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1500w,
-                            {% endthumbnail %}{% thumbnail photo.image "1900x1500" crop="30%" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1900w
-                            {% endthumbnail %}"
-                        sizes="100vw" 
-                        class="xprez-photo" />
-                    {% else %}
                     <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
                         srcset="{{ thumb.url|build_absolute_uri }} 400w,
                             {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
                                 {{ thumb.url|build_absolute_uri }} 800w,
                             {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1000w,
-                            {% endthumbnail %}{% thumbnail photo.image "1500x1500" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1500w,
-                            {% endthumbnail %}{% thumbnail photo.image "1900x1900" quality=70 as thumb %}
-                                {{ thumb.url|build_absolute_uri }} 1900w
+                                {{ thumb.url|build_absolute_uri }} 1000w
                             {% endthumbnail %}"
-                        sizes="100vw" 
+                        sizes="(min-width: 800px) 13vw,25vw"
                         class="xprez-photo" />
-                    {% endif %}
                 {% endif %}
-
-                {% if photo.description %}
-                    <span class="xprez-media-caption">{{ photo.description }}</span>
+            {% elif content.columns == 6 %}
+                {% if content.crop %}
+                <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1000w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 800px) 17vw, 25vw"
+                    class="xprez-photo" />
+                {% else %}
+                    <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                        srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                            {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
+                                {{ thumb.url|build_absolute_uri }} 800w,
+                            {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
+                                {{ thumb.url|build_absolute_uri }} 1000w
+                            {% endthumbnail %}"
+                        sizes="(min-width: 800px) 17vw,25vw"
+                        class="xprez-photo" />
                 {% endif %}
-            </div>
-        {% endfor %}
+            {% elif content.columns == 4 %}
+                {% if content.crop %}
+                <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1000w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 800px) 25vw,
+                            50vw"
+                    class="xprez-photo" />
+                {% else %}
+                <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1000w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 800px) 25vw,
+                            50vw"
+                    class="xprez-photo" />
+                {% endif %}
+            {% elif content.columns == 3 %}
+                {% if content.crop %}
+                <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1000w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 800px) 33.3vw,
+                            50vw"
+                    class="xprez-photo" />
+                {% else %}
+                <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1000w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 800px) 33.3vw,
+                            50vw"
+                    class="xprez-photo" />
+                {% endif %}
+            {% elif content.columns == 2 %}
+                {% if content.crop %}
+                <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri}} 1000w,
+                        {% endthumbnail %}{% thumbnail photo.image "1500x1150" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1500w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 500px) 50vw,
+                            100vw"
+                    class="xprez-photo" />
+                {% else %}
+                <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1000w,
+                        {% endthumbnail %}{% thumbnail photo.image "1500x1500" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1500w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 500px) 50vw,
+                            100vw"
+                    class="xprez-photo" />
+                {% endif %}
+            {% else %}
+                {% if content.crop %}
+                <img src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1000w,
+                        {% endthumbnail %}{% thumbnail photo.image "1500x1150" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1500w,
+                        {% endthumbnail %}{% thumbnail photo.image "1900x1500" crop="30%" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1900w
+                        {% endthumbnail %}"
+                    sizes="100vw"
+                    class="xprez-photo" />
+                {% else %}
+                <img src="{% thumbnail photo.image "400x400" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail photo.image "800x800" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail photo.image "1000x1000" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1000w,
+                        {% endthumbnail %}{% thumbnail photo.image "1500x1500" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1500w,
+                        {% endthumbnail %}{% thumbnail photo.image "1900x1900" quality=70 as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1900w
+                        {% endthumbnail %}"
+                    sizes="100vw"
+                    class="xprez-photo" />
+                {% endif %}
+            {% endif %}
 
-    </div>
+            {% if photo.description %}
+                <span class="xprez-media-caption">{{ photo.description }}</span>
+            {% endif %}
+        </div>
+    {% endfor %}
 {% endblock %}

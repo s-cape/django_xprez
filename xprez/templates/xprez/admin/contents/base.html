@@ -11,6 +11,9 @@
             {{ content.admin_form.position }}
             {{ content.admin_form.delete }}
             {{ content.admin_form.visible }}
+            {{ content.admin_form.css_class }}
+            {{ content.admin_form.margin_top }}
+            {{ content.admin_form.margin_bottom }}
         {% endblock %}
     </div>
     <div class="xprez-module__title js-sortable-handler">
@@ -18,9 +21,41 @@
         <span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_delete_content' content.pk %}" title="Remove"></span>
         <span class="xprez-icon-btn-copy js-copy-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_copy_content' content.pk %}" title="Copy and paste the module to the end"></span>
         <span class="xprez-icon-btn-eye js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off"></span>
-        <h2>{{ content.verbose_name }}</h2>
+        <h2>
+            {{ content.verbose_name }}
+            {% if content.css_class  %}<span>Class: {{ content.css_class }}</span>{% endif %}
+            {% if content.margin_top != content.MARGIN_DEFAULT %}<span>Top : {{ content.get_margin_top_display }}</span>{% endif %}
+            {% if content.margin_bottom != content.MARGIN_DEFAULT %}<span>Bottom: {{ content.get_margin_bottom_display }}</span>{% endif %}
+        </h2>
+
+        <span class="xprez-icon-btn-eye {# TODO:kap #} js-common-options-toggle" title="Common options"></span>
     </div>
     <div class="xprez-module__collapse-cont">
+        <div class="xprez-module__options js-common-options">
+            <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_top">
+                <li>
+                    <label for="" class="xprez-option-label">Margin top:</label>
+                </li>
+                {% for value, label in content.admin_form.margin_top.field.choices %}
+                    <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
+                {% endfor %}
+            </ul>
+            <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_bottom">
+                <li>
+                    <label for="" class="xprez-option-label">Margin bottom:</label>
+                </li>
+                {% for value, label in content.admin_form.margin_bottom.field.choices %}
+                    <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
+                {% endfor %}
+            </ul>
+            <ul class="xprez-module__options-group ">
+                <li>
+                    <label for="" class="xprez-option-label">Css class:</label>
+                    <input type="text" class="xprez-option-input js-text_controller" data-formfield_selector="#id_content-{{ content.pk }}-css_class">
+                </li>
+            </ul>
+        </div>
+
         <div class="xprez-module__options {% block options_class %}{% endblock %}">
             {% block options %}
 

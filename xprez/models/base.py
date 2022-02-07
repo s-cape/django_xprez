@@ -50,6 +50,13 @@ class Content(models.Model):
     changed = models.DateTimeField(auto_now=True, editable=False, db_index=True, verbose_name='changed')
     visible = models.BooleanField(default=True)
 
+    css_class = models.CharField(max_length=100, null=True, blank=True)
+
+    MARGIN_DEFAULT = 2
+    MARGIN_CHOICES = ((0, 'None'), (1, 'S'), (MARGIN_DEFAULT, 'M'), (3, 'L'), (4, 'XL'),)
+    margin_top = models.PositiveSmallIntegerField(choices=MARGIN_CHOICES, default=MARGIN_DEFAULT)
+    margin_bottom = models.PositiveSmallIntegerField(choices=MARGIN_CHOICES, default=MARGIN_DEFAULT)
+
     class Meta:
         ordering = ('position',)
 

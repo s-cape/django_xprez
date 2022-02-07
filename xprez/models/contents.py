@@ -37,7 +37,7 @@ class MediumEditor(Content):
     verbose_name = 'Text Content'
 
     text = models.TextField()
-    css_class = models.CharField(max_length=100, null=True, blank=True)
+    # css_class = models.CharField(max_length=100, null=True, blank=True)
     box = models.BooleanField(default=False)
     width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
 
@@ -94,7 +94,7 @@ class CkEditor(CkEditorFileUploadMixin, Content):
     verbose_name = 'Text Content (CK)'  # TODO
 
     text = models.TextField()
-    css_class = models.CharField(max_length=100, null=True, blank=True)
+    # css_class = models.CharField(max_length=100, null=True, blank=True)
     box = models.BooleanField(default=False)
     width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
 
@@ -396,7 +396,7 @@ class TextImageBase(Content):
     image = models.ImageField(upload_to='text_image_images')
     text = models.TextField()
     image_alignment = models.CharField(choices=IMAGE_ALIGNMENT_CHOICES, default=ALIGNMENT_LEFT, max_length=15)
-    css_class = models.CharField(max_length=100, null=True, blank=True)
+    # css_class = models.CharField(max_length=100, null=True, blank=True)
 
     class AdminMedia:
         js = CkEditorWidget.Media.js

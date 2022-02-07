@@ -1,8 +1,7 @@
 {% extends 'xprez/contents/base.html' %}
 
-{% block content %}
-<div class="xprez-module xprez-code-input">
-	{{ content.code|safe }}
-</div>
-{% endblock %}
+{% block css_class_extra %}xprez-code-input{% endblock %}
 
+{% block content_in %}
+	{{ content.code|safe }}
+{% endblock %}

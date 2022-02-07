@@ -3,8 +3,9 @@
 
 {% load humanize xprez %}
 
-{% block content %}
-<div class="xprez-module xprez-numbers">
+{% block css_class_extra %}xprez-numbers{% endblock %}
+
+{% block content_in %}
     {% for number in content.numbers.all %}
         {% if number.number %}
         <div class="xprez-number-item js-number-container">
@@ -18,5 +19,4 @@
         </div>
         {% endif %}
     {% endfor %}
-</div>
 {% endblock %}
