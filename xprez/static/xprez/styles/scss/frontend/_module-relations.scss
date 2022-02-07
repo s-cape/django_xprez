@@ -1,32 +1,51 @@
 // content blocks relations
 
-@mixin relation($o,$l,$m,$s) { // grid multiples
-	margin-top: $module-spacing-base * $o;
+@mixin relation($o, $l, $m, $s, $dir: bottom) { // grid multiples
+	margin-#{$dir}: $module-spacing-base * $o;
 
 	@media only screen and (max-width: $typo-break-l) {
-       margin-top: $module-spacing-base * $l;
+       margin-#{$dir} : $module-spacing-base * $l;
     }
 
     @media only screen and (max-width: $typo-break-m) {
-       margin-top: $module-spacing-base * $m;
+       margin-#{$dir}: $module-spacing-base * $m;
     }
 
     @media only screen and (max-width: $typo-break-s) {
-       margin-top: $module-spacing-base * $s;
+       margin-#{$dir}: $module-spacing-base * $s;
     }
 }
+
+//.xprez-module-margin-top-1 {
+//	@include relation(2.5,2,1.5,1);
+//}
+
+.xprez-module-margin-bottom-1 {
+	@include relation(2.5,2,1.5,1);
+}
+
+//.xprez-module-margin-top-2 {
+//	@include relation(5,4,3,2);
+//}
+
+.xprez-module-margin-bottom-2 {
+	@include relation(5,4,3,2);
+}
+
+
+
 .xprez-module {
-	& + .xprez-module {
-		@include relation(5,4,3,2);
-	}
-
-	& + .xprez-gallery {
-		@include relation(5,3,2,1.5);
-	}
-
-	& + .xprez-gallery.text-width {
-		@include relation(3,1.5,1.5,1.5);
-	}
+	//& + .xprez-module {
+	//	@include relation(5,4,3,2);
+	//}
+	//
+	//& + .xprez-gallery {
+	//	@include relation(5,3,2,1.5);
+	//}
+	//
+	//& + .xprez-gallery.text-width {
+	//	@include relation(3,1.5,1.5,1.5);
+	//}
 
 	&:last-child {
 		margin-bottom: $g*5;
@@ -41,18 +60,18 @@
 	}
 }
 .xprez-gallery {
-	& + .xprez-module {
-		@include relation(5,4,3,2);
-	}
-
-	& + & {
-		margin-top: 0;
-	}
+	//& + .xprez-module {
+	//	@include relation(5,4,3,2);
+	//}
+	//
+	//& + & {
+	//	margin-top: 0;
+	//}
 }
 .xprez-grid-boxes {
-	& + & {
-		margin-top: 0;
-	}
+	//& + & {
+	//	margin-top: 0;
+	//}
 }
 
 
