@@ -32,14 +32,17 @@
     </div>
     <div class="xprez-module__collapse-cont">
         <div class="xprez-module__options xprez-module__common-options js-common-options">
-            <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_top">
-                <li>
-                    <label class="xprez-option-label">Margin top:</label>
-                </li>
-                {% for value, label in content.admin_form.margin_top.field.choices %}
-                    <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
-                {% endfor %}
-            </ul>
+            {% comment %}
+                <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_top">
+                    <li>
+                        <label class="xprez-option-label">Margin top:</label>
+                    </li>
+                    {% for value, label in content.admin_form.margin_top.field.choices %}
+                        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
+                    {% endfor %}
+                </ul>
+            {% endcomment %}
+
             <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_bottom">
                 <li>
                     <label class="xprez-option-label">Margin bottom:</label>

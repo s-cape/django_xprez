@@ -1,25 +1,32 @@
 .xprez-text-content-boxed {
 	box-sizing: border-box;
-	background: $super-light-gray;
+	background: $text-module-boxed-bg;
 	max-width: 100%;
 	padding: $g*3 $l-space;
+	border-radius: $text-module-boxed-radius;
+
 	p:last-child {
 		margin-bottom: 0;
 	}
+
 	&.full-width {
 		@include full-width;
 	}
+
 	&.mid-width {
 		@include m-width;
 	}
+
 	&.text-width {
 		@include cont-width($s-width + $m-space*6);
 		padding: $g*3 $m-space*3;
 	}
+
 	&.full-width, &.mid-width, &.text-width {
 		@media only screen and (max-width: ($break-m+200)) {
-		padding: $g*2 $m-space;
+			padding: $g*2 $m-space;
 		}
+
 		@media only screen and (max-width: ($break-s)) {
 			padding: $g*2 $s-space;
 		}
