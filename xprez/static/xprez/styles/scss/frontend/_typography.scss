@@ -25,6 +25,10 @@
 
 // Xprez basic text styles
 
+.xprez-text-content-centered {
+	text-align: center;
+}
+
 .xprez-text-content, .xprez-text-image,   
 .xprez-feature-boxes {
 	@include clearfix;
@@ -208,6 +212,7 @@
 	font-size: $basefont;
 	font-family: $body-font-family;
 }
+
 
 
 

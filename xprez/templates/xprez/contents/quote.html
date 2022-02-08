@@ -10,18 +10,18 @@
         </div>{% endif %}
         {% for quote in content.quotes.all %}
             <div class="xprez-quote__item">
-                {% if quote.image %}
-                    {% thumbnail quote.image "210x210" crop="25%" as thumb %}
-                    <img src="{{ thumb.url|build_absolute_uri }}" class="xprez-qoute__img"/>
-                    {% endthumbnail %}
-                {% else %}
-                    {% static "xprez/img/avatar.svg" as avatar_url %}
-                    <img src="{{ avatar_url|build_absolute_uri }}" class="xprez-qoute__img"/>
-                {% endif %}
-
-                <div class="xprez-quote__name">{{ quote.name }}</div>
-                <div class="xprez-quote__job-title">{{ quote.job_title }}</div>
-
+                <div class="xprez-quote__avatar">
+                    {% if quote.image %}
+                        {% thumbnail quote.image "210x210" crop="25%" as thumb %}
+                            <img src="{{ thumb.url|build_absolute_uri }}" class="xprez-qoute__img"/>
+                        {% endthumbnail %}
+                    {% else %}
+                        {% static "xprez/img/avatar.svg" as avatar_url %}
+                        <img src="{{ avatar_url|build_absolute_uri }}" class="xprez-qoute__img"/>
+                    {% endif %}
+                    <div class="xprez-quote__name">{{ quote.name }}</div>
+                    <div class="xprez-quote__job-title">{{ quote.job_title }}</div>
+                </div>
                 <div class="xprez-quote__quote">
                     {% if quote.title %}<h4>{{ quote.title }}</h4>{% endif %}
                     <p>{{ quote.quote }}</p>
