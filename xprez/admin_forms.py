@@ -40,7 +40,7 @@ class MediumEditorForm(BaseContentForm):
 class CkEditorForm(BaseContentForm):
     class Meta:
         model = CkEditor
-        fields = ('text', 'box', 'width',) + BaseContentForm.Meta.fields
+        fields = ('text', 'content_centered', 'box', 'width',) + BaseContentForm.Meta.fields
         widgets = {
             'text': CkEditorWidget(file_upload_dir='ck_editor_uploads')
         }

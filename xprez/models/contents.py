@@ -91,12 +91,13 @@ class CkEditor(CkEditorFileUploadMixin, Content):
     admin_template_name = 'xprez/admin/contents/ck_editor.html'
     front_template_name = 'xprez/contents/ck_editor.html'
     icon_name = 'text_content'
-    verbose_name = 'Text Content (CK)'  # TODO
+    verbose_name = 'Text Content'
 
     text = models.TextField()
     # css_class = models.CharField(max_length=100, null=True, blank=True)
     box = models.BooleanField(default=False)
-    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
+    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_TEXT)
+    content_centered = models.BooleanField(default=False)
 
     class AdminMedia:
         js = CkEditorWidget.Media.js + PHOTOSWIPE_JS

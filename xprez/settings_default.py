@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 DEFAULT_ALLOWED_CONTENTS = [
-    'mediumeditor',
+    # 'mediumeditor',
     'ckeditor',
     'quotecontent',
     'gallery',

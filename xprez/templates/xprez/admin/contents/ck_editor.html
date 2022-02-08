@@ -2,9 +2,10 @@
 
 {% block options %}
     <ul class="xprez-module__options-group">
-        <li><span class="xprez-option-btn js-checkbox_controller js-box" data-formfield_selector="#id_content-{{ content.pk }}-box">Box</span></li>
+        <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-box">Box</span></li>
+        <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-content_centered">Centered</span></li>
     </ul>
-    <ul class="xprez-module__options-group js-select_controller js-box-show" data-formfield_selector="#id_content-{{ content.pk }}-width">
+    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-width">
         <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_FULL }}">Full width</span></li>
         <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_MID }}">Mid width</span></li>
         <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_TEXT }}">Text width</span></li>
@@ -19,23 +20,5 @@
     {{ block.super }}
     {{ content.admin_form.width }}
     {{ content.admin_form.box }}
-{% endblock %}
-
-
-{% block js %}
-    <script>
-        $(function () {
-            var $jsBox = $('.js-content-{{ content.pk }}').find('.js-box');
-            var $boxOptions = $('.js-content-{{ content.pk }}').find('.js-box-show');
-            if (!$jsBox.hasClass('active')) {
-                $boxOptions.hide();
-            }
-            $jsBox.on('activated', function () {
-                $boxOptions.show();
-            });
-            $jsBox.on('deactivated', function () {
-                $boxOptions.hide();
-            });
-        });
-    </script>
+    {{ content.admin_form.content_centered }}
 {% endblock %}
