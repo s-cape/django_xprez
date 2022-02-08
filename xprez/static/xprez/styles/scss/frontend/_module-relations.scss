@@ -16,20 +16,24 @@
     }
 }
 
-//.xprez-module-margin-top-1 {
-//	@include relation(2.5,2,1.5,1);
-//}
-
-.xprez-module-margin-bottom-1 {
-	@include relation(2.5,2,1.5,1);
+.xprez-module-margin-bottom-0 {
+	@include relation(0, 0, 0, 0);
 }
 
-//.xprez-module-margin-top-2 {
-//	@include relation(5,4,3,2);
-//}
+.xprez-module-margin-bottom-1 {
+	@include relation(2, 1.75, 1.5, 1);
+}
 
 .xprez-module-margin-bottom-2 {
-	@include relation(5,4,3,2);
+	@include relation(5, 4, 3, 2);
+}
+
+.xprez-module-margin-bottom-3 {
+	@include relation(7.5, 6, 4.5, 3);
+}
+
+.xprez-module-margin-bottom-4 {
+	@include relation(10, 8, 6, 4);
 }
 
 
@@ -47,17 +51,17 @@
 	//	@include relation(3,1.5,1.5,1.5);
 	//}
 
-	&:last-child {
-		margin-bottom: $g*5;
-		@media only screen and (max-width: $typo-break-s) {
-	       margin-bottom: $g*2;
-	    }
-	}
+	//&:last-child {
+	//	margin-bottom: $g*5;
+	//	@media only screen and (max-width: $typo-break-s) {
+	//       margin-bottom: $g*2;
+	//    }
+	//}
 
-	&.xprez-quote-boxed:last-child,
-	&.xprez-photo-connect-true.full-width:last-child {
-		margin-bottom: 0;
-	}
+	//&.xprez-quote-boxed:last-child,
+	//&.xprez-photo-connect-true.full-width:last-child {
+	//	margin-bottom: 0;
+	//}
 }
 .xprez-gallery {
 	//& + .xprez-module {

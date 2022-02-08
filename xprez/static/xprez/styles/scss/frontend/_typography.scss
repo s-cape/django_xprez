@@ -7,6 +7,22 @@
 	@include xprez-mobile-extra-space;
 }
 
+.xprez-text-content.mid-width:not(.xprez-text-content-boxed) {
+	@include m-width;
+	@media (max-width: ($m-width + $m-space)) and (min-width: $break-m) {
+		padding-left: $m-space;
+		padding-right: $m-space;
+	}
+}
+
+.xprez-text-content.full-width:not(.xprez-text-content-boxed) {
+	@include full-width;
+	@media (min-width: $break-m) {
+		padding-left: $m-space;
+		padding-right: $m-space;
+	}
+}
+
 // Xprez basic text styles
 
 .xprez-text-content, .xprez-text-image,   
