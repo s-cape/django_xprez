@@ -54,7 +54,6 @@ class Content(models.Model):
 
     MARGIN_DEFAULT = 2
     MARGIN_CHOICES = ((0, 'None'), (1, 'S'), (MARGIN_DEFAULT, 'M'), (3, 'L'), (4, 'XL'),)
-    margin_top = models.PositiveSmallIntegerField(choices=MARGIN_CHOICES, default=MARGIN_DEFAULT)
     margin_bottom = models.PositiveSmallIntegerField(choices=MARGIN_CHOICES, default=MARGIN_DEFAULT)
 
     class Meta:

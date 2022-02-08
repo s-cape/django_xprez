@@ -12,7 +12,6 @@
             {{ content.admin_form.delete }}
             {{ content.admin_form.visible }}
             {{ content.admin_form.css_class }}
-            {{ content.admin_form.margin_top }}
             {{ content.admin_form.margin_bottom }}
         {% endblock %}
     </div>
@@ -24,7 +23,6 @@
         <h2>
             <b>{{ content.verbose_name }}</b>
             {% if content.css_class  %}<i>class: <b>{{ content.css_class }}</b></i>{% endif %}
-            {% if content.margin_top != content.MARGIN_DEFAULT %}<i>top: <b>{{ content.get_margin_top_display }}</b></i>{% endif %}
             {% if content.margin_bottom != content.MARGIN_DEFAULT %}<i>bottom: <b>{{ content.get_margin_bottom_display }}</b></i>{% endif %}
         </h2>
 
@@ -32,14 +30,6 @@
     </div>
     <div class="xprez-module__collapse-cont">
         <div class="xprez-module__options xprez-module__common-options js-common-options">
-            <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_top">
-                <li>
-                    <label class="xprez-option-label">Margin top:</label>
-                </li>
-                {% for value, label in content.admin_form.margin_top.field.choices %}
-                    <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
-                {% endfor %}
-            </ul>
             <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_bottom">
                 <li>
                     <label class="xprez-option-label">Margin bottom:</label>

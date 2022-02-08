@@ -19,7 +19,7 @@ from .models import (Attachment, CkEditor, CodeInput, CodeTemplate,
 
 class BaseContentForm(forms.ModelForm):
     class Meta:
-        fields = ('position', 'visible', 'css_class', 'margin_top', 'margin_bottom')
+        fields = ('position', 'visible', 'css_class', 'margin_bottom')
 
 
 class GalleryForm(BaseContentForm):
