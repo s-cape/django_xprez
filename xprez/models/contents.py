@@ -468,7 +468,7 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
 
     def render_front(self, extra_context={}):
         boxes = []
-        for box_content in self.boxes:
+        for box_content in (self.boxes or []):
             if striptags(box_content != ''):
                 # boxes.append(medium_editor_render_text_parsed(medium_editor_parse_text(box_content)))
                 boxes.append(ckeditor_parse_text.render_text_parsed(
@@ -479,7 +479,7 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
         return super().render_front(extra_context=extra_context)
 
     def show_front(self):
-        for box_content in self.boxes:
+        for box_content in (self.boxes or []):
             if striptags(box_content != ''):
                 return True
         return False

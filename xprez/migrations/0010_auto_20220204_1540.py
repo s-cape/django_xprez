@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0009_gridboxes_width'),
+        ('xprez', '0010_ckeditor'),
     ]
 
     operations = [
