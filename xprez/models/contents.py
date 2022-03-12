@@ -349,7 +349,7 @@ class DownloadContent(AjaxUploadFormsetContent):
 class Attachment(ContentItem):
     content_foreign_key = 'content'
     content = models.ForeignKey(DownloadContent, related_name='attachments', on_delete=models.CASCADE)
-    file = models.FileField(upload_to='files')
+    file = models.FileField(upload_to='files', max_length=300)
     name = models.CharField(max_length=100, blank=True)
     position = models.PositiveSmallIntegerField()
 
