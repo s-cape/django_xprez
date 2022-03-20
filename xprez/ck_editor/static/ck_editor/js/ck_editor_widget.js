@@ -16,11 +16,15 @@ function initializeCkEditor($textarea, $editorRoot) {
     var config = $textarea.data('ck-editor-config');
     config.initialData = $textarea.val();
 
-    BalloonBlockEditor
+    var editor = BalloonBlockEditor
         .create($editorRoot[0], config)
         .then(function(editor) {
             $form.submit(function () {
                 $textarea.val(editor.getData());
+            });
+            editor.keystrokes.set('Ctrl+space', function(key, stop) {
+                editor.execute('input', { text: '\u00a0' } );
+                stop();
             });
         });
 }
