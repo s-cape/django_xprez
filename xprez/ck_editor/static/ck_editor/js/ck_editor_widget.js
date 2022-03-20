@@ -16,7 +16,7 @@ function initializeCkEditor($textarea, $editorRoot) {
     var config = $textarea.data('ck-editor-config');
     config.initialData = $textarea.val();
 
-    var editor = BalloonBlockEditor
+    BalloonBlockEditor
         .create($editorRoot[0], config)
         .then(function(editor) {
             $form.submit(function () {
