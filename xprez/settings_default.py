@@ -59,6 +59,7 @@ _XPREZ_CKEDITOR_CONFIG_FULL_BASE = {
     'fontSize': {
         'options': ('tiny', 'default', 'big',)
     },
+
 }
 
 XPREZ_CKEDITOR_CONFIG_FULL_NO_INSERT_PLUGIN = deepcopy(_XPREZ_CKEDITOR_CONFIG_FULL_BASE)
@@ -71,7 +72,7 @@ XPREZ_CKEDITOR_CONFIG_FULL['blockToolbar'] += ('|', 'imageUpload', 'MediaEmbed',
 XPREZ_CKEDITOR_CONFIG_FULL['toolbar'] += ('|', 'imageUpload', 'MediaEmbed',)
 XPREZ_CKEDITOR_CONFIG_FULL['simpleUpload'] = {'uploadUrl': None}  # filled later in CkEditor.__init__
 XPREZ_CKEDITOR_CONFIG_FULL['mediaEmbed '] = {'previewsInData': True}
-XPREZ_CKEDITOR_CONFIG_FULL['image '] = {
+XPREZ_CKEDITOR_CONFIG_FULL['image'] = {
     'toolbar': ('imageTextAlternative', 'toggleImageCaption', '|', 'imageStyle:alignLeft', 'imageStyle:block', 'imageStyle:alignRight', '|', 'linkImage',),
     'styles': ('block', 'alignLeft', 'alignRight',),
 }
