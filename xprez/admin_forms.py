@@ -159,6 +159,6 @@ class GridBoxesForm(BaseContentForm):
 
 
 AttachmentFormSet = inlineformset_factory(DownloadContent, Attachment, fields=('id', 'name', 'position'), extra=0, can_delete=True)
-PhotoFormSet = inlineformset_factory(Gallery, Photo, fields=('id', 'description', 'position'), extra=0, can_delete=True)
+PhotoFormSet = inlineformset_factory(Gallery, Photo, fields=('id', 'description', 'alt_text', 'position'), extra=0, can_delete=True)
 QuoteFormSet = inlineformset_factory(QuoteContent, Quote, form=QuoteForm, fields=('id', 'name', 'job_title', 'title', 'quote', 'image'), max_num=2, can_delete=True)
 NumberFormSet = inlineformset_factory(NumbersContent, Number, form=NumberForm, fields=('id', 'number', 'suffix', 'title'), max_num=4, extra=4, can_delete=True)

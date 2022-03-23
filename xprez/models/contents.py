@@ -200,6 +200,7 @@ class Photo(ContentItem):
     gallery = models.ForeignKey(Gallery, related_name='photos', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='photos')
     description = models.CharField(max_length=255, blank=True, null=True)
+    alt_text = models.CharField(max_length=255, blank=True)
     position = models.PositiveSmallIntegerField()
 
     @classmethod
