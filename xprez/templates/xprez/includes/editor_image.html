@@ -26,7 +26,7 @@
                     {% endthumbnail %}"
                 sizes="(min-width: 755px) 700px,
                         98vw" 
-                {% if alt_text %}alt="{{ alt_text }}"{% endif %}
+                alt="{{ alt_text|default:caption }}"
                 />
         {% if link_url or lightbox %}
             </a>

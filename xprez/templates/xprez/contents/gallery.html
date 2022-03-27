@@ -12,9 +12,9 @@
             data-original_height="{{ thumb.height }}"
             {% endthumbnail %}
             data-title="{% if photo.description %}{{ photo.description }}{% endif %}"
-            data-alt="{{ photo.alt_text }}"
+            data-alt="{{ photo.alt_text|default:photo.description }}"
         >
-            <img class="xprez-photo" alt="{{ photo.alt_text }}"
+            <img class="xprez-photo" alt="{{ photo.alt_text|default:photo.description }}"
                 {% if content.columns == 8 %}
                     {% if content.crop %}
                         src="{% thumbnail photo.image "400x400" crop="30%" quality=70 as thumb %}{{ thumb.url|build_absolute_uri }}"
