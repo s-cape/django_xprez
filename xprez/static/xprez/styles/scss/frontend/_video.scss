@@ -16,7 +16,7 @@
 
 .xprez-video-item {
 	position: relative;
-	padding-top: 55%;
+	padding-top: $video-ratio-height;
 
 	iframe {
 		position: absolute;
