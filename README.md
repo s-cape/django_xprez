@@ -74,4 +74,6 @@ TODO
 
 - fix template content to save only relative path to database
 - check template content raising UnicodeDecodeError
-
+- create manual for various situations (ck_editor branch)
+  - using custom config and implement style sources into own building system (using get_module_path.py)
+  - how to implement `xprezanchor` functionality
