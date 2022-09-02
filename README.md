@@ -14,7 +14,7 @@ Quick start
         'django.contrib.humanize',
         'sorl.thumbnail',
         'xprez',
-        'xprez.medium_editor',
+        'xprez.ck_editor',
         ...
     ]
 ```

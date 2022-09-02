@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 PACKAGE = "xprez"
 NAME = "django_xprez"
@@ -7,7 +7,7 @@ DESCRIPTION = "Django CMS for presentation websites"
 AUTHOR = "Michal Májský, Martin Kappel, Jakub Dolejšek, Michal Tilsch - s-cape.cz & mimatik.com"
 AUTHOR_EMAIL = "michal.majsky@s-cape.cz"
 URL = "https://www.s-cape.cz"
-VERSION = '0.0.2'
+VERSION = '0.1.0'
 LICENSE = "Mozilla Public License 2.0 (MPL 2.0)"
 
 setup(
@@ -22,6 +22,7 @@ setup(
     include_package_data=True,
     classifiers=[
         # "Development Status :: 5 - Production/Stable",
+        "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Framework :: Django",
         "Intended Audience :: Developers",
