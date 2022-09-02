@@ -69,6 +69,39 @@ To rebuild css styles
     npm run build (or `watch` for developing)
 
 
+Deploying to pip
+----------------
+
+# requirements
+
+    python -m pip install --user --upgrade setuptools wheel twine
+
+
+# cleanup old builds (if exists)
+
+    rm -rf ./dist ./build
+
+# create dist package
+
+    python setup.py sdist bdist_wheel
+
+# to check package add this to requirements.txt
+
+    file:/<path_to_package>/dist/django_xprez-<version>.tar.gz
+
+# upload to testpypi (username: jakub.dolejsek)
+
+    python -m twine upload --repository testpypi dist/*
+
+# to check package from testpypi add (temporary) this to top of requirements.txt:
+
+    --extra-index-url https://test.pypi.org/simple/
+
+# upload to pypi (username: jakub.dolejsek)
+
+    python -m twine upload dist/*
+
+
 TODO
 -------
 
