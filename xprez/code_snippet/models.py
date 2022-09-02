@@ -11,7 +11,7 @@ from pygments.lexers.html import DtdLexer
 
 
 class CodeSnippet(Content):
-    form_class = 'code_snippet.admin_forms.CodeSnippetForm'
+    form_class = 'xprez.code_snippet.admin_forms.CodeSnippetForm'
     admin_template_name = 'xprez/admin/code_snippet.html'
     front_template_name = 'xprez/code_snippet.html'
     verbose_name = 'Code snippet'
