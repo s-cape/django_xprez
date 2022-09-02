@@ -1,7 +1,6 @@
 from django import forms
 from django.apps import apps
 from django.conf import settings as django_settings
-from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.admin import helpers
 from django.contrib.admin.exceptions import DisallowedModelAdminToField
@@ -13,9 +12,9 @@ from django.db import transaction
 from django.forms import all_valid
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.utils.encoding import force_text
+from django.urls import re_path
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
 from . import contents_manager, models
@@ -23,6 +22,12 @@ from .models.fields import TemplatePathField
 from .settings import (XPREZ_CONTAINER_MODEL_CLASS,
                        XPREZ_DEFAULT_ALLOWED_CONTENTS,
                        XPREZ_DEFAULT_EXCLUDED_CONTENTS)
+
+try:
+    from django.utils.encoding import force_str
+except ImportError:  # backwards compatibility with django 2.*
+    from django.utils.encoding import force_text as force_str
+
 
 
 class XprezAdmin(admin.ModelAdmin):
@@ -110,7 +115,7 @@ class XprezAdmin(admin.ModelAdmin):
 
             if obj is None:
                 raise Http404(_('%(name)s object with primary key %(key)r does not exist.') % {
-                    'name': force_text(opts.verbose_name), 'key': escape(object_id)})
+                    'name': force_str(opts.verbose_name), 'key': escape(object_id)})
 
         ModelForm = self.get_form(request, obj)
         if request.method == 'POST':
@@ -175,7 +180,7 @@ class XprezAdmin(admin.ModelAdmin):
 
         context = dict(
             self.admin_site.each_context(request),
-            title=(_('Add %s') if add else _('Change %s')) % force_text(opts.verbose_name),
+            title=(_('Add %s') if add else _('Change %s')) % force_str(opts.verbose_name),
             adminform=adminForm,
             object_id=object_id,
             original=obj,
@@ -250,12 +255,11 @@ class XprezAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(XprezAdmin, self).get_urls()
         my_urls = [
-            url(r'^%s/copy/(?P<page_pk>\d+)/$' % self.model._meta.model_name, self.admin_site.admin_view(self.copy_view), name=self.model._meta.model_name + '_copy'),
-            url(r'^ajax/add-content/(?P<page_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$', self.admin_site.admin_view(self.add_content_view), name='ajax_add_content'),
-            url(r'^ajax/add-content-before/(?P<before_content_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$', self.admin_site.admin_view(self.add_content_before_view), name='ajax_add_content_before'),
-            url(r'^ajax/delete-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.delete_content_view), name='ajax_delete_content'),
-            url(r'^ajax/copy-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.copy_content_view), name='ajax_copy_content'),
-
+            re_path(r'^%s/copy/(?P<page_pk>\d+)/$' % self.model._meta.model_name, self.admin_site.admin_view(self.copy_view), name=self.model._meta.model_name + '_copy'),
+            re_path(r'^ajax/add-content/(?P<page_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$', self.admin_site.admin_view(self.add_content_view), name='ajax_add_content'),
+            re_path(r'^ajax/add-content-before/(?P<before_content_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$', self.admin_site.admin_view(self.add_content_before_view), name='ajax_add_content_before'),
+            re_path(r'^ajax/delete-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.delete_content_view), name='ajax_delete_content'),
+            re_path(r'^ajax/copy-content/(?P<content_pk>\d+)/$', self.admin_site.admin_view(self.copy_content_view), name='ajax_copy_content'),
         ]
         return my_urls + urls
 

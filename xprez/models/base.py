@@ -1,9 +1,9 @@
-from django.conf.urls import url
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db import models
 from django.db.models import F, Max
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.urls import re_path
 from django.utils.decorators import method_decorator
 
 from .. import settings as xprez_settings
@@ -226,7 +226,7 @@ class AjaxUploadFormsetContent(FormsetContent):
     def get_urls(cls):
         cls_name = cls.__name__.lower()
         return [
-            url(r'^%s/upload-item/(?P<content_pk>\d+)/' % cls_name, cls.upload_file_view, name='%s_ajax_upload_item' % cls_name),
+            re_path(r'^%s/upload-item/(?P<content_pk>\d+)/' % cls_name, cls.upload_file_view, name='%s_ajax_upload_item' % cls_name),
         ]
 
 

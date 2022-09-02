@@ -2,14 +2,13 @@
 from os import makedirs, path
 
 from django.conf import settings as django_settings
-from django.conf.urls import url
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.http import JsonResponse
 from django.template import TemplateDoesNotExist
 from django.template.defaultfilters import striptags
 from django.template.loader import get_template
+from django.urls import re_path
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from xprez.utils import random_string
@@ -24,6 +23,12 @@ from ..medium_editor.widgets import MediumEditorWidget
 from .base import (AjaxUploadFormsetContent, Content, ContentItem,
                    FormsetContent)
 from .fields import TemplatePathField
+
+try:
+    from django.db.models import JSONField
+except ImportError:
+    from django.contrib.postgres.fields import JSONField
+
 
 PHOTOSWIPE_JS = ('xprez/libs/photoswipe/dist/photoswipe.min.js', 'xprez/libs/photoswipe/dist/photoswipe-ui-default.min.js', 'xprez/js/photoswipe.js')
 PHOTOSWIPE_CSS = ('xprez/libs/photoswipe/dist/photoswipe.css', 'xprez/libs/photoswipe/dist/default-skin/default-skin.css')
@@ -82,7 +87,7 @@ class CkEditorFileUploadMixin:
     def get_urls(cls):
         cls_name = cls.__name__.lower()
         return [
-            url(r'^{}/file-upload/(?P<directory>[/\w-]+)/$'.format(cls_name), cls.file_upload_view, name='{}_file_upload'.format(cls_name)),
+            re_path(r'^{}/file-upload/(?P<directory>[/\w-]+)/$'.format(cls_name), cls.file_upload_view, name='{}_file_upload'.format(cls_name)),
         ]
 
 
