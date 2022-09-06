@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/django-xprez.svg)](https://badge.fury.io/py/django-xprez)
+
 Django Xprez
 ============
 

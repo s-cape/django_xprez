@@ -17,6 +17,7 @@ setup(
     version=VERSION,
     description=DESCRIPTION,
     long_description=(Path(__file__).parent / "README.md").read_text(),
+    long_description_content_type='text/markdown',
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     license=LICENSE,
