@@ -77,8 +77,8 @@
 
 {% block js %}
     <script>
-        jqueryME(document).ready(function () {
-            initializeCkEditors(jqueryME('.js-content-{{ content.pk }} .js-boxes'));
+        $(document).ready(function () {
+            initializeCkEditors($('.js-content-{{ content.pk }} .js-boxes'));
             var $scope = $('.js-content-{{ content.pk }}');
             var boxesCount = {{ content.boxes|length }};
             var contentID = {{ content.pk }};

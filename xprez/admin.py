@@ -29,7 +29,6 @@ except ImportError:  # backwards compatibility with django 2.*
     from django.utils.encoding import force_text as force_str
 
 
-
 class XprezAdmin(admin.ModelAdmin):
     change_form_extend_template = 'admin/change_form.html'
     change_form_template = 'xprez/admin/xprez_changeform.html'
@@ -37,18 +36,7 @@ class XprezAdmin(admin.ModelAdmin):
     excluded_contents = XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
     def _get_allowed_contents(self):
-        content_types = []
-        if self.allowed_contents == '__all__':
-            content_types = contents_manager.all_as_list()
-        else:
-            for ct in self.allowed_contents:
-                content_types.append(contents_manager.get(ct))
-        if self.excluded_contents:
-            for ct in self.excluded_contents:
-                ct = contents_manager.get(ct)
-                if ct in content_types:
-                    content_types.remove(ct)
-        return content_types
+        return contents_manager._get_allowed_contents(allowed_contents=self.allowed_contents, excluded_contents=self.excluded_contents)
 
     def _get_ui_css_class(self):
         if 'suit' in django_settings.INSTALLED_APPS:

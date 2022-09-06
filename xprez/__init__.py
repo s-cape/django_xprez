@@ -2,9 +2,11 @@ from collections import OrderedDict
 
 from django.utils.module_loading import autodiscover_modules
 
+from .settings import (XPREZ_DEFAULT_ALLOWED_CONTENTS,
+                       XPREZ_DEFAULT_EXCLUDED_CONTENTS)
+
 
 class ContentTypeManager:
-
     def get(self, content_type):
         return self._registry[content_type]
 
@@ -22,7 +24,7 @@ class ContentTypeManager:
 
         js = []
         css = []
-        for key, content in self._registry.items():
+        for content in self._get_allowed_contents():
             media_class = getattr(content, media_class_name)
             js += list(getattr(media_class, 'js', []))
             css += list(getattr(media_class, 'css', []))
@@ -45,6 +47,20 @@ class ContentTypeManager:
 
     def unregister(self, content_class):
         del self._registry[content_class.identifier()]
+
+    def _get_allowed_contents(self, allowed_contents=XPREZ_DEFAULT_ALLOWED_CONTENTS, excluded_contents=XPREZ_DEFAULT_EXCLUDED_CONTENTS):
+        content_types = []
+        if allowed_contents == '__all__':
+            content_types = self.all_as_list()
+        else:
+            for ct in allowed_contents:
+                content_types.append(self.get(ct))
+        if excluded_contents:
+            for ct in excluded_contents:
+                ct = self.get(ct)
+                if ct in content_types:
+                    content_types.remove(ct)
+        return content_types
 
 
 contents_manager = ContentTypeManager()
