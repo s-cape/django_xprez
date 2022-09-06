@@ -6,7 +6,13 @@ Xprez is CMS For Django
 Quick start
 -----------
 
-1. Add following apps to your INSTALLED_APPS setting like this:
+1. Install django-xprez:
+```
+    pip install django-xprez
+```
+
+
+2. Add following apps to your INSTALLED_APPS setting like this:
 
 ```
     INSTALLED_APPS = [
@@ -19,8 +25,10 @@ Quick start
     ]
 ```
 
-2. Make sure request context processor is enabled in settings:
+3. Run `python manage.py migrate` to create xprez models.
 
+
+4. Make sure request context processor is enabled in settings:
 
 ```
     TEMPLATES = [
@@ -36,21 +44,49 @@ Quick start
     ]
 ```
 
+5. Include the xprez admin URLconf in your project urls.py like this:
 
-3. (optional) Change sorl thumbnail backend in settings - for seo-friendly thumbnail filenames:
+```
+    path('xprez/', include('xprez.urls')),
+```
+
+6. Create models:
+```
+    from xprez.models import ContentsContainer
+
+    class Page(ContentsContainer):
+        title = models.CharField(max_length=255)
+        slug = models.SlugField(max_length=255, unique=True)
+
+        def __str__(self):
+            return self.title
+
+        def __unicode__(self):
+            return self.__str__()
+```
+
+7. Register models in admin:
+```
+    from django.contrib import admin
+    from xprez.admin import XprezAdmin
+    from .models import Page
+
+    @admin.register(Page)
+    class PageAdmin(XprezAdmin):
+        pass
+```
+
+8. Render page in template:
+```
+    {% xprez_front_media %}
+    {% include 'xprez/container.html' with contents=page.contents.all %}
+```
+
+9. (optional) Change sorl thumbnail backend in settings - for seo-friendly thumbnail filenames:
 
 ```
     THUMBNAIL_BACKEND = 'xprez.contrib.sorl_thumbnail.thumbnail_backend.NamingThumbnailBackend'
 ```
-
-
-4. Include the xprez URLconf in your project urls.py like this:
-
-```
-    url(r'^xprez/', include('xprez.urls')),
-```
-
-5. Run `python manage.py migrate` to create xprez models.
 
 
 Development
