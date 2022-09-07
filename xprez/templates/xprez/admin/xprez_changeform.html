@@ -11,13 +11,9 @@
     {{ block.super }}
     <script>
         var $ = $ || django.jQuery;
-        var jQuery = jQuery || django.jQuery;
+        var jQuery = $ || jQuery || django.jQuery;
     </script>
-    <script type="text/javascript" src="{% static 'xprez/admin/libs/jquery_ui/jquery-ui.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'xprez/admin/js/contents.js' %}"></script>
     {% include 'xprez/includes/media.html' %}
-    <script type="text/javascript" src="{% static 'xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js' %}"></script>
-    <link rel="stylesheet" href="{% static "xprez/styles/xprez-backend.css" %}">
 {% endblock %}
 
 {% block inline_field_sets %}

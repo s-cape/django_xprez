@@ -179,7 +179,7 @@ $(function () {
     activateCommonOptions($container);
     // hideErrorsForDeletedContents();
 
-    $($container).sortable({
+    $container.sortable({
         'handle': '.js-sortable-handler',
         update: function (event, ui) {
             $('.js-content').each(function (index, el) {

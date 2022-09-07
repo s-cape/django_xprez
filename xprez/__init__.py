@@ -19,11 +19,12 @@ class ContentTypeManager:
             urls += content.get_urls()
         return urls
 
-    def _collect_media(self, media_class_name):
+    def _collect_media(self, media_class_name, js_initial=[], css_initial=[]):
         from .utils import remove_duplicates
 
-        js = []
-        css = []
+        js = list(js_initial)
+        css = list(css_initial)
+
         for content in self._get_allowed_contents():
             media_class = getattr(content, media_class_name)
             js += list(getattr(media_class, 'js', []))
@@ -34,7 +35,13 @@ class ContentTypeManager:
         }
 
     def admin_media(self):
-        return self._collect_media('AdminMedia')
+        return self._collect_media('AdminMedia', js_initial=[
+            'xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js',
+            'xprez/admin/libs/jquery_ui/jquery-ui.min.js',
+            'xprez/admin/js/contents.js',
+        ], css_initial=[
+            'xprez/styles/xprez-backend.css',
+        ])
 
     def front_media(self):
         return self._collect_media('FrontMedia')
