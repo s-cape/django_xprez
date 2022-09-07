@@ -1,4 +1,4 @@
-Django==3.2
+Django==3.2.15
 psycopg2-binary==2.8
 Pygments==2.2.0
 Pillow==9.1
