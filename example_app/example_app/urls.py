@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.conf import settings
@@ -21,12 +21,11 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^xprez/', include('xprez.urls')),
-    url(r'^medium-editor/', include('xprez.medium_editor.urls')),
+    path('admin/', admin.site.urls),
+    path('xprez/', include('xprez.urls')),
 
-    url(r'^$', views.page, name='page'),
-    url(r'^(?P<slug>[A-z0-9-]+)/$', views.page, name='page'),
+    path('', views.page, name='page'),
+    path('<slug:slug>/', views.page, name='page'),
 
 ]
 
