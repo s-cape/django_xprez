@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 
     'sorl.thumbnail',
     'xprez',
-    'xprez.medium_editor',
+    'xprez.ck_editor',
     'xprez.code_snippet',
     'example_app',
 
