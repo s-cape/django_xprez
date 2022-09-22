@@ -14,7 +14,7 @@ Quick start
 ```
 
 
-2. Add following apps to your INSTALLED_APPS setting like this:
+2. Add following apps to your settings.INSTALLED_APPS:
 
 ```
     INSTALLED_APPS = [
@@ -62,9 +62,6 @@ Quick start
 
         def __str__(self):
             return self.title
-
-        def __unicode__(self):
-            return self.__str__()
 ```
 
 7. Register models in admin:
@@ -80,6 +77,7 @@ Quick start
 
 8. Render page in template:
 ```
+    {% load xprez %}
     {% xprez_front_media %}
     {% include 'xprez/container.html' with contents=page.contents.all %}
 ```
