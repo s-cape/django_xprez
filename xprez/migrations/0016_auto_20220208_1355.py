@@ -8,8 +8,8 @@ def migrate_ckeditor_width(apps, schema_editor):
     When not boxed, force width to "Text width"
     """
 
-    CkEditor = apps.get_model('xprez.CkEditor')
-    CkEditor.objects.filter(box=False).update(width='text')
+    CkEditor = apps.get_model("xprez.CkEditor")
+    CkEditor.objects.filter(box=False).update(width="text")
 
 
 def noop(*args, **kwargs):
@@ -19,9 +19,7 @@ def noop(*args, **kwargs):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0015_ckeditor_content_centered'),
+        ("xprez", "0015_ckeditor_content_centered"),
     ]
 
-    operations = [
-        migrations.RunPython(migrate_ckeditor_width, noop)
-    ]
+    operations = [migrations.RunPython(migrate_ckeditor_width, noop)]

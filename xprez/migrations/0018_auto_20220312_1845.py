@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0017_auto_20220208_1401'),
+        ("xprez", "0017_auto_20220208_1401"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='attachment',
-            name='file',
-            field=models.FileField(max_length=300, upload_to='files'),
+            model_name="attachment",
+            name="file",
+            field=models.FileField(max_length=300, upload_to="files"),
         ),
     ]

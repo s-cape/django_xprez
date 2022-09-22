@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0004_auto_20180504_1516'),
+        ("xprez", "0004_auto_20180504_1516"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='content',
-            name='visible',
+            model_name="content",
+            name="visible",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='textimage',
-            name='css_class',
+            model_name="textimage",
+            name="css_class",
             field=models.CharField(blank=True, max_length=100, null=True),
         ),
     ]

@@ -21,13 +21,11 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^xprez/', include('xprez.urls')),
-    url(r'^medium-editor/', include('xprez.medium_editor.urls')),
-
-    url(r'^$', views.page, name='page'),
-    url(r'^(?P<slug>[A-z0-9-]+)/$', views.page, name='page'),
-
+    url(r"^admin/", admin.site.urls),
+    url(r"^xprez/", include("xprez.urls")),
+    url(r"^medium-editor/", include("xprez.medium_editor.urls")),
+    url(r"^$", views.page, name="page"),
+    url(r"^(?P<slug>[A-z0-9-]+)/$", views.page, name="page"),
 ]
 
 if settings.DEBUG:

@@ -11,20 +11,30 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('xprez', '0001_initial'),
+        ("xprez", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Page',
+            name="Page",
             fields=[
-                ('contentscontainer_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='xprez.ContentsContainer')),
-                ('title', models.CharField(max_length=255)),
+                (
+                    "contentscontainer_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.ContentsContainer",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
             ],
             options={
-                'verbose_name': 'Page',
-                'verbose_name_plural': 'Pages',
+                "verbose_name": "Page",
+                "verbose_name_plural": "Pages",
             },
-            bases=('xprez.contentscontainer',),
+            bases=("xprez.contentscontainer",),
         ),
     ]

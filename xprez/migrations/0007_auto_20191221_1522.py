@@ -7,14 +7,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0006_gridboxes'),
+        ("xprez", "0006_gridboxes"),
     ]
 
     operations = [
-        migrations.RemoveField( model_name='gridboxes', name='boxes',),
+        migrations.RemoveField(
+            model_name="gridboxes",
+            name="boxes",
+        ),
         migrations.AddField(
-            model_name='gridboxes',
-            name='boxes',
+            model_name="gridboxes",
+            name="boxes",
             field=django.contrib.postgres.fields.jsonb.JSONField(null=True),
         ),
     ]

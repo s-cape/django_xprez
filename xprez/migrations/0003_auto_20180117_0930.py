@@ -7,26 +7,45 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0002_auto_20180115_1306'),
+        ("xprez", "0002_auto_20180115_1306"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TextImage',
+            name="TextImage",
             fields=[
-                ('content_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='xprez.Content')),
-                ('image', models.ImageField(upload_to='text_image_images')),
-                ('text', models.TextField()),
-                ('image_alignment', models.CharField(choices=[('left', 'Left'), ('right', 'Right')], default='left', max_length=15)),
+                (
+                    "content_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.Content",
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="text_image_images")),
+                ("text", models.TextField()),
+                (
+                    "image_alignment",
+                    models.CharField(
+                        choices=[("left", "Left"), ("right", "Right")],
+                        default="left",
+                        max_length=15,
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('xprez.content',),
+            bases=("xprez.content",),
         ),
         migrations.AlterField(
-            model_name='video',
-            name='video_type',
-            field=models.CharField(choices=[('vimeo', 'Vimeo'), ('youtube', 'YouTube')], max_length=50),
+            model_name="video",
+            name="video_type",
+            field=models.CharField(
+                choices=[("vimeo", "Vimeo"), ("youtube", "YouTube")], max_length=50
+            ),
         ),
     ]

@@ -2,8 +2,7 @@ from collections import OrderedDict
 
 from django.utils.module_loading import autodiscover_modules
 
-from .settings import (XPREZ_DEFAULT_ALLOWED_CONTENTS,
-                       XPREZ_DEFAULT_EXCLUDED_CONTENTS)
+from .settings import XPREZ_DEFAULT_ALLOWED_CONTENTS, XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
 
 class ContentTypeManager:
@@ -27,24 +26,28 @@ class ContentTypeManager:
 
         for content in self._get_allowed_contents():
             media_class = getattr(content, media_class_name)
-            js += list(getattr(media_class, 'js', []))
-            css += list(getattr(media_class, 'css', []))
+            js += list(getattr(media_class, "js", []))
+            css += list(getattr(media_class, "css", []))
         return {
-            'js': remove_duplicates(js),
-            'css': remove_duplicates(css),
+            "js": remove_duplicates(js),
+            "css": remove_duplicates(css),
         }
 
     def admin_media(self):
-        return self._collect_media('AdminMedia', js_initial=[
-            'xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js',
-            'xprez/admin/libs/jquery_ui/jquery-ui.min.js',
-            'xprez/admin/js/contents.js',
-        ], css_initial=[
-            'xprez/styles/xprez-backend.css',
-        ])
+        return self._collect_media(
+            "AdminMedia",
+            js_initial=[
+                "xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js",
+                "xprez/admin/libs/jquery_ui/jquery-ui.min.js",
+                "xprez/admin/js/contents.js",
+            ],
+            css_initial=[
+                "xprez/styles/xprez-backend.css",
+            ],
+        )
 
     def front_media(self):
-        return self._collect_media('FrontMedia')
+        return self._collect_media("FrontMedia")
 
     def __init__(self):
         self._registry = OrderedDict()
@@ -55,9 +58,13 @@ class ContentTypeManager:
     def unregister(self, content_class):
         del self._registry[content_class.identifier()]
 
-    def _get_allowed_contents(self, allowed_contents=XPREZ_DEFAULT_ALLOWED_CONTENTS, excluded_contents=XPREZ_DEFAULT_EXCLUDED_CONTENTS):
+    def _get_allowed_contents(
+        self,
+        allowed_contents=XPREZ_DEFAULT_ALLOWED_CONTENTS,
+        excluded_contents=XPREZ_DEFAULT_EXCLUDED_CONTENTS,
+    ):
         content_types = []
-        if allowed_contents == '__all__':
+        if allowed_contents == "__all__":
             content_types = self.all_as_list()
         else:
             for ct in allowed_contents:
@@ -74,4 +81,4 @@ contents_manager = ContentTypeManager()
 
 
 def autodiscover():
-    autodiscover_modules('models', register_to=contents_manager)
+    autodiscover_modules("models", register_to=contents_manager)

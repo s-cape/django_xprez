@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0010_ckeditor'),
-        ('xprez', '0012_auto_20220204_1600'),
+        ("xprez", "0010_ckeditor"),
+        ("xprez", "0012_auto_20220204_1600"),
     ]
 
-    operations = [
-    ]
+    operations = []

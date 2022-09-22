@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0014_remove_content_margin_top'),
+        ("xprez", "0014_remove_content_margin_top"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='ckeditor',
-            name='content_centered',
+            model_name="ckeditor",
+            name="content_centered",
             field=models.BooleanField(default=False),
         ),
     ]
