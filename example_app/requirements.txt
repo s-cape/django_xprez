@@ -1,6 +1,6 @@
 Django==4.1
 psycopg2-binary>=2.8.4
-Pygments==2.2.0
+Pygments==2.7.4
 Pillow==9.1.1
 sorl-thumbnail==12.8.0
 html5lib==1.0.1
