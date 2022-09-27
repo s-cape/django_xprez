@@ -92,6 +92,9 @@ Quick start
 
 Development
 -----------
+To setup automated black formatting connected to git commits:
+- install [pre-commit](https://pre-commit.com/#installation)
+- run `pre-commit install`
 
 To rebuild ckeditor:
 
