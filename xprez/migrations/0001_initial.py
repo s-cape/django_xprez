@@ -49,15 +49,11 @@ class Migration(migrations.Migration):
                 ("content_type", models.CharField(max_length=100)),
                 (
                     "created",
-                    models.DateTimeField(
-                        auto_now_add=True, db_index=True, verbose_name=b"created"
-                    ),
+                    models.DateTimeField(auto_now_add=True, db_index=True, verbose_name=b"created"),
                 ),
                 (
                     "changed",
-                    models.DateTimeField(
-                        auto_now=True, db_index=True, verbose_name=b"changed"
-                    ),
+                    models.DateTimeField(auto_now=True, db_index=True, verbose_name=b"changed"),
                 ),
             ],
             options={

@@ -22,9 +22,7 @@ setup(
     author_email=AUTHOR_EMAIL,
     license=LICENSE,
     url=URL,
-    packages=find_packages(
-        exclude=["tests", "tests.*", "example_app", "example_app.*"]
-    ),
+    packages=find_packages(exclude=["tests", "tests.*", "example_app", "example_app.*"]),
     include_package_data=True,
     classifiers=[
         # "Development Status :: 5 - Production/Stable",

@@ -75,9 +75,7 @@ class XprezAdmin(admin.ModelAdmin):
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         extra_context = self._add_xprez_context(extra_context)
-        return super(XprezAdmin, self).change_view(
-            request, object_id, form_url, extra_context
-        )
+        return super(XprezAdmin, self).change_view(request, object_id, form_url, extra_context)
 
     def add_view(self, request, form_url="", extra_context=None):
         extra_context = self._add_xprez_context(extra_context)
@@ -89,9 +87,7 @@ class XprezAdmin(admin.ModelAdmin):
         contents = None
         to_field = request.POST.get(TO_FIELD_VAR, request.GET.get(TO_FIELD_VAR))
         if to_field and not self.to_field_allowed(request, to_field):
-            raise DisallowedModelAdminToField(
-                "The field %s cannot be referenced." % to_field
-            )
+            raise DisallowedModelAdminToField("The field %s cannot be referenced." % to_field)
 
         model = self.model
         opts = model._meta
@@ -138,15 +134,11 @@ class XprezAdmin(admin.ModelAdmin):
             else:
                 form_validated = False
                 new_object = form.instance
-            formsets, inline_instances = self._create_formsets(
-                request, new_object, change=not add
-            )
+            formsets, inline_instances = self._create_formsets(request, new_object, change=not add)
             if all_valid(formsets) and form_validated:
                 self.save_model(request, new_object, form, not add)
                 self.save_related(request, form, formsets, not add)
-                change_message = self.construct_change_message(
-                    request, form, formsets, add
-                )
+                change_message = self.construct_change_message(request, form, formsets, add)
                 if add:
                     self.log_addition(request, new_object, change_message)
                     return self.response_add(request, new_object)
@@ -160,9 +152,7 @@ class XprezAdmin(admin.ModelAdmin):
             if add:
                 initial = self.get_changeform_initial_data(request)
                 form = ModelForm(initial=initial)
-                formsets, inline_instances = self._create_formsets(
-                    request, form.instance, change=False
-                )
+                formsets, inline_instances = self._create_formsets(request, form.instance, change=False)
             else:
                 form = ModelForm(instance=obj)
                 contents = []
@@ -171,9 +161,7 @@ class XprezAdmin(admin.ModelAdmin):
                         content = content.polymorph()
                         content.build_admin_form(self)
                         contents.append(content)
-                formsets, inline_instances = self._create_formsets(
-                    request, obj, change=True
-                )
+                formsets, inline_instances = self._create_formsets(request, obj, change=True)
 
         adminForm = helpers.AdminForm(
             form,
@@ -184,16 +172,13 @@ class XprezAdmin(admin.ModelAdmin):
         )
         media = self.media + adminForm.media
 
-        inline_formsets = self.get_inline_formsets(
-            request, formsets, inline_instances, obj
-        )
+        inline_formsets = self.get_inline_formsets(request, formsets, inline_instances, obj)
         for inline_formset in inline_formsets:
             media = media + inline_formset.media
 
         context = dict(
             self.admin_site.each_context(request),
-            title=(_("Add %s") if add else _("Change %s"))
-            % force_str(opts.verbose_name),
+            title=(_("Add %s") if add else _("Change %s")) % force_str(opts.verbose_name),
             adminform=adminForm,
             object_id=object_id,
             original=obj,
@@ -201,8 +186,7 @@ class XprezAdmin(admin.ModelAdmin):
             to_field=to_field,
             media=media,
             inline_admin_formsets=inline_formsets,
-            errors=helpers.AdminErrorList(form, formsets)
-            or not all_content_forms_valid,
+            errors=helpers.AdminErrorList(form, formsets) or not all_content_forms_valid,
             preserved_filters=self.get_preserved_filters(request),
             contents=contents,
             copy_url_name="admin:" + self.model._meta.model_name + "_copy",
@@ -213,11 +197,7 @@ class XprezAdmin(admin.ModelAdmin):
 
         # Hide the "Save" and "Save and continue" buttons if "Save as New" was
         # previously chosen to prevent the interface from getting confusing.
-        if (
-            request.method == "POST"
-            and not form_validated
-            and "_saveasnew" in request.POST
-        ):
+        if request.method == "POST" and not form_validated and "_saveasnew" in request.POST:
             context["show_save"] = False
             context["show_save_and_continue"] = False
             # Use the change template instead of the add template.
@@ -225,9 +205,7 @@ class XprezAdmin(admin.ModelAdmin):
 
         context.update(extra_context or {})
 
-        return self.render_change_form(
-            request, context, add=add, change=not add, obj=obj, form_url=form_url
-        )
+        return self.render_change_form(request, context, add=add, change=not add, obj=obj, form_url=form_url)
 
     def add_content_view(self, request, page_pk, content_type):
         content_class = models.contents_manager.get(content_type)
@@ -235,23 +213,17 @@ class XprezAdmin(admin.ModelAdmin):
         container = self._get_container_instance(request, page_pk)
         content = content_class.create_for_page(container)
         content.build_admin_form(self)
-        return JsonResponse(
-            {"template": content.render_admin(), "content_pk": content.pk}
-        )
+        return JsonResponse({"template": content.render_admin(), "content_pk": content.pk})
 
     def add_content_before_view(self, request, before_content_pk, content_type):
         content_class = models.contents_manager.get(content_type)
 
         before_content = models.Content.objects.get(pk=before_content_pk)
         container = before_content.page
-        content = content_class.create_for_page(
-            container, position=before_content.position
-        )
+        content = content_class.create_for_page(container, position=before_content.position)
         content.build_admin_form(self)
 
-        updated_contents_positions = dict(
-            [(c.id, c.position) for c in container.contents.all()]
-        )
+        updated_contents_positions = dict([(c.id, c.position) for c in container.contents.all()])
         return JsonResponse(
             {
                 "template": content.render_admin(),
@@ -264,9 +236,7 @@ class XprezAdmin(admin.ModelAdmin):
         content = models.Content.objects.get(pk=content_pk).polymorph()
         new_content = content.copy()
         new_content.build_admin_form(self)
-        return JsonResponse(
-            {"template": new_content.render_admin(), "content_pk": new_content.pk}
-        )
+        return JsonResponse({"template": new_content.render_admin(), "content_pk": new_content.pk})
 
     def copy_view(self, request, page_pk):
         inst = self.model.objects.get(pk=page_pk)

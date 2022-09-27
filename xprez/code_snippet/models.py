@@ -34,9 +34,7 @@ class CodeSnippet(Content):
 
     title = models.CharField(max_length=150, null=True, blank=True)
     code = models.TextField()
-    lang = models.CharField(
-        "Jazyk", max_length=20, choices=LANG_CHOICES, default="python"
-    )
+    lang = models.CharField("Jazyk", max_length=20, choices=LANG_CHOICES, default="python")
 
     def get_highlighted_code(self):
         lexer_map = {
@@ -46,9 +44,7 @@ class CodeSnippet(Content):
             "php": PhpLexer,
             "xml": DtdLexer,
         }
-        return highlight(
-            self.code, lexer_map[self.lang](), HtmlFormatter(style="colorful")
-        )
+        return highlight(self.code, lexer_map[self.lang](), HtmlFormatter(style="colorful"))
 
 
 contents_manager.register(CodeSnippet)

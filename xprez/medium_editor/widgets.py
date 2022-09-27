@@ -49,9 +49,7 @@ class MediumEditorWidget(forms.widgets.Textarea):
             default_attrs.update(attrs)
 
         if file_upload_dir:
-            default_attrs["data-file-upload"] = reverse_lazy(
-                "medium_file_upload", args=[file_upload_dir]
-            )
+            default_attrs["data-file-upload"] = reverse_lazy("medium_file_upload", args=[file_upload_dir])
             default_attrs["data-file-delete"] = reverse_lazy("medium_file_delete")
 
         super(MediumEditorWidget, self).__init__(default_attrs)

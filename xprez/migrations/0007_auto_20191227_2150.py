@@ -6,11 +6,7 @@ from django.db.models import OneToOneRel
 
 def fill_content_type(apps, schema_editor):
     ContentsContainer = apps.get_model("xprez.ContentsContainer")
-    attrs = [
-        f.name
-        for f in ContentsContainer._meta.get_fields()
-        if isinstance(f, OneToOneRel)
-    ]
+    attrs = [f.name for f in ContentsContainer._meta.get_fields() if isinstance(f, OneToOneRel)]
 
     for container in ContentsContainer.objects.all():
         for attr in attrs:

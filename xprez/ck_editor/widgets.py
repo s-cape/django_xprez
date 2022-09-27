@@ -20,9 +20,7 @@ class CkEditorWidget(forms.widgets.Textarea):
             config = settings.XPREZ_CKEDITOR_CONFIG_FULL
 
         if "simpleUpload" in config and config["simpleUpload"].get("uploadUrl") is None:
-            config["simpleUpload"]["uploadUrl"] = reverse(
-                "xprez:ckeditor_file_upload", args=[file_upload_dir]
-            )
+            config["simpleUpload"]["uploadUrl"] = reverse("xprez:ckeditor_file_upload", args=[file_upload_dir])
 
         default_attrs = {
             "class": "js-ck-editor-source",
