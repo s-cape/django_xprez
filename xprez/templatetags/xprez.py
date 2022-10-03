@@ -29,7 +29,9 @@ def xprez_content_render_front(context, content):
         return polymorph.render_front(extra_context=context.flatten())
     except TypeError:
         warnings.warn(
-            "Deprecation warning: {} render_front() should accept context attribute.".format(type(polymorph)),
+            "Deprecation warning: {} render_front() should accept context attribute.".format(
+                type(polymorph)
+            ),
             DeprecationWarning,
         )
         return polymorph.render_front()

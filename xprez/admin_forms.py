@@ -189,14 +189,18 @@ class TextImageForm(BaseContentForm):
             "image_alignment",
         ) + BaseContentForm.Meta.fields
         widgets = {
-            "text": CkEditorWidget(config=settings.XPREZ_CKEDITOR_CONFIG_FULL_NO_INSERT_PLUGIN),
+            "text": CkEditorWidget(
+                config=settings.XPREZ_CKEDITOR_CONFIG_FULL_NO_INSERT_PLUGIN
+            ),
         }
 
 
 class GridBoxesForm(BaseContentForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.ckeditor_widget_tpl = CkEditorWidget(config=settings.XPREZ_CKEDITOR_CONFIG_FULL)  # TODO: cleanup
+        self.ckeditor_widget_tpl = CkEditorWidget(
+            config=settings.XPREZ_CKEDITOR_CONFIG_FULL
+        )  # TODO: cleanup
 
     class Meta:
         model = GridBoxes

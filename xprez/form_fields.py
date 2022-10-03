@@ -9,7 +9,14 @@ class RelativeFilePathFieldForm(ChoiceField):
     """
 
     def __init__(
-        self, path, match=None, recursive=False, allow_files=True, allow_folders=False, rel_path="", **kwargs
+        self,
+        path,
+        match=None,
+        recursive=False,
+        allow_files=True,
+        allow_folders=False,
+        rel_path="",
+        **kwargs
     ):
         self.path, self.match, self.recursive, self.rel_path = (
             path,

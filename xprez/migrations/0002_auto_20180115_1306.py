@@ -19,17 +19,23 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="codetemplate",
             name="template_name",
-            field=xprez.models.fields.TemplatePathField(blank=True, max_length=255, null=True),
+            field=xprez.models.fields.TemplatePathField(
+                blank=True, max_length=255, null=True
+            ),
         ),
         migrations.AlterField(
             model_name="content",
             name="changed",
-            field=models.DateTimeField(auto_now=True, db_index=True, verbose_name="changed"),
+            field=models.DateTimeField(
+                auto_now=True, db_index=True, verbose_name="changed"
+            ),
         ),
         migrations.AlterField(
             model_name="content",
             name="created",
-            field=models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="created"),
+            field=models.DateTimeField(
+                auto_now_add=True, db_index=True, verbose_name="created"
+            ),
         ),
         migrations.AlterField(
             model_name="gallery",
@@ -67,7 +73,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="video",
             name="video_type",
-            field=models.CharField(choices=[("youtube", "YouTube"), ("vimeo", "Vimeo")], max_length=50),
+            field=models.CharField(
+                choices=[("youtube", "YouTube"), ("vimeo", "Vimeo")], max_length=50
+            ),
         ),
         migrations.AlterField(
             model_name="video",

@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="video",
             name="video_type",
-            field=models.CharField(choices=[("youtube", "YouTube"), ("vimeo", "Vimeo")], max_length=50),
+            field=models.CharField(
+                choices=[("youtube", "YouTube"), ("vimeo", "Vimeo")], max_length=50
+            ),
         ),
     ]

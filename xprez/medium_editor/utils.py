@@ -48,7 +48,10 @@ def parse_text(text_source):
             else:
                 caption = ""
 
-            tag.replaceWith('{%% medium_content_image "%s" "%s" %s %s "%s" %%}' % (url, align, width, height, caption))
+            tag.replaceWith(
+                '{%% medium_content_image "%s" "%s" %s %s "%s" %%}'
+                % (url, align, width, height, caption)
+            )
 
     for tag in soup.find_all(attrs={"contenteditable": True}):
         del tag["contenteditable"]

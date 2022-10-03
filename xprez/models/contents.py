@@ -49,7 +49,9 @@ class MediumEditor(Content):
     text = models.TextField()
     # css_class = models.CharField(max_length=100, null=True, blank=True)
     box = models.BooleanField(default=False)
-    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
+    width = models.CharField(
+        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
+    )
 
     class AdminMedia:
         js = MediumEditorWidget.Media.js
@@ -74,7 +76,9 @@ class CkEditorFileUploadMixin:
             file_data = request.FILES["upload"]
             name = file_data.name
             random_dir_name = random_string(16)
-            full_directory = path.join(django_settings.MEDIA_ROOT, directory, random_dir_name)
+            full_directory = path.join(
+                django_settings.MEDIA_ROOT, directory, random_dir_name
+            )
             if not path.isdir(full_directory):
                 makedirs(full_directory)
 
@@ -108,7 +112,9 @@ class CkEditor(CkEditorFileUploadMixin, Content):
     text = models.TextField()
     # css_class = models.CharField(max_length=100, null=True, blank=True)
     box = models.BooleanField(default=False)
-    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_TEXT)
+    width = models.CharField(
+        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_TEXT
+    )
     content_centered = models.BooleanField(default=False)
 
     class AdminMedia:
@@ -154,7 +160,9 @@ class QuoteContent(FormsetContent):
 
 class Quote(ContentItem):
     content_foreign_key = "content"
-    content = models.ForeignKey(QuoteContent, related_name="quotes", on_delete=models.CASCADE)
+    content = models.ForeignKey(
+        QuoteContent, related_name="quotes", on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=255)
     job_title = models.CharField(max_length=255)
     image = models.ImageField(upload_to="quotes", null=True, blank=True)
@@ -185,7 +193,9 @@ class Gallery(AjaxUploadFormsetContent):
     verbose_name = "Gallery / Image"
     formset_factory = "xprez.admin_forms.PhotoFormSet"
 
-    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
+    width = models.CharField(
+        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
+    )
     columns = models.PositiveSmallIntegerField(default=1)
     divided = models.BooleanField(default=False)
     crop = models.BooleanField(default=False)
@@ -209,7 +219,9 @@ class Gallery(AjaxUploadFormsetContent):
 
 class Photo(ContentItem):
     content_foreign_key = "gallery"
-    gallery = models.ForeignKey(Gallery, related_name="photos", on_delete=models.CASCADE)
+    gallery = models.ForeignKey(
+        Gallery, related_name="photos", on_delete=models.CASCADE
+    )
     image = models.ImageField(upload_to="photos")
     description = models.CharField(max_length=255, blank=True, null=True)
     alt_text = models.CharField(max_length=255, blank=True)
@@ -243,7 +255,9 @@ class Video(Content):
 
     poster_image = models.ImageField(upload_to="video", null=True, blank=True)
     url = models.URLField()
-    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
+    width = models.CharField(
+        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
+    )
     video_type = models.CharField(choices=TYPE_CHOICES, max_length=50)
     video_id = models.CharField(max_length=200)
 
@@ -301,7 +315,9 @@ class NumbersContent(FormsetContent):
 
 class Number(ContentItem):
     content_foreign_key = "content"
-    content = models.ForeignKey(NumbersContent, related_name="numbers", on_delete=models.CASCADE)
+    content = models.ForeignKey(
+        NumbersContent, related_name="numbers", on_delete=models.CASCADE
+    )
     number = models.IntegerField(null=True, blank=True)
     suffix = models.CharField(max_length=10, null=True, blank=True)
     title = models.CharField(max_length=100, blank=True)
@@ -375,7 +391,9 @@ class DownloadContent(AjaxUploadFormsetContent):
 
 class Attachment(ContentItem):
     content_foreign_key = "content"
-    content = models.ForeignKey(DownloadContent, related_name="attachments", on_delete=models.CASCADE)
+    content = models.ForeignKey(
+        DownloadContent, related_name="attachments", on_delete=models.CASCADE
+    )
     file = models.FileField(upload_to="files", max_length=300)
     name = models.CharField(max_length=100, blank=True)
     position = models.PositiveSmallIntegerField()
@@ -423,7 +441,9 @@ class TextImageBase(Content):
 
     image = models.ImageField(upload_to="text_image_images")
     text = models.TextField()
-    image_alignment = models.CharField(choices=IMAGE_ALIGNMENT_CHOICES, default=ALIGNMENT_LEFT, max_length=15)
+    image_alignment = models.CharField(
+        choices=IMAGE_ALIGNMENT_CHOICES, default=ALIGNMENT_LEFT, max_length=15
+    )
     # css_class = models.CharField(max_length=100, null=True, blank=True)
 
     class AdminMedia:
@@ -482,7 +502,9 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
 
     columns = models.PositiveSmallIntegerField(default=2)
     margin = models.CharField(max_length=4, choices=MARGIN_CHOICES, default="m")
-    width = models.CharField(max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL)
+    width = models.CharField(
+        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
+    )
     text_size = models.CharField(max_length=2, choices=TEXT_SIZE_CHOICES, default="m")
 
     padded = models.BooleanField(default=True)
@@ -499,7 +521,9 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
                 # boxes.append(medium_editor_render_text_parsed(medium_editor_parse_text(box_content)))
                 boxes.append(
                     ckeditor_parse_text.render_text_parsed(
-                        ckeditor_parse_text.parse_text(box_content, extra_context["request"])
+                        ckeditor_parse_text.parse_text(
+                            box_content, extra_context["request"]
+                        )
                     )
                 )
 

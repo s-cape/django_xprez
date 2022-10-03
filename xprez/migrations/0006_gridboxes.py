@@ -50,7 +50,9 @@ class Migration(migrations.Migration):
                 ("border", models.BooleanField(default=True)),
                 (
                     "boxes",
-                    django.contrib.postgres.fields.ArrayField(base_field=models.TextField(), null=True, size=None),
+                    django.contrib.postgres.fields.ArrayField(
+                        base_field=models.TextField(), null=True, size=None
+                    ),
                 ),
             ],
             bases=("xprez.content",),
