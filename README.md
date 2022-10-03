@@ -129,7 +129,7 @@ Deploying to pip
 
     file:/<path_to_package>/dist/django_xprez-<version>.tar.gz
 
-#### upload to testpypi (username: jakub.dolejsek)
+#### upload to testpypi
 
     python -m twine upload --repository testpypi dist/*
 
@@ -137,7 +137,7 @@ Deploying to pip
 
     --extra-index-url https://test.pypi.org/simple/
 
-#### upload to pypi (username: jakub.dolejsek)
+#### upload to pypi
 
     python -m twine upload dist/*
 
