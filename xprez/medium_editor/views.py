@@ -20,22 +20,20 @@ from xprez.utils import random_string
 @csrf_exempt
 @staff_member_required
 def medium_file_upload(request, directory):
-    if request.method == 'POST':
-        file_data = request.FILES['files[]']
+    if request.method == "POST":
+        file_data = request.FILES["files[]"]
         name = file_data.name
         random_dir_name = random_string(16)
         full_directory = path.join(settings.MEDIA_ROOT, directory, random_dir_name)
         if not path.isdir(full_directory):
             makedirs(full_directory)
 
-        with open(path.join(full_directory, name), 'wb+') as destination:
+        with open(path.join(full_directory, name), "wb+") as destination:
             for chunk in file_data.chunks():
                 destination.write(chunk)
 
         filename = path.join(directory, random_dir_name, name)
-        response_data = {
-            'files': [{'url': settings.MEDIA_URL + filename}]
-        }
+        response_data = {"files": [{"url": settings.MEDIA_URL + filename}]}
         return JsonResponse(response_data)
 
 

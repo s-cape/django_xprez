@@ -7,19 +7,36 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0009_gridboxes_width'),
+        ("xprez", "0009_gridboxes_width"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CkEditor',
+            name="CkEditor",
             fields=[
-                ('content_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='xprez.Content')),
-                ('text', models.TextField()),
-                ('css_class', models.CharField(blank=True, max_length=100, null=True)),
-                ('box', models.BooleanField(default=False)),
-                ('width', models.CharField(choices=[('full', 'full'), ('mid', 'mid'), ('text', 'text')], default='full', max_length=50)),
+                (
+                    "content_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.Content",
+                    ),
+                ),
+                ("text", models.TextField()),
+                ("css_class", models.CharField(blank=True, max_length=100, null=True)),
+                ("box", models.BooleanField(default=False)),
+                (
+                    "width",
+                    models.CharField(
+                        choices=[("full", "full"), ("mid", "mid"), ("text", "text")],
+                        default="full",
+                        max_length=50,
+                    ),
+                ),
             ],
-            bases=('xprez.content',),
+            bases=("xprez.content",),
         ),
     ]

@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0005_auto_20191025_1352'),
+        ("xprez", "0005_auto_20191025_1352"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='contentscontainer',
-            name='content_type',
-            field=models.CharField(default='', editable=False, max_length=100),
+            model_name="contentscontainer",
+            name="content_type",
+            field=models.CharField(default="", editable=False, max_length=100),
             preserve_default=False,
         ),
     ]

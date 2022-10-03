@@ -34,30 +34,46 @@ class Content(models.Model):
     verbose_name = NotImplemented
     icon_name = NotImplemented
 
-    SIZE_FULL = 'full'
-    SIZE_MID = 'mid'
-    SIZE_TEXT = 'text'
+    SIZE_FULL = "full"
+    SIZE_MID = "mid"
+    SIZE_TEXT = "text"
     SIZE_CHOICES = (
-        (SIZE_FULL, 'full'),
-        (SIZE_MID, 'mid'),
-        (SIZE_TEXT, 'text'),
+        (SIZE_FULL, "full"),
+        (SIZE_MID, "mid"),
+        (SIZE_TEXT, "text"),
     )
 
-    page = models.ForeignKey(xprez_settings.XPREZ_CONTAINER_MODEL_CLASS, on_delete=models.CASCADE, related_name='contents')
+    page = models.ForeignKey(
+        xprez_settings.XPREZ_CONTAINER_MODEL_CLASS,
+        on_delete=models.CASCADE,
+        related_name="contents",
+    )
     position = models.PositiveSmallIntegerField()
     content_type = models.CharField(max_length=100)
-    created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True, verbose_name='created')
-    changed = models.DateTimeField(auto_now=True, editable=False, db_index=True, verbose_name='changed')
+    created = models.DateTimeField(
+        auto_now_add=True, editable=False, db_index=True, verbose_name="created"
+    )
+    changed = models.DateTimeField(
+        auto_now=True, editable=False, db_index=True, verbose_name="changed"
+    )
     visible = models.BooleanField(default=True)
 
     css_class = models.CharField(max_length=100, null=True, blank=True)
 
     MARGIN_DEFAULT = 2
-    MARGIN_CHOICES = ((0, 'None'), (1, 'S'), (MARGIN_DEFAULT, 'M'), (3, 'L'), (4, 'XL'),)
-    margin_bottom = models.PositiveSmallIntegerField(choices=MARGIN_CHOICES, default=MARGIN_DEFAULT)
+    MARGIN_CHOICES = (
+        (0, "None"),
+        (1, "S"),
+        (MARGIN_DEFAULT, "M"),
+        (3, "L"),
+        (4, "XL"),
+    )
+    margin_bottom = models.PositiveSmallIntegerField(
+        choices=MARGIN_CHOICES, default=MARGIN_DEFAULT
+    )
 
     class Meta:
-        ordering = ('position',)
+        ordering = ("position",)
 
     class AdminMedia:
         js = []
@@ -81,10 +97,13 @@ class Content(models.Model):
         if not for_page:
             for_page = self.page
 
-        initial = dict([
-            (field.name, getattr(self, field.name))
-            for field in self._meta.fields if not field.primary_key
-        ])
+        initial = dict(
+            [
+                (field.name, getattr(self, field.name))
+                for field in self._meta.fields
+                if not field.primary_key
+            ]
+        )
         inst = self.__class__(**initial)
         inst.position = self._count_new_content_position(for_page)
         inst.page = for_page
@@ -99,9 +118,9 @@ class Content(models.Model):
 
     @classmethod
     def _count_new_content_position(cls, page):
-        result = page.contents.all().aggregate(Max('position'))
-        if result['position__max'] is not None:
-            position = result['position__max'] + 1
+        result = page.contents.all().aggregate(Max("position"))
+        if result["position__max"] is not None:
+            position = result["position__max"] + 1
         else:
             position = 0
         return position
@@ -112,15 +131,19 @@ class Content(models.Model):
             position = cls._count_new_content_position(page)
         else:  # add on specific position
             if page.contents.filter(position=position).exists():
-                page.contents.filter(position__gte=position).update(position=F('position') + 1)
+                page.contents.filter(position__gte=position).update(
+                    position=F("position") + 1
+                )
         return cls.objects.create(page=page, position=position, **kwargs)
 
     def get_form_prefix(self):
-        return 'content-' + str(self.pk)
+        return "content-" + str(self.pk)
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class(self.form_class)
-        self.admin_form = form_class(instance=self, prefix=self.get_form_prefix(), data=data, files=files)
+        self.admin_form = form_class(
+            instance=self, prefix=self.get_form_prefix(), data=data, files=files
+        )
         self.admin_form.admin = admin
 
     def is_admin_form_valid(self):
@@ -131,10 +154,13 @@ class Content(models.Model):
         inst.save()
 
     def render_admin(self):
-        return render_to_string(self.admin_template_name, {
-            'content': self,
-            'content_types': self.admin_form.admin._get_allowed_contents(),
-        })
+        return render_to_string(
+            self.admin_template_name,
+            {
+                "content": self,
+                "content_types": self.admin_form.admin._get_allowed_contents(),
+            },
+        )
 
     def show_front(self):
         """
@@ -145,9 +171,9 @@ class Content(models.Model):
     def render_front(self, extra_context=None):
         if self.show_front():
             context = extra_context or {}
-            context['content'] = self
+            context["content"] = self
             return render_to_string(self.front_template_name, context)
-        return ''
+        return ""
 
     def admin_has_errors(self):
         return bool(self.admin_form.errors)
@@ -174,7 +200,13 @@ class FormsetContent(Content):
     def build_admin_form(self, admin, data=None, files=None):
         super(FormsetContent, self).build_admin_form(admin, data)
         FormSet = import_class(self.formset_factory)
-        self.formset = FormSet(instance=self, queryset=self.get_formset_queryset(), data=data, files=files, prefix='{}s-{}'.format(self.identifier(), self.pk))
+        self.formset = FormSet(
+            instance=self,
+            queryset=self.get_formset_queryset(),
+            data=data,
+            files=files,
+            prefix="{}s-{}".format(self.identifier(), self.pk),
+        )
 
     def save_admin_form(self, request):
         super(FormsetContent, self).save_admin_form(request)
@@ -184,7 +216,9 @@ class FormsetContent(Content):
         return self.admin_form.is_valid() and self.formset.is_valid()
 
     def admin_has_errors(self):
-        return super(FormsetContent, self).admin_has_errors() or (self.formset.total_error_count() > 0 and not self.formset.is_valid())
+        return super(FormsetContent, self).admin_has_errors() or (
+            self.formset.total_error_count() > 0 and not self.formset.is_valid()
+        )
 
     def copy(self, for_page=None):
         inst = super(FormsetContent, self).copy(for_page)
@@ -200,33 +234,51 @@ class AjaxUploadFormsetContent(FormsetContent):
         abstract = True
 
     class AdminMedia:
-        js = ('xprez/admin/libs/dropzone/dropzone.js', 'xprez/admin/js/ajax_upload_formset.js')
+        js = (
+            "xprez/admin/libs/dropzone/dropzone.js",
+            "xprez/admin/js/ajax_upload_formset.js",
+        )
 
     @classmethod
     @method_decorator(staff_member_required)
     def upload_file_view(cls, request, content_pk):
         content = cls.objects.get(pk=content_pk)
-        file_list = request.FILES.getlist('file')
+        file_list = request.FILES.getlist("file")
         if len(file_list) > 0:
             file_ = file_list[0]
             FormSet = import_class(cls.formset_factory)
             item = FormSet.model.create_from_file(file_, content)
             queryset = content.get_formset_queryset()
-            item_formset = FormSet(instance=content, queryset=queryset, prefix='{}s-{}'.format(cls.identifier(), content.pk))
+            item_formset = FormSet(
+                instance=content,
+                queryset=queryset,
+                prefix="{}s-{}".format(cls.identifier(), content.pk),
+            )
             item_form = item_formset.forms[-1]
-            return JsonResponse(data={
-                'form': item_form.as_p(),
-                'template': render_to_string(cls.admin_formset_item_template_name, {'item': item, 'content': content, 'number': queryset.count() - 1})
-            })
-        return JsonResponse(status=400, data={
-            'error': 'No files uploaded'
-        })
+            return JsonResponse(
+                data={
+                    "form": item_form.as_p(),
+                    "template": render_to_string(
+                        cls.admin_formset_item_template_name,
+                        {
+                            "item": item,
+                            "content": content,
+                            "number": queryset.count() - 1,
+                        },
+                    ),
+                }
+            )
+        return JsonResponse(status=400, data={"error": "No files uploaded"})
 
     @classmethod
     def get_urls(cls):
         cls_name = cls.__name__.lower()
         return [
-            re_path(r'^%s/upload-item/(?P<content_pk>\d+)/' % cls_name, cls.upload_file_view, name='%s_ajax_upload_item' % cls_name),
+            re_path(
+                r"^%s/upload-item/(?P<content_pk>\d+)/" % cls_name,
+                cls.upload_file_view,
+                name="%s_ajax_upload_item" % cls_name,
+            ),
         ]
 
 
@@ -239,10 +291,13 @@ class ContentItem(models.Model):
     def copy(self, for_content, save=True):
         if not for_content:
             for_content = getattr(self, self.content_foreign_key)
-        initial = dict([
-            (field.name, getattr(self, field.name))
-            for field in self._meta.fields if not field.primary_key
-        ])
+        initial = dict(
+            [
+                (field.name, getattr(self, field.name))
+                for field in self._meta.fields
+                if not field.primary_key
+            ]
+        )
         inst = self.__class__(**initial)
         setattr(inst, self.content_foreign_key, for_content)
         if save:

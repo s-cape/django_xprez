@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0016_auto_20220208_1355'),
+        ("xprez", "0016_auto_20220208_1355"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ckeditor',
-            name='width',
-            field=models.CharField(choices=[('full', 'full'), ('mid', 'mid'), ('text', 'text')], default='text', max_length=50),
+            model_name="ckeditor",
+            name="width",
+            field=models.CharField(
+                choices=[("full", "full"), ("mid", "mid"), ("text", "text")],
+                default="text",
+                max_length=50,
+            ),
         ),
     ]

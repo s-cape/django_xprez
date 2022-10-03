@@ -4,9 +4,9 @@ from django.db import migrations
 
 
 def fill_css_class(apps, schema_editor):
-    MediumEditor = apps.get_model('xprez.MediumEditor')
-    CkEditor = apps.get_model('xprez.CkEditor')
-    TextImage = apps.get_model('xprez.TextImage')
+    MediumEditor = apps.get_model("xprez.MediumEditor")
+    CkEditor = apps.get_model("xprez.CkEditor")
+    TextImage = apps.get_model("xprez.TextImage")
 
     for Model in [TextImage, MediumEditor, CkEditor]:
         for obj in Model.objects.all():
@@ -21,7 +21,7 @@ def noop(*args, **kwargs):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0010_auto_20220204_1540'),
+        ("xprez", "0010_auto_20220204_1540"),
     ]
 
     operations = [

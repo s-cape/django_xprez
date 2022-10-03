@@ -6,38 +6,44 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0010_ckeditor'),
+        ("xprez", "0010_ckeditor"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='mediumeditor',
-            old_name='css_class',
-            new_name='css_class_old',
+            model_name="mediumeditor",
+            old_name="css_class",
+            new_name="css_class_old",
         ),
         migrations.RenameField(
-            model_name='ckeditor',
-            old_name='css_class',
-            new_name='css_class_old',
+            model_name="ckeditor",
+            old_name="css_class",
+            new_name="css_class_old",
         ),
         migrations.RenameField(
-            model_name='textimage',
-            old_name='css_class',
-            new_name='css_class_old',
+            model_name="textimage",
+            old_name="css_class",
+            new_name="css_class_old",
         ),
         migrations.AddField(
-            model_name='content',
-            name='css_class',
+            model_name="content",
+            name="css_class",
             field=models.CharField(blank=True, max_length=100, null=True),
         ),
         migrations.AddField(
-            model_name='content',
-            name='margin_bottom',
-            field=models.PositiveSmallIntegerField(choices=[(0, 'None'), (1, 'S'), (2, 'M'), (3, 'L'), (4, 'XL')], default=2),
+            model_name="content",
+            name="margin_bottom",
+            field=models.PositiveSmallIntegerField(
+                choices=[(0, "None"), (1, "S"), (2, "M"), (3, "L"), (4, "XL")],
+                default=2,
+            ),
         ),
         migrations.AddField(
-            model_name='content',
-            name='margin_top',
-            field=models.PositiveSmallIntegerField(choices=[(0, 'None'), (1, 'S'), (2, 'M'), (3, 'L'), (4, 'XL')], default=2),
+            model_name="content",
+            name="margin_top",
+            field=models.PositiveSmallIntegerField(
+                choices=[(0, "None"), (1, "S"), (2, "M"), (3, "L"), (4, "XL")],
+                default=2,
+            ),
         ),
     ]

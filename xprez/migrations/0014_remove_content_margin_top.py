@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0013_merge_20220207_1020'),
+        ("xprez", "0013_merge_20220207_1020"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='content',
-            name='margin_top',
+            model_name="content",
+            name="margin_top",
         ),
     ]

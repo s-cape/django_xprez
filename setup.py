@@ -9,7 +9,7 @@ DESCRIPTION = "Django CMS for presentation websites"
 AUTHOR = "Michal Májský, Martin Kappel, Jakub Dolejšek, Michal Tilsch - s-cape.cz & mimatik.com"
 AUTHOR_EMAIL = "michal.majsky@s-cape.cz"
 URL = "https://github.com/s-cape/django_xprez"
-VERSION = '0.1.2'
+VERSION = "0.1.2"
 LICENSE = "Mozilla Public License 2.0 (MPL 2.0)"
 
 setup(
@@ -17,12 +17,14 @@ setup(
     version=VERSION,
     description=DESCRIPTION,
     long_description=(Path(__file__).parent / "README.md").read_text(),
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     license=LICENSE,
     url=URL,
-    packages=find_packages(exclude=['tests', 'tests.*', 'example_app', 'example_app.*']),
+    packages=find_packages(
+        exclude=["tests", "tests.*", "example_app", "example_app.*"]
+    ),
     include_package_data=True,
     classifiers=[
         # "Development Status :: 5 - Production/Stable",
@@ -39,7 +41,7 @@ setup(
         "beautifulsoup4>=4.5.3",
         "Pillow>=3.0.0",
         "sorl-thumbnail",
-        "django>=1.10"
+        "django>=1.10",
     ],
     # test_suite="runtests.run_tests",
 )

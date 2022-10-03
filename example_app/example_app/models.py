@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.urls import reverse
 from xprez.models import ContentsContainer
@@ -15,7 +14,7 @@ class Page(ContentsContainer):
         return self.__str__()
 
     def get_absolute_url(self):
-        return reverse('page', args=[self.slug])
+        return reverse("page", args=[self.slug])
 
     def copy(self):
         new_inst = self.__class__(title="Copy of " + self.title)
@@ -31,5 +30,5 @@ class Page(ContentsContainer):
         return new_inst
 
     class Meta:
-        verbose_name_plural = 'Pages'
-        verbose_name = 'Page'
+        verbose_name_plural = "Pages"
+        verbose_name = "Page"

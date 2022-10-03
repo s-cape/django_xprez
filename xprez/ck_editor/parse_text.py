@@ -14,23 +14,23 @@ except ImportError:
 
 def parse_text(text_source, request):
     if not text_source:
-        return ''
-    soup = BeautifulSoup(text_source, 'html5lib')
+        return ""
+    soup = BeautifulSoup(text_source, "html5lib")
 
     # extract empty p elements from end of text
-    for last_p in reversed(soup.find_all('p')):
+    for last_p in reversed(soup.find_all("p")):
         if last_p.text:
             break
         else:
             last_p.extract()
 
-    for tag in soup.find_all('figure', attrs={'class': 'image'}):
+    for tag in soup.find_all("figure", attrs={"class": "image"}):
 
-        tag_img = tag.find('img')
+        tag_img = tag.find("img")
         if tag_img:
-            url = tag_img.get('src')
+            url = tag_img.get("src")
 
-            if not url.lower().startswith('http') and request:
+            if not url.lower().startswith("http") and request:
                 url = request.build_absolute_uri(url)
 
             if sys.version_info >= (3, 0):
@@ -39,36 +39,45 @@ def parse_text(text_source, request):
                 file = cStringIO.StringIO(urllib.urlopen(url).read())
             im = Image.open(file)
             width, height = im.size
-            if 'image-style-align-right' in tag['class']:
-                align = 'right'
-            elif 'image-style-align-left' in tag['class']:
-                align = 'left'
+            if "image-style-align-right" in tag["class"]:
+                align = "right"
+            elif "image-style-align-left" in tag["class"]:
+                align = "left"
             else:
-                align = 'center'
+                align = "center"
 
-            caption_tag = tag.find('figcaption')
+            caption_tag = tag.find("figcaption")
             if caption_tag:
                 caption = caption_tag.text
             else:
-                caption = ''
+                caption = ""
 
-            alt_text = tag_img.get('alt', '')
+            alt_text = tag_img.get("alt", "")
 
-            tag_link = tag.find('a')
+            tag_link = tag.find("a")
             if tag_link:
-                link_url = tag_link.get('href')
-                link_new_window = tag_link.get('target') == '_blank'
+                link_url = tag_link.get("href")
+                link_new_window = tag_link.get("target") == "_blank"
             else:
                 link_url = ""
                 link_new_window = False
 
-            tag.replaceWith('{%% ckeditor_content_image "%s" "%s" %s %s caption="%s" alt_text="%s" link_url="%s" link_new_window=%s %%}' % (
-                url, align, width, height, caption, alt_text, link_url,
-                'True' if link_new_window else 'False',
-            ))
+            tag.replaceWith(
+                '{%% ckeditor_content_image "%s" "%s" %s %s caption="%s" alt_text="%s" link_url="%s" link_new_window=%s %%}'
+                % (
+                    url,
+                    align,
+                    width,
+                    height,
+                    caption,
+                    alt_text,
+                    link_url,
+                    "True" if link_new_window else "False",
+                )
+            )
 
-    for tag in soup.find_all(attrs={'contenteditable': True}):
-        del tag['contenteditable']
+    for tag in soup.find_all(attrs={"contenteditable": True}):
+        del tag["contenteditable"]
 
     if sys.version_info >= (3, 0):
         text_parsed = str(soup)
@@ -78,7 +87,7 @@ def parse_text(text_source, request):
 
 
 def render_text_parsed(text_parsed, extra_context={}):
-    t = Template('{% load xprez %}' + text_parsed)
+    t = Template("{% load xprez %}" + text_parsed)
     c = Context({})
     c.update(extra_context)
     return mark_safe(t.render(c))

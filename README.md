@@ -1,4 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/django-xprez.svg)](https://badge.fury.io/py/django-xprez)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Django Xprez
 ============
@@ -91,6 +92,9 @@ Quick start
 
 Development
 -----------
+To setup automated black formatting connected to git commits:
+- install [pre-commit](https://pre-commit.com/#installation)
+- run `pre-commit install`
 
 To rebuild ckeditor:
 

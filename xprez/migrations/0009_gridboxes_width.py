@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('xprez', '0008_merge_20200129_1159'),
+        ("xprez", "0008_merge_20200129_1159"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='gridboxes',
-            name='width',
-            field=models.CharField(choices=[('full', 'full'), ('mid', 'mid'), ('text', 'text')], default='full', max_length=50),
+            model_name="gridboxes",
+            name="width",
+            field=models.CharField(
+                choices=[("full", "full"), ("mid", "mid"), ("text", "text")],
+                default="full",
+                max_length=50,
+            ),
         ),
     ]
