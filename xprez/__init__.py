@@ -2,8 +2,6 @@ from collections import OrderedDict
 
 from django.utils.module_loading import autodiscover_modules
 
-from .settings import XPREZ_DEFAULT_ALLOWED_CONTENTS, XPREZ_DEFAULT_EXCLUDED_CONTENTS
-
 
 class ContentTypeManager:
     def get(self, content_type):
@@ -60,9 +58,18 @@ class ContentTypeManager:
 
     def _get_allowed_contents(
         self,
-        allowed_contents=XPREZ_DEFAULT_ALLOWED_CONTENTS,
-        excluded_contents=XPREZ_DEFAULT_EXCLUDED_CONTENTS,
+        allowed_contents=None,
+        excluded_contents=None,
     ):
+        if allowed_contents is None:
+            from .settings import XPREZ_DEFAULT_ALLOWED_CONTENTS
+
+            allowed_contents = XPREZ_DEFAULT_ALLOWED_CONTENTS
+        if excluded_contents is None:
+            from .settings import XPREZ_DEFAULT_EXCLUDED_CONTENTS
+
+            excluded_contents = XPREZ_DEFAULT_EXCLUDED_CONTENTS
+
         content_types = []
         if allowed_contents == "__all__":
             content_types = self.all_as_list()
