@@ -172,6 +172,10 @@
 		}
 	}
 
+	img {
+		max-width: 100%;
+	}
+
 	figure.media {
 		&:not(:first-child) {
 			margin-top: $text-module-media-mt;

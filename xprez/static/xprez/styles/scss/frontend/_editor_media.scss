@@ -27,20 +27,40 @@
 }
 .medium-insert-images-right, .medium-insert-embeds-right,
 .ck-widget.image-style-align-right {
-	max-width: 33.33%;
+	max-width: 40%;
 	margin: 0 0 $g 30px;
 	float: right;
+
 	figure {
 		margin: $g*.5 0 $g 0;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	@media screen and (max-width: 500px) {
+		max-width: 100%;
+		margin: 0 0 $g 0;
 	}
 }
 .medium-insert-images-left, .medium-insert-embeds-left,
 .ck-widget.image-style-align-left {
-	max-width: 33.33%;
+	max-width: 40%;
 	margin: 0 30px $g 0;
 	float: left;
+
 	figure {
 		margin: $g*.5 0 $g 0;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	@media screen and (max-width: 500px) {
+		max-width: 100%;
+		margin: 0 0 $g 0;
 	}
 }
 
@@ -56,5 +76,9 @@
 		margin-bottom: $g;
 		opacity: 0.7;
 		background: none;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
 	}
 }
