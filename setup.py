@@ -9,7 +9,7 @@ DESCRIPTION = "Django CMS for presentation websites"
 AUTHOR = "Michal Májský, Martin Kappel, Jakub Dolejšek, Michal Tilsch - s-cape.cz & mimatik.com"
 AUTHOR_EMAIL = "michal.majsky@s-cape.cz"
 URL = "https://github.com/s-cape/django_xprez"
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 LICENSE = "Mozilla Public License 2.0 (MPL 2.0)"
 
 setup(
@@ -22,9 +22,7 @@ setup(
     author_email=AUTHOR_EMAIL,
     license=LICENSE,
     url=URL,
-    packages=find_packages(
-        exclude=["tests", "tests.*", "example_app", "example_app.*"]
-    ),
+    packages=find_packages(exclude=["tests", "tests.*", "example_app", "example_app.*"]),
     include_package_data=True,
     classifiers=[
         # "Development Status :: 5 - Production/Stable",

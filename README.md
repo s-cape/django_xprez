@@ -109,8 +109,24 @@ To rebuild css styles
     npm run build (or `watch` for developing)
 
 
-Deploying to pip
+Deploying new version
 ----------------
+
+#### Tagging new version
+
+Update setup.py -> VERSION
+
+On localhost run:
+```
+    git tag vX.Y.Z
+    git push origin vX.Y.Z
+```
+
+#### Draft release on github
+
+Go to: `https://github.com/s-cape/django_xprez/releases` -> `Draft new release`
+Select tag `vX.Y.Z` and name `vX.Y.Z`
+
 
 #### requirements
 
