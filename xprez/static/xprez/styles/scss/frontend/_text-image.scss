@@ -58,7 +58,7 @@ $ti-break-m: $textimage-breakpoint;
 	}
 
 	@media only screen and (max-width: ($break-s)) {
-		padding: 0 $s-space;
+		padding: 0 $mobile-edge-space;
 	}
 }
 .xprez-text-image--text {
