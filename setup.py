@@ -39,7 +39,7 @@ setup(
         "beautifulsoup4>=4.5.3",
         "Pillow>=3.0.0",
         "sorl-thumbnail",
-        "django>=1.10",
+        "django>=3.1",
     ],
     # test_suite="runtests.run_tests",
 )
