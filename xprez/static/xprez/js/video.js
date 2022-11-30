@@ -1,20 +1,29 @@
-function xprezCheckVideoPoster() {
-    var $activeElement = $(document.activeElement);
-    if ($activeElement.hasClass('js-xprez-video-with-poster')) {
-        $activeElement.closest('.xprez-module').find('.js-xprez-video-poster').hide();
-        $activeElement.removeClass('js-xprez-video-with-poster');
-    }
-}
+function initPosters() {
+    $('.js-video-with-poster').each(function (index, el) {
+        var $el = $(el);
+        var $poster = $el.find('.js-poster');
+        $poster.on('click', function () {
+            var $youtube = $el.find('.js-youtube');
+            if ($youtube.length) {
+                new YT.Player($youtube.attr('id'), {
+                  events: {
+                    'onReady': function(event) {
+                        event.target.playVideo();
+                    }
+                  }
+                });
+                setTimeout(function() {
+                    $poster.hide();
+                }, 250);
+            }
 
-function xprezInitVideoHidePoster() {
-    focus();
-    $(window).blur(function() { xprezCheckVideoPoster(); });  // detect if window lose focus, possibly to iframe
-    setInterval(xprezCheckVideoPoster, 500);  // Fallback in case blur detection does not work. For example when you have multiple iframes.
-
-    // in case css pointer-events: none does not work (opera mini)
-    $('.js-xprez-video-poster').click(function () {
-        $(this).hide();
+            var $vimeo = $el.find('.js-vimeo');
+            if ($vimeo.length) {
+                new Vimeo.Player($vimeo[0]).play();
+                $poster.hide();
+            }
+        })
     });
 }
 
-xprezInitVideoHidePoster();
+$(function () { initPosters() });

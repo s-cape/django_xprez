@@ -1,10 +1,10 @@
 {% extends 'xprez/contents/base.html' %}
 {% load thumbnail xprez %}
 
-{% block css_class_extra %}xprez-video {{ content.width }}-width{% endblock %}
+{% block css_class_extra %}xprez-video {{ content.width }}-width {% if content.poster_image %}js-video-with-poster{% endif %}{% endblock %}
 
 {% block content_in %}
-    <div class="xprez-video-item js-xprez-video-item">
+    <div class="xprez-video-item">
         {% if content.poster_image %}
             <style>
                 .xprez-video-poster-{{ content.video_id }} {
@@ -33,19 +33,19 @@
                     {% endthumbnail %}
                     }
                 }
-                .js-xprez-video-poster { pointer-events: none }
             </style>
-            <div class="js-xprez-video-poster xprez-video-poster-{{ content.video_id }}"></div>
+            <div class="js-poster xprez-video-poster-{{ content.video_id }}"></div>
         {% endif %}
         <iframe
-            id="video-{{ content.pk }}" width="560" height="315"
-            class="js-xprez-video{% if content.poster_image %} js-xprez-video-with-poster{% endif %}"
+            id="video-{{ content.pk }}"
+            width="560" height="315"
+            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
+            allow="autoplay"
             {% if content.video_type == 'youtube' %}
-                src="https://www.youtube.com/embed/{{ content.video_id }}"
+                class="js-youtube" src="https://www.youtube.com/embed/{{ content.video_id }}?enablejsapi=1"
             {% elif content.video_type == 'vimeo' %}
-                src="https://player.vimeo.com/video/{{ content.video_id }}?color=ffffff&portrait=0&badge=0"
+                class="js-vimeo" src="https://player.vimeo.com/video/{{ content.video_id }}?color=ffffff&portrait=0&badge=0&api=1"
             {% endif %}
-            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>
-        </iframe>
+        ></iframe>
     </div>
 {% endblock %}

@@ -252,7 +252,11 @@ class Video(Content):
         return self.url
 
     class FrontMedia:
-        js = ("xprez/js/video.js",)
+        js = (
+            "xprez/js/video.js",
+            "//www.youtube.com/iframe_api",
+            "//player.vimeo.com/api/player.js",
+        )
 
 
 class CodeInput(Content):
