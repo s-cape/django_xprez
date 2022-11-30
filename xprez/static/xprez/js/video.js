@@ -1,48 +1,20 @@
-function xprezInitVimeo() {
-    $('.js-video-with-poster').each(function (index, el) {
-        var $wrapper = $(el);
-        var $iframe = $wrapper.find('.js-vimeo');
-        if ($iframe.length) {
-            var $poster = $wrapper.find('.js-poster');
-            var player = new Vimeo.Player($iframe[0]);
-            player.on('play', function() {
-                $poster.hide();
-            });
-        }
-    });
+function xprezCheckVideoPoster() {
+    var $activeElement = $(document.activeElement);
+    if ($activeElement.hasClass('js-xprez-video-with-poster')) {
+        $activeElement.closest('.xprez-module').find('.js-xprez-video-poster').hide();
+        $activeElement.removeClass('js-xprez-video-with-poster');
+    }
 }
 
-function xprezInitYoutube() {
-    $('.js-video-with-poster').each(function (index, el) {
-        var $wrapper = $(el);
-        var $iframe = $wrapper.find('.js-youtube');
-        if ($iframe.length) {
-            var $poster = $wrapper.find('.js-poster');
-            new YT.Player($iframe.attr('id'), {
-                events: {
-                    'onStateChange': function(event) {
-                        if (event.data == YT.PlayerState.PLAYING) {
-                            $poster.hide();
-                        }
-                    }
-                }
-            });
-        }
-    });
-}
+function xprezInitVideoHidePoster() {
+    focus();
+    $(window).blur(function() { xprezCheckVideoPoster(); });  // detect if window lose focus, possibly to iframe
+    setInterval(xprezCheckVideoPoster, 500);  // Fallback in case blur detection does not work. For example when you have multiple iframes.
 
-function xprezInitVideoFallback() {
-    // just in case pointer-events: none does not work (opera mini)
-    $('.js-video-with-poster .js-poster').click(function () {
+    // in case css pointer-events: none does not work (opera mini)
+    $('.js-xprez-video-poster').click(function () {
         $(this).hide();
     });
 }
 
-$(function () {
-    xprezInitVimeo();
-    // youtube init is handled by the youtube onYoutubeIframeAPIReady callback
-    xprezInitVideoFallback();
-});
-
-function onYouTubeIframeAPIReady() { xprezInitYoutube; }
-window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+xprezInitVideoHidePoster();
