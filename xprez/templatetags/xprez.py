@@ -24,7 +24,9 @@ class PrefixableMedia(Media):
 
     def absolute_path(self, path):
         absolute_path = super().absolute_path(path)
-        if XPREZ_USE_ABSOLUTE_URI and not path.startswith(("http://", "https://", "//")):
+        if XPREZ_USE_ABSOLUTE_URI and not path.startswith(
+            ("http://", "https://", "//")
+        ):
             return "{}{}".format(XPREZ_BASE_URL, absolute_path)
         else:
             return absolute_path
@@ -42,7 +44,9 @@ def xprez_content_render_front(context, content):
         return polymorph.render_front(extra_context=context.flatten())
     except TypeError:
         warnings.warn(
-            "Deprecation warning: {} render_front() should accept context attribute.".format(type(polymorph)),
+            "Deprecation warning: {} render_front() should accept context attribute.".format(
+                type(polymorph)
+            ),
             DeprecationWarning,
         )
         return polymorph.render_front()

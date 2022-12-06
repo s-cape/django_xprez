@@ -105,7 +105,9 @@ XPREZ_CKEDITOR_CONFIG_FULL["toolbar"] += (
     "imageUpload",
     "MediaEmbed",
 )
-XPREZ_CKEDITOR_CONFIG_FULL["simpleUpload"] = {"uploadUrl": None}  # filled later in CkEditor.__init__
+XPREZ_CKEDITOR_CONFIG_FULL["simpleUpload"] = {
+    "uploadUrl": None
+}  # filled later in CkEditor.__init__
 XPREZ_CKEDITOR_CONFIG_FULL["mediaEmbed "] = {"previewsInData": True}
 XPREZ_CKEDITOR_CONFIG_FULL["image"] = {
     "toolbar": (
