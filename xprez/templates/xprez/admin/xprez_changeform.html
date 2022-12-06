@@ -7,15 +7,6 @@
     {% endwith %}
 {% endblock %}
 
-{% block extrahead %}
-    {{ block.super }}
-    <script>
-        var $ = $ || django.jQuery;
-        var jQuery = $ || jQuery || django.jQuery;
-    </script>
-    {% include 'xprez/includes/media.html' %}
-{% endblock %}
-
 {% block inline_field_sets %}
     {{ block.super }}
     {% include 'xprez/admin/xprez.html' %}

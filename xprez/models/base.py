@@ -77,11 +77,11 @@ class Content(models.Model):
 
     class AdminMedia:
         js = []
-        css = []
+        css = {}
 
     class FrontMedia:
         js = []
-        css = []
+        css = {}
 
     def __str__(self):
         return self.content_type
