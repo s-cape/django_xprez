@@ -255,7 +255,7 @@ class Video(Content):
         js = (
             "xprez/js/video.js",
             "//www.youtube.com/iframe_api",
-            "xprez/libs/froogaloop/froogaloop.min.js",
+            "//player.vimeo.com/api/player.js",
         )
 
 

@@ -1,5 +1,5 @@
-function handlePoster($contents) {
-    $contents.each(function (index, el) {
+function initPosters() {
+    $('.js-video-with-poster').each(function (index, el) {
         var $el = $(el);
         var $poster = $el.find('.js-poster');
         $poster.on('click', function () {
@@ -15,26 +15,15 @@ function handlePoster($contents) {
                 setTimeout(function() {
                     $poster.hide();
                 }, 250);
-
             }
+
             var $vimeo = $el.find('.js-vimeo');
             if ($vimeo.length) {
-                var player = $f($vimeo[0]);
-                player.api("play");
+                new Vimeo.Player($vimeo[0]).play();
                 $poster.hide();
-
             }
         })
-
     });
-
 }
 
-function initPosters() {
-    handlePoster($('.js-video-with-poster'));
-}
-
-
-$(function () {
-    initPosters()
-});
+$(function () { initPosters() });

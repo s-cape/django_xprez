@@ -6,7 +6,6 @@
 {% block content_in %}
     <div class="xprez-video-item">
         {% if content.poster_image %}
-            
             <style>
                 .xprez-video-poster-{{ content.video_id }} {
                     {% thumbnail content.poster_image "500x278" crop="50%" quality=70 as thumb %}
@@ -37,11 +36,16 @@
             </style>
             <div class="js-poster xprez-video-poster-{{ content.video_id }}"></div>
         {% endif %}
-        {% if content.video_type == 'youtube' %}
-            <iframe class="js-youtube" id="video-{{ content.pk }}" width="560" height="315" src="https://www.youtube.com/embed/{{ content.video_id }}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
-        {% endif %}
-        {% if content.video_type == 'vimeo' %}
-            <iframe class="js-vimeo" id="video-{{ content.pk }}" src="https://player.vimeo.com/video/{{ content.video_id }}?color=ffffff&portrait=0&badge=0&api=1" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-        {% endif %}
+        <iframe
+            id="video-{{ content.pk }}"
+            width="560" height="315"
+            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
+            allow="autoplay"
+            {% if content.video_type == 'youtube' %}
+                class="js-youtube" src="https://www.youtube.com/embed/{{ content.video_id }}?enablejsapi=1"
+            {% elif content.video_type == 'vimeo' %}
+                class="js-vimeo" src="https://player.vimeo.com/video/{{ content.video_id }}?color=ffffff&portrait=0&badge=0&api=1"
+            {% endif %}
+        ></iframe>
     </div>
 {% endblock %}
