@@ -73,6 +73,10 @@ class XprezAdmin(admin.ModelAdmin):
         )
         return extra_context
 
+    @property
+    def media(self, *args, **kwargs):
+        return super().media + contents_manager.admin_media()
+
     def change_view(self, request, object_id, form_url="", extra_context=None):
         extra_context = self._add_xprez_context(extra_context)
         return super(XprezAdmin, self).change_view(
