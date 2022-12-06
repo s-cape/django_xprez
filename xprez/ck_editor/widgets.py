@@ -10,7 +10,7 @@ class CkEditorWidget(forms.widgets.Textarea):
 
     class Media:
         css = {"all": ()}
-        js = (
+        js = tuple(settings.XPREZ_JQUERY_INIT_MEDIA) + (
             "ck_editor/libs/ck_editor/ckeditor.js",
             "ck_editor/js/ck_editor_widget.js",
         )
@@ -20,9 +20,7 @@ class CkEditorWidget(forms.widgets.Textarea):
             config = settings.XPREZ_CKEDITOR_CONFIG_FULL
 
         if "simpleUpload" in config and config["simpleUpload"].get("uploadUrl") is None:
-            config["simpleUpload"]["uploadUrl"] = reverse(
-                "xprez:ckeditor_file_upload", args=[file_upload_dir]
-            )
+            config["simpleUpload"]["uploadUrl"] = reverse("xprez:ckeditor_file_upload", args=[file_upload_dir])
 
         default_attrs = {
             "class": "js-ck-editor-source",

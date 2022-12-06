@@ -105,9 +105,7 @@ XPREZ_CKEDITOR_CONFIG_FULL["toolbar"] += (
     "imageUpload",
     "MediaEmbed",
 )
-XPREZ_CKEDITOR_CONFIG_FULL["simpleUpload"] = {
-    "uploadUrl": None
-}  # filled later in CkEditor.__init__
+XPREZ_CKEDITOR_CONFIG_FULL["simpleUpload"] = {"uploadUrl": None}  # filled later in CkEditor.__init__
 XPREZ_CKEDITOR_CONFIG_FULL["mediaEmbed "] = {"previewsInData": True}
 XPREZ_CKEDITOR_CONFIG_FULL["image"] = {
     "toolbar": (
@@ -126,3 +124,9 @@ XPREZ_CKEDITOR_CONFIG_FULL["image"] = {
         "alignRight",
     ),
 }
+
+XPREZ_JQUERY_INIT_MEDIA = (
+    "admin/js/vendor/jquery/jquery.js",  # use django's jquery
+    "admin/js/jquery.init.js",  # call django's jquery init (which includes noconflict)
+    "xprez/admin/js/jquery_revert_noconflict.js",  # revert noconflict - $ is now global again
+)

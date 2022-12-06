@@ -50,12 +50,8 @@ class Content(models.Model):
     )
     position = models.PositiveSmallIntegerField()
     content_type = models.CharField(max_length=100)
-    created = models.DateTimeField(
-        auto_now_add=True, editable=False, db_index=True, verbose_name="created"
-    )
-    changed = models.DateTimeField(
-        auto_now=True, editable=False, db_index=True, verbose_name="changed"
-    )
+    created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True, verbose_name="created")
+    changed = models.DateTimeField(auto_now=True, editable=False, db_index=True, verbose_name="changed")
     visible = models.BooleanField(default=True)
 
     css_class = models.CharField(max_length=100, null=True, blank=True)
@@ -68,20 +64,18 @@ class Content(models.Model):
         (3, "L"),
         (4, "XL"),
     )
-    margin_bottom = models.PositiveSmallIntegerField(
-        choices=MARGIN_CHOICES, default=MARGIN_DEFAULT
-    )
+    margin_bottom = models.PositiveSmallIntegerField(choices=MARGIN_CHOICES, default=MARGIN_DEFAULT)
 
     class Meta:
         ordering = ("position",)
 
     class AdminMedia:
         js = []
-        css = []
+        css = {}
 
     class FrontMedia:
         js = []
-        css = []
+        css = {}
 
     def __str__(self):
         return self.content_type
@@ -98,11 +92,7 @@ class Content(models.Model):
             for_page = self.page
 
         initial = dict(
-            [
-                (field.name, getattr(self, field.name))
-                for field in self._meta.fields
-                if not field.primary_key
-            ]
+            [(field.name, getattr(self, field.name)) for field in self._meta.fields if not field.primary_key]
         )
         inst = self.__class__(**initial)
         inst.position = self._count_new_content_position(for_page)
@@ -131,9 +121,7 @@ class Content(models.Model):
             position = cls._count_new_content_position(page)
         else:  # add on specific position
             if page.contents.filter(position=position).exists():
-                page.contents.filter(position__gte=position).update(
-                    position=F("position") + 1
-                )
+                page.contents.filter(position__gte=position).update(position=F("position") + 1)
         return cls.objects.create(page=page, position=position, **kwargs)
 
     def get_form_prefix(self):
@@ -141,9 +129,7 @@ class Content(models.Model):
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class(self.form_class)
-        self.admin_form = form_class(
-            instance=self, prefix=self.get_form_prefix(), data=data, files=files
-        )
+        self.admin_form = form_class(instance=self, prefix=self.get_form_prefix(), data=data, files=files)
         self.admin_form.admin = admin
 
     def is_admin_form_valid(self):
@@ -292,11 +278,7 @@ class ContentItem(models.Model):
         if not for_content:
             for_content = getattr(self, self.content_foreign_key)
         initial = dict(
-            [
-                (field.name, getattr(self, field.name))
-                for field in self._meta.fields
-                if not field.primary_key
-            ]
+            [(field.name, getattr(self, field.name)) for field in self._meta.fields if not field.primary_key]
         )
         inst = self.__class__(**initial)
         setattr(inst, self.content_foreign_key, for_content)

@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import warnings
 
 from django import template
+from django.forms import Media
 
 from .. import contents_manager
 from ..settings import XPREZ_BASE_URL, XPREZ_USE_ABSOLUTE_URI
@@ -13,13 +14,25 @@ from ..utils import build_absolute_uri as build_abs_uri
 register = template.Library()
 
 
-@register.inclusion_tag("xprez/includes/media.html")
+class PrefixableMedia(Media):
+    @staticmethod
+    def from_media(media):
+        prefixable = PrefixableMedia()
+        prefixable._css_lists = media._css_lists
+        prefixable._js_lists = media._js_lists
+        return prefixable
+
+    def absolute_path(self, path):
+        absolute_path = super().absolute_path(path)
+        if XPREZ_USE_ABSOLUTE_URI and not path.startswith(("http://", "https://", "//")):
+            return "{}{}".format(XPREZ_BASE_URL, absolute_path)
+        else:
+            return absolute_path
+
+
+@register.simple_tag()
 def xprez_front_media():
-    return {
-        "BASE_URL": XPREZ_BASE_URL,
-        "USE_ABSOLUTE_URI": XPREZ_USE_ABSOLUTE_URI,
-        "contents_media": contents_manager.front_media(),
-    }
+    return PrefixableMedia.from_media(contents_manager.front_media())
 
 
 @register.simple_tag(takes_context=True)
@@ -29,9 +42,7 @@ def xprez_content_render_front(context, content):
         return polymorph.render_front(extra_context=context.flatten())
     except TypeError:
         warnings.warn(
-            "Deprecation warning: {} render_front() should accept context attribute.".format(
-                type(polymorph)
-            ),
+            "Deprecation warning: {} render_front() should accept context attribute.".format(type(polymorph)),
             DeprecationWarning,
         )
         return polymorph.render_front()

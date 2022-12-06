@@ -1,5 +1,7 @@
+import warnings
 from collections import OrderedDict
 
+from django.forms import Media
 from django.utils.module_loading import autodiscover_modules
 
 
@@ -16,32 +18,42 @@ class ContentTypeManager:
             urls += content.get_urls()
         return urls
 
-    def _collect_media(self, media_class_name, js_initial=[], css_initial=[]):
-        from .utils import remove_duplicates
+    @staticmethod
+    def _get_class_media(content_class, media_class_name):
+        data = getattr(content_class, media_class_name)
+        css = getattr(data, "css", {})
+        js = getattr(data, "js", [])
+        if isinstance(css, tuple) or isinstance(css, list):
+            warnings.warn(
+                "{}.{}.css should be a dict, not list/tuple".format(
+                    content_class,
+                    media_class_name,
+                ),
+                DeprecationWarning,
+            )
+            css = {"all": css}
+        return Media(css=css, js=js)
 
-        js = list(js_initial)
-        css = list(css_initial)
-
+    def _collect_media(self, media_class_name, initial=Media()):
+        media = initial
         for content in self._get_allowed_contents():
-            media_class = getattr(content, media_class_name)
-            js += list(getattr(media_class, "js", []))
-            css += list(getattr(media_class, "css", []))
-        return {
-            "js": remove_duplicates(js),
-            "css": remove_duplicates(css),
-        }
+            media += ContentTypeManager._get_class_media(content, media_class_name)
+        return media
 
     def admin_media(self):
+        from .settings import XPREZ_JQUERY_INIT_MEDIA
+
         return self._collect_media(
             "AdminMedia",
-            js_initial=[
-                "xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js",
-                "xprez/admin/libs/jquery_ui/jquery-ui.min.js",
-                "xprez/admin/js/contents.js",
-            ],
-            css_initial=[
-                "xprez/styles/xprez-backend.css",
-            ],
+            initial=Media(
+                js=tuple(XPREZ_JQUERY_INIT_MEDIA)
+                + (
+                    "xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js",
+                    "xprez/admin/libs/jquery_ui/jquery-ui.min.js",
+                    "xprez/admin/js/contents.js",
+                ),
+                css={"all": ("xprez/styles/xprez-backend.css",)},
+            ),
         )
 
     def front_media(self):

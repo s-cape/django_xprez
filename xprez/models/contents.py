@@ -108,7 +108,7 @@ class CkEditor(CkEditorFileUploadMixin, Content):
 
     class AdminMedia:
         js = CkEditorWidget.Media.js + PHOTOSWIPE_JS
-        css = CkEditorWidget.Media.css["all"] + PHOTOSWIPE_CSS
+        css = {"all": CkEditorWidget.Media.css["all"] + PHOTOSWIPE_CSS}
 
     def show_front(self):
         # TODO: not working for single image inserted in editor
@@ -423,7 +423,7 @@ class TextImageBase(Content):
 
     class AdminMedia:
         js = CkEditorWidget.Media.js
-        css = CkEditorWidget.Media.css["all"]
+        css = {"css": CkEditorWidget.Media.css["all"]}
 
     class Meta:
         abstract = True
@@ -473,7 +473,7 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
 
     class AdminMedia:
         js = CkEditorWidget.Media.js + ("xprez/admin/js/grid_boxes.js",)
-        css = CkEditorWidget.Media.css["all"]
+        css = {"css": CkEditorWidget.Media.css["all"]}
 
     columns = models.PositiveSmallIntegerField(default=2)
     margin = models.CharField(max_length=4, choices=MARGIN_CHOICES, default="m")
