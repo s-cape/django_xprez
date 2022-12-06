@@ -38,6 +38,8 @@ XPREZ_CKEDITOR_CONFIG_FULL_NO_INSERT_PLUGIN = getattr(
     settings_default.XPREZ_CKEDITOR_CONFIG_FULL_NO_INSERT_PLUGIN,
 )
 
-XPREZ_JQUERY_INIT_MEDIA = getattr(
-    django_settings, "XPREZ_JQUERY_INIT_MEDIA", settings_default.XPREZ_JQUERY_INIT_MEDIA
+XPREZ_JQUERY_INIT_MEDIA_JS = getattr(
+    django_settings,
+    "XPREZ_JQUERY_INIT_MEDIA_JS",
+    settings_default.XPREZ_JQUERY_INIT_MEDIA_JS,
 )

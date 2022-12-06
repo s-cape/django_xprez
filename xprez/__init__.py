@@ -41,12 +41,12 @@ class ContentTypeManager:
         return media
 
     def admin_media(self):
-        from .settings import XPREZ_JQUERY_INIT_MEDIA
+        from .settings import XPREZ_JQUERY_INIT_MEDIA_JS
 
         return self._collect_media(
             "AdminMedia",
             initial=Media(
-                js=tuple(XPREZ_JQUERY_INIT_MEDIA)
+                js=tuple(XPREZ_JQUERY_INIT_MEDIA_JS)
                 + (
                     "xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js",
                     "xprez/admin/libs/jquery_ui/jquery-ui.min.js",

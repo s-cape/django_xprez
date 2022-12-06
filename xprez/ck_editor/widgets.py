@@ -10,7 +10,7 @@ class CkEditorWidget(forms.widgets.Textarea):
 
     class Media:
         css = {"all": ()}
-        js = tuple(settings.XPREZ_JQUERY_INIT_MEDIA) + (
+        js = tuple(settings.XPREZ_JQUERY_INIT_MEDIA_JS) + (
             "ck_editor/libs/ck_editor/ckeditor.js",
             "ck_editor/js/ck_editor_widget.js",
         )

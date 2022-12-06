@@ -127,7 +127,7 @@ XPREZ_CKEDITOR_CONFIG_FULL["image"] = {
     ),
 }
 
-XPREZ_JQUERY_INIT_MEDIA = (
+XPREZ_JQUERY_INIT_MEDIA_JS = (
     "admin/js/vendor/jquery/jquery.js",  # use django's jquery
     "admin/js/jquery.init.js",  # call django's jquery init (which includes noconflict)
     "xprez/admin/js/jquery_revert_noconflict.js",  # revert noconflict - $ is now global again
