@@ -6,7 +6,6 @@ from .utils import remove_duplicates
 
 
 class ContentTypeManager:
-
     def get(self, content_type):
         return self._registry[content_type]
 
@@ -24,18 +23,18 @@ class ContentTypeManager:
         css = []
         for key, content in self._registry.items():
             media_class = getattr(content, media_class_name)
-            js += list(getattr(media_class, 'js', []))
-            css += list(getattr(media_class, 'css', []))
+            js += list(getattr(media_class, "js", []))
+            css += list(getattr(media_class, "css", []))
         return {
-            'js': remove_duplicates(js),
-            'css': remove_duplicates(css),
+            "js": remove_duplicates(js),
+            "css": remove_duplicates(css),
         }
 
     def admin_media(self):
-        return self._collect_media('AdminMedia')
+        return self._collect_media("AdminMedia")
 
     def front_media(self):
-        return self._collect_media('FrontMedia')
+        return self._collect_media("FrontMedia")
 
     def __init__(self):
         self._registry = OrderedDict()
@@ -51,4 +50,4 @@ contents_manager = ContentTypeManager()
 
 
 def autodiscover():
-    autodiscover_modules('models', register_to=contents_manager)
+    autodiscover_modules("models", register_to=contents_manager)

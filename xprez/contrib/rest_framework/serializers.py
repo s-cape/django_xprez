@@ -11,6 +11,4 @@ class ContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ('position', 'html')
-
-
+        fields = ("position", "html")

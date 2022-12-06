@@ -11,18 +11,42 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('xprez', '0001_initial'),
+        ("xprez", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CodeSnippet',
+            name="CodeSnippet",
             fields=[
-                ('content_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='xprez.Content')),
-                ('title', models.CharField(blank=True, max_length=150, null=True)),
-                ('code', models.TextField()),
-                ('lang', models.CharField(choices=[(b'python', b'Python'), (b'js', b'JavaScript'), (b'django_template', b'Django Template'), (b'php', b'PHP'), (b'xml', b'XML')], default=b'python', max_length=20, verbose_name=b'Jazyk')),
+                (
+                    "content_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.Content",
+                    ),
+                ),
+                ("title", models.CharField(blank=True, max_length=150, null=True)),
+                ("code", models.TextField()),
+                (
+                    "lang",
+                    models.CharField(
+                        choices=[
+                            (b"python", b"Python"),
+                            (b"js", b"JavaScript"),
+                            (b"django_template", b"Django Template"),
+                            (b"php", b"PHP"),
+                            (b"xml", b"XML"),
+                        ],
+                        default=b"python",
+                        max_length=20,
+                        verbose_name=b"Jazyk",
+                    ),
+                ),
             ],
-            bases=('xprez.content',),
+            bases=("xprez.content",),
         ),
     ]
