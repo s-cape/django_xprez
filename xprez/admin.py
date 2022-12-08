@@ -17,13 +17,13 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from . import contents_manager, models
+# from .settings import (
+#     XPREZ_CONTAINER_MODEL_CLASS,
+#     XPREZ_DEFAULT_ALLOWED_CONTENTS,
+#     XPREZ_DEFAULT_EXCLUDED_CONTENTS,
+# )
+from . import contents_manager, models, settings
 from .models.fields import TemplatePathField
-from .settings import (
-    XPREZ_CONTAINER_MODEL_CLASS,
-    XPREZ_DEFAULT_ALLOWED_CONTENTS,
-    XPREZ_DEFAULT_EXCLUDED_CONTENTS,
-)
 
 try:
     from django.utils.encoding import force_str
@@ -34,8 +34,8 @@ except ImportError:  # backwards compatibility with django 2.*
 class XprezAdmin(admin.ModelAdmin):
     change_form_extend_template = "admin/change_form.html"
     change_form_template = "xprez/admin/xprez_changeform.html"
-    allowed_contents = XPREZ_DEFAULT_ALLOWED_CONTENTS
-    excluded_contents = XPREZ_DEFAULT_EXCLUDED_CONTENTS
+    allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
+    excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
     def _get_allowed_contents(self):
         return contents_manager._get_allowed_contents(
@@ -51,7 +51,7 @@ class XprezAdmin(admin.ModelAdmin):
         return "default-admin"
 
     def _get_container_instance(self, request, object_pk):
-        app_label, model_name = XPREZ_CONTAINER_MODEL_CLASS.split(".")
+        app_label, model_name = settings.XPREZ_CONTAINER_MODEL_CLASS.split(".")
         klass = apps.get_model(app_label, model_name)
         return klass.objects.get(pk=object_pk)
         # return self.get_object(request, object_pk)

@@ -4,6 +4,10 @@ from collections import OrderedDict
 from django.forms import Media
 from django.utils.module_loading import autodiscover_modules
 
+from .settings_loader import SettingsLoader
+
+settings = SettingsLoader()
+
 
 class ContentTypeManager:
     def get(self, content_type):
@@ -41,12 +45,10 @@ class ContentTypeManager:
         return media
 
     def admin_media(self):
-        from .settings import XPREZ_JQUERY_INIT_MEDIA_JS
-
         return self._collect_media(
             "AdminMedia",
             initial=Media(
-                js=tuple(XPREZ_JQUERY_INIT_MEDIA_JS)
+                js=tuple(settings.XPREZ_JQUERY_INIT_MEDIA_JS)
                 + (
                     "xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js",
                     "xprez/admin/libs/jquery_ui/jquery-ui.min.js",
@@ -74,13 +76,13 @@ class ContentTypeManager:
         excluded_contents=None,
     ):
         if allowed_contents is None:
-            from .settings import XPREZ_DEFAULT_ALLOWED_CONTENTS
+            # from .settings import XPREZ_DEFAULT_ALLOWED_CONTENTS
 
-            allowed_contents = XPREZ_DEFAULT_ALLOWED_CONTENTS
+            allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
         if excluded_contents is None:
-            from .settings import XPREZ_DEFAULT_EXCLUDED_CONTENTS
+            # from .settings import XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
-            excluded_contents = XPREZ_DEFAULT_EXCLUDED_CONTENTS
+            excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
         content_types = []
         if allowed_contents == "__all__":

@@ -1,6 +1,9 @@
 from copy import deepcopy
 
-DEFAULT_ALLOWED_CONTENTS = [
+XPREZ_CONTAINER_MODEL_CLASS = "xprez.ContentsContainer"
+
+
+XPREZ_DEFAULT_ALLOWED_CONTENTS = [
     # 'mediumeditor',
     "ckeditor",
     "quotecontent",
@@ -14,10 +17,17 @@ DEFAULT_ALLOWED_CONTENTS = [
     "textimage",
 ]
 
+XPREZ_DEFAULT_EXCLUDED_CONTENTS = None
+
 XPREZ_CKEDITOR_CONFIG_SIMPLE = {
     "toolbar": ("bold", "italic", "link"),
     "blockToolbar": (),
 }
+
+XPREZ_CODE_TEMPLATES_DIR = ""
+XPREZ_CODE_TEMPLATES_PREFIX = ""
+XPREZ_USE_ABSOLUTE_URI = False
+XPREZ_BASE_URL = ""
 
 _XPREZ_CKEDITOR_CONFIG_FULL_BASE = {
     "blockToolbar": (
