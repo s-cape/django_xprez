@@ -34,6 +34,7 @@ class PrefixableMedia(Media):
 
 @register.simple_tag()
 def xprez_front_media():
+    # TODO:jakub - allow to get media only for used contents
     return PrefixableMedia.from_media(contents_manager.front_media())
 
 
