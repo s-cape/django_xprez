@@ -37,11 +37,10 @@ def xprez_front_media(contents=None):
     Returns the media required by the contents.
     If contents is None, returns the media required by all contents.
     """
-
-    if contents:
-        content_types = set([content.content_type for content in contents])
-    else:
+    if contents is None:
         content_types = None
+    else:
+        content_types = set([content.content_type for content in contents])
 
     return str(
         PrefixableMedia.from_media(
