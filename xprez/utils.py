@@ -1,6 +1,6 @@
 import random
 
-from . import settings
+from .conf import settings
 
 
 def import_class(cl):

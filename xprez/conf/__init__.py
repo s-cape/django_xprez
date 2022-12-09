@@ -1,19 +1,14 @@
 from django.conf import settings as user_settings
 
-from . import settings_default as defaults
+from . import defaults
 
 
 class SettingsLoader:
-    """
-    Settings proxy that will lookup first in the django settings, and then in the conf
-    defaults.
-    """
-
     def __getattr__(self, name):
-
-        if name != name.upper():
-            raise AttributeError(name)
         try:
             return getattr(user_settings, name)
         except AttributeError:
             return getattr(defaults, name)
+
+
+settings = SettingsLoader()

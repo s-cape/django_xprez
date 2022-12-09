@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.urls import re_path
 from django.utils.decorators import method_decorator
 
-from .. import settings as xprez_settings
+from ..conf import settings
 from ..utils import import_class
 
 
@@ -44,7 +44,7 @@ class Content(models.Model):
     )
 
     page = models.ForeignKey(
-        xprez_settings.XPREZ_CONTAINER_MODEL_CLASS,
+        settings.XPREZ_CONTAINER_MODEL_CLASS,
         on_delete=models.CASCADE,
         related_name="contents",
     )

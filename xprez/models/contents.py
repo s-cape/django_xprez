@@ -12,14 +12,15 @@ from django.template.loader import get_template
 from django.urls import re_path
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from xprez.utils import random_string
 
-from .. import contents_manager, settings
+from .. import contents_manager
 from ..ck_editor import parse_text as ckeditor_parse_text
 from ..ck_editor.widgets import CkEditorWidget
+from ..conf import settings
 from ..medium_editor.utils import parse_text as medium_editor_parse_text
 from ..medium_editor.utils import render_text_parsed as medium_editor_render_text_parsed
 from ..medium_editor.widgets import MediumEditorWidget
+from ..utils import random_string
 from .base import AjaxUploadFormsetContent, Content, ContentItem, FormsetContent
 from .fields import TemplatePathField
 
