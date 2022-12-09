@@ -1,2 +1,2 @@
-from .base import *
-from .contents import *
+from .base import *  # noqa
+from .contents import *  # noqa

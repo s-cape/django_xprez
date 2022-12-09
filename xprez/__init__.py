@@ -35,9 +35,10 @@ class ContentTypeManager:
             css = {"all": css}
         return Media(css=css, js=js)
 
-    def _collect_media(self, media_class_name, initial=Media()):
+    def _collect_media(self, media_class_name, initial=Media(), content_types=None):
         media = initial
-        for content in self._get_allowed_contents():
+        contents = self._get_allowed_contents(allowed_contents=content_types)
+        for content in contents:
             media += ContentTypeManager._get_class_media(content, media_class_name)
         return media
 
@@ -55,8 +56,8 @@ class ContentTypeManager:
             ),
         )
 
-    def front_media(self):
-        return self._collect_media("FrontMedia")
+    def front_media(self, content_types=None):
+        return self._collect_media("FrontMedia", content_types=content_types)
 
     def __init__(self):
         self._registry = OrderedDict()

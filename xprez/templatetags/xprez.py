@@ -32,9 +32,22 @@ class PrefixableMedia(Media):
 
 
 @register.simple_tag()
-def xprez_front_media():
-    # TODO:jakub - allow to get media only for used contents
-    return PrefixableMedia.from_media(contents_manager.front_media())
+def xprez_front_media(contents=None):
+    """
+    Returns the media required by the contents.
+    If contents is None, returns the media required by all contents.
+    """
+
+    if contents:
+        content_types = set([content.content_type for content in contents])
+    else:
+        content_types = None
+
+    return str(
+        PrefixableMedia.from_media(
+            contents_manager.front_media(content_types=content_types)
+        )
+    )
 
 
 @register.simple_tag(takes_context=True)
