@@ -5,21 +5,24 @@ XPREZ_TEXT_IMAGE_CONTENT_WIDGET = (
     "xprez.ck_editor.widgets.CkEditorWidgetFullNoInsertPlugin"
 )
 
-
-XPREZ_DEFAULT_ALLOWED_CONTENTS = [
-    # 'mediumeditor',
+XPREZ_CONTENTS_AUTOREGISTER = True
+XPREZ_CONTENTS_AUTOREGISTER_BUILTINS = [
+    # 'mediumeditor',  # deprecated
     "ckeditor",
     "quotecontent",
     "gallery",
     "downloadcontent",
     "video",
     "numberscontent",
-    "featureboxes",
+    # "featureboxes",  # deprecated
     "codeinput",
     "codetemplate",
     "textimage",
+    # "anchor",  # not yet implemented, disabled by default
 ]
+XPREZ_CONTENTS_AUTOREGISTER_CUSTOM = "__all__"
 
+XPREZ_DEFAULT_ALLOWED_CONTENTS = "__all__"
 XPREZ_DEFAULT_EXCLUDED_CONTENTS = None
 
 XPREZ_CODE_TEMPLATES_DIR = ""

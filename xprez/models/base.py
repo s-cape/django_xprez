@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db import models
 from django.db.models import F, Max
@@ -40,7 +39,7 @@ class Content(models.Model):
     def front_template_name(self):
         return "xprez/contents/{}.html".format(self.identifier())
 
-    icon_name = None
+    icon_name = "default"
 
     SIZE_FULL = "full"
     SIZE_MID = "mid"
@@ -212,9 +211,6 @@ class Content(models.Model):
     @classmethod
     def identifier(cls):
         return cls.__name__.lower()
-
-    def get_icon_name(self):
-        return self.icon_name or self.identifier()
 
 
 class FormsetContent(Content):

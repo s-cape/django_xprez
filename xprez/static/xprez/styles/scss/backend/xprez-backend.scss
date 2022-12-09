@@ -304,6 +304,7 @@
 		background: $b-gray-8;
 	}
 }
+.xprez-icon-btn-add-default:before {content: "\e86e";}  // TODO:kaplick create better default icon
 .xprez-icon-btn-add-text_content:before {content: "\e235";}
 .xprez-icon-btn-add-text_box:before {content: "\e8b0";}
 .xprez-icon-btn-add-code_template:before {content: "\e8be";}
