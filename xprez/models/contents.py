@@ -102,7 +102,6 @@ class CkEditor(CkEditorFileUploadMixin, Content):
     admin_template_name = "xprez/admin/contents/ck_editor.html"
     front_template_name = "xprez/contents/ck_editor.html"
     icon_name = "text_content"
-    verbose_name = "Text Content"
 
     text = models.TextField()
     # css_class = models.CharField(max_length=100, null=True, blank=True)
@@ -111,6 +110,9 @@ class CkEditor(CkEditorFileUploadMixin, Content):
         max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_TEXT
     )
     content_centered = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Text Content"
 
     class AdminMedia:
         js = CkEditorWidget.Media.js + PHOTOSWIPE_JS
@@ -133,7 +135,9 @@ class QuoteContent(FormsetContent):
     admin_template_name = "xprez/admin/contents/quote.html"
     front_template_name = "xprez/contents/quote.html"
     icon_name = "quote"
-    verbose_name = "Quote"
+
+    class Meta:
+        verbose_name = "Quote"
 
     title = models.CharField(max_length=255, null=True, blank=True)
     box = models.BooleanField(default=False)
@@ -185,7 +189,6 @@ class Gallery(AjaxUploadFormsetContent):
     admin_formset_item_template_name = "xprez/admin/contents/gallery/photo.html"
     front_template_name = "xprez/contents/gallery.html"
     icon_name = "gallery"
-    verbose_name = "Gallery / Image"
     formset_factory = "xprez.admin_forms.PhotoFormSet"
 
     width = models.CharField(
@@ -203,6 +206,9 @@ class Gallery(AjaxUploadFormsetContent):
         for index, photo in enumerate(self.photos.all()):
             photo.position = index
             photo.save()
+
+    class Meta:
+        verbose_name = "Gallery / Image"
 
     class FrontMedia:
         js = PHOTOSWIPE_JS
@@ -244,7 +250,6 @@ class Video(Content):
     )
     admin_template_name = "xprez/admin/contents/video.html"
     front_template_name = "xprez/contents/video.html"
-    verbose_name = "Video"
     icon_name = "video"
     form_class = "xprez.admin_forms.VideoForm"
 
@@ -276,7 +281,6 @@ class Video(Content):
 class CodeInput(Content):
     admin_template_name = "xprez/admin/contents/code_input.html"
     front_template_name = "xprez/contents/code_input.html"
-    verbose_name = "Code Input"
     icon_name = "code"
     form_class = "xprez.admin_forms.CodeInputForm"
 
@@ -289,7 +293,6 @@ class CodeInput(Content):
 class NumbersContent(FormsetContent):
     admin_template_name = "xprez/admin/contents/numbers.html"
     front_template_name = "xprez/contents/numbers.html"
-    verbose_name = "Numbers"
     icon_name = "numbers"
     form_class = "xprez.admin_forms.NumbersContentForm"
     formset_factory = "xprez.admin_forms.NumberFormSet"
@@ -299,6 +302,9 @@ class NumbersContent(FormsetContent):
 
     def show_front(self):
         return self.numbers.all().count()
+
+    class Meta:
+        verbose_name = "Numbers"
 
     class FrontMedia:
         js = (
@@ -324,7 +330,6 @@ class Number(ContentItem):
 class FeatureBoxes(Content):
     admin_template_name = "xprez/admin/contents/feature_boxes.html"
     front_template_name = "xprez/contents/feature_boxes.html"
-    verbose_name = "Feature Boxes"
     icon_name = "feature_boxes"
     form_class = "xprez.admin_forms.FeatureBoxesForm"
 
@@ -332,13 +337,15 @@ class FeatureBoxes(Content):
     box_2 = models.TextField(blank=True)
     box_3 = models.TextField(blank=True)
 
+    class Meta:
+        verbose_name = "Feature Boxes"
+
     def show_front(self):
         return bool(self.box_1)
 
 
 class CodeTemplate(Content):
     admin_template_name = "xprez/admin/contents/code_template.html"
-    verbose_name = "Code Template"
     icon_name = "code_template"
     form_class = "xprez.admin_forms.CodeTemplateForm"
 
@@ -370,12 +377,14 @@ class DownloadContent(AjaxUploadFormsetContent):
     front_template_name = "xprez/contents/download.html"
     admin_formset_item_template_name = "xprez/admin/contents/download/attachment.html"
 
-    verbose_name = "Files"
     icon_name = "files"
     form_class = "xprez.admin_forms.DownloadContentForm"
     formset_factory = "xprez.admin_forms.AttachmentFormSet"
 
     title = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        verbose_name = "Files"
 
     def get_formset_queryset(self):
         return self.attachments.all()
@@ -424,7 +433,6 @@ class TextImageBase(Content):
     form_class = "xprez.admin_forms.TextImageForm"
     admin_template_name = "xprez/admin/contents/text_image.html"
     front_template_name = "xprez/contents/text_image.html"
-    verbose_name = "Image + Text"
     icon_name = "text_image"
 
     ALIGNMENT_LEFT = "left"
@@ -446,6 +454,7 @@ class TextImageBase(Content):
         css = {"css": CkEditorWidget.Media.css["all"]}
 
     class Meta:
+        verbose_name = "Image + Text"
         abstract = True
 
     def show_front(self):
@@ -476,7 +485,6 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
     form_class = "xprez.admin_forms.GridBoxesForm"
     admin_template_name = "xprez/admin/contents/grid_boxes/grid_boxes.html"
     front_template_name = "xprez/contents/grid_boxes.html"
-    verbose_name = "Grid Boxes"
     icon_name = "grid_boxes"
 
     MARGIN_CHOICES = (

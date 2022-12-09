@@ -9,7 +9,6 @@
     <div style="display: none;">
         {% block hidden_form %}
             {{ content.admin_form.position }}
-            {{ content.admin_form.delete }}
             {{ content.admin_form.visible }}
             {{ content.admin_form.css_class }}
             {{ content.admin_form.margin_bottom }}
@@ -47,9 +46,7 @@
         </div>
 
         <div class="xprez-module__options {% block options_class %}{% endblock %}">
-            {% block options %}
-
-            {% endblock %}
+            {% block options %}{% endblock %}
         </div>
 
         <div class="xprez-module__content">
@@ -63,6 +60,11 @@
                 {% endif %}
             {% endblock %}
             {% block content %}
+                <div class="xprez-form-table">
+                    {% for field in content.admin_form.main_fields %}
+                        {% include 'xprez/admin/form/row.html' with field=field%}
+                    {% endfor %}
+                </div>
             {% endblock %}
         </div>
     </div>

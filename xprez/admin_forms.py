@@ -2,7 +2,6 @@ try:
     import urlparse
 except ImportError:
     import urllib.parse as urlparse
-import json
 
 from django import forms
 from django.forms import inlineformset_factory
@@ -32,8 +31,19 @@ from .models import (
 
 
 class BaseContentForm(forms.ModelForm):
+    base_content_fields = ("position", "visible", "css_class", "margin_bottom")
+
+    def main_fields(self):
+        excluded_fields = tuple(self.base_content_fields)
+        excluded_fields += getattr(self._meta, "options_fields", ())
+
+        for field in self.fields:
+            if field not in excluded_fields:
+                yield self[field]
+
     class Meta:
-        fields = ("position", "visible", "css_class", "margin_bottom")
+        options_fields = tuple()
+        fields = "__all__"
 
 
 class GalleryForm(BaseContentForm):
@@ -44,7 +54,7 @@ class GalleryForm(BaseContentForm):
             "columns",
             "divided",
             "crop",
-        ) + BaseContentForm.Meta.fields
+        ) + BaseContentForm.base_content_fields
 
 
 class MediumEditorForm(BaseContentForm):
@@ -54,7 +64,7 @@ class MediumEditorForm(BaseContentForm):
             "text",
             "box",
             "width",
-        ) + BaseContentForm.Meta.fields
+        ) + BaseContentForm.base_content_fields
         widgets = {"text": MediumEditorWidget(file_upload_dir="medium_editor_uploads")}
 
 
@@ -66,7 +76,7 @@ class CkEditorForm(BaseContentForm):
             "content_centered",
             "box",
             "width",
-        ) + BaseContentForm.Meta.fields
+        ) + BaseContentForm.base_content_fields
         widgets = {"text": CkEditorWidget(file_upload_dir="ck_editor_uploads")}
 
 
@@ -87,7 +97,7 @@ class QuoteContentForm(BaseContentForm):
             "display_two",
             "title",
             "box",
-        ) + BaseContentForm.Meta.fields
+        ) + BaseContentForm.base_content_fields
 
 
 class VideoForm(BaseContentForm):
@@ -119,7 +129,7 @@ class VideoForm(BaseContentForm):
             "poster_image",
             "url",
             "width",
-        ) + BaseContentForm.Meta.fields
+        ) + BaseContentForm.base_content_fields
         widgets = {
             "url": forms.URLInput(attrs={"class": "long"}),
         }
@@ -128,13 +138,13 @@ class VideoForm(BaseContentForm):
 class CodeInputForm(BaseContentForm):
     class Meta:
         model = CodeInput
-        fields = ("code",) + BaseContentForm.Meta.fields
+        fields = ("code",) + BaseContentForm.base_content_fields
 
 
 class NumbersContentForm(BaseContentForm):
     class Meta:
         model = NumbersContent
-        fields = BaseContentForm.Meta.fields
+        fields = BaseContentForm.base_content_fields
 
 
 class NumberForm(forms.ModelForm):
@@ -159,7 +169,7 @@ class FeatureBoxesForm(BaseContentForm):
             "box_1",
             "box_2",
             "box_3",
-        ) + BaseContentForm.Meta.fields
+        ) + BaseContentForm.base_content_fields
         widgets = {
             "box_1": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
             "box_2": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
@@ -170,13 +180,13 @@ class FeatureBoxesForm(BaseContentForm):
 class CodeTemplateForm(BaseContentForm):
     class Meta:
         model = CodeTemplate
-        fields = ("template_name",) + BaseContentForm.Meta.fields
+        fields = ("template_name",) + BaseContentForm.base_content_fields
 
 
 class DownloadContentForm(BaseContentForm):
     class Meta:
         model = DownloadContent
-        fields = ("title",) + BaseContentForm.Meta.fields
+        fields = ("title",) + BaseContentForm.base_content_fields
         widgets = {"title": forms.TextInput(attrs={"placeholder": "Files"})}
 
 
@@ -187,7 +197,7 @@ class TextImageForm(BaseContentForm):
             "image",
             "text",
             "image_alignment",
-        ) + BaseContentForm.Meta.fields
+        ) + BaseContentForm.base_content_fields
         widgets = {
             "text": CkEditorWidget(
                 config=settings.XPREZ_CKEDITOR_CONFIG_FULL_NO_INSERT_PLUGIN
@@ -215,7 +225,7 @@ class GridBoxesForm(BaseContentForm):
             "boxes_filled",
             "border",
             "boxes",
-        ) + BaseContentForm.Meta.fields
+        ) + BaseContentForm.base_content_fields
 
 
 AttachmentFormSet = inlineformset_factory(

@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db import models
 from django.db.models import F, Max
@@ -28,11 +29,18 @@ class ContentsContainer(models.Model):
 
 
 class Content(models.Model):
-    form_class = NotImplemented
-    admin_template_name = NotImplemented
-    front_template_name = NotImplemented
-    verbose_name = NotImplemented
-    icon_name = NotImplemented
+    @property
+    def admin_template_name(self):
+        return [
+            "xprez/admin/contents/{}.html".format(self.identifier()),
+            "xprez/admin/contents/base.html".format(self.identifier()),
+        ]
+
+    @property
+    def front_template_name(self):
+        return "xprez/contents/{}.html".format(self.identifier())
+
+    icon_name = None
 
     SIZE_FULL = "full"
     SIZE_MID = "mid"
@@ -47,9 +55,10 @@ class Content(models.Model):
         xprez_settings.XPREZ_CONTAINER_MODEL_CLASS,
         on_delete=models.CASCADE,
         related_name="contents",
+        editable=False,
     )
     position = models.PositiveSmallIntegerField()
-    content_type = models.CharField(max_length=100)
+    content_type = models.CharField(max_length=100, editable=False)
     created = models.DateTimeField(
         auto_now_add=True, editable=False, db_index=True, verbose_name="created"
     )
@@ -88,6 +97,10 @@ class Content(models.Model):
 
     def __unicode__(self):
         return self.__str__()
+
+    @property
+    def verbose_name(self):
+        return self._meta.verbose_name.title()
 
     def polymorph(self):
         obj = getattr(self, self.content_type.lower())
@@ -139,8 +152,22 @@ class Content(models.Model):
     def get_form_prefix(self):
         return "content-" + str(self.pk)
 
+    form_class = "xprez.admin_forms.BaseContentForm"
+
+    def get_admin_form_class(self):
+        cls = import_class(self.form_class)
+        if cls._meta.model:
+            return cls
+        else:
+
+            class ContentForm(cls):
+                class Meta(cls.Meta):
+                    model = self.__class__
+
+            return ContentForm
+
     def build_admin_form(self, admin, data=None, files=None):
-        form_class = import_class(self.form_class)
+        form_class = self.get_admin_form_class()
         self.admin_form = form_class(
             instance=self, prefix=self.get_form_prefix(), data=data, files=files
         )
@@ -185,6 +212,9 @@ class Content(models.Model):
     @classmethod
     def identifier(cls):
         return cls.__name__.lower()
+
+    def get_icon_name(self):
+        return self.icon_name or self.identifier()
 
 
 class FormsetContent(Content):

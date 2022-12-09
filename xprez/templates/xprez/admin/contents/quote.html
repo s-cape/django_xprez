@@ -12,11 +12,10 @@
 
 {% block content %}
     <div style="display: none;">
-    {{ content.formset.management_form }}
+        {{ content.formset.management_form }}
     </div>
     <div class="xprez-form-table">
-            {% include 'xprez/admin/form/row.html' with field=content.admin_form.title %}
-
+        {% include 'xprez/admin/form/row.html' with field=content.admin_form.title %}
     </div>
     {% for form in content.formset %}
         <div class="xprez-form-table js-quoteform-{{ forloop.counter0 }}">
@@ -37,8 +36,6 @@
     {{ block.super }}
     {{ content.admin_form.display_two }}
     {{ content.admin_form.box }}
-
-
 {% endblock %}
 
 
@@ -61,8 +58,6 @@
                 $2ndDelete.prop('checked', true);
                 $2ndQuote.hide();
             });
-
-
         });
     </script>
 {% endblock %}
