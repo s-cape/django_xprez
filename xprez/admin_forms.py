@@ -7,8 +7,7 @@ from django import forms
 from django.forms import inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 
-from . import settings
-from .ck_editor.widgets import CkEditorWidget
+from .conf import settings
 from .medium_editor.widgets import MediumEditorWidget
 from .models import (
     Attachment,
@@ -28,6 +27,7 @@ from .models import (
     TextImage,
     Video,
 )
+from .utils import import_class
 
 
 class BaseContentForm(forms.ModelForm):
@@ -77,7 +77,11 @@ class CkEditorForm(BaseContentForm):
             "box",
             "width",
         ) + BaseContentForm.base_content_fields
-        widgets = {"text": CkEditorWidget(file_upload_dir="ck_editor_uploads")}
+        widgets = {
+            "text": import_class(settings.XPREZ_CK_EDITOR_CONTENT_WIDGET)(
+                file_upload_dir="ck_editor_uploads"
+            )
+        }
 
 
 class QuoteForm(forms.ModelForm):
@@ -199,18 +203,16 @@ class TextImageForm(BaseContentForm):
             "image_alignment",
         ) + BaseContentForm.base_content_fields
         widgets = {
-            "text": CkEditorWidget(
-                config=settings.XPREZ_CKEDITOR_CONFIG_FULL_NO_INSERT_PLUGIN
-            ),
+            "text": import_class(settings.XPREZ_TEXT_IMAGE_CONTENT_WIDGET)(),
         }
 
 
 class GridBoxesForm(BaseContentForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.ckeditor_widget_tpl = CkEditorWidget(
-            config=settings.XPREZ_CKEDITOR_CONFIG_FULL
-        )  # TODO: cleanup
+        self.ckeditor_widget_tpl = import_class(
+            settings.XPREZ_GRID_BOXES_CONTENT_WIDGET
+        )()
 
     class Meta:
         model = GridBoxes

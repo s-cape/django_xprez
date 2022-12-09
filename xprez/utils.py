@@ -1,6 +1,6 @@
 import random
 
-from .settings import XPREZ_BASE_URL, XPREZ_USE_ABSOLUTE_URI
+from .conf import settings
 
 
 def import_class(cl):
@@ -17,11 +17,11 @@ def remove_duplicates(list_):
 
 
 def build_absolute_uri(location, request=None):
-    if XPREZ_USE_ABSOLUTE_URI:
+    if settings.XPREZ_USE_ABSOLUTE_URI:
         if "http" not in location:
             if request:
                 return request.build_absolute_uri(location)
-            return "{}{}".format(XPREZ_BASE_URL, location)
+            return "{}{}".format(settings.XPREZ_BASE_URL, location)
     return location
 
 

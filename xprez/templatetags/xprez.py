@@ -7,8 +7,7 @@ import warnings
 from django import template
 from django.forms import Media
 
-from .. import contents_manager
-from ..settings import XPREZ_BASE_URL, XPREZ_USE_ABSOLUTE_URI
+from .. import contents_manager, settings
 from ..utils import build_absolute_uri as build_abs_uri
 
 register = template.Library()
@@ -24,10 +23,10 @@ class PrefixableMedia(Media):
 
     def absolute_path(self, path):
         absolute_path = super().absolute_path(path)
-        if XPREZ_USE_ABSOLUTE_URI and not path.startswith(
+        if settings.XPREZ_USE_ABSOLUTE_URI and not path.startswith(
             ("http://", "https://", "//")
         ):
-            return "{}{}".format(XPREZ_BASE_URL, absolute_path)
+            return "{}{}".format(settings.XPREZ_BASE_URL, absolute_path)
         else:
             return absolute_path
 
