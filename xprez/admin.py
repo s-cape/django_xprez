@@ -234,7 +234,7 @@ class XprezAdmin(admin.ModelAdmin):
         )
 
     def add_content_view(self, request, page_pk, content_type):
-        content_class = models.contents_manager.get(content_type)
+        content_class = contents_manager.get(content_type)
 
         container = self._get_container_instance(request, page_pk)
         content = content_class.create_for_page(container)
@@ -244,7 +244,7 @@ class XprezAdmin(admin.ModelAdmin):
         )
 
     def add_content_before_view(self, request, before_content_pk, content_type):
-        content_class = models.contents_manager.get(content_type)
+        content_class = contents_manager.get(content_type)
 
         before_content = models.Content.objects.get(pk=before_content_pk)
         container = before_content.page

@@ -1,5 +1,4 @@
-from . import autodiscover
-from .models import contents_manager
+from . import autodiscover, contents_manager
 
 autodiscover()
 

@@ -73,12 +73,8 @@ class ContentTypeManager:
         excluded_contents=None,
     ):
         if allowed_contents is None:
-            # from .settings import XPREZ_DEFAULT_ALLOWED_CONTENTS
-
             allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
         if excluded_contents is None:
-            # from .settings import XPREZ_DEFAULT_EXCLUDED_CONTENTS
-
             excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
         content_types = []

@@ -13,7 +13,6 @@ from django.urls import re_path
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from .. import contents_manager
 from ..ck_editor import parse_text as ckeditor_parse_text
 from ..ck_editor.widgets import CkEditorWidget
 from ..conf import settings
@@ -539,17 +538,3 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
             if striptags(box_content != ""):
                 return True
         return False
-
-
-# contents_manager.register(MediumEditor)
-# contents_manager.register(CkEditor)
-# contents_manager.register(QuoteContent)
-# contents_manager.register(Gallery)
-# contents_manager.register(DownloadContent)
-# contents_manager.register(Video)
-# contents_manager.register(NumbersContent)
-# contents_manager.register(FeatureBoxes)
-# contents_manager.register(CodeInput)
-# contents_manager.register(CodeTemplate)
-# contents_manager.register(TextImage)
-# contents_manager.register(GridBoxes)

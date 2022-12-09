@@ -9,6 +9,7 @@ XPREZ_CONTENTS_AUTOREGISTER = True
 XPREZ_CONTENTS_AUTOREGISTER_BUILTINS = [
     # 'mediumeditor',  # deprecated
     "ckeditor",
+    "gridboxes",
     "quotecontent",
     "gallery",
     "downloadcontent",
