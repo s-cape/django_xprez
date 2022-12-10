@@ -16,7 +16,7 @@
 		padding-top: $quote-box-padding-v;
 		padding-bottom: $quote-box-padding-v;
 
-		@include media-breakpoint-down($typo-break-s) {
+		@include xprez-breakpoint-down($typo-break-s) {
 			padding-top: math.div($quote-box-padding-v, 2);
 			padding-bottom: math.div($quote-box-padding-v, 2);
 		}
@@ -25,7 +25,7 @@
 
 .xprez-quote-title {
 	margin-bottom: $quote-head-title-mb;
-	@include media-breakpoint-down($typo-break-m) {
+	@include xprez-breakpoint-down($typo-break-m) {
 		margin-bottom: math.div($quote-head-title-mb, 2);
 	}
 }
