@@ -66,12 +66,14 @@
 
     &.boxes_filled .xprez-grid-box-inner {
         background: $gridbox-background;
+        border-radius: $gridbox-border-radius;
     }
 
     // box border switch
 
     &.border .xprez-grid-box-inner {
         border: 1px solid $gridbox-border;
+        border-radius: $gridbox-border-radius;
     }
 
     // box padding switch

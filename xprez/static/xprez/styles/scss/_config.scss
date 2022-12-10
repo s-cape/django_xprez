@@ -67,6 +67,7 @@
 	$base-text-color:  $black !default;
 	$base-font-size: 1rem !default;
 	$base-lh: 1.5 !default;
+	$base-border-radius: 0 !default;
 	$basefont: $base-font-size;
 
 	//
@@ -138,7 +139,7 @@
 	//
 
 	$text-module-boxed-bg: $super-light-gray !default;
-	$text-module-boxed-radius: 0 !default;
+	$text-module-boxed-radius: $base-border-radius !default;
 
 	//
 	// GRID BOXES
@@ -165,6 +166,7 @@
 
 	$gridbox-background: $b-gray-3 !default;
 	$gridbox-border: 1px solid $b-gray-4 !default;
+	$gridbox-border-radius: $base-border-radius !default;
 
 
 	//
@@ -175,7 +177,7 @@
 
 	$button-size: $base-font-size * 0.875 !default;
 	$button-font-family: $sans !default;
-	$button-border-radius: 0px !default;
+	$button-border-radius: $base-border-radius * .5 !default;
 	$button-border: none !default;
 	$button-text-shadow: none !default;
 	$button-text-decoration: none !default;
