@@ -15,7 +15,7 @@
 	// spacing
 	$l-space: 88px !default;
 	$m-space: 28px !default;
-	$s-space: 14px !default;
+	$s-space: 12px !default;
 	$xs-space: 7px !default;
 
 	$mobile-edge-space: $s-space !default;
@@ -145,7 +145,7 @@
 	//
 
 	// sizes should be em because of scaling and are independent on $use-xprez-text-styles setting
-	$gridbox-base-size: $base-font-size;
+	$gridbox-base-size: $base-font-size !default;
 
 	$gridbox-h2-size: 3.125em !default;
 	$gridbox-h3-size: 2em !default;

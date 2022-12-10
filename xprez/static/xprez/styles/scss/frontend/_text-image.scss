@@ -78,19 +78,15 @@ $ti-break-m: $textimage-breakpoint;
 // flexbox layout 
 
 @media only screen and (min-width: ($ti-break-m)) {
+	.xprez-text-image {
+		display: flex;
 
-	.flexbox {
+		& > div {
+			align-self: center;
+		}
 
-		.xprez-text-image {
-			display: flex;
-
-			& > div {
-				align-self: center;
-			}
-
-			&.xprez-text-image-right {
-				flex-direction: row-reverse;
-			}
+		&.xprez-text-image-right {
+			flex-direction: row-reverse;
 		}
 	}
 }

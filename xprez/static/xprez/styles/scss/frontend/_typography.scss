@@ -142,12 +142,15 @@
 				font-family: $body-font-family;
 				font-style: normal;
 			}
-			padding-left: 0;
 			border: none;
 			color: inherit;
 
 
 			@if $use-xprez-blockquote-box-style {
+				&, p {
+					padding-left: 0;
+				}
+
 				& {
 					margin: $text-module-blockquote-mt $text-module-blockquote-ms $text-module-blockquote-mb $text-module-blockquote-me;
 				}
