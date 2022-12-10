@@ -3,28 +3,37 @@
 		margin: 2rem 0;
 	}
 }
+
 .medium-insert-images {
 	figure {
 		margin: $g*2 0;
-		img {
-			width: 100%;
-		}
 	}
 }
+
 .medium-insert-embeds {
-	figure { margin: $g*2 0; }
+	figure {
+		margin: $g*2 0;
+	}
+
 	.video {
 		position: relative;
 		padding-top: 55%;
+
 		iframe {
 			position: absolute;
-			top: 0; right: 0;
+			top: 0;
+			right: 0;
 			height: 100%;
 			width: 100%;
 			display: block;
 		}
 	}
 }
+
+.medium-insert-images-center {
+	text-align: center;
+}
+
 .medium-insert-images-right, .medium-insert-embeds-right,
 .ck-widget.image-style-align-right {
 	max-width: 40%;
@@ -44,6 +53,7 @@
 		margin: 0 0 $g 0;
 	}
 }
+
 .medium-insert-images-left, .medium-insert-embeds-left,
 .ck-widget.image-style-align-left {
 	max-width: 40%;
@@ -67,8 +77,8 @@
 .medium-insert-images, .medium-insert-embeds,
 .ck-widget.image {
 	figcaption {
-		@include type(15px,1.3);
-		@include type-min(13px,1);
+		@include type(15px, 1.3);
+		@include type-min(13px, 1);
 		font-style: italic;
 		display: block;
 		text-align: center;

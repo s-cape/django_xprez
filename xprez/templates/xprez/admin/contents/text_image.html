@@ -17,7 +17,7 @@
                 {% if content.image %}
                     <div class="xprez-form-row">
                         <div class="xprez-cell-label">
-                            {% thumbnail content.image "400x400" as thumb %}
+                            {% thumbnail content.image "1000x1000" format="WEBP" upscale=False as thumb %}
                                 <img src="{{ thumb.url }}"/>
                             {% endthumbnail %}
                         </div>

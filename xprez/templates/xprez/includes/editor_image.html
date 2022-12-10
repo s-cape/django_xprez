@@ -7,7 +7,7 @@
         {% if link_url %}
             <a href="{{ link_url }}" {% if link_new_window %}target="_blank"{% endif %}>
         {% elif lightbox %}
-            {% thumbnail url "1800x1200" format="JPEG" quality=90 filename_stem=alt_text as full %}
+            {% thumbnail url "1800x1200" format="WEBP" quality=90 filename_stem=alt_text as full %}
             <a
                 href="{{ full.url|build_absolute_uri }}"
                 data-original_url="{{ full.url|build_absolute_uri }}"
@@ -17,12 +17,12 @@
             >
             {% endthumbnail %}
         {% endif %}
-            <img src="{% thumbnail url "427x280" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+            <img src="{% thumbnail url "427x280" quality=70 format="WEBP" filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
                 srcset="{{ thumb.url|build_absolute_uri }} 427w,
-                    {% endthumbnail %}{% thumbnail url "600x400" quality=70 filename_stem=alt_text as thumb %}
-                        {{ thumb.url|build_absolute_uri }} 600w,
-                    {% endthumbnail %}{% thumbnail url "1000x666" quality=70 filename_stem=alt_text as thumb %}
-                        {{ thumb.url|build_absolute_uri }} 1000w
+                    {% endthumbnail %}{% thumbnail url "800x800" quality=80 format="WEBP" filename_stem=alt_text as thumb %}
+                        {{ thumb.url|build_absolute_uri }} 800w,
+                    {% endthumbnail %}{% thumbnail url "1400x1400" quality=80 format="WEBP" filename_stem=alt_text upscale=False as thumb %}
+                        {{ thumb.url|build_absolute_uri }} 1200w
                     {% endthumbnail %}"
                 sizes="(min-width: 755px) 700px,
                         98vw" 
