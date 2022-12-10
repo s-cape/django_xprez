@@ -1,5 +1,5 @@
 {% block content %}
-    <div class="xprez-module xprez-module-margin-bottom-{{ content.margin_bottom }} {{ content.css_class|default:"" }} {% block css_class_extra %}{% endblock %}">
+    <div class="{% block css_class %}xprez-module xprez-module-margin-bottom-{{ content.margin_bottom }} {{ content.css_class|default:"" }} {% block css_class_extra %}{% endblock %}{% endblock %}">
         {% block content_in %}
         {% endblock %}
     </div>
