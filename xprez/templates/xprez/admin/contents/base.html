@@ -61,6 +61,9 @@
             {% endblock %}
             {% block content %}
                 <div class="xprez-form-table">
+                    {% if content.preview_image %}
+                        <img src="{% static content.preview_image %}" alt="" class="xprez-module__preview-image">
+                    {% endif %}
                     {% for field in content.admin_form.main_fields %}
                         {% include 'xprez/admin/form/row.html' with field=field%}
                     {% endfor %}
