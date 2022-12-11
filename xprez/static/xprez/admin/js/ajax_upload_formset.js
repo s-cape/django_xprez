@@ -49,12 +49,13 @@ function activateDropzone($scope, formset_prefix) {
 
 
 function activateItemSorting($scope, formset_prefix) {
-    var $photoContainer = $scope.find('.js-item-container');
-    $photoContainer.sortable({
+    var $itemContainer = $scope.find('.js-item-container');
+    $itemContainer.sortable({
+            handle: $itemContainer.find('.js-item-handle').length ? '.js-item-handle' : null,
             update: function (event, ui) {
-                $photoContainer.find('.js-item').each(function (index, el) {
+                $itemContainer.find('.js-item').each(function (index, el) {
                     var $el = $(el);
-                    $('#id_'+formset_prefix+'-' + $photoContainer.data('content_pk') + '-' + $el.data('number') + '-position').val(index);
+                    $('#id_'+formset_prefix+'-' + $itemContainer.data('content_pk') + '-' + $el.data('number') + '-position').val(index);
                 });
             }
         }
