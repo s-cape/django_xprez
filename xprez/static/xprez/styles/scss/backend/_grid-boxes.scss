@@ -1,32 +1,48 @@
 .xprez-grid-boxes-admin-wrapper {
-    border: 1px dotted $b-gray-5;
-    border-radius: 2px;
-    text-align: left;
-    padding: 10px;
-    margin-bottom: $g;
-    width: 400px;
-    margin-right: 15px;
-    display: flex;
-    flex-direction: column;
-    .xprez & .medium-editor, .xprez & .ck-editor {
-        font-size: 14px;
-        line-height: $g*.75;
-        margin: 0;
-        padding-top: 0;
-        flex: 1;
-        .medium-insert-buttons-show {
-            margin-left: 20px;
-        }
-        .medium-insert-images figure {
-            margin: 8px 0;
-        }
-    }
+	border: 1px dotted $b-gray-5;
+	border-radius: 2px;
+	text-align: left;
+	padding: 10px;
+	margin-bottom: $g;
+	width: 400px;
+	margin-right: 15px;
+	display: flex;
+	flex-direction: column;
+
+	.xprez & .medium-editor, .xprez & .ck-editor {
+		font-size: 14px;
+		line-height: $g*.75;
+		margin: 0;
+		padding-top: 0;
+		flex: 1;
+
+		.medium-insert-buttons-show {
+			margin-left: 20px;
+		}
+
+		.medium-insert-images figure {
+			margin: 8px 0;
+		}
+	}
 }
+
+.xprez-grid-boxes-admin-wrapper--long {
+	width: 100%;
+}
+
 .xprez-grid-boxes-admin-buttons {
-    text-align: center;
-    margin-bottom: -5px;
+	border-top: 1px solid $b-gray-4;
+	text-align: center;
+	margin-bottom: -5px;
+	padding-top: 1rem;
+	margin-top: 1rem;
+
+	> * {
+		margin: 0 4px;
+	}
 }
+
 .xprez-grid-boxes-admin-grid {
-    display: flex;
-    flex-wrap: wrap;
+	display: flex;
+	flex-wrap: wrap;
 }

@@ -1,0 +1,24 @@
+.xprez-faq {
+	&.full-width {
+		@include full-width;
+	}
+
+	&.mid-width {
+		@include m-width;
+	}
+
+	&.text-width {
+		@include cont-width($s-width + $m-space*6);
+		padding: $g*3 $m-space*3;
+	}
+
+	&.full-width, &.mid-width, &.text-width {
+		@media only screen and (max-width: ($break-m+200)) {
+			padding: $g*2 ($m-space * .5);
+		}
+
+		@media only screen and (max-width: ($break-s)) {
+			padding: $g*2 ($s-space * .5);
+		}
+	}
+}

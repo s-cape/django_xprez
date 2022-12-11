@@ -3,82 +3,104 @@
 	width: 100%;
 	padding-top: $g;
 	padding-bottom: $g;
+
 	label {
 		@include type-b(12px);
 		color: $b-gray-7;
 	}
+
 	& + & {
 		border-top: 1px solid $b-gray-4;
 
 	}
 
 	&.ui-sortable-helper {
-		background: darken($super-light-gray,5%);
+		background: darken($super-light-gray, 5%);
 	}
+
 	&.ui-sortable-handle {
 		cursor: move;
 	}
 }
+
 .xprez-title-form-table {
 	border-bottom: 1px solid $b-gray-4;
 }
+
 .xprez-form-row {
-	display: table-row;
+	display: flex;
+	flex-wrap: nowrap;
 }
+
 .xprez-cell-label {
-	display: table-cell;
-	width: 120px;
+	width: 100px;
 	text-align: right;
 	//border-right: 1px solid $b-gray-3;
 	padding: 5px 10px 0 0;
 	vertical-align: top;
 }
+
 .xprez-cell {
-	display: table-cell;
 	padding: 5px 10px;
+	flex: 1;
+	max-width: 700px;
+
 	label {
 		display: inline-block;
 		text-align: right;
 		padding: 0 5px;
 	}
+
 	.clearable-file-input {
 		padding-left: 10px;
 	}
 }
+
 .xprez-cell-info {
 	@include type-b(12px);
 }
+
 .xprez-multi-field {
 	float: left;
 	margin-right: 10px;
+
 	&:last-child {
 		margin-right: 0;
 	}
+
 	label {
 		float: left;
 		margin-right: 10px;
 	}
 }
+
 .xprez-multi-field-cell {
 	float: left;
 }
+
 .xprez-sub-info {
 	display: block;
 	@include type-b(11px, 1.5);
 	padding-left: 5px;
+
 	.error & {
 		color: $b-red;
 	}
 }
+
 .xprez-required {
 	label {
 		&:after {
-		    content: '*';
+			content: '*';
 			margin: 0 0 0 5px;
 			position: absolute;
-			color: $b-gray-6;	
+			color: $b-gray-6;
 		}
 	}
+}
+
+.xprez-drag-handle {
+	cursor: move;
 }
 
 
@@ -88,14 +110,18 @@ input, textarea {
 	.error & {
 		border-color: $b-red;
 	}
+
 	&.long {
 		width: 500px;
 	}
+
 	&.short {
 		width: 50px;
 	}
 
 }
+
 textarea {
 	height: 100px;
+	width: calc(100% - 5px);
 }
