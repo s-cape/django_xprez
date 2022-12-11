@@ -12,7 +12,7 @@
             <div class="xprez-quote__item">
                 <div class="xprez-quote__avatar">
                     {% if quote.image %}
-                        {% thumbnail quote.image "210x210" crop="25%" as thumb %}
+                        {% thumbnail quote.image "210x210" format="WEBP" quality=80 crop="25%" as thumb %}
                             <img src="{{ thumb.url|build_absolute_uri }}" class="xprez-qoute__img"/>
                         {% endthumbnail %}
                     {% else %}

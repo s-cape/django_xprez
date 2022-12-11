@@ -17,13 +17,13 @@
 
 // Media breakpoints
 
-@mixin media-breakpoint-up($breakpoint) {
+@mixin xprez-breakpoint-up($breakpoint) {
     @media (min-width: $breakpoint) {
         @content;
     }
 }
 
-@mixin media-breakpoint-down($breakpoint) {
+@mixin xprez-breakpoint-down($breakpoint) {
     @media (max-width: $breakpoint) {
         @content;
     }
@@ -54,7 +54,7 @@
     $mtop:      null,
     $mbot:      null
 ) {
-    @include media-breakpoint-down($typo-break-m) {
+    @include xprez-breakpoint-down($typo-break-m) {
         @include type($fsize, $lheight, $mtop, $mbot);
     }
 }
@@ -65,7 +65,7 @@
     $mtop:      null,
     $mbot:      null
 ) {
-    @include media-breakpoint-down($typo-break-s) {
+    @include xprez-breakpoint-down($typo-break-s) {
         @include type($fsize, $lheight, $mtop, $mbot);
     }
 }
@@ -78,7 +78,7 @@
 ) {
     @if $fsize {
         font-size: calc(#{$fsize} + 1rem);
-        @include media-breakpoint-down(900px) {
+        @include xprez-breakpoint-down(900px) {
             font-size: calc(#{$fsize} + 1.5vw);
         }
     }

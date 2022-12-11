@@ -5,8 +5,8 @@
               data-formfield_selector="#id_gallerys-{{ content.pk }}-{{ number }}-DELETE"></span>
     </div>
     {% block thumb %}
-    {% thumbnail item.image "400x400"  as thumb %}
-    <img src="{{ thumb.url }}" class="xprez-gallery__img"  />
+    {% thumbnail item.image "400x400" format="WEBP" quality=80 as thumb %}
+        <img src="{{ thumb.url }}" class="xprez-gallery__img"  />
     {% endthumbnail %}
     {% endblock %}
     <input type="text" value="" class="js-text_controller" data-formfield_selector="#id_gallerys-{{ content.pk }}-{{ number }}-description" placeholder="Add caption" />

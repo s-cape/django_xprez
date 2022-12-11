@@ -15,7 +15,7 @@
 	// spacing
 	$l-space: 88px !default;
 	$m-space: 28px !default;
-	$s-space: 14px !default;
+	$s-space: 12px !default;
 	$xs-space: 7px !default;
 
 	$mobile-edge-space: $s-space !default;
@@ -67,6 +67,7 @@
 	$base-text-color:  $black !default;
 	$base-font-size: 1rem !default;
 	$base-lh: 1.5 !default;
+	$base-border-radius: 0 !default;
 	$basefont: $base-font-size;
 
 	//
@@ -138,14 +139,14 @@
 	//
 
 	$text-module-boxed-bg: $super-light-gray !default;
-	$text-module-boxed-radius: 0 !default;
+	$text-module-boxed-radius: $base-border-radius !default;
 
 	//
 	// GRID BOXES
 	//
 
 	// sizes should be em because of scaling and are independent on $use-xprez-text-styles setting
-	$gridbox-base-size: $base-font-size;
+	$gridbox-base-size: $base-font-size !default;
 
 	$gridbox-h2-size: 3.125em !default;
 	$gridbox-h3-size: 2em !default;
@@ -165,6 +166,7 @@
 
 	$gridbox-background: $b-gray-3 !default;
 	$gridbox-border: 1px solid $b-gray-4 !default;
+	$gridbox-border-radius: $base-border-radius !default;
 
 
 	//
@@ -175,7 +177,7 @@
 
 	$button-size: $base-font-size * 0.875 !default;
 	$button-font-family: $sans !default;
-	$button-border-radius: 0px !default;
+	$button-border-radius: $base-border-radius * .5 !default;
 	$button-border: none !default;
 	$button-text-shadow: none !default;
 	$button-text-decoration: none !default;

@@ -120,7 +120,7 @@
 		@if $use-xprez-text-styles {
 			margin: $text-module-list-mt $text-module-list-h $text-module-list-mb;
 			padding: 0 0 0 $text-module-list-ps;
-			@include media-breakpoint-down($typo-break-s) {
+			@include xprez-breakpoint-down($typo-break-s) {
 				padding-left: math.div($text-module-list-ps, 2);
 			}
 			li {
@@ -142,12 +142,15 @@
 				font-family: $body-font-family;
 				font-style: normal;
 			}
-			padding-left: 0;
 			border: none;
 			color: inherit;
 
 
 			@if $use-xprez-blockquote-box-style {
+				&, p {
+					padding-left: 0;
+				}
+
 				& {
 					margin: $text-module-blockquote-mt $text-module-blockquote-ms $text-module-blockquote-mb $text-module-blockquote-me;
 				}
