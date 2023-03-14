@@ -90,11 +90,7 @@ def parse_text(text_source, request):
     for tag in soup.find_all(attrs={"contenteditable": True}):
         del tag["contenteditable"]
 
-    if sys.version_info >= (3, 0):
-        text_parsed = str(soup)
-    else:
-        text_parsed = unicode(soup)
-    return text_parsed
+    return str(soup)
 
 
 def render_text_parsed(text_parsed, extra_context={}):
