@@ -161,6 +161,7 @@ Select tag `vX.Y.Z` and name `vX.Y.Z`
 TODO
 -------
 
+- add custom module tutorial to Readme
 - fix template content to save only relative path to database
 - check template content raising UnicodeDecodeError
 - create manual for various situations (ck_editor branch)
