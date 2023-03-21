@@ -37,8 +37,8 @@ class XprezModelFormMixin(object):
 
 
 class XprezAdminMixin(object):
-    xprez_allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
-    xprez_excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
+    allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
+    excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
     def xprez_get_form(self, ModelForm=None):
         ModelForm = ModelForm or self.model_form
@@ -53,8 +53,8 @@ class XprezAdminMixin(object):
 
     def xprez_get_allowed_contents(self):
         return contents_manager._get_allowed_contents(
-            allowed_contents=self.xprez_allowed_contents,
-            excluded_contents=self.xprez_excluded_contents,
+            allowed_contents=self.allowed_contents,
+            excluded_contents=self.excluded_contents,
         )
 
     def xprez_ui_css_class(self):
@@ -72,12 +72,12 @@ class XprezAdminMixin(object):
     def xprez_admin_view(self, view):
         return view
 
-    xprez_view_url_namespace = None
+    xprez_url_namespace = None
 
     def xprez_admin_url_name(self, name, include_namespace=False):
         name = "{}_{}".format(self.model._meta.model_name, name)
-        if include_namespace and self.xprez_view_url_namespace:
-            name = "{}:{}".format(self.xprez_view_url_namespace, name)
+        if include_namespace and self.xprez_url_namespace:
+            name = "{}:{}".format(self.xprez_url_namespace, name)
         return name
 
     def xprez_add_content_url_name(self):
@@ -184,7 +184,7 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
     change_form_extend_template = "admin/change_form.html"
     change_form_template = "xprez/admin/xprez_changeform.html"
 
-    xprez_view_url_namespace = "admin"
+    xprez_url_namespace = "admin"
 
     def xprez_admin_view(self, view):
         return self.admin_site.admin_view(view)
