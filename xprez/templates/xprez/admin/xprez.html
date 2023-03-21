@@ -1,22 +1,14 @@
 {% load i18n %}
-{# {% if show_xprez_toolbar %} #}
-{# {% if adminform.form.xprez_contents %} #}
-{% if original.pk %}
-    <div class="xprez {{ ui_css_class }}">
-        <div class="xprez-top"><span class="xprez-option-btn js-collapse_all">Collapse All Boxes</span></div>
-        <div class="js-contents-container">
-            {% for content in adminform.form.xprez_contents %}
-                {{ content.render_admin }}
-            {% endfor %}
-        </div>
-        <div class="js-xprez-add xprez-add">
-            <h2>+ Add new piece of content +</h2>
-            {% include "./includes/add_list.html" %}
-        </div>
-    </div>
 
-{% else %}
-    <div class="xprez text-center">
-        <input type="submit" name="_continue" class="btn btn-high btn-info btn-large" value="{% trans 'Save and continue editing' %}"/>
+<div class="xprez {{ form.xprez_admin.xprez_ui_css_class }}">
+    <div class="xprez-top"><span class="xprez-option-btn js-collapse_all">Collapse All Boxes</span></div>
+    <div class="js-contents-container">
+        {% for content in form.xprez_contents %}
+            {{ content.render_admin }}
+        {% endfor %}
     </div>
-{% endif %}
+    <div class="js-xprez-add xprez-add">
+        <h2>+ Add new piece of content +</h2>
+        {% include "./includes/add_list.html" with xprez_admin=form.xprez_admin container=form.instance %}
+    </div>
+</div>

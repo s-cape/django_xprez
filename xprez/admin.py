@@ -3,7 +3,7 @@ from django.conf import settings as django_settings
 from django.contrib import admin
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.urls import re_path
+from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
 from . import contents_manager, models, settings
@@ -17,7 +17,7 @@ class XprezModelFormMixin(object):
         if instance:
             for content in instance.contents.all():
                 content = content.polymorph()
-                content.build_admin_form(self, data, files)
+                content.build_admin_form(self.xprez_admin, data, files)
                 self.xprez_contents.append(content)
 
     def is_valid(self):
@@ -28,50 +28,36 @@ class XprezModelFormMixin(object):
 
         return super().is_valid() and self.xprez_contents_all_valid
 
+    def save_xprez_contents(self, request):
+        for content in self.xprez_contents:
+            content.save_admin_form(request)
+
+    def is_multipart(self):
+        return True
+
 
 class XprezAdminMixin(object):
-    allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
-    excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
+    xprez_allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
+    xprez_excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
-    def get_form(self, *args, **kwargs):
-        ModelForm = super().get_form(*args, **kwargs)
-
-        admin = self
+    def xprez_get_form(self, ModelForm=None):
+        ModelForm = ModelForm or self.model_form
 
         class Form(XprezModelFormMixin, ModelForm):
-            # TODO:jakub - reorganize this somehow
-            def _get_allowed_contents(self, *args, **kwargs):
-                return admin._get_allowed_contents(*args, **kwargs)
+            xprez_admin = self
 
         return Form
 
-    def save_model(self, request, obj, form, *args, **kwargs):
-        super().save_model(request, obj, form, *args, **kwargs)
-        for content in form.xprez_contents:
-            content.save_admin_form(request)
-
-    def render_change_form(self, request, context, *args, **kwargs):
-        context.update(
-            {
-                "copy_url_name": "admin:" + self.model._meta.model_name + "_copy",
-                "copy_supported": hasattr(context["original"], "copy"),
-                "errors": context["errors"]
-                or context["adminform"].form.xprez_contents_all_valid is False,
-            }
-        )
-
-        return super().render_change_form(request, context, *args, **kwargs)
-
-    def _xprez_admin_media(self):
+    def xprez_admin_media(self):
         return contents_manager.admin_media()
 
-    def _get_allowed_contents(self):
+    def xprez_get_allowed_contents(self):
         return contents_manager._get_allowed_contents(
-            allowed_contents=self.allowed_contents,
-            excluded_contents=self.excluded_contents,
+            allowed_contents=self.xprez_allowed_contents,
+            excluded_contents=self.xprez_excluded_contents,
         )
 
-    def _get_ui_css_class(self):
+    def xprez_ui_css_class(self):
         if "suit" in django_settings.INSTALLED_APPS:
             return "suit"
         elif "grapelli" in django_settings.INSTALLED_APPS:
@@ -83,48 +69,62 @@ class XprezAdminMixin(object):
         klass = apps.get_model(app_label, model_name)
         return klass.objects.get(pk=object_pk)
 
-    def _add_xprez_context(self, extra_context=None):
-        if not extra_context:
-            extra_context = {}
-        extra_context.update(
-            {
-                "content_types": self._get_allowed_contents(),
-                "contents_media": self._xprez_admin_media(),
-                "ui_css_class": self._get_ui_css_class(),
-            }
-        )
-        return extra_context
+    def xprez_admin_view(self, view):
+        return view
 
-    def _xprez_admin_urls(self):
+    xprez_view_url_namespace = None
+
+    def xprez_admin_url_name(self, name, include_namespace=False):
+        name = "{}_{}".format(self.model._meta.model_name, name)
+        if include_namespace and self.xprez_view_url_namespace:
+            name = "{}:{}".format(self.xprez_view_url_namespace, name)
+        return name
+
+    def xprez_add_content_url_name(self):
+        return self.xprez_admin_url_name("add_content", include_namespace=True)
+
+    def xprez_add_content_before_url_name(self):
+        return self.xprez_admin_url_name("add_content_before", include_namespace=True)
+
+    def xprez_delete_content_url_name(self):
+        return self.xprez_admin_url_name("delete_content", include_namespace=True)
+
+    def xprez_copy_content_url_name(self):
+        return self.xprez_admin_url_name("copy_content", include_namespace=True)
+
+    def xprez_copy_url_name(self):
+        return self.xprez_admin_url_name("copy", include_namespace=True)
+
+    def xprez_admin_urls(self):
         return [
-            re_path(
-                r"^%s/copy/(?P<page_pk>\d+)/$" % self.model._meta.model_name,
-                self.admin_site.admin_view(self.copy_view),
-                name=self.model._meta.model_name + "_copy",
+            path(
+                "xprez-add-content/<int:page_pk>/<str:content_type>/",
+                self.xprez_admin_view(self.xprez_add_content_view),
+                name=self.xprez_admin_url_name("add_content"),
             ),
-            re_path(
-                r"^ajax/add-content/(?P<page_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$",
-                self.admin_site.admin_view(self.add_content_view),
-                name="ajax_add_content",
+            path(
+                "xprez-add-content-before/<int:before_content_pk>/<str:content_type>/",
+                self.xprez_admin_view(self.xprez_add_content_before_view),
+                name=self.xprez_admin_url_name("add_content_before"),
             ),
-            re_path(
-                r"^ajax/add-content-before/(?P<before_content_pk>\d+)/(?P<content_type>[A-z0-9-]+)/$",
-                self.admin_site.admin_view(self.add_content_before_view),
-                name="ajax_add_content_before",
+            path(
+                "xprez-delete-content/<int:content_pk>/",
+                self.xprez_admin_view(self.xprez_delete_content_view),
+                name=self.xprez_admin_url_name("delete_content"),
             ),
-            re_path(
-                r"^ajax/delete-content/(?P<content_pk>\d+)/$",
-                self.admin_site.admin_view(self.delete_content_view),
-                name="ajax_delete_content",
+            path(
+                "xprez-copy-content/<int:content_pk>/",
+                self.xprez_admin_view(self.xprez_copy_content_view),
+                name=self.xprez_admin_url_name("copy_content"),
             ),
-            re_path(
-                r"^ajax/copy-content/(?P<content_pk>\d+)/$",
-                self.admin_site.admin_view(self.copy_content_view),
-                name="ajax_copy_content",
+            path(
+                "xprez-copy/<int:page_pk>/",
+                self.xprez_admin_view(self.xprez_copy_view),
+                name=self.xprez_admin_url_name("copy"),
             ),
         ]
 
-    def add_content_view(self, request, page_pk, content_type):
+    def xprez_add_content_view(self, request, page_pk, content_type):
         content_class = contents_manager.get(content_type)
 
         container = self._get_container_instance(request, page_pk)
@@ -134,7 +134,7 @@ class XprezAdminMixin(object):
             {"template": content.render_admin(), "content_pk": content.pk}
         )
 
-    def add_content_before_view(self, request, before_content_pk, content_type):
+    def xprez_add_content_before_view(self, request, before_content_pk, content_type):
         content_class = contents_manager.get(content_type)
 
         before_content = models.Content.objects.get(pk=before_content_pk)
@@ -155,7 +155,14 @@ class XprezAdminMixin(object):
             }
         )
 
-    def copy_content_view(self, request, content_pk):
+    @csrf_exempt
+    def xprez_delete_content_view(self, request, content_pk):
+        if request.method == "POST":
+            content = models.Content.objects.get(pk=content_pk)
+            content.delete()
+        return HttpResponse()
+
+    def xprez_copy_content_view(self, request, content_pk):
         content = models.Content.objects.get(pk=content_pk).polymorph()
         new_content = content.copy()
         new_content.build_admin_form(self)
@@ -163,47 +170,42 @@ class XprezAdminMixin(object):
             {"template": new_content.render_admin(), "content_pk": new_content.pk}
         )
 
-    def copy_view(self, request, page_pk):
+    def xprez_copy_supported(self):
+        return hasattr(self.model, "copy")
+
+    def xprez_copy_view(self, request, page_pk):
         inst = self.model.objects.get(pk=page_pk)
         copy = inst.copy()
         info = (copy._meta.app_label, copy._meta.model_name)
         return redirect("admin:%s_%s_change" % info, copy.pk)
-
-    @csrf_exempt
-    def delete_content_view(self, request, content_pk):
-        if request.method == "POST":
-            content = models.Content.objects.get(pk=content_pk)
-            content.delete()
-        return HttpResponse()
 
 
 class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
     change_form_extend_template = "admin/change_form.html"
     change_form_template = "xprez/admin/xprez_changeform.html"
 
+    xprez_view_url_namespace = "admin"
+
+    def xprez_admin_view(self, view):
+        return self.admin_site.admin_view(view)
+
+    def get_form(self, *args, **kwargs):
+        return self.xprez_get_form(super().get_form(*args, **kwargs))
+
+    def save_model(self, request, obj, form, *args, **kwargs):
+        super().save_model(request, obj, form, *args, **kwargs)
+        form.save_xprez_contents(request)
+
     @property
     def media(self, *args, **kwargs):
-        return super().media + self._xprez_admin_media()
+        return super().media + self.xprez_admin_media()
 
-    def _add_xprez_context(self, extra_context=None):
-        context = super()._add_xprez_context(extra_context=extra_context)
-        context.update(
-            {"change_form_extend_template": self.change_form_extend_template}
+    def render_change_form(self, request, context, *args, **kwargs):
+        context["errors"] = (
+            context["errors"]
+            or context["adminform"].form.xprez_contents_all_valid is False
         )
-        return context
-
-    def change_view(self, request, object_id, form_url="", extra_context=None):
-        return super().change_view(
-            request,
-            object_id,
-            form_url,
-            extra_context=self._add_xprez_context(extra_context),
-        )
-
-    def add_view(self, request, form_url="", extra_context=None):
-        return super().add_view(
-            request, form_url, extra_context=self._add_xprez_context(extra_context)
-        )
+        return super().render_change_form(request, context, *args, **kwargs)
 
     def get_urls(self):
-        return self._xprez_admin_urls() + super().get_urls()
+        return self.xprez_admin_urls() + super().get_urls()

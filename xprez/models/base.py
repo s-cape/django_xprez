@@ -170,7 +170,7 @@ class Content(models.Model):
         self.admin_form = form_class(
             instance=self, prefix=self.get_form_prefix(), data=data, files=files
         )
-        self.admin_form.admin = admin
+        self.admin_form.xprez_admin = admin
 
     def is_admin_form_valid(self):
         return self.admin_form.is_valid()
@@ -184,7 +184,7 @@ class Content(models.Model):
             self.admin_template_name,
             {
                 "content": self,
-                "content_types": self.admin_form.admin._get_allowed_contents(),
+                "xprez_admin": self.admin_form.xprez_admin,
             },
         )
 

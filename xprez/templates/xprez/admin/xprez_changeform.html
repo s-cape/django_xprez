@@ -1,20 +1,21 @@
-{% extends change_form_extend_template %}
-{% load static i18n %}
-
-{% block content %}
-    {% with has_file_field=True %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
+{% extends adminform.form.xprez_admin.change_form_extend_template %}
+{% load static %}
+{% load i18n %}
 
 {% block inline_field_sets %}
     {{ block.super }}
-    {% include 'xprez/admin/xprez.html' %}
+    {% if adminform.form.instance.pk %}
+        {% include 'xprez/admin/xprez.html' with form=adminform.form %}
+    {% else %}
+        <div class="xprez text-center">
+            <input type="submit" name="_continue" class="btn btn-high btn-info btn-large" value="{% trans 'Save and continue editing' %}"/>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block object-tools-items %}
-    {% if copy_supported %}
-        <li><a href="{% url copy_url_name original.pk %}">Copy</a></li>
+    {% if adminform.form.xprez_admin.xprez_copy_supported %}
+        <li><a href="{% url adminform.form.xprez_admin.xprez_copy_url_name original.pk %}">Copy</a></li>
     {% endif %}
     {{ block.super }}
 {% endblock %}
