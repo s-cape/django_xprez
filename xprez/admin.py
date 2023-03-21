@@ -96,7 +96,7 @@ class XprezAdminMixin(object):
         return self.xprez_admin_url_name("copy", include_namespace=True)
 
     def xprez_admin_urls(self):
-        return [
+        urls = [
             path(
                 "xprez-add-content/<int:page_pk>/<str:content_type>/",
                 self.xprez_admin_view(self.xprez_add_content_view),
@@ -117,12 +117,16 @@ class XprezAdminMixin(object):
                 self.xprez_admin_view(self.xprez_copy_content_view),
                 name=self.xprez_admin_url_name("copy_content"),
             ),
-            path(
-                "xprez-copy/<int:page_pk>/",
-                self.xprez_admin_view(self.xprez_copy_view),
-                name=self.xprez_admin_url_name("copy"),
-            ),
         ]
+        if self.xprez_copy_supported():
+            urls += [
+                path(
+                    "xprez-copy/<int:page_pk>/",
+                    self.xprez_admin_view(self.xprez_copy_view),
+                    name=self.xprez_admin_url_name("copy"),
+                ),
+            ]
+        return urls
 
     def xprez_add_content_view(self, request, page_pk, content_type):
         content_class = contents_manager.get(content_type)
@@ -184,7 +188,9 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
     change_form_extend_template = "admin/change_form.html"
     change_form_template = "xprez/admin/xprez_changeform.html"
 
-    xprez_url_namespace = "admin"
+    @property
+    def xprez_url_namespace(self):
+        return self.admin_site.name
 
     def xprez_admin_view(self, view):
         return self.admin_site.admin_view(view)
