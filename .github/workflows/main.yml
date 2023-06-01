@@ -34,6 +34,6 @@ jobs:
 
 
             -   name: Run python tests
-                run: python manage.py test --settings=settings_ci
+                run: python manage.py test --settings=example_app.settings_ci
                 working-directory: ./example_app
 
