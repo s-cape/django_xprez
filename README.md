@@ -80,6 +80,7 @@ Quick start
 ```
     {% load xprez %}
     {% xprez_front_media %}
+    {% include 'xprez/includes/photoswipe.html' %}
     {% include 'xprez/container.html' with contents=page.contents.all %}
 ```
 
@@ -89,6 +90,7 @@ Quick start
     THUMBNAIL_BACKEND = 'xprez.contrib.sorl_thumbnail.thumbnail_backend.NamingThumbnailBackend'
 ```
 
+10. (optional) Look at example_app for more comprehensive example.
 
 Development
 -----------
