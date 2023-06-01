@@ -35,5 +35,5 @@ jobs:
 
             -   name: Run python tests
                 run: python src/manage.py test --settings=settings_ci
-                working-directory: ./src/example_app
+                working-directory: ./example_app
 
