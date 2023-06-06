@@ -118,6 +118,10 @@
                 }
             }
         }
+
+        img {
+            width: 100%;
+        }
     }
 
     // grid sizes
@@ -256,10 +260,6 @@
         //p, ul, li  {
         //    line-height: 1.7;
         //}
-
-        .medium-insert-images figure {
-            margin-bottom: $g*.5;
-        }
     }
 
     &.textsize-xs .xprez-grid-box {
@@ -268,10 +268,10 @@
         //p, ul, li  {
         //    line-height: 1.5;
         //}
+    }
 
-        .medium-insert-images figure {
-            margin-bottom: $g*.5;
-        }
+    figure {
+        margin-bottom: $gridbox-media-margin-bottom;
     }
 
     // centering
@@ -289,7 +289,7 @@
     .medium-insert-images {
         figure {
             margin-top: 1.25em;
-            margin-bottom: 1.25em;
+            //margin-bottom: 1.25em;
         }
 
         &:first-child figure {

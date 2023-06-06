@@ -1,0 +1,39 @@
+on:
+    push:
+        branches: [ master ]
+    pull_request:
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:latest
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: xprez_example_app
+                ports:
+                    - 5432:5432
+                # needed because the postgres container does not provide a healthcheck
+                options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: actions/setup-python@v4
+                with:
+                    python-version: '3.10'
+                    cache: 'pip' # caching pip dependencies
+            -   uses: pre-commit/action@v3.0.0
+                with:
+                    extra_args: --all-files
+
+            -   name: Install Python requirements
+                run: pip install -r example_app/requirements.txt
+
+
+            -   name: Run python tests
+                run: python manage.py test --settings=example_app.settings_ci
+                working-directory: ./example_app
+
