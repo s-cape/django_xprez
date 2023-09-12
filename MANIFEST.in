@@ -6,3 +6,4 @@ recursive-include xprez/ck_editor/static *
 recursive-include xprez/medium_editor/static *
 recursive-include xprez/code_snippet/static *
 recursive-include xprez/code_snippet/templates *
+prune xprez/static/xprez/node_modules/
