@@ -2,7 +2,7 @@
 <div class="xprez-module {% if content.admin_has_errors %}xprez-module--error{% endif %} js-content js-content-{{ content.pk }} {% block extra_class %}{% endblock %}" data-pk="{{ content.pk }}">
     <div class="xprez-add xprez-add-before">
         <div class="xprez-add__cont">
-            {% include "../includes/add_list.html" with before_content=content %}
+            {% include "../includes/add_list.html" with xprez_admin=xprez_admin before_content=content %}
         </div>
     </div>
 
@@ -17,8 +17,8 @@
     </div>
     <div class="xprez-module__title js-sortable-handler">
         <span class="xprez-icon-btn-collapse js-collapser" title="Collapse"></span>
-        <span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_delete_content' content.pk %}" title="Remove"></span>
-        <span class="xprez-icon-btn-copy js-copy-content" data-pk="{{ content.pk }}" data-url="{% url 'admin:ajax_copy_content' content.pk %}" title="Copy and paste the module to the end"></span>
+        <span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_delete_content_url_name content.pk %}" title="Remove"></span>
+        <span class="xprez-icon-btn-copy js-copy-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_copy_content_url_name content.pk %}" title="Copy and paste the module to the end"></span>
         <span class="xprez-icon-btn-eye js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off"></span>
         <h2>
             <b>{{ content.verbose_name }}</b>
