@@ -116,7 +116,7 @@ Deploying new version
 
 #### Tagging new version
 
-Update setup.py -> VERSION
+Update setup.py -> VERSION, commit and push to master.
 
 On localhost run:
 ```
