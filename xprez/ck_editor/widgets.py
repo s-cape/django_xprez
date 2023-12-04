@@ -66,12 +66,12 @@ class CkEditorWidgetFullBase(CkEditorWidgetBase):
                     "toggleButtonPrimary": {
                         "mode": "manual",
                         "label": "Primary button",
-                        "classes": "btn btn-primary",
+                        "classes": ["btn", "btn-primary"],
                     },
                     "toggleButtonSecondary": {
                         "mode": "manual",
                         "label": "Secondary button",
-                        "classes": "btn btn-secondary",
+                        "classes": ["btn", "btn-secondary"],
                     },
                     "openInNewTab": {
                         "mode": "manual",
