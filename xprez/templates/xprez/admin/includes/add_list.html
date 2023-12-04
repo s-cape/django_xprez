@@ -1,5 +1,5 @@
 <ul class="xprez-add__list">
-    {% for content_type in xprez_admin.xprez_get_allowed_contents %}
+    {% for content_type in allowed_contents %}
         <li class="js-add-content"
             {% if before_content %}
             data-insert-before=".js-content-{{ before_content.pk }}"

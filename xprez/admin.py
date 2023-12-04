@@ -35,6 +35,9 @@ class XprezModelFormMixin(object):
     def is_multipart(self):
         return True
 
+    def xprez_get_allowed_contents(self):
+        return self.xprez_admin.xprez_get_allowed_contents(container=self.instance)
+
 
 class XprezAdminMixin(object):
     allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
@@ -51,7 +54,7 @@ class XprezAdminMixin(object):
     def xprez_admin_media(self):
         return contents_manager.admin_media()
 
-    def xprez_get_allowed_contents(self):
+    def xprez_get_allowed_contents(self, container):
         return contents_manager._get_allowed_contents(
             allowed_contents=self.allowed_contents,
             excluded_contents=self.excluded_contents,
@@ -171,7 +174,10 @@ class XprezAdminMixin(object):
         new_content = content.copy()
         new_content.build_admin_form(self)
         return JsonResponse(
-            {"template": new_content.render_admin(), "content_pk": new_content.pk}
+            {
+                "template": new_content.render_admin(),
+                "content_pk": new_content.pk,
+            }
         )
 
     def xprez_copy_supported(self):

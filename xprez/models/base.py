@@ -185,6 +185,9 @@ class Content(models.Model):
             {
                 "content": self,
                 "xprez_admin": self.admin_form.xprez_admin,
+                "allowed_contents": self.admin_form.xprez_admin.xprez_get_allowed_contents(
+                    container=self.page
+                ),
             },
         )
 
@@ -214,7 +217,6 @@ class Content(models.Model):
 
 
 class FormsetContent(Content):
-
     formset_factory = NotImplemented
 
     class Meta:
