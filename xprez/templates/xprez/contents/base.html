@@ -1,8 +1,10 @@
 {% block content %}
-    <div class="{% block css_class %}xprez-module xprez-module-margin-bottom-{{ content.margin_bottom }} {{ content.css_class|default:"" }} {% block css_class_extra %}{% endblock %}{% endblock %}">
+<div class="xprez-module-cont xprez-module-margin-bottom-{{ content.margin_bottom }} {{ content.css_class|default:'' }}">
+    <div class="{% block css_class %}xprez-module {% block css_class_extra %}{% endblock %}{% endblock %}">
         {% block content_in %}
         {% endblock %}
     </div>
+</div>
 {% endblock %}
 
 {% block js %} {% endblock %}

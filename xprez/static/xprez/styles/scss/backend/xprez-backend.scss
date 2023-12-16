@@ -19,7 +19,6 @@
 @import "../frontend/grid-boxes";
 
 
-
 // GENERAL LAYOUT
 .xprez {
 	box-sizing: border-box;
@@ -35,6 +34,7 @@
 .xprez-module {
 	border: 1px solid $b-gray-4;
 	margin: $g 0;
+
 	&.collapsed .xprez-module__collapse-cont {
 		display: none;
 	}
@@ -49,7 +49,7 @@
 
 	h2 {
 		@include type-b(12px);
-		color: darken($b-gray-7,15%);
+		color: darken($b-gray-7, 15%);
 		cursor: move;
 		position: absolute;
 		top: 0;
@@ -97,7 +97,7 @@
 }
 
 .xprez-module__common-options {
-	background: rgba(0,0,0,0.02);
+	background: rgba(0, 0, 0, 0.02);
 }
 
 .xprez-module__content {
@@ -134,7 +134,7 @@
 	text-align: center;
 
 	h2 {
-		@include type-b(13px,2,2,2);
+		@include type-b(13px, 2, 2, 2);
 		color: $b-gray-7;
 		font-weight: normal;
 	}
@@ -152,7 +152,9 @@
 		vertical-align: top;
 
 		&:hover {
-			.xprez-add__label { color: $b-blue-high; }
+			.xprez-add__label {
+				color: $b-blue-high;
+			}
 
 			[class^="xprez-icon-btn-add"], [class*=" xprez-icon-btn-add"] {
 				background: $b-blue-high;
@@ -162,7 +164,7 @@
 }
 
 .xprez-add__label {
-	@include type-b(12px,0.9,.5,1);
+	@include type-b(12px, 0.9, .5, 1);
 	display: inline-block;
 	color: $b-gray-7;
 }
@@ -195,36 +197,85 @@
 		background: $b-gray-7;
 	}
 }
-.xprez-icon-btn-remove:before {content: "\e872";}
+
+.xprez-icon-btn-remove:before {
+	content: "\e872";
+}
 
 .xprez-icon-btn-collapse:before {
 	content: "\e5c6";
 	font-size: 28px;
 
-	.collapsed & { content: "\e5c5";}
+	.collapsed & {
+		content: "\e5c5";
+	}
 }
 
-.xprez-icon-btn-remove.active{
+.xprez-icon-btn-remove.active {
 	background: $b-red;
 }
 
-.xprez-icon-btn-layout_1:before {content: "\e8f3";}
-.xprez-icon-btn-layout_2:before	{content: "\e8f2";}
-.xprez-icon-btn-layout_3:before	{content: "\e8f0";}
-.xprez-icon-btn-layout_4:before	{content: "\e42a";}
-.xprez-icon-btn-layout_6:before	{content: "\e900";}
-.xprez-icon-btn-layout_8:before	{content: "\e901";}
-.xprez-icon-btn-crop:before	{content: "\e3be";}
-.xprez-icon-btn-copy:before { content: "\e14d"; }
-.xprez-icon-btn-align-center:before {content: "\e903";}
-.xprez-icon-btn-background:before {content: "\e905";}
-.xprez-icon-btn-border:before {content: "\e957";}
-.xprez-icon-btn-chevron-small-down:before { content: "\e906";}
-.xprez-icon-btn-chevron-small-up:before {content: "\e907";}
-.xprez-icon-btn-edit-pencil:before { content: "\e908"; }
-.xprez-icon-btn-dots-horizontal-triple:before { content: "\e90b"; }
+.xprez-icon-btn-layout_1:before {
+	content: "\e8f3";
+}
 
-.xprez-icon-btn-eye	{
+.xprez-icon-btn-layout_2:before {
+	content: "\e8f2";
+}
+
+.xprez-icon-btn-layout_3:before {
+	content: "\e8f0";
+}
+
+.xprez-icon-btn-layout_4:before {
+	content: "\e42a";
+}
+
+.xprez-icon-btn-layout_6:before {
+	content: "\e900";
+}
+
+.xprez-icon-btn-layout_8:before {
+	content: "\e901";
+}
+
+.xprez-icon-btn-crop:before {
+	content: "\e3be";
+}
+
+.xprez-icon-btn-copy:before {
+	content: "\e14d";
+}
+
+.xprez-icon-btn-align-center:before {
+	content: "\e903";
+}
+
+.xprez-icon-btn-background:before {
+	content: "\e905";
+}
+
+.xprez-icon-btn-border:before {
+	content: "\e957";
+}
+
+.xprez-icon-btn-chevron-small-down:before {
+	content: "\e906";
+}
+
+.xprez-icon-btn-chevron-small-up:before {
+	content: "\e907";
+}
+
+.xprez-icon-btn-edit-pencil:before {
+	content: "\e908";
+}
+
+.xprez-icon-btn-dots-horizontal-triple:before {
+	content: "\e90b";
+}
+
+.xprez-icon-btn-eye {
 	position: relative;
 
 	&:before {
@@ -246,7 +297,7 @@
 	}
 }
 
-.xprez-icon-btn-eye.active	{
+.xprez-icon-btn-eye.active {
 	background: none;
 
 	&:before {
@@ -268,13 +319,16 @@
 	padding: 0 7px;
 	letter-spacing: 0.02em;
 	cursor: pointer;
+
 	&:hover {
 		background: $b-gray-4;
 	}
+
 	&.active {
 		color: white;
 		background: $b-gray-7;
 	}
+
 	[class^="xprez-icon"] {
 		margin-right: 5px;
 		font-size: 20px;
@@ -292,33 +346,82 @@
 	display: inline-block;
 	background: $b-gray-7;
 	border-radius: 30px;
+
 	&:before {
 		font-size: 25px;
 		line-height: 60px;
 	}
+
 	&:hover {
 		background: $b-purple;
 	}
+
 	&.active {
 		color: white;
 		background: $b-gray-8;
 	}
 }
-.xprez-icon-btn-add-default:before {content: "\e86e";}  // TODO:kaplick create better default icon
-.xprez-icon-btn-add-text_content:before {content: "\e235";}
-.xprez-icon-btn-add-text_box:before {content: "\e8b0";}
-.xprez-icon-btn-add-code_template:before {content: "\e8be";}
-.xprez-icon-btn-add-numbers:before {content: "\e3d4";}
-.xprez-icon-btn-add-video:before {content: "\e8da";}
-.xprez-icon-btn-add-gallery:before {content: "\e432";}
-.xprez-icon-btn-add-feature_boxes:before {content: "\e875";}
-.xprez-icon-btn-add-code:before {content: "\e86f";}
-.xprez-icon-btn-add-quote:before {content: "\e0b7";}
-.xprez-icon-btn-add-linked_article:before {content: "\e86e";}
-.xprez-icon-btn-add-downloads:before {content: "\e2c0";}
-.xprez-icon-btn-add-text_image:before {content: "\e060";}
-.xprez-icon-btn-add-grid_boxes:before {content: "\e904";}
-.xprez-icon-btn-add-anchor:before {content: "\e909";}
+
+.xprez-icon-btn-add-default:before {
+	content: "\e86e";
+}
+
+// TODO:kaplick create better default icon
+.xprez-icon-btn-add-text_content:before {
+	content: "\e235";
+}
+
+.xprez-icon-btn-add-text_box:before {
+	content: "\e8b0";
+}
+
+.xprez-icon-btn-add-code_template:before {
+	content: "\e8be";
+}
+
+.xprez-icon-btn-add-numbers:before {
+	content: "\e3d4";
+}
+
+.xprez-icon-btn-add-video:before {
+	content: "\e8da";
+}
+
+.xprez-icon-btn-add-gallery:before {
+	content: "\e432";
+}
+
+.xprez-icon-btn-add-feature_boxes:before {
+	content: "\e875";
+}
+
+.xprez-icon-btn-add-code:before {
+	content: "\e86f";
+}
+
+.xprez-icon-btn-add-quote:before {
+	content: "\e0b7";
+}
+
+.xprez-icon-btn-add-linked_article:before {
+	content: "\e86e";
+}
+
+.xprez-icon-btn-add-downloads:before {
+	content: "\e2c0";
+}
+
+.xprez-icon-btn-add-text_image:before {
+	content: "\e060";
+}
+
+.xprez-icon-btn-add-grid_boxes:before {
+	content: "\e904";
+}
+
+.xprez-icon-btn-add-anchor:before {
+	content: "\e909";
+}
 
 // Option forms
 .xprez-option-label {
@@ -327,6 +430,7 @@
 	color: $b-gray-7;
 	letter-spacing: 0.02em;
 }
+
 .xprez .xprez-option-input {
 	@include sans($font-b);
 	border-radius: 2px;
@@ -334,7 +438,7 @@
 	box-sizing: border-box;
 	@include type-b(12px, 20px);
 	height: auto;
-	width: 150px;
+	width: 110px !important;
 	vertical-align: middle;
 	padding: 3px 5px;
 	border: 1px solid $b-gray-4;

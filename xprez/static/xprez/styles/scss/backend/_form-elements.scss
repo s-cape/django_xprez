@@ -3,9 +3,11 @@
 	width: 100%;
 	padding-top: $g;
 	padding-bottom: $g;
+	line-height: 1.25;
 
 	label {
-		@include type-b(12px);
+		font-size: .857rem;
+
 		color: $b-gray-7;
 	}
 
@@ -33,7 +35,7 @@
 }
 
 .xprez-cell-label {
-	width: 100px;
+	min-width: 130px;
 	text-align: right;
 	//border-right: 1px solid $b-gray-3;
 	padding: 5px 10px 0 0;
@@ -53,6 +55,15 @@
 
 	.clearable-file-input {
 		padding-left: 10px;
+	}
+
+	input[type=checkbox] {
+		width: unset;
+		margin-top: .25rem;
+	}
+
+	input, textarea, select {
+		box-sizing: border-box;
 	}
 }
 

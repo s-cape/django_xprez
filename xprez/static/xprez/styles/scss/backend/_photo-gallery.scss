@@ -1,8 +1,20 @@
 @mixin placeholder($c,$fs: italic ) {
-	&::-webkit-input-placeholder { color: $c; font-style: italic; }
-	&::-moz-placeholder { color: $c; font-style: italic; }
-	&:-ms-input-placeholder { color: $c; font-style: italic; }
-	&:-moz-placeholder { color: $c; font-style: italic;}
+	&::-webkit-input-placeholder {
+		color: $c;
+		font-style: italic;
+	}
+	&::-moz-placeholder {
+		color: $c;
+		font-style: italic;
+	}
+	&:-ms-input-placeholder {
+		color: $c;
+		font-style: italic;
+	}
+	&:-moz-placeholder {
+		color: $c;
+		font-style: italic;
+	}
 }
 
 .xprez-gallery__item {
@@ -10,59 +22,75 @@
 	display: inline-block;
 	width: 220px;
 	margin: 0 10px 10px 0;
+
 	input[type=text] {
-		box-sizing: content-box;
+		//box-sizing: content-box;
 		@include placeholder($b-gray-6);
 		box-shadow: none;
 		border-radius: 0px;
-		@include type(13px,1);
+		@include type(13px, 1);
 		width: 100%;
 		padding: 3px 3px;
 		margin-top: 5px;
-		border: none; 
+		border: none;
 		border-bottom: 1px solid transparent;
+
 		&:hover {
 			border-bottom-color: $b-gray-3;
 		}
+
 		&:focus {
 			border-bottom: 1px solid $b-blue-high;
 			color: $b-gray-8;
 		}
 	}
+
 	.xprez-gallery-photo-buttons {
 		position: absolute;
 		right: 0;
 		text-align: right;
+
 		[class*='xprez-icon-btn-'] {
 			display: none;
 			background: $b-gray-7;
-			&:before { color: white; }
+
+			&:before {
+				color: white;
+			}
+
 			&:hover {
 				background: $black;
 			}
+
 			&.active {
 				background: $b-red;
 				display: inline-block;
+
 				&:hover {
-					&:before { color: $white }
+					&:before {
+						color: $white
+					}
 				}
 			}
 		}
 	}
+
 	&:hover {
 		[class*='xprez-icon-btn-'] {
 			display: inline-block;
 		}
 	}
 }
+
 .xprez-gallery__img {
 	cursor: move;
 	max-width: 100%;
-    width: auto;
-    height: auto;
-    vertical-align: middle;
-    border: 0;
+	width: auto;
+	height: auto;
+	vertical-align: middle;
+	border: 0;
 }
+
 .xprez-gallery__dropzone {
 	border: 1px dotted $b-gray-5;
 	border-radius: 2px;
@@ -74,9 +102,10 @@
 	cursor: pointer;
 	font-style: italic;
 	overflow: hidden;
+
 	&:hover {
 		color: $b-gray-8;
-		border-color:  $b-blue-high;
+		border-color: $b-blue-high;
 	}
 }
 
@@ -86,28 +115,35 @@
 	position: relative;
 	display: inline-block;
 	margin: 5px 10px 5px 0;
+
 	.dz-details, .dz-success-mark, .dz-error-mark {
 		display: none;
 	}
+
 	.dz-success-mark {
 		svg {
 			width: 30px;
 		}
+
 		#Oval-2 {
 			fill: green;
 		}
-	} 
+	}
+
 	.dz-error-mark {
 		svg {
 			width: 30px;
 		}
+
 		#Oval-2 {
 			fill: $b-red;
 		}
 	}
+
 	.dz-image {
 		opacity: 0.5;
 	}
+
 	.dz-progress {
 		position: absolute;
 		bottom: 0;
@@ -116,6 +152,7 @@
 		height: 5px;
 		background: white;
 		border-top: 2px solid white;
+
 		.dz-upload {
 			position: absolute;
 			bottom: 0;
@@ -125,6 +162,7 @@
 		}
 	}
 }
+
 .xprez .dz-processing .dz-image {
 	opacity: 1;
 }
