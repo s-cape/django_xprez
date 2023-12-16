@@ -1,10 +1,12 @@
 {% load static %}
 <div class="xprez-module {% if content.admin_has_errors %}xprez-module--error{% endif %} js-content js-content-{{ content.pk }} {% block extra_class %}{% endblock %}" data-pk="{{ content.pk }}">
-    <div class="xprez-add xprez-add-before">
-        <div class="xprez-add__cont">
-            {% include "../includes/add_list.html" with xprez_admin=xprez_admin allowed_contents=allowed_contents before_content=content %}
+    {% if allowed_contents %}
+        <div class="xprez-add xprez-add-before">
+            <div class="xprez-add__cont">
+                {% include "../includes/add_list.html" with xprez_admin=xprez_admin allowed_contents=allowed_contents before_content=content %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 
     {% block js %}{% endblock %}
     <div style="display: none;">
