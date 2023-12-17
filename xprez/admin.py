@@ -171,12 +171,17 @@ class XprezAdminMixin(object):
 
     def xprez_copy_content_view(self, request, content_pk):
         content = models.Content.objects.get(pk=content_pk).polymorph()
-        new_content = content.copy()
+        new_content = content.copy(position=content.position + 1)
         new_content.build_admin_form(self)
+
+        updated_contents_positions = dict(
+            [(c.id, c.position) for c in content.page.contents.all()]
+        )
         return JsonResponse(
             {
                 "template": new_content.render_admin(),
                 "content_pk": new_content.pk,
+                "updated_content_positions": updated_contents_positions,
             }
         )
 

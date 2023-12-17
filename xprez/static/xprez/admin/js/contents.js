@@ -7,6 +7,8 @@ function activateAddContentLinks($scope) {
                 var insertBefore = $el.data('insert-before');
                 if (insertBefore) {
                     $(data.template).insertBefore($(insertBefore))
+                } else if ($el.hasClass('js-copy-content')) {
+                    $(data.template).insertAfter($el.closest('.js-content'));
                 } else {
                     $contentsContainer.append(data.template);
                 }

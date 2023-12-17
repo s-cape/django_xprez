@@ -119,7 +119,7 @@ class Content(models.Model):
         obj = getattr(self, self.content_type.lower())
         return obj
 
-    def copy(self, for_page=None, save=True):
+    def copy(self, for_page=None, save=True, position=None):
         if not for_page:
             for_page = self.page
 
@@ -131,7 +131,14 @@ class Content(models.Model):
             ]
         )
         inst = self.__class__(**initial)
-        inst.position = self._count_new_content_position(for_page)
+        if position is None:  # add to end
+            inst.position = self._count_new_content_position(for_page)
+        else:  # add on specific position
+            inst.position = position
+            if for_page.contents.filter(position=position).exists():
+                for_page.contents.filter(position__gte=position).update(
+                    position=F("position") + 1
+                )
         inst.page = for_page
         if save:
             inst.save()
