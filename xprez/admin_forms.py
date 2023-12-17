@@ -31,7 +31,15 @@ from .utils import import_class
 
 
 class BaseContentForm(forms.ModelForm):
-    base_content_fields = ("position", "visible", "css_class", "margin_bottom")
+    base_content_fields = (
+        "position",
+        "visible",
+        "css_class",
+        "margin_bottom",
+        "padding_vertical",
+        "alternate_color",
+        "background_color",
+    )
 
     def main_fields(self):
         excluded_fields = tuple(self.base_content_fields)

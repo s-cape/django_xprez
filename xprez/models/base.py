@@ -66,18 +66,32 @@ class Content(models.Model):
     )
     visible = models.BooleanField(default=True)
 
+    alternate_color = models.BooleanField(default=False)
+    background_color = models.CharField(max_length=30, blank=True)
     css_class = models.CharField(max_length=100, null=True, blank=True)
 
-    MARGIN_DEFAULT = 2
-    MARGIN_CHOICES = (
+    MARGIN_BOTTOM_DEFAULT = 2
+    MARGIN_BOTTOM_CHOICES = (
         (0, "None"),
         (1, "S"),
-        (MARGIN_DEFAULT, "M"),
+        (2, "M"),
         (3, "L"),
         (4, "XL"),
     )
     margin_bottom = models.PositiveSmallIntegerField(
-        choices=MARGIN_CHOICES, default=MARGIN_DEFAULT
+        choices=MARGIN_BOTTOM_CHOICES, default=MARGIN_BOTTOM_DEFAULT
+    )
+
+    PADDING_VERTICAL_DEFAULT = 0
+    PADDING_VERTICAL_CHOICES = (
+        (0, "None"),
+        (1, "S"),
+        (2, "M"),
+        (3, "L"),
+        (4, "XL"),
+    )
+    padding_vertical = models.PositiveSmallIntegerField(
+        choices=PADDING_VERTICAL_CHOICES, default=PADDING_VERTICAL_DEFAULT
     )
 
     class Meta:
