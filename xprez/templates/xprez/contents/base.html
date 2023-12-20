@@ -1,8 +1,9 @@
 {% block content %}
-<div class="xprez-module-cont xprez-module-margin-bottom-{{ content.margin_bottom }} xprez-module-padding-vertical-{{ content.padding_vertical }} {{ content.css_class|default:'' }}">
+<div class="xprez-module-cont xprez-module-margin-bottom-{{ content.margin_bottom }} xprez-module-padding-y-{{ content.padding_vertical }} {{ content.css_class|default:'' }}"
+     {% if content.background_color %}style="background-color: {{ content.background_color }};"{% endif %}
+>
     <div
         class="{% block css_class %}xprez-module {% if content.alternate_color %}xprez-module-alternate-color{% endif %} {% block css_class_extra %}{% endblock %}{% endblock %}"
-        {% if content.background_color %}style="background-color: {{ content.background_color }};"{% endif %}
     >
         {% block content_in %}
         {% endblock %}

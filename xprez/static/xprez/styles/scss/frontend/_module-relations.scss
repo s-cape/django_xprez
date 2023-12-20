@@ -1,81 +1,43 @@
+@use "../library/rfs";
+
 // content blocks relations
 
-@mixin relation($o, $l, $m, $s, $dir: bottom) { // grid multiples
-	margin-#{$dir}: $module-spacing-base * $o;
-
-	@media only screen and (max-width: $typo-break-l) {
-       margin-#{$dir} : $module-spacing-base * $l;
-    }
-
-    @media only screen and (max-width: $typo-break-m) {
-       margin-#{$dir}: $module-spacing-base * $m;
-    }
-
-    @media only screen and (max-width: $typo-break-s) {
-       margin-#{$dir}: $module-spacing-base * $s;
-    }
-}
-
 .xprez-module-margin-bottom-0 {
-	@include relation(0, 0, 0, 0);
+	margin-bottom: 0;
 }
 
 .xprez-module-margin-bottom-1 {
-	@include relation(2, 1.75, 1.5, 1);
+	@include rfs.margin-bottom(2rem);
 }
 
 .xprez-module-margin-bottom-2 {
-	@include relation(5, 4, 3, 2);
+	@include rfs.margin-bottom(5rem);
 }
 
 .xprez-module-margin-bottom-3 {
-	@include relation(7.5, 6, 4.5, 3);
+	@include rfs.margin-bottom(7.5rem);
 }
 
 .xprez-module-margin-bottom-4 {
-	@include relation(10, 8, 6, 4);
+	@include rfs.margin-bottom(10rem);
 }
 
-
-
-.xprez-module {
-	//& + .xprez-module {
-	//	@include relation(5,4,3,2);
-	//}
-	//
-	//& + .xprez-gallery {
-	//	@include relation(5,3,2,1.5);
-	//}
-	//
-	//& + .xprez-gallery.text-width {
-	//	@include relation(3,1.5,1.5,1.5);
-	//}
-
-	//&:last-child {
-	//	margin-bottom: $g*5;
-	//	@media only screen and (max-width: $typo-break-s) {
-	//       margin-bottom: $g*2;
-	//    }
-	//}
-
-	//&.xprez-quote-boxed:last-child,
-	//&.xprez-photo-connect-true.full-width:last-child {
-	//	margin-bottom: 0;
-	//}
-}
-.xprez-gallery {
-	//& + .xprez-module {
-	//	@include relation(5,4,3,2);
-	//}
-	//
-	//& + & {
-	//	margin-top: 0;
-	//}
-}
-.xprez-grid-boxes {
-	//& + & {
-	//	margin-top: 0;
-	//}
+.xprez-module-padding-y-0 {
+	padding: 0;
 }
 
+.xprez-module-padding-y-1 {
+	@include rfs.padding(2rem 0);
+}
 
+.xprez-module-padding-y-2 {
+	@include rfs.padding(5rem 0);
+}
+
+.xprez-module-padding-y-3 {
+	@include rfs.padding(7.5rem 0);
+}
+
+.xprez-module-padding-y-4 {
+	@include rfs.padding(10rem 0);
+}
