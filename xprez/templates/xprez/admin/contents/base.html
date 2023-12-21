@@ -17,7 +17,8 @@
             {{ content.admin_form.background_color }}
             {{ content.admin_form.alternate_color }}
             {{ content.admin_form.margin_bottom }}
-            {{ content.admin_form.padding_vertical }}
+            {{ content.admin_form.padding_top }}
+            {{ content.admin_form.padding_bottom }}
         {% endblock %}
     </div>
     <div class="xprez-module__title js-sortable-handler">
@@ -27,8 +28,14 @@
         {% block btn_toggle_visible %}<span class="xprez-icon-btn-eye js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off"></span>{% endblock %}
         <h2>
             <b>{{ content.verbose_name }}</b>
-            {% if content.margin_bottom != content.MARGIN_BOTTOM_DEFAULT %}<i>bottom: <b>{{ content.get_margin_bottom_display }}</b></i>{% endif %}
-            {% if content.padding_vertical != content.PADDING_VERTICAL_DEFAULT %}<i>padding: <b>{{ content.get_padding_vertical_display }}</b></i>{% endif %}
+            {% if content.margin_bottom != content.MARGIN_BOTTOM_DEFAULT %}<i>margin bottom: <b>{{ content.get_margin_bottom_display }}</b></i>{% endif %}
+            {% if content.padding_top != content.PADDING_TOP_DEFAULT or content.padding_bottom != content.PADDING_BOTTOM_DEFAULT %}
+                <i>
+                    padding
+                    {% if content.padding_top != content.PADDING_TOP_DEFAULT %}top: <b>{{ content.get_padding_top_display }}</b>{% endif %}
+                    {% if content.padding_bottom != content.PADDING_BOTTOM_DEFAULT %}bottom: <b>{{ content.get_padding_bottom_display }}</b>{% endif %}
+                </i>
+            {% endif %}
             {% if content.alternate_color %}<i><b>alternate color</b></i>{% endif %}
             {% if content.background_color %}<i>background color: <b>{{ content.background_color }}</b></i>{% endif %}
             {% if content.css_class  %}<i>class: <b>{{ content.css_class }}</b></i>{% endif %}
@@ -47,19 +54,28 @@
                         <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
                     {% endfor %}
                 </ul>
-                <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-padding_vertical">
+                <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-padding_top">
                     <li>
-                        <label class="xprez-option-label">Padding vertical:</label>
+                        <label class="xprez-option-label">Padding top:</label>
                     </li>
-                    {% for value, label in content.admin_form.padding_vertical.field.choices %}
+                    {% for value, label in content.admin_form.padding_top.field.choices %}
                         <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
                     {% endfor %}
                 </ul>
+                <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-padding_bottom">
+                    <li>
+                        <label class="xprez-option-label">Padding bottom:</label>
+                    </li>
+                    {% for value, label in content.admin_form.padding_bottom.field.choices %}
+                        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+            <div>
                 <ul class="xprez-module__options-group">
                     <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-alternate_color" >Alternate color</span></li>
                 </ul>
-            </div>
-            <div>
                 <ul class="xprez-module__options-group ">
                     <li>
                         <label class="xprez-option-label">Background color:</label>

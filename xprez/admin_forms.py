@@ -36,7 +36,8 @@ class BaseContentForm(forms.ModelForm):
         "visible",
         "css_class",
         "margin_bottom",
-        "padding_vertical",
+        "padding_top",
+        "padding_bottom",
         "alternate_color",
         "background_color",
     )

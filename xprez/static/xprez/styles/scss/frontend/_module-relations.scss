@@ -22,22 +22,42 @@
 	@include rfs.margin-bottom(10rem);
 }
 
-.xprez-module-padding-y-0 {
-	padding: 0;
+.xprez-module-padding-top-0 {
+	padding-top: 0;
 }
 
-.xprez-module-padding-y-1 {
-	@include rfs.padding(2rem 0);
+.xprez-module-padding-top-1 {
+	@include rfs.padding-top(2rem);
 }
 
-.xprez-module-padding-y-2 {
-	@include rfs.padding(5rem 0);
+.xprez-module-padding-top-2 {
+	@include rfs.padding-top(5rem);
 }
 
-.xprez-module-padding-y-3 {
-	@include rfs.padding(7.5rem 0);
+.xprez-module-padding-top-3 {
+	@include rfs.padding-top(7.5rem);
 }
 
-.xprez-module-padding-y-4 {
-	@include rfs.padding(10rem 0);
+.xprez-module-padding-top-4 {
+	@include rfs.padding-top(10rem);
+}
+
+.xprez-module-padding-bottom-0 {
+	padding-bottom: 0;
+}
+
+.xprez-module-padding-bottom-1 {
+	@include rfs.padding-bottom(2rem);
+}
+
+.xprez-module-padding-bottom-2 {
+	@include rfs.padding-bottom(5rem);
+}
+
+.xprez-module-padding-bottom-3 {
+	@include rfs.padding-bottom(7.5rem);
+}
+
+.xprez-module-padding-bottom-4 {
+	@include rfs.padding-bottom(10rem);
 }

@@ -1,5 +1,5 @@
 {% block content %}
-<div class="xprez-module-cont xprez-module-margin-bottom-{{ content.margin_bottom }} xprez-module-padding-y-{{ content.padding_vertical }} {{ content.css_class|default:'' }}"
+<div class="xprez-module-cont xprez-module-margin-bottom-{{ content.margin_bottom }} xprez-module-padding-top-{{ content.padding_top }} xprez-module-padding-bottom-{{ content.padding_bottom }}  {{ content.css_class|default:'' }}"
      {% if content.background_color %}style="background-color: {{ content.background_color }};"{% endif %}
 >
     <div

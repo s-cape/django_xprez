@@ -82,16 +82,28 @@ class Content(models.Model):
         choices=MARGIN_BOTTOM_CHOICES, default=MARGIN_BOTTOM_DEFAULT
     )
 
-    PADDING_VERTICAL_DEFAULT = 0
-    PADDING_VERTICAL_CHOICES = (
+    PADDING_TOP_DEFAULT = 0
+    PADDING_TOP_CHOICES = (
         (0, "None"),
         (1, "S"),
         (2, "M"),
         (3, "L"),
         (4, "XL"),
     )
-    padding_vertical = models.PositiveSmallIntegerField(
-        choices=PADDING_VERTICAL_CHOICES, default=PADDING_VERTICAL_DEFAULT
+    padding_top = models.PositiveSmallIntegerField(
+        choices=PADDING_TOP_CHOICES, default=PADDING_TOP_DEFAULT
+    )
+
+    PADDING_BOTTOM_DEFAULT = 0
+    PADDING_BOTTOM_CHOICES = (
+        (0, "None"),
+        (1, "S"),
+        (2, "M"),
+        (3, "L"),
+        (4, "XL"),
+    )
+    padding_bottom = models.PositiveSmallIntegerField(
+        choices=PADDING_BOTTOM_CHOICES, default=PADDING_BOTTOM_DEFAULT
     )
 
     class Meta:
