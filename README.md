@@ -111,7 +111,36 @@ To rebuild css styles
     npm run build (or `watch` for developing)
 
 
-Deploying new version
+Deploying new version (old)
+----------------
+
+#### Tagging new version
+
+Update setup.py -> VERSION, commit and push to master.
+
+On localhost run:
+```
+    git tag vX.Y.Z
+    git push origin vX.Y.Z
+```
+
+Github actions then should build and publish new version on test pypi.
+
+#### Testing new version from testpypi
+
+Add this to top of your requirements.txt:
+
+```
+--extra-index-url https://test.pypi.org/simple/
+```
+
+#### Deploying new version to pypi
+
+Go to https://github.com/s-cape/django_xprez/actions/workflows/pypi.yml and run workflow.
+
+
+
+Deploying new version (archive)
 ----------------
 
 #### Tagging new version
