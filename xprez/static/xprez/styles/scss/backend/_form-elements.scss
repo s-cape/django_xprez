@@ -63,6 +63,10 @@
 		margin-top: .25rem;
 	}
 
+	input[type=number] {
+		width: 90px;
+	}
+
 	input, textarea, select {
 		box-sizing: border-box;
 	}
