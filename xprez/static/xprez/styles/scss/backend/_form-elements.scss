@@ -1,9 +1,10 @@
 .xprez-form-table {
-	display: table;
-	width: 100%;
+	max-width: var(--x-admin-form-width);
 	padding-top: $g;
 	padding-bottom: $g;
 	line-height: 1.25;
+	margin-left: auto;
+	margin-right: auto;
 
 	label {
 		font-size: .857rem;
