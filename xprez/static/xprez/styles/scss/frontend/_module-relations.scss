@@ -1,5 +1,10 @@
 @use "../library/rfs";
 
+$rel-size-1: 2rem;
+$rel-size-2: 5rem;
+$rel-size-3: 7.5rem;
+$rel-size-4: 10rem;
+
 // content blocks relations
 
 .xprez-module-margin-bottom-0 {
@@ -7,19 +12,19 @@
 }
 
 .xprez-module-margin-bottom-1 {
-	@include rfs.margin-bottom(2rem);
+	@include rfs.margin-bottom($rel-size-1);
 }
 
 .xprez-module-margin-bottom-2 {
-	@include rfs.margin-bottom(5rem);
+	@include rfs.margin-bottom($rel-size-2);
 }
 
 .xprez-module-margin-bottom-3 {
-	@include rfs.margin-bottom(7.5rem);
+	@include rfs.margin-bottom($rel-size-3);
 }
 
 .xprez-module-margin-bottom-4 {
-	@include rfs.margin-bottom(10rem);
+	@include rfs.margin-bottom($rel-size-4);
 }
 
 .xprez-module-padding-top-0 {
@@ -27,19 +32,19 @@
 }
 
 .xprez-module-padding-top-1 {
-	@include rfs.padding-top(2rem);
+	@include rfs.padding-top($rel-size-1);
 }
 
 .xprez-module-padding-top-2 {
-	@include rfs.padding-top(5rem);
+	@include rfs.padding-top($rel-size-2);
 }
 
 .xprez-module-padding-top-3 {
-	@include rfs.padding-top(7.5rem);
+	@include rfs.padding-top($rel-size-3);
 }
 
 .xprez-module-padding-top-4 {
-	@include rfs.padding-top(10rem);
+	@include rfs.padding-top($rel-size-4);
 }
 
 .xprez-module-padding-bottom-0 {
@@ -47,17 +52,17 @@
 }
 
 .xprez-module-padding-bottom-1 {
-	@include rfs.padding-bottom(2rem);
+	@include rfs.padding-bottom($rel-size-1);
 }
 
 .xprez-module-padding-bottom-2 {
-	@include rfs.padding-bottom(5rem);
+	@include rfs.padding-bottom($rel-size-2);
 }
 
 .xprez-module-padding-bottom-3 {
-	@include rfs.padding-bottom(7.5rem);
+	@include rfs.padding-bottom($rel-size-3);
 }
 
 .xprez-module-padding-bottom-4 {
-	@include rfs.padding-bottom(10rem);
+	@include rfs.padding-bottom($rel-size-4);
 }
