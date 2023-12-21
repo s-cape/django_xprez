@@ -111,7 +111,7 @@ To rebuild css styles
     npm run build (or `watch` for developing)
 
 
-Deploying new version (old)
+Deploying new version
 ----------------
 
 #### Tagging new version
