@@ -139,56 +139,6 @@ Add this to top of your requirements.txt:
 Go to https://github.com/s-cape/django_xprez/actions/workflows/pypi.yml and run workflow.
 
 
-
-Deploying new version (archive)
-----------------
-
-#### Tagging new version
-
-Update setup.py -> VERSION, commit and push to master.
-
-On localhost run:
-```
-    git tag vX.Y.Z
-    git push origin vX.Y.Z
-```
-
-#### Draft release on github
-
-Go to: `https://github.com/s-cape/django_xprez/releases` -> `Draft new release`
-Select tag `vX.Y.Z` and name `vX.Y.Z`
-
-
-#### requirements
-
-    python -m pip install --user --upgrade setuptools wheel twine
-
-
-#### cleanup old builds (if exists)
-
-    rm -rf ./dist ./build
-
-#### create dist package
-
-    python setup.py sdist bdist_wheel
-
-#### to check package add this to requirements.txt
-
-    file:/<path_to_package>/dist/django_xprez-<version>.tar.gz
-
-#### upload to testpypi
-
-    python -m twine upload --repository testpypi dist/*
-
-#### to check package from testpypi add (temporary) this to top of requirements.txt:
-
-    --extra-index-url https://test.pypi.org/simple/
-
-#### upload to pypi
-
-    python -m twine upload dist/*
-
-
 TODO
 -------
 
