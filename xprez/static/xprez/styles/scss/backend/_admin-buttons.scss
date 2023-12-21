@@ -1,0 +1,268 @@
+// Text Buttons
+
+.xprez-option-btn {
+	@include type-b(12px, 28px);
+	border-radius: 2px;
+	color: $b-gray-7;
+	padding: 0 7px;
+	letter-spacing: 0.02em;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+
+	&:hover {
+		background: $b-gray-4;
+	}
+
+	&.active {
+		color: white;
+		background: $b-gray-7;
+	}
+
+	[class^="xprez-icon"] {
+		margin-right: 5px;
+		font-size: 20px;
+		vertical-align: middle;
+	}
+}
+
+//
+// InContent buttons
+//
+
+.xprez-module__add-item-cont {
+	margin-top: 2rem;
+	text-align: center;
+}
+
+//
+// Icon Buttons
+//
+
+[class^="xprez-icon-btn-"], [class*=" xprez-icon-btn-"] {
+	width: 28px;
+	text-align: center;
+	cursor: pointer;
+	color: $b-gray-7;
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 2px;
+
+	&:before {
+		font-size: 20px;
+		line-height: 28px;
+	}
+
+	&:hover {
+		background: $b-gray-4;
+	}
+
+	&.active {
+		color: white;
+		background: $b-gray-7;
+	}
+}
+
+.xprez-icon-btn-remove:before {
+	content: "\e872";
+}
+
+.xprez-icon-btn-collapse:before {
+	content: "\e5c6";
+	font-size: 28px;
+
+	.collapsed & {
+		content: "\e5c5";
+	}
+}
+
+.xprez-icon-btn-remove.active {
+	background: $b-red;
+}
+
+
+.xprez-icon-btn-layout_1:before {
+	content: "\e8f3";
+}
+
+.xprez-icon-btn-layout_2:before {
+	content: "\e8f2";
+}
+
+.xprez-icon-btn-layout_3:before {
+	content: "\e8f0";
+}
+
+.xprez-icon-btn-layout_4:before {
+	content: "\e42a";
+}
+
+.xprez-icon-btn-layout_6:before {
+	content: "\e900";
+}
+
+.xprez-icon-btn-layout_8:before {
+	content: "\e901";
+}
+
+.xprez-icon-btn-crop:before {
+	content: "\e3be";
+}
+
+.xprez-icon-btn-copy:before {
+	content: "\e14d";
+}
+
+.xprez-icon-btn-align-center:before {
+	content: "\e903";
+}
+
+.xprez-icon-btn-background:before {
+	content: "\e905";
+}
+
+.xprez-icon-btn-border:before {
+	content: "\e957";
+}
+
+.xprez-icon-btn-chevron-small-down:before {
+	content: "\e906";
+}
+
+.xprez-icon-btn-chevron-small-up:before {
+	content: "\e907";
+}
+
+.xprez-icon-btn-edit-pencil:before {
+	content: "\e908";
+}
+
+.xprez-icon-btn-dots-horizontal-triple:before {
+	content: "\e90b";
+}
+
+.xprez-icon-btn-eye {
+	position: relative;
+
+	&:before {
+		content: "\e902";
+		color: $b-blue-high;
+	}
+
+	&:after {
+		content: '';
+		position: absolute;
+		left: 10%;
+		top: 50%;
+		width: 80%;
+		height: 2px;
+		background: $b-blue-high;
+		transform: rotate(-45deg);
+		transform-origin: 40% 0%;
+		border-radius: 5px;
+	}
+}
+
+.xprez-icon-btn-eye.active {
+	background: none;
+
+	&:before {
+		color: $b-gray-7;
+	}
+
+	&:after {
+		display: none;
+	}
+}
+
+
+// Add Module icon buttons
+
+[class^="xprez-icon-btn-add"], [class*=" xprez-icon-btn-add"] {
+	transition: all 300ms;
+	width: 60px;
+	cursor: pointer;
+	color: white;
+	display: inline-block;
+	background: $b-gray-7;
+	border-radius: 30px;
+
+	&:before {
+		font-size: 25px;
+		line-height: 60px;
+	}
+
+	&:hover {
+		background: $b-purple;
+	}
+
+	&.active {
+		color: white;
+		background: $b-gray-8;
+	}
+}
+
+.xprez-icon-btn-add-default:before {
+	content: "\e86e";
+}
+
+// TODO:kaplick create better default icon
+.xprez-icon-btn-add-text_content:before {
+	content: "\e235";
+}
+
+.xprez-icon-btn-add-files:before {
+	content: "\e226";
+}
+
+.xprez-icon-btn-add-text_box:before {
+	content: "\e8b0";
+}
+
+.xprez-icon-btn-add-code_template:before {
+	content: "\e8be";
+}
+
+.xprez-icon-btn-add-numbers:before {
+	content: "\e3d4";
+}
+
+.xprez-icon-btn-add-video:before {
+	content: "\e8da";
+}
+
+.xprez-icon-btn-add-gallery:before {
+	content: "\e432";
+}
+
+.xprez-icon-btn-add-feature_boxes:before {
+	content: "\e875";
+}
+
+.xprez-icon-btn-add-code:before {
+	content: "\e86f";
+}
+
+.xprez-icon-btn-add-quote:before {
+	content: "\e0b7";
+}
+
+.xprez-icon-btn-add-linked_article:before {
+	content: "\e86e";
+}
+
+.xprez-icon-btn-add-downloads:before {
+	content: "\e2c0";
+}
+
+.xprez-icon-btn-add-text_image:before {
+	content: "\e060";
+}
+
+.xprez-icon-btn-add-grid_boxes:before {
+	content: "\e904";
+}
+
+.xprez-icon-btn-add-anchor:before {
+	content: "\e909";
+}

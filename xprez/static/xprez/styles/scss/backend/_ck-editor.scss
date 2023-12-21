@@ -1,7 +1,7 @@
 .xprez-module__content {
 	.ck-content {
-		max-width: 700px;
-		margin: 0 30px;
+		max-width: var(--x-admin-form-width);
+		margin: 2rem auto;
 		padding-top: .5rem;
 		padding-bottom: .5rem;
 	}
@@ -11,11 +11,15 @@
 		margin-left: 0;
 	}
 
-	.ck.ck-editor__editable_inline>:first-child {
-		margin-top: 0;
-	}
+	.ck.ck-editor__editable_inline {
+		padding: .5rem;
 
-	.ck.ck-editor__editable_inline>:last-child {
-		margin-bottom: 0;
+		> :first-child {
+			margin-top: 0;
+		}
+
+		> :last-child {
+			margin-bottom: 0;
+		}
 	}
 }
