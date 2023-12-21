@@ -1,5 +1,7 @@
 .xprez-module {
 	.btn {
+		--ck-color-link-selected-background: #{$button-primary-bg};
+
 		@if $use-xprez-button-styles {
 			display: inline-block;
 			@include type($button-size);
