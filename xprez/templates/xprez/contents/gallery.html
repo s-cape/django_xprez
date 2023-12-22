@@ -122,29 +122,29 @@
                     {% endif %}
                 {% else %}
                     {% if content.crop %}
-                        src="{% thumbnail photo.image "400x400" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
-                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                                {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                        src="{% thumbnail photo.image "600x600" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 600w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x769" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
                                     {{ thumb.url|build_absolute_uri }} 800w,
-                                {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
-                                    {{ thumb.url|build_absolute_uri }} 1000w,
-                                {% endthumbnail %}{% thumbnail photo.image "1500x1150" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                {% endthumbnail %}{% thumbnail photo.image "1500x1153" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
                                     {{ thumb.url|build_absolute_uri }} 1500w,
-                                {% endthumbnail %}{% thumbnail photo.image "1900x1500" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
-                                    {{ thumb.url|build_absolute_uri }} 1900w
+                                {% endthumbnail %}{% thumbnail photo.image "2000x1538" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 2000w,
+                                {% endthumbnail %}{% thumbnail photo.image "2500x1923" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 2500w
                                 {% endthumbnail %}"
                             sizes="100vw"
                     {% else %}
-                        src="{% thumbnail photo.image "400x400" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
-                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
-                                {% endthumbnail %}{% thumbnail photo.image "800x800" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
-                                    {{ thumb.url|build_absolute_uri }} 800w,
+                        src="{% thumbnail photo.image "600x600" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 600w,
                                 {% endthumbnail %}{% thumbnail photo.image "1000x1000" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
                                     {{ thumb.url|build_absolute_uri }} 1000w,
                                 {% endthumbnail %}{% thumbnail photo.image "1500x1500" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
                                     {{ thumb.url|build_absolute_uri }} 1500w,
-                                {% endthumbnail %}{% thumbnail photo.image "1900x1900" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
-                                    {{ thumb.url|build_absolute_uri }} 1900w
+                                {% endthumbnail %}{% thumbnail photo.image "2000x2000" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 2000w,
+                                {% endthumbnail %}{% thumbnail photo.image "2500x2500" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 2500w
                                 {% endthumbnail %}"
                             sizes="100vw"
                     {% endif %}
