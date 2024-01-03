@@ -1,16 +1,15 @@
-from bs4 import BeautifulSoup
-import urllib
 import sys
+import urllib
+
+from bs4 import BeautifulSoup
+from django.template import Context, Template
+from django.utils.safestring import mark_safe
+from PIL import Image
 
 try:
     import cStringIO
 except ImportError:
     import io
-
-from PIL import Image
-
-from django.template import Template, Context
-from django.utils.safestring import mark_safe
 
 
 def parse_text(text_source):

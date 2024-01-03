@@ -100,7 +100,6 @@ function activateMultipleSelectControllers($scope) {
                 values.push(val);
             }
             $formField.val(values);
-
         });
 
     });
