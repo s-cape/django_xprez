@@ -13,6 +13,13 @@
     {% if content.border %}border{% endif %}
 {% endblock %}
 
+{% block attrs_extra %}
+    {% if content.image_sizing == "icon" and content.image_max_width %}
+        style="--gridbox-item-image-width: {{ content.image_max_width }}px;"
+    {% endif %}
+{% endblock %}
+
+
 {% block content_in %}
     {% for box in rendered_boxes %}
         <div class="xprez-grid-box">
