@@ -96,9 +96,9 @@
         }
     }
 
-    // images to edges
+    // Image sizing based on settings
 
-    &.edge_images.padded {
+    &.image-sizing-edge.padded {
         .medium-insert-images-center {
             margin-left: - $gridbox-padding;
             margin-right: - $gridbox-padding;
@@ -121,6 +121,20 @@
 
         img {
             width: 100%;
+        }
+    }
+
+    &.image-sizing-icon {
+        img {
+            display: block;
+            max-width: var(--xprez-gridbox-item-image-width, 50%);
+        }
+
+        &.centered {
+            img {
+                margin-left: auto;
+                margin-right: auto;
+            }
         }
     }
 

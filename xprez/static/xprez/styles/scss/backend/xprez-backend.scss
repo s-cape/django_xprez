@@ -192,6 +192,18 @@
 	vertical-align: middle;
 	padding: 3px 5px;
 	border: 1px solid $b-gray-4;
+
+	&--s {
+		width: 50px !important;
+	}
+
+	&--m {
+		width: 80px !important;
+	}
+
+	&--l {
+		width: 140px !important;
+	}
 }
 
 

@@ -1,9 +1,13 @@
+:root {
+	--xprez-gb-padding: 10px;
+}
+
 .xprez-grid-boxes-admin-wrapper {
 	box-sizing: border-box;
 	border: 1px dotted $b-gray-5;
 	border-radius: 2px;
 	text-align: left;
-	padding: 10px;
+	padding: var(--xprez-gb-padding);
 	width: calc(50% - 1rem);
 	display: flex;
 	flex-direction: column;
@@ -28,7 +32,6 @@
 .xprez-grid-boxes-admin-wrapper--long {
 	width: 100%;
 }
-
 .xprez-grid-boxes-admin-buttons {
 	border-top: 1px solid $b-gray-4;
 	text-align: center;
@@ -47,4 +50,13 @@
 	gap: 1rem;
 	max-width: var(--x-admin-form-width);
 	margin: 0 auto;
+}
+
+// Image sizing based on settings
+
+.xprez-module:has([data-formfield_value="icon"]:is(.active)) {
+	figure.image {
+		width: 50%;
+		display: inline-block;
+	}
 }
