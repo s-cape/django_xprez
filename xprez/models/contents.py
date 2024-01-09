@@ -174,7 +174,6 @@ class Quote(ContentItem):
 
 
 class Gallery(AjaxUploadFormsetContent):
-
     COLUMNS_CHOICES = (
         (1, "1"),
         (2, "2"),
@@ -512,7 +511,20 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
 
     padded = models.BooleanField(default=True)
     content_centered = models.BooleanField(default=False)
-    edge_images = models.BooleanField(default=False)
+    # edge_images = models.BooleanField(default=False)
+
+    IMAGE_SIZING_CHOICES = (
+        ("fill", "Default"),
+        ("edge", "Edge"),
+        ("icon", "Icon"),
+    )
+    image_sizing = models.CharField(
+        max_length=7, choices=IMAGE_SIZING_CHOICES, default="fill"
+    )
+    image_max_width = models.PositiveSmallIntegerField(
+        default=None, null=True, blank=True
+    )
+
     boxes_filled = models.BooleanField(default=True)
     border = models.BooleanField(default=True)
     boxes = JSONField(null=True)

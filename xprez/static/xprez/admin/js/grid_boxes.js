@@ -51,9 +51,18 @@ var handleFormSubmit = function ($scope, contentID) {
     });
 }
 
+var initImageSizingControls = function ($scope) {
+    var $input = $($scope.find('.js-image-sizing-controller').data('formfield_selector'));
+    var toggleMaxWidthController = function () {
+        $scope.find('.js-image-max-width-controller').toggle($input.val() === 'icon');
+    }
+    $input.on('change', toggleMaxWidthController);
+    toggleMaxWidthController();
+}
 
 var initGridBox = function ($scope, contentID, boxesCount) {
     initBoxActions($scope.find('.js-boxes'));
     initAddAnotherBtn($scope, contentID, boxesCount);
+    initImageSizingControls($scope);
     handleFormSubmit($scope, contentID);
 }

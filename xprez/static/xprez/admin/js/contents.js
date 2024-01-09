@@ -68,6 +68,7 @@ function activateSelectControllers($scope) {
             $options.removeClass('active');
             $this.addClass('active');
             $formField.val($this.data('formfield_value'));
+            $formField.trigger('change');
         });
     });
 }
@@ -100,7 +101,7 @@ function activateMultipleSelectControllers($scope) {
                 values.push(val);
             }
             $formField.val(values);
-
+            $formField.trigger('change');
         });
 
     });
