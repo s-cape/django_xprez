@@ -114,29 +114,7 @@ To rebuild css styles
 Deploying new version
 ----------------
 
-#### Tagging new version
-
-Update setup.py -> VERSION, commit and push to master.
-
-On localhost run:
-```
-    git tag vX.Y.Z
-    git push origin vX.Y.Z
-```
-
-Github actions then should build and publish new version on test pypi.
-
-#### Testing new version from testpypi
-
-Add this to top of your requirements.txt:
-
-```
---extra-index-url https://test.pypi.org/simple/
-```
-
-#### Deploying new version to pypi
-
-Go to https://github.com/s-cape/django_xprez/actions/workflows/pypi.yml and run workflow.
+https://github.com/s-cape/django_xprez/actions/workflows/release.yml
 
 
 TODO
