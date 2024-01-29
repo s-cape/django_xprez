@@ -17,11 +17,11 @@
             >
             {% endthumbnail %}
         {% endif %}
-            <img src="{% thumbnail url "427x280" quality=70 format="WEBP" filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+            <img width="{{ width }}" height="{{ height }}" src="{% thumbnail url "427x280" quality=70 format="WEBP" filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
                 srcset="{{ thumb.url|build_absolute_uri }} 427w,
                     {% endthumbnail %}{% thumbnail url "800x800" quality=80 format="WEBP" filename_stem=alt_text as thumb %}
                         {{ thumb.url|build_absolute_uri }} 800w,
-                    {% endthumbnail %}{% thumbnail url "1400x1400" quality=80 format="WEBP" filename_stem=alt_text upscale=False as thumb %}
+                    {% endthumbnail %}{% thumbnail url "1400x1400" quality=80 format="WEBP" filename_stem=alt_text as thumb %}
                         {{ thumb.url|build_absolute_uri }} 1200w
                     {% endthumbnail %}"
                 sizes="(min-width: 755px) 700px,
