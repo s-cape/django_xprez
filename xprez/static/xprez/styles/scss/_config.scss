@@ -65,6 +65,7 @@
 	// base settings
 	$base-box-bg: $super-light-gray !default;
 	$base-text-color:  $black !default;
+	$base-heading-color:  $black !default;
 	$base-font-size: 1rem !default;
 	$base-lh: 1.5 !default;
 	$base-border-radius: 0 !default;
@@ -138,7 +139,7 @@
 	// BOXED TEXT
 	//
 
-	$text-module-boxed-bg: $super-light-gray !default;
+	$text-module-boxed-bg: $base-box-bg !default;
 	$text-module-boxed-radius: $base-border-radius !default;
 
 	//
@@ -164,8 +165,8 @@
 	$gridbox-margin-l: $gridbox-margin-s * 4 !default;
 	$gridbox-padding: $gridbox-margin-s * 2 !default;
 
-	$gridbox-background: $b-gray-3 !default;
-	$gridbox-border: 1px solid $b-gray-4 !default;
+	$gridbox-background: $base-box-bg !default;
+	$gridbox-border-color: $b-gray-4 !default;
 	$gridbox-border-radius: $base-border-radius !default;
 
 	$gridbox-media-margin-bottom: 1.25em;
@@ -205,8 +206,10 @@
 	$download-box-bg: $base-box-bg !default;
 	$download-cell-padding-v: 0.5rem !default;
 
-	$download-button-size: $base-font-size * 0.875 !default;
+	$download-button-size: 1rem !default;
 	$download-button-padding-v: 0.5rem !default;
+	$download-button-color: null !default;
+	$download-button-hover-color: null !default;
 	$download-button-bg: null !default;
 	$download-button-hover-bg: null !default;
 
@@ -220,6 +223,7 @@
 
 	$numbers-digit-size: 3.5rem !default;
 	$numbers-digit-weight: 600 !default;
+	$numbers-digit-color: null !default;
 
 	$numbers-suffix-weight: 500 !default;
 	$numbers-suffix-size: $numbers-digit-size * 1 !default;

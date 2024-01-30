@@ -37,7 +37,7 @@
 .xprez-module {
 
 	@if $use-xprez-text-styles {
-		color: $xprez-base-color;
+		color: var(--x-base-color);
 	}
 
 	p {
@@ -59,7 +59,7 @@
 			font-family: $heading-font-family;
 			font-weight: $text-module-h2-weight;
 			letter-spacing: $text-module-heading-letter-spacing;
-			color: $text-module-h2-color;
+			color: var(--x-h2-color);
 
 			&:first-child {
 				margin-top: 0;
@@ -69,7 +69,7 @@
 
 		span, strong {
 			font-weight: $text-module-heading-emphasis-weight !important;
-			color: $text-module-heading-emphasis-color;
+			color: var(--x-heading-emphasis-color);
 		}
 	}
 
@@ -82,7 +82,7 @@
 			font-family: $heading-font-family;
 			font-weight: $text-module-h3-weight;
 			letter-spacing: $text-module-heading-letter-spacing;
-			color: $text-module-h3-color;
+			color: var(--x-h3-color);
 
 			&:first-child {
 				margin-top: 0;
@@ -92,7 +92,7 @@
 
 		span, strong {
 			font-weight: $text-module-heading-emphasis-weight !important;
-			color: $text-module-heading-emphasis-color;
+			color: var(--x-heading-emphasis-color);
 		}
 	}
 
@@ -104,7 +104,7 @@
 							$text-module-h4-mb);
 			font-family: $heading-font-family;
 			font-weight: $text-module-heading-emphasis-weight !important;
-			color: $text-module-h4-color;
+			color: var(--x-h4-color);
 
 			&:first-child {
 				margin-top: 0;
@@ -159,7 +159,7 @@
 					width: 60px;
 					content:'';
 					display: block;
-					border-top: 6px solid $text-module-blockquote-box-dash-bg;
+					border-top: 6px solid var(--x-blockquote-dash-color);
 					margin-bottom: $g;
 				}
 
@@ -167,7 +167,7 @@
 					width: 60px;
 					content:'';
 					display: block;
-					border-bottom: 6px solid $text-module-blockquote-box-dash-bg;
+					border-bottom: 6px solid var(--x-blockquote-dash-color);
 					margin-top: $g;
 				}
 			}

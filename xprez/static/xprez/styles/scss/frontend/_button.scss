@@ -2,6 +2,24 @@
 	.btn {
 		--ck-color-link-selected-background: #{$button-primary-bg};
 
+		--x-btn-color: var(--x-btn-primary-color);
+		--x-btn-bg: var(--x-btn-primary-bg);
+		--x-btn-hover-color: var(--x-btn-primary-hover-color);
+		--x-btn-hover-bg: var(--x-btn-primary-hover-bg);
+
+		&.btn-secondary {
+			--x-btn-color: var(--x-btn-secondary-color);
+			--x-btn-bg: var(--x-btn-secondary-bg);
+			--x-btn-hover-color: var(--x-btn-secondary-color);
+			--x-btn-hover-bg: var(--x-btn-secondary-bg);
+		}
+
+		&.white {
+			--x-btn-color: #{$txt-gray};
+			--x-btn-bg: white;
+			--x-btn-hover-color: #{$txt-gray};
+		}
+
 		@if $use-xprez-button-styles {
 			display: inline-block;
 			@include type($button-size);
@@ -14,37 +32,21 @@
 			text-transform: $button-text-transform;
 			letter-spacing: $button-letter-spacing;
 			padding: $button-padding-v $button-padding-h;
-			color: $button-primary-text-color;
-			background: $button-primary-bg;
 			box-shadow: $button-box-shadow;
+			color: var(--x-btn-color);
+			background: var(--x-btn-bg);
 
 			@media only screen and (max-width: $typo-break-s) {
 				padding: ($button-padding-v * 0.75) ($button-padding-h * 0.75);
 			}
 
+			&:hover {
+				color: var(--x-btn-hover-color);
+				background: var(--x-btn-hover-bg);
+			}
+
 			&:active {
 				transform: scale(0.95);
-			}
-
-			&:hover {
-				color: $button-primary-hover-text-color;
-				background: $button-primary-hover-bg;
-			}
-
-			&.btn-secondary {
-				color: $button-secondary-text-color;
-				background: $button-secondary-bg;
-
-				&:hover {
-					color: $button-secondary-hover-text-color;
-					background: $button-secondary-hover-bg;
-				}
-			}
-
-			&.btn-white {
-				background: $white;
-				color: $txt-gray;
-				&:hover { color: $txt-gray; }
 			}
 		}
 

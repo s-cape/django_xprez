@@ -46,7 +46,7 @@
 		left: 50%;
 		content: "\e038";
 		z-index: 3;
-		color: $video-button-color;
+		color: var(--x-video-btn-color);
 		text-shadow: 0 0 40px rgba(0,0,0,0.1);
 		font-size: $video-button-size;
 		margin-left: -1 * math.div($video-button-size, 2);

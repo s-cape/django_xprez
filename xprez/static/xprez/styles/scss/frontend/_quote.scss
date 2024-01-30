@@ -2,7 +2,7 @@
 
 .xprez-quote {
 	&.xprez-quote-boxed {
-		background: $quote-box-bg;
+		background: var(--x-quote-box-bg);
 	}
 }
 

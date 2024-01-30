@@ -1,0 +1,58 @@
+:root {
+	--x-base-color: #{$xprez-base-color};
+
+	// Heading colors
+	--x-heading-color: #{$base-heading-color};
+	--x-heading-emphasis-color: #{$text-module-heading-emphasis-color};
+	@if ($text-module-h2-color) {
+		--x-h2-color: #{$text-module-h2-color};
+	} @else {
+		--x-h2-color: #{$base-heading-color};
+	}
+	@if ($text-module-h3-color) {
+		--x-h3-color: #{$text-module-h3-color};
+	} @else {
+		--x-h3-color: #{$base-heading-color};
+	}
+	@if ($text-module-h4-color) {
+		--x-h4-color: #{$text-module-h4-color};
+	} @else {
+		--x-h4-color: #{$base-heading-color};
+	}
+
+	// Blockquote colors
+	--x-blockquote-dash-color: #{$text-module-blockquote-box-dash-bg};
+
+	// Box background
+	--x-base-box-bg: #{$base-box-bg};
+
+	// Text boxed
+	--x-text-boxed-bg: #{$text-module-boxed-bg};
+
+	// Gridbox
+	--x-gridbox-bg: #{$gridbox-background};
+	--x-gridbox-border-color: #{$gridbox-border-color};
+
+	// Buttons
+	--x-btn-primary-color: #{$button-primary-text-color};
+	--x-btn-primary-bg: #{$button-primary-bg};
+	--x-btn-primary-hover-color: #{$button-primary-hover-text-color};
+	--x-btn-primary-hover-bg: #{$button-primary-hover-bg};
+	--x-btn-secondary-color: #{$button-secondary-text-color};
+	--x-btn-secondary-bg: #{$button-secondary-bg};
+	--x-btn-secondary-hover-color: #{$button-secondary-hover-text-color};
+	--x-btn-secondary-hover-bg: #{$button-secondary-hover-bg};
+
+	// Download
+	--x-download-bg: #{$download-box-bg};
+
+	// Numbers
+	--x-numbers-stroke-bg: #{$numbers-stroke-bg};
+	--x-numbers-digit-color: #{$numbers-digit-color};
+
+	// Quote
+	--x-quote-box-bg: #{$quote-box-bg};
+
+	// Video
+	--x-video-btn-color: #{$video-button-color};
+}

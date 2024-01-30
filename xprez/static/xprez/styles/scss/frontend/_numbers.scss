@@ -24,6 +24,7 @@
 .xprez-number {
 	@include condensed;
 	line-height: 1;
+	color: var(--x-numbers-digit-color);
 }
 
 .xprez-number-digits {
@@ -53,7 +54,7 @@
 		content:'';
 		display: block;
 		height: 1px;
-		background: $numbers-stroke-bg;
+		background-color: var(--x-numbers-stroke-bg);
 		width: 16px;
 		margin: $g auto $g;
 	}

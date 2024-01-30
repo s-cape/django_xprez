@@ -1,6 +1,6 @@
 .xprez-text-content-boxed {
 	box-sizing: border-box;
-	background: $text-module-boxed-bg;
+	background: var(--x-text-boxed-bg);
 	max-width: 100%;
 	padding: $g*3 $l-space;
 	border-radius: $text-module-boxed-radius;

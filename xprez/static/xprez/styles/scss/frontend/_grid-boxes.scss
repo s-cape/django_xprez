@@ -65,14 +65,14 @@
     // box backgound switch
 
     &.boxes_filled .xprez-grid-box-inner {
-        background: $gridbox-background;
+        background: var(--x-gridbox-bg);
         border-radius: $gridbox-border-radius;
     }
 
     // box border switch
 
     &.border .xprez-grid-box-inner {
-        border: 1px solid $gridbox-border;
+        border: 1px solid var(--x-gridbox-border-color);
         border-radius: $gridbox-border-radius;
     }
 

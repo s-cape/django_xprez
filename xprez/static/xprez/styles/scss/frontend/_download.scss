@@ -3,7 +3,7 @@ $download-break: 520px;
 .xprez-download {
 	@include clearfix;
 	box-sizing: border-box;
-	background: $download-box-bg;
+	background: var(--x-download-bg);
 	max-width: 100%;
 
 	@include cont-width($s-width + $m-space*6);
@@ -28,7 +28,22 @@ $download-break: 520px;
 	}
 
 	.btn, .btn.btn-secondary {
+		@if ($download-button-color) {
+			--x-btn-color: #{$download-button-color};
+		}
+		@if ($download-button-hover-color) {
+			--x-btn-hover-color: #{$download-button-hover-color};
+
+		}
+		@if ($download-button-bg) {
+			--x-btn-bg: #{$download-button-bg};
+		}
+		@if ($download-button-hover-bg) {
+			--x-btn-hover-bg: #{$download-button-hover-bg};
+		}
+
 		white-space: nowrap;
+		width: 100%;
 
 		@include xprez-breakpoint-down($download-break) {
 			display: block;
@@ -37,12 +52,7 @@ $download-break: 520px;
 		@if $use-xprez-button-styles {
 			padding-top: $download-button-padding-v;
 			padding-bottom: $download-button-padding-v;
-			background: $download-button-bg;
 			font-size: $download-button-size;
-
-			&:hover {
-				background: $download-button-hover-bg;
-			}
 		}
 	}
 
