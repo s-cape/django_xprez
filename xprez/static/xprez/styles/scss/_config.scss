@@ -39,7 +39,7 @@
 	$heading-font-family: $sans !default;
 	$body-font-family: $sans !default;
 
-	//colors
+	// colors
 	$white: #FFF !default;
 	$black: #1E1E21 !default;
 	$gray: #78747D !default;
@@ -62,13 +62,21 @@
 	$b-blue-high: #1D5EC7 !default;
 	$b-red: #D10420 !default;
 
-	// base settings
+	// base color settings
+	$base-bg: transparent !default;
 	$base-box-bg: $super-light-gray !default;
 	$base-text-color:  $black !default;
 	$base-heading-color:  $black !default;
+
+	$alt-base-bg: $b-gray-8 !default;
+	$alt-base-box-bg: $black !default;
+	$alt-base-text-color:  $white !default;
+	$alt-base-heading-color:  $white !default;
+
+	// base metrics
 	$base-font-size: 1rem !default;
 	$base-lh: 1.5 !default;
-	$base-border-radius: 0 !default;
+	$base-border-radius: .75rem !default;
 	$basefont: $base-font-size;
 
 	//
@@ -77,13 +85,17 @@
 
 	$use-xprez-text-styles: true !default;
 
-	$xprez-base-color: $base-text-color !default;
-	$text-module-base-lh: $base-lh !default;
+	$link-color: null !default;
+	$link-hover-color: null !default;
+	$alt-link-color: lighten($alt-base-bg, 40%) !default;
+	$alt-link-hover-color: white !default;
 
+	$text-module-base-lh: $base-lh !default;
 	$text-module-heading-letter-spacing: -0.04em !default;
 	$text-module-heading-weight: 700 !default;
 	$text-module-heading-emphasis-weight: 700 !default;
 	$text-module-heading-emphasis-color: $gray !default;
+	$alt-text-module-heading-emphasis-color: lighten($alt-base-bg, 30%) !default;
 
 	$text-module-column-width: $s-width !default;
 	$text-module-p-size: $base-font-size !default;
@@ -97,6 +109,7 @@
 	$text-module-h2-mb: 0.5em !default;
 	$text-module-h2-weight: $text-module-heading-weight !default;
 	$text-module-h2-color: null !default;
+	$alt-text-module-h2-color: null !default;
 
 	$text-module-h3-fluid-size: 1rem !default;
 	$text-module-h3-lh: 1.25 !default;
@@ -104,6 +117,7 @@
 	$text-module-h3-mb: 0.5em !default;
 	$text-module-h3-weight: $text-module-heading-weight !default;
 	$text-module-h3-color: null !default;
+	$alt-text-module-h3-color: null !default;
 
 	$text-module-h4-size: 1.125rem !default;
 	$text-module-h4-lh: $text-module-base-lh !default;
@@ -111,6 +125,7 @@
 	$text-module-h4-mb: 0 !default;
 	$text-module-h4-weight: $text-module-heading-weight !default;
 	$text-module-h4-color: null !default;
+	$alt-text-module-h4-color: null !default;
 
 	$text-module-small-size: 0.875em !default;
 
@@ -131,6 +146,7 @@
 	$text-module-blockquote-ms: 0 !default;
 	$text-module-blockquote-me: 0 !default;
 	$text-module-blockquote-box-dash-bg: $light-gray !default;
+	$alt-text-module-blockquote-box-dash-bg: lighten($alt-base-bg, 10%) !default;
 
 	$text-module-media-mt: 2rem !default;
 	$text-module-media-mb: 2rem !default;
@@ -140,6 +156,7 @@
 	//
 
 	$text-module-boxed-bg: $base-box-bg !default;
+	$alt-text-module-boxed-bg: $alt-base-box-bg !default;
 	$text-module-boxed-radius: $base-border-radius !default;
 
 	//
@@ -165,9 +182,11 @@
 	$gridbox-margin-l: $gridbox-margin-s * 4 !default;
 	$gridbox-padding: $gridbox-margin-s * 2 !default;
 
+	$gridbox-border-radius: $base-border-radius !default;
 	$gridbox-background: $base-box-bg !default;
 	$gridbox-border-color: $b-gray-4 !default;
-	$gridbox-border-radius: $base-border-radius !default;
+	$alt-gridbox-background: $alt-base-box-bg !default;
+	$alt-gridbox-border-color: $alt-base-box-bg !default;
 
 	$gridbox-media-margin-bottom: 1.25em;
 
@@ -190,28 +209,43 @@
 	$button-padding-v: 1.25em;
 	$button-padding-h: 1.75em;
 
-	$button-primary-bg: $txt-gray !default;
+	$button-primary-bg: $black !default;
 	$button-primary-text-color: $white !default;
-	$button-primary-hover-bg: lighten($txt-gray, 10%) !default;
+	$button-primary-hover-bg: lighten($black, 3%) !default;
 	$button-primary-hover-text-color: $white !default;
+	$alt-button-primary-bg: $button-primary-bg !default;
+	$alt-button-primary-text-color: $button-primary-text-color !default;
+	$alt-button-primary-hover-bg: $button-primary-hover-bg !default;
+	$alt-button-primary-hover-text-color: $button-primary-hover-text-color !default;
+
 	$button-secondary-bg: $light-gray !default;
 	$button-secondary-text-color: $txt-gray !default;
 	$button-secondary-hover-bg: darken($light-gray,10%) !default;
 	$button-secondary-hover-text-color: $txt-gray !default;
+	$alt-button-secondary-bg: $button-secondary-bg !default;
+	$alt-button-secondary-text-color: $button-secondary-text-color !default;
+	$alt-button-secondary-hover-bg: $button-secondary-hover-bg !default;
+	$alt-button-secondary-hover-text-color: $button-secondary-hover-text-color !default;
 
 	//
 	// DOWNLOAD
 	//
 
-	$download-box-bg: $base-box-bg !default;
 	$download-cell-padding-v: 0.5rem !default;
+	$download-box-bg: $base-box-bg !default;
+	$alt-download-box-bg: $alt-base-box-bg !default;
 
 	$download-button-size: 1rem !default;
 	$download-button-padding-v: 0.5rem !default;
-	$download-button-color: null !default;
-	$download-button-hover-color: null !default;
-	$download-button-bg: null !default;
-	$download-button-hover-bg: null !default;
+
+	$download-button-color: $button-secondary-text-color !default;
+	$download-button-hover-color: $button-secondary-hover-text-color !default;
+	$download-button-bg: $button-secondary-bg !default;
+	$download-button-hover-bg: $button-secondary-hover-bg !default;
+	$alt-download-button-color: $download-button-color !default;
+	$alt-download-button-hover-color: $download-button-hover-color !default;
+	$alt-download-button-bg: $download-button-bg !default;
+	$alt-download-button-hover-bg: $download-button-hover-bg !default;
 
 	$download-name-size: $base-font-size !default;
 	$download-name-lh: null !default;
@@ -224,6 +258,7 @@
 	$numbers-digit-size: 3.5rem !default;
 	$numbers-digit-weight: 600 !default;
 	$numbers-digit-color: null !default;
+	$alt-numbers-digit-color: $numbers-digit-color !default;
 
 	$numbers-suffix-weight: 500 !default;
 	$numbers-suffix-size: $numbers-digit-size * 1 !default;
@@ -234,10 +269,11 @@
 	$numbers-description-lh: 1.25 !default;
 	$numbers-description-weight: bold !default;
 	$numbers-description-text-transform: uppercase !default;
-	$numbers-description-style: none !default;
+	$numbers-description-style: normal !default;
 	$numbers-description-opacity: 0.5 !default;
 
 	$numbers-stroke-bg: $light-gray !default;
+	$alt-numbers-stroke-bg: lighten($alt-base-bg, 10%) !default;
 
 	//
 	// QUOTE
@@ -247,6 +283,7 @@
 	$quote-2-cols-width: $m-width !default;
 
 	$quote-box-bg: $base-box-bg !default;
+	$alt-quote-box-bg: $alt-base-box-bg !default;
 	$quote-box-padding-v:  4rem !default;
 	$quote-head-title-mb:  2rem !default;
 	$quote-avatar-width:  150px !default;
@@ -270,6 +307,7 @@
 	//
 
 	$video-button-color: white !default;
+	$alt-video-button-color: $video-button-color !default;
 	$video-button-size: 130px !default;
 	$video-ratio-height: 56.25% !default;
 
@@ -282,7 +320,6 @@
 	$textimage-text-column-spacing: $m-space * 4 !default;
 	$textimage-image-column-spacing: $m-space * 2 !default;
 	$textimage-text-max-width: 600px !default;
-
 
 //
 // BACKEND

@@ -28,20 +28,6 @@ $download-break: 520px;
 	}
 
 	.btn, .btn.btn-secondary {
-		@if ($download-button-color) {
-			--x-btn-color: #{$download-button-color};
-		}
-		@if ($download-button-hover-color) {
-			--x-btn-hover-color: #{$download-button-hover-color};
-
-		}
-		@if ($download-button-bg) {
-			--x-btn-bg: #{$download-button-bg};
-		}
-		@if ($download-button-hover-bg) {
-			--x-btn-hover-bg: #{$download-button-hover-bg};
-		}
-
 		white-space: nowrap;
 		width: 100%;
 
@@ -53,6 +39,13 @@ $download-break: 520px;
 			padding-top: $download-button-padding-v;
 			padding-bottom: $download-button-padding-v;
 			font-size: $download-button-size;
+			color: var(--x-download-btn-color);
+			background-color: var(--x-download-btn-bg);
+
+			&:hover {
+				color: var(--x-download-btn-hover-color);
+				background-color: var(--x-download-btn-hover-bg);
+			}
 		}
 	}
 

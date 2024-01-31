@@ -12,18 +12,19 @@
  
 // Modules layout & elements styling
 
-@import "module-relations"; 
-@import "photo-gallery";
+@import "module_relations";
+@import "module_cont";
+@import "photo_gallery";
 @import "typography";
 @import "editor_media";
 @import "button";
-@import "text-image";
-@import "boxed-text";
+@import "text_image";
+@import "boxed_text";
 @import "quote";
-@import "feature-boxes"; 
+@import "feature_boxes";
 @import "video";   
 @import "numbers";  
 @import "download";
-@import "grid-boxes";
+@import "grid_boxes";
 @import "faq";
 

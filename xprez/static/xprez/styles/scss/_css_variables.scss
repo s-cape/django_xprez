@@ -1,9 +1,14 @@
 :root {
-	--x-base-color: #{$xprez-base-color};
+	--x-base-bg: #{$base-bg};
+	--x-base-color: #{$base-text-color};
+
+	--x-link-color: #{$link-color};
+	--x-link-hover-color: #{$link-hover-color};
 
 	// Heading colors
 	--x-heading-color: #{$base-heading-color};
 	--x-heading-emphasis-color: #{$text-module-heading-emphasis-color};
+
 	@if ($text-module-h2-color) {
 		--x-h2-color: #{$text-module-h2-color};
 	} @else {
@@ -44,6 +49,10 @@
 	--x-btn-secondary-hover-bg: #{$button-secondary-hover-bg};
 
 	// Download
+	--x-download-btn-color: #{$download-button-color};
+	--x-download-btn-hover-color: #{$download-button-hover-color};
+	--x-download-btn-bg: #{$download-button-bg};
+	--x-download-btn-hover-bg: #{$download-button-hover-bg};
 	--x-download-bg: #{$download-box-bg};
 
 	// Numbers
@@ -55,4 +64,73 @@
 
 	// Video
 	--x-video-btn-color: #{$video-button-color};
+}
+
+.xprez-module-alternate-color {
+	--x-base-bg: #{$alt-base-bg};
+	--x-base-color: #{$alt-base-text-color};
+
+	--x-link-color: #{$alt-link-color};
+	--x-link-hover-color: #{$alt-link-hover-color};
+
+	// Heading colors
+	--x-heading-color: #{$alt-base-heading-color};
+	--x-heading-emphasis-color: #{$alt-text-module-heading-emphasis-color};
+
+	@if ($alt-text-module-h2-color) {
+		--x-h2-color: #{$alt-text-module-h2-color};
+	} @else {
+		--x-h2-color: #{$alt-base-heading-color};
+	}
+	@if ($alt-text-module-h3-color) {
+		--x-h3-color: #{$alt-text-module-h3-color};
+	} @else {
+		--x-h3-color: #{$alt-base-heading-color};
+	}
+	@if ($alt-text-module-h4-color) {
+		--x-h4-color: #{$alt-text-module-h4-color};
+	} @else {
+		--x-h4-color: #{$alt-base-heading-color};
+	}
+
+	// Blockquote colors
+	--x-blockquote-dash-color: #{$alt-text-module-blockquote-box-dash-bg};
+
+	// Box background
+	--x-base-box-bg: #{$alt-base-box-bg};
+
+	// Text boxed
+	--x-text-boxed-bg: #{$alt-text-module-boxed-bg};
+
+	// Gridbox
+	--x-gridbox-bg: #{$alt-gridbox-background};
+	--x-gridbox-border-color: #{$alt-gridbox-border-color};
+
+	// Buttons
+	--x-btn-primary-color: #{$alt-button-primary-text-color};
+	--x-btn-primary-bg: #{$alt-button-primary-bg};
+	--x-btn-primary-hover-color: #{$alt-button-primary-hover-text-color};
+	--x-btn-primary-hover-bg: #{$alt-button-primary-hover-bg};
+
+	--x-btn-secondary-color: #{$alt-button-secondary-text-color};
+	--x-btn-secondary-bg: #{$alt-button-secondary-bg};
+	--x-btn-secondary-hover-color: #{$alt-button-secondary-hover-text-color};
+	--x-btn-secondary-hover-bg: #{$alt-button-secondary-hover-bg};
+
+	// Download
+	--x-download-btn-color: #{$alt-download-button-color};
+	--x-download-btn-hover-color: #{$alt-download-button-hover-color};
+	--x-download-btn-bg: #{$alt-download-button-bg};
+	--x-download-btn-hover-bg: #{$alt-download-button-hover-bg};
+	--x-download-bg: #{$alt-download-box-bg};
+
+	// Numbers
+	--x-numbers-stroke-bg: #{$alt-numbers-stroke-bg};
+	--x-numbers-digit-color: #{$alt-numbers-digit-color};
+
+	// Quote
+	--x-quote-box-bg: #{$alt-quote-box-bg};
+
+	// Video
+	--x-video-btn-color: #{$alt-video-button-color};
 }

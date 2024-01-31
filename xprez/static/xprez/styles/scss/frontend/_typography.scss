@@ -30,14 +30,26 @@
 }
 
 .xprez-text-content, .xprez-text-image,   
-.xprez-feature-boxes {
+.xprez-feature-boxes, .xprez-grid-box {
 	@include clearfix;
+
+	a:not(.btn) {
+		text-decoration: underline;
+	}
 }
 
 .xprez-module {
 
 	@if $use-xprez-text-styles {
 		color: var(--x-base-color);
+
+		a:not(.btn) {
+			color: var(--x-link-color);
+
+			&:hover {
+				color: var(--x-link-hover-color);
+			}
+		}
 	}
 
 	p {
