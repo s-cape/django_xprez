@@ -11,7 +11,7 @@
             <div class="xprez-download-btn">
                 <a href="{{ att.file.url }}" class="btn btn-secondary btn-download" download="{{ att.get_name }}{% if att.get_extension %}.{{ att.get_extension }}{% endif %}">{% trans 'Download' %} {{ att.get_extension }}</a>
             </div>
-            <h4>{{ att.get_name }}</h4>
+            <div class="xprez-download-item-name">{{ att.get_name }}</div>
         </div>
     {% endfor %}
 {% endblock %}
