@@ -49,7 +49,7 @@ $download-break: 520px;
 		}
 	}
 
-	h4 {
+	&-name {
 		@include type($download-name-size, $download-name-lh, 0, 0);
 		@include type-min(14px, 1.5, 0, 1);
 		@include sans;
