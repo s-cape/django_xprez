@@ -1,11 +1,8 @@
-:root {
+@mixin base-text-style {
 	--x-base-bg: #{$base-bg};
 	--x-base-color: #{$base-text-color};
-
 	--x-link-color: #{$link-color};
 	--x-link-hover-color: #{$link-hover-color};
-
-	// Heading colors
 	--x-heading-color: #{$base-heading-color};
 	--x-heading-emphasis-color: #{$text-module-heading-emphasis-color};
 
@@ -24,6 +21,10 @@
 	} @else {
 		--x-h4-color: #{$base-heading-color};
 	}
+}
+
+:root {
+	@include base-text-style;
 
 	// Blockquote colors
 	--x-blockquote-dash-color: #{$text-module-blockquote-box-dash-bg};
@@ -35,7 +36,7 @@
 	--x-text-boxed-bg: #{$text-module-boxed-bg};
 
 	// Gridbox
-	--x-gridbox-bg: #{$gridbox-background};
+	--x-gridbox-bg: #{$gridbox-bg};
 	--x-gridbox-border-color: #{$gridbox-border-color};
 
 	// Buttons
@@ -69,7 +70,6 @@
 .xprez-module-alternate-color {
 	--x-base-bg: #{$alt-base-bg};
 	--x-base-color: #{$alt-base-text-color};
-
 	--x-link-color: #{$alt-link-color};
 	--x-link-hover-color: #{$alt-link-hover-color};
 
@@ -103,7 +103,7 @@
 	--x-text-boxed-bg: #{$alt-text-module-boxed-bg};
 
 	// Gridbox
-	--x-gridbox-bg: #{$alt-gridbox-background};
+	--x-gridbox-bg: #{$alt-gridbox-bg};
 	--x-gridbox-border-color: #{$alt-gridbox-border-color};
 
 	// Buttons
@@ -133,4 +133,14 @@
 
 	// Video
 	--x-video-btn-color: #{$alt-video-button-color};
+}
+@if ($alt-box-use-base-text-style) {
+	.xprez-module-alternate-color {
+		.xprez-text-content-boxed,
+		.xprez-grid-boxes,
+		.xprez-download,
+		.xprez-boxed {
+			@include base-text-style;
+		}
+	}
 }
