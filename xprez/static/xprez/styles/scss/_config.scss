@@ -68,6 +68,7 @@
 	$base-text-color:  $black !default;
 	$base-heading-color:  $black !default;
 
+	$alt-box-use-base-text-style: false;
 	$alt-base-bg: $b-gray-8 !default;
 	$alt-base-box-bg: $black !default;
 	$alt-base-text-color:  $white !default;
@@ -183,9 +184,9 @@
 	$gridbox-padding: $gridbox-margin-s * 2 !default;
 
 	$gridbox-border-radius: $base-border-radius !default;
-	$gridbox-background: $base-box-bg !default;
+	$gridbox-bg: $base-box-bg !default;
 	$gridbox-border-color: $b-gray-4 !default;
-	$alt-gridbox-background: $alt-base-box-bg !default;
+	$alt-gridbox-bg: $alt-base-box-bg !default;
 	$alt-gridbox-border-color: $alt-base-box-bg !default;
 
 	$gridbox-media-margin-bottom: 1.25em;
