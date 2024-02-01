@@ -17,6 +17,11 @@
 		h4 {
 			font-size: 1.5em;
 		}
+
+		a:not(.btn) {
+			color: inherit;
+			text-decoration: underline;
+		}
 	}
 
 	.xprez-cell .ck-content {
