@@ -58,3 +58,4 @@ target/
 testdb
 /prepros-6.config
 /xprez/prepros-6.config
+*.css.map
