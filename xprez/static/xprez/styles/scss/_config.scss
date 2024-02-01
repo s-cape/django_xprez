@@ -68,7 +68,7 @@
 	$base-text-color:  $black !default;
 	$base-heading-color:  $black !default;
 
-	$alt-box-use-base-text-style: false;
+	$alt-box-use-base-text-style: false !default;
 	$alt-base-bg: $b-gray-8 !default;
 	$alt-base-box-bg: $black !default;
 	$alt-base-text-color:  $white !default;
