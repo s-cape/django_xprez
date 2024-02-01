@@ -137,7 +137,7 @@
 @if ($alt-box-use-base-text-style) {
 	.xprez-module-alternate-color {
 		.xprez-text-content-boxed,
-		.xprez-grid-boxes,
+		.xprez-grid-boxes.boxes_filled,
 		.xprez-download,
 		.xprez-boxed {
 			@include base-text-style;
