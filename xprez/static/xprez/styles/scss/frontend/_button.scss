@@ -1,11 +1,16 @@
 .xprez-module {
 	.btn {
-		--ck-color-link-selected-background: #{$button-primary-bg};
+		--ck-color-link-selected-background: #{$b-blue-high};
+		--ck-color-link-selected-color: white;
 
 		--x-btn-color: var(--x-btn-primary-color);
 		--x-btn-bg: var(--x-btn-primary-bg);
 		--x-btn-hover-color: var(--x-btn-primary-hover-color);
 		--x-btn-hover-bg: var(--x-btn-primary-hover-bg);
+
+		&.ck-link_selected {
+			color: var(--ck-color-link-selected-color);
+		}
 
 		&.btn-secondary {
 			--x-btn-color: var(--x-btn-secondary-color);

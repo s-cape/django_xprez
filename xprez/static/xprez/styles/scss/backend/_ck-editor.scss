@@ -4,6 +4,24 @@
 		margin: 1rem auto;
 		padding-top: .5rem;
 		padding-bottom: .5rem;
+
+		.btn {
+			font-size: 1em;
+			padding: .75em 1.5em
+		}
+
+		li {
+			font-size: 1em;
+		}
+
+		h4 {
+			font-size: 1.5em;
+		}
+
+		a:not(.btn) {
+			color: inherit;
+			text-decoration: underline;
+		}
 	}
 
 	.xprez-cell .ck-content {
