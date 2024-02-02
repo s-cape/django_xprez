@@ -134,6 +134,7 @@
 	// Video
 	--x-video-btn-color: #{$alt-video-button-color};
 }
+
 @if ($alt-box-use-base-text-style) {
 	.xprez-module-alternate-color {
 		.xprez-text-content-boxed,

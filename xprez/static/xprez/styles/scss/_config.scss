@@ -88,7 +88,7 @@ $use-xprez-text-styles: true !default;
 
 $link-color: null !default;
 $link-hover-color: null !default;
-$alt-link-color: lighten($alt-base-bg, 40%) !default;
+$alt-link-color: white !default;
 $alt-link-hover-color: white !default;
 
 $text-module-base-lh: $base-lh !default;
@@ -96,7 +96,7 @@ $text-module-heading-letter-spacing: -0.04em !default;
 $text-module-heading-weight: 700 !default;
 $text-module-heading-emphasis-weight: 700 !default;
 $text-module-heading-emphasis-color: $gray !default;
-$alt-text-module-heading-emphasis-color: lighten($alt-base-bg, 30%) !default;
+$alt-text-module-heading-emphasis-color: color-mix(in srgb, $alt-base-bg, #FFF 30%) !default;
 
 $text-module-column-width: $s-width !default;
 $text-module-p-size: $base-font-size !default;
@@ -147,7 +147,7 @@ $text-module-blockquote-mb: 3rem !default;
 $text-module-blockquote-ms: 0 !default;
 $text-module-blockquote-me: 0 !default;
 $text-module-blockquote-box-dash-bg: $light-gray !default;
-$alt-text-module-blockquote-box-dash-bg: lighten($alt-base-bg, 10%) !default;
+$alt-text-module-blockquote-box-dash-bg: color-mix(in srgb, $alt-base-bg, #FFF 10%) !default;
 
 $text-module-media-mt: 2rem !default;
 $text-module-media-mb: 2rem !default;
@@ -274,7 +274,7 @@ $numbers-description-style: normal !default;
 $numbers-description-opacity: 0.5 !default;
 
 $numbers-stroke-bg: $light-gray !default;
-$alt-numbers-stroke-bg: lighten($alt-base-bg, 10%) !default;
+$alt-numbers-stroke-bg: color-mix(in srgb, $alt-base-bg, #FFF 10%)!default;
 
 //
 // QUOTE
