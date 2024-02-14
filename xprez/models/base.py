@@ -281,11 +281,15 @@ class FormsetContent(Content):
             self.formset.total_error_count() > 0 and not self.formset.is_valid()
         )
 
-    def copy(self, for_page=None):
-        inst = super(FormsetContent, self).copy(for_page)
+    def copy(self, for_page=None, save=True, position=None):
+        inst = super(FormsetContent, self).copy(for_page, save=save, position=position)
+        if save:
+            self.copy_items(inst)
+        return inst
+
+    def copy_items(self, inst):
         for item in self.get_formset_queryset():
             item.copy(inst)
-        return inst
 
 
 class AjaxUploadFormsetContent(FormsetContent):
