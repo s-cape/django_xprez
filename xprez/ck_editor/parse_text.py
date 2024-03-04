@@ -1,15 +1,10 @@
-import sys
+import io
 import urllib
 
 from bs4 import BeautifulSoup
 from django.template import Context, Template
 from django.utils.safestring import mark_safe
 from PIL import Image
-
-try:
-    import cStringIO
-except ImportError:
-    import io
 
 
 def _replace_wrapper_with_templatetag(wrapper, img, request):
@@ -19,10 +14,12 @@ def _replace_wrapper_with_templatetag(wrapper, img, request):
     if not src.lower().startswith("http") and request:
         src = request.build_absolute_uri(src)
 
-    if sys.version_info >= (3, 0):
-        file = io.BytesIO(urllib.request.urlopen(src).read())
-    else:
-        file = cStringIO.StringIO(urllib.urlopen(src).read())
+    request = urllib.request.Request(
+        src, headers={"User-agent": ""}  # needed for cloudflare
+    )
+
+    file = io.BytesIO(urllib.request.urlopen(request).read())
+
     im = Image.open(file)
     width, height = im.size
     classes = list(img.get("class", [])) + list(wrapper.get("class", []))

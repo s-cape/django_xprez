@@ -1,15 +1,10 @@
-import sys
+import io
 import urllib
 
 from bs4 import BeautifulSoup
 from django.template import Context, Template
 from django.utils.safestring import mark_safe
 from PIL import Image
-
-try:
-    import cStringIO
-except ImportError:
-    import io
 
 
 def parse_text(text_source):
@@ -28,10 +23,12 @@ def parse_text(text_source):
         tag_img = tag.find("img")
         if tag_img:
             url = tag_img.get("src")
-            if sys.version_info >= (3, 0):
-                file = io.BytesIO(urllib.request.urlopen(url).read())
-            else:
-                file = cStringIO.StringIO(urllib.urlopen(url).read())
+
+            request = urllib.request.Request(
+                url, headers={"User-agent": ""}  # needed for cloudflare
+            )
+
+            file = io.BytesIO(urllib.request.urlopen(request).read())
             im = Image.open(file)
             width, height = im.size
             if "medium-insert-images-right" in tag["class"]:
@@ -55,10 +52,7 @@ def parse_text(text_source):
     for tag in soup.find_all(attrs={"contenteditable": True}):
         del tag["contenteditable"]
 
-    if sys.version_info >= (3, 0):
-        text_parsed = str(soup)
-    else:
-        text_parsed = unicode(soup)
+    text_parsed = str(soup)
     return text_parsed
 
 
