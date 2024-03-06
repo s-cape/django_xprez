@@ -36,3 +36,7 @@ XPREZ_JQUERY_INIT_MEDIA_JS = (
     "admin/js/jquery.init.js",  # call django's jquery init (which includes noconflict)
     "xprez/admin/js/jquery_revert_noconflict.js",  # revert noconflict - $ is now global again
 )
+
+XPREZ_STAFF_MEMBER_REQUIRED = (
+    "django.contrib.admin.views.decorators.staff_member_required"
+)

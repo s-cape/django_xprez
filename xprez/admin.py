@@ -129,6 +129,8 @@ class XprezAdminMixin(object):
                     name=self.xprez_admin_url_name("copy"),
                 ),
             ]
+        urls += contents_manager.get_urls()
+
         return urls
 
     def xprez_add_content_view(self, request, page_pk, content_type):

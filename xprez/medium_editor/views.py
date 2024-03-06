@@ -5,9 +5,9 @@ from __future__ import unicode_literals
 from os import makedirs, path
 
 from django.conf import settings
-from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from xprez.permissions import xprez_staff_member_required
 from xprez.utils import random_string
 
 # def random_string(length, include_special_chars=False):
@@ -18,7 +18,7 @@ from xprez.utils import random_string
 
 
 @csrf_exempt
-@staff_member_required
+@xprez_staff_member_required
 def medium_file_upload(request, directory):
     if request.method == "POST":
         file_data = request.FILES["files[]"]
@@ -38,7 +38,7 @@ def medium_file_upload(request, directory):
 
 
 @csrf_exempt
-@staff_member_required
+@xprez_staff_member_required
 def medium_file_delete(request):
     # do nothing, we want to keep the file
 

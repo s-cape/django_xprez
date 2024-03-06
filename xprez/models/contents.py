@@ -2,7 +2,6 @@
 from os import makedirs, path
 
 from django.conf import settings as django_settings
-from django.contrib.admin.views.decorators import staff_member_required
 from django.db import models
 from django.db.models import JSONField
 from django.http import JsonResponse
@@ -19,6 +18,7 @@ from ..conf import settings
 from ..medium_editor.utils import parse_text as medium_editor_parse_text
 from ..medium_editor.utils import render_text_parsed as medium_editor_render_text_parsed
 from ..medium_editor.widgets import MediumEditorWidget
+from ..permissions import xprez_staff_member_required
 from ..utils import random_string
 from .base import AjaxUploadFormsetContent, Content, ContentItem, FormsetContent
 from .fields import TemplatePathField
@@ -64,7 +64,7 @@ class MediumEditor(Content):
 
 class CkEditorFileUploadMixin:
     @classmethod
-    @method_decorator(staff_member_required)
+    @method_decorator(xprez_staff_member_required)
     @method_decorator(csrf_exempt)
     def file_upload_view(cls, request, directory):
         if request.method == "POST":

@@ -1,4 +1,3 @@
-from django.contrib.admin.views.decorators import staff_member_required
 from django.db import models
 from django.db.models import F, Max
 from django.http import JsonResponse
@@ -7,6 +6,7 @@ from django.urls import re_path
 from django.utils.decorators import method_decorator
 
 from ..conf import settings
+from ..permissions import xprez_staff_member_required
 from ..utils import import_class
 
 
@@ -305,7 +305,7 @@ class AjaxUploadFormsetContent(FormsetContent):
         )
 
     @classmethod
-    @method_decorator(staff_member_required)
+    @method_decorator(xprez_staff_member_required)
     def upload_file_view(cls, request, content_pk):
         content = cls.objects.get(pk=content_pk)
         file_list = request.FILES.getlist("file")
