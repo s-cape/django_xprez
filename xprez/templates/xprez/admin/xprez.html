@@ -1,10 +1,22 @@
 {% load i18n %}
+{% load xprez_admin %}
 
-<div class="xprez {{ form.xprez_admin.xprez_ui_css_class }}">
-    <div class="xprez-top"><span class="xprez-option-btn js-collapse_all">Collapse All Boxes</span></div>
+{% get_xprez_clipboard form.xprez_admin request form.instance as xprez_clipboard %}
+
+<div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
+    <div class="xprez-top">
+        <span class="xprez-option-btn js-collapse_all">Collapse all boxes</span>
+        <span
+            class="xprez-option-btn js-clipboard-copy clipboard-copy"
+            data-url="{% url form.xprez_admin.xprez_clipboard_copy_container_url_name form.instance.pk %}"
+        >
+            <span class="success-message">√</span>
+            Copy all boxes
+    </span>
+    </div>
     <div class="js-contents-container">
         {% for content in form.xprez_contents %}
-            {{ content.render_admin }}
+            {% xprez_content_render_admin content %}
         {% endfor %}
     </div>
     {% with allowed_contents=form.xprez_get_allowed_contents %}
@@ -16,4 +28,6 @@
         {% endif %}
     {% endwith %}
     </div>
+
+    {% include "./includes/clipboard.html" with container=form.instance xprez_clipboard=xprez_clipboard %}
 </div>

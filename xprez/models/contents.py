@@ -20,7 +20,13 @@ from ..medium_editor.utils import render_text_parsed as medium_editor_render_tex
 from ..medium_editor.widgets import MediumEditorWidget
 from ..permissions import xprez_staff_member_required
 from ..utils import random_string
-from .base import AjaxUploadFormsetContent, Content, ContentItem, FormsetContent
+from .base import (
+    CLIPBOARD_TEXT_MAX_LENGTH,
+    AjaxUploadFormsetContent,
+    Content,
+    ContentItem,
+    FormsetContent,
+)
 from .fields import TemplatePathField
 
 PHOTOSWIPE_JS = (
@@ -127,6 +133,9 @@ class CkEditor(CkEditorFileUploadMixin, Content):
             ckeditor_parse_text.parse_text(self.text, extra_context["request"])
         )
         return super().render_front(extra_context=extra_context)
+
+    def clipboard_text(self):
+        return striptags(self.text)[:CLIPBOARD_TEXT_MAX_LENGTH]
 
 
 class QuoteContent(FormsetContent):

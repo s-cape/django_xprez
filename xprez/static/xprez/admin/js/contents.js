@@ -174,12 +174,45 @@ function activateFormfieldControllers($scope) {
     activateDeleteButtons($scope);
 }
 
+function activateCopyMenu($scope) {
+    $scope.find('.js-copy-menu-toggle').each(function() {
+        var $toggle = $(this);
+        $toggle.click(function() {
+            $toggle.toggleClass('active');
+        });
+    });
+}
+
+function activateClipboard($scope) {
+    $scope.find('.js-clipboard-copy').each(function() {
+        var $el = $(this);
+        $el.click(function() {
+            $el.removeClass('success');
+            $.post($el.data('url'), function () {
+                $el.addClass('success');
+            });
+        });
+    });
+
+    var $clipboardList = $('.js-clipboard-list');
+    $scope.find('.js-clipboard-list-toggle').each(function() {
+        var $toggle = $(this);
+        console.log($toggle);
+        $toggle.click(function() {
+            $clipboardList.toggleClass('active');
+        })
+    });
+}
+
 $(function () {
+    var $xprez = $('.js-xprez');
     var $container = $('.js-contents-container');
     activateAddContentLinks($('.js-xprez-add,.js-contents-container'));
     activateFormfieldControllers($container);
     activateCollapsers($container);
     activateCommonOptions($container);
+    activateCopyMenu($container);
+    activateClipboard($xprez);
     // hideErrorsForDeletedContents();
 
     $container.sortable({

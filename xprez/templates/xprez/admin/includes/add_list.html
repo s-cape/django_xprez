@@ -1,4 +1,15 @@
+{% load xprez_admin %}
 <ul class="xprez-add__list">
+    {% if xprez_clipboard == None %}
+        {% get_xprez_clipboard xprez_admin request container as xprez_clipboard %}
+    {% endif %}
+    {% if xprez_clipboard %}
+        <li class="js-clipboard-list-toggle">
+            <span class="xprez-icon-btn-add-anchor"></span>
+            <span class="xprez-add__label">Paste</span>
+        </li>
+    {% endif %}
+
     {% for content_type in allowed_contents %}
         <li class="js-add-content"
             {% if before_content %}

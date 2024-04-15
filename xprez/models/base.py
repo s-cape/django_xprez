@@ -9,6 +9,8 @@ from ..conf import settings
 from ..permissions import xprez_staff_member_required
 from ..utils import import_class
 
+CLIPBOARD_TEXT_MAX_LENGTH = 100
+
 
 class ContentsContainer(models.Model):
     content_type = models.CharField(max_length=100, editable=False)
@@ -25,6 +27,12 @@ class ContentsContainer(models.Model):
     def copy_contents(self, for_container):
         for content in self.contents.all():
             content.polymorph().copy(for_container)
+
+    def clipboard_verbose_name(self):
+        return self.polymorph()._meta.verbose_name
+
+    def clipboard_text(self):
+        return self.polymorph().__str__()
 
 
 class Content(models.Model):
@@ -212,17 +220,18 @@ class Content(models.Model):
         inst = self.admin_form.save(commit=False)
         inst.save()
 
-    def render_admin(self):
-        return render_to_string(
-            self.admin_template_name,
+    def render_admin(self, extra_context=None):
+        context = extra_context or {}
+        context.update(
             {
                 "content": self,
                 "xprez_admin": self.admin_form.xprez_admin,
                 "allowed_contents": self.admin_form.xprez_admin.xprez_get_allowed_contents(
                     container=self.page
                 ),
-            },
+            }
         )
+        return render_to_string(self.admin_template_name, context)
 
     def show_front(self):
         """
@@ -247,6 +256,12 @@ class Content(models.Model):
     @classmethod
     def identifier(cls):
         return cls.__name__.lower()
+
+    def clipboard_verbose_name(self):
+        return self.polymorph()._meta.verbose_name
+
+    def clipboard_text(self):
+        return ""
 
 
 class FormsetContent(Content):

@@ -24,7 +24,17 @@
     <div class="xprez-module__title js-sortable-handler">
         {% block btn_collapse %}<span class="xprez-icon-btn-collapse js-collapser" title="Collapse"></span>{% endblock %}
         {% block btn_delete %}<span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_delete_content_url_name content.pk %}" title="Remove"></span>{% endblock %}
-        {% block btn_copy_content %}<span class="xprez-icon-btn-copy js-copy-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_copy_content_url_name content.pk %}" title="Copy and paste the module"></span>{% endblock %}
+        {% block btn_copy_content %}
+            <div class="xprez-icon-btn-copy js-copy-menu-toggle copy-menu-toggle" title="Copy">
+                <div class="js-copy-menu copy-menu">
+                    <div class="js-copy-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_copy_content_url_name content.pk %}">Copy and paste the module</div>
+                    <div class="js-clipboard-copy clipboard-copy" data-url="{% url xprez_admin.xprez_clipboard_copy_content_url_name content.pk %}">
+                        <span class="success-message">√</span>
+                        Copy to clipboard
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
         {% block btn_toggle_visible %}<span class="xprez-icon-btn-eye js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off"></span>{% endblock %}
         <h2>
             <b>{{ content.verbose_name }}</b>

@@ -1,0 +1,7 @@
+{% if xprez_clipboard %}
+	<div class="xprez-clipboard-list js-clipboard-list active">
+		{% for item in xprez_clipboard %}
+			<div>{{ item.content_type }} {{ item.obj.clipboard_verbose_name }} {{ item.obj.clipboard_text }}</div>
+		{% endfor %}
+	</div>
+{% endif %}

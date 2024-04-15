@@ -34,7 +34,22 @@
 	max-width: $xprez-max-width;
 	padding: 0 40px 0 0;
 	margin: 1rem auto 3rem;
+
+	.clipboard-copy .success-message {
+		display: none;
+	}
+	.clipboard-copy.success .success-message {
+		display: block;
+	}
 }
+
+.xprez-clipboard-list {
+	display: none;
+	&.active {
+		display: block;
+	}
+}
+
 
 .xprez-module {
 	border: 1px solid $b-gray-4;
@@ -42,6 +57,19 @@
 
 	&.collapsed .xprez-module__collapse-cont {
 		display: none;
+	}
+
+
+	.copy-menu-toggle { overflow: visible; position: relative; }
+	.copy-menu { display: none; }
+	.copy-menu-toggle.active .copy-menu {
+		display: block;
+		width: 200px;
+		position: absolute;
+	    top: 0px;
+	    right: 40px;
+	    background: black;
+	    z-index: 100;
 	}
 }
 
