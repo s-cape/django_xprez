@@ -186,10 +186,14 @@ function activateCopyMenu($scope) {
 function activateClipboard($scope) {
     $scope.find('.js-clipboard-copy').each(function() {
         var $el = $(this);
-        $el.click(function() {
+        $el.click(function(e) {
+            e.stopPropagation();
             $el.removeClass('success');
             $.post($el.data('url'), function () {
                 $el.addClass('success');
+                setTimeout(function() {
+                    $el.closest('.js-copy-menu-toggle.active').removeClass('active');
+                }, 1000);
             });
         });
     });
