@@ -1,0 +1,30 @@
+.xprez-clipboard-copy {
+	.xprez-inline-success-message {
+		display: none;
+	}
+
+	&.success {
+		.xprez-inline-success-message {
+			display: flex;
+		}
+
+		.default {
+			display: none;
+		}
+	}
+
+	.check {
+		color: green;
+	}
+}
+
+.xprez-inline-success-message {
+	display: flex;
+	align-items: center;
+
+	svg {
+		width: 24px;
+		height: 24px;
+		margin: -4px 0;
+	}
+}

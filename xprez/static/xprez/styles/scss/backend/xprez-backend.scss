@@ -15,6 +15,9 @@
 @import "medium-editor";
 @import "text-content";
 @import "admin-buttons";
+@import "submenu";
+@import "clipboard";
+@import "top_menu";
 
 @import "../frontend/layout";
 @import "../frontend/typography";
@@ -34,13 +37,6 @@
 	max-width: $xprez-max-width;
 	padding: 0 40px 0 0;
 	margin: 1rem auto 3rem;
-
-	.clipboard-copy .success-message {
-		display: none;
-	}
-	.clipboard-copy.success .success-message {
-		display: block;
-	}
 }
 
 .xprez-clipboard-list {
@@ -58,38 +54,22 @@
 	&.collapsed .xprez-module__collapse-cont {
 		display: none;
 	}
-
-
-	.copy-menu-toggle { overflow: visible; position: relative; }
-	.copy-menu { display: none; }
-	.copy-menu-toggle.active .copy-menu {
-		display: block;
-		width: 200px;
-		position: absolute;
-	    top: 0px;
-	    right: 40px;
-	    background: black;
-	    z-index: 100;
-	}
 }
 
 .xprez-module__title {
 	background: $b-gray-2;
-	text-align: center;
-	overflow: hidden;
 	position: relative;
 	padding-bottom: 3px;
+	display: flex;
+	gap: 8px;
 
 	h2 {
 		@include type-b(12px);
 		color: darken($b-gray-7, 15%);
 		cursor: move;
-		position: absolute;
-		top: 0;
-		right: 120px;
-		left: 120px;
 		margin: 0;
 		font-weight: normal;
+		flex: 1;
 
 		i {
 			font-style: normal;
@@ -99,7 +79,6 @@
 	}
 
 	.xprez-icon-btn-collapse {
-		float: left;
 		margin-top: 2px;
 		margin-left: 2px;
 	}
@@ -108,7 +87,6 @@
 	.xprez-icon-btn-copy,
 	.xprez-icon-btn-eye,
 	.xprez-icon-btn-dots-horizontal-triple {
-		float: right;
 		margin-top: 2px;
 		margin-right: 2px;
 	}

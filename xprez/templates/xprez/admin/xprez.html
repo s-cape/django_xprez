@@ -5,13 +5,13 @@
 
 <div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
     <div class="xprez-top">
-        <span class="xprez-option-btn js-collapse_all">Collapse all boxes</span>
+        <span class="xprez-option-btn js-collapse_all">Collapse all</span>
         <span
-            class="xprez-option-btn js-clipboard-copy clipboard-copy"
+            class="xprez-option-btn js-clipboard-copy xprez-clipboard-copy"
             data-url="{% url form.xprez_admin.xprez_clipboard_copy_container_url_name form.instance.pk %}"
         >
-            <span class="success-message">√</span>
-            Copy all boxes
+            <span class="xprez-inline-success-message">{% include "./includes/icons/checkmark.html" %} Copied</span>
+            <span class="default">Copy all modules</span>
     </span>
     </div>
     <div class="js-contents-container">

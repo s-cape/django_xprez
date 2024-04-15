@@ -1,0 +1,52 @@
+.xprez-submenu {
+	display: none;
+	visibility: hidden;
+	opacity: 0;
+	border-radius: 2px;
+	position: absolute;
+	right: 0;
+	z-index: 10;
+	background: #F6F7F8;
+	padding: 10px 0;
+	box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2), 0px 0px 45px rgba(0, 0, 0, 0.1);
+	//margin-top: -50px;
+	//margin-right: 0px;
+	width: min-content;
+	flex-wrap: wrap;
+	transition: all 0.3s;
+	color: #343A40;
+	@include sans($font-b);
+	text-align: left;
+
+	& > * {
+		flex: 1;
+		box-sizing: border-box;
+		display: flex;
+		gap: 8px;
+		text-align: left;
+		padding: .5rem 1rem;
+		white-space: nowrap;
+		align-items: center;
+
+		&:hover {
+			background: rgba(0,0,0,.05);
+		}
+	}
+
+	.svg-icon {
+		width: 24px;
+		height: 24px;
+		margin: -4px 0;
+	}
+
+	&__toggle {
+		overflow: visible;
+		position: relative;
+
+		&.active > div {
+			display: flex;
+			visibility: visible;
+			opacity: 1;
+		}
+	}
+}

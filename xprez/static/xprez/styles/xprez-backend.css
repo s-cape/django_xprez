@@ -1051,6 +1051,80 @@ textarea {
   content: "\e909";
 }
 
+.xprez-submenu {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  border-radius: 2px;
+  position: absolute;
+  right: 0;
+  z-index: 10;
+  background: #F6F7F8;
+  padding: 10px 0;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2), 0px 0px 45px rgba(0, 0, 0, 0.1);
+  width: min-content;
+  flex-wrap: wrap;
+  transition: all 0.3s;
+  color: #343A40;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
+}
+.xprez-submenu > * {
+  flex: 1;
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+  align-items: center;
+}
+.xprez-submenu > *:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.xprez-submenu .svg-icon {
+  width: 24px;
+  height: 24px;
+  margin: -4px 0;
+}
+.xprez-submenu__toggle {
+  overflow: visible;
+  position: relative;
+}
+.xprez-submenu__toggle.active > div {
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+}
+
+.xprez-clipboard-copy .xprez-inline-success-message {
+  display: none;
+}
+.xprez-clipboard-copy.success .xprez-inline-success-message {
+  display: flex;
+}
+.xprez-clipboard-copy.success .default {
+  display: none;
+}
+.xprez-clipboard-copy .check {
+  color: green;
+}
+
+.xprez-inline-success-message {
+  display: flex;
+  align-items: center;
+}
+.xprez-inline-success-message svg {
+  width: 24px;
+  height: 24px;
+  margin: -4px 0;
+}
+
+.xprez-top {
+  display: flex;
+  align-items: center;
+}
+
 .xprez-full-width {
   box-sizing: border-box;
   max-width: 100%;
@@ -1753,12 +1827,6 @@ textarea {
   padding: 0 40px 0 0;
   margin: 1rem auto 3rem;
 }
-.xprez .clipboard-copy .success-message {
-  display: none;
-}
-.xprez .clipboard-copy.success .success-message {
-  display: block;
-}
 
 .xprez-clipboard-list {
   display: none;
@@ -1774,29 +1842,13 @@ textarea {
 .xprez-module.collapsed .xprez-module__collapse-cont {
   display: none;
 }
-.xprez-module .copy-menu-toggle {
-  overflow: visible;
-  position: relative;
-}
-.xprez-module .copy-menu {
-  display: none;
-}
-.xprez-module .copy-menu-toggle.active .copy-menu {
-  display: block;
-  width: 200px;
-  position: absolute;
-  top: 0px;
-  right: 40px;
-  background: black;
-  z-index: 100;
-}
 
 .xprez-module__title {
   background: #F6F7F8;
-  text-align: center;
-  overflow: hidden;
   position: relative;
   padding-bottom: 3px;
+  display: flex;
+  gap: 8px;
 }
 .xprez-module__title h2 {
   font-size: 12px;
@@ -1805,12 +1857,9 @@ textarea {
   margin-bottom: 0em;
   color: #60686f;
   cursor: move;
-  position: absolute;
-  top: 0;
-  right: 120px;
-  left: 120px;
   margin: 0;
   font-weight: normal;
+  flex: 1;
 }
 .xprez-module__title h2 i {
   font-style: normal;
@@ -1818,7 +1867,6 @@ textarea {
   margin-left: 0.5rem;
 }
 .xprez-module__title .xprez-icon-btn-collapse {
-  float: left;
   margin-top: 2px;
   margin-left: 2px;
 }
@@ -1826,7 +1874,6 @@ textarea {
 .xprez-module__title .xprez-icon-btn-copy,
 .xprez-module__title .xprez-icon-btn-eye,
 .xprez-module__title .xprez-icon-btn-dots-horizontal-triple {
-  float: right;
   margin-top: 2px;
   margin-right: 2px;
 }
