@@ -46,7 +46,11 @@
                 <div class="xprez-icon-btn-copy js-copy-menu-toggle xprez-submenu__toggle" title="Copy">
                     <div class="js-copy-menu xprez-submenu">
                         <div class="js-copy-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_copy_content_url_name content.pk %}">Duplicate</div>
-                        <div class="js-clipboard-copy xprez-clipboard-copy" data-url="{% url xprez_admin.xprez_clipboard_copy_content_url_name content.pk %}">
+                        <div
+                            class="js-clipboard-copy xprez-clipboard-copy"
+                            data-content-type="content"
+                            data-pk="{{ content.pk }}"
+                        >
                             <span class="xprez-inline-success-message">{% include "../includes/icons/checkmark.html" %} Copied</span>
                             <span class="default">Copy</span>
                         </div>

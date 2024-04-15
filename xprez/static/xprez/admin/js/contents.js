@@ -12,22 +12,31 @@ function activateAddContentLinks($scope) {
                 } else {
                     $contentsContainer.append(data.template);
                 }
-                var $content = $('.js-content-' + data.content_pk);
-                activateAddContentLinks($content);
-                activateFormfieldControllers($content);
-                activateCollapsers($content);
-                activateCommonOptions($content);
 
-                if (data.updated_content_positions) {
-                    for (id in data.updated_content_positions) {
-                        $contentsContainer.find('#id_content-'+id+'-position').val(data.updated_content_positions[id]);
-                    }
-                }
+                var $content = $('.js-content-' + data.content_pk);
+                activateContent($content, data);
+                updateContentPositions(data);
             });
         });
     });
 }
 
+function updateContentPositions(data) {
+    if (data.updated_content_positions) {
+        for (id in data.updated_content_positions) {
+            $contentsContainer.find('#id_content-'+id+'-position').val(data.updated_content_positions[id]);
+        }
+    }
+}
+
+function activateContent($content, data) {
+    activateAddContentLinks($content);
+    activateFormfieldControllers($content);
+    activateCollapsers($content);
+    activateCommonOptions($content);
+    activateCopyMenu($content);
+    activateClipboardTogglers($content);
+}
 
 function activateCheckboxControllers($scope) {
     $scope.find('.js-checkbox_controller').each(function (index, el) {
@@ -183,28 +192,80 @@ function activateCopyMenu($scope) {
     });
 }
 
-function activateClipboard($scope) {
+function activateClipboardTogglers($scope) {
+    var copyUrl = $('.js-xprez').data('clipboard-copy-url');
+
     $scope.find('.js-clipboard-copy').each(function() {
         var $el = $(this);
         $el.click(function(e) {
             e.stopPropagation();
             $el.removeClass('success');
-            $.post($el.data('url'), function () {
-                $el.addClass('success');
-                setTimeout(function() {
-                    $el.closest('.js-copy-menu-toggle.active').removeClass('active');
-                }, 1000);
-            });
+            $.post(
+                copyUrl,
+                {
+                    'pk': $el.data('pk'),
+                    'content_type': $el.data('content-type')
+                },
+                function() {
+                    $el.addClass('success');
+                    setTimeout(function() {
+                        $el.closest('.js-copy-menu-toggle.active').removeClass('active');
+                    }, 1000);
+                }
+            );
         });
     });
 
     var $clipboardList = $('.js-clipboard-list');
     $scope.find('.js-clipboard-list-toggle').each(function() {
         var $toggle = $(this);
-        console.log($toggle);
         $toggle.click(function() {
-            $clipboardList.toggleClass('active');
+            if ($clipboardList.hasClass('active')) {
+                $clipboardList.removeClass('active');
+            } else {
+                $clipboardList.addClass('active');
+                $clipboardList.data("insertBefore", $toggle.data("insertBefore") || null);
+                $clipboardList.data("beforeContentPk", $toggle.data("beforeContentPk") || null);
+                $clipboardList.data("intoContainerPk", $toggle.data("intoContainerPk") || null);
+                console.log("Set data");
+                console.log($clipboardList.data());
+            }
         })
+    });
+}
+
+function activateClipboardList() {
+    var $clipboardList = $('.js-clipboard-list');
+    var pasteUrl = $('.js-xprez').data('clipboard-paste-url');
+
+    $clipboardList.find('.js-clipboard-paste').each(function() {
+        var $pasteEl = $(this);
+        var $pasteDataEl = $pasteEl.closest('.js-clipboard-paste-data');
+                    // 'insert_before': $clipboardList.data('insertBefore'),
+
+        $pasteEl.click(function() {
+            $.post(
+                pasteUrl,
+                {
+                    'pk': $pasteDataEl.data('pk'),
+                    'content_type': $pasteDataEl.data('content-type'),
+                    'before_content_pk': $clipboardList.data('beforeContentPk'),
+                    'into_container_pk': $clipboardList.data('intoContainerPk'),
+                    'symlink': $pasteEl.data('symlink')
+                },
+                function(data) {
+                    console.log('pasted');
+                    console.log('data');
+                    // var $content = $(data.template);
+                    // $content.insertAfter($clipboardList.data('insertBefore'));
+                    // activateAddContentLinks($content);
+                    // activateFormfieldControllers($content);
+                    // activateCollapsers($content);
+                    // activateCommonOptions($content);
+                    // $clipboardList.removeClass('active');
+                }
+            );
+        });
     });
 }
 
@@ -216,7 +277,9 @@ $(function () {
     activateCollapsers($container);
     activateCommonOptions($container);
     activateCopyMenu($container);
-    activateClipboard($xprez);
+
+    activateClipboardList();
+    activateClipboardTogglers($xprez);
     // hideErrorsForDeletedContents();
 
     $container.sortable({

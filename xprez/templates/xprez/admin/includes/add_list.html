@@ -4,7 +4,14 @@
         {% get_xprez_clipboard xprez_admin request container as xprez_clipboard %}
     {% endif %}
     {% if xprez_clipboard %}
-        <li class="js-clipboard-list-toggle">
+        <li class="js-clipboard-list-toggle"
+            {% if before_content %}
+                data-insert-before=".js-content-{{ before_content.pk }}"
+                data-before-content-pk="{{ before_content.pk }}"
+            {% else %}
+                data-into-container-pk="{{ container.pk }}"
+            {% endif %}
+        >
             <span class="xprez-icon-btn-add-anchor"></span>
             <span class="xprez-add__label">Paste</span>
         </li>

@@ -1,7 +1,17 @@
 {% if xprez_clipboard %}
-	<div class="xprez-clipboard-list js-clipboard-list active">
+	<div class="xprez-clipboard-list js-clipboard-list">
 		{% for item in xprez_clipboard %}
-			<div>{{ item.content_type }} {{ item.obj.clipboard_verbose_name }} {{ item.obj.clipboard_text }}</div>
+			<div class="js-clipboard-paste-data"
+				data-pk="{{ item.obj.pk }}"
+				data-content-type="{{ item.content_type }}"
+			>
+				{{ item.content_type }}
+				{{ item.obj.clipboard_verbose_name }}
+				{{ item.obj.clipboard_text }}
+				<span class="js-clipboard-paste">paste</span>
+				{# TODO:later #}
+				{# <span class="js-clipboard-paste" data-symlink="1">symlink</span> #}
+			</div>
 		{% endfor %}
 	</div>
 {% endif %}

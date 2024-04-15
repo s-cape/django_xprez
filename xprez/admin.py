@@ -102,15 +102,11 @@ class XprezAdminMixin(object):
     def xprez_copy_url_name(self):
         return self.xprez_admin_url_name("copy", include_namespace=True)
 
-    def xprez_clipboard_copy_container_url_name(self):
-        return self.xprez_admin_url_name(
-            "clipboard_copy_container", include_namespace=True
-        )
+    def xprez_clipboard_copy_url_name(self):
+        return self.xprez_admin_url_name("clipboard_copy", include_namespace=True)
 
-    def xprez_clipboard_copy_content_url_name(self):
-        return self.xprez_admin_url_name(
-            "clipboard_copy_content", include_namespace=True
-        )
+    def xprez_clipboard_paste_url_name(self):
+        return self.xprez_admin_url_name("clipboard_paste", include_namespace=True)
 
     def xprez_admin_urls(self):
         urls = [
@@ -140,14 +136,14 @@ class XprezAdminMixin(object):
             #     name=self.xprez_admin_url_name("clipboard_add_content"),
             # ),
             path(
-                "xprez-clipboard-copy-container/<int:container_pk>/",
-                self.xprez_admin_view(self.xprez_clipboard_copy_container),
-                name=self.xprez_admin_url_name("clipboard_copy_container"),
+                "xprez-clipboard-copy/",
+                self.xprez_admin_view(self.xprez_clipboard_copy),
+                name=self.xprez_admin_url_name("clipboard_copy"),
             ),
             path(
-                "xprez-clipboard-copy-content/<int:content_pk>/",
-                self.xprez_admin_view(self.xprez_clipboard_copy_content),
-                name=self.xprez_admin_url_name("clipboard_copy_content"),
+                "xprez-clipboard-paste/",
+                self.xprez_admin_view(self.xprez_clipboard_paste),
+                name=self.xprez_admin_url_name("clipboard_paste"),
             ),
         ]
         if self.xprez_copy_supported():
@@ -185,14 +181,13 @@ class XprezAdminMixin(object):
         )
         content.build_admin_form(self)
 
-        updated_contents_positions = dict(
-            [(c.id, c.position) for c in container.contents.all()]
-        )
         return JsonResponse(
             {
                 "template": content.render_admin({"request": request}),
                 "content_pk": content.pk,
-                "updated_content_positions": updated_contents_positions,
+                "updated_content_positions": self._updated_contents_positions(
+                    container
+                ),
             }
         )
 
@@ -203,19 +198,21 @@ class XprezAdminMixin(object):
             content.delete()
         return HttpResponse()
 
+    def _updated_contents_positions(self, page):
+        return dict([(c.id, c.position) for c in page.contents.all()])
+
     def xprez_copy_content_view(self, request, content_pk):
         content = models.Content.objects.get(pk=content_pk).polymorph()
         new_content = content.copy(position=content.position + 1)
         new_content.build_admin_form(self)
 
-        updated_contents_positions = dict(
-            [(c.id, c.position) for c in content.page.contents.all()]
-        )
         return JsonResponse(
             {
                 "template": new_content.render_admin({"request": request}),
                 "content_pk": new_content.pk,
-                "updated_content_positions": updated_contents_positions,
+                "updated_content_positions": self._updated_contents_positions(
+                    content.page
+                ),
             }
         )
 
@@ -233,24 +230,77 @@ class XprezAdminMixin(object):
     CLIPBOARD_CONTAINER_KEY = "container"
     CLIPBOARD_CONTENT_KEY = "content"
 
-    def _xprez_clipboard_copy(self, request, data):
+    def xprez_clipboard_copy(self, request):
+        content_type = request.POST.get("content_type")
+        assert content_type in [
+            self.CLIPBOARD_CONTAINER_KEY,
+            self.CLIPBOARD_CONTENT_KEY,
+        ]
+
         clipboard = request.session.get(self.CLIPBOARD_SESSION_KEY, [])
-        clipboard.insert(0, data)
+        clipboard.insert(0, (content_type, request.POST.get("pk")))
         clipboard = clipboard[: self.CLIPBOARD_MAX_LENGTH]
         request.session[self.CLIPBOARD_SESSION_KEY] = clipboard
         return HttpResponse()
 
-    def xprez_clipboard_copy_container(self, request, container_pk):
-        container = self._get_container_instance(request, container_pk)
-        return self._xprez_clipboard_copy(
-            request, (self.CLIPBOARD_CONTAINER_KEY, container.pk)
+    def xprez_clipboard_paste(self, request):
+        content_type = request.POST.get("content_type")
+        if content_type == self.CLIPBOARD_CONTENT_KEY:
+            contents = models.Content.objects.filter(pk__in=request.POST.getlist("pk"))
+        elif content_type == self.CLIPBOARD_CONTAINER_KEY:
+            contents = self._get_container_instance(
+                request, request.POST.get("pk")
+            ).contents.all()
+        else:
+            raise ValueError("Invalid content type")
+
+        if request.POST.get("before_content_pk"):
+            before_content = models.Content.objects.get(
+                pk=request.POST.get("before_content_pk")
+            )
+            container = before_content.page
+            position = before_content.position
+        elif request.POST.get("into_container_pk"):
+            container = self._get_container_instance(
+                request, request.POST.get("into_container_pk")
+            )
+            position = None
+
+        contents_data = []
+        for content in contents:
+            new_content = content.polymorph().copy(
+                for_page=container, position=position
+            )
+            new_content.build_admin_form(self)
+            contents_data += [
+                {
+                    "template": new_content.render_admin({"request": request}),
+                    "content_pk": new_content.pk,
+                }
+            ]
+            if position is not None:
+                position += 1
+
+        return JsonResponse(
+            {
+                "contents_data": contents_data,
+                "updated_content_positions": self._updated_contents_positions(
+                    container
+                ),
+            }
         )
 
-    def xprez_clipboard_copy_content(self, request, content_pk):
-        content = models.Content.objects.get(pk=content_pk).polymorph()
-        return self._xprez_clipboard_copy(
-            request, (self.CLIPBOARD_CONTENT_KEY, content.pk)
-        )
+    # def xprez_clipboard_copy_container(self, request, container_pk):
+    #     container = self._get_container_instance(request, container_pk)
+    #     return self._xprez_clipboard_copy(
+    #         request, (self.CLIPBOARD_CONTAINER_KEY, container.pk)
+    #     )
+
+    # def xprez_clipboard_copy_content(self, request, content_pk):
+    #     content = models.Content.objects.get(pk=content_pk).polymorph()
+    #     return self._xprez_clipboard_copy(
+    #         request, (self.CLIPBOARD_CONTENT_KEY, content.pk)
+    #     )
 
     def xprez_clipboard_list(self, request, container):
         session_data = request.session.get(self.CLIPBOARD_SESSION_KEY, [])
