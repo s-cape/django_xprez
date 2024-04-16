@@ -19,12 +19,12 @@
     </div>
     {% with allowed_contents=form.xprez_get_allowed_contents %}
         {% if allowed_contents %}
-            <div class="js-xprez-add xprez-add">
+            <div class="js-xprez-add xprez-add-after">
                 <h2>+ Add new piece of content +</h2>
                 {% include "./includes/add_list.html" with xprez_admin=form.xprez_admin container=form.instance %}
             </div>
         {% endif %}
     {% endwith %}
 
-    <div class="xprez-clipboard-list js-xprez-clipboard-wrapper"></div>
+    {# <div class="xprez-clipboard-list js-xprez-clipboard-wrapper"></div> #}
 </div>

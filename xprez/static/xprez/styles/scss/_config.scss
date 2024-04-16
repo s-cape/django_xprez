@@ -85,6 +85,8 @@ $basefont: $base-font-size;
 //
 
 $use-xprez-text-styles: true !default;
+$use-xprez-text-colors: true !default; // TODO
+$use-xprez-text-rfs: false !default; // TODO
 
 $link-color: null !default;
 $link-hover-color: null !default;
@@ -201,14 +203,15 @@ $use-xprez-button-styles: true !default;
 $button-size: $base-font-size * 0.875 !default;
 $button-font-family: $sans !default;
 $button-border-radius: $base-border-radius * .5 !default;
+$button-font-weight: 400 !default;
 $button-border: none !default;
 $button-text-shadow: none !default;
 $button-text-decoration: none !default;
 $button-text-transform: none !default;
 $button-letter-spacing: 0.05em !default;
 $button-box-shadow: none !default;
-$button-padding-v: 1.25em;
-$button-padding-h: 1.75em;
+$button-padding-v: 1.25em !default;
+$button-padding-h: 1.75em !default;
 
 $button-primary-bg: $black !default;
 $button-primary-text-color: $white !default;

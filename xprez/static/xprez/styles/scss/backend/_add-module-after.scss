@@ -1,0 +1,26 @@
+.xprez-add-after {
+	text-align: center;
+
+	h2 {
+		@include type-b(13px, 2, 2, 1);
+		color: $b-gray-7;
+		font-weight: normal;
+	}
+
+	.xprez-submenu {
+		display: flex;
+		visibility: visible;
+		opacity: 1;
+		font-size: 1rem !important;
+		position: relative;
+		margin: 0 auto 2rem;
+		min-width: 600px;
+		box-shadow: none;
+		background: transparent;
+
+		& > * {
+			width: 33.3%;
+			flex-basis: 33.3%;
+		}
+	}
+}

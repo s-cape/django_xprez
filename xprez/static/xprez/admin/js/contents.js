@@ -193,8 +193,6 @@ function activateCopyMenu($scope) {
 }
 
 function activateClipboardCopyLink($el) {
-    var copyUrl = $('.js-xprez').data('clipboard-copy-url');
-    var $xprez = $('.js-xprez');
     $el.click(function(e) {
         e.stopPropagation();
         $el.removeClass('success');
@@ -203,8 +201,8 @@ function activateClipboardCopyLink($el) {
             setTimeout(function() {
                 $el.closest('.js-copy-menu-toggle.active').removeClass('active');
             }, 1000);
-            $xprez.find('.js-clipboard-list-toggle').show();
-            $xprez.find('.js-xprez-clipboard-wrapper').removeClass('active').html();
+            $('.js-xprez-clipboard-list-trigger').show();
+            hideClipboardLists();
         });
     });
 }
@@ -214,106 +212,59 @@ function activateClipboardContent($scope) {
         activateClipboardCopyLink($(this))
     });
 
-    $scope.find('.js-clipboard-list-toggle').each(function() {
-        var $toggle = $(this);
-        $toggle.click(function(e) {
+    $scope.find('.js-xprez-clipboard-list-trigger').each(function() {
+        var $trigger = $(this);
+        $trigger.click(function(e) {
             e.stopPropagation();
-            toggleClipboardList($toggle.data('url'));
+            loadClipboardList($trigger);
         })
     });
 }
 
 function activateClipboardGlobal() {
-    $(document).click(function() {
-        var $clipboardWrapper = $('.js-xprez-clipboard-wrapper');
-
-        if ($clipboardWrapper.hasClass('active')) {
-            $clipboardWrapper.removeClass('active').html('');
-        }
-    });
-
-    $('.js-xprez-clipboard-copy-all').each(function() { activateClipboardCopyLink($(this))});
+    activateClipboardCopyLink($('.js-xprez-clipboard-copy-all'));
     activateClipboardContent($('.js-xprez-add'));
 
-    // var $clipboardList = $xprez.find('.js-clipboard-list');
-    // $clipboardList.find('.js-clipboard-paste').each(function() {
-    //     var $pasteEl = $(this);
-    //     var $pasteDataEl = $pasteEl.closest('.js-clipboard-paste-data');
-    //     $pasteEl.click(function(e) {
-    //         e.stopPropagation();
-    //         $.post(
-    //             pasteUrl,
-    //             {
-    //                 'pk': $pasteDataEl.data('pk'),
-    //                 'content_type': $pasteDataEl.data('content-type'),
-    //                 'before_content_pk': $clipboardList.data('beforeContentPk'),
-    //                 'into_container_pk': $clipboardList.data('intoContainerPk'),
-    //                 'symlink': $pasteEl.data('symlink')
-    //             },
-    //             function(data) {
-    //                 var $contentsContainer = $('.js-xprez-contents-container');
-    //                 var insertBefore = $clipboardList.data('insert-before');
-
-    //                 for (const contentData of data.contents) {
-    //                     if (insertBefore) {
-    //                         $(contentData.template).insertBefore($(insertBefore))
-    //                     } else {
-    //                         $contentsContainer.append(contentData.template);
-    //                     }
-    //                     var $content = $('.js-content-' + contentData.content_pk);
-    //                     activateContent($content);
-    //                 }
-    //                 updateContentPositions(data);
-    //                 $clipboardList.removeClass('active');
-    //             }
-    //         );
-    //     });
-    // });
-
-
+    $(document).click(hideClipboardLists);
 }
 
-function toggleClipboardList(url) {
-    var $clipboardWrapper = $('.js-xprez-clipboard-wrapper');
+function loadClipboardList($trigger) {
+    hideClipboardLists();
 
-    if ($clipboardWrapper.hasClass('active')) {
-        $clipboardWrapper.removeClass('active');
-    } else {
-        $clipboardWrapper.html('');
-        $clipboardWrapper.addClass('active');
-        $.get(url, function(data) {
-            $clipboardWrapper.html(data);
+    var $contentsContainer = $('.js-xprez-contents-container');
+    var $content = $trigger.closest('.js-content');
 
-            console.log('init');
-            $clipboardWrapper.find('.js-clipboard-paste').each(function() {
-                var $pasteEl = $(this);
-                $pasteEl.click(function(e) {
-                    console.log('click');
-                    e.stopPropagation();
-                    $.post($pasteEl.data('url'), function(data) {
-                        console.log('post returned');
-                        console.log(data);
-                        var $contentsContainer = $('.js-xprez-contents-container');
-                        var insertBefore = $pasteEl.data('insert-before');
+    $.get($trigger.data('url'), function(data) {
+        $clipboardList = $(data);
 
-                        for (const contentData of data.contents) {
-                            if (insertBefore) {
-                                console.log('insert before');
-                                $(contentData.template).insertBefore($(insertBefore))
-                            } else {
-                                console.log('append');
-                                $contentsContainer.append(contentData.template);
-                            }
-                            var $content = $('.js-content-' + contentData.content_pk);
-                            activateContent($content);
-                        }
-                        updateContentPositions(data);
-                        $clipboardWrapper.removeClass('active');
-                    });
+        if ($content.length) {
+            $clipboardList.insertBefore($content);
+        } else {
+            console.log($clipboardList)
+            console.log($contentsContainer)
+            $contentsContainer.append($clipboardList);
+        }
+
+        $clipboardList.find('.js-clipboard-paste').each(function() {
+            var $pasteEl = $(this);
+            $pasteEl.click(function(e) {
+                e.stopPropagation();
+                $.post($pasteEl.data('url'), function(data) {
+                    for (const contentData of data.contents) {
+                        $(contentData.template).insertBefore($clipboardList);
+                        var $content = $('.js-content-' + contentData.content_pk);
+                        activateContent($content);
+                    }
+                    updateContentPositions(data);
+                    $clipboardWrapper.removeClass('active');
                 });
             });
         });
-    }
+    });
+}
+
+function hideClipboardLists() {
+    $('.js-xprez-clipboard-list').remove();
 }
 
 $(function () {

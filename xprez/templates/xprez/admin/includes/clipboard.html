@@ -1,23 +1,21 @@
-{% if clipboard %}
-	<div>
-		{% for item in clipboard %}
-			<div>
-				{{ item.key }}
-				{{ item.obj.clipboard_verbose_name }}
-				{{ item.obj.clipboard_text }}
-				<span
-					class="js-clipboard-paste"
-					data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_PASTE_ACTION target_position target_pk %}"
-					{% if target_position == xprez_admin.POSITION_CONTENT_BEFORE %}data-insert-before=".js-content-{{ target.pk }}"{% endif %}
-				>paste</span>
-				<span
-					class="js-clipboard-paste"
-					data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_SYMLINK_ACTION target_position target_pk %}"
-					{% if target_position == xprez_admin.POSITION_CONTENT_BEFORE %}data-insert-before=".js-content-{{ target.pk }}"{% endif %}
-				>symlink</span>
-			</div>
-		{% endfor %}
-	</div>
-{% else %}
-	<p>clipboard empty</p>
-{% endif %}
+<div class="xprez-clipboard-list js-xprez-clipboard-list">
+	{% for item in clipboard %}
+		<div>
+			{{ item.key }}
+			{{ item.obj.clipboard_verbose_name }}
+			{{ item.obj.clipboard_text }}
+			<span
+				class="js-clipboard-paste"
+				data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_PASTE_ACTION target_position target_pk %}"
+				{# {% if target_position == xprez_admin.POSITION_CONTENT_BEFORE %}data-insert-before=".js-content-{{ target.pk }}"{% endif %} #}
+			>paste</span>
+			<span
+				class="js-clipboard-paste"
+				data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_SYMLINK_ACTION target_position target_pk %}"
+				{# {% if target_position == xprez_admin.POSITION_CONTENT_BEFORE %}data-insert-before=".js-content-{{ target.pk }}"{% endif %} #}
+			>symlink</span>
+		</div>
+	{% empty %}
+		<p>clipboard empty</p>
+	{% endfor %}
+</div>
