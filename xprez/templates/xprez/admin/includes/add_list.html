@@ -1,29 +1,29 @@
 {% load xprez_admin %}
+{% xprez_clipboard_is_empty xprez_admin request as clipboard_is_empty %}
+
 <ul class="xprez-add__list">
-    {% if xprez_clipboard == None %}
-        {% get_xprez_clipboard xprez_admin request container as xprez_clipboard %}
-    {% endif %}
-    {% if xprez_clipboard %}
-        <li class="js-clipboard-list-toggle"
-            {% if before_content %}
-                data-insert-before=".js-content-{{ before_content.pk }}"
-                data-before-content-pk="{{ before_content.pk }}"
-            {% else %}
-                data-into-container-pk="{{ container.pk }}"
-            {% endif %}
-        >
-            <span class="xprez-icon-btn-add-anchor"></span>
-            <span class="xprez-add__label">Paste</span>
-        </li>
-    {% endif %}
+    <li class="js-clipboard-list-toggle"
+        {% if clipboard_is_empty %}
+            style="display: none"
+        {% endif %}
+        {% if before_content %}
+            data-url="{% url xprez_admin.xprez_clipboard_list_url_name xprez_admin.POSITION_CONTENT_BEFORE before_content.pk %}"
+            data-insert-before=".js-content-{{ before_content.pk }}"
+        {% else %}
+            data-url="{% url xprez_admin.xprez_clipboard_list_url_name xprez_admin.POSITION_CONTAINER_END container.pk %}"
+        {% endif %}
+    >
+        <span class="xprez-icon-btn-add-anchor"></span>
+        <span class="xprez-add__label">Paste</span>
+    </li>
 
     {% for content_type in allowed_contents %}
         <li class="js-add-content"
             {% if before_content %}
-            data-insert-before=".js-content-{{ before_content.pk }}"
-            data-url="{% url xprez_admin.xprez_add_content_before_url_name before_content.pk content_type.identifier %}?{{ request.GET.urlencode }}"
+                data-insert-before=".js-content-{{ before_content.pk }}"
+                data-url="{% url xprez_admin.xprez_add_content_before_url_name before_content.pk content_type.identifier %}?{{ request.GET.urlencode }}"
             {% else %}
-            data-url="{% url xprez_admin.xprez_add_content_url_name container.pk content_type.identifier %}?{{ request.GET.urlencode }}"
+                data-url="{% url xprez_admin.xprez_add_content_url_name container.pk content_type.identifier %}?{{ request.GET.urlencode }}"
             {% endif %}
         >
             <span class="xprez-icon-btn-add-{{ content_type.icon_name }}"></span>

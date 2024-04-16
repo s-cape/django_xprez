@@ -1,5 +1,5 @@
 function activateAddContentLinks($scope) {
-    var $contentsContainer = $('.js-contents-container');
+    var $contentsContainer = $('.js-xprez-contents-container');
     $scope.find('.js-add-content, .js-copy-content').each(function (index, el) {
         var $el = $(el);
         $el.click(function () {
@@ -14,7 +14,7 @@ function activateAddContentLinks($scope) {
                 }
 
                 var $content = $('.js-content-' + data.content_pk);
-                activateContent($content, data);
+                activateContent($content);
                 updateContentPositions(data);
             });
         });
@@ -22,6 +22,7 @@ function activateAddContentLinks($scope) {
 }
 
 function updateContentPositions(data) {
+    var $contentsContainer = $('.js-xprez-contents-container');
     if (data.updated_content_positions) {
         for (id in data.updated_content_positions) {
             $contentsContainer.find('#id_content-'+id+'-position').val(data.updated_content_positions[id]);
@@ -29,13 +30,13 @@ function updateContentPositions(data) {
     }
 }
 
-function activateContent($content, data) {
+function activateContent($content) {
     activateAddContentLinks($content);
     activateFormfieldControllers($content);
     activateCollapsers($content);
     activateCommonOptions($content);
     activateCopyMenu($content);
-    activateClipboardTogglers($content);
+    activateClipboardContent($content);
 }
 
 function activateCheckboxControllers($scope) {
@@ -54,7 +55,6 @@ function activateCheckboxControllers($scope) {
                 $checkbox.prop('checked', false);
                 $el.removeClass('active');
                 $el.trigger('deactivated');
-
             }
             else {
                 $checkbox.prop('checked', true);
@@ -192,94 +192,141 @@ function activateCopyMenu($scope) {
     });
 }
 
-function activateClipboardTogglers($scope) {
+function activateClipboardCopyLink($el) {
     var copyUrl = $('.js-xprez').data('clipboard-copy-url');
-
-    $scope.find('.js-clipboard-copy').each(function() {
-        var $el = $(this);
-        $el.click(function(e) {
-            e.stopPropagation();
-            $el.removeClass('success');
-            $.post(
-                copyUrl,
-                {
-                    'pk': $el.data('pk'),
-                    'content_type': $el.data('content-type')
-                },
-                function() {
-                    $el.addClass('success');
-                    setTimeout(function() {
-                        $el.closest('.js-copy-menu-toggle.active').removeClass('active');
-                    }, 1000);
-                }
-            );
+    var $xprez = $('.js-xprez');
+    $el.click(function(e) {
+        e.stopPropagation();
+        $el.removeClass('success');
+        $.post($el.data('url'), function() {
+            $el.addClass('success');
+            setTimeout(function() {
+                $el.closest('.js-copy-menu-toggle.active').removeClass('active');
+            }, 1000);
+            $xprez.find('.js-clipboard-list-toggle').show();
+            $xprez.find('.js-xprez-clipboard-wrapper').removeClass('active').html();
         });
     });
+}
 
-    var $clipboardList = $('.js-clipboard-list');
+function activateClipboardContent($scope) {
+    $scope.find('.js-clipboard-copy').each(function() {
+        activateClipboardCopyLink($(this))
+    });
+
     $scope.find('.js-clipboard-list-toggle').each(function() {
         var $toggle = $(this);
-        $toggle.click(function() {
-            if ($clipboardList.hasClass('active')) {
-                $clipboardList.removeClass('active');
-            } else {
-                $clipboardList.addClass('active');
-                $clipboardList.data("insertBefore", $toggle.data("insertBefore") || null);
-                $clipboardList.data("beforeContentPk", $toggle.data("beforeContentPk") || null);
-                $clipboardList.data("intoContainerPk", $toggle.data("intoContainerPk") || null);
-                console.log("Set data");
-                console.log($clipboardList.data());
-            }
+        $toggle.click(function(e) {
+            e.stopPropagation();
+            toggleClipboardList($toggle.data('url'));
         })
     });
 }
 
-function activateClipboardList() {
-    var $clipboardList = $('.js-clipboard-list');
-    var pasteUrl = $('.js-xprez').data('clipboard-paste-url');
+function activateClipboardGlobal() {
+    $(document).click(function() {
+        var $clipboardWrapper = $('.js-xprez-clipboard-wrapper');
 
-    $clipboardList.find('.js-clipboard-paste').each(function() {
-        var $pasteEl = $(this);
-        var $pasteDataEl = $pasteEl.closest('.js-clipboard-paste-data');
-                    // 'insert_before': $clipboardList.data('insertBefore'),
-
-        $pasteEl.click(function() {
-            $.post(
-                pasteUrl,
-                {
-                    'pk': $pasteDataEl.data('pk'),
-                    'content_type': $pasteDataEl.data('content-type'),
-                    'before_content_pk': $clipboardList.data('beforeContentPk'),
-                    'into_container_pk': $clipboardList.data('intoContainerPk'),
-                    'symlink': $pasteEl.data('symlink')
-                },
-                function(data) {
-                    console.log('pasted');
-                    console.log('data');
-                    // var $content = $(data.template);
-                    // $content.insertAfter($clipboardList.data('insertBefore'));
-                    // activateAddContentLinks($content);
-                    // activateFormfieldControllers($content);
-                    // activateCollapsers($content);
-                    // activateCommonOptions($content);
-                    // $clipboardList.removeClass('active');
-                }
-            );
-        });
+        if ($clipboardWrapper.hasClass('active')) {
+            $clipboardWrapper.removeClass('active').html('');
+        }
     });
+
+    $('.js-xprez-clipboard-copy-all').each(function() { activateClipboardCopyLink($(this))});
+    activateClipboardContent($('.js-xprez-add'));
+
+    // var $clipboardList = $xprez.find('.js-clipboard-list');
+    // $clipboardList.find('.js-clipboard-paste').each(function() {
+    //     var $pasteEl = $(this);
+    //     var $pasteDataEl = $pasteEl.closest('.js-clipboard-paste-data');
+    //     $pasteEl.click(function(e) {
+    //         e.stopPropagation();
+    //         $.post(
+    //             pasteUrl,
+    //             {
+    //                 'pk': $pasteDataEl.data('pk'),
+    //                 'content_type': $pasteDataEl.data('content-type'),
+    //                 'before_content_pk': $clipboardList.data('beforeContentPk'),
+    //                 'into_container_pk': $clipboardList.data('intoContainerPk'),
+    //                 'symlink': $pasteEl.data('symlink')
+    //             },
+    //             function(data) {
+    //                 var $contentsContainer = $('.js-xprez-contents-container');
+    //                 var insertBefore = $clipboardList.data('insert-before');
+
+    //                 for (const contentData of data.contents) {
+    //                     if (insertBefore) {
+    //                         $(contentData.template).insertBefore($(insertBefore))
+    //                     } else {
+    //                         $contentsContainer.append(contentData.template);
+    //                     }
+    //                     var $content = $('.js-content-' + contentData.content_pk);
+    //                     activateContent($content);
+    //                 }
+    //                 updateContentPositions(data);
+    //                 $clipboardList.removeClass('active');
+    //             }
+    //         );
+    //     });
+    // });
+
+
+}
+
+function toggleClipboardList(url) {
+    var $clipboardWrapper = $('.js-xprez-clipboard-wrapper');
+
+    if ($clipboardWrapper.hasClass('active')) {
+        $clipboardWrapper.removeClass('active');
+    } else {
+        $clipboardWrapper.html('');
+        $clipboardWrapper.addClass('active');
+        $.get(url, function(data) {
+            $clipboardWrapper.html(data);
+
+            console.log('init');
+            $clipboardWrapper.find('.js-clipboard-paste').each(function() {
+                var $pasteEl = $(this);
+                $pasteEl.click(function(e) {
+                    console.log('click');
+                    e.stopPropagation();
+                    $.post($pasteEl.data('url'), function(data) {
+                        console.log('post returned');
+                        console.log(data);
+                        var $contentsContainer = $('.js-xprez-contents-container');
+                        var insertBefore = $pasteEl.data('insert-before');
+
+                        for (const contentData of data.contents) {
+                            if (insertBefore) {
+                                console.log('insert before');
+                                $(contentData.template).insertBefore($(insertBefore))
+                            } else {
+                                console.log('append');
+                                $contentsContainer.append(contentData.template);
+                            }
+                            var $content = $('.js-content-' + contentData.content_pk);
+                            activateContent($content);
+                        }
+                        updateContentPositions(data);
+                        $clipboardWrapper.removeClass('active');
+                    });
+                });
+            });
+        });
+    }
 }
 
 $(function () {
     var $xprez = $('.js-xprez');
-    var $container = $('.js-contents-container');
-    activateAddContentLinks($('.js-xprez-add,.js-contents-container'));
+    var $container = $('.js-xprez-contents-container');
+    activateAddContentLinks($('.js-xprez-add,.js-xprez-contents-container'));
     activateFormfieldControllers($container);
     activateCollapsers($container);
     activateCommonOptions($container);
     activateCopyMenu($container);
 
-    activateClipboardList();
-    activateClipboardTogglers($xprez);
+    activateClipboardGlobal();
+    activateClipboardContent($container);
     // hideErrorsForDeletedContents();
 
     $container.sortable({

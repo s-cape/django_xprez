@@ -3,8 +3,8 @@ from django.conf import settings as django_settings
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
-from django.urls import path
+from django.shortcuts import redirect, render
+from django.urls import path, re_path
 from django.views.decorators.csrf import csrf_exempt
 
 from . import contents_manager, models, settings
@@ -108,6 +108,20 @@ class XprezAdminMixin(object):
     def xprez_clipboard_paste_url_name(self):
         return self.xprez_admin_url_name("clipboard_paste", include_namespace=True)
 
+    def xprez_clipboard_list_url_name(self):
+        return self.xprez_admin_url_name("clipboard_list", include_namespace=True)
+
+    POSITION_CONTENT_BEFORE = "content_before"
+    POSITION_CONTAINER_END = "container_end"
+
+    CLIPBOARD_SESSION_KEY = "xprez_clipboard"
+    CLIPBOARD_MAX_LENGTH = 10
+    CLIPBOARD_CONTAINER_KEY = "container"
+    CLIPBOARD_CONTENT_KEY = "content"
+
+    CLIPBOARD_PASTE_ACTION = "paste"
+    CLIPBOARD_SYMLINK_ACTION = "symlink"
+
     def xprez_admin_urls(self):
         urls = [
             path(
@@ -130,20 +144,32 @@ class XprezAdminMixin(object):
                 self.xprez_admin_view(self.xprez_copy_content_view),
                 name=self.xprez_admin_url_name("copy_content"),
             ),
-            # path(
-            #     "xprez-clipboard-add-content/<int:content_pk>/",
-            #     self.xprez_admin_view(self.xprez_clipboard_add_content),
-            #     name=self.xprez_admin_url_name("clipboard_add_content"),
-            # ),
-            path(
-                "xprez-clipboard-copy/",
+            re_path(
+                r"^xprez-clipboard-copy/(?P<key>{}|{})/(?P<pk>[0-9]+)/$".format(
+                    self.CLIPBOARD_CONTENT_KEY, self.CLIPBOARD_CONTAINER_KEY
+                ),
                 self.xprez_admin_view(self.xprez_clipboard_copy),
                 name=self.xprez_admin_url_name("clipboard_copy"),
             ),
-            path(
-                "xprez-clipboard-paste/",
+            re_path(
+                r"^xprez-clipboard-paste/(?P<key>{}|{})/(?P<pk>[0-9]+)/(?P<action>{}|{})/(?P<target_position>{}|{})/(?P<target_pk>[0-9]+)/$".format(
+                    self.CLIPBOARD_CONTENT_KEY,
+                    self.CLIPBOARD_CONTAINER_KEY,
+                    self.CLIPBOARD_PASTE_ACTION,
+                    self.CLIPBOARD_SYMLINK_ACTION,
+                    self.POSITION_CONTENT_BEFORE,
+                    self.POSITION_CONTAINER_END,
+                ),
                 self.xprez_admin_view(self.xprez_clipboard_paste),
                 name=self.xprez_admin_url_name("clipboard_paste"),
+            ),
+            re_path(
+                r"^xprez-clipboard-list/(?P<target_position>{}|{})/(?P<target_pk>[0-9]+)/$".format(
+                    self.POSITION_CONTENT_BEFORE,
+                    self.POSITION_CONTAINER_END,
+                ),
+                self.xprez_admin_view(self.xprez_clipboard_list),
+                name=self.xprez_admin_url_name("clipboard_list"),
             ),
         ]
         if self.xprez_copy_supported():
@@ -225,52 +251,38 @@ class XprezAdminMixin(object):
         info = (copy._meta.app_label, copy._meta.model_name)
         return redirect("admin:%s_%s_change" % info, copy.pk)
 
-    CLIPBOARD_SESSION_KEY = "xprez_clipboard"
-    CLIPBOARD_MAX_LENGTH = 10
-    CLIPBOARD_CONTAINER_KEY = "container"
-    CLIPBOARD_CONTENT_KEY = "content"
-
-    def xprez_clipboard_copy(self, request):
-        content_type = request.POST.get("content_type")
-        assert content_type in [
-            self.CLIPBOARD_CONTAINER_KEY,
-            self.CLIPBOARD_CONTENT_KEY,
-        ]
-
+    def xprez_clipboard_copy(self, request, key, pk):
         clipboard = request.session.get(self.CLIPBOARD_SESSION_KEY, [])
-        clipboard.insert(0, (content_type, request.POST.get("pk")))
+        clipboard.insert(0, (key, int(pk)))
         clipboard = clipboard[: self.CLIPBOARD_MAX_LENGTH]
         request.session[self.CLIPBOARD_SESSION_KEY] = clipboard
         return HttpResponse()
 
-    def xprez_clipboard_paste(self, request):
-        content_type = request.POST.get("content_type")
-        if content_type == self.CLIPBOARD_CONTENT_KEY:
-            contents = models.Content.objects.filter(pk__in=request.POST.getlist("pk"))
-        elif content_type == self.CLIPBOARD_CONTAINER_KEY:
-            contents = self._get_container_instance(
-                request, request.POST.get("pk")
-            ).contents.all()
-        else:
-            raise ValueError("Invalid content type")
+    def xprez_clipboard_paste(
+        self, request, key, pk, action, target_position, target_pk
+    ):
+        if key == self.CLIPBOARD_CONTENT_KEY:
+            contents = models.Content.objects.filter(pk=int(pk))
+        elif key == self.CLIPBOARD_CONTAINER_KEY:
+            contents = self._get_container_instance(request, int(pk)).contents.all()
 
-        if request.POST.get("before_content_pk"):
-            before_content = models.Content.objects.get(
-                pk=request.POST.get("before_content_pk")
-            )
+        if target_position == self.POSITION_CONTENT_BEFORE:
+            before_content = models.Content.objects.get(pk=target_pk)
             container = before_content.page
             position = before_content.position
-        elif request.POST.get("into_container_pk"):
-            container = self._get_container_instance(
-                request, request.POST.get("into_container_pk")
-            )
+        elif target_position == self.POSITION_CONTAINER_END:
+            container = self._get_container_instance(request, target_pk)
             position = None
 
         contents_data = []
         for content in contents:
-            new_content = content.polymorph().copy(
-                for_page=container, position=position
-            )
+            if action == self.CLIPBOARD_PASTE_ACTION:
+                new_content = content.polymorph().copy(
+                    for_page=container, position=position
+                )
+            elif action == self.CLIPBOARD_SYMLINK_ACTION:
+                # TODO
+                pass
             new_content.build_admin_form(self)
             contents_data += [
                 {
@@ -283,7 +295,7 @@ class XprezAdminMixin(object):
 
         return JsonResponse(
             {
-                "contents_data": contents_data,
+                "contents": contents_data,
                 "updated_content_positions": self._updated_contents_positions(
                     container
                 ),
@@ -302,28 +314,39 @@ class XprezAdminMixin(object):
     #         request, (self.CLIPBOARD_CONTENT_KEY, content.pk)
     #     )
 
-    def xprez_clipboard_list(self, request, container):
+    def xprez_clipboard_is_empty(self, request):
+        return not bool(request.session.get(self.CLIPBOARD_SESSION_KEY, False))
+
+    def xprez_clipboard_list(self, request, target_position, target_pk):
         session_data = request.session.get(self.CLIPBOARD_SESSION_KEY, [])
 
         clipboard = []
-        for content_type, pk in session_data:
+        for key, pk in session_data:
             try:
-                if content_type == self.CLIPBOARD_CONTAINER_KEY:
+                if key == self.CLIPBOARD_CONTAINER_KEY:
                     obj = self._get_container_instance(request, pk).polymorph()
-                elif content_type == self.CLIPBOARD_CONTENT_KEY:
+                elif key == self.CLIPBOARD_CONTENT_KEY:
                     obj = models.Content.objects.get(pk=pk).polymorph()
-                else:
-                    continue
 
                 clipboard += [
                     {
-                        "content_type": content_type,
+                        "key": key,
                         "obj": obj,
                     }
                 ]
             except ObjectDoesNotExist:
                 pass
-        return clipboard
+
+        return render(
+            request,
+            "xprez/admin/includes/clipboard.html",
+            {
+                "xprez_admin": self,
+                "clipboard": clipboard,
+                "target_position": target_position,
+                "target_pk": target_pk,
+            },
+        )
 
 
 class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):

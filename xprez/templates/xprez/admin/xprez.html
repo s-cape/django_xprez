@@ -1,25 +1,18 @@
 {% load i18n %}
 {% load xprez_admin %}
 
-{% get_xprez_clipboard form.xprez_admin request form.instance as xprez_clipboard %}
-
-<div
-    class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez"
-    data-clipboard-copy-url="{% url form.xprez_admin.xprez_clipboard_copy_url_name %}"
-    data-clipboard-paste-url="{% url form.xprez_admin.xprez_clipboard_paste_url_name %}"
->
+<div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
     <div class="xprez-top">
         <span class="xprez-option-btn js-collapse_all">Collapse all</span>
         <span
-            class="xprez-option-btn js-clipboard-copy xprez-clipboard-copy"
-            data-content-type="container"
-            data-pk="{{ form.instance.pk }}"
+            class="xprez-option-btn js-xprez-clipboard-copy-all xprez-clipboard-copy"
+            data-url="{% url form.xprez_admin.xprez_clipboard_copy_url_name form.xprez_admin.CLIPBOARD_CONTAINER_KEY form.instance.pk %}"
         >
             <span class="xprez-inline-success-message">{% include "./includes/icons/checkmark.html" %} Copied</span>
-            <span class="default">Copy all modules</span>
-    </span>
+            <span class="default">Copy all</span>
+        </span>
     </div>
-    <div class="js-contents-container">
+    <div class="js-xprez-contents-container">
         {% for content in form.xprez_contents %}
             {% xprez_content_render_admin content %}
         {% endfor %}
@@ -32,7 +25,6 @@
             </div>
         {% endif %}
     {% endwith %}
-    </div>
 
-    {% include "./includes/clipboard.html" with xprez_clipboard=xprez_clipboard %}
+    <div class="xprez-clipboard-list js-xprez-clipboard-wrapper"></div>
 </div>
