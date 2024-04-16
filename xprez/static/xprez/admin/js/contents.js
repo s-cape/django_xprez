@@ -226,7 +226,6 @@ function loadClipboardList($trigger) {
         $clipboardList.find('.js-clipboard-paste').click(function(e) {
             e.stopPropagation();
             var $pasteEl = $(this);
-            $clipboardList.hide();
             $.post($pasteEl.data('url'), function(data) {
                 for (const contentData of data.contents) {
                     $(contentData.template).insertBefore($clipboardList);

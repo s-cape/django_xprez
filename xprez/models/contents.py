@@ -579,4 +579,6 @@ class ContentSymlink(Content):
             return self.symlink.polymorph().render_front(*args, **kwargs)
 
     def show_front(self):
-        return self.symlink and self.symlink.polymorph().show_front()
+        return (
+            self.show_front and self.symlink and self.symlink.polymorph().show_front()
+        )
