@@ -654,13 +654,11 @@ textarea {
 
 .xprez-add-before {
   position: relative;
-  opacity: 0.1;
-  z-index: 10;
+  opacity: 1;
   transition: opacity 150ms;
 }
 .xprez-add-before:hover {
   opacity: 1;
-  z-index: 1000;
 }
 .xprez-add-before:hover:after,
 .xprez-add-before:hover .xprez-add__cont:before {
@@ -706,52 +704,35 @@ textarea {
   opacity: 1;
   cursor: pointer;
 }
-.xprez-add-before .xprez-add__cont .xprez-add__list {
-  border-radius: 2px;
-  display: none;
-  visibility: hidden;
-  position: relative;
-  z-index: 10;
-  background: #F6F7F8;
-  padding: 10px 0;
-  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2), 0px 0px 45px rgba(0, 0, 0, 0.1);
-  margin-top: -50px;
-  margin-right: 0px;
-  opacity: 0;
-  width: 290px;
-  flex-wrap: wrap;
-  transition: all 0.3s;
+.xprez-add-before .xprez-add__cont .xprez-submenu {
+  margin-top: -2.5rem;
 }
-.xprez-add-before .xprez-add__cont .xprez-add__list [class*=" xprez-icon-btn-add"], .xprez-add-before .xprez-add__cont .xprez-add__list [class^=xprez-icon-btn-add] {
-  color: #343A40;
-  background: transparent;
-  width: auto;
-  height: auto;
-  margin-right: 6px;
+
+.xprez-add-after {
+  text-align: center;
 }
-.xprez-add-before .xprez-add__cont .xprez-add__list [class*=" xprez-icon-btn-add"]:before, .xprez-add-before .xprez-add__cont .xprez-add__list [class^=xprez-icon-btn-add]:before {
-  font-size: 20px;
-  line-height: inherit;
+.xprez-add-after h2 {
+  font-size: 13px;
+  line-height: 2.4615384615em;
+  margin-top: 2.4615384615em;
+  margin-bottom: 1.2307692308em;
+  color: #868E96;
+  font-weight: normal;
 }
-.xprez-add-before .xprez-add__cont .xprez-add__list .xprez-add__label {
-  margin: 0;
-  color: #343A40;
-}
-.xprez-add-before .xprez-add__cont .xprez-add__list li {
-  box-sizing: border-box;
-  width: 50%;
-  display: block;
-  text-align: left;
-  padding: 3px 20px 3px 13px;
-  white-space: nowrap;
-}
-.xprez-add-before .xprez-add__cont .xprez-add__list li:hover {
-  background: #E9ECEF;
-}
-.xprez-add-before .xprez-add__cont:hover .xprez-add__list {
+.xprez-add-after .xprez-submenu {
   display: flex;
   visibility: visible;
   opacity: 1;
+  font-size: 1rem !important;
+  position: relative;
+  margin: 0 auto 2rem;
+  min-width: 600px;
+  box-shadow: none;
+  background: transparent;
+}
+.xprez-add-after .xprez-submenu > * {
+  width: 33.3%;
+  flex-basis: 33.3%;
 }
 
 .xprez-module__content .ck-content {
@@ -1060,7 +1041,7 @@ textarea {
   right: 0;
   z-index: 10;
   background: #F6F7F8;
-  padding: 10px 0;
+  padding: 10px 0 !important;
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2), 0px 0px 45px rgba(0, 0, 0, 0.1);
   width: min-content;
   flex-wrap: wrap;
@@ -1070,14 +1051,16 @@ textarea {
   text-align: left;
 }
 .xprez-submenu > * {
-  flex: 1;
+  flex-grow: 1;
   box-sizing: border-box;
   display: flex;
   gap: 8px;
   text-align: left;
   padding: 0.5rem 1rem;
+  margin: 0 !important;
   white-space: nowrap;
   align-items: center;
+  cursor: pointer;
 }
 .xprez-submenu > *:hover {
   background: rgba(0, 0, 0, 0.05);
@@ -1091,10 +1074,30 @@ textarea {
   overflow: visible;
   position: relative;
 }
-.xprez-submenu__toggle.active > div {
+.xprez-submenu__toggle.active .xprez-submenu {
   display: flex;
   visibility: visible;
   opacity: 1;
+  z-index: 150;
+}
+.xprez-submenu--2-cols {
+  min-width: 340px;
+}
+.xprez-submenu--2-cols > * {
+  flex-grow: 0;
+  width: 50%;
+  flex-basis: 50%;
+}
+.xprez-submenu [class*=" xprez-icon-btn-add"], .xprez-submenu [class^=xprez-icon-btn-add] {
+  color: #343A40;
+  background: transparent;
+  width: auto;
+  height: auto;
+  margin-right: 6px;
+}
+.xprez-submenu [class*=" xprez-icon-btn-add"]:before, .xprez-submenu [class^=xprez-icon-btn-add]:before {
+  font-size: 20px;
+  line-height: inherit;
 }
 
 .xprez-clipboard-copy .xprez-inline-success-message {
@@ -1492,10 +1495,12 @@ textarea {
   --x-btn-bg: var(--x-btn-primary-bg);
   --x-btn-hover-color: var(--x-btn-primary-hover-color);
   --x-btn-hover-bg: var(--x-btn-primary-hover-bg);
-  display: inline-block;
   font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
   box-sizing: border-box;
+  font-weight: 400;
   border-radius: 0.375rem;
   text-shadow: none;
   border: none;
@@ -1513,8 +1518,8 @@ textarea {
 .xprez-module .btn.btn-secondary {
   --x-btn-color: var(--x-btn-secondary-color);
   --x-btn-bg: var(--x-btn-secondary-bg);
-  --x-btn-hover-color: var(--x-btn-secondary-color);
-  --x-btn-hover-bg: var(--x-btn-secondary-bg);
+  --x-btn-hover-color: var(--x-btn-secondary-hover-color);
+  --x-btn-hover-bg: var(--x-btn-secondary-hover-bg);
 }
 .xprez-module .btn.white {
   --x-btn-color: #37383C;
@@ -1917,45 +1922,6 @@ textarea {
   display: inline-block;
   vertical-align: middle;
   font-size: 12px;
-}
-
-.xprez-add {
-  text-align: center;
-}
-.xprez-add h2 {
-  font-size: 13px;
-  line-height: 2.4615384615em;
-  margin-top: 2.4615384615em;
-  margin-bottom: 2.4615384615em;
-  color: #868E96;
-  font-weight: normal;
-}
-
-.xprez-add__list {
-  padding-left: 0;
-  list-style: none;
-}
-.xprez-add__list li {
-  display: inline-block;
-  cursor: pointer;
-  width: 60px;
-  padding: 0 5px;
-  vertical-align: top;
-}
-.xprez-add__list li:hover .xprez-add__label {
-  color: #1D5EC7;
-}
-.xprez-add__list li:hover [class^=xprez-icon-btn-add], .xprez-add__list li:hover [class*=" xprez-icon-btn-add"] {
-  background: #1D5EC7;
-}
-
-.xprez-add__label {
-  font-size: 12px;
-  line-height: 1.2em;
-  margin-top: 0.6666666667em;
-  margin-bottom: 1.3333333333em;
-  display: inline-block;
-  color: #868E96;
 }
 
 .xprez-option-label {

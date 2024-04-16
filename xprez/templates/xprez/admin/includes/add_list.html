@@ -1,5 +1,5 @@
 {% load xprez_admin %}
-<ul class="xprez-add__list">
+<ul class="xprez-submenu xprez-submenu--2-cols">
     {% if xprez_clipboard == None %}
         {% get_xprez_clipboard xprez_admin request container as xprez_clipboard %}
     {% endif %}
@@ -13,7 +13,7 @@
             {% endif %}
         >
             <span class="xprez-icon-btn-add-anchor"></span>
-            <span class="xprez-add__label">Paste</span>
+            <span class="xprez-submenu__label">Paste</span>
         </li>
     {% endif %}
 
@@ -27,7 +27,7 @@
             {% endif %}
         >
             <span class="xprez-icon-btn-add-{{ content_type.icon_name }}"></span>
-            <span class="xprez-add__label">{{ content_type.verbose_name }}</span>
+            <span class="xprez-submenu__label">{{ content_type.verbose_name }}</span>
         </li>
     {% endfor %}
 </ul>

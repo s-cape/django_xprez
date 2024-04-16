@@ -926,10 +926,12 @@
   --x-btn-bg: var(--x-btn-primary-bg);
   --x-btn-hover-color: var(--x-btn-primary-hover-color);
   --x-btn-hover-bg: var(--x-btn-primary-hover-bg);
-  display: inline-block;
   font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
   font-family: "acumin-pro", Helvetica, Arial, sans-serif;
   box-sizing: border-box;
+  font-weight: 400;
   border-radius: 0.375rem;
   text-shadow: none;
   border: none;
@@ -947,8 +949,8 @@
 .xprez-module .btn.btn-secondary {
   --x-btn-color: var(--x-btn-secondary-color);
   --x-btn-bg: var(--x-btn-secondary-bg);
-  --x-btn-hover-color: var(--x-btn-secondary-color);
-  --x-btn-hover-bg: var(--x-btn-secondary-bg);
+  --x-btn-hover-color: var(--x-btn-secondary-hover-color);
+  --x-btn-hover-bg: var(--x-btn-secondary-hover-bg);
 }
 .xprez-module .btn.white {
   --x-btn-color: #37383C;

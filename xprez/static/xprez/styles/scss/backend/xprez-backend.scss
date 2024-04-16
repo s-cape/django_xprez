@@ -10,7 +10,8 @@
 @import "form-elements";
 @import "image-text";
 @import "grid-boxes";
-@import "add-module";
+@import "add-module-before";
+@import "add-module-after";
 @import "ck-editor";
 @import "medium-editor";
 @import "text-content";
@@ -138,46 +139,6 @@
 	}
 }
 
-//
-
-.xprez-add {
-	text-align: center;
-
-	h2 {
-		@include type-b(13px, 2, 2, 2);
-		color: $b-gray-7;
-		font-weight: normal;
-	}
-}
-
-.xprez-add__list {
-	padding-left: 0;
-	list-style: none;
-
-	li {
-		display: inline-block;
-		cursor: pointer;
-		width: 60px;
-		padding: 0 5px;
-		vertical-align: top;
-
-		&:hover {
-			.xprez-add__label {
-				color: $b-blue-high;
-			}
-
-			[class^="xprez-icon-btn-add"], [class*=" xprez-icon-btn-add"] {
-				background: $b-blue-high;
-			}
-		}
-	}
-}
-
-.xprez-add__label {
-	@include type-b(12px, 0.9, .5, 1);
-	display: inline-block;
-	color: $b-gray-7;
-}
 
 // Option forms
 
