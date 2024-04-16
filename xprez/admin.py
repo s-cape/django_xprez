@@ -261,6 +261,13 @@ class XprezAdminMixin(object):
         request.session[self.CLIPBOARD_SESSION_KEY] = clipboard
         return HttpResponse()
 
+    def _xprez_target_container_and_position(self, request, target_position, target_pk):
+        if target_position == self.POSITION_CONTENT_BEFORE:
+            before_content = models.Content.objects.get(pk=target_pk)
+            return before_content.page, before_content.position
+        elif target_position == self.POSITION_CONTAINER_END:
+            return self._get_container_instance(request, target_pk), None
+
     def xprez_clipboard_paste(
         self, request, key, pk, action, target_position, target_pk
     ):
@@ -269,13 +276,9 @@ class XprezAdminMixin(object):
         elif key == self.CLIPBOARD_CONTAINER_KEY:
             contents = self._get_container_instance(request, int(pk)).contents.all()
 
-        if target_position == self.POSITION_CONTENT_BEFORE:
-            before_content = models.Content.objects.get(pk=target_pk)
-            container = before_content.page
-            position = before_content.position
-        elif target_position == self.POSITION_CONTAINER_END:
-            container = self._get_container_instance(request, target_pk)
-            position = None
+        container, position = self._xprez_target_container_and_position(
+            request, target_position, target_pk
+        )
 
         allowed_contents = self.xprez_get_allowed_contents(container)
 
@@ -315,7 +318,9 @@ class XprezAdminMixin(object):
     def xprez_clipboard_list(self, request, target_position, target_pk):
         session_data = request.session.get(self.CLIPBOARD_SESSION_KEY, [])
 
-        target_container = self._get_container_instance(request, target_pk)
+        target_container, position = self._xprez_target_container_and_position(
+            request, target_position, target_pk
+        )
         allowed_content_types = self.xprez_get_allowed_content_types(target_container)
 
         clipboard = []
@@ -337,13 +342,7 @@ class XprezAdminMixin(object):
                     obj = models.Content.objects.get(pk=pk).polymorph()
                     allowed = obj.content_type in allowed_content_types
 
-                clipboard += [
-                    {
-                        "key": key,
-                        "obj": obj,
-                        "allowed": allowed,
-                    }
-                ]
+                clipboard += [{"key": key, "obj": obj, "allowed": allowed}]
             except ObjectDoesNotExist:
                 pass
 
