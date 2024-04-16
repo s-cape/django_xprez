@@ -2,7 +2,7 @@
 <div class="xprez-module {% if content.admin_has_errors %}xprez-module--error{% endif %} js-content js-content-{{ content.pk }} {% block extra_class %}{% endblock %}" data-pk="{{ content.pk }}">
     {% if allowed_contents %}
         <div class="xprez-add-before">
-            <div class="xprez-add__cont xprez-submenu__toggle {#active#}">
+            <div class="xprez-add__cont xprez-submenu__toggle js-xprez-submenu-toggle">
                 {% include "../includes/add_list.html" with xprez_admin=xprez_admin allowed_contents=allowed_contents before_content=content %}
             </div>
         </div>
@@ -43,8 +43,8 @@
             <span class="xprez-icon-btn-dots-horizontal-triple js-common-options-toggle" title="Common options"></span>
             {% block btn_toggle_visible %}<span class="xprez-icon-btn-eye js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off"></span>{% endblock %}
             {% block btn_copy_content %}
-                <div class="xprez-icon-btn-copy js-copy-menu-toggle xprez-submenu__toggle" title="Copy">
-                    <div class="js-copy-menu xprez-submenu">
+                <div class="xprez-icon-btn-copy js-xprez-submenu-toggle xprez-submenu__toggle" title="Copy">
+                    <div class="xprez-submenu">
                         <div
                             class="js-copy-content"
                             data-url="{% url xprez_admin.xprez_copy_content_url_name content.pk %}"

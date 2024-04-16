@@ -302,18 +302,6 @@ class XprezAdminMixin(object):
             }
         )
 
-    # def xprez_clipboard_copy_container(self, request, container_pk):
-    #     container = self._get_container_instance(request, container_pk)
-    #     return self._xprez_clipboard_copy(
-    #         request, (self.CLIPBOARD_CONTAINER_KEY, container.pk)
-    #     )
-
-    # def xprez_clipboard_copy_content(self, request, content_pk):
-    #     content = models.Content.objects.get(pk=content_pk).polymorph()
-    #     return self._xprez_clipboard_copy(
-    #         request, (self.CLIPBOARD_CONTENT_KEY, content.pk)
-    #     )
-
     def xprez_clipboard_is_empty(self, request):
         return not bool(request.session.get(self.CLIPBOARD_SESSION_KEY, False))
 

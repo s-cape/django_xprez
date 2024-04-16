@@ -35,7 +35,7 @@ function activateContent($content) {
     activateFormfieldControllers($content);
     activateCollapsers($content);
     activateCommonOptions($content);
-    activateCopyMenu($content);
+    activateSubmenus($content);
     activateClipboardContent($content);
 }
 
@@ -183,53 +183,33 @@ function activateFormfieldControllers($scope) {
     activateDeleteButtons($scope);
 }
 
-function activateCopyMenu($scope) {
-    $scope.find('.js-copy-menu-toggle').each(function() {
-        var $toggle = $(this);
-        $toggle.click(function() {
-            $toggle.toggleClass('active');
-        });
+function activateSubmenus($scope) {
+    $scope.find('.js-xprez-submenu-toggle').click(function(e) {
+        e.stopPropagation();
+        $(this).toggleClass('active');
     });
 }
 
 function activateClipboardCopyLink($el) {
     $el.click(function(e) {
-        e.stopPropagation();
+        if ($el.closest('.js-xprez-submenu-toggle.active').length) {
+            e.stopPropagation();
+        }
+
         $el.removeClass('success');
         $.post($el.data('url'), function() {
             $el.addClass('success');
             setTimeout(function() {
-                $el.closest('.js-copy-menu-toggle.active').removeClass('active');
+                $el.closest('.js-xprez-submenu-toggle.active').removeClass('active');
             }, 1000);
             $('.js-xprez-clipboard-list-trigger').show();
-            hideClipboardLists();
+            removeClipboardLists();
         });
     });
 }
 
-function activateClipboardContent($scope) {
-    $scope.find('.js-clipboard-copy').each(function() {
-        activateClipboardCopyLink($(this))
-    });
-
-    $scope.find('.js-xprez-clipboard-list-trigger').each(function() {
-        var $trigger = $(this);
-        $trigger.click(function(e) {
-            e.stopPropagation();
-            loadClipboardList($trigger);
-        })
-    });
-}
-
-function activateClipboardGlobal() {
-    activateClipboardCopyLink($('.js-xprez-clipboard-copy-all'));
-    activateClipboardContent($('.js-xprez-add'));
-
-    $(document).click(hideClipboardLists);
-}
-
 function loadClipboardList($trigger) {
-    hideClipboardLists();
+    removeClipboardLists();
 
     var $contentsContainer = $('.js-xprez-contents-container');
     var $content = $trigger.closest('.js-content');
@@ -240,31 +220,46 @@ function loadClipboardList($trigger) {
         if ($content.length) {
             $clipboardList.insertBefore($content);
         } else {
-            console.log($clipboardList)
-            console.log($contentsContainer)
             $contentsContainer.append($clipboardList);
         }
 
-        $clipboardList.find('.js-clipboard-paste').each(function() {
+        $clipboardList.find('.js-clipboard-paste').click(function(e) {
+            e.stopPropagation();
             var $pasteEl = $(this);
-            $pasteEl.click(function(e) {
-                e.stopPropagation();
-                $.post($pasteEl.data('url'), function(data) {
-                    for (const contentData of data.contents) {
-                        $(contentData.template).insertBefore($clipboardList);
-                        var $content = $('.js-content-' + contentData.content_pk);
-                        activateContent($content);
-                    }
-                    updateContentPositions(data);
-                    $clipboardWrapper.removeClass('active');
-                });
+            $clipboardList.hide();
+            $.post($pasteEl.data('url'), function(data) {
+                for (const contentData of data.contents) {
+                    $(contentData.template).insertBefore($clipboardList);
+                    var $content = $('.js-content-' + contentData.content_pk);
+                    activateContent($content);
+                }
+                updateContentPositions(data);
+                removeClipboardLists();
             });
         });
     });
 }
 
-function hideClipboardLists() {
-    $('.js-xprez-clipboard-list').remove();
+function removeClipboardLists() { $('.js-xprez-clipboard-list').remove(); }
+
+
+function activateClipboardContent($scope) {
+    $scope.find('.js-clipboard-copy').each(function() {
+        activateClipboardCopyLink($(this))
+    });
+
+    $scope.find('.js-xprez-clipboard-list-trigger').click(function(e) {
+        loadClipboardList($(this));
+    });
+}
+
+function activateClipboardGlobal() {
+    activateClipboardCopyLink($('.js-xprez-clipboard-copy-all'));
+    activateClipboardContent($('.js-xprez-add'));
+
+    $(document)
+        .click(removeClipboardLists)
+        .click(function() { $('.js-xprez-submenu-toggle.active').removeClass('active'); });
 }
 
 $(function () {
@@ -274,7 +269,7 @@ $(function () {
     activateFormfieldControllers($container);
     activateCollapsers($container);
     activateCommonOptions($container);
-    activateCopyMenu($container);
+    activateSubmenus($container);
 
     activateClipboardGlobal();
     activateClipboardContent($container);
