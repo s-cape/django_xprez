@@ -58,6 +58,9 @@ class XprezAdminMixin(object):
     def xprez_admin_media(self):
         return contents_manager.admin_media()
 
+    def xprez_get_allowed_content_types(self, container):
+        return [c.__name__.lower() for c in self.xprez_get_allowed_contents(container)]
+
     def xprez_get_allowed_contents(self, container):
         return contents_manager._get_allowed_contents(
             allowed_contents=self.allowed_contents,
@@ -274,12 +277,16 @@ class XprezAdminMixin(object):
             container = self._get_container_instance(request, target_pk)
             position = None
 
+        allowed_contents = self.xprez_get_allowed_contents(container)
+
         contents_data = []
         for content in contents:
+            source_content = content.polymorph()
+            if source_content.__class__ not in allowed_contents:
+                continue
+
             if action == self.CLIPBOARD_PASTE_ACTION:
-                new_content = content.polymorph().copy(
-                    for_page=container, position=position
-                )
+                new_content = source_content.copy(for_page=container, position=position)
             elif action == self.CLIPBOARD_SYMLINK_ACTION:
                 # TODO
                 pass
@@ -308,18 +315,33 @@ class XprezAdminMixin(object):
     def xprez_clipboard_list(self, request, target_position, target_pk):
         session_data = request.session.get(self.CLIPBOARD_SESSION_KEY, [])
 
+        target_container = self._get_container_instance(request, target_pk)
+        allowed_content_types = self.xprez_get_allowed_content_types(target_container)
+
         clipboard = []
         for key, pk in session_data:
             try:
                 if key == self.CLIPBOARD_CONTAINER_KEY:
                     obj = self._get_container_instance(request, pk).polymorph()
+                    contents = obj.contents.all()
+                    if any(c.content_type in allowed_content_types for c in contents):
+                        if all(
+                            c.content_type in allowed_content_types for c in contents
+                        ):
+                            allowed = True
+                        else:
+                            allowed = "partial"
+                    else:
+                        allowed = False
                 elif key == self.CLIPBOARD_CONTENT_KEY:
                     obj = models.Content.objects.get(pk=pk).polymorph()
+                    allowed = obj.content_type in allowed_content_types
 
                 clipboard += [
                     {
                         "key": key,
                         "obj": obj,
+                        "allowed": allowed,
                     }
                 ]
             except ObjectDoesNotExist:

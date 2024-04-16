@@ -1,4 +1,6 @@
 {% load xprez_admin %}
+{% xprez_clipboard_is_empty xprez_admin request as clipboard_is_empty %}
+
 <ul class="xprez-submenu xprez-submenu--2-cols">
     <li class="js-xprez-clipboard-list-trigger"
         {% if clipboard_is_empty %}
