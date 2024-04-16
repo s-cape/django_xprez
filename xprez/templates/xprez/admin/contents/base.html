@@ -40,7 +40,7 @@
         </h2>
 
         <div>
-            <span class="xprez-icon-btn-dots-horizontal-triple js-common-options-toggle" title="Common options"></span>
+            {% block btn_options %}<span class="xprez-icon-btn-dots-horizontal-triple js-common-options-toggle" title="Common options"></span>{% endblock %}
             {% block btn_toggle_visible %}<span class="xprez-icon-btn-eye js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off"></span>{% endblock %}
             {% block btn_copy_content %}
                 <div class="xprez-icon-btn-copy js-xprez-submenu-toggle xprez-submenu__toggle" title="Copy">

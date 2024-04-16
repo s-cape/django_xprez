@@ -1,0 +1,12 @@
+{% extends 'xprez/admin/contents/base.html' %}
+
+{% block options_class %}hidden{% endblock %}
+{% block btn_copy_content %}{% endblock %}
+
+{% block content %}
+	{% if content.symlink %}
+		symlink {{ content.symlink.polymorph.verbose_name }} from {{ content.symlink.page.polymorph }}
+	{% else %}
+		symlinked content not found
+	{% endif %}
+{% endblock %}

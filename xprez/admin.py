@@ -291,8 +291,10 @@ class XprezAdminMixin(object):
             if action == self.CLIPBOARD_PASTE_ACTION:
                 new_content = source_content.copy(for_page=container, position=position)
             elif action == self.CLIPBOARD_SYMLINK_ACTION:
-                # TODO
-                pass
+                new_content = models.ContentSymlink.create_for_page(
+                    container, position=position, symlink=source_content
+                )
+
             new_content.build_admin_form(self)
             contents_data += [
                 {

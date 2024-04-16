@@ -559,3 +559,24 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
             if striptags(box_content != ""):
                 return True
         return False
+
+
+class ContentSymlink(Content):
+    admin_template_name = "xprez/admin/contents/content_symlink.html"
+    symlink = models.ForeignKey(
+        Content,
+        on_delete=models.SET_NULL,
+        null=True,
+        editable=False,
+        related_name="symlinked_content_set",
+    )
+
+    class Meta:
+        verbose_name = "Symlink"
+
+    def render_front(self, *args, **kwargs):
+        if self.symlink:
+            return self.symlink.polymorph().render_front(*args, **kwargs)
+
+    def show_front(self):
+        return self.symlink and self.symlink.polymorph().show_front()
