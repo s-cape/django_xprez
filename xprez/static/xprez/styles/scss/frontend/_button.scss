@@ -15,8 +15,8 @@
 		&.btn-secondary {
 			--x-btn-color: var(--x-btn-secondary-color);
 			--x-btn-bg: var(--x-btn-secondary-bg);
-			--x-btn-hover-color: var(--x-btn-secondary-color);
-			--x-btn-hover-bg: var(--x-btn-secondary-bg);
+			--x-btn-hover-color: var(--x-btn-secondary-hover-color);
+			--x-btn-hover-bg: var(--x-btn-secondary-hover-bg);
 		}
 
 		&.white {
@@ -26,10 +26,12 @@
 		}
 
 		@if $use-xprez-button-styles {
-			display: inline-block;
 			@include type($button-size);
+			display: inline-flex;
+			align-items: center;
 			font-family: $button-font-family;
 			box-sizing: border-box;
+			font-weight: $button-font-weight;
 			border-radius: $button-border-radius;
 			text-shadow: $button-text-shadow;
 			border: $button-border;
