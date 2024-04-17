@@ -64,57 +64,61 @@
             {% block btn_delete %}<span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_delete_content_url_name content.pk %}" title="Remove"></span>{% endblock %}
         </div>
     </div>
-    <div class="xprez-module__collapse-cont">
-        <div class="xprez-module__options xprez-module__common-options js-common-options">
-            <div>
-                <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_bottom">
-                    <li>
-                        <label class="xprez-option-label">Margin bottom:</label>
-                    </li>
-                    {% for value, label in content.admin_form.margin_bottom.field.choices %}
-                        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
-                    {% endfor %}
-                </ul>
-                <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-padding_top">
-                    <li>
-                        <label class="xprez-option-label">Padding top:</label>
-                    </li>
-                    {% for value, label in content.admin_form.padding_top.field.choices %}
-                        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
-                    {% endfor %}
-                </ul>
-                <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-padding_bottom">
-                    <li>
-                        <label class="xprez-option-label">Padding bottom:</label>
-                    </li>
-                    {% for value, label in content.admin_form.padding_bottom.field.choices %}
-                        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
-                    {% endfor %}
-                </ul>
+    {% block common_options_wrapper %}
+        <div class="xprez-module__collapse-cont">
+            <div class="xprez-module__options xprez-module__common-options js-common-options">
+                <div>
+                    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_bottom">
+                        <li>
+                            <label class="xprez-option-label">Margin bottom:</label>
+                        </li>
+                        {% for value, label in content.admin_form.margin_bottom.field.choices %}
+                            <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
+                        {% endfor %}
+                    </ul>
+                    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-padding_top">
+                        <li>
+                            <label class="xprez-option-label">Padding top:</label>
+                        </li>
+                        {% for value, label in content.admin_form.padding_top.field.choices %}
+                            <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
+                        {% endfor %}
+                    </ul>
+                    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-padding_bottom">
+                        <li>
+                            <label class="xprez-option-label">Padding bottom:</label>
+                        </li>
+                        {% for value, label in content.admin_form.padding_bottom.field.choices %}
+                            <li><span class="xprez-option-btn js-option" data-formfield_value="{{ value }}">{{ label }}</span></li>
+                        {% endfor %}
+                    </ul>
 
+                </div>
+                <div>
+                    <ul class="xprez-module__options-group">
+                        <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-alternate_color" >Alternate color</span></li>
+                    </ul>
+                    <ul class="xprez-module__options-group ">
+                        <li>
+                            <label class="xprez-option-label">Background color:</label>
+                            <input type="text" class="xprez-option-input xprez-option-input--m js-text_controller" data-formfield_selector="#id_content-{{ content.pk }}-background_color">
+                        </li>
+                    </ul>
+                    <ul class="xprez-module__options-group ">
+                        <li>
+                            <label class="xprez-option-label">Css class:</label>
+                            <input type="text" class="xprez-option-input js-text_controller" data-formfield_selector="#id_content-{{ content.pk }}-css_class">
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div>
-                <ul class="xprez-module__options-group">
-                    <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-alternate_color" >Alternate color</span></li>
-                </ul>
-                <ul class="xprez-module__options-group ">
-                    <li>
-                        <label class="xprez-option-label">Background color:</label>
-                        <input type="text" class="xprez-option-input xprez-option-input--m js-text_controller" data-formfield_selector="#id_content-{{ content.pk }}-background_color">
-                    </li>
-                </ul>
-                <ul class="xprez-module__options-group ">
-                    <li>
-                        <label class="xprez-option-label">Css class:</label>
-                        <input type="text" class="xprez-option-input js-text_controller" data-formfield_selector="#id_content-{{ content.pk }}-css_class">
-                    </li>
-                </ul>
-            </div>
-        </div>
+        {% endblock %}
 
-        <div class="xprez-module__options {% block options_class %}{% endblock %}">
-            {% block options %}{% endblock %}
-        </div>
+        {% block options_wrapper %}
+            <div class="xprez-module__options {% block options_class %}{% endblock %}">
+                {% block options %}{% endblock %}
+            </div>
+        {% endblock %}
 
         <div class="xprez-module__content">
             {% block errors %}

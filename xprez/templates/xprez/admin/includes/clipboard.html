@@ -2,7 +2,13 @@
 	{% for item in clipboard %}
 		<div class="xprez-clipboard-list__item">
 			<div class="xprez-clipboard-list__icon">
-				{% include "../icons/clipboard_item.html" %}
+				{% with icon=item.obj.icon %}
+					{% if icon %}
+						{{ item.obj.icon }}
+					{% else %}
+						{% include "../icons/clipboard_item.html" %}
+					{% endif %}
+				{% endwith %}
 			</div>
 			<div class="xprez-clipboard-list__info">
 				{# {{ item.key }} #}

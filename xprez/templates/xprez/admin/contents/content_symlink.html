@@ -1,7 +1,9 @@
 {% extends 'xprez/admin/contents/base.html' %}
 
-{% block options_class %}hidden{% endblock %}
+{% block common_options_wrapper %}{% endblock %}
+{% block options_wrapper %}{% endblock %}
 {% block btn_copy_content %}{% endblock %}
+{% block btn_options %}{% endblock %}
 
 {% block content %}
 	{% if content.symlink %}
