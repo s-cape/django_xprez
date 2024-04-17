@@ -4,11 +4,11 @@
 	padding: 6px 8px;
 	background: $b-gray-5;
 	display: inline-flex;
-	align-content: center;
+	align-items: center;
 	vertical-align: baseline;
 
 	&:hover {
-		background: darken($b-gray-5, 5%);
+		background: darken($b-gray-5, 4%);
 	}
 
 	svg {

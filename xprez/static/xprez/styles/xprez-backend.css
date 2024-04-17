@@ -1123,7 +1123,7 @@ textarea {
 .xprez-clipboard-list {
   border: 1px solid #ADB5BD;
   border-radius: 2px;
-  background: #E9ECEF;
+  background: #eff1f3;
   font-size: 0.875rem;
   overflow-y: auto;
   max-height: 300px;
@@ -1135,12 +1135,13 @@ textarea {
   padding: 0.5rem 8px;
   display: flex;
   gap: 0.5rem;
+  transition: background linear 0.3s;
 }
 .xprez-clipboard-list__item:not(:last-child) {
   border-bottom: 1px solid #CED4DA;
 }
 .xprez-clipboard-list__item:hover {
-  background: #F6F7F8;
+  background: #fbfbfc;
 }
 .xprez-clipboard-list__info {
   flex: 1;
@@ -1150,7 +1151,7 @@ textarea {
 }
 .xprez-clipboard-list__module {
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 .xprez-clipboard-list__icon svg {
   width: 18px;
@@ -1168,11 +1169,11 @@ textarea {
   padding: 6px 8px;
   background: #CED4DA;
   display: inline-flex;
-  align-content: center;
+  align-items: center;
   vertical-align: baseline;
 }
 .xprez-btn:hover {
-  background: #bfc7cf;
+  background: #c2cad1;
 }
 .xprez-btn svg {
   margin-right: 4px;
