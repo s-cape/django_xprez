@@ -32,7 +32,7 @@
 .xprez-clipboard-list {
 	border: 1px solid $b-gray-6;
 	border-radius: 2px;
-	background: $b-gray-3;
+	background: lighten($b-gray-3, 2%);
 	font-size: .875rem;
 	overflow-y: auto;
 	max-height: 300px;
@@ -44,13 +44,14 @@
 		padding: .5rem 8px;
 		display: flex;
 		gap: .5rem;
+		transition: background linear .3s;
 
 		&:not(:last-child) {
 			border-bottom: 1px solid $b-gray-5;
 		}
 
 		&:hover {
-			background: $b-gray-2;
+			background: lighten($b-gray-3, 6%);
 		}
 	}
 
@@ -64,7 +65,7 @@
 
 	&__module {
 		font-weight: 600;
-		margin-bottom: .5rem;
+		margin-bottom: .25rem;
 	}
 
 	&__icon {
