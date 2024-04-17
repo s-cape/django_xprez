@@ -254,6 +254,7 @@ class XprezAdminMixin(object):
         info = (copy._meta.app_label, copy._meta.model_name)
         return redirect("admin:%s_%s_change" % info, copy.pk)
 
+    @csrf_exempt
     def xprez_clipboard_copy(self, request, key, pk):
         clipboard = request.session.get(self.CLIPBOARD_SESSION_KEY, [])
         clipboard.insert(0, (key, int(pk)))
@@ -268,6 +269,7 @@ class XprezAdminMixin(object):
         elif target_position == self.POSITION_CONTAINER_END:
             return self._get_container_instance(request, target_pk), None
 
+    @csrf_exempt
     def xprez_clipboard_paste(
         self, request, key, pk, action, target_position, target_pk
     ):
