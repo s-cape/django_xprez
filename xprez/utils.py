@@ -30,3 +30,9 @@ def random_string(length, include_special_chars=False):
     if include_special_chars:
         chars += "!@#$%^&*(-_=+)"
     return "".join([random.choice(chars) for i in range(length)])
+
+
+def truncate_with_ellipsis(string, length):
+    if len(string) > length:
+        return string[: length - 3] + "..."
+    return string

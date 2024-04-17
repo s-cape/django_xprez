@@ -32,7 +32,7 @@ class ContentsContainer(models.Model):
     def clipboard_verbose_name(self):
         return self.polymorph()._meta.verbose_name
 
-    def clipboard_text(self):
+    def clipboard_text_preview(self):
         return self.polymorph().__str__()
 
 
@@ -270,7 +270,7 @@ class Content(models.Model):
     def clipboard_verbose_name(self):
         return self.polymorph()._meta.verbose_name
 
-    def clipboard_text(self):
+    def clipboard_text_preview(self):
         return ""
 
 

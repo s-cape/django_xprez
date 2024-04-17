@@ -11,6 +11,7 @@ from django.template.loader import get_template
 from django.urls import re_path
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from xprez.utils import truncate_with_ellipsis
 
 from ..ck_editor import parse_text as ckeditor_parse_text
 from ..ck_editor.widgets import CkEditorWidget
@@ -135,8 +136,8 @@ class CkEditor(CkEditorFileUploadMixin, Content):
         )
         return super().render_front(extra_context=extra_context)
 
-    def clipboard_text(self):
-        return striptags(self.text)[:CLIPBOARD_TEXT_MAX_LENGTH]
+    def clipboard_text_preview(self):
+        return truncate_with_ellipsis(striptags(self.text), CLIPBOARD_TEXT_MAX_LENGTH)
 
 
 class QuoteContent(FormsetContent):
