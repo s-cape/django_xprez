@@ -13,7 +13,7 @@
             data-url="{% url xprez_admin.xprez_clipboard_list_url_name xprez_admin.POSITION_CONTAINER_END container.pk %}"
         {% endif %}
     >
-        <span class="xprez-icon-btn-add-anchor"></span>
+        <span class="xprez-icon">{% include "xprez/admin/icons/paste.html" %}</span>
         <span class="xprez-submenu__label">Paste</span>
     </li>
 
@@ -26,7 +26,8 @@
                 data-url="{% url xprez_admin.xprez_add_content_url_name container.pk content_type.identifier %}?{{ request.GET.urlencode }}"
             {% endif %}
         >
-            <span class="xprez-icon-btn-add-{{ content_type.icon_name }}"></span>
+            {# <span class="xprez-icon-btn-add-{{ content_type.icon_name }}"></span> #}
+            <span class="xprez-icon">{{ content_type.icon }}</span>
             <span class="xprez-submenu__label">{{ content_type.verbose_name }}</span>
         </li>
     {% endfor %}

@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import re_path
 from django.utils.decorators import method_decorator
+from django.utils.functional import classproperty
 
 from ..conf import settings
 from ..permissions import xprez_staff_member_required
@@ -36,6 +37,10 @@ class ContentsContainer(models.Model):
 
 
 class Content(models.Model):
+    @classmethod
+    def identifier(cls):
+        return cls.__name__.lower()
+
     @property
     def admin_template_name(self):
         return [
@@ -46,8 +51,6 @@ class Content(models.Model):
     @property
     def front_template_name(self):
         return "xprez/contents/{}.html".format(self.identifier())
-
-    icon_name = "default"
 
     SIZE_FULL = "full"
     SIZE_MID = "mid"
@@ -253,9 +256,20 @@ class Content(models.Model):
     def get_urls(cls):
         return []
 
-    @classmethod
-    def identifier(cls):
-        return cls.__name__.lower()
+    @classproperty
+    def icon_name(cls):
+        return cls.identifier()
+
+    @classproperty
+    def icon_template_name(cls):
+        return [
+            f"xprez/admin/icons/contents/{cls.icon_name}.html",
+            "xprez/admin/icons/contents/default.html",
+        ]
+
+    @classproperty
+    def icon(cls):
+        return render_to_string(cls.icon_template_name)
 
     def clipboard_verbose_name(self):
         return self.polymorph()._meta.verbose_name

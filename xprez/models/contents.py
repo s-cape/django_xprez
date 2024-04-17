@@ -44,7 +44,7 @@ class MediumEditor(Content):
     form_class = "xprez.admin_forms.MediumEditorForm"
     admin_template_name = "xprez/admin/contents/medium_editor.html"
     front_template_name = "xprez/contents/medium_editor.html"
-    icon_name = "text_content"
+    # icon_name = "text_content"
     verbose_name = "Text Content"
 
     text = models.TextField()
@@ -107,7 +107,7 @@ class CkEditor(CkEditorFileUploadMixin, Content):
     form_class = "xprez.admin_forms.CkEditorForm"
     admin_template_name = "xprez/admin/contents/ck_editor.html"
     front_template_name = "xprez/contents/ck_editor.html"
-    icon_name = "text_content"
+    # icon_name = "text_content"
 
     text = models.TextField()
     # css_class = models.CharField(max_length=100, null=True, blank=True)
@@ -143,7 +143,7 @@ class QuoteContent(FormsetContent):
     formset_factory = "xprez.admin_forms.QuoteFormSet"
     admin_template_name = "xprez/admin/contents/quote.html"
     front_template_name = "xprez/contents/quote.html"
-    icon_name = "quote"
+    # icon_name = "quote"
 
     class Meta:
         verbose_name = "Quote"
@@ -196,7 +196,7 @@ class Gallery(AjaxUploadFormsetContent):
     admin_template_name = "xprez/admin/contents/gallery/gallery.html"
     admin_formset_item_template_name = "xprez/admin/contents/gallery/photo.html"
     front_template_name = "xprez/contents/gallery.html"
-    icon_name = "gallery"
+    # icon_name = "gallery"
     formset_factory = "xprez.admin_forms.PhotoFormSet"
 
     width = models.CharField(
@@ -258,7 +258,7 @@ class Video(Content):
     )
     admin_template_name = "xprez/admin/contents/video.html"
     front_template_name = "xprez/contents/video.html"
-    icon_name = "video"
+    # icon_name = "video"
     form_class = "xprez.admin_forms.VideoForm"
 
     poster_image = models.ImageField(upload_to="video", null=True, blank=True)
@@ -289,7 +289,7 @@ class Video(Content):
 class CodeInput(Content):
     admin_template_name = "xprez/admin/contents/code_input.html"
     front_template_name = "xprez/contents/code_input.html"
-    icon_name = "code"
+    # icon_name = "code"
     form_class = "xprez.admin_forms.CodeInputForm"
 
     code = models.TextField()
@@ -301,7 +301,7 @@ class CodeInput(Content):
 class NumbersContent(FormsetContent):
     admin_template_name = "xprez/admin/contents/numbers.html"
     front_template_name = "xprez/contents/numbers.html"
-    icon_name = "numbers"
+    # icon_name = "numbers"
     form_class = "xprez.admin_forms.NumbersContentForm"
     formset_factory = "xprez.admin_forms.NumberFormSet"
 
@@ -338,7 +338,7 @@ class Number(ContentItem):
 class FeatureBoxes(Content):
     admin_template_name = "xprez/admin/contents/feature_boxes.html"
     front_template_name = "xprez/contents/feature_boxes.html"
-    icon_name = "feature_boxes"
+    # icon_name = "feature_boxes"
     form_class = "xprez.admin_forms.FeatureBoxesForm"
 
     box_1 = models.TextField(blank=True)
@@ -354,7 +354,7 @@ class FeatureBoxes(Content):
 
 class CodeTemplate(Content):
     admin_template_name = "xprez/admin/contents/code_template.html"
-    icon_name = "code_template"
+    # icon_name = "code_template"
     form_class = "xprez.admin_forms.CodeTemplateForm"
 
     template_name = TemplatePathField(
@@ -385,7 +385,7 @@ class DownloadContent(AjaxUploadFormsetContent):
     front_template_name = "xprez/contents/download.html"
     admin_formset_item_template_name = "xprez/admin/contents/download/attachment.html"
 
-    icon_name = "files"
+    # icon_name = "files"
     form_class = "xprez.admin_forms.DownloadContentForm"
     formset_factory = "xprez.admin_forms.AttachmentFormSet"
 
@@ -441,7 +441,7 @@ class TextImageBase(Content):
     form_class = "xprez.admin_forms.TextImageForm"
     admin_template_name = "xprez/admin/contents/text_image.html"
     front_template_name = "xprez/contents/text_image.html"
-    icon_name = "text_image"
+    # icon_name = "text_image"
 
     ALIGNMENT_LEFT = "left"
     ALIGNMENT_RIGHT = "right"
@@ -493,7 +493,7 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
     form_class = "xprez.admin_forms.GridBoxesForm"
     admin_template_name = "xprez/admin/contents/grid_boxes/grid_boxes.html"
     front_template_name = "xprez/contents/grid_boxes.html"
-    icon_name = "grid_boxes"
+    # icon_name = "grid_boxes"
 
     MARGIN_CHOICES = (
         ("none", "none"),
