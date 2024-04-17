@@ -723,7 +723,6 @@ textarea {
   display: flex;
   visibility: visible;
   opacity: 1;
-  font-size: 1rem !important;
   position: relative;
   margin: 0 auto 2rem;
   min-width: 600px;
@@ -1061,13 +1060,14 @@ textarea {
   white-space: nowrap;
   align-items: center;
   cursor: pointer;
+  font-size: 13px !important;
 }
 .xprez-submenu > *:hover {
   background: rgba(0, 0, 0, 0.05);
 }
 .xprez-submenu .svg-icon {
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   margin: -4px 0;
 }
 .xprez-submenu__toggle {
@@ -1087,17 +1087,6 @@ textarea {
   flex-grow: 0;
   width: 50%;
   flex-basis: 50%;
-}
-.xprez-submenu [class*=" xprez-icon-btn-add"], .xprez-submenu [class^=xprez-icon-btn-add] {
-  color: #343A40;
-  background: transparent;
-  width: auto;
-  height: auto;
-  margin-right: 6px;
-}
-.xprez-submenu [class*=" xprez-icon-btn-add"]:before, .xprez-submenu [class^=xprez-icon-btn-add]:before {
-  font-size: 20px;
-  line-height: inherit;
 }
 
 .xprez-clipboard-copy .xprez-inline-success-message {
@@ -1832,13 +1821,6 @@ textarea {
   padding: 0 40px 0 0;
   margin: 1rem auto 3rem;
 }
-
-/*.xprez-clipboard-list {
-  display: none;
-}
-.xprez-clipboard-list.active {
-  display: block;
-}*/
 
 .xprez-module {
   border: 1px solid #DEE2E6;

@@ -27,7 +27,7 @@
             {% endif %}
         >
             {# <span class="xprez-icon-btn-add-{{ content_type.icon_name }}"></span> #}
-            <span class="xprez-icon">{{ content_type.icon }}</span>
+            {{ content_type.icon }}
             <span class="xprez-submenu__label">{{ content_type.verbose_name }}</span>
         </li>
     {% endfor %}

@@ -1,3 +1,7 @@
+.xprez-module .xprez-submenu > * {
+	//font-size: 13px;
+}
+
 .xprez-submenu {
 	display: none;
 	visibility: hidden;
@@ -27,6 +31,7 @@
 		white-space: nowrap;
 		align-items: center;
 		cursor: pointer;
+		font-size: 13px !important;
 
 		&:hover {
 			background: rgba(0,0,0,.05);
@@ -34,8 +39,8 @@
 	}
 
 	.svg-icon {
-		width: 24px;
-		height: 24px;
+		width: 18px;
+		height: 18px;
 		margin: -4px 0;
 	}
 
@@ -58,19 +63,6 @@
 			flex-grow: 0;
 			width: 50%;
 			flex-basis: 50%;
-		}
-	}
-
-	[class*=" xprez-icon-btn-add"], [class^=xprez-icon-btn-add] {
-		color: $b-gray-8;
-		background: transparent;
-		width: auto;
-		height: auto;
-		margin-right: 6px;
-
-		&:before {
-			font-size: 20px;
-			line-height: inherit;
 		}
 	}
 }
