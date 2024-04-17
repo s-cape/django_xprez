@@ -1085,8 +1085,16 @@ textarea {
 }
 .xprez-submenu--2-cols > * {
   flex-grow: 0;
-  width: 50%;
   flex-basis: 50%;
+}
+.xprez-submenu__paste {
+  background: #343A40;
+  color: white;
+  flex-basis: 100%;
+}
+.xprez-submenu__paste:hover {
+  background: #000;
+  color: white;
 }
 
 .xprez-clipboard-copy .xprez-inline-success-message {
@@ -1112,9 +1120,62 @@ textarea {
   margin: -4px 0;
 }
 
+.xprez-clipboard-list {
+  border: 1px solid #ADB5BD;
+  border-radius: 2px;
+  background: #E9ECEF;
+  font-size: 0.875rem;
+  overflow-y: auto;
+  max-height: 300px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.xprez-clipboard-list__item {
+  padding: 0.5rem 8px;
+  display: flex;
+  gap: 0.5rem;
+}
+.xprez-clipboard-list__item:not(:last-child) {
+  border-bottom: 1px solid #CED4DA;
+}
+.xprez-clipboard-list__item:hover {
+  background: #F6F7F8;
+}
+.xprez-clipboard-list__info {
+  flex: 1;
+}
+.xprez-clipboard-list__info i {
+  opacity: 0.7;
+}
+.xprez-clipboard-list__module {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.xprez-clipboard-list__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
 .xprez-top {
   display: flex;
   align-items: center;
+}
+
+.xprez-btn {
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 6px 8px;
+  background: #CED4DA;
+  display: inline-flex;
+  align-content: center;
+  vertical-align: baseline;
+}
+.xprez-btn:hover {
+  background: #bfc7cf;
+}
+.xprez-btn svg {
+  margin-right: 4px;
 }
 
 .xprez-full-width {
@@ -1913,6 +1974,7 @@ textarea {
   margin-bottom: 0em;
   display: inline-block;
   color: #868E96;
+  color: #343A40;
   letter-spacing: 0.02em;
 }
 

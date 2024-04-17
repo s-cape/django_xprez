@@ -1,0 +1,17 @@
+.xprez-btn {
+	cursor: pointer;
+	border-radius: 3px;
+	padding: 6px 8px;
+	background: $b-gray-5;
+	display: inline-flex;
+	align-content: center;
+	vertical-align: baseline;
+
+	&:hover {
+		background: darken($b-gray-5, 5%);
+	}
+
+	svg {
+		margin-right: 4px;
+	}
+}

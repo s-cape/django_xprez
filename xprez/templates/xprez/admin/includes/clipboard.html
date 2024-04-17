@@ -1,27 +1,39 @@
 <div class="xprez-clipboard-list js-xprez-clipboard-list">
 	{% for item in clipboard %}
-		<div>
-			{# {{ item.key }} #}
-			{{ item.obj.clipboard_verbose_name }}
-			{{ item.obj.clipboard_text }}
-			{% if item.allowed %}
-				<span
-					class="js-clipboard-paste"
-					data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_PASTE_ACTION target_position target_pk %}"
-				>paste</span>
-				<span
-					class="js-clipboard-paste"
-					data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_SYMLINK_ACTION target_position target_pk %}"
-				>symlink</span>
-
-				{% if item.allowed == "partial" %}
-					<span class="warning">
-						some contents not allowed
+		<div class="xprez-clipboard-list__item">
+			<div class="xprez-clipboard-list__icon">
+				{% include "../icons/clipboard_item.html" %}
+			</div>
+			<div class="xprez-clipboard-list__info">
+				{# {{ item.key }} #}
+				<div class="xprez-clipboard-list__module">{{ item.obj.clipboard_verbose_name }}</div>
+				<i>{{ item.obj.clipboard_text }}...</i>
+			</div>
+			<div class="xprez-clipboard-list__actions">
+				{% if item.allowed %}
+					<span
+						class="js-clipboard-paste xprez-btn"
+						data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_PASTE_ACTION target_position target_pk %}"
+					>
+						{% include "../icons/paste.html" %} Paste
 					</span>
+					<span
+						class="js-clipboard-paste xprez-btn"
+						data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_SYMLINK_ACTION target_position target_pk %}"
+					>
+						{% include "../icons/link.html" %} Link
+					</span>
+
+					{% if item.allowed == "partial" %}
+						<span class="warning">
+							some contents not allowed
+						</span>
+					{% endif %}
+
+				{% else %}
+					<span class="warning">not allowed</span>
 				{% endif %}
-			{% else %}
-				<span class="warning">not allowed</span>
-			{% endif %}
+			</div>
 		</div>
 	{% empty %}
 		<p>clipboard empty</p>

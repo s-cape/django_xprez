@@ -2,7 +2,7 @@
 {% xprez_clipboard_is_empty xprez_admin request as clipboard_is_empty %}
 
 <ul class="xprez-submenu xprez-submenu--2-cols">
-    <li class="js-xprez-clipboard-list-trigger"
+    <li class="js-xprez-clipboard-list-trigger xprez-submenu__paste"
         {% if clipboard_is_empty %}
             style="display: none"
         {% endif %}
@@ -14,7 +14,7 @@
         {% endif %}
     >
         <span class="xprez-icon">{% include "xprez/admin/icons/paste.html" %}</span>
-        <span class="xprez-submenu__label">Paste</span>
+        <span class="xprez-submenu__label">Paste from clipboard</span>
     </li>
 
     {% for content_type in allowed_contents %}

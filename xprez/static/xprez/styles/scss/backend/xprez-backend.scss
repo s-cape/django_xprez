@@ -19,6 +19,7 @@
 @import "submenu";
 @import "clipboard";
 @import "top_menu";
+@import "button";
 
 @import "../frontend/layout";
 @import "../frontend/typography";
@@ -138,6 +139,7 @@
 	@include type-b(12px, 28px);
 	display: inline-block;
 	color: $b-gray-7;
+	color: #343A40;
 	letter-spacing: 0.02em;
 }
 

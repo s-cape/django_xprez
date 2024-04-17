@@ -28,3 +28,49 @@
 		margin: -4px 0;
 	}
 }
+
+.xprez-clipboard-list {
+	border: 1px solid $b-gray-6;
+	border-radius: 2px;
+	background: $b-gray-3;
+	font-size: .875rem;
+	overflow-y: auto;
+	max-height: 300px;
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+
+	&__item {
+		padding: .5rem 8px;
+		display: flex;
+		gap: .5rem;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid $b-gray-5;
+		}
+
+		&:hover {
+			background: $b-gray-2;
+		}
+	}
+
+	&__info {
+		flex: 1;
+
+		i {
+			opacity: .7;
+		}
+	}
+
+	&__module {
+		font-weight: 600;
+		margin-bottom: .5rem;
+	}
+
+	&__icon {
+		svg {
+			width: 18px;
+			height: 18px;
+		}
+	}
+}
