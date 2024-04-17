@@ -257,13 +257,9 @@ class Content(models.Model):
         return []
 
     @classproperty
-    def icon_name(cls):
-        return cls.identifier()
-
-    @classproperty
     def icon_template_name(cls):
         return [
-            f"xprez/admin/icons/contents/{cls.icon_name}.html",
+            "xprez/admin/icons/contents/{}.html".format(cls.identifier()),
             "xprez/admin/icons/contents/default.html",
         ]
 
