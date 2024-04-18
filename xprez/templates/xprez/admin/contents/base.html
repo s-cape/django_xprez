@@ -64,8 +64,8 @@
             {% block btn_delete %}<span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_delete_content_url_name content.pk %}" title="Remove"></span>{% endblock %}
         </div>
     </div>
-    {% block common_options_wrapper %}
-        <div class="xprez-module__collapse-cont">
+    <div class="xprez-module__collapse-cont">
+        {% block common_options_wrapper %}
             <div class="xprez-module__options xprez-module__common-options js-common-options">
                 <div>
                     <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-margin_bottom">
