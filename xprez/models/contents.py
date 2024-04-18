@@ -564,6 +564,7 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
 
 class ContentSymlink(Content):
     admin_template_name = "xprez/admin/contents/content_symlink.html"
+    icon_template_name = "xprez/admin/icons/contents/content_symlink.html"
     symlink = models.ForeignKey(
         Content,
         on_delete=models.SET_NULL,
