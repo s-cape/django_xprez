@@ -8,8 +8,9 @@
 {% block content %}
 	<div class="xprez-module__content-info">
 		{% if content.symlink %}
-			{{content.symlink.polymorph.icon}} <strong>{{ content.symlink.polymorph.verbose_name }}</strong> from {% include "xprez/admin/icons/page.html" %}
-			<strong>{{ content.symlink.page.polymorph }}</strong>
+			{% include "xprez/admin/icons/page.html" %} <strong>{{ content.symlink.page.polymorph }}</strong>
+			<span class="xprez-module__content-info-arr">&#x203A;</span>
+			{{content.symlink.polymorph.icon}} <strong>{{ content.symlink.polymorph.verbose_name }}</strong>
 		{% else %}
 			<div class="xprez-warning">Linked content not found.</div>
 		{% endif %}
