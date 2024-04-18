@@ -707,6 +707,9 @@ textarea {
 .xprez-add-before .xprez-add__cont .xprez-submenu {
   margin-top: -2.5rem;
 }
+.xprez-add-before .xprez-submenu__paste {
+  margin-bottom: 0.15rem !important;
+}
 
 .xprez-add-after {
   text-align: center;
@@ -1128,12 +1131,12 @@ textarea {
   overflow-y: auto;
   max-height: 300px;
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 2rem auto;
 }
 .xprez-clipboard-list__item {
   padding: 0.5rem 8px;
   display: flex;
+  align-items: center;
   gap: 0.5rem;
   transition: background linear 0.3s;
 }
@@ -1151,11 +1154,14 @@ textarea {
 }
 .xprez-clipboard-list__module {
   font-weight: 600;
-  margin-bottom: 0.25rem;
+}
+.xprez-clipboard-list__icon {
+  align-self: flex-start;
 }
 .xprez-clipboard-list__icon svg {
   width: 18px;
   height: 18px;
+  margin-top: 4px;
 }
 
 .xprez-top {
@@ -1166,7 +1172,7 @@ textarea {
 .xprez-btn {
   cursor: pointer;
   border-radius: 3px;
-  padding: 6px 8px;
+  padding: 4px 8px;
   background: #CED4DA;
   display: inline-flex;
   align-items: center;
@@ -1176,7 +1182,7 @@ textarea {
   background: #c2cad1;
 }
 .xprez-btn svg {
-  margin-right: 4px;
+  margin-right: 6px;
 }
 
 .xprez-full-width {
