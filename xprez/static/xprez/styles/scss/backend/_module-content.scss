@@ -11,4 +11,11 @@
 			vertical-align: baseline;
 		}
 	}
+
+	&-buttons {
+		display: flex;
+		justify-content: center;
+		gap: 6px;
+		margin: 1rem auto;
+	}
 }

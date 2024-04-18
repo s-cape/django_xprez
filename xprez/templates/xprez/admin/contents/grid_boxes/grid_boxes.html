@@ -72,13 +72,15 @@
         {% include 'xprez/admin/contents/grid_boxes/box.html' %}
     </div>
 
-    <div class="js-boxes xprez-grid-boxes-admin-grid">
+    <div class="js-boxes xprez-grid-boxes-admin-grid xprez-form-table">
         {% for box_content in content.boxes %}
             {% include 'xprez/admin/contents/grid_boxes/box.html' %}
         {% endfor %}
     </div>
-    <div class="xprez-module__add-item-cont">
-        <span href="#" class="js-add-another xprez-option-btn"><span class="xprez-icon-control_point"></span><span>Add another box</span></span>
+    <div class="xprez-module__content-buttons">
+        <span class="js-add-another xprez-btn xprez-btn-transparent">
+            {% include "xprez/admin/icons/plus.html" %} Add another box
+        </span>
     </div>
 {% endblock %}
 

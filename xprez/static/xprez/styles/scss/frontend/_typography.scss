@@ -33,7 +33,7 @@
 .xprez-feature-boxes, .xprez-grid-box {
 	@include clearfix;
 
-	a:not(.btn) {
+	a:not(.btn):not(.xprez-btn) {
 		text-decoration: underline;
 	}
 }
@@ -43,7 +43,7 @@
 	@if $use-xprez-text-styles {
 		color: var(--x-base-color);
 
-		a:not(.btn) {
+		a:not(.btn):not(.xprez-btn) {
 			color: var(--x-link-color);
 
 			&:hover {
