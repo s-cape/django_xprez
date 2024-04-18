@@ -1,0 +1,22 @@
+// GENERAL LAYOUT
+.xprez {
+	box-sizing: border-box;
+	@include sans($font-b);
+	font-size: $basefont-b;
+	font-weight: 400;
+	width: 100%;
+	min-width: $xprez-min-width;
+	max-width: $xprez-max-width;
+	padding: 0 40px 0 0;
+	margin: 1rem auto 3rem;
+	line-height: 1.4;
+}
+
+.xprez-module {
+	border: 1px solid $b-gray-4;
+	margin: $g 0;
+
+	&.collapsed .xprez-module__collapse-cont {
+		display: none;
+	}
+}

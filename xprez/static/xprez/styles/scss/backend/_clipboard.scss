@@ -37,12 +37,12 @@
 	overflow-y: auto;
 	max-height: 300px;
 	max-width: 600px;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 2rem auto;
 
 	&__item {
 		padding: .5rem 8px;
 		display: flex;
+		align-items: center;
 		gap: .5rem;
 		transition: background linear .3s;
 
@@ -65,13 +65,15 @@
 
 	&__module {
 		font-weight: 600;
-		margin-bottom: .25rem;
 	}
 
 	&__icon {
+		align-self: flex-start;
+
 		svg {
 			width: 18px;
 			height: 18px;
+			margin-top: 4px;
 		}
 	}
 }

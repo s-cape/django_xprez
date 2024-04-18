@@ -14,6 +14,11 @@
 				{# {{ item.key }} #}
 				<div class="xprez-clipboard-list__module">{{ item.obj.clipboard_verbose_name }}</div>
 				<i>{{ item.obj.clipboard_text_preview }}</i>
+				{% if item.allowed == "partial" %}
+					<div class="xprez-warning">
+						Some contents is not allowed here
+					</div>
+				{% endif %}
 			</div>
 			<div class="xprez-clipboard-list__actions">
 				{% if item.allowed %}
@@ -30,14 +35,8 @@
 						{% include "../icons/link.html" %} Link
 					</span>
 
-					{% if item.allowed == "partial" %}
-						<span class="warning">
-							some contents not allowed
-						</span>
-					{% endif %}
-
 				{% else %}
-					<span class="warning">not allowed</span>
+					<span class="xprez-warning">not allowed</span>
 				{% endif %}
 			</div>
 		</div>

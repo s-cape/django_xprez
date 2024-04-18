@@ -6,9 +6,12 @@
 {% block btn_options %}{% endblock %}
 
 {% block content %}
-	{% if content.symlink %}
-		symlink {{ content.symlink.polymorph.verbose_name }} from {{ content.symlink.page.polymorph }}
-	{% else %}
-		symlinked content not found
-	{% endif %}
+	<div class="xprez-module__content-info">
+		{% if content.symlink %}
+			{{content.symlink.polymorph.icon}} <strong>{{ content.symlink.polymorph.verbose_name }}</strong> from {% include "xprez/admin/icons/page.html" %}
+			<strong>{{ content.symlink.page.polymorph }}</strong>
+		{% else %}
+			<div class="xprez-warning">Linked content not found.</div>
+		{% endif %}
+	</div>
 {% endblock %}

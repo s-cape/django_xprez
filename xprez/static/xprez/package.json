@@ -14,7 +14,7 @@
     "scripts": {
         "css-prefix": "postcss styles/*.css --verbose --use autoprefixer --no-map --replace",
         "css-compile-build": "sass --style compressed --no-error-css --no-source-map  styles/scss/frontend:styles styles/scss/backend:styles",
-        "css-compile-watch": "sass --watch --style expanded --source-map --error-css  styles/scss/frontend:styles styles/scss/backend:styles",
+        "css-compile-watch": "sass --watch --style compressed --source-map --error-css  styles/scss/frontend:styles styles/scss/backend:styles",
         "watch": "npm-run-all css-compile-watch",
         "build": "npm-run-all css-compile-build css-prefix"
     }

@@ -1,17 +1,35 @@
 .xprez-btn {
 	cursor: pointer;
 	border-radius: 3px;
-	padding: 6px 8px;
+	padding: 4px 8px;
 	background: $b-gray-5;
 	display: inline-flex;
 	align-items: center;
 	vertical-align: baseline;
+	color: $txt-gray;
 
 	&:hover {
 		background: darken($b-gray-5, 4%);
+		color: $txt-gray;
 	}
 
 	svg {
-		margin-right: 4px;
+		margin-right: 6px;
+	}
+}
+
+.xprez-btn-light {
+	background: $b-gray-4;
+
+	&:hover {
+		background: darken($b-gray-4, 4%);
+	}
+}
+
+.xprez-btn-transparent {
+	background: transparent;
+
+	&:hover {
+		background: $b-gray-2;
 	}
 }

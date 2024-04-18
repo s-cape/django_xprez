@@ -1,10 +1,15 @@
 .xprez-module.xprez-module--error {
-	border-color: lighten($b-red,15%);
+	border-color: lighten($b-red, 15%);
 }
+
 .xprez-error-list {
 	color: $b-red;
 	padding-left: 0;
 	list-style: none;
-	@include type-b(13px,1);
+	@include type-b(13px, 1);
 	margin-bottom: $g;
+}
+
+.xprez-warning {
+	color: orangered;
 }

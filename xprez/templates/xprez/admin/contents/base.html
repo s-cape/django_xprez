@@ -25,6 +25,7 @@
         {% block btn_collapse %}<span class="xprez-icon-btn-collapse js-collapser" title="Collapse"></span>{% endblock %}
 
         <h2>
+            {{ content.icon }}
             <b>{{ content.verbose_name }}</b>
             {% if content.margin_bottom != content.MARGIN_BOTTOM_DEFAULT %}<i>margin bottom: <b>{{ content.get_margin_bottom_display }}</b></i>{% endif %}
             {% if content.padding_top != content.PADDING_TOP_DEFAULT or content.padding_bottom != content.PADDING_BOTTOM_DEFAULT %}
