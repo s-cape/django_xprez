@@ -1,0 +1,14 @@
+.xprez-module__content {
+	--x-link-color: #{$b-blue-high};
+
+	background: white;
+	border-top: 1px solid $b-gray-4;
+	padding: 15px;
+	overflow: hidden;
+
+	&-info {
+		> svg {
+			vertical-align: baseline;
+		}
+	}
+}

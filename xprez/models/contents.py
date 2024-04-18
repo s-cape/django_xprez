@@ -573,7 +573,7 @@ class ContentSymlink(Content):
     )
 
     class Meta:
-        verbose_name = "Symlink"
+        verbose_name = "Linked module"
 
     def render_front(self, *args, **kwargs):
         if self.symlink:

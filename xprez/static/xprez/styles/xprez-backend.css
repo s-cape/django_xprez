@@ -417,6 +417,10 @@
   margin-bottom: 1rem;
 }
 
+.xprez-warning {
+  color: orangered;
+}
+
 .xprez-form-table {
   max-width: var(--x-admin-form-width);
   padding-top: 1rem;
@@ -1950,14 +1954,6 @@ textarea {
   background: #f0f2f4;
 }
 
-.xprez-module__content {
-  --x-link-color: #1D5EC7;
-  background: white;
-  border-top: 1px solid #DEE2E6;
-  padding: 15px;
-  overflow: hidden;
-}
-
 .xprez-module .xprez-module__options-group {
   list-style: none;
   display: inline-block;
@@ -2008,6 +2004,17 @@ textarea {
 }
 .xprez .xprez-option-input--l {
   width: 140px !important;
+}
+
+.xprez-module__content {
+  --x-link-color: #1D5EC7;
+  background: white;
+  border-top: 1px solid #DEE2E6;
+  padding: 15px;
+  overflow: hidden;
+}
+.xprez-module__content-info > svg {
+  vertical-align: baseline;
 }
 
 /*# sourceMappingURL=xprez-backend.css.map */

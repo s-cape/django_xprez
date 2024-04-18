@@ -1,0 +1,109 @@
+.xprez-module__title {
+	background: $b-gray-2;
+	position: relative;
+	padding-bottom: 3px;
+	display: flex;
+	gap: 8px;
+
+	h2 {
+		@include type-b(12px);
+		color: darken($b-gray-7, 15%);
+		cursor: move;
+		margin: 0;
+		font-weight: normal;
+		flex: 1;
+
+		i {
+			font-style: normal;
+			opacity: 0.9;
+			margin-left: .5rem;
+		}
+	}
+
+	.xprez-icon-btn-collapse {
+		margin-top: 2px;
+		margin-left: 2px;
+	}
+
+	.xprez-icon-btn-remove,
+	.xprez-icon-btn-copy,
+	.xprez-icon-btn-eye,
+	.xprez-icon-btn-dots-horizontal-triple {
+		margin-top: 2px;
+		margin-right: 2px;
+	}
+}
+
+.xprez-module__options {
+	background: $b-gray-2;
+	text-align: center;
+	padding: 2px;
+	line-height: 28px;
+
+	&.hidden {
+		display: none;
+	}
+
+	li {
+		margin: .5rem 0;
+	}
+}
+
+.xprez-module__common-options {
+	background: darken($b-gray-2, 2%);
+}
+
+
+.xprez-module .xprez-module__options-group {
+	list-style: none;
+	display: inline-block;
+	padding: 0 10px;
+	border-left: 1px solid $b-gray-5;
+	margin: 0;
+
+	&:first-child {
+		border-left: none;
+	}
+
+	li {
+		display: inline-block;
+		vertical-align: middle;
+		font-size: 12px;
+	}
+}
+
+
+// Option forms
+
+.xprez-option-label {
+	@include type-b(12px, 28px);
+	display: inline-block;
+	color: $b-gray-7;
+	color: #343A40;
+	letter-spacing: 0.02em;
+}
+
+.xprez .xprez-option-input {
+	@include sans($font-b);
+	border-radius: 2px;
+	box-shadow: none;
+	box-sizing: border-box;
+	@include type-b(12px, 20px);
+	height: auto;
+	width: 110px !important;
+	vertical-align: middle;
+	padding: 3px 5px;
+	border: 1px solid $b-gray-4;
+
+	&--s {
+		width: 50px !important;
+	}
+
+	&--m {
+		width: 80px !important;
+	}
+
+	&--l {
+		width: 140px !important;
+	}
+}
