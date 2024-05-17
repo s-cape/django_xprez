@@ -36,6 +36,10 @@
 	.ck.ck-editor__editable_inline {
 		padding: .5rem;
 
+		&:hover {
+			border: var(--ck-focus-ring);
+		}
+
 		> :first-child {
 			margin-top: 0;
 		}
