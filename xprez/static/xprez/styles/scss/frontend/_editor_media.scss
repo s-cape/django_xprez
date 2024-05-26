@@ -9,6 +9,10 @@
 		margin: $g*2 0;
 	}
 
+	&:first-child {
+		margin-top: 0;
+	}
+
 	img	{
 		max-width: 100%;
 		height: auto;

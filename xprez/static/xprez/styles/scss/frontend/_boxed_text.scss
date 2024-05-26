@@ -28,7 +28,7 @@
 		}
 
 		@media only screen and (max-width: ($break-s)) {
-			padding: $g*2 $s-space;
+			padding: $g*2 $mobile-edge-space;
 		}
 	}
 }
