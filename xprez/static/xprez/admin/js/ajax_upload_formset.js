@@ -50,6 +50,11 @@ function activateDropzone($scope, formset_prefix) {
 
 function activateItemSorting($scope, formset_prefix) {
     var $itemContainer = $scope.find('.js-item-container');
+
+    if ($itemContainer.data('ui-sortable')) {
+        $itemContainer.sortable('destroy');
+    }
+
     $itemContainer.sortable({
             handle: $itemContainer.find('.js-item-handle').length ? '.js-item-handle' : null,
             update: function (event, ui) {
@@ -60,6 +65,7 @@ function activateItemSorting($scope, formset_prefix) {
             }
         }
     );
+
 }
 
 
