@@ -378,7 +378,10 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, *args, **kwargs):
         super().save_model(request, obj, form, *args, **kwargs)
-        form.save_xprez_contents(request)
+
+        # admin's list_editable bypasses overrided get_form, so it does not have save_xprez_contents
+        if hasattr(form, "save_xprez_contents"):
+            form.save_xprez_contents(request)
 
     @property
     def media(self, *args, **kwargs):
