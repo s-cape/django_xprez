@@ -1,0 +1,36 @@
+// Text Buttons
+
+.xprez-option-btn {
+	@include type-b(12px, 28px);
+	border-radius: 2px;
+	color: $b-gray-7;
+	padding: 0 7px;
+	letter-spacing: 0.02em;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+
+	&:hover {
+		background: $b-gray-4;
+	}
+
+	&.active {
+		color: white;
+		background: $b-gray-7;
+	}
+
+	[class^="xprez-icon"] {
+		margin-right: 5px;
+		font-size: 20px;
+		vertical-align: middle;
+	}
+}
+
+//
+// InContent buttons
+//
+
+// .xprez-module__add-item-cont {
+// 	margin-top: 2rem;
+// 	text-align: center;
+// }

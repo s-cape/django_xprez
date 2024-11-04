@@ -1,0 +1,8 @@
+.xprez-module {
+	border: 1px solid $b-gray-4;
+	margin: $g 0;
+
+	&.collapsed .xprez-module__collapse-cont {
+		display: none;
+	}
+}

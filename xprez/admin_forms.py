@@ -18,6 +18,8 @@ from .models import (
     FeatureBoxes,
     Gallery,
     GridBoxes,
+    Grid,
+    GridItem,
     MediumEditor,
     Number,
     NumbersContent,
@@ -203,6 +205,13 @@ class DownloadContentForm(BaseContentForm):
         widgets = {"title": forms.TextInput(attrs={"placeholder": "Files"})}
 
 
+class GridForm(BaseContentForm):
+    class Meta:
+        model = Grid
+        fields = BaseContentForm.base_content_fields
+        # widgets = {"title": forms.TextInput(attrs={"placeholder": "Grid"})}
+
+
 class TextImageForm(BaseContentForm):
     class Meta:
         model = TextImage
@@ -244,6 +253,13 @@ AttachmentFormSet = inlineformset_factory(
     DownloadContent,
     Attachment,
     fields=("id", "name", "position"),
+    extra=0,
+    can_delete=True,
+)
+GridItemFormSet = inlineformset_factory(
+    Grid,
+    GridItem,
+    fields=("id", "position", "text"),
     extra=0,
     can_delete=True,
 )

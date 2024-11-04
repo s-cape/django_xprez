@@ -4,7 +4,7 @@
 @import "../css_variables";
 @import "../library/rfs";
 @import "../library/mixins";
-@import "../backend/icons";
+@import "../backend/comp/icons";
 
 // layout @mixin definitions
 
@@ -19,7 +19,7 @@
 @import "editor_media";
 @import "button";
 @import "text_image";
-@import "boxed_text";
+@import "boxed_text"; 
 @import "quote";
 @import "feature_boxes";
 @import "video";   

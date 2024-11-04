@@ -10,6 +10,7 @@ XPREZ_CONTENTS_AUTOREGISTER_BUILTINS = [
     # 'mediumeditor',  # deprecated
     "ckeditor",
     "gridboxes",
+    "grid",
     "quotecontent",
     "gallery",
     "downloadcontent",

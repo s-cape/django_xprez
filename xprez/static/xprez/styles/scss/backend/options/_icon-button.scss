@@ -1,57 +1,20 @@
-// Text Buttons
-
-.xprez-option-btn {
-	@include type-b(12px, 28px);
-	border-radius: 2px;
-	color: $b-gray-7;
-	padding: 0 7px;
-	letter-spacing: 0.02em;
-	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-
-	&:hover {
-		background: $b-gray-4;
-	}
-
-	&.active {
-		color: white;
-		background: $b-gray-7;
-	}
-
-	[class^="xprez-icon"] {
-		margin-right: 5px;
-		font-size: 20px;
-		vertical-align: middle;
-	}
-}
-
-//
-// InContent buttons
-//
-
-.xprez-module__add-item-cont {
-	margin-top: 2rem;
-	text-align: center;
-}
-
 //
 // Icon Buttons
 //
 
-[class^="xprez-icon-btn-"], [class*=" xprez-icon-btn-"] {
+[class^="xprez-icon-btn"], [class*=" xprez-icon-btn"] {
 	width: 28px;
+	height: 28px;
 	text-align: center;
 	cursor: pointer;
 	color: $b-gray-7;
 	display: inline-block;
 	vertical-align: middle;
 	border-radius: 2px;
-
-	&:before {
-		font-size: 20px;
-		line-height: 28px;
-	}
+	font-size: 20px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 
 	&:hover {
 		background: $b-gray-4;

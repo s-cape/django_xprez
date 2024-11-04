@@ -4,23 +4,7 @@
 @import "../library/mixins";
 @import "variables";
 
-
-@import "icons";
-@import "photo-gallery";
-@import "messaging";
-@import "form-elements";
-@import "image-text";
-@import "grid-boxes";
-@import "add-module-before";
-@import "add-module-after";
-@import "ck-editor";
-@import "medium-editor";
-@import "text-content";
-@import "admin-buttons";
-@import "submenu";
-@import "clipboard";
-@import "top_menu";
-@import "button";
+// Frontend styles
 
 @import "../frontend/layout";
 @import "../frontend/typography";
@@ -28,6 +12,30 @@
 @import "../frontend/button";
 @import "../frontend/grid_boxes";
 
-@import "base";
-@import "module-title";
-@import "module-content";
+// Backend styles
+
+@import "app/app-base";
+@import "app/add-module-after";
+@import "app/add-module-before";
+@import "app/clipboard";
+@import "app/messaging";
+@import "app/submenu";
+@import "app/top_menu";
+
+@import "comp/button";
+@import "comp/icons";
+
+@import "contents/ck-editor";
+@import "contents/grid-boxes";
+@import "contents/image-text";
+@import "contents/medium-editor";
+@import "contents/photo-gallery";
+@import "contents/text-content";
+
+@import "module/form-elements";
+@import "module/module-base";
+@import "module/module-content";
+@import "module/module-title";
+
+@import "options/obsolete-admin-buttons"; 
+@import "options/icon-button"; 
