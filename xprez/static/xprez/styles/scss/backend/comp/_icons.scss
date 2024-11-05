@@ -1,69 +1,232 @@
 @font-face {
   font-family: 'xprez';
-  src:  url('/static/xprez/fonts/xprez.eot?omad97s#iefix') format('embedded-opentype'),
-        url('/static/xprez/fonts/xprez.ttf?omad97s') format('truetype'),
-        url('/static/xprez/fonts/xprez.woff?omad97s') format('woff'),
-        url('/static/xprez/fonts/xprez.svg?omad97s#xprez') format('svg');
+  src: url('/static/xprez/fonts/xprez.eot?omad97s#iefix') format('embedded-opentype'),
+    url('/static/xprez/fonts/xprez.ttf?omad97s') format('truetype'),
+    url('/static/xprez/fonts/xprez.woff?omad97s') format('woff'),
+    url('/static/xprez/fonts/xprez.svg?omad97s#xprez') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
-[class^="xprez-icon-"], [class*=" xprez-icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
+[class*="xprez-icon-"]:not(.xprez-icon-btn) {
   font-family: 'xprez' !important;
-  speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
   line-height: 1;
-
-  /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.xprez-icon-add_circle:before { content: "\e147";}
-.xprez-icon-control_point:before {content: "\e3ba";}
-.xprez-icon-arrow_right:before {content: "\e5c5";}
-.xprez-icon-arrow_down:before {content: "\e5c6";}
-.xprez-icon-linked_article:before {content: "\e86e";}
-.xprez-icon-cancel:before {content: "\e5c9";}
-.xprez-icon-quote:before {content: "\e0b7";}
-.xprez-icon-close:before {content: "\e5cd";}
-.xprez-icon-code:before {content: "\e86f";}
-.xprez-icon-crop:before {content: "\e3be";}
-.xprez-icon-delete:before {content: "\e872";}
-.xprez-icon-feature_boxes:before {content: "\e875";}
-.xprez-icon-done:before {content: "\e876";}
-.xprez-icon-numbers:before {content: "\e3d4";}
-.xprez-icon-text_content:before {content: "\e235";}
-.xprez-icon-video:before {content: "\e8da";}
-.xprez-icon-gallery:before {content: "\e432";}
-.xprez-icon-text_box:before {content: "\e8b0";}
-.xprez-icon-code_template:before {content: "\e8be";}
-.xprez-icon-videocam:before {content: "\e04b";}
-.xprez-icon-layout_4:before {content: "\e42a";}
-.xprez-icon-layout_stream:before {content: "\e42b";}
-.xprez-icon-layout_3:before {content: "\e8f0";}
-.xprez-icon-layout_2:before {content: "\e8f2";}
-.xprez-icon-layout_1:before {content: "\e8f3";}
-.xprez-icon-layout_6:before {content: "\e900";}
-.xprez-icon-layout_8:before {content: "\e901";}
-.xprez-icon-play_arrow:before {content: "\e037";}
-.xprez-icon-play_circle_filled:before {content: "\e038";}
-.xprez-icon-play_circle_outline:before {content: "\e039";}
-.xprez-icon-cloud_download:before {content: "\e2c0";}
-.xprez-icon-add-files:before {content: "\e226";}
-.xprez-icon-copy:before { content: "\e14d"; }
-.xprez-icon-btn-add-text_image:before { content: "\e060";}
-.xprez-icon-eye:before { content: "\e902"; }
-.xprez-icon-align-center:before {content: "\e903";}
-.xprez-icon-grid-boxes:before {content: "\e904";}
-.xprez-icon-background:before {content: "\e905";}
-.xprez-icon-border:before {content: "\e957";}
-.xprez-icon-chevron-small-down:before { content: "\e906";}
-.xprez-icon-chevron-small-up:before {content: "\e907";}
-.xprez-icon-edit-pencil:before { content: "\e908"; }
-.xprez-icon-page_anchor:before { content: "\e909"; }
-.xprez-icon-dots-horizontal-triple:before { content: "\e90b"; }
+.xprez-icon-copy:before {
+  content: "\e902";
+}
+
+.xprez-icon-cross_circle_outline_small:before {
+  content: "\e90d";
+}
+
+.xprez-icon-dots_horizontal:before {
+  content: "\e90e";
+}
+
+.xprez-icon-check_circle_outline_small:before {
+  content: "\e90f";
+}
+
+.xprez-icon-check_circle_small:before {
+  content: "\e910";
+}
+
+.xprez-icon-image:before {
+  content: "\e911";
+}
+
+.xprez-icon-move:before {
+  content: "\e912";
+}
+
+.xprez-icon-plus_square_20:before {
+  content: "\e913";
+}
+
+.xprez-icon-settings:before {
+  content: "\e914";
+}
+
+.xprez-icon-delete:before {
+  content: "\e915";
+}
+
+.xprez-icon-eye:before {
+  content: "\e90a";
+}
+
+.xprez-icon-eye_slash:before {
+  content: "\e90c";
+}
+
+.xprez-icon-layout_6:before {
+  content: "\e900";
+}
+
+.xprez-icon-layout_8:before {
+  content: "\e901";
+}
+
+.xprez-icon-background:before {
+  content: "\e905";
+}
+
+.xprez-icon-border:before {
+  content: "\e957";
+}
+
+.xprez-icon-play_arrow:before {
+  content: "\e037";
+}
+
+.xprez-icon-play_circle_filled:before {
+  content: "\e038";
+}
+
+.xprez-icon-play_circle_outline:before {
+  content: "\e039";
+}
+
+.xprez-icon-videocam:before {
+  content: "\e04b";
+}
+
+.xprez-icon-art_track:before {
+  content: "\e060";
+}
+
+.xprez-icon-quote:before {
+  content: "\e0b7";
+}
+
+.xprez-icon-add_circle:before {
+  content: "\e147";
+}
+
+.xprez-icon-attach_file:before {
+  content: "\e226";
+}
+
+.xprez-icon-text_content:before {
+  content: "\e235";
+}
+
+.xprez-icon-cloud_download:before {
+  content: "\e2c0";
+}
+
+.xprez-icon-control_point:before {
+  content: "\e3ba";
+}
+
+.xprez-icon-crop:before {
+  content: "\e3be";
+}
+
+.xprez-icon-numbers:before {
+  content: "\e3d4";
+}
+
+.xprez-icon-layout_4:before {
+  content: "\e42a";
+}
+
+.xprez-icon-layout_stream:before {
+  content: "\e42b";
+}
+
+.xprez-icon-gallery:before {
+  content: "\e432";
+}
+
+.xprez-icon-arrow_right:before {
+  content: "\e5c5";
+}
+
+.xprez-icon-arrow_down:before {
+  content: "\e5c6";
+}
+
+.xprez-icon-cancel:before {
+  content: "\e5c9";
+}
+
+.xprez-icon-close:before {
+  content: "\e5cd";
+}
+
+.xprez-icon-linked_article:before {
+  content: "\e86e";
+}
+
+.xprez-icon-code:before {
+  content: "\e86f";
+}
+
+.xprez-icon-feature_boxes:before {
+  content: "\e875";
+}
+
+.xprez-icon-done:before {
+  content: "\e876";
+}
+
+.xprez-icon-text_box:before {
+  content: "\e8b0";
+}
+
+.xprez-icon-code_template:before {
+  content: "\e8be";
+}
+
+.xprez-icon-video:before {
+  content: "\e8da";
+}
+
+.xprez-icon-layout_3:before {
+  content: "\e8f0";
+}
+
+.xprez-icon-layout_2:before {
+  content: "\e8f2";
+}
+
+.xprez-icon-layout_1:before {
+  content: "\e8f3";
+}
+
+.xprez-icon-edit-pencil:before {
+  content: "\e908";
+}
+
+.xprez-icon-page_anchor:before {
+  content: "\e909";
+}
+
+.xprez-icon-align-center:before {
+  content: "\e903";
+}
+
+.xprez-icon-dots-horizontal-triple:before {
+  content: "\e90b";
+}
+
+.xprez-icon-grid-boxes:before {
+  content: "\e904";
+}
+
+.xprez-icon-chevron-small-down:before {
+  content: "\e906";
+}
+
+.xprez-icon-chevron-small-up:before {
+  content: "\e907";
+}

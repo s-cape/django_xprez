@@ -2,15 +2,15 @@
 // Icon Buttons
 //
 
-[class^="xprez-icon-btn"], [class*=" xprez-icon-btn"] {
-	width: 28px;
-	height: 28px;
+[class*="xprez-icon-btn"] {
+	width: var(--x-admin-icon-button-size);
+	height: var(--x-admin-icon-button-size);
 	text-align: center;
 	cursor: pointer;
-	color: $b-gray-7;
+	color: var(--x-admin-option-button-color);
 	display: inline-block;
 	vertical-align: middle;
-	border-radius: 2px;
+	border-radius: 4px;
 	font-size: 20px;
 	display: inline-flex;
 	align-items: center;
@@ -24,10 +24,45 @@
 		color: white;
 		background: $b-gray-7;
 	}
+
+	i {
+		font-size: var(--x-admin-icon-button-icon-size);
+	}
+}
+
+.xprez-icon-btn--icon-toggle {
+	[state="active"] {
+		display: none;
+	}
+
+	&.active {
+		color: var(--x-admin-option-button-color);
+		background: inherit;
+
+		[state="active"] {
+			display: inline-block;
+		}
+
+		[state="inactive"] {
+			display: none;
+		}
+
+		&:hover {
+			background: $b-gray-4;
+		}
+	} 
+
+	[danger] {
+		color: $b-red;
+	}
+	
+	[alert] {
+		color: $b-blue-high;
+	}
 }
 
 .xprez-icon-btn-remove:before {
-	content: "\e872";
+	content: "\e915";
 }
 
 .xprez-icon-btn-collapse:before {

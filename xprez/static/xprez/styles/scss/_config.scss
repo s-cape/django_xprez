@@ -54,7 +54,7 @@ $b-gray-3: #E9ECEF !default;
 $b-gray-4: #DEE2E6 !default;
 $b-gray-5: #CED4DA !default;
 $b-gray-6: #ADB5BD !default;
-$b-gray-7: #868E96 !default;
+$b-gray-7: #706E6E !default;
 $b-gray-8: #343A40 !default;
 
 $b-purple: #7950F2 !default;
@@ -331,6 +331,6 @@ $textimage-text-max-width: 600px !default;
 
 $xprez-max-width: 1000px !default;
 $xprez-min-width: 400px !default;
-$g-b: 16px !default;
-$basefont-b: 14px !default;
-$font-b: Arial, Helvetica, sans-serif !default;
+$g-b: 16px !default; // grid spacing
+$basefont-b: 14px !default; // base font size
+$font-b: Arial, Helvetica, sans-serif !default; // base font family

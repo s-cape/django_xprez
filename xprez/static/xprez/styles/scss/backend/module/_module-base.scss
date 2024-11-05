@@ -1,8 +1,14 @@
 .xprez-module {
 	border: 1px solid $b-gray-4;
 	margin: $g 0;
+	border-radius: var(--x-admin-border-radius-md);
 
 	&.collapsed .xprez-module__collapse-cont {
 		display: none;
 	}
+
+	// transparentize module when invisible
+	// &:has(.xprez-module__visibility-toggle.active) {
+	// 	opacity: .6;
+	// }
 }

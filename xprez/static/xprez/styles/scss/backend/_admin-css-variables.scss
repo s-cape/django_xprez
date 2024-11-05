@@ -1,0 +1,15 @@
+:root {
+	--x-admin-font-size-base: #{$basefont-b}; // default: 14px
+
+	--x-admin-option-button-color: #{$b-gray-7}; 
+	--x-admin-icon-button-size: 32px;
+	--x-admin-icon-button-icon-size: 16px;
+
+	--x-admin-form-width: 800px;
+
+	--x-admin-border-radius-sm: 4px;
+	--x-admin-border-radius-md: 8px;
+
+	--x-admin-padding-sm: 4px;
+	--x-admin-padding-md: 8px;
+}

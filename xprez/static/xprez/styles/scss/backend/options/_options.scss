@@ -1,0 +1,73 @@
+.xprez-module__options {
+	background: $b-gray-2;
+	text-align: center;
+	padding: 2px;
+	line-height: 28px;
+
+	&.hidden {
+		display: none;
+	}
+
+	li {
+		margin: .5rem 0;
+	}
+}
+
+.xprez-module__common-options {
+	background: darken($b-gray-2, 2%);
+}
+
+
+.xprez-module .xprez-module__options-group {
+	list-style: none;
+	display: inline-block;
+	padding: 0 10px;
+	border-left: 1px solid $b-gray-5;
+	margin: 0;
+
+	&:first-child {
+		border-left: none;
+	}
+
+	li {
+		display: inline-block;
+		vertical-align: middle;
+		font-size: 12px;
+	}
+}
+
+
+// Option forms
+
+.xprez-option-label {
+	@include type-b(12px, 28px);
+	display: inline-block;
+	color: $b-gray-7;
+	color: #343A40;
+	letter-spacing: 0.02em;
+}
+
+.xprez .xprez-option-input {
+	@include sans($font-b);
+	border-radius: 2px;
+	box-shadow: none;
+	box-sizing: border-box;
+	@include type-b(12px, 20px);
+	height: auto;
+	width: 110px !important;
+	vertical-align: middle;
+	padding: 3px 5px;
+	border: 1px solid $b-gray-4;
+
+	&--s {
+		width: 50px !important;
+	}
+
+	&--m {
+		width: 80px !important;
+	}
+
+	&--l {
+		width: 140px !important;
+	}
+}

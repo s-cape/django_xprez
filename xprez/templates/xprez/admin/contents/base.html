@@ -22,7 +22,11 @@
         {% endblock %}
     </div>
     <div class="xprez-module__title js-sortable-handler">
-        {% block btn_collapse %}<span class="xprez-icon-btn-collapse js-collapser" title="Collapse"></span>{% endblock %}
+        {% block btn_collapse %}
+            <span class="xprez-icon-btn js-collapser" title="Collapse">
+                <i class="xprez-icon-chevron-small-down"></i>
+            </span>
+        {% endblock %}
 
         <h2>
             {{ content.icon }}
@@ -43,16 +47,18 @@
         <div>
             {% block btn_options %}
                 <span class="xprez-icon-btn js-common-options-toggle" title="Common options">
-                    <i class="xprez-icon-dots-horizontal-triple"></i>
+                    <i class="xprez-icon-dots_horizontal"></i>
                 </span>
             {% endblock %}
             {% block btn_toggle_visible %}
-                <span class="xprez-icon-btn-eye js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off">
-                    <i class="xprez-icon-eye"></i>
+                <span class="xprez-icon-btn xprez-icon-btn--icon-toggle xprez-module__visibility-toggle js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off">
+                    <i class="xprez-icon-eye" state="inactive"></i>
+                    <i class="xprez-icon-eye_slash" state="active" alert></i>
                 </span>
             {% endblock %}
             {% block btn_copy_content %}
-                <div class="xprez-icon-btn-copy js-xprez-submenu-toggle xprez-submenu__toggle" title="Copy">
+                <div class="xprez-icon-btn js-xprez-submenu-toggle xprez-submenu__toggle" title="Copy">
+                    <i class="xprez-icon-copy"></i>
                     <div class="xprez-submenu">
                         <div
                             class="js-copy-content"
@@ -70,7 +76,11 @@
                     </div>
                 </div>
             {% endblock %}
-            {% block btn_delete %}<span class="xprez-icon-btn-remove js-delete-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_delete_content_url_name content.pk %}" title="Remove"></span>{% endblock %}
+            {% block btn_delete %}
+                <span class="xprez-icon-btn js-delete-content" data-pk="{{ content.pk }}" data-url="{% url xprez_admin.xprez_delete_content_url_name content.pk %}" title="Remove">
+                    <i class="xprez-icon-delete"></i>
+                </span>
+            {% endblock %}
         </div>
     </div>
     <div class="xprez-module__collapse-cont">

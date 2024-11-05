@@ -2,7 +2,7 @@
 @import "../config";
 @import "../css_variables";
 @import "../library/mixins";
-@import "variables";
+@import "admin-css-variables";
 
 // Frontend styles
 
@@ -37,5 +37,6 @@
 @import "module/module-content";
 @import "module/module-title";
 
-@import "options/obsolete-admin-buttons"; 
+@import "options/text-button"; 
 @import "options/icon-button"; 
+@import "options/options";
