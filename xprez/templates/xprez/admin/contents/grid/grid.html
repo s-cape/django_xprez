@@ -1,70 +1,19 @@
 {% extends 'xprez/admin/contents/base.html' %}
 
+{% block extra_class %}xprez-module--transparent{% endblock %}
+
 {% block options %}
-    <div>
-        <ul class="xprez-module__options-group js-select_controller"
-            data-formfield_selector="#id_content-{{ content.pk }}-columns">
-            <!--        <li><span class="xprez-icon-btn-layout_1 js-option" data-formfield_value="1"  title="1 column"></span></li>-->
-            <li><span class="xprez-icon-btn-layout_2 js-option" data-formfield_value="2" title="2 columns"></span></li>
-            <li><span class="xprez-icon-btn-layout_3 js-option" data-formfield_value="3" title="3 columns"></span></li>
-            <li><span class="xprez-icon-btn-layout_4 js-option" data-formfield_value="4" title="4 columns"></span></li>
-            <li><span class="xprez-icon-btn-layout_6 js-option" data-formfield_value="6" title="6 columns"></span></li>
-            <li><span class="xprez-icon-btn-layout_8 js-option" data-formfield_value="8" title="8 columns"></span></li>
-
-        </ul>
-
-        <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ content.pk }}-width">
-            <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_FULL }}">Full width</span></li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_MID }}">Mid width</span></li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="{{ content.SIZE_TEXT }}">Text width</span></li>
-        </ul>
-
-        <ul class="xprez-module__options-group js-select_controller"
-            data-formfield_selector="#id_content-{{ content.pk }}-margin">
-            <li>Margin:</li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="none">None</span></li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="m">M</span></li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="l">L</span></li>
-        </ul>
-
-        <ul class="xprez-module__options-group js-select_controller"
-            data-formfield_selector="#id_content-{{ content.pk }}-text_size">
-            <li>Text size:</li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="xs">XS</span></li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="s">S</span></li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="m">M</span></li>
-        </ul>
-    </div>
-
-    <div>
-        <ul class="xprez-module__options-group">
-            <li><span class="xprez-option-btn js-checkbox_controller"
-                      data-formfield_selector="#id_content-{{ content.pk }}-padded">Padded</span></li>
-        </ul>
-
-        <ul class="xprez-module__options-group js-select_controller js-image-sizing-controller"
-            data-formfield_selector="#id_content-{{ content.pk }}-image_sizing">
-            <li>Image sizing:</li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="fill">Default</span></li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="edge">Edge</span></li>
-            <li><span class="xprez-option-btn js-option" data-formfield_value="icon">Icon</span></li>
-            <li class="js-image-max-width-controller">&nbsp;max:</li>
-            <li class="js-image-max-width-controller"><input type="text" class="xprez-option-input xprez-option-input--s js-text_controller" data-formfield_selector="#id_content-{{ content.pk }}-image_max_width"></li>
-            <li class="js-image-max-width-controller">px</li>
-        </ul>
-        <ul class="xprez-module__options-group">
-            <li><span class="xprez-icon-btn-align-center js-checkbox_controller"
-                      data-formfield_selector="#id_content-{{ content.pk }}-content_centered"
-                      title="Centered content"></span></li>
-        </ul>
-
-        <ul class="xprez-module__options-group">
-            <li><span class="xprez-icon-btn-background js-checkbox_controller"
-                      data-formfield_selector="#id_content-{{ content.pk }}-boxes_filled" title="Background"></span></li>
-            <li><span class="xprez-icon-btn-border js-checkbox_controller"
-                      data-formfield_selector="#id_content-{{ content.pk }}-border" title="Border"></span></li>
-        </ul>
-    </div>
+    <xprez-options-panel>
+        <xprez-option>
+            <label for="grid-max-width">Grid max width</label>
+            <input size="md" type="text" id="grid-max-width" value="Medium">
+        </xprez-option>
+        <xprez-option>
+            <label for="grid-padding">Padding</label>
+            <input size="sm" type="text" id="grid-padding" value="2">
+            <xprez-option-suffix>rem</xprez-option-suffix>
+        </xprez-option>
+    </options-panel>
 {% endblock %}
 
 {% block content %}

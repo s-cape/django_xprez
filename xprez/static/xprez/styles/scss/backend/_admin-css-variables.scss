@@ -1,15 +1,37 @@
 :root {
+	// General
+
+	--x-admin-border-radius-sm: 4px;
+	--x-admin-border-radius-md: 8px;
+	--x-admin-border-radius-lg: 12px;
+
+	--x-admin-padding-sm: 4px;
+	--x-admin-padding-md: 8px;
+
+	--x-admin-box-shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+
+	// Specific
+
 	--x-admin-font-size-base: #{$basefont-b}; // default: 14px
+	--x-admin-content-bg: white;
+	--x-admin-content-box-bg: white;
+	--x-admin-form-width: 800px;
+
+	--x-admin-option-gap: 2px;
+	--x-admin-option-bg: #FFF;
+	--x-admin-option-color: #{$b-gray-7};
+	--x-admin-option-input-color: #{$b-gray-8};
+	--x-admin-option-input-font-weight: 500;
+	--x-admin-option-font-size: 13px;
+	--x-admin-option-border-radius: 6px;
 
 	--x-admin-option-button-color: #{$b-gray-7}; 
 	--x-admin-icon-button-size: 32px;
 	--x-admin-icon-button-icon-size: 16px;
+}
 
-	--x-admin-form-width: 800px;
-
-	--x-admin-border-radius-sm: 4px;
-	--x-admin-border-radius-md: 8px;
-
-	--x-admin-padding-sm: 4px;
-	--x-admin-padding-md: 8px;
+.xprez-module {
+	&--transparent {
+		--x-admin-content-bg: var(--x-admin-padding-sm);
+	}
 }

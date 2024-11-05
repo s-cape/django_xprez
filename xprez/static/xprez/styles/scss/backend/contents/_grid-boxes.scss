@@ -11,6 +11,8 @@
 	width: calc(50% - 1rem);
 	display: flex;
 	flex-direction: column;
+	background: var(--x-admin-content-box-bg);
+	border-radius: var(--x-admin-border-radius-lg);
 
 	.xprez & .medium-editor, .xprez & .ck-editor {
 		font-size: 14px;

@@ -1,73 +1,69 @@
-.xprez-module__options {
-	background: $b-gray-2;
-	text-align: center;
-	padding: 2px;
-	line-height: 28px;
+xprez-option {
+	display: inline-flex;
+	gap: var(--x-admin-option-gap);
+	background: var(--x-admin-option-bg);
+	color: var(--x-admin-option-color);
+	font-size: var(--x-admin-option-font-size);
+	line-height: 1;
+	align-items: baseline;
+	border-radius: var(--x-admin-option-border-radius);
+	box-shadow: var(--x-admin-box-shadow-sm);
+	padding: 0 var(--x-admin-padding-md);
 
-	&.hidden {
-		display: none;
+	label {
+		flex-basis: max-content;
+		padding: var(--x-admin-padding-md) 0;
 	}
 
-	li {
-		margin: .5rem 0;
+	input[type="text"] {
+		background: transparent !important;
+		border: none !important;
+		text-align: right;
+		box-shadow: none !important;
+		padding: var(--x-admin-padding-sm) 0 !important;
+		min-width: 20px !important;
+		outline: none !important;
+		flex: 1;
+		font-weight: var(--x-admin-option-input-font-weight) !important;
+		font-size: inherit !important;
+		line-height: inherit !important;
+		color: var(--x-admin-option-input-color) !important;
+
+		&[size="sm"] {
+			width: 25px !important;
+		}
+
+		&[size="md"] {
+			width: 60px !important;
+		}
+	}
+
+
+	xprez-option-suffix {
+		flex-basis: max-content;
+		display: inline-flex;
+		align-items: center;
 	}
 }
 
-.xprez-module__common-options {
-	background: darken($b-gray-2, 2%);
-}
 
+.xprez-module {
+	&__options {
+		// background: $b-gray-2;
+		text-align: center;
+		line-height: 28px;
+		padding: 0 var(--x-admin-padding-md) var(--x-admin-padding-md);
 
-.xprez-module .xprez-module__options-group {
-	list-style: none;
-	display: inline-block;
-	padding: 0 10px;
-	border-left: 1px solid $b-gray-5;
-	margin: 0;
+		&.hidden {
+			display: none;
+		}
 
-	&:first-child {
-		border-left: none;
+		li {
+			margin: .5rem 0;
+		}
 	}
 
-	li {
-		display: inline-block;
-		vertical-align: middle;
-		font-size: 12px;
-	}
-}
-
-
-// Option forms
-
-.xprez-option-label {
-	@include type-b(12px, 28px);
-	display: inline-block;
-	color: $b-gray-7;
-	color: #343A40;
-	letter-spacing: 0.02em;
-}
-
-.xprez .xprez-option-input {
-	@include sans($font-b);
-	border-radius: 2px;
-	box-shadow: none;
-	box-sizing: border-box;
-	@include type-b(12px, 20px);
-	height: auto;
-	width: 110px !important;
-	vertical-align: middle;
-	padding: 3px 5px;
-	border: 1px solid $b-gray-4;
-
-	&--s {
-		width: 50px !important;
-	}
-
-	&--m {
-		width: 80px !important;
-	}
-
-	&--l {
-		width: 140px !important;
+	&__common-options {
+		background: darken($b-gray-2, 2%);
 	}
 }
