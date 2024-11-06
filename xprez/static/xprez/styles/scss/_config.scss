@@ -33,7 +33,7 @@ $g: 1rem !default;
 // modules spacing
 $module-spacing-base: $g !default;
 
-$sans:  "acumin-pro", Helvetica ,Arial , sans-serif !default;
+$sans:  Arial , sans-serif !default;
 $serif:  Georgia, serif !default;
 $condensed: "trumpgothicpro", "Arial", sans-serif !default;
 $heading-font-family: $sans !default;
@@ -329,6 +329,7 @@ $textimage-text-max-width: 600px !default;
 // BACKEND
 // 
 
+$admin-ui-font-family: 'Roboto', sans-serif !default;
 $xprez-max-width: 1000px !default;
 $xprez-min-width: 400px !default;
 $g-b: 16px !default; // grid spacing

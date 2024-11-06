@@ -27,7 +27,7 @@
 }
 
 .xprez-icon-btn--icon-toggle {
-	[state="active"] {
+	[data-variant="active"] {
 		display: none;
 	}
 
@@ -35,11 +35,11 @@
 		color: var(--x-admin-option-button-color);
 		background: inherit;
 
-		[state="active"] {
+		[data-variant="active"] {
 			display: inline-block;
 		}
 
-		[state="inactive"] {
+		[data-variant="inactive"] {
 			display: none;
 		}
 
@@ -48,11 +48,11 @@
 		}
 	} 
 
-	[danger] {
+	[data-danger] {
 		color: $b-red;
 	}
 	
-	[alert] {
+	[data-alert] {
 		color: $b-blue-high;
 	}
 }

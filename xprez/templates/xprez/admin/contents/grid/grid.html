@@ -3,17 +3,59 @@
 {% block extra_class %}xprez-module--transparent{% endblock %}
 
 {% block options %}
-    <xprez-options-panel>
-        <xprez-option>
+    <div class="xprez-option__group">
+        <div class="xprez-option" data-active="true">
             <label for="grid-max-width">Grid max width</label>
-            <input size="md" type="text" id="grid-max-width" value="Medium">
-        </xprez-option>
-        <xprez-option>
+            <input data-size="md" type="text" id="grid-max-width" value="Medium">
+        </div>
+        <div class="xprez-option" data-active="true">
             <label for="grid-padding">Padding</label>
-            <input size="sm" type="text" id="grid-padding" value="2">
-            <xprez-option-suffix>rem</xprez-option-suffix>
-        </xprez-option>
-    </options-panel>
+            <input data-size="sm" type="text" id="grid-padding" value="2">
+            <span class="xprez-option__suffix">rem</span>
+        </div>
+        <div class="xprez-option" data-active="true">
+            <label for="grid-dropdown">Padding</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="grid-dropdown">
+                    <option value="full">Full</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option" data-active="true">
+            <label for="grid-border">Border</label>
+            <input type="checkbox" id="grid-border">
+        </div>
+    </div>
+
+    <div class="xprez-option__group">
+        <div class="xprez-option">
+            <label for="grid-max-width2">Grid max width</label>
+            <input data-size="md" type="text" id="grid-max-width2" value="Medium">
+        </div>
+        <div class="xprez-option">
+            <label for="grid-padding2">Padding</label>
+            <input data-size="sm" type="text" id="grid-padding2" value="2">
+            <span class="xprez-option__suffix">rem</span>
+        </div>
+        <div class="xprez-option">
+            <label for="grid-dropdown">Padding</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="grid-dropdown2">
+                    <option value="full">Full</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option">
+            <label for="grid-border2">Border</label>
+            <input type="checkbox" id="grid-border2">
+        </div>
+    </div>
 {% endblock %}
 
 {% block content %}

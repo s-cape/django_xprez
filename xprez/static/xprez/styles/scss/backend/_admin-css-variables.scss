@@ -1,4 +1,11 @@
 :root {
+	// Colors
+	--x-admin-color-selection-rgb: 18, 144, 247;
+
+	// Fonts
+	--x-admin-ui-font-family: #{$admin-ui-font-family};
+	--x-admin-ui-font-weight: 400;
+
 	// General
 
 	--x-admin-border-radius-sm: 4px;
@@ -9,6 +16,15 @@
 	--x-admin-padding-md: 8px;
 
 	--x-admin-box-shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+
+	--x-admin-module-bg: #{$b-gray-2};
+	--x-admin-module-bg-stripes: repeating-linear-gradient(
+		-45deg,
+		#{darken($b-gray-2, 2%)},
+		#{darken($b-gray-2, 2%)} 10px, 
+		#{$b-gray-2} 10px,
+		#{$b-gray-2} 20px
+	);
 
 	// Specific
 
@@ -21,9 +37,15 @@
 	--x-admin-option-bg: #FFF;
 	--x-admin-option-color: #{$b-gray-7};
 	--x-admin-option-input-color: #{$b-gray-8};
-	--x-admin-option-input-font-weight: 500;
-	--x-admin-option-font-size: 13px;
+	--x-admin-option-input-font-weight: 600;
+	--x-admin-option-font-size: 12px;
 	--x-admin-option-border-radius: 6px;
+	--x-admin-option-box-shadow: var(--x-admin-box-shadow-sm);
+	--x-admin-option-box-shadow-focus: 0 0 2px 1px rgba(var(--x-admin-color-selection-rgb), 0.5);
+	--x-admin-option-selection-bg: rgba(var(--x-admin-color-selection-rgb), 0.2);
+	--x-admin-option-button-size: 28px;
+
+	--x-admin-option-group-gap: 4px;
 
 	--x-admin-option-button-color: #{$b-gray-7}; 
 	--x-admin-icon-button-size: 32px;

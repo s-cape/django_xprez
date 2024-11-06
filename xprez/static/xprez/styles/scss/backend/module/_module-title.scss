@@ -1,12 +1,13 @@
 .xprez-module__title {
-	background: $b-gray-2;
+	font-family: var(--x-admin-ui-font-family);
+	font-weight: var(--x-admin-ui-font-weight);
 	position: relative;
 	margin: var(--x-admin-padding-sm);
 	display: flex;
 	align-items: center;
 	gap: 4px;
 
-	h2 {
+	&-heading{
 		font-size: var(--x-admin-font-size-base);
 		color: darken($b-gray-7, 15%);
 		cursor: move;

@@ -1,0 +1,25 @@
+.xprez-module {
+	&__options {
+		font-family: var(--x-admin-ui-font-family);
+		font-weight: var(--x-admin-ui-font-weight);
+		text-align: center;
+		line-height: 28px;
+		padding: 0 var(--x-admin-padding-md) var(--x-admin-padding-md);
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: var(--x-admin-option-group-gap);
+
+		&.hidden {
+			display: none;
+		}
+
+		li {
+			margin: .5rem 0;
+		}
+	}
+
+	&__common-options {
+		background: darken($b-gray-2, 2%);
+	}
+}

@@ -14,6 +14,7 @@
 
 // Backend styles
 
+@import "app/font";
 @import "app/app-base";
 @import "app/add-module-after";
 @import "app/add-module-before";
@@ -40,4 +41,6 @@
 @import "options/text-button"; 
 @import "options/icon-button"; 
 @import "options/deprecated-options";
-@import "options/options";
+@import "options/option-container";
+@import "options/option-group";
+@import "options/option";
