@@ -14,7 +14,9 @@
 
 // Backend styles
 
-@import "app/font";
+@import "font/app-font";
+@import "font/icons";
+
 @import "app/app-base";
 @import "app/add-module-after";
 @import "app/add-module-before";
@@ -24,7 +26,6 @@
 @import "app/top_menu";
 
 @import "comp/button";
-@import "comp/icons";
 
 @import "contents/ck-editor";
 @import "contents/grid-boxes";

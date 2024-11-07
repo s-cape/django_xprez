@@ -47,14 +47,14 @@
 			background: $b-gray-4;
 		}
 	} 
+}
 
-	[data-danger] {
-		color: $b-red;
-	}
-	
-	[data-alert] {
-		color: $b-blue-high;
-	}
+*[data-color-danger] {
+	color: $b-red;
+}
+
+*[data-color-alert] {
+	color: $b-blue-high;
 }
 
 .xprez-icon-btn-remove:before {

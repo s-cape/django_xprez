@@ -118,6 +118,51 @@
 		--x-admin-checkbox-color: var(--x-admin-option-input-color);
 	}
 
+	// Toggle
+
+	&:has([data-variant-checked]) {
+		background: transparent;
+		box-shadow: none;
+		padding: 0;
+		align-items: center;
+		cursor: pointer;
+		height: var(--x-admin-icon-button-size);
+		width: var(--x-admin-icon-button-size);
+		min-height: 0;
+
+		&:after {
+			display: none !important;
+		}
+
+		&:hover {
+			background-color: $b-gray-4
+		}
+
+		label {
+			padding: 0;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: var(--x-admin-border-radius-sm);
+		}
+
+		input {
+			cursor: pointer;
+		}
+	}
+
+	&:has(input[type="checkbox"]:checked) {
+		[data-variant-checked="false"] {
+			display: none;
+		}
+	}
+
+	&:has(input[type="checkbox"]:not(:checked)) {
+		[data-variant-checked="true"] {
+			display: none;
+		}
+	}
+
 	// Select
 
 	&:has(select) {

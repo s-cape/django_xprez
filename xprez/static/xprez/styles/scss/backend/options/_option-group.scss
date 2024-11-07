@@ -24,6 +24,8 @@
         }
 
         &__title {
+            --x-admin-icon-button-size: 24px;
+
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -31,10 +33,6 @@
             text-transform: uppercase;
             font-weight: 600;
             font-size: var(--x-admin-option-font-size);
-
-            .xprez-icon-btn {
-                --x-admin-icon-button-size: 24px;
-            }
 
             &:not(:first-child) {
                 margin-top: var(--x-admin-padding-md);

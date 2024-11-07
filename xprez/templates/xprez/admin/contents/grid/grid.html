@@ -33,10 +33,14 @@
         </div>
 
         <div class="xprez-option-group__title">
-            <span class="xprez-icon-btn xprez-icon-btn--icon-toggle js-checkbox_controller" title="Visibility on/off">
-                <i class="xprez-icon-eye" data-variant="inactive"></i>
-                <i class="xprez-icon-eye_slash" data-variant="active" data-danger></i>
-            </span>
+            <div class="xprez-option" data-active="true" data-text-label="false">
+                <label for="visible">
+                    <i class="xprez-icon-eye" data-variant-checked="true"></i>
+                    <i class="xprez-icon-eye_slash" data-variant-checked="false" data-color-danger></i>
+                    <span>Visible</span>
+                </label>
+                <input type="checkbox" id="visible" checked>
+            </div>
             <span class="xprez-option-group__title-text">Basic style (> 0px)</span>
             <span class="xprez-icon-btn" title="Remove breakpoint">
                 <i class="xprez-icon-delete"></i>

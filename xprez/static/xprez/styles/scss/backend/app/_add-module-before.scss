@@ -38,21 +38,29 @@
 		right: 0;
 
 		&:before {
+			@include xprez-icon;
+			content: '\e90d';
 			position: absolute;
 			display: block;
-			content: '+';
 			width: 40px;
 			height: 60px;
 			right: -40px;
 			top: -38px;
-			font-weight: bold;
-			font-size: 35px;
+			font-size: 24px;
 			color: $b-gray-7;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			opacity: 1;
+			opacity: .5;
 			cursor: pointer;
+			transform: rotate(45deg);
+			transition: all 150ms;
+		}
+
+		&:hover:before {
+			opacity: 1;
+			font-size: 36px;
+			transform: rotate(-45deg);
 		}
 
 		.xprez-submenu {
