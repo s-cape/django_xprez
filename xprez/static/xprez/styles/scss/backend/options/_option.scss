@@ -13,6 +13,7 @@
 	position: relative;
 	opacity: 0.3;
 	text-align: left;
+	min-height: var(--x-admin-option-height);
 	
 	&[data-active="true"] {
 		opacity: 1;
@@ -27,10 +28,29 @@
 		opacity: 1;
 	}
 
+	// Label
+
 	label {
 		flex-basis: max-content;
 		padding: var(--x-admin-padding-md) var(--x-admin-option-gap) var(--x-admin-padding-md) 0;
+
+		display: inline-flex;
+		align-items: center;
+		gap: var(--x-admin-option-gap);
+
+		i[class^="xprez-icon-"] {
+			font-size: var(--x-admin-option-icon-size);
+			margin: -.5em 0;
+		}
 	}
+
+	&[data-text-label="false"] {
+		label span {
+			display: none;
+		}
+	}
+
+	// Text input
 
 	input[type="text"] {
 		font-family: inherit !important;
@@ -52,6 +72,8 @@
 			background-color: var(--x-admin-option-selection-bg, 0.2);
 		}
 	}
+
+	// Checkbox
 
 	input[type="checkbox"] {
 		appearance: none;
@@ -83,6 +105,7 @@
 			align-items: center;
 			justify-content: center;
 			font-size: 20px;
+			margin-left: -10px;
 		}
 
 		label {
@@ -95,10 +118,12 @@
 		--x-admin-checkbox-color: var(--x-admin-option-input-color);
 	}
 
-	&__suffix {
-		flex-basis: max-content;
-		display: inline-flex;
-		align-items: center;
+	// Select
+
+	&:has(select) {
+		label {
+			padding-right: 0;
+		}
 	}
 
 	&__dropdown {
@@ -131,5 +156,14 @@
 				width: max-content;
 			}
 		}
+	}
+
+
+	// Elements
+
+	&__suffix {
+		flex-basis: max-content;
+		display: inline-flex;
+		align-items: center;
 	}
 }

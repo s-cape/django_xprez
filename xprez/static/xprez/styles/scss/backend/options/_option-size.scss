@@ -16,29 +16,29 @@ input[type="text"], select, .xprez-option__dropdown {
 }
 
 .xprez-option {
-    &[data-option-size="sm"] {
+    &[data-size="sm"] {
         width: 100px;
     } 
     
-    &[data-option-size="md"] {
+    &[data-size="md"] {
         width: 200px;
     }
     
-    &[data-option-size="lg"] {
+    &[data-size="lg"] {
         width: 400px;
     }
 
     // Flex sizes
 
-    &[data-option-size="flex-1"] {
+    &[data-size="flex-1"] {
         flex: 1;
     }
 
-    &[data-option-size="flex-2"] {
+    &[data-size="flex-2"] {
         flex: 2;
     } 
     
-    &[data-option-size="flex-auto"] {
+    &[data-size="flex-auto"] {
         flex: auto;
     }
 }

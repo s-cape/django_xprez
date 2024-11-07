@@ -34,7 +34,8 @@
 	--x-admin-content-box-bg: white;
 	--x-admin-form-width: 800px;
 
-	--x-admin-option-gap: 2px;
+	--x-admin-option-gap: 4px;
+	--x-admin-option-height: 28px;
 	--x-admin-option-bg: #FFF;
 	--x-admin-option-color: #{$b-gray-7};
 	--x-admin-option-input-color: #{$b-gray-8};
@@ -44,7 +45,8 @@
 	--x-admin-option-box-shadow: var(--x-admin-box-shadow-sm);
 	--x-admin-option-box-shadow-focus: 0 0 2px 1px rgba(var(--x-admin-color-selection-rgb), 0.5);
 	--x-admin-option-selection-bg: rgba(var(--x-admin-color-selection-rgb), 0.2);
-	--x-admin-option-button-size: 28px;
+	--x-admin-option-button-size: var(--x-admin-option-height);
+	--x-admin-option-icon-size: 20px;
 
 	--x-admin-option-group-gap: 4px;
 	--x-admin-option-group-panel-bg: #{$b-gray-3};
