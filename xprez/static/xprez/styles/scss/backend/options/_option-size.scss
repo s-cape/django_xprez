@@ -1,0 +1,44 @@
+
+input[type="text"], select, .xprez-option__dropdown {
+    box-sizing: border-box;
+
+    [data-input-size="sm"] > & {
+        width: 4ch !important;
+    }
+
+    [data-input-size="md"] > & {
+        width: 10ch !important;
+    }
+    
+    [data-input-size="lg"] > & {
+        width: 16ch !important;
+    }
+}
+
+.xprez-option {
+    &[data-option-size="sm"] {
+        width: 100px;
+    } 
+    
+    &[data-option-size="md"] {
+        width: 200px;
+    }
+    
+    &[data-option-size="lg"] {
+        width: 400px;
+    }
+
+    // Flex sizes
+
+    &[data-option-size="flex-1"] {
+        flex: 1;
+    }
+
+    &[data-option-size="flex-2"] {
+        flex: 2;
+    } 
+    
+    &[data-option-size="flex-auto"] {
+        flex: auto;
+    }
+}

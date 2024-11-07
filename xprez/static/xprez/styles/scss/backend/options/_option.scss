@@ -12,11 +12,12 @@
 	transition: box-shadow .15s linear;
 	position: relative;
 	opacity: 0.3;
+	text-align: left;
 	
 	&[data-active="true"] {
 		opacity: 1;
 	}
-	
+
 	&:has(:focus) {
 		box-shadow: var(--x-admin-option-box-shadow-focus);
 		opacity: 1;
@@ -45,17 +46,10 @@
 		flex: 1;
 		line-height: inherit !important;
 		color: var(--x-admin-option-input-color) !important;
+		width: 100%;
 
 		&::selection {
 			background-color: var(--x-admin-option-selection-bg, 0.2);
-		}
-
-		&[data-size="sm"] {
-			width: 4ch !important;
-		}
-
-		&[data-size="md"] {
-			width: 8ch !important;
 		}
 	}
 
@@ -65,7 +59,7 @@
 		position: absolute;
 		right: 0;
 		top: 0;
-		width: 28px;
+		width: var(--x-admin-option-button-size);
 		height: 100%;
 
 		&:focus {
@@ -90,6 +84,10 @@
 			justify-content: center;
 			font-size: 20px;
 		}
+
+		label {
+			flex: 1;
+		}
 	}
 
 	&:has(input[type="checkbox"]:checked) {
@@ -109,6 +107,7 @@
 		flex: 1;
 
 		select {
+			// appearance: none;
 			width: 100%;
 			box-sizing: border-box;
 			display: inline-flex;

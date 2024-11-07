@@ -1,4 +1,33 @@
-.xprez-option__group {
-	display: flex;
-	gap: var(--x-admin-option-group-gap);
+.xprez-option {
+    &-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--x-admin-option-group-gap);
+
+        &--panel {
+            width: 265px;
+            background: var(--x-admin-option-group-panel-bg);
+            padding: var(--x-admin-padding-lg);
+            border-radius: var(--x-admin-border-radius-lg);
+        }
+
+        &__subtitle {
+            font-size: var(--x-admin-option-font-size);
+            color: var(--x-admin-option-color);
+            text-align: left;
+            line-height: 1.25;
+            margin: var(--x-admin-padding-md) 0 var(--x-admin-padding-sm);
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+    }
+
+    &-row {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--x-admin-option-group-gap);
+    }
+
 }
