@@ -1,0 +1,55 @@
+.xprez-section {
+    margin: 1rem 0;
+
+    &__header {
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        position: relative;
+
+        > * {
+            z-index: 2;
+            background: $admin-bg;
+        }
+
+        &::before {
+            content: "";
+            height: 0.5px;
+            width: 100%;
+            background: $b-gray-6;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-1px);
+        }
+    }
+
+    &__settings {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 $g-b;
+
+        @media screen and (min-width: 1000px) {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            height: 100%;
+            transform: translateX(-50%);
+        }
+
+        & > * {
+            flex-wrap: wrap;
+        }
+    }
+
+    &__actions {
+        position: relative;
+        padding-left: $g-b;
+    }
+	
+    &__footer {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+}

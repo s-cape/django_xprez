@@ -54,6 +54,11 @@
 	--x-admin-option-button-color: #{$b-gray-7}; 
 	--x-admin-icon-button-size: 32px;
 	--x-admin-icon-button-icon-size: 16px;
+
+	--x-admin-popover-bg: #{$b-gray-3};
+	--x-admin-popover-width: 265px;
+	--x-admin-animation-easing: cubic-bezier(0.32, 0.72, 0, 1);
+	--x-admin-animation-duration: .3s;
 }
 
 .xprez-module {

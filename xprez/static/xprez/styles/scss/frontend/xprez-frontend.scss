@@ -1,30 +1,38 @@
 // SCSS libs & config imports
+// @layer config, frontend; 
 
-@import "../config" layer(config);
-@import "../css_variables" layer(config);
-@import "../library/rfs" layer(config);
-@import "../library/mixins" layer(config);
-@import "../backend/font/icons" layer(config);
+@import "../config";
+@import "../library/mixins";
 
-// layout @mixin definitions
+// @layer config {
+    @import "../css_variables";
+    @import "../library/rfs";
+    @import "../backend/font/icons";
+// }
 
-@import "layout";
- 
-// Modules layout & elements styling
+// @layer frontend {
+    // layout @mixin definitions
 
-@import "module_relations";
-@import "module_cont";
-@import "photo_gallery";
-@import "typography";
-@import "editor_media";
-@import "button";
-@import "text_image";
-@import "boxed_text"; 
-@import "quote";
-@import "feature_boxes";
-@import "video";   
-@import "numbers";  
-@import "download";
-@import "grid_boxes";
-@import "faq";
+    @import "layout";
+
+    // Modules layout & elements styling
+
+    @import "module_relations";
+    @import "module_cont";
+    @import "photo_gallery";
+    @import "typography";
+    @import "editor_media";
+    @import "button";
+    @import "text_image";
+    @import "boxed_text"; 
+    @import "quote";
+    @import "feature_boxes";
+    @import "video";   
+    @import "numbers";  
+    @import "download";
+    @import "grid_boxes";
+    @import "faq";
+// }
+
+
 

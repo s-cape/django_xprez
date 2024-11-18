@@ -5,8 +5,8 @@
 	background: $b-gray-5;
 	display: inline-flex;
 	align-items: center;
-	vertical-align: baseline;
 	color: $txt-gray;
+	gap: 8px;
 
 	&:hover {
 		background: darken($b-gray-5, 4%);
@@ -15,6 +15,10 @@
 
 	svg {
 		margin-right: 6px;
+	}
+
+	*[class*="xprez-icon-"] {
+		font-size: 16px;
 	}
 }
 

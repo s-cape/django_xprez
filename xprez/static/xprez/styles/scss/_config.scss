@@ -329,9 +329,10 @@ $textimage-text-max-width: 600px !default;
 // BACKEND
 // 
 
+$admin-bg: #edeff1 !default;
 $admin-ui-font-family: 'Roboto', sans-serif !default;
-$xprez-max-width: 1000px !default;
-$xprez-min-width: 400px !default;
+$xprez-max-width: unset !default;
+$xprez-min-width: 320px !default;
 $g-b: 16px !default; // grid spacing
 $basefont-b: 14px !default; // base font size
 $font-b: Arial, Helvetica, sans-serif !default; // base font family

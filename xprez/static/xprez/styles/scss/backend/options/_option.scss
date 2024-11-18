@@ -67,7 +67,8 @@
 		line-height: inherit !important;
 		color: var(--x-admin-option-input-color) !important;
 		width: 100%;
-
+		margin: 0 !important;
+		
 		&::selection {
 			background-color: var(--x-admin-option-selection-bg, 0.2);
 		}
@@ -83,6 +84,7 @@
 		top: 0;
 		width: var(--x-admin-option-button-size);
 		height: 100%;
+		margin: 0;
 
 		&:focus {
 			outline: none !important;
@@ -179,7 +181,7 @@
 		select {
 			// appearance: none;
 			height: var(--x-admin-option-height);
-			width: 100%;
+			flex-basis: 100%;
 			box-sizing: border-box;
 			display: inline-flex;
 			border: none !important;

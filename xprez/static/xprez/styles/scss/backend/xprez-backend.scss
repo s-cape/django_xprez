@@ -1,48 +1,58 @@
+@layer x-base, x-frontend, x-backend;
 // SCSS imports
 @import "../config";
-@import "../css_variables";
 @import "../library/mixins";
-@import "admin-css-variables";
+
+@layer x-base {
+    @import "../css_variables";
+    @import "admin-css-variables";
+}
 
 // Frontend styles
 
-@import "../frontend/layout";
-@import "../frontend/typography";
-@import "../frontend/editor_media";
-@import "../frontend/button";
-@import "../frontend/grid_boxes";
+@layer x-frontend {
+    @import "../frontend/layout";
+    @import "../frontend/typography";
+    @import "../frontend/editor_media";
+    @import "../frontend/button";
+    @import "../frontend/grid_boxes";
+}
 
 // Backend styles
 
-@import "font/app-font";
-@import "font/icons";
+@layer x-backend {
+    @import "font/app-font";
+    @import "font/icons";
 
-@import "app/app-base";
-@import "app/add-module-after";
-@import "app/add-module-before";
-@import "app/clipboard";
-@import "app/messaging";
-@import "app/submenu";
-@import "app/top_menu";
+    @import "app/app-base";
+    @import "app/add-module-after";
+    @import "app/add-module-before";
+    @import "app/clipboard";
+    @import "app/messaging";
+    @import "app/submenu";
+    @import "app/top_menu";
+    @import "app/section";
 
-@import "comp/button";
+    @import "comp/button";
+    @import "comp/popover";
 
-@import "contents/ck-editor";
-@import "contents/grid-boxes";
-@import "contents/image-text";
-@import "contents/medium-editor";
-@import "contents/photo-gallery";
-@import "contents/text-content";
+    @import "contents/ck-editor";
+    @import "contents/grid-boxes";
+    @import "contents/image-text";
+    @import "contents/medium-editor";
+    @import "contents/photo-gallery";
+    @import "contents/text-content";
 
-@import "module/form-elements";
-@import "module/module-base";
-@import "module/module-content";
-@import "module/module-title";
+    @import "module/form-elements";
+    @import "module/module-base";
+    @import "module/module-content";
+    @import "module/module-title";
 
-@import "options/text-button"; 
-@import "options/icon-button"; 
-@import "options/deprecated-options";
-@import "options/option-container";
-@import "options/option-group";
-@import "options/option";
-@import "options/option-size";
+    @import "options/text-button"; 
+    @import "options/icon-button"; 
+    @import "options/deprecated-options";
+    @import "options/option-container";
+    @import "options/option-group";
+    @import "options/option";
+    @import "options/option-size";
+}

@@ -11,16 +11,20 @@
 
 @font-face {
   font-family: 'xprez';
-  src: url('/static/xprez/fonts/icons/xprez.eot?omad9d7s#iefix') format('embedded-opentype'),
-    url('/static/xprez/fonts/icons/xprez.ttf?omadd97s') format('truetype'),
-    url('/static/xprez/fonts/icons/xprez.woff?omdad97s') format('woff'),
-    url('/static/xprez/fonts/icons/xprez.svg?omadd97s#xprez') format('svg');
+  src: url('/static/xprez/fonts/icons/xprez.eot?omadf9d7s#iefix') format('embedded-opentype'),
+    url('/static/xprez/fonts/icons/xprez.ttf?omdadd97s') format('truetype'),
+    url('/static/xprez/fonts/icons/xprez.woff?osmdad97s') format('woff'),
+    url('/static/xprez/fonts/icons/xprez.svg?omafdd97s#xprez') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 [class*="xprez-icon-"]:not(.xprez-icon-btn) {
   @include xprez-icon;
+}
+
+.xprez-icon-plus-circle:before {
+  content: "\e918";
 }
 
 .xprez-icon-vertical:before {

@@ -1,0 +1,200 @@
+{% load i18n %}
+{% load xprez_admin %}
+
+<div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
+
+    <div class="xprez-section">
+        <div class="xprez-section__header">
+            {% block btn_collapse %}
+                <span class="xprez-icon-btn js-collapser" title="Collapse">
+                    <i class="xprez-icon-chevron-small-down"></i>
+                </span>
+            {% endblock %}
+
+            <div class="xprez-section__settings">
+                <span class="xprez-icon-btn" data-popover-target="id1-section-settings" title="Advanced settings">
+                    <i class="xprez-icon-settings"></i>
+                </span>
+                <div class="xprez-option-row">
+                    <div class="xprez-option" data-size="flex-auto" data-active="true">
+                        <label for="id1-cols">Columns</label>
+                        <span class="xprez-option__dropdown">
+                            <select class="xprez-option__select" id="id1-cols">
+                                <option value="1">1</option>
+                                <option value="2" selected>2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="xprez-option" data-size="flex-auto" data-active="true">
+                        <label for="id1-gap">Gap</label>
+                        <span class="xprez-option__dropdown">
+                            <select class="xprez-option__select" id="id1-gap">
+                                <option value="sm">Small</option>
+                                <option value="md" selected>Medium</option>
+                                <option value="lg">Large</option>
+                                <option value="xl">X-Large</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="xprez-option" data-size="flex-auto" data-active="true">
+                        <label for="id1-max-width">Max width</label>
+                        <span class="xprez-option__dropdown">
+                            <select class="xprez-option__select" id="id1-max-width">
+                                <option value="sm">Small</option>
+                                <option value="md" selected>Medium</option>
+                                <option value="lg">Large</option>
+                                <option value="xl">X-Large</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="xprez-section__actions">
+                {% block btn_add_section %}
+                    <span class="xprez-icon-btn" title="Add section">
+                        <i class="xprez-icon-plus-circle"></i>
+                    </span>
+                {% endblock %}
+                {% block btn_toggle_visible %}
+                    <span class="xprez-icon-btn xprez-icon-btn--icon-toggle js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off">
+                        <i class="xprez-icon-eye x-variant-unchecked"></i>
+                        <i class="xprez-icon-eye_slash  x-variant-checked x-color-alert"></i>
+                    </span>
+                {% endblock %}
+                {% block btn_copy_content %}
+                    <div class="xprez-icon-btn js-xprez-submenu-toggle xprez-submenu__toggle" title="Copy">
+                        <i class="xprez-icon-copy"></i>
+                        <div class="xprez-submenu">
+                            <div
+                                class="js-copy-content"
+                                data-url="TODO{#{% url xprez_admin.xprez_copy_content_url_name content.pk %}#}"
+                            >
+                                Duplicate
+                            </div>
+                            <div
+                                class="js-clipboard-copy xprez-clipboard-copy"
+                                data-url="TODO{#{% url xprez_admin.xprez_clipboard_copy_url_name xprez_admin.CLIPBOARD_CONTENT_KEY content.pk %}#}"
+                            >
+                                <span class="xprez-inline-success-message">{% include "xprez/admin/icons/checkmark.html" %} Copied</span>
+                                <span class="default">Copy</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endblock %}
+                {% block btn_delete %}
+                    <span class="xprez-icon-btn js-delete-content" data-pk="{{ content.pk }}" data-url="TODO{#{% url xprez_admin.xprez_delete_content_url_name content.pk %}#}" title="Remove">
+                        <i class="xprez-icon-delete"></i>
+                    </span>
+                {% endblock %}
+            </div>
+        </div>
+
+        <div class="xprez-section__content">
+
+        </div>
+
+        <div class="xprez-section__footer">
+            <span class="js-add-another xprez-btn xprez-btn-transparent">
+                <i class="xprez-icon-plus_square_20"></i>Add content
+            </span>
+        </div>
+    </div>
+
+    <div popover class="xprez-popover" id="id1-section-settings">
+        <div class="xprez-popover__content">
+            <div class="xprez-option-group" >
+                {% include "./option_group.html" %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    window.popoverManager = {
+        popovers: new Map(),
+        
+        init() {
+            // Initialize all popovers on page
+            document.querySelectorAll('.xprez-popover').forEach(popover => {
+                this.initializePopover(popover);
+            });
+        },
+
+        initializePopover(popover) {
+            const popoverId = popover.id;
+            const popoverContent = popover.querySelector('.xprez-popover__content');
+
+            const openPopover = () => {
+                if (typeof popover.showPopover === 'function') {
+                    popover.showPopover();
+                } else {
+                    popover.style.display = 'block';
+                }
+            };
+
+            const closePopover = () => {
+                if (typeof popover.hidePopover === 'function') {
+                    popover.hidePopover();
+                } else {
+                    popover.style.display = 'none';
+                }
+            };
+
+            // Close when clicking outside
+            document.addEventListener('click', (event) => {
+                const isClickInside = popover.contains(event.target);
+                    const openButton = event.target.closest('[data-popover-target]');
+
+                if (!isClickInside && !openButton) {
+                    this.closePopover(popoverId);
+                }
+            });
+
+            // Save reference to drawer in drawerManager
+            this.popovers.set(popoverId, {
+                open: openPopover,
+                close: closePopover
+            });
+
+            // Initialize triggers
+            this.initializeTriggersForPopover(popoverId);
+        },
+
+        initializeTriggersForPopover(popoverId) {
+            document.querySelectorAll(`[data-popover-target="${popoverId}"]`).forEach(trigger => {
+                trigger.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    this.openPopover(popoverId);
+                });
+            });
+        },
+
+        openPopover(popoverId) {
+            const popover = this.popovers.get(popoverId);
+            if (popover) {
+                popover.open();
+            } else {
+                console.warn(`Popover with ID "${popoverId}" not found`);
+            }
+        },
+
+        closePopover(popoverId) {
+            const popover = this.popovers.get(popoverId);
+            if (popover) {
+                popover.close();
+            }
+        }
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        popoverManager.init();
+    });
+
+</script>
