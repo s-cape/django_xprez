@@ -1,10 +1,10 @@
 // SCSS libs & config imports
 
-@import "../config";
-@import "../css_variables";
-@import "../library/rfs";
-@import "../library/mixins";
-@import "../backend/comp/icons";
+@import "../config" layer(config);
+@import "../css_variables" layer(config);
+@import "../library/rfs" layer(config);
+@import "../library/mixins" layer(config);
+@import "../backend/font/icons" layer(config);
 
 // layout @mixin definitions
 
