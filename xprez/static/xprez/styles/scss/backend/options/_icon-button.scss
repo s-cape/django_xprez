@@ -27,7 +27,7 @@
 }
 
 .xprez-icon-btn--icon-toggle {
-	[data-variant="active"] {
+	.x-variant-checked {
 		display: none;
 	}
 
@@ -35,11 +35,11 @@
 		color: var(--x-admin-option-button-color);
 		background: inherit;
 
-		[data-variant="active"] {
+		.x-variant-checked {
 			display: inline-block;
 		}
 
-		[data-variant="inactive"] {
+		.x-variant-unchecked {
 			display: none;
 		}
 
@@ -49,11 +49,11 @@
 	} 
 }
 
-*[data-color-danger] {
+.x-color-danger {
 	color: $b-red;
 }
 
-*[data-color-alert] {
+.x-color-alert {
 	color: $b-blue-high;
 }
 
