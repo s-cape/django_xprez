@@ -35,7 +35,7 @@
             font-size: var(--x-admin-option-font-size);
 
             &:not(:first-child) {
-                margin-top: var(--x-admin-padding-md);
+                margin-top: var(--x-admin-padding-lg);
             }
 
             & + .xprez-option-group__subtitle {
