@@ -23,6 +23,42 @@
   @include xprez-icon;
 }
 
+.xprez-icon-padding_b:before {
+  content: "\e91c";
+}
+
+.xprez-icon-padding_h:before {
+  content: "\e91d";
+}
+
+.xprez-icon-padding_l:before {
+  content: "\e91e";
+}
+
+.xprez-icon-padding_r:before {
+  content: "\e91f";
+}
+
+.xprez-icon-padding_t:before {
+  content: "\e920";
+}
+
+.xprez-icon-padding_v:before {
+  content: "\e921";
+}
+
+.xprez-icon-grid_3_3:before {
+  content: "\e919";
+}
+
+.xprez-icon-link_vertical:before {
+  content: "\e91a";
+}
+
+.xprez-icon-sync:before {
+  content: "\e91b";
+}
+
 .xprez-icon-plus-circle:before {
   content: "\e918";
 }

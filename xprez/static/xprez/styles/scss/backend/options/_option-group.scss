@@ -30,9 +30,10 @@
             align-items: center;
             justify-content: flex-start;
             gap: var(--x-admin-padding-sm);
-            text-transform: uppercase;
             font-weight: 600;
+            text-transform: uppercase;
             font-size: var(--x-admin-option-font-size);
+            margin-bottom: var(--x-admin-padding-sm);
 
             &:not(:first-child) {
                 margin-top: var(--x-admin-padding-lg);
@@ -45,6 +46,23 @@
             &-text {
                 flex: 1;
                 text-align: left;
+            }
+            
+            .xprez-option {
+                --x-admin-option-bg: transparent;
+            }
+        }
+
+        &__heading {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            gap: var(--x-admin-padding-md);
+            font-size: var(--x-admin-option-group-title-font-size);
+            margin-bottom: var(--x-admin-padding-lg);
+
+            [class^="xprez-icon-"] {
+                font-size: var(--x-admin-option-icon-size);
             }
         }
     }

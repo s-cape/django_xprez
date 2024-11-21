@@ -99,7 +99,7 @@
         </div>
 
         <div class="xprez-section__footer">
-            <span class="js-add-another xprez-btn xprez-btn-transparent">
+            <span class="js-add-another xprez-btn xprez-btn-transparent" data-popover-target="id2-text-settings">
                 <i class="xprez-icon-plus_square_20"></i>Add content
             </span>
         </div>
@@ -107,11 +107,16 @@
 
     <div popover class="xprez-popover" id="id1-section-settings">
         <div class="xprez-popover__content">
-            <div class="xprez-option-group" >
-                {% include "./option_group.html" %}
-            </div>
+            {% include "./section_option_group.html" %}
         </div>
     </div>
+    
+    <div popover class="xprez-popover" id="id2-text-settings">
+        <div class="xprez-popover__content">
+            {% include "./text_option_group.html" %}
+        </div>
+    </div>
+    
 
 </div>
 
@@ -195,6 +200,7 @@
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
         popoverManager.init();
+        popoverManager.openPopover('id2-text-settings'); // dev show popover on page load
     });
 
 </script>

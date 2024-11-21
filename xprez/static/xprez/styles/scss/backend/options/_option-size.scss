@@ -30,6 +30,10 @@ input[type="text"], select, .xprez-option__dropdown {
 
     // Flex sizes
 
+    &[data-size="flex-0"] {
+        flex: 0;
+    }
+    
     &[data-size="flex-1"] {
         flex: 1;
     }

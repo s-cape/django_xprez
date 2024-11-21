@@ -1,0 +1,137 @@
+<div class="xprez-option-group">
+    <div class="xprez-option-group__heading">
+        {% include "xprez/admin/icons/contents/text.html" %}
+        <span class="xprez-option-group__title-text">Text</span>
+        <span class="xprez-btn xprez-btn--sm" title="All settings of selected modules will be overwritten with current settings">
+            Sync selected
+            <i class="xprez-icon-sync"></i>
+        </span>
+    </div>
+
+    <div class="xprez-option-row">
+        <div class="xprez-option xprez-option--marker" data-size="flex-1" data-active="true">
+            <label for="similar_style">
+                <span>Change style for similar contents</span>
+            </label>
+            <input type="checkbox" id="similar_style" checked>
+        </div>
+    </div>
+
+    <div class="xprez-option-group__subtitle">Attributes</div>
+    
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="t_url">Target URL</label>
+            <input type="text" id="t_url" value="/about-us/" size="2">
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="false">
+            <label for="cc">CSS class</label>
+            <input type="text" id="cc" value="">
+        </div>
+    </div>
+    
+    <div class="xprez-option-group__title">
+        <div class="xprez-option" data-active="true" data-text-label="false">
+            <label for="visible">
+                <i class="xprez-icon-eye x-variant-checked"></i>
+                <i class="xprez-icon-eye_slash x-variant-unchecked x-color-danger"></i>
+                <span>Visible</span>
+            </label>
+            <input type="checkbox" id="visible" checked>
+        </div>
+        <span class="xprez-option-group__title-text">Basic style (> 0px)</span>
+    </div>
+    
+    <div class="xprez-option-group__subtitle">Box</div>
+
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="ar">Aspect-ratio</label>
+            <input type="text" id="ar" value="0">
+        </div>
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="cs">Column span</label>
+            <input type="text" id="cs" value="2" size="2">
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="pd">Padding</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="pd">
+                    <option value="full">Full</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="border">
+                <i class="xprez-icon-border"></i>
+                <span>Border</span>
+            </label>
+            <input type="checkbox" id="border">
+        </div>
+        <div class="xprez-option" data-size="flex-1" data-active="false">
+            <label for="bg">
+                <i class="xprez-icon-background"></i>
+                <span>Background</span>
+            </label>
+            <input type="checkbox" id="bg" checked>
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="false" data-text-label="false">
+            <label for="v_align">
+                <i class="xprez-icon-vertical"></i>
+                <span>Vertical alignment</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="v_align">
+                    <option value="full">Top</option>
+                    <option value="medium">Center</option>
+                    <option value="small">Bottom</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option" data-size="flex-1" data-active="true" data-text-label="false">
+            <label for="h_align">
+                <i class="xprez-icon-horizontal"></i>
+                <span>Horizontal alignment</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="h_align">
+                    <option value="full">Left</option>
+                    <option value="medium">Center</option>
+                    <option value="small">Right</option>
+                </select>
+            </span>
+        </div>
+    </div>
+    
+    <div class="xprez-option-group__subtitle">Image / video</div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-2" data-active="true">
+            <label for="t_bg">Type</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="t_bg">
+                    <option value="full">Lead</option>
+                    <option value="medium">Icon</option>
+                    <option value="small" selected>Background</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="t_top">Top</label>
+            <input type="text" id="t_top" value="50" size="2">
+            <span class="xprez-option__suffix">%</span>
+        </div>
+    </div>
+    
+    
+</div>

@@ -1,0 +1,362 @@
+<div class="xprez-option-group">
+    <div class="xprez-option-group__heading">
+        <i class="xprez-icon-grid_3_3"></i>
+        <span class="xprez-option-group__title-text">Section</span>
+    </div>
+
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="mb">Max width</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="mb">
+                    <option value="full">Full</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="false">
+            <label for="alt-color">
+                <span>Alternate color</span>
+            </label>
+            <input type="checkbox" id="alt-color">
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="false">
+            <label for="bg-color">Background color</label>
+            <input type="text" id="bg-color">
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="false">
+            <label for="cc">CSS class</label>
+            <input type="text" id="cc" value="">
+        </div>
+    </div>
+    
+    <div class="xprez-option-group__title">
+        <div class="xprez-option" data-active="true" data-text-label="false">
+            <label for="visible">
+                <i class="xprez-icon-eye x-variant-checked"></i>
+                <i class="xprez-icon-eye_slash x-variant-unchecked x-color-danger"></i>
+                <span>Visible</span>
+            </label>
+            <input type="checkbox" id="visible" checked>
+        </div>
+        <span class="xprez-option-group__title-text">Basic style (> 0px)</span>
+    </div>
+    
+    <div class="xprez-option-group__subtitle">Section</div>
+
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="mb">Margin bottom</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="mb">
+                    <option value="full">Full</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+    </div>
+
+
+    <div class="xprez-option-group__subtitle">Padding</div>
+
+    <div class="xprez-option-row">
+        
+        <!-- <div class="xprez-option" data-size="flex-1" data-active="true" data-text-label="false">
+            <label for="pt">
+                <i class="xprez-icon-padding_v"></i>
+                <span>Vertical</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="pt">
+                    <option value="full">Full</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div> -->
+
+        <div class="xprez-option" data-size="flex-1" data-active="true" data-text-label="false">
+            <label for="pt">
+                <i class="xprez-icon-padding_t"></i>
+                <span>Padding top</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="pt">
+                    <option value="none">None</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+
+        <div class="xprez-option" data-active="true" data-text-label="false">
+            <label for="link_padd_v" title="Link top and bottom">
+                <i class="xprez-icon-link_vertical x-variant-checked x-color-alert"></i>
+                <i class="xprez-icon-link_vertical x-variant-unchecked"></i>
+                <span>Link top and bottom</span>
+            </label>
+            <input type="checkbox" id="link_padd_v">
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true" data-text-label="false">
+            <label for="pt">
+                <i class="xprez-icon-padding_b"></i>
+                <span>Padding bottom</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="pt">
+                    <option value="none">None</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option__btn-spacer"></div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-2" data-active="true" data-text-label="false">
+            <label for="pb">
+                <i class="xprez-icon-padding_h"></i>
+                <span>Horizontal</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="pb">
+                    <option value="none">None</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="custom" selected>Custom</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option" data-size="flex-0" data-active="true" data-text-label="false">
+            <input type="text" id="pb_custom" value="32" size="2">
+            <span class="xprez-option__suffix">px</span>
+        </div>
+        <div class="xprez-option" data-active="true" data-text-label="false">
+            <label for="link_padd_v" title="Link left and right">
+                <i class="xprez-icon-link_vertical x-variant-checked x-color-alert"></i>
+                <i class="xprez-icon-link_vertical x-variant-unchecked"></i>
+                <span>Link left and right</span>
+            </label>
+            <input type="checkbox" id="link_padd_v" checked>
+        </div>
+    </div>
+
+    <div class="xprez-option-group__subtitle">Grid</div>
+
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="" data-active="true">
+            <label for="mb">Columns</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="mb">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </span>
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="gap">Gap</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="gap">
+                    <option value="full">Full</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom" selected>Custom</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option" data-size="flex-0" data-active="true">
+            <input type="text" id="gap_custom" value="32" size="2">
+            <span class="xprez-option__suffix">px</span>
+        </div>
+    </div>
+
+    <div class="xprez-option-group__subtitle">Grid box inner alignment</div>
+
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true" data-text-label="false">
+            <label for="v_align">
+                <i class="xprez-icon-vertical"></i>
+                <span>Vertical alignment</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="v_align">
+                    <option value="full">Top</option>
+                    <option value="medium">Center</option>
+                    <option value="small">Bottom</option>
+                    <option value="stretch">Stretch</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option" data-size="flex-1" data-active="true" data-text-label="false">
+            <label for="h_align">
+                <i class="xprez-icon-horizontal"></i>
+                <span>Horizontal alignment</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="h_align">
+                    <option value="full">Left</option>
+                    <option value="medium">Center</option>
+                    <option value="small">Right</option>
+                    <option value="stretch">Stretch</option>
+                </select>
+            </span>
+        </div>
+    </div>
+
+    {# BREAKPOINT #}
+
+    <div class="xprez-option-group__title">
+        <div class="xprez-option" data-active="true" data-text-label="false">
+            <label for="visible">
+                <i class="xprez-icon-eye x-variant-checked"></i>
+                <i class="xprez-icon-eye_slash x-variant-unchecked x-color-danger"></i>
+                <span>Visible</span>
+            </label>
+            <input type="checkbox" id="visible" checked>
+        </div>
+        <span class="xprez-option-group__title-text">Large mobile (> 400px)</span>
+        <span class="xprez-icon-btn" title="Remove breakpoint">
+            <i class="xprez-icon-delete"></i>
+        </span>
+    </div>
+
+    <div class="xprez-option-group__subtitle">Section</div>
+
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="false">
+            <label for="mb">Margin bottom</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="mb">
+                    <option value="full">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="false">
+            <label for="pt">Padding top</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="pt">
+                    <option value="full">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-2" data-active="false">
+            <label for="pb">Padding bottom</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="pb">
+                    <option value="full">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="small">Large</option>
+                    <option value="custom" selected>Custom</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option" data-size="flex-0" data-active="false" data-text-label="false">
+            <input type="text" id="pb_custom" value="32" size="2">
+            <span class="xprez-option__suffix">px</span>
+        </div>
+    </div>
+
+    <div class="xprez-option-group__subtitle">Grid</div>
+
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="" data-active="true">
+            <label for="mb">Columns</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="mb">
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </span>
+        </div>
+    </div>
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="true">
+            <label for="gap_bp2">Gap</label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="gap_bp2">
+                    <option value="full">Full</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="small">Small</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </span>
+        </div>
+    </div>
+
+    <div class="xprez-option-group__subtitle">Grid box inner alignment</div>
+
+    <div class="xprez-option-row">
+        <div class="xprez-option" data-size="flex-1" data-active="false" data-text-label="false">
+            <label for="v_align_bp2">
+                <i class="xprez-icon-vertical"></i>
+                <span>Vertical alignment</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="v_align_bp2">
+                    <option value="full">Top</option>
+                    <option value="medium">Center</option>
+                    <option value="small">Bottom</option>
+                    <option value="stretch">Stretch</option>
+                </select>
+            </span>
+        </div>
+        <div class="xprez-option" data-size="flex-1" data-active="false" data-text-label="false">
+            <label for="h_align_bp2">
+                <i class="xprez-icon-horizontal"></i>
+                <span>Horizontal alignment</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="h_align_bp2">
+                    <option value="full">Left</option>
+                    <option value="medium">Center</option>
+                    <option value="small">Right</option>
+                    <option value="stretch">Stretch</option>
+                </select>
+            </span>
+        </div>
+    </div>
+    
+    
+</div>

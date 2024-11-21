@@ -28,7 +28,7 @@
 }
 
 .xprez .xprez-option-input {
-	@include sans($font-b);
+	font-family: $admin-ui-font-family;
 	border-radius: 2px;
 	box-shadow: none;
 	box-sizing: border-box;

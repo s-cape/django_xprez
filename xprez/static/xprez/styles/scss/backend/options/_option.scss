@@ -37,6 +37,7 @@
 		display: inline-flex;
 		align-items: center;
 		gap: var(--x-admin-option-gap);
+		color: inherit;
 
 		i[class^="xprez-icon-"] {
 			font-size: var(--x-admin-option-icon-size);
@@ -94,9 +95,11 @@
 	&:has(input[type="checkbox"]) {
 		--x-admin-checkbox-icon: '\e90d';
 		--x-admin-checkbox-color: var(--x-admin-option-color);
+		--x-admin-checkbox-bg: var(--x-admin-option-bg);
 
 		padding-right: 0;
 		color: var(--x-admin-checkbox-color);
+		background: var(--x-admin-checkbox-bg);
 
 		&:after {
 			@include xprez-icon;
@@ -117,7 +120,9 @@
 
 	&:has(input[type="checkbox"]:checked) {
 		--x-admin-checkbox-icon: '\e910';
-		--x-admin-checkbox-color: var(--x-admin-option-input-color);
+
+		color: var(--x-admin-checkbox-checked-color, var(--x-admin-option-input-color));
+		background: var(--x-admin-checkbox-checked-bg, var(--x-admin-option-bg));
 	}
 
 	// Toggle
@@ -128,8 +133,8 @@
 		padding: 0;
 		align-items: center;
 		cursor: pointer;
-		height: var(--x-admin-icon-button-size);
-		width: var(--x-admin-icon-button-size);
+		height: var(--x-admin-option-height);
+		width: var(--x-admin-option-height);
 		min-height: 0;
 
 		&:after {
@@ -187,9 +192,11 @@
 			border: none !important;
 			padding: var(--x-admin-padding-sm) var(--x-admin-option-gap) !important;
 			font-size: inherit !important;
+			font-family: inherit;
 			line-height: 1 !important;
 			font-weight: var(--x-admin-option-input-font-weight) !important;
 			margin: 0 !important;
+			// text-align: right;
 
 			
 			&:after {
@@ -216,4 +223,18 @@
 		display: inline-flex;
 		align-items: center;
 	}
+
+	&__btn-spacer {
+		width: var(--x-admin-option-height);
+	}
+
+	// Modificators
+
+	&--marker:has(input[type="checkbox"]) {
+		// --x-admin-checkbox-bg: var(--x-admin-marker-bg);
+		// --x-admin-checkbox-color: var(--x-admin-marker-color);
+		--x-admin-checkbox-checked-bg: var(--x-admin-marker-checked-bg);
+		--x-admin-checkbox-checked-color: var(--x-admin-marker-checked-color);
+
+    }
 }

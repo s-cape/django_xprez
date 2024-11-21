@@ -132,7 +132,7 @@
 //    }
 //}
 @mixin type-b(
-    $fsize:     $basefont-b, // px / font-size
+    $fsize:     $admin-ui-font-size, // px / font-size
     $lheight:   2, // grid multiplier or px / line-height
     $mtop:      0, // grid multiplier or px / margin-top
     $mbot:      0 // grid multiplier or px / margin-bottom

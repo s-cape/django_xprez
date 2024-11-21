@@ -16,7 +16,7 @@ $submenu-color: #343A40;
 	flex-wrap: wrap;
 	transition: all 0.3s;
 	color: $submenu-color;
-	@include sans($font-b);
+	font-family: $admin-ui-font-family;
 	text-align: left;
 
 	& > * {

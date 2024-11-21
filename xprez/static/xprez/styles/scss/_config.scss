@@ -61,6 +61,7 @@ $b-purple: #7950F2 !default;
 $b-blue: #359CBA !default;
 $b-blue-high: #1D5EC7 !default;
 $b-red: #D10420 !default;
+$b-pink: #DD4FDF !default;
 
 // base color settings
 $base-bg: transparent !default;
@@ -331,8 +332,7 @@ $textimage-text-max-width: 600px !default;
 
 $admin-bg: #edeff1 !default;
 $admin-ui-font-family: 'Roboto', sans-serif !default;
+$admin-ui-font-size: 14px !default; 
 $xprez-max-width: unset !default;
 $xprez-min-width: 320px !default;
 $g-b: 16px !default; // grid spacing
-$basefont-b: 14px !default; // base font size
-$font-b: Arial, Helvetica, sans-serif !default; // base font family

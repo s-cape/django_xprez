@@ -18,8 +18,16 @@
         background-color: var(--x-admin-popover-bg);
         padding: 0 var(--cl-card-padding-x) var(--cl-card-padding-y);
         filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.05)) drop-shadow(0px 0px 34px rgba(0, 0, 0, 0.30));
+        box-sizing: content-box;
         width: var(--x-admin-popover-width);
         padding: var(--x-admin-padding-lg);
+        overflow-y: auto;
+        
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     
         position: fixed;
         bottom: 0;
