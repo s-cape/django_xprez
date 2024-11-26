@@ -9,7 +9,7 @@
 
         > * {
             z-index: 2;
-            background: $admin-bg;
+            background: var(--x-admin-bg, $admin-bg);
         }
 
         &::before {

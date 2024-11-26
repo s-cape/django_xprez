@@ -122,13 +122,15 @@
 		--x-admin-checkbox-icon: '\e910';
 
 		color: var(--x-admin-checkbox-checked-color, var(--x-admin-option-input-color));
-		background: var(--x-admin-checkbox-checked-bg, var(--x-admin-option-bg));
+		background: var(--x-admin-checkbox-checked-bg, var(--x-admin-checkbox-bg));
 	}
 
 	// Toggle
 
-	&:has(.x-variant-checked) {
-		background: transparent;
+	&:has(input[type="checkbox"]):has(.x-variant-checked) {
+		--x-admin-checkbox-bg: transparent;
+		--x-admin-checkbox-checked-bg: transparent;
+
 		box-shadow: none;
 		padding: 0;
 		align-items: center;
