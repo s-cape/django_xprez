@@ -12,6 +12,7 @@ def _replace_wrapper_with_templatetag(wrapper, img, request):
     src = img.get("src")
 
     if not src:
+        wrapper.extract()
         return
 
     if not src.lower().startswith("http") and request:
