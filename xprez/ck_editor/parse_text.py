@@ -11,6 +11,9 @@ def _replace_wrapper_with_templatetag(wrapper, img, request):
     # wrapper and img may be the same tag - that is the case of inline images
     src = img.get("src")
 
+    if not src:
+        return
+
     if not src.lower().startswith("http") and request:
         src = request.build_absolute_uri(src)
 
@@ -18,7 +21,10 @@ def _replace_wrapper_with_templatetag(wrapper, img, request):
         src, headers={"User-agent": ""}  # needed for cloudflare
     )
 
-    file = io.BytesIO(urllib.request.urlopen(request).read())
+    try:
+        file = io.BytesIO(urllib.request.urlopen(request).read())
+    except Exception as e:
+        return
 
     im = Image.open(file)
     width, height = im.size
