@@ -19,7 +19,7 @@
 	--x-admin-box-shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
 
 	--x-admin-module-bg: #{$b-gray-2};
-	--x-admin-module-bg-stripes: repeating-linear-gradient(
+	--x-admin-module-bg-stripes: repeating-linear-gradient( 
 		-45deg,
 		#{darken($b-gray-2, 2%)},
 		#{darken($b-gray-2, 2%)} 10px, 
@@ -28,8 +28,12 @@
 	);
 
 	// Specific
+	--x-admin-section-grid-gap: 16px;
+	--x-admin-section-grid-default: repeat(2, 1fr);
+	--x-admin-content-header-bg: #{$b-gray-3};
 
 	--x-admin-font-size-base: #{$admin-ui-font-size};
+	--x-admin-font-size-sm: #{$admin-ui-font-size-sm};
 	--x-admin-content-bg: white;
 	--x-admin-content-box-bg: white;
 	--x-admin-form-width: 800px;

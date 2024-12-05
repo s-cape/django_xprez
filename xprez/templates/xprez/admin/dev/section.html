@@ -47,6 +47,7 @@
                                 <option value="md" selected>Medium</option>
                                 <option value="lg">Large</option>
                                 <option value="xl">X-Large</option>
+                                <option value="xl">Full</option>
                                 <option value="custom">Custom</option>
                             </select>
                         </span>
@@ -94,12 +95,10 @@
             </div>
         </div>
 
-        <div class="xprez-section__content">
-
-        </div>
+        {% include "./section_grid.html" %}
 
         <div class="xprez-section__footer">
-            <span class="js-add-another xprez-btn xprez-btn-transparent" data-popover-target="id2-text-settings">
+            <span class="js-add-another xprez-btn xprez-btn-transparent">
                 <i class="xprez-icon-plus_square_20"></i>Add content
             </span>
         </div>
@@ -116,6 +115,7 @@
             {% include "./text_option_group.html" %}
         </div>
     </div>
+
     
 
 </div>
@@ -200,7 +200,7 @@
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
         popoverManager.init();
-        popoverManager.openPopover('id2-text-settings'); // dev show popover on page load
+        // popoverManager.openPopover('id2-text-settings'); // dev show popover on page load
     });
 
 </script>

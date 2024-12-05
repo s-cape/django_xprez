@@ -1,0 +1,32 @@
+.xprez-content {
+    border-radius: var(--x-admin-border-radius-md);
+    overflow: hidden;
+
+    &__header {
+        padding: var(--x-admin-padding-md) var(--x-admin-padding-lg);
+        background-color: var(--x-admin-content-header-bg);
+        display: flex;
+        align-items: center;
+        gap: var(--x-admin-padding-md);
+    }
+
+    &__name {
+        font-size: var(--x-admin-font-size-sm);
+        font-weight: 500;
+        display: inline-flex;
+        gap: var(--x-admin-padding-sm);
+    }
+
+    &__actions {
+        display: inline-flex;
+
+        &--right {
+            margin-left: auto;
+        }
+    }
+
+    &__body {
+        padding: var(--x-admin-padding-lg);
+        background-color: var(--x-admin-content-bg);
+    }
+}

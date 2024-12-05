@@ -25,7 +25,9 @@
 @import "app/messaging";
 @import "app/submenu";
 @import "app/top_menu";
-@import "app/section";
+@import "app/section/section";
+@import "app/section/section_grid";
+@import "app/section/section_content";
 
 @import "comp/button";
 @import "comp/popover";
