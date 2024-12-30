@@ -15,6 +15,7 @@
 	--x-admin-padding-sm: 4px;
 	--x-admin-padding-md: 8px;
 	--x-admin-padding-lg: 16px;
+	--x-admin-padding-xl: 24px;
 
 	--x-admin-box-shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
 
@@ -54,12 +55,18 @@
 
 	--x-admin-marker-checked-bg: #{$b-pink};
 	--x-admin-marker-checked-color: #FFF; 
+	--x-admin-marker-checked-text-bg: #EEDDEF; 
+	--x-admin-marker-checked-hover-text-bg: #{darken(#EEDDEF, 3%)}; 
 
 	--x-admin-option-group-title-font-size: 14px;
 	--x-admin-option-group-gap: 4px;
 	--x-admin-option-group-panel-bg: #{$b-gray-3};
 
 	--x-admin-option-button-color: #{$b-gray-7}; 
+	--x-admin-option-button-bg: transparent;
+	--x-admin-option-button-hover-bg: #{$b-gray-4};
+	--x-admin-option-button-active-bg: #{$b-gray-7};
+
 	--x-admin-icon-button-size: 32px;
 	--x-admin-icon-button-icon-size: 16px;
 

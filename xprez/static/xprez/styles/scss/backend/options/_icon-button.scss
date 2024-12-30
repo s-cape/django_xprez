@@ -4,6 +4,7 @@
 	text-align: center;
 	cursor: pointer;
 	color: var(--x-admin-option-button-color);
+	background: var(--x-admin-option-button-bg);
 	display: inline-block;
 	vertical-align: middle;
 	border-radius: 4px;
@@ -13,12 +14,12 @@
 	justify-content: center;
 
 	&:hover {
-		background: $b-gray-4;
+		background: var(--x-admin-option-button-hover-bg);
 	}
 
 	&.active {
 		color: white;
-		background: $b-gray-7;
+		background: var(--x-admin-option-button-active-bg);
 	}
 
 	i {

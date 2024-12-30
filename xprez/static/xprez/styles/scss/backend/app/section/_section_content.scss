@@ -2,8 +2,20 @@
     border-radius: var(--x-admin-border-radius-md);
     overflow: hidden;
 
+    &[data-mode="edit"],
+    &[data-mode="select"] {
+        --x-toggle-display: inline-flex;
+        --x-icon-display: none;
+    }
+
+    &[data-mode="edit"] {
+        --x-admin-content-header-bg: var(--x-admin-marker-checked-text-bg);
+        --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
+        --x-admin-option-button-hover-bg: var(--x-admin-marker-checked-hover-text-bg);
+    }
+
     &__header {
-        padding: var(--x-admin-padding-md) var(--x-admin-padding-lg);
+        padding: var(--x-admin-padding-sm) var(--x-admin-padding-md);
         background-color: var(--x-admin-content-header-bg);
         display: flex;
         align-items: center;
@@ -11,10 +23,26 @@
     }
 
     &__name {
+        --x-admin-option-icon-size: 28px;
+        --x-admin-checkbox-checked-color:  var(--x-admin-marker-checked-bg);
+
         font-size: var(--x-admin-font-size-sm);
         font-weight: 500;
         display: inline-flex;
-        gap: var(--x-admin-padding-sm);
+        align-items: center;
+        gap: 4px;
+
+        &-icon {
+            height: var(--x-admin-option-height);
+            width: var(--x-admin-option-height);
+            display: var(--x-icon-display, inline-flex);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .xprez-option {
+            display: var(--x-toggle-display, none);
+        }
     }
 
     &__actions {

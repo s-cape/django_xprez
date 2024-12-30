@@ -1,7 +1,16 @@
-<div class="xprez-content">
+<div class="xprez-content" data-mode="{{ mode }}">
     <div class="xprez-content__header">
         <div class="xprez-content__name">
-            {% include "xprez/admin/icons/contents/text.html" %}
+            <span class="xprez-content__name-icon">
+                {% include "xprez/admin/icons/contents/text.html" %}
+            </span>
+            <div class="xprez-option" data-active="true">
+                <label >
+                    <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
+                    <i class="xprez-icon-check_circle_small x-variant-checked"></i>
+                </label>
+                <input type="checkbox" {{ checked_state }}>
+            </div>
             <span class="xprez-option-group__title-text">Text</span>
         </div>
 

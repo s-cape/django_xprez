@@ -1,5 +1,6 @@
 <div class="xprez-section-grid">
-    {% include "./content.html" %}
-    {% include "./content.html" %}
-    {% include "./content.html" %}
+    {% include "./content.html"  %}
+    {% include "./content.html" with mode="select" checked_state="checked" %}
+    {% include "./content.html" with mode="edit" checked_state="checked" %}
+    {% include "./content.html" with mode="select" checked_state="" %}
 </div>

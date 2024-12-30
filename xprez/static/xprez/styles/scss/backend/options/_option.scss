@@ -144,7 +144,7 @@
 		}
 
 		&:hover {
-			background-color: $b-gray-4
+			background-color: var(--x-admin-option-hover-bg, $b-gray-4);
 		}
 
 		label {

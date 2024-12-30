@@ -8,6 +8,8 @@
         position: relative;
 
         > * {
+            --x-admin-option-button-bg: var(--x-admin-bg, $admin-bg);
+
             z-index: 2;
             background: var(--x-admin-bg, $admin-bg);
         }

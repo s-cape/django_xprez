@@ -2,5 +2,5 @@
     display: grid;
     grid-template-columns: var(--x-admin-section-grid, var(--x-admin-section-grid-default));
     gap: var(--x-admin-section-grid-gap);
-    padding: var(--x-admin-padding-lg);
+    padding: var(--x-admin-padding-xl) var(--x-admin-padding-lg);
 }
