@@ -239,4 +239,13 @@
 		--x-admin-checkbox-checked-color: var(--x-admin-marker-checked-color);
 
     }
+
+	&--transparent {
+		background: transparent;
+		box-shadow: none;
+
+		select, input {
+			background: transparent !important;
+		}
+	}
 }

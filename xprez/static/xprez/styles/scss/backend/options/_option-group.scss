@@ -65,6 +65,16 @@
                 font-size: var(--x-admin-option-icon-size);
             }
         }
+
+        &__footer {
+            margin-top: var(--x-admin-padding-xl);
+            padding-top: var(--x-admin-padding-md);
+            padding-bottom: var(--x-admin-padding-md);
+            border-top: 1px solid $b-gray-6;
+            position: sticky;
+            bottom:  calc(var(--x-admin-padding-lg) * -1);
+            background-color: var(--x-admin-popover-bg);
+        }
     }
 
     &-row {
