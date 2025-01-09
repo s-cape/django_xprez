@@ -13,10 +13,6 @@
 		color: $txt-gray;
 	}
 
-	svg {
-		margin-right: 6px;
-	}
-
 	*[class*="xprez-icon-"] {
 		font-size: 16px;
 	}
@@ -24,6 +20,25 @@
 	// Modifications
 	&--sm {
 		font-size: 12px; 
+	}
+
+	&__inner {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	&__success {
+		display: none;
+	}
+
+	&.success {
+		.xprez-btn__success {
+			display: flex;
+		}
+		.xprez-btn__default {
+			display: none;
+		}
 	}
 }
 
@@ -39,6 +54,6 @@
 	background: transparent;
 
 	&:hover {
-		background: $b-gray-2;
+		background: $b-gray-3;
 	}
 }

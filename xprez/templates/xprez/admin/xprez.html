@@ -1,7 +1,61 @@
 {% load i18n %}
 {% load xprez_admin %}
 
-{% include "./dev/section.html" %}
+{# NEW #}
+
+    <div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
+
+        <div class="xprez-top">
+            <div class="xprez-option" data-active="true" data-text-label="true">
+                <label for="view">
+                    <i class="xprez-icon-view"></i>
+                    <span>View</span>
+                </label>
+                <span class="xprez-option__dropdown">
+                    <select class="xprez-option__select" id="view">
+                        <option value="sm">Default edit view</option>
+                        <option value="sm">Small devices (500px)</option>
+                        <option value="md">Tablets (768px)</option>
+                        <option value="lg">Large devices (992px)</option>
+                        <option value="xl">Desktops (1200px)</option>
+                        <option value="xxl">Extra large devices (1500px)</option>
+                    </select>
+                </span>
+            </div>
+
+            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm">
+                <i class="xprez-icon-vertical"></i>
+                Collapse all
+            </span>
+            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm {# success #}">
+                <span class="xprez-btn__inner xprez-btn__success">
+                    {% include "xprez/admin/icons/checkmark.html" %}
+                    Copied
+                </span>
+                <span class="xprez-btn__inner xprez-btn__default">
+                    <i class="xprez-icon-copy"></i>
+                    Copy all
+                </span>
+            </span>
+        </div>
+
+        {% include "./dev/section.html" %}
+
+        {% with allowed_contents=form.xprez_get_allowed_contents %}
+            {% if allowed_contents %}
+                <div class="js-xprez-add xprez-add-after">
+                    <div class="xprez-section__header --centered">
+                        <h3>Add section</h3>
+                    </div>
+
+                    {% include "./includes/add_list.html" with xprez_admin=form.xprez_admin container=form.instance %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+    </div>
+
+{# // NEW #}
 
 <div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
     <div class="xprez-top">
