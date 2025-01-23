@@ -11,6 +11,7 @@ from django.template.loader import get_template
 from django.urls import re_path
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+
 from xprez.utils import truncate_with_ellipsis
 
 from ..ck_editor import parse_text as ckeditor_parse_text

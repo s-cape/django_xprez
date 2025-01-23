@@ -3,6 +3,7 @@ from collections import OrderedDict
 
 from django.forms import Media
 from django.utils.module_loading import autodiscover_modules
+
 from xprez.conf import settings
 
 

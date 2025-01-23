@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("xprez", "0022_content_alternate_color_content_background_color_and_more"),
     ]

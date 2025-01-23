@@ -1,7 +1,8 @@
 from django import forms
 
-from .models import CodeSnippet
 from xprez.admin_forms import BaseContentForm
+
+from .models import CodeSnippet
 
 
 class CodeSnippetForm(BaseContentForm):

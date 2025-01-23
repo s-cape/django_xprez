@@ -19,7 +19,6 @@ def noop(*args, **kwargs):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("xprez", "0010_auto_20220204_1540"),
     ]
