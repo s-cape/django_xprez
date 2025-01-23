@@ -563,29 +563,6 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
         return False
 
 
-class Grid(FormsetContent):
-    # form_class = "xprez.admin_forms.GridForm"
-    admin_template_name = "xprez/admin/contents/grid/grid.html"
-    front_template_name = "xprez/contents/grid.html"
-    # icon_template_name = "xprez/admin/icons/contents/grid.html"
-    admin_formset_item_template_name = "xprez/admin/contents/grid/item.html"
-    form_class = "xprez.admin_forms.GridForm"
-    formset_factory = "xprez.admin_forms.GridItemFormSet"
-
-    def get_formset_queryset(self):
-        return self.items.all()
-
-    def show_front(self):
-        return self.items.all().count()
-
-
-class GridItem(ContentItem):
-    content_foreign_key = "content"
-    content = models.ForeignKey(Grid, related_name="items", on_delete=models.CASCADE)
-    position = models.PositiveSmallIntegerField()
-    text = models.TextField()
-
-
 class ContentSymlink(Content):
     admin_template_name = "xprez/admin/contents/content_symlink.html"
     icon_template_name = "xprez/admin/icons/contents/content_symlink.html"
