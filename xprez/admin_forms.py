@@ -51,7 +51,7 @@ class BaseContentForm(forms.ModelForm):
                 yield self[field]
 
     class Meta:
-        options_fields = tuple()
+        options_fields = ()
         fields = "__all__"
 
 
@@ -122,8 +122,10 @@ class VideoForm(BaseContentForm):
         if "youtube" in url:
             try:
                 self.video_id = url_query.get("v")[0]
-            except (KeyError, TypeError):
-                raise forms.ValidationError(_("Error in parsing video ID from youtube"))
+            except (KeyError, TypeError) as e:
+                raise forms.ValidationError(
+                    _("Error in parsing video ID from youtube")
+                ) from e
             self.video_type = "youtube"
         elif "vimeo" in url:
             self.video_id = url.split("/")[-1]
