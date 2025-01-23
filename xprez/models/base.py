@@ -45,7 +45,7 @@ class Content(models.Model):
     def admin_template_name(self):
         return [
             "xprez/admin/contents/{}.html".format(self.identifier()),
-            "xprez/admin/contents/base.html".format(self.identifier()),
+            "xprez/admin/contents/base.html",
         ]
 
     @property
@@ -146,13 +146,11 @@ class Content(models.Model):
         if not for_page:
             for_page = self.page
 
-        initial = dict(
-            [
-                (field.name, getattr(self, field.name))
-                for field in self._meta.fields
-                if not field.primary_key
-            ]
-        )
+        initial = {
+            field.name: getattr(self, field.name)
+            for field in self._meta.fields
+            if not field.primary_key
+        }
         inst = self.__class__(**initial)
         if position is None:  # add to end
             inst.position = self._count_new_content_position(for_page)
@@ -225,11 +223,12 @@ class Content(models.Model):
 
     def render_admin(self, extra_context=None):
         context = extra_context or {}
+        xprez_admin = self.admin_form.xprez_admin
         context.update(
             {
                 "content": self,
-                "xprez_admin": self.admin_form.xprez_admin,
-                "allowed_contents": self.admin_form.xprez_admin.xprez_get_allowed_contents(
+                "xprez_admin": xprez_admin,
+                "allowed_contents": xprez_admin.xprez_get_allowed_contents(
                     container=self.page
                 ),
             }
@@ -238,7 +237,8 @@ class Content(models.Model):
 
     def show_front(self):
         """
-        We may want to display content on frontend only when certain its attributes are filled
+        We may want to display content on frontend only
+        when certain its attributes are filled
         """
         return True
 
@@ -381,13 +381,11 @@ class ContentItem(models.Model):
     def copy(self, for_content, save=True):
         if not for_content:
             for_content = getattr(self, self.content_foreign_key)
-        initial = dict(
-            [
-                (field.name, getattr(self, field.name))
-                for field in self._meta.fields
-                if not field.primary_key
-            ]
-        )
+        initial = {
+            field.name: getattr(self, field.name)
+            for field in self._meta.fields
+            if not field.primary_key
+        }
         inst = self.__class__(**initial)
         setattr(inst, self.content_foreign_key, for_content)
         if save:
