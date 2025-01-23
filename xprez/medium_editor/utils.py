@@ -25,7 +25,8 @@ def parse_text(text_source):
             url = tag_img.get("src")
 
             request = urllib.request.Request(
-                url, headers={"User-agent": ""}  # needed for cloudflare
+                url,
+                headers={"User-agent": ""},  # needed for cloudflare
             )
 
             file = io.BytesIO(urllib.request.urlopen(request).read())

@@ -19,7 +19,8 @@ def _replace_wrapper_with_templatetag(wrapper, img, request):
         src = request.build_absolute_uri(src)
 
     request = urllib.request.Request(
-        src, headers={"User-agent": ""}  # needed for cloudflare
+        src,
+        headers={"User-agent": ""},  # needed for cloudflare
     )
 
     try:

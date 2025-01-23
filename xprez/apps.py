@@ -1,4 +1,5 @@
 from django.apps import AppConfig, apps
+
 from xprez.conf import settings
 
 

@@ -1,13 +1,14 @@
-from xprez.models import Content
-from xprez import contents_manager
 from django.db import models
 from pygments import highlight
-from pygments.lexers import PythonLexer
-from pygments.lexers.php import PhpLexer
-from pygments.lexers.javascript import JavascriptLexer
 from pygments.formatters import HtmlFormatter
-from pygments.lexers.templates import DjangoLexer
+from pygments.lexers import PythonLexer
 from pygments.lexers.html import DtdLexer
+from pygments.lexers.javascript import JavascriptLexer
+from pygments.lexers.php import PhpLexer
+from pygments.lexers.templates import DjangoLexer
+
+from xprez import contents_manager
+from xprez.models import Content
 
 
 class CodeSnippet(Content):

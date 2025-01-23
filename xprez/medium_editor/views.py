@@ -7,6 +7,7 @@ from os import makedirs, path
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
 from xprez.permissions import xprez_staff_member_required
 from xprez.utils import random_string
 
