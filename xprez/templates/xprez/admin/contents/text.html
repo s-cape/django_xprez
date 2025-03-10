@@ -1,0 +1,9 @@
+{% extends 'xprez/admin/contents/text_base.html' %}
+
+{% block actions %}
+    <span class="xprez-icon-btn" title="Image">
+        <i class="xprez-icon-image"></i>
+        {% comment %} {{ content.admin_form.image }} {% endcomment %}
+    </span>
+    {{ block.super }}
+{% endblock %}

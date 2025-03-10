@@ -1,3 +1,4 @@
+XPREZ_SECTION_MODEL_CLASS = "xprez.Section"
 XPREZ_CONTAINER_MODEL_CLASS = "xprez.ContentsContainer"
 XPREZ_CK_EDITOR_CONTENT_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
 XPREZ_GRID_BOXES_CONTENT_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
@@ -6,20 +7,31 @@ XPREZ_TEXT_IMAGE_CONTENT_WIDGET = (
 )
 
 XPREZ_CONTENTS_AUTOREGISTER = True
+# XPREZ_CONTENTS_AUTOREGISTER_BUILTINS = [
+#     # 'mediumeditor',  # deprecated
+#     "textcontent",
+#     "ckeditor",
+#     "gridboxes",
+#     "quotecontent",
+#     "gallery",
+#     "downloadcontent",
+#     "video",
+#     "numberscontent",
+#     # "featureboxes",  # deprecated
+#     "codeinput",
+#     "codetemplate",
+#     "textimage",
+#     # "anchor",  # not yet implemented, disabled by default
+# ]
 XPREZ_CONTENTS_AUTOREGISTER_BUILTINS = [
-    # 'mediumeditor',  # deprecated
-    "ckeditor",
-    "gridboxes",
-    "quotecontent",
-    "gallery",
-    "downloadcontent",
-    "video",
-    "numberscontent",
-    # "featureboxes",  # deprecated
-    "codeinput",
-    "codetemplate",
-    "textimage",
-    # "anchor",  # not yet implemented, disabled by default
+    "xprez.TextContent",
+    "xprez.QuoteContent",
+    "xprez.Gallery",
+    "xprez.DownloadContent",
+    "xprez.Video",
+    "xprez.NumbersContent",
+    "xprez.CodeInput",
+    "xprez.CodeTemplate",
 ]
 XPREZ_CONTENTS_AUTOREGISTER_CUSTOM = "__all__"
 
@@ -40,3 +52,13 @@ XPREZ_JQUERY_INIT_MEDIA_JS = (
 XPREZ_STAFF_MEMBER_REQUIRED = (
     "django.contrib.admin.views.decorators.staff_member_required"
 )
+
+XPREZ_BREAKPOINTS = {
+    0: {"infix": "", "name": "Basic style (&0px)"},
+    1: {"infix": "sm", "name": "Small devices (&gt; 500px)"},
+    2: {"infix": "md", "name": "Tablets (&gt; 768px)"},
+    3: {"infix": "lg", "name": "Large devices (&gt; 992px)"},
+    4: {"infix": "xl", "name": "Desktops (&gt; 1200px)"},
+    5: {"infix": "xxl", "name": "Extra large devices (&gt; 1500px)"},
+}
+XPREZ_DEFAULT_BREAKPOINT = 0

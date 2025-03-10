@@ -16,7 +16,7 @@ class ContentTypeManager:
 
     def get_urls(self):
         urls = []
-        for key, content in self._registry.items():
+        for content in self._registry.values():
             urls += content.get_urls()
         return urls
 
@@ -32,12 +32,13 @@ class ContentTypeManager:
                     media_class_name,
                 ),
                 DeprecationWarning,
+                stacklevel=2,
             )
             css = {"all": css}
         return Media(css=css, js=js)
 
-    def _collect_media(self, media_class_name, initial=Media(), content_types=None):
-        media = initial
+    def _collect_media(self, media_class_name, initial=None, content_types=None):
+        media = initial or Media()
         contents = self._get_allowed_contents(allowed_contents=content_types)
         for content in contents:
             media += ContentTypeManager._get_class_media(content, media_class_name)
@@ -51,7 +52,7 @@ class ContentTypeManager:
                 + (
                     "xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js",
                     "xprez/admin/libs/jquery_ui/jquery-ui.min.js",
-                    "xprez/admin/js/contents.js",
+                    "xprez/admin/js/xprez.js",
                 ),
                 css={"all": ("xprez/styles/xprez-backend.css",)},
             ),
@@ -64,10 +65,10 @@ class ContentTypeManager:
         self._registry = OrderedDict()
 
     def register(self, content_class):
-        self._registry[content_class.identifier()] = content_class
+        self._registry[content_class.class_content_type()] = content_class
 
     def unregister(self, content_class):
-        del self._registry[content_class.identifier()]
+        del self._registry[content_class.class_content_type()]
 
     def _get_allowed_contents(
         self,

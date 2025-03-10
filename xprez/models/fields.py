@@ -9,7 +9,7 @@ class TemplatePathField(models.FilePathField):
     def __init__(self, template_dir="", prefix="", **kwargs):
         self.template_dir = template_dir
         self.prefix = prefix
-        super(TemplatePathField, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def formfield(self, **kwargs):
         absolute_path = os.path.join(self.template_dir, self.prefix)
@@ -19,4 +19,4 @@ class TemplatePathField(models.FilePathField):
             "form_class": RelativeFilePathFieldForm,
         }
         defaults.update(kwargs)
-        return super(TemplatePathField, self).formfield(**defaults)
+        return super().formfield(**defaults)

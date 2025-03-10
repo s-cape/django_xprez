@@ -54,4 +54,4 @@ class MediumEditorWidget(forms.widgets.Textarea):
             )
             default_attrs["data-file-delete"] = reverse_lazy("medium_file_delete")
 
-        super(MediumEditorWidget, self).__init__(default_attrs)
+        super().__init__(default_attrs)

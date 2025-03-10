@@ -9,7 +9,8 @@ from django.utils.translation import gettext_lazy as _
 
 from .conf import settings
 from .medium_editor.widgets import MediumEditorWidget
-from .models import (
+from .models.base import Section
+from .models.contents import (
     Attachment,
     CkEditor,
     CodeInput,
@@ -24,22 +25,32 @@ from .models import (
     Photo,
     Quote,
     QuoteContent,
+    TextContent,
     TextImage,
     Video,
 )
 from .utils import import_class
 
 
+class SectionForm(forms.ModelForm):
+    # confirm_save = forms.BooleanField(initial=True)
+
+    class Meta:
+        model = Section
+        fields = "__all__"
+
+
 class BaseContentForm(forms.ModelForm):
     base_content_fields = (
         "position",
-        "visible",
-        "css_class",
-        "margin_bottom",
-        "padding_top",
-        "padding_bottom",
-        "alternate_color",
-        "background_color",
+        "section",
+        # "visible",
+        # "css_class",
+        # "margin_bottom",
+        # "padding_top",
+        # "padding_bottom",
+        # "alternate_color",
+        # "background_color",
     )
 
     def main_fields(self):
@@ -53,6 +64,23 @@ class BaseContentForm(forms.ModelForm):
     class Meta:
         options_fields = ()
         fields = "__all__"
+
+
+class TextContentBaseForm(BaseContentForm):
+    class Meta:
+        model = CkEditor
+        fields = ("text",) + BaseContentForm.base_content_fields
+        widgets = {
+            "text": import_class(settings.XPREZ_CK_EDITOR_CONTENT_WIDGET)(
+                file_upload_dir="ck_editor_uploads"
+            )
+        }
+
+
+class TextContentForm(TextContentBaseForm):
+    class Meta(TextContentBaseForm.Meta):
+        model = TextContent
+        fields = TextContentBaseForm.Meta.fields + ("image",)
 
 
 class GalleryForm(BaseContentForm):

@@ -37,6 +37,8 @@ class XprezConfig(AppConfig):
             for content in contents:
                 contents_manager.register(content)
         else:
-            contents_dict = {content.identifier(): content for content in contents}
-            for identifier in config:
-                contents_manager.register(contents_dict[identifier])
+            contents_dict = {
+                content.class_content_type(): content for content in contents
+            }
+            for content_type in config:
+                contents_manager.register(contents_dict[content_type])

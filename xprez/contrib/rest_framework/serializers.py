@@ -7,7 +7,7 @@ class ContentSerializer(serializers.ModelSerializer):
     html = serializers.SerializerMethodField()
 
     def get_html(self, obj):
-        return obj.polymorph().render_front()
+        return obj.polymorph().render_front(self.context)
 
     class Meta:
         model = Content

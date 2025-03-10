@@ -42,35 +42,6 @@ PHOTOSWIPE_CSS = (
 )
 
 
-class MediumEditor(Content):
-    form_class = "xprez.admin_forms.MediumEditorForm"
-    admin_template_name = "xprez/admin/contents/medium_editor.html"
-    front_template_name = "xprez/contents/medium_editor.html"
-    icon_template_name = "xprez/admin/icons/contents/medium_editor.html"
-
-    verbose_name = "Text Content"
-
-    text = models.TextField()
-    # css_class = models.CharField(max_length=100, null=True, blank=True)
-    box = models.BooleanField(default=False)
-    width = models.CharField(
-        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
-    )
-
-    class AdminMedia:
-        js = MediumEditorWidget.Media.js
-        css = MediumEditorWidget.Media.css["all"]
-
-    def show_front(self):
-        return striptags(self.text) != ""
-
-    def get_parsed_text(self):
-        return medium_editor_parse_text(self.text)
-
-    def render_text(self):
-        return medium_editor_render_text_parsed(self.get_parsed_text())
-
-
 class CkEditorFileUploadMixin:
     @classmethod
     @method_decorator(xprez_staff_member_required)
@@ -106,6 +77,66 @@ class CkEditorFileUploadMixin:
         ]
 
 
+class TextContentBase(CkEditorFileUploadMixin, Content):
+    form_class = "xprez.admin_forms.TextContentBaseForm"
+    admin_template_name = "xprez/admin/contents/text_base.html"
+    front_template_name = "xprez/contents/text_base.html"
+    icon_template_name = "xprez/admin/icons/contents/text_base.html"
+
+    text = models.TextField(blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class TextContent(TextContentBase):
+    form_class = "xprez.admin_forms.TextContentForm"
+    admin_template_name = "xprez/admin/contents/text.html"
+    image = models.ImageField(upload_to="images", null=True, blank=True)
+
+    class AdminMedia:
+        js = CkEditorWidget.Media.js
+        css = {"css": CkEditorWidget.Media.css["all"]}
+
+    class Meta:
+        verbose_name = "Text"
+
+    def render_front(self, context):
+        context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
+            ckeditor_parse_text.parse_text(self.text, context["request"])
+        )
+        return super().render_front(context)
+
+
+class MediumEditor(Content):
+    form_class = "xprez.admin_forms.MediumEditorForm"
+    admin_template_name = "xprez/admin/contents/medium_editor.html"
+    front_template_name = "xprez/contents/medium_editor.html"
+    icon_template_name = "xprez/admin/icons/contents/medium_editor.html"
+
+    verbose_name = "Text"
+
+    text = models.TextField()
+    # css_class = models.CharField(max_length=100, null=True, blank=True)
+    box = models.BooleanField(default=False)
+    width = models.CharField(
+        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
+    )
+
+    class AdminMedia:
+        js = MediumEditorWidget.Media.js
+        css = MediumEditorWidget.Media.css["all"]
+
+    def show_front(self):
+        return striptags(self.text) != ""
+
+    def get_parsed_text(self):
+        return medium_editor_parse_text(self.text)
+
+    def render_text(self):
+        return medium_editor_render_text_parsed(self.get_parsed_text())
+
+
 class CkEditor(CkEditorFileUploadMixin, Content):
     form_class = "xprez.admin_forms.CkEditorForm"
     admin_template_name = "xprez/admin/contents/ck_editor.html"
@@ -121,21 +152,17 @@ class CkEditor(CkEditorFileUploadMixin, Content):
     content_centered = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "Text Content"
+        verbose_name = "Text"
 
     class AdminMedia:
-        js = CkEditorWidget.Media.js + PHOTOSWIPE_JS
-        css = {"all": CkEditorWidget.Media.css["all"] + PHOTOSWIPE_CSS}
+        js = CkEditorWidget.Media.js  # + PHOTOSWIPE_JS
+        css = {"all": CkEditorWidget.Media.css["all"]}  # + PHOTOSWIPE_CSS}
 
-    def show_front(self):
-        # TODO: not working for single image inserted in editor
-        return striptags(self.text) != ""
-
-    def render_front(self, extra_context={}):
-        extra_context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
-            ckeditor_parse_text.parse_text(self.text, extra_context["request"])
+    def render_front(self, context):
+        context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
+            ckeditor_parse_text.parse_text(self.text, context["request"])
         )
-        return super().render_front(extra_context=extra_context)
+        return super().render_front(context)
 
     def clipboard_text_preview(self):
         return truncate_with_ellipsis(striptags(self.text), CLIPBOARD_TEXT_MAX_LENGTH)
@@ -213,7 +240,7 @@ class Gallery(AjaxUploadFormsetContent):
         return self.photos.all()
 
     def save_admin_form(self, request):
-        super(Gallery, self).save_admin_form(request)
+        super().save_admin_form(request)
         for index, photo in enumerate(self.photos.all()):
             photo.position = index
             photo.save()
@@ -368,12 +395,8 @@ class CodeTemplate(Content):
         blank=True,
     )
 
-    def show_front(self):
-        return self.template_name
-
-    def render_front(self, extra_context=None):
-        if self.show_front():
-            context = extra_context or {}
+    def render_front(self, context):
+        if self.template_name:
             context["content"] = self
             try:
                 return get_template(self.template_name).render(context=context)
@@ -457,7 +480,6 @@ class TextImageBase(Content):
     image_alignment = models.CharField(
         choices=IMAGE_ALIGNMENT_CHOICES, default=ALIGNMENT_LEFT, max_length=15
     )
-    # css_class = models.CharField(max_length=100, null=True, blank=True)
 
     class AdminMedia:
         js = CkEditorWidget.Media.js
@@ -467,23 +489,11 @@ class TextImageBase(Content):
         verbose_name = "Image + Text"
         abstract = True
 
-    def show_front(self):
-        return True
-
-    def render_front(self, extra_context={}):
-        extra_context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
-            ckeditor_parse_text.parse_text(self.text, extra_context["request"])
+    def render_front(self, context):
+        context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
+            ckeditor_parse_text.parse_text(self.text, context["request"])
         )
-        return super().render_front(extra_context=extra_context)
-
-    # def show_front(self):
-    #     return striptags(self.text) != ''
-
-    # def get_parsed_text(self):
-    #     return medium_editor_parse_text(self.text)
-
-    # def render_text(self):
-    #     return medium_editor_render_text_parsed(self.get_parsed_text())
+        return super().render_front(context)
 
 
 class TextImage(TextImageBase):
@@ -540,27 +550,21 @@ class GridBoxes(CkEditorFileUploadMixin, Content):
     border = models.BooleanField(default=True)
     boxes = JSONField(null=True)
 
-    def render_front(self, extra_context={}):
+    def render_front(self, context):
         boxes = []
         for box_content in self.boxes or []:
             if striptags(box_content != ""):
-                # boxes.append(medium_editor_render_text_parsed(medium_editor_parse_text(box_content)))
                 boxes.append(
                     ckeditor_parse_text.render_text_parsed(
-                        ckeditor_parse_text.parse_text(
-                            box_content, extra_context["request"]
-                        )
+                        ckeditor_parse_text.parse_text(box_content, context["request"])
                     )
                 )
 
-        extra_context["rendered_boxes"] = boxes
-        return super().render_front(extra_context=extra_context)
-
-    def show_front(self):
-        for box_content in self.boxes or []:
-            if striptags(box_content != ""):
-                return True
-        return False
+        if boxes:
+            context["rendered_boxes"] = boxes
+            return super().render_front(context)
+        else:
+            return ""
 
 
 class ContentSymlink(Content):
@@ -580,8 +584,5 @@ class ContentSymlink(Content):
     def render_front(self, *args, **kwargs):
         if self.symlink:
             return self.symlink.polymorph().render_front(*args, **kwargs)
-
-    def show_front(self):
-        return (
-            self.show_front and self.symlink and self.symlink.polymorph().show_front()
-        )
+        else:
+            return ""

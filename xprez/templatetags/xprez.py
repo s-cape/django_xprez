@@ -2,13 +2,11 @@
 
 from __future__ import unicode_literals
 
-import warnings
-
 from django import template
 from django.forms import Media
 
 from .. import contents_manager, settings
-from ..utils import build_absolute_uri as build_abs_uri
+from ..utils import build_absolute_uri as _build_absolute_uri
 
 register = template.Library()
 
@@ -40,7 +38,7 @@ def xprez_front_media(contents=None):
     if contents is None:
         content_types = None
     else:
-        content_types = set([content.content_type for content in contents])
+        content_types = {content.content_type for content in contents}
 
     return str(
         PrefixableMedia.from_media(
@@ -50,18 +48,18 @@ def xprez_front_media(contents=None):
 
 
 @register.simple_tag(takes_context=True)
+def xprez_container_render_front(context, container):
+    return container.render_front(context.flatten())
+
+
+@register.simple_tag(takes_context=True)
+def xprez_section_render_front(context, section):
+    return section.render_front(context.flatten())
+
+
+@register.simple_tag(takes_context=True)
 def xprez_content_render_front(context, content):
-    polymorph = content.polymorph()
-    try:
-        return polymorph.render_front(extra_context=context.flatten())
-    except TypeError:
-        warnings.warn(
-            "Deprecation warning: {} render_front() should accept context attribute.".format(
-                type(polymorph)
-            ),
-            DeprecationWarning,
-        )
-        return polymorph.render_front()
+    return content.polymorph().render_front(context.flatten())
 
 
 @register.inclusion_tag("xprez/includes/medium_image.html", takes_context=True)
@@ -126,7 +124,7 @@ def _editor_content_image(
     lightbox = threshold_size["width"] < width or threshold_size["height"] < height
 
     image_context = {
-        "url": build_abs_uri(url),
+        "url": _build_absolute_uri(url),
         "align": align,
         "width": width,
         "height": height,
@@ -143,4 +141,4 @@ def _editor_content_image(
 
 @register.filter()
 def build_absolute_uri(url):
-    return build_abs_uri(url)
+    return _build_absolute_uri(url)

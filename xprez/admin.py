@@ -11,27 +11,39 @@ from . import contents_manager, models, settings
 
 
 class XprezModelFormMixin(object):
-    def __init__(self, data=None, files=None, instance=None, *args, **kwargs):
-        super().__init__(data=data, files=files, instance=instance, *args, **kwargs)
-        self.xprez_contents = []
-        self.xprez_contents_all_valid = None
+    def __init__(self, data=None, files=None, instance=None, **kwargs):
+        super().__init__(data=data, files=files, instance=instance, **kwargs)
+        self.xprez_sections = []
+        self.xprez_sections_all_valid = None
         if instance:
-            for content in instance.contents.all():
-                content = content.polymorph()
-                content.build_admin_form(self.xprez_admin, data, files)
-                self.xprez_contents.append(content)
+            sections = instance.sections.all()
+            if data is None:
+                sections = sections.filter(saved=True)
+            else:
+                ids = [int(id) for id in data.getlist("section-id")]
+                sections = sections.filter(pk__in=ids)
+
+            for section in sections:
+                section.build_admin_form(self.xprez_admin, data, files)
+                self.xprez_sections.append(section)
 
     def is_valid(self):
-        self.xprez_contents_all_valid = True
-        for content in self.xprez_contents:
-            if not content.is_admin_form_valid():
-                self.xprez_contents_all_valid = False
+        self.xprez_sections_all_valid = True
+        for section in self.xprez_sections:
+            if not section.is_admin_form_valid():
+                self.xprez_sections_all_valid = False
+        return super().is_valid() and self.xprez_sections_all_valid
 
-        return super().is_valid() and self.xprez_contents_all_valid
+    def save_xprez_sections(self, request):
+        for section in self.xprez_sections:
+            section.saved = True
+            section.save_admin_form(request)
 
-    def save_xprez_contents(self, request):
-        for content in self.xprez_contents:
-            content.save_admin_form(request)
+        # TODO: think about this. What is the best way to delete old sections/contents?
+        # for section in self.instance.sections.exclude(
+        #     pk__in=[s.id for s in self.xprez_sections]
+        # ).filter(saved=False, date_created__lt=timezone.now() - timedelta(days=5)):
+        #     section.delete()
 
     def is_multipart(self):
         return True
@@ -90,11 +102,11 @@ class XprezAdminMixin(object):
             name = "{}:{}".format(self.xprez_url_namespace, name)
         return name
 
-    def xprez_add_content_url_name(self):
-        return self.xprez_admin_url_name("add_content", include_namespace=True)
+    def xprez_add_url_name(self):
+        return self.xprez_admin_url_name("add", include_namespace=True)
 
-    def xprez_add_content_before_url_name(self):
-        return self.xprez_admin_url_name("add_content_before", include_namespace=True)
+    # def xprez_add_content_before_url_name(self):
+    #     return self.xprez_admin_url_name("add_content_before", include_namespace=True)
 
     def xprez_delete_content_url_name(self):
         return self.xprez_admin_url_name("delete_content", include_namespace=True)
@@ -115,11 +127,14 @@ class XprezAdminMixin(object):
         return self.xprez_admin_url_name("clipboard_list", include_namespace=True)
 
     POSITION_CONTENT_BEFORE = "content_before"
+    POSITION_SECTION_BEFORE = "section_before"
+    POSITION_SECTION_END = "section_end"
     POSITION_CONTAINER_END = "container_end"
 
     CLIPBOARD_SESSION_KEY = "xprez_clipboard"
     CLIPBOARD_MAX_LENGTH = 10
     CLIPBOARD_CONTAINER_KEY = "container"
+    CLIPBOARD_SECTION_KEY = "section"
     CLIPBOARD_CONTENT_KEY = "content"
 
     CLIPBOARD_PASTE_ACTION = "paste"
@@ -128,15 +143,34 @@ class XprezAdminMixin(object):
     def xprez_admin_urls(self):
         urls = [
             path(
-                "xprez-add-content/<int:page_pk>/<str:content_type>/",
-                self.xprez_admin_view(self.xprez_add_content_view),
-                name=self.xprez_admin_url_name("add_content"),
+                "xprez-add/<str:content_type>/<int:container_pk>/<int:section_pk>/",
+                self.xprez_admin_view(self.xprez_add_view),
+                name=self.xprez_admin_url_name("add"),
             ),
             path(
-                "xprez-add-content-before/<int:before_content_pk>/<str:content_type>/",
-                self.xprez_admin_view(self.xprez_add_content_before_view),
-                name=self.xprez_admin_url_name("add_content_before"),
+                "xprez-add/<str:content_type>/<int:container_pk>/",
+                self.xprez_admin_view(self.xprez_add_view),
+                name=self.xprez_admin_url_name("add"),
             ),
+            # path(
+            #     "xprez-add-content/<str:content_type>/<int:container_pk>/",
+            #     self.xprez_admin_view(self.xprez_add_content_before_view),
+            #     name=self.xprez_admin_url_name("add_content"),
+            # ),
+            # re_path(
+            #     r"^xprez-add-content/(?P<position>{}|{}|{})/(?P<pk>[0-9]+)/(?P<content_type>[A-Za-z_]+)/$".format(
+            #         self.POSITION_SECTION_BEFORE,
+            #         self.POSITION_SECTION_END,
+            #         self.POSITION_CONTAINER_END,
+            #     ),
+            #     self.xprez_admin_view(self.xprez_add_content_view),
+            #     name=self.xprez_admin_url_name("add_content"),
+            # ),
+            # path(
+            #     "xprez-add-content-before/<int:before_content_pk>/<str:content_type>/",
+            #     self.xprez_admin_view(self.xprez_add_content_before_view),
+            #     name=self.xprez_admin_url_name("add_content_before"),
+            # ),
             path(
                 "xprez-delete-content/<int:content_pk>/",
                 self.xprez_admin_view(self.xprez_delete_content_view),
@@ -155,9 +189,10 @@ class XprezAdminMixin(object):
                 name=self.xprez_admin_url_name("clipboard_copy"),
             ),
             re_path(
-                r"^xprez-clipboard-paste/(?P<key>{}|{})/(?P<pk>[0-9]+)/(?P<action>{}|{})/(?P<target_position>{}|{})/(?P<target_pk>[0-9]+)/$".format(
+                r"^xprez-clipboard-paste/(?P<key>{}|{}|{})/(?P<pk>[0-9]+)/(?P<action>{}|{})/(?P<target_position>{}|{})/(?P<target_pk>[0-9]+)/$".format(
                     self.CLIPBOARD_CONTENT_KEY,
                     self.CLIPBOARD_CONTAINER_KEY,
+                    self.CLIPBOARD_SECTION_KEY,
                     self.CLIPBOARD_PASTE_ACTION,
                     self.CLIPBOARD_SYMLINK_ACTION,
                     self.POSITION_CONTENT_BEFORE,
@@ -178,7 +213,7 @@ class XprezAdminMixin(object):
         if self.xprez_copy_supported():
             urls += [
                 path(
-                    "xprez-copy/<int:page_pk>/",
+                    "xprez-copy/<int:container_pk>/",
                     self.xprez_admin_view(self.xprez_copy_view),
                     name=self.xprez_admin_url_name("copy"),
                 ),
@@ -187,38 +222,59 @@ class XprezAdminMixin(object):
 
         return urls
 
-    def xprez_add_content_view(self, request, page_pk, content_type):
+    def xprez_add_view(self, request, content_type, container_pk, section_pk=None):
         content_class = contents_manager.get(content_type)
+        container = self._get_container_instance(request, container_pk)
+        if section_pk is None:
+            section = container.sections.create()
+            content = content_class.objects.create(section=section)
+            section.build_admin_form(self)
+            return HttpResponse(section.render_admin({"request": request}))
+        else:
+            section = container.sections.get(pk=section_pk)
+            content = content_class.create_for_section(section)
+            content.build_admin_form(self)
+            return HttpResponse(content.render_admin({"request": request}))
 
-        container = self._get_container_instance(request, page_pk)
-        content = content_class.create_for_page(container)
-        content.build_admin_form(self)
-        return JsonResponse(
-            {
-                "template": content.render_admin({"request": request}),
-                "content_pk": content.pk,
-            }
-        )
+        # container = self._get_container_instance(request, pk)
+        # content = content_class.create_for_container(container)
+        # content.build_admin_form(self)
+        # return JsonResponse(
+        #     {
+        #         "template": content.render_admin({"request": request}),
+        #         "content_pk": content.pk,
+        #     }
+        # )
 
-    def xprez_add_content_before_view(self, request, before_content_pk, content_type):
-        content_class = contents_manager.get(content_type)
+    #     container = self._get_container_instance(request, container_pk)
+    #     content = content_class.create_for_container(container)
+    #     content.build_admin_form(self)
+    #     return JsonResponse(
+    #         {
+    #             "template": content.render_admin({"request": request}),
+    #             "content_pk": content.pk,
+    #         }
+    #     )
 
-        before_content = models.Content.objects.get(pk=before_content_pk)
-        container = before_content.page
-        content = content_class.create_for_page(
-            container, position=before_content.position
-        )
-        content.build_admin_form(self)
+    # def xprez_add_content_before_view(self, request, before_content_pk, content_type):
+    #     content_class = contents_manager.get(content_type)
 
-        return JsonResponse(
-            {
-                "template": content.render_admin({"request": request}),
-                "content_pk": content.pk,
-                "updated_content_positions": self._updated_contents_positions(
-                    container
-                ),
-            }
-        )
+    #     before_content = models.Content.objects.get(pk=before_content_pk)
+    #     container = before_content.container
+    #     content = content_class.create_for_container(
+    #         container, position=before_content.position
+    #     )
+    #     content.build_admin_form(self)
+
+    #     return JsonResponse(
+    #         {
+    #             "template": content.render_admin({"request": request}),
+    #             "content_pk": content.pk,
+    #             "updated_content_positions": self._updated_contents_positions(
+    #                 container
+    #             ),
+    #         }
+    #     )
 
     @csrf_exempt
     def xprez_delete_content_view(self, request, content_pk):
@@ -227,8 +283,8 @@ class XprezAdminMixin(object):
             content.delete()
         return HttpResponse()
 
-    def _updated_contents_positions(self, page):
-        return dict([(c.id, c.position) for c in page.contents.all()])
+    def _updated_contents_positions(self, container):
+        return {c.id: c.position for c in container.contents.all()}
 
     def xprez_copy_content_view(self, request, content_pk):
         content = models.Content.objects.get(pk=content_pk).polymorph()
@@ -240,7 +296,7 @@ class XprezAdminMixin(object):
                 "template": new_content.render_admin({"request": request}),
                 "content_pk": new_content.pk,
                 "updated_content_positions": self._updated_contents_positions(
-                    content.page
+                    content.container
                 ),
             }
         )
@@ -248,8 +304,8 @@ class XprezAdminMixin(object):
     def xprez_copy_supported(self):
         return hasattr(self.model, "copy")
 
-    def xprez_copy_view(self, request, page_pk):
-        inst = self.model.objects.get(pk=page_pk)
+    def xprez_copy_view(self, request, container_pk):
+        inst = self.model.objects.get(pk=container_pk)
         copy = inst.copy()
         info = (copy._meta.app_label, copy._meta.model_name)
         return redirect("admin:%s_%s_change" % info, copy.pk)
@@ -265,7 +321,7 @@ class XprezAdminMixin(object):
     def _xprez_target_container_and_position(self, request, target_position, target_pk):
         if target_position == self.POSITION_CONTENT_BEFORE:
             before_content = models.Content.objects.get(pk=target_pk)
-            return before_content.page, before_content.position
+            return before_content.container, before_content.position
         elif target_position == self.POSITION_CONTAINER_END:
             return self._get_container_instance(request, target_pk), None
 
@@ -291,9 +347,11 @@ class XprezAdminMixin(object):
                 continue
 
             if action == self.CLIPBOARD_PASTE_ACTION:
-                new_content = source_content.copy(for_page=container, position=position)
+                new_content = source_content.copy(
+                    for_container=container, position=position
+                )
             elif action == self.CLIPBOARD_SYMLINK_ACTION:
-                new_content = models.ContentSymlink.create_for_page(
+                new_content = models.ContentSymlink.create_for_container(
                     container, position=position, symlink=source_content
                 )
 
@@ -379,9 +437,12 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
     def save_model(self, request, obj, form, *args, **kwargs):
         super().save_model(request, obj, form, *args, **kwargs)
 
-        # admin's list_editable bypasses overrided get_form, so it does not have save_xprez_contents
-        if hasattr(form, "save_xprez_contents"):
-            form.save_xprez_contents(request)
+        """
+        admin's list_editable bypasses overrided get_form
+        so it does not have save_xprez_sections
+        """
+        if hasattr(form, "save_xprez_sections"):
+            form.save_xprez_sections(request)
 
     @property
     def media(self, *args, **kwargs):
@@ -390,7 +451,7 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
     def render_change_form(self, request, context, *args, **kwargs):
         context["errors"] = (
             context["errors"]
-            or context["adminform"].form.xprez_contents_all_valid is False
+            or context["adminform"].form.xprez_sections_all_valid is False
         )
         return super().render_change_form(request, context, *args, **kwargs)
 

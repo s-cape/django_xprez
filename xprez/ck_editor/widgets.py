@@ -136,7 +136,12 @@ class CkEditorWidgetFull(CkEditorWidgetFullBase):
             "MediaEmbed",
         )
         config["simpleUpload"] = {
-            "uploadUrl": reverse("xprez:ckeditor_file_upload", args=[file_upload_dir])
+            "uploadUrl": reverse(
+                "xprez:textcontent_file_upload",
+                args=[
+                    file_upload_dir
+                ],  # TODO: replace textcontent_ with the correct content type
+            )
         }
         config["mediaEmbed "] = {"previewsInData": True}
         config["image"] = {

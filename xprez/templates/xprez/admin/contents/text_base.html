@@ -14,11 +14,14 @@
         <li><span class="xprez-icon-btn-align-center js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-content_centered" title="Centered content"></span></li>
     </ul>
 {% endblock %}
+{% endcomment %}
 
-{% block content %}
+{% block main_fields %}
     {{ content.admin_form.text }}
+    {{ content.admin_form.text.errors }}
 {% endblock %}
 
+{% comment %}
 {% block hidden_fields %}
     {{ block.super }}
     {{ content.admin_form.width }}

@@ -1,30 +1,28 @@
-// var jqueryCK = jQuery.noConflict(true);
-
-
-function initializeCkEditors($scope) {
-    $scope.find('.js-ck-editor-source').each(function(index) {
-        var $textarea = $(this);
-        var $editorRoot = $textarea.parent().siblings('.js-ck-editor-root');
-        initializeCkEditor($textarea, $editorRoot);
+function initializeCkEditors(scope) {
+    scope.querySelectorAll('.js-ck-editor-source').forEach((textarea, index) => {
+        var editorRoot = textarea.closest('.js-ck-editor-root');
+        initializeCkEditor(textarea, editorRoot);
     });
 }
 
+function initializeCkEditor(textarea, editorRoot) {
+    var form = editorRoot.closest('form');
 
-function initializeCkEditor($textarea, $editorRoot) {
-    var $form = $editorRoot.parents('form');
-
-    var config = $textarea.data('ck-editor-config');
-    config.initialData = $textarea.val();
+    var config = JSON.parse(textarea.getAttribute('data-ck-editor-config'));
+    config.initialData = textarea.value;
 
     BalloonBlockEditor
-        .create($editorRoot[0], config)
-        .then(function(editor) {
-            $form.submit(function () {
-                $textarea.val(editor.getData());
+        .create(editorRoot, config)
+        .then(editor => {
+            form.addEventListener('submit', () => {
+                textarea.value = editor.getData();
             });
-            editor.keystrokes.set('Ctrl+space', function(key, stop) {
-                editor.execute('input', { text: '\u00a0' } );
+            editor.keystrokes.set('Ctrl+space', (key, stop) => {
+                editor.execute('input', { text: '\u00a0' });
                 stop();
             });
         });
 }
+
+window.initializeCkEditors = initializeCkEditors;
+window.initializeCkEditor = initializeCkEditor;

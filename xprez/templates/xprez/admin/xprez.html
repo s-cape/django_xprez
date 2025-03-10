@@ -1,62 +1,74 @@
 {% load i18n %}
 {% load xprez_admin %}
 
-{# NEW #}
+{# TODO: cleanup #}
+<style>
+</style>
 
-    <div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
-
-        <div class="xprez-top">
-            <div class="xprez-option" data-active="true" data-text-label="true">
-                <label for="view">
-                    <i class="xprez-icon-view"></i>
-                    <span>View</span>
-                </label>
-                <span class="xprez-option__dropdown">
-                    <select class="xprez-option__select" id="view">
-                        <option value="sm">Default edit view</option>
-                        <option value="sm">Small devices (500px)</option>
-                        <option value="md">Tablets (768px)</option>
-                        <option value="lg">Large devices (992px)</option>
-                        <option value="xl">Desktops (1200px)</option>
-                        <option value="xxl">Extra large devices (1500px)</option>
-                    </select>
-                </span>
-            </div>
-
-            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm">
-                <i class="xprez-icon-vertical"></i>
-                Collapse all
-            </span>
-            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm {# success #}">
-                <span class="xprez-btn__inner xprez-btn__success">
-                    {% include "xprez/admin/icons/checkmark.html" %}
-                    Copied
-                </span>
-                <span class="xprez-btn__inner xprez-btn__default">
-                    <i class="xprez-icon-copy"></i>
-                    Copy all
-                </span>
+<div class="xprez {{ form.xprez_admin.xprez_ui_css_class }}" data-component="xprez">
+    <div class="xprez-top">
+        <div class="xprez-option" data-active="true" data-text-label="true">
+            <label for="view">
+                <i class="xprez-icon-view"></i>
+                <span>View</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select class="xprez-option__select" id="view" data-component="xprez-view-select">
+                    <option value="sm">Default edit view</option>
+                    <option value="sm">Small devices (500px)</option>
+                    <option value="md">Tablets (768px)</option>
+                    <option value="lg">Large devices (992px)</option>
+                    <option value="xl">Desktops (1200px)</option>
+                    <option value="xxl">Extra large devices (1500px)</option>
+                </select>
             </span>
         </div>
 
-        {% include "./dev/section.html" %}
-
-        {% with allowed_contents=form.xprez_get_allowed_contents %}
-            {% if allowed_contents %}
-                <div class="js-xprez-add xprez-add-after">
-                    <div class="xprez-section__header --centered">
-                        <h3>Add section</h3>
-                    </div>
-
-                    {% include "./includes/add_list.html" with xprez_admin=form.xprez_admin container=form.instance %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
+        <span class="xprez-btn xprez-btn-transparent xprez-btn--sm">
+            <i class="xprez-icon-vertical"></i>
+            Collapse all
+        </span>
+        <span class="xprez-btn xprez-btn-transparent xprez-btn--sm {# success #}">
+            <span class="xprez-btn__inner xprez-btn__success">
+                {% include "xprez/admin/icons/checkmark.html" %}
+                Copied
+            </span>
+            <span class="xprez-btn__inner xprez-btn__default">
+                <i class="xprez-icon-copy"></i>
+                Copy all
+            </span>
+        </span>
     </div>
 
-{# // NEW #}
+    <div data-component="xprez-sections-container">
+        {% for section in form.xprez_sections %}
+            {% xprez_section_render_admin section %}
+        {% endfor %}
+    </div>
 
+    {% include "./dev/section.html" %}
+
+    {% with allowed_contents=form.xprez_get_allowed_contents %}
+        {% if allowed_contents %}
+            <div class="xprez-add-after">
+                <div class="xprez-section__header--centered">
+                    <h3>Add section</h3>
+                </div>
+                {% comment %} {% include "./includes/add_list.html" with component_name="xprez-add-list-container-end" xprez_admin=form.xprez_admin add_position=form.xprez_admin.POSITION_CONTAINER_END add_object="section" container=form.instance %} {% endcomment %}
+                {% include "./includes/add_list.html" with component_name="xprez-add-list-container-end" xprez_admin=form.xprez_admin container=form.instance %}
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<script>
+    window.addEventListener("DOMContentLoaded", function() {
+        window.xprez = new Xprez();
+        window.xprez.sayHello();
+    });
+</script>
+
+{% comment %}
 <div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
     <div class="xprez-top">
         <span class="xprez-option-btn js-collapse_all">Collapse all</span>
@@ -82,3 +94,91 @@
         {% endif %}
     {% endwith %}
 </div>
+{% endcomment %}
+{% comment %}
+<script>
+    window.popoverManager = {
+        popovers: new Map(),
+        
+        init() {
+            // Initialize all popovers on page
+            document.querySelectorAll('.xprez-popover').forEach(popover => {
+                this.initializePopover(popover);
+            });
+        },
+
+        initializePopover(popover) {
+            const popoverId = popover.id;
+            const popoverContent = popover.querySelector('.xprez-popover__content');
+
+            const openPopover = () => {
+                if (typeof popover.showPopover === 'function') {
+                    popover.showPopover();
+                } else {
+                    popover.style.display = 'block';
+                }
+            };
+
+            const closePopover = () => {
+                if (typeof popover.hidePopover === 'function') {
+                    popover.hidePopover();
+                } else {
+                    popover.style.display = 'none';
+                }
+            };
+
+            // Close when clicking outside
+            document.addEventListener('click', (event) => {
+                const isClickInside = popover.contains(event.target);
+                    const openButton = event.target.closest('[data-popover-target]');
+
+                if (!isClickInside && !openButton) {
+                    this.closePopover(popoverId);
+                }
+            });
+
+            // Save reference to drawer in drawerManager
+            this.popovers.set(popoverId, {
+                open: openPopover,
+                close: closePopover
+            });
+
+            // Initialize triggers
+            this.initializeTriggersForPopover(popoverId);
+        },
+
+        initializeTriggersForPopover(popoverId) {
+            document.querySelectorAll(`[data-popover-target="${popoverId}"]`).forEach(trigger => {
+                trigger.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    this.openPopover(popoverId);
+                });
+            });
+        },
+
+        openPopover(popoverId) {
+            const popover = this.popovers.get(popoverId);
+            if (popover) {
+                popover.open();
+            } else {
+                console.warn(`Popover with ID "${popoverId}" not found`);
+            }
+        },
+
+        closePopover(popoverId) {
+            const popover = this.popovers.get(popoverId);
+            if (popover) {
+                popover.close();
+            }
+        }
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        popoverManager.init();
+        // popoverManager.openPopover('id2-text-settings'); // dev show popover on page load
+        // popoverManager.openPopover('id1-section-settings'); // dev show popover on page load
+    });
+
+</script>
+{% endcomment %}

@@ -1,8 +1,6 @@
 {% load xprez %}
 <div class="xprez-frontend">
-    {% for content in contents %}
-        {% if content.visible %}
-            {% xprez_content_render_front content %}
-        {% endif %}
+    {% for section in sections %}
+        {% xprez_section_render_front section %}
     {% endfor %}
 </div>

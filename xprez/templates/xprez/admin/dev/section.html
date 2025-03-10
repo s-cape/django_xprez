@@ -12,9 +12,9 @@
             {% endblock %}
 
             <div class="xprez-section__settings">
-                <span class="xprez-icon-btn" data-popover-target="id1-section-settings" title="Advanced settings">
+                <button type="button" class="xprez-icon-btn" popovertarget="id1-section-settings" title="Advanced settings">
                     <i class="xprez-icon-settings"></i>
-                </span>
+                </button>
                 <div class="xprez-option-row">
                     <div class="xprez-option" data-size="flex-auto" data-active="true">
                         <label for="id1-cols">Columns</label>
@@ -104,7 +104,7 @@
         </div>
     </div>
 
-    <div popover class="xprez-popover" id="id1-section-settings">
+    <div popover open class="xprez-popover" id="id1-section-settings">
         <div class="xprez-popover__content">
             {% include "./section_option_group.html" %}
         </div>
@@ -115,11 +115,9 @@
             {% include "./text_option_group.html" %}
         </div>
     </div>
-
-    
-
 </div>
 
+{% comment %}
 <script>
     window.popoverManager = {
         popovers: new Map(),
@@ -203,5 +201,5 @@
         // popoverManager.openPopover('id2-text-settings'); // dev show popover on page load
         // popoverManager.openPopover('id1-section-settings'); // dev show popover on page load
     });
-
 </script>
+{% endcomment %}
