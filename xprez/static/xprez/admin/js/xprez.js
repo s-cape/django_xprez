@@ -1,6 +1,6 @@
 (function() {
     class Xprez {
-        constructor() { 
+        constructor() {
             this.el = document.querySelector("[data-component='xprez']");
             this.sectionsContainerEl = this.el.querySelector("[data-component='xprez-sections-container']");
             this.viewSelectEl = this.el.querySelector("[data-component='xprez-view-select']");
@@ -13,7 +13,7 @@
             this.initAllSectionsCollapser();
         }
 
-        initSection(sectionEl) { 
+        initSection(sectionEl) {
             const section = new XprezSection(this, sectionEl);
             this.sections[section.id()] = section;
         }
@@ -31,13 +31,13 @@
             const contentPopovers = this.getContents().flatMap(content => content.popover);
             return [...sectionPopovers, ...contentPopovers];
         }
-   
+
         setPlacementToInputs() {
             this.sectionsContainerEl.querySelectorAll("[data-component='xprez-section']").forEach(
                 (section, sectionIndex) => {
                     const positionInputEl = section.querySelector(`input[name="${section.dataset.prefix}-position"]`);
                     positionInputEl.value = sectionIndex;
-                
+
                     section.querySelectorAll("[data-component='xprez-content']").forEach(
                         (content, contentIndex) => {
                             const positionInputEl = content.querySelector(`input[name="${content.dataset.prefix}-position"]`);
@@ -47,7 +47,7 @@
                 }
             );
         }
-    
+
         initAllSectionsCollapser() {
             this.allSectionsCollapserEl = this.el.querySelector("[data-component='xprez-all-sections-collapser']");
             this.allSectionsCollapserEl.addEventListener("click", function() {
@@ -60,16 +60,16 @@
         constructor(xprez, el) {
             this.xprez = xprez;
             this.el = el;
-        
+
             this.el.querySelectorAll("[data-component='xprez-add-item']").forEach(
                 this.initItem.bind(this)
             );
         }
-            
+
         initItem(itemEl) {
             itemEl.addEventListener("click", this.add.bind(this, itemEl));
         }
-                
+
         add(itemEl) {
             fetch(itemEl.dataset.url)
                 .then(response => {
@@ -91,7 +91,7 @@
                     console.error('Error adding content:', error);
                 });
         }
-    
+
         placeNewElement(el) {}
         initNewElement(el) {}
     }
@@ -162,7 +162,7 @@
             const content = new ControllerClass(this, contentEl);
             this.contents[contentEl.querySelector("input[name='content-id']").value] = content;
         }
-    
+
         initCollapser() {
             this.collapserEl = this.el.querySelector("[data-component='xprez-section-collapser']");
             this.collapserEl.addEventListener("click", this.toggleCollapse.bind(this));
@@ -180,7 +180,7 @@
             this.popover = new XprezContentPopover(this);
         }
     }
-    
+
     class XprezPopoverBase {
         constructor(...args) {
             this.bindElements(...args);
@@ -239,10 +239,10 @@
         }
         hide() {
             super.hide();
-            this.content.el.dataset.mode = ""; 
+            this.content.el.dataset.mode = "";
         }
     }
-    
+
     function executeScripts(el) {
         el.querySelectorAll("script").forEach(script => {
             const newScript = document.createElement("script");
