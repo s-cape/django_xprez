@@ -40,13 +40,13 @@ class ContentsContainer(models.Model):
         return self.polymorph().__str__()
 
     def render_front(self, context):
-        context["sections"] = self.get_sections_front()
+        context["sections"] = self.get_sections()
         return render_to_string(self.front_template_name, context)
 
     def get_sections(self):
         if not hasattr(self, "_sections"):
             # TODO: prefetch section configs, contents (polymorphed) and content configs (polymorphed)
-            self._sections = self.sections.filter(visible=True)
+            self._sections = self.sections.filter(saved=True)  # TODO:, visible=True)
         return self._sections
 
 
@@ -167,7 +167,7 @@ class Section(models.Model):
 
     def get_contents(self):
         if not hasattr(self, "_contents"):
-            self._contents = self.contents.filter(visible=True)
+            self._contents = self.contents.all()  # TODO: filter(saved=True)
         return self._contents
 
     def get_configs(self):
@@ -177,8 +177,9 @@ class Section(models.Model):
 
     def render_front(self, context):
         context["section"] = self
-        context["contents"] = self.get_front_contents()
-        context["configs"] = self.get_front_configs()
+        context["contents"] = self.get_contents()
+        context["configs"] = self.get_configs()
+        print(context["contents"])
         return render_to_string(self.front_template_name, context)
 
 
@@ -211,6 +212,8 @@ class Content(models.Model):
         # editable=False,
         # null=True,  # TODO: remove
     )
+    saved = models.BooleanField(default=False, editable=False)
+
     position = models.PositiveSmallIntegerField(default=0)
     content_type = models.CharField(max_length=100, editable=False)
     css_class = models.CharField(max_length=100, null=True, blank=True)

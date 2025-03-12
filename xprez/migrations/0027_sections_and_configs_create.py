@@ -132,6 +132,11 @@ class Migration(migrations.Migration):
                 to="xprez.section",
             ),
         ),
+        migrations.AddField(
+            model_name="content",
+            name="saved",
+            field=models.BooleanField(default=False, editable=False),
+        ),
         migrations.CreateModel(
             name="SectionConfig",
             fields=[

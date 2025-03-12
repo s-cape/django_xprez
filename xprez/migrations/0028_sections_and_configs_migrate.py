@@ -70,6 +70,7 @@ def migrate_to_sections(apps, schema_editor):
             section=medium_editor.section,
             position=medium_editor.position,
             text=medium_editor.text,
+            saved=True,
         )
         _set_content_type(content)
         medium_editor.delete()
@@ -79,6 +80,7 @@ def migrate_to_sections(apps, schema_editor):
             section=ck_editor.section,
             position=ck_editor.position,
             text=ck_editor.text,
+            saved=True,
         )
         _set_content_type(content)
         ck_editor.delete()
@@ -89,6 +91,7 @@ def migrate_to_sections(apps, schema_editor):
                 section=grid_boxes.section,
                 position=index,
                 text=box,
+                saved=True,
             )
             _set_content_type(content)
         grid_boxes.delete()

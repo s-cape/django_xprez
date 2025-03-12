@@ -93,6 +93,8 @@ class TextContentBase(CkEditorFileUploadMixin, Content):
 class TextContent(TextContentBase):
     form_class = "xprez.admin_forms.TextContentForm"
     admin_template_name = "xprez/admin/contents/text.html"
+    front_template_name = "xprez/contents/text.html"
+    icon_template_name = "xprez/admin/icons/contents/text.html"
     config_model = "xprez.TextContentConfig"
 
     image = models.ImageField(upload_to="images", null=True, blank=True)
