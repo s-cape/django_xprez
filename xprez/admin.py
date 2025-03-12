@@ -232,7 +232,7 @@ class XprezAdminMixin(object):
             return HttpResponse(section.render_admin({"request": request}))
         else:
             section = container.sections.get(pk=section_pk)
-            content = content_class.create_for_section(section)
+            content = content_class.objects.create(section=section)
             content.build_admin_form(self)
             return HttpResponse(content.render_admin({"request": request}))
 

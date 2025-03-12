@@ -6,18 +6,16 @@
             this.viewSelectEl = this.el.querySelector("[data-component='xprez-view-select']");
             this.viewSelectEl.addEventListener("change", this.updateView.bind(this));
             this.sections = {};
-            this.el.querySelectorAll("[data-component='xprez-section']").forEach(
-                this.initSection.bind(this)
-            );
-        
+            this.el.querySelectorAll("[data-component='xprez-section']").forEach(this.initSection.bind(this));
+
             this.updateView();
-            this.addList = new XprezAddListContainerEnd(this, this.el.querySelector("[data-component='xprez-add-list-container-end']"));
-            // this.updatePositions();
+            this.add = new XprezAddContainerEnd(this, this.el.querySelector("[data-component='xprez-add-container-end']"));
+            this.initAllSectionsCollapser();
         }
 
         initSection(sectionEl) { 
             const section = new XprezSection(this, sectionEl);
-            this.sections[sectionEl.dataset.id] = section;
+            this.sections[section.id()] = section;
         }
 
         updateView() {
@@ -25,14 +23,16 @@
         }
 
         getContents() {
-            return Object.values(this.sections).flatMap(section => section.contents);
+            return Object.values(this.sections).flatMap(section => Object.values(section.contents));
         }
 
-        sayHello() {
-            console.log(this.getContents());
+        getPopovers() {
+            const sectionPopovers = Object.values(this.sections).flatMap(section => section.popover);
+            const contentPopovers = this.getContents().flatMap(content => content.popover);
+            return [...sectionPopovers, ...contentPopovers];
         }
-    
-        setPlacementToData() {
+   
+        setPlacementToInputs() {
             this.sectionsContainerEl.querySelectorAll("[data-component='xprez-section']").forEach(
                 (section, sectionIndex) => {
                     const positionInputEl = section.querySelector(`input[name="${section.dataset.prefix}-position"]`);
@@ -47,9 +47,16 @@
                 }
             );
         }
+    
+        initAllSectionsCollapser() {
+            this.allSectionsCollapserEl = this.el.querySelector("[data-component='xprez-all-sections-collapser']");
+            this.allSectionsCollapserEl.addEventListener("click", function() {
+                for (const section of Object.values(this.sections)) { section.collapse(); }
+            }.bind(this));
+        }
     }
 
-    class XprezAddListBase {
+    class XprezAddBase {
         constructor(xprez, el) {
             this.xprez = xprez;
             this.el = el;
@@ -60,58 +67,91 @@
         }
             
         initItem(itemEl) {
-            itemEl.addEventListener("click", (e) => {
-                fetch(itemEl.dataset.url)
-                    .then(response => {
-                        if (response.ok) {
-                            return response.text();
-                        } else {
-                            console.log("TODO: show error message");
-                            throw new Error(`Server returned ${response.status}: ${response.statusText}`);
-                        }
-                    })
-                    .then(html => {
-                        const newEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild;
-                        this.placeNewElement(newEl);
-                        this.initNewElement(newEl);
-                        executeScripts(newEl);
-                        this.xprez.setPlacementToData();
-                    })
-                    .catch(error => {
-                        console.error('Error adding content:', error);
-                    });
-            });
+            itemEl.addEventListener("click", this.add.bind(this, itemEl));
+        }
+                
+        add(itemEl) {
+            fetch(itemEl.dataset.url)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        console.log("TODO: show error message");
+                        throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                    }
+                })
+                .then(html => {
+                    const newEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild;
+                    this.placeNewElement(newEl);
+                    this.initNewElement(newEl);
+                    executeScripts(newEl);
+                    this.xprez.setPlacementToInputs();
+                })
+                .catch(error => {
+                    console.error('Error adding content:', error);
+                });
         }
     
         placeNewElement(el) {}
         initNewElement(el) {}
     }
 
-    class XprezAddListContainerEnd extends XprezAddListBase {
-        placeNewElement(el) {
-            this.xprez.sectionsContainerEl.appendChild(el);
+    class XprezAddContainerEnd extends XprezAddBase {
+        placeNewElement(el) { this.xprez.sectionsContainerEl.appendChild(el); }
+        initNewElement(el) { this.xprez.initSection(el); }
+    }
+
+    class XprezAddSectionBase extends XprezAddBase {
+        constructor(xprez, el, section) {
+            super(xprez, el);
+            this.section = section;
+            this.setTriggerEl();
+            this.triggerEl.addEventListener("click", this.toggle.bind(this));
         }
-        initNewElement(el) {
-            this.xprez.initSection(el);
+        setTriggerEl() {}
+        add(itemEl) {
+            super.add(itemEl);
+            this.hide();
         }
+        isVisible() { return !this.el.hasAttribute("data-hidden"); }
+        show() { this.el.removeAttribute("data-hidden"); }
+        hide() { this.el.setAttribute("data-hidden", ""); }
+        toggle() { this.isVisible() ? this.hide() : this.show(); }
+    }
+
+    class XprezAddSectionBefore extends XprezAddSectionBase {
+        setTriggerEl() { this.triggerEl = this.section.el.querySelector("[data-component='xprez-add-section-before-trigger']"); }
+        placeNewElement(el) { this.section.el.before(el); }
+        initNewElement(el) { this.xprez.initSection(el); }
+    }
+
+    class XprezAddSectionEnd extends XprezAddSectionBase {
+        setTriggerEl() { this.triggerEl = this.section.el.querySelector("[data-component='xprez-add-section-end-trigger']"); }
+        placeNewElement(el) { this.section.gridEl.appendChild(el); }
+        initNewElement(el) { this.section.initContent(el); }
     }
 
     class XprezSection {
         constructor(xprez, sectionEl) {
             this.xprez = xprez;
             this.el = sectionEl;
+            this.gridEl = this.el.querySelector("[data-component='xprez-section-grid']");
             this.contents = {};
             this.el.querySelectorAll("[data-component='xprez-content']").forEach(
                 this.initContent.bind(this)
             );
             this.popover = new XprezSectionPopover(this);
-        
-            // this.xprezAddListBefore = new XprezAddList(this.xprez, this.el.querySelector("[data-component='xprez-add-list-section-before']"));
-            // this.xprezAddListEnd = new XprezAddList(this.xprez, this.el.querySelector("[data-component='xprez-add-list-section-end']"));
+            this.initCollapser();
+            this.addSectionBefore = new XprezAddSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-add-section-before']"), this);
+            this.addSectionEnd = new XprezAddSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-add-section-end']"), this);
+            // this.xprezAddBefore = new XprezAdd(this.xprez, this.el.querySelector("[data-component='xprez-add-section-before']"));
+            // this.xprezAddEnd = new XprezAdd(this.xprez, this.el.querySelector("[data-component='xprez-add-section-end']"));
             // this.el.querySelectorAll("[data-component='xprez-add-content-trigger']").forEach(
             //     this.xprez.initAddContentTrigger.bind(this.xprez)
             // );
         }
+
+        id() { return this.el.querySelector("[name='section-id']").value; }
 
         initContent(contentEl) {
             const ControllerClass = window[contentEl.dataset.jsControllerClass];
@@ -122,6 +162,15 @@
             const content = new ControllerClass(this, contentEl);
             this.contents[contentEl.querySelector("input[name='content-id']").value] = content;
         }
+    
+        initCollapser() {
+            this.collapserEl = this.el.querySelector("[data-component='xprez-section-collapser']");
+            this.collapserEl.addEventListener("click", this.toggleCollapse.bind(this));
+        }
+        isCollapsed() { return this.el.hasAttribute("data-collapsed"); }
+        collapse() { this.el.setAttribute("data-collapsed", ""); }
+        expand() { this.el.removeAttribute("data-collapsed"); }
+        toggleCollapse() { this.isCollapsed() ? this.expand() : this.collapse(); }
     }
 
    class XprezContent {
@@ -136,6 +185,7 @@
         constructor(...args) {
             this.bindElements(...args);
             this.bindEvents();
+            this.openOnErrors();
         }
 
         bindEvents() {
@@ -148,6 +198,13 @@
             });
         }
 
+        hasErrors() { return this.el.querySelector("[data-has-errors]"); }
+        openOnErrors() {
+            if (this.hasErrors()) {
+                this.show();
+            }
+        }
+
         isOpen() { return this.el.matches(":popover-open"); }
         show() { this.el.showPopover(); }
         hide() { this.el.hidePopover(); }
@@ -158,6 +215,15 @@
             this.section = section;
             this.el = this.section.el.querySelector("[data-component='xprez-section-popover']");
             this.triggerEl = this.section.el.querySelector("[data-component='xprez-section-popover-trigger']");
+        }
+        show() {
+            this.section.xprez.getPopovers().filter(popover => popover !== this).forEach(popover => popover.hide());
+            super.show();
+            this.section.el.dataset.mode = "edit";
+        }
+        hide() {
+            super.hide();
+            this.section.el.dataset.mode = "";
         }
     }
 

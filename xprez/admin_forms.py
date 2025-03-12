@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from .conf import settings
 from .medium_editor.widgets import MediumEditorWidget
 from .models.base import Section
+from .models.configs import SectionConfig
 from .models.contents import (
     Attachment,
     CkEditor,
@@ -33,17 +34,27 @@ from .utils import import_class
 
 
 class SectionForm(forms.ModelForm):
-    # confirm_save = forms.BooleanField(initial=True)
-
     class Meta:
         model = Section
         fields = "__all__"
+
+
+class SectionConfigForm(forms.ModelForm):
+    class Meta:
+        model = SectionConfig
+        fields = "__all__"
+
+    # def clean(self):
+    #     super().clean()
+    #     if self.cleaned_data.get("padding_left_choice") == "custom":
+    #         raise forms.ValidationError({"padding_left_choice": "test error"})
 
 
 class BaseContentForm(forms.ModelForm):
     base_content_fields = (
         "position",
         "section",
+        "css_class",
         # "visible",
         # "css_class",
         # "margin_bottom",
@@ -53,16 +64,39 @@ class BaseContentForm(forms.ModelForm):
         # "background_color",
     )
 
-    def main_fields(self):
+    options_fields = ()
+
+    def get_main_fields(self):
         excluded_fields = tuple(self.base_content_fields)
-        excluded_fields += getattr(self._meta, "options_fields", ())
+        excluded_fields += self.options_fields
 
         for field in self.fields:
             if field not in excluded_fields:
                 yield self[field]
 
+    def get_options_fields(self):
+        for field in self.options_fields:
+            yield self[field]
+
     class Meta:
-        options_fields = ()
+        fields = "__all__"
+
+
+class ContentConfigForm(forms.ModelForm):
+    base_content_fields = (
+        "visible",
+        "colspan",
+        "rowspan",
+        "vertical_align",
+        "horizontal_align",
+    )
+
+    def get_extra_fields(self):
+        for field in self.fields:
+            if field not in self.base_content_fields:
+                yield self[field]
+
+    class Meta:
         fields = "__all__"
 
 
@@ -78,9 +112,23 @@ class TextContentBaseForm(BaseContentForm):
 
 
 class TextContentForm(TextContentBaseForm):
+    options_fields = ("url",) + TextContentBaseForm.options_fields
+    image_clear = forms.BooleanField(required=False)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if self.cleaned_data.get("image_clear"):
+            instance.image = None
+        if commit:
+            instance.save()
+        return instance
+
     class Meta(TextContentBaseForm.Meta):
         model = TextContent
-        fields = TextContentBaseForm.Meta.fields + ("image",)
+        fields = TextContentBaseForm.Meta.fields + ("image", "url")
+
+        widgets = {"image": forms.FileInput}
+        widgets.update(TextContentBaseForm.Meta.widgets)
 
 
 class GalleryForm(BaseContentForm):

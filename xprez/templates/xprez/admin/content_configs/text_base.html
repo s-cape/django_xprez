@@ -1,0 +1,10 @@
+{% extends "xprez/admin/content_configs/base.html" %}
+
+{% block extra_fields %}
+    <div class="xprez-option-group__subtitle">Inner box</div>
+
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.border flex=1 %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.background flex=1 %}
+    </div>
+{% endblock %}

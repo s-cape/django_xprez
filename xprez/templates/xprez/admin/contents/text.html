@@ -3,7 +3,15 @@
 {% block actions %}
     <span class="xprez-icon-btn" title="Image">
         <i class="xprez-icon-image"></i>
-        {% comment %} {{ content.admin_form.image }} {% endcomment %}
+        {{ content.admin_form.image }}
     </span>
+    {{ block.super }}
+{% endblock %}
+
+{% block main_fields %}
+    {% if content.image %}
+        <img src="{{ content.image.url }}">
+        Clear: {{ content.admin_form.image_clear }}
+    {% endif %}
     {{ block.super }}
 {% endblock %}

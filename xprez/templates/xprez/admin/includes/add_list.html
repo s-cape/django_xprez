@@ -2,44 +2,27 @@
 {% xprez_clipboard_is_empty xprez_admin request as clipboard_is_empty %}
 
 <ul
-    class="xprez-submenu xprez-submenu--2-cols"
+    {% comment %} class="xprez-submenu xprez-submenu--2-cols" {% endcomment %}
     data-component="{{ component_name }}"
+    {{ attributes|default:"" }}
 >
-    <li class="js-xprez-clipboard-list-trigger xprez-submenu__paste"
-        {% if clipboard_is_empty %}
-            style="display: none"
-        {% endif %}
-        {% comment %} data-url="{% url xprez_admin.xprez_clipboard_list_url_name xprez_admin.POSITION_CONTAINER_END pk %}" {% endcomment %}
-        {% comment %}
-        {% if before_content %}
-            data-url="{% url xprez_admin.xprez_clipboard_list_url_name xprez_admin.POSITION_CONTENT_BEFORE before_content.pk %}"
-            data-insert-before=".js-content-{{ before_content.pk }}"
-        {% else %}
-            data-url="{% url xprez_admin.xprez_clipboard_list_url_name xprez_admin.POSITION_CONTAINER_END container.pk %}"
-        {% endif %}
-        {% endcomment %}
+    <li
+        class="js-xprez-clipboard-list-trigger xprez-submenu__paste"
+        {% if clipboard_is_empty %}data-hidden{% endif %}
     >
         <span class="xprez-icon">{% include "xprez/admin/icons/paste.html" %}</span>
         <span class="xprez-submenu__label">Paste from clipboard</span>
     </li>
 
     {% for content_type in allowed_contents %}
-        <li data-component="xprez-add-item"
-            {% if section %}
-                data-url="{% url xprez_admin.xprez_add_url_name content_type.class_content_type section.container.pk section.pk %}"
-            {% elif container %}
-                data-url="{% url xprez_admin.xprez_add_url_name content_type.class_content_type container.pk %}"
+        <li
+            data-component="xprez-add-item"
+            {% if add_list_section %}
+                data-url="{% url xprez_admin.xprez_add_url_name content_type.class_content_type add_list_section.container.pk add_list_section.pk %}"
+            {% elif add_list_container %}
+                data-url="{% url xprez_admin.xprez_add_url_name content_type.class_content_type add_list_container.pk %}"
             {% endif %}
-            {% comment %}
-            {% if before_content %}
-                data-insert-before=".js-content-{{ before_content.pk }}"
-                data-url="{% url xprez_admin.xprez_add_content_before_url_name before_content.pk content_type.identifier %}?{{ request.GET.urlencode }}"
-            {% else %}
-                data-url="{% url xprez_admin.xprez_add_content_url_name container.pk content_type.identifier %}?{{ request.GET.urlencode }}"
-            {% endif %}
-            {% endcomment %}
         >
-            {# <span class="xprez-icon-btn-add-{{ content_type.icon_name }}"></span> #}
             {{ content_type.icon }}
             <span class="xprez-submenu__label">{{ content_type.verbose_name }}</span>
         </li>

@@ -7,10 +7,10 @@
     {# data-id="{{ section.pk }}" #}
     data-prefix="{{ section.admin_form.prefix }}"
 >
-    {% comment %} {% include "./includes/add_list.html" with xprez_admin=form.xprez_admin position=form.xprez_admin.POSITION_SECTION_BEFORE pk=section.pk %} {% endcomment %}
+    {% include "./includes/add_list.html" with component_name="xprez-add-section-before" xprez_admin=section.admin_form.xprez_admin add_list_container=section.container attributes="data-hidden" %}
 
     <div class="xprez-section__header">
-        <span class="xprez-icon-btn js-collapser" title="Collapse">
+        <span class="xprez-icon-btn" title="Collapse" data-component="xprez-section-collapser">
             <i class="xprez-icon-chevron-small-down"></i>
         </span>
 
@@ -61,7 +61,7 @@
         </div>
 
         <div class="xprez-section__actions">
-            <span class="xprez-icon-btn" title="Add section">
+            <span class="xprez-icon-btn" title="Add section" data-component="xprez-add-section-before-trigger">
                 <i class="xprez-icon-plus-circle"></i>
             </span>
             <span class="xprez-icon-btn xprez-icon-btn--icon-toggle js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off">
@@ -92,17 +92,17 @@
         </div>
     </div>
 
-    <div class="xprez-section-grid">
+    <div class="xprez-section-grid" data-component="xprez-section-grid">
         {% for content in section.admin_form.xprez_contents %}
             {% xprez_content_render_admin content %}
         {% endfor %}
     </div>
 
     <div class="xprez-section__footer">
-        <span class="js-add-another xprez-btn xprez-btn-transparent">
+        <span class="xprez-btn xprez-btn-transparent" data-component="xprez-add-section-end-trigger">
             <i class="xprez-icon-plus_square_20"></i>Add content
         </span>
-        {% include "./includes/add_list.html" with xprez_admin=form.xprez_admin section=section %}
+        {% include "./includes/add_list.html" with component_name="xprez-add-section-end" xprez_admin=section.admin_form.xprez_admin add_list_section=section attributes="data-hidden" %}
     </div>
 
     <div popover="manual" class="xprez-popover" data-component="xprez-section-popover">
@@ -114,12 +114,16 @@
                         <span class="xprez-option-group__title-text">Section</span>
                     </div>
                     <div class="xprez-option-row">
-                        {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_choice %}
-                        {% include "xprez/admin/form/row.html" with field=section.admin_form.max_width_custom label=False suffix="px" flex=0 %}
+                        {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_choice flex=1 %}
+                        {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_custom label=False suffix="px" flex=0 attributes="data-hidden" %}
                     </div>
-                    {% include "xprez/admin/form/row.html" with field=section.admin_form.alternate_color %}
-                    {% include "xprez/admin/form/row.html" with field=section.admin_form.background_color %}
-                    {% include "xprez/admin/form/row.html" with field=section.admin_form.css_class %}
+                    {% include "xprez/admin/form/row.html" with field=section.admin_form.alternate_color flex=1 %}
+                    {% include "xprez/admin/form/row.html" with field=section.admin_form.background_color flex=1 %}
+                    {% include "xprez/admin/form/row.html" with field=section.admin_form.css_class flex=1 %}
+            
+                    {% for config in section.admin_form.xprez_configs %}
+                        {% xprez_section_config_render_admin config %}
+                    {% endfor %}
                 </div>
             {% endblock %}
         </div>

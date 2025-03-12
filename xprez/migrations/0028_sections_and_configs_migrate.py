@@ -34,6 +34,9 @@ def migrate_to_sections(apps, schema_editor):
     TextContent = apps.get_model("xprez", "TextContent")
     GridBoxes = apps.get_model("xprez", "GridBoxes")
 
+    ContentConfig = apps.get_model("xprez", "ContentConfig")
+    TextContentConfig = apps.get_model("xprez", "TextContentConfig")
+
     for content in Content.objects.all():
         section = Section.objects.create(
             container=content.page,
@@ -90,6 +93,20 @@ def migrate_to_sections(apps, schema_editor):
             _set_content_type(content)
         grid_boxes.delete()
 
+    for content in Content.objects.all():
+        if content.content_type == "xprez.TextContent":
+            for css_breakpoint in xprez_settings.XPREZ_BREAKPOINTS.keys():
+                TextContentConfig.objects.create(
+                    content=content,
+                    css_breakpoint=css_breakpoint,
+                )
+        else:
+            for css_breakpoint in xprez_settings.XPREZ_BREAKPOINTS.keys():
+                ContentConfig.objects.create(
+                    content=content,
+                    css_breakpoint=css_breakpoint,
+                )
+
 
 def reverse(apps, schema_editor):
     raise NotImplementedError(
@@ -102,7 +119,7 @@ def reverse(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("xprez", "0027_section_textcontent_alter_ckeditor_options_and_more"),
+        ("xprez", "0027_sections_and_configs_create"),
     ]
 
     operations = [

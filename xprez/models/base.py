@@ -72,14 +72,14 @@ class Section(models.Model):
     MAX_WIDTH_FULL = "full"
     MAX_WIDTH_CUSTOM = "custom"
     MAX_WIDTH_CHOICES = (
-        (MAX_WIDTH_SMALL, "small"),
-        (MAX_WIDTH_MEDIUM, "medium"),
-        (MAX_WIDTH_FULL, "full"),
-        (MAX_WIDTH_CUSTOM, "custom"),
+        (MAX_WIDTH_SMALL, "Small"),
+        (MAX_WIDTH_MEDIUM, "Medium"),
+        (MAX_WIDTH_FULL, "Full"),
+        (MAX_WIDTH_CUSTOM, "Custom"),
     )
     max_width_choice = models.CharField(
         verbose_name="Max width",
-        max_length=100,
+        max_length=16,
         choices=MAX_WIDTH_CHOICES,
         default=MAX_WIDTH_FULL,
     )
@@ -109,8 +109,15 @@ class Section(models.Model):
         self.admin_form.xprez_admin = admin
         self.admin_form.xprez_contents_all_valid = None
         self.admin_form.xprez_contents = [c.polymorph() for c in self.contents.all()]
+
         for content in self.admin_form.xprez_contents:
             content.build_admin_form(admin, data, files)
+
+        self.admin_form.xprez_configs_all_valid = None
+        self.admin_form.xprez_configs = self.get_configs()
+
+        for config in self.admin_form.xprez_configs:
+            config.build_admin_form(admin, data, files)
 
         # self.admin_form.xprez_contents = sorted(
         #     self.admin_form.xprez_contents,
@@ -122,7 +129,17 @@ class Section(models.Model):
         for content in self.admin_form.xprez_contents:
             if not content.is_admin_form_valid():
                 self.admin_form.xprez_contents_all_valid = False
-        return self.admin_form.is_valid() and self.admin_form.xprez_contents_all_valid
+
+        self.admin_form.xprez_configs_all_valid = True
+        for config in self.admin_form.xprez_configs:
+            if not config.is_admin_form_valid():
+                self.admin_form.xprez_configs_all_valid = False
+
+        return (
+            self.admin_form.is_valid()
+            and self.admin_form.xprez_contents_all_valid
+            and self.admin_form.xprez_configs_all_valid
+        )
 
     def save_admin_form(self, request):
         inst = self.admin_form.save(commit=False)
@@ -130,15 +147,18 @@ class Section(models.Model):
         for content in self.admin_form.xprez_contents:
             content.save_admin_form(request)
 
+        for config in self.admin_form.xprez_configs:
+            config.save_admin_form(request)
+
     def render_admin(self, context):
         # xprez_admin = self.admin_form.xprez_admin
-        form = self.admin_form
+        # form = self.admin_form
         context.update(
             {
                 "section": self,
-                "form": form,
+                # "form": form,
                 # "xprez_admin": xprez_admin,
-                "allowed_contents": form.xprez_admin.xprez_get_allowed_contents(
+                "allowed_contents": self.admin_form.xprez_admin.xprez_get_allowed_contents(
                     container=self.container
                 ),
             }
@@ -193,12 +213,12 @@ class Content(models.Model):
     )
     position = models.PositiveSmallIntegerField(default=0)
     content_type = models.CharField(max_length=100, editable=False)
+    css_class = models.CharField(max_length=100, null=True, blank=True)
 
     # # TODO: remove
     # visible = models.BooleanField(default=True)
     # alternate_color = models.BooleanField(default=False)
     # background_color = models.CharField(max_length=30, blank=True)
-    # css_class = models.CharField(max_length=100, null=True, blank=True)
 
     # MARGIN_BOTTOM_DEFAULT = 2
     # MARGIN_BOTTOM_CHOICES = (
@@ -258,7 +278,8 @@ class Content(models.Model):
             self.content_type = self.class_content_type()
         super().save(*args, **kwargs)
         if self.pk:
-            self.get_or_create_config(css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT)
+            for css_breakpoint in settings.XPREZ_BREAKPOINTS.keys():
+                self.get_or_create_config(css_breakpoint)
 
     @property
     def verbose_name(self):
@@ -366,6 +387,11 @@ class Content(models.Model):
         )
         return config
 
+    def get_configs(self):
+        if not hasattr(self, "_configs"):
+            self._configs = self.get_config_model().objects.filter(content=self)
+        return self._configs
+
     def get_form_prefix(self):
         return "content-" + str(self.pk)
 
@@ -388,12 +414,26 @@ class Content(models.Model):
         )
         self.admin_form.xprez_admin = admin
 
+        self.admin_form.xprez_configs_all_valid = None
+        self.admin_form.xprez_configs = self.get_configs()
+
+        for config in self.admin_form.xprez_configs:
+            config.build_admin_form(admin, data, files)
+
     def is_admin_form_valid(self):
-        return self.admin_form.is_valid()
+        self.admin_form.xprez_configs_all_valid = True
+        for config in self.admin_form.xprez_configs:
+            if not config.is_admin_form_valid():
+                self.admin_form.xprez_configs_all_valid = False
+
+        return self.admin_form.is_valid() and self.admin_form.xprez_configs_all_valid
 
     def save_admin_form(self, request):
         inst = self.admin_form.save(commit=False)
         inst.save()
+
+        for config in self.admin_form.xprez_configs:
+            config.save_admin_form(request)
 
     def render_admin(self, context):
         xprez_admin = self.admin_form.xprez_admin
@@ -401,9 +441,9 @@ class Content(models.Model):
             {
                 "content": self,
                 "xprez_admin": xprez_admin,
-                "allowed_contents": xprez_admin.xprez_get_allowed_contents(
-                    container=self.section.container
-                ),
+                # "allowed_contents": xprez_admin.xprez_get_allowed_contents(
+                #     container=self.section.container
+                # ),
             }
         )
         return render_to_string(self.admin_template_name, context)

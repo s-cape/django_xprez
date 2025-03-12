@@ -82,6 +82,7 @@ class TextContentBase(CkEditorFileUploadMixin, Content):
     admin_template_name = "xprez/admin/contents/text_base.html"
     front_template_name = "xprez/contents/text_base.html"
     icon_template_name = "xprez/admin/icons/contents/text_base.html"
+    config_model = "xprez.TextContentBaseConfig"
 
     text = models.TextField(blank=True)
 
@@ -92,7 +93,10 @@ class TextContentBase(CkEditorFileUploadMixin, Content):
 class TextContent(TextContentBase):
     form_class = "xprez.admin_forms.TextContentForm"
     admin_template_name = "xprez/admin/contents/text.html"
+    config_model = "xprez.TextContentConfig"
+
     image = models.ImageField(upload_to="images", null=True, blank=True)
+    url = models.CharField("Target URL", max_length=255, null=True, blank=True)
 
     class AdminMedia:
         js = CkEditorWidget.Media.js

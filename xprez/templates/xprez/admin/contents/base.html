@@ -1,8 +1,8 @@
+{% load xprez_admin %}
 <div
     class="xprez-content"
     data-mode="{# edit #}{# select #}"
     data-component="xprez-content"
-    {# data-id="{{ content.pk }}" #}
     data-prefix="{{ content.admin_form.prefix }}"
     data-js-controller-class="{{ content.js_controller_class }}"
 >
@@ -46,8 +46,8 @@
                     <img src="{% static content.preview_image %}" alt="" class="xprez-module__preview-image">
                 {% endif %}
                 {% block main_fields %}
-                    {% for field in content.admin_form.main_fields %}
-                        {% include 'xprez/admin/form/row.html' with field=field%}
+                    {% for field in content.admin_form.get_main_fields %}
+                        {% include 'xprez/admin/form/row.html' with field=field %}
                     {% endfor %}
                 {% endblock %}
             </div>
@@ -56,7 +56,50 @@
 
     <div popover="manual" class="xprez-popover" data-component="xprez-content-popover">
         <div class="xprez-popover__content">
-            {% include "xprez/admin/dev/text_option_group.html" %}
+            {% block popopover_content %}
+                <div class="xprez-option-group">
+                    <div class="xprez-option-group__heading">
+                        <i class="xprez-icon-grid_3_3"></i>
+                        <span class="xprez-option-group__title-text">{{ content.verbose_name }}</span>
+                        <span
+                            class="xprez-btn xprez-btn--sm"
+                            title="All settings of selected modules will be overwritten with current settings"
+                            data-component="xprez-content-sync-selected"
+                        >
+                            Sync selected
+                            <i class="xprez-icon-sync"></i>
+                        </span>
+                    </div>
+                    
+                    <div class="xprez-option-row">
+                        <div class="xprez-option xprez-option--marker" data-size="flex-1" data-active="true">
+                            <label for="{{ content.admin_form.prefix }}-change-similar">
+                                <span>Change style for similar contents</span>
+                            </label>
+                            <input
+                                id="{{ content.admin_form.prefix }}-change-similar"
+                                type="checkbox"
+                                checked
+                                data-component="xprez-content-change-similar"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="xprez-option-group__subtitle">Attributes</div>
+
+                    {% include "xprez/admin/form/row.html" with field=content.admin_form.css_class flex=1 %}
+                    {% block options_fields %}
+                        {% for field in content.admin_form.get_options_fields %}
+                            {% include "xprez/admin/form/row.html" with field=field %}
+                        {% endfor %}
+                    {% endblock %}
+                    Configs:
+                
+                    {% for config in content.admin_form.xprez_configs %}
+                        {% xprez_content_config_render_admin config %}
+                    {% endfor %}
+                </div>
+            {% endblock %}
         </div>
     </div>
 

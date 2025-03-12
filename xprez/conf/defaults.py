@@ -54,7 +54,7 @@ XPREZ_STAFF_MEMBER_REQUIRED = (
 )
 
 XPREZ_BREAKPOINTS = {
-    0: {"infix": "", "name": "Basic style (&0px)"},
+    0: {"infix": "", "name": "Basic style (&gt; 0px)"},
     1: {"infix": "sm", "name": "Small devices (&gt; 500px)"},
     2: {"infix": "md", "name": "Tablets (&gt; 768px)"},
     3: {"infix": "lg", "name": "Large devices (&gt; 992px)"},

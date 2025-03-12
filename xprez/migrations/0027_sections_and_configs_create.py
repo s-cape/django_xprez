@@ -31,13 +31,14 @@ class Migration(migrations.Migration):
                     "max_width_choice",
                     models.CharField(
                         choices=[
-                            ("small", "small"),
-                            ("medium", "medium"),
-                            ("full", "full"),
-                            ("custom", "custom"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("full", "Full"),
+                            ("custom", "Custom"),
                         ],
                         default="full",
-                        max_length=100,
+                        max_length=16,
+                        verbose_name="Max width",
                     ),
                 ),
                 (
@@ -78,6 +79,12 @@ class Migration(migrations.Migration):
                 ),
                 ("text", models.TextField(blank=True)),
                 ("image", models.ImageField(upload_to="images", null=True, blank=True)),
+                (
+                    "url",
+                    models.CharField(
+                        blank=True, max_length=255, null=True, verbose_name="Target URL"
+                    ),
+                ),
             ],
             options={
                 "verbose_name": "Text",
@@ -141,7 +148,7 @@ class Migration(migrations.Migration):
                     "css_breakpoint",
                     models.PositiveSmallIntegerField(
                         choices=[
-                            (0, "Basic style (&0px)"),
+                            (0, "Basic style (&gt; 0px)"),
                             (1, "Small devices (&gt; 500px)"),
                             (2, "Tablets (&gt; 768px)"),
                             (3, "Large devices (&gt; 992px)"),
@@ -149,21 +156,22 @@ class Migration(migrations.Migration):
                             (5, "Extra large devices (&gt; 1500px)"),
                         ],
                         default=0,
+                        editable=False,
                     ),
                 ),
-                ("saved", models.BooleanField(default=False)),
                 ("visible", models.BooleanField(default=True)),
                 (
                     "margin_bottom_choice",
                     models.CharField(
                         choices=[
-                            ("full", "full"),
-                            ("medium", "medium"),
-                            ("small", "small"),
-                            ("custom", "custom"),
+                            ("full", "Full"),
+                            ("medium", "Medium"),
+                            ("small", "Small"),
+                            ("custom", "Custom"),
                         ],
                         default="medium",
                         max_length=20,
+                        verbose_name="Margin bottom",
                     ),
                 ),
                 (
@@ -174,56 +182,60 @@ class Migration(migrations.Migration):
                     "padding_left_choice",
                     models.CharField(
                         choices=[
-                            ("none", "none"),
-                            ("small", "small"),
-                            ("medium", "medium"),
-                            ("large", "large"),
-                            ("custom", "custom"),
+                            ("none", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
                         ],
                         default="none",
                         max_length=20,
+                        verbose_name="Padding left",
                     ),
                 ),
                 (
                     "padding_right_choice",
                     models.CharField(
                         choices=[
-                            ("none", "none"),
-                            ("small", "small"),
-                            ("medium", "medium"),
-                            ("large", "large"),
-                            ("custom", "custom"),
+                            ("none", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
                         ],
                         default="none",
                         max_length=20,
+                        verbose_name="Padding right",
                     ),
                 ),
                 (
                     "padding_top_choice",
                     models.CharField(
                         choices=[
-                            ("none", "none"),
-                            ("small", "small"),
-                            ("medium", "medium"),
-                            ("large", "large"),
-                            ("custom", "custom"),
+                            ("none", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
                         ],
                         default="none",
                         max_length=20,
+                        verbose_name="Padding top",
                     ),
                 ),
                 (
                     "padding_bottom_choice",
                     models.CharField(
                         choices=[
-                            ("none", "none"),
-                            ("small", "small"),
-                            ("medium", "medium"),
-                            ("large", "large"),
-                            ("custom", "custom"),
+                            ("none", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
                         ],
                         default="none",
                         max_length=20,
+                        verbose_name="Padding bottom",
                     ),
                 ),
                 (
@@ -263,13 +275,14 @@ class Migration(migrations.Migration):
                     "gap_choice",
                     models.CharField(
                         choices=[
-                            ("full", "full"),
-                            ("medium", "medium"),
-                            ("small", "small"),
-                            ("custom", "custom"),
+                            ("full", "Full"),
+                            ("medium", "Medium"),
+                            ("small", "Small"),
+                            ("custom", "Custom"),
                         ],
                         default="full",
                         max_length=20,
+                        verbose_name="Gap",
                     ),
                 ),
                 ("gap_custom", models.PositiveIntegerField(blank=True, null=True)),
@@ -277,10 +290,10 @@ class Migration(migrations.Migration):
                     "vertical_align",
                     models.CharField(
                         choices=[
-                            ("top", "top"),
-                            ("middle", "middle"),
-                            ("bottom", "bottom"),
-                            ("stretch", "stretch"),
+                            ("top", "Top"),
+                            ("middle", "Middle"),
+                            ("bottom", "Bottom"),
+                            ("stretch", "Stretch"),
                         ],
                         default="top",
                         max_length=20,
@@ -290,10 +303,10 @@ class Migration(migrations.Migration):
                     "horizontal_align",
                     models.CharField(
                         choices=[
-                            ("left", "left"),
-                            ("center", "center"),
-                            ("right", "right"),
-                            ("stretch", "stretch"),
+                            ("left", "Left"),
+                            ("center", "Center"),
+                            ("right", "Right"),
+                            ("stretch", "Stretch"),
                         ],
                         default="left",
                         max_length=20,
@@ -305,6 +318,7 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="configs",
                         to="xprez.section",
+                        editable=False,
                     ),
                 ),
             ],
@@ -312,6 +326,7 @@ class Migration(migrations.Migration):
                 "verbose_name": "Section Config",
                 "verbose_name_plural": "Section Configs",
                 "unique_together": {("section", "css_breakpoint")},
+                "ordering": ("css_breakpoint",),
             },
         ),
         migrations.CreateModel(
@@ -330,7 +345,7 @@ class Migration(migrations.Migration):
                     "css_breakpoint",
                     models.PositiveSmallIntegerField(
                         choices=[
-                            (0, "Basic style (&0px)"),
+                            (0, "Basic style (&gt; 0px)"),
                             (1, "Small devices (&gt; 500px)"),
                             (2, "Tablets (&gt; 768px)"),
                             (3, "Large devices (&gt; 992px)"),
@@ -338,6 +353,7 @@ class Migration(migrations.Migration):
                             (5, "Extra large devices (&gt; 1500px)"),
                         ],
                         default=0,
+                        editable=False,
                     ),
                 ),
                 ("visible", models.BooleanField(default=True)),
@@ -345,8 +361,47 @@ class Migration(migrations.Migration):
                     "content",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="configs",
+                        related_name="content_configs",
                         to="xprez.content",
+                        editable=False,
+                    ),
+                ),
+                (
+                    "colspan",
+                    models.PositiveSmallIntegerField(
+                        default=1, verbose_name="Column span"
+                    ),
+                ),
+                (
+                    "horizontal_align",
+                    models.CharField(
+                        choices=[
+                            ("left", "Left"),
+                            ("center", "Center"),
+                            ("right", "Right"),
+                            ("stretch", "Stretch"),
+                        ],
+                        default="left",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "rowspan",
+                    models.PositiveSmallIntegerField(
+                        default=1, verbose_name="Row span"
+                    ),
+                ),
+                (
+                    "vertical_align",
+                    models.CharField(
+                        choices=[
+                            ("top", "Top"),
+                            ("middle", "Middle"),
+                            ("bottom", "Bottom"),
+                            ("stretch", "Stretch"),
+                        ],
+                        default="top",
+                        max_length=20,
                     ),
                 ),
             ],
@@ -355,5 +410,53 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "Content Configs",
                 "unique_together": {("content", "css_breakpoint")},
             },
+        ),
+        migrations.CreateModel(
+            name="TextContentBaseConfig",
+            fields=[
+                (
+                    "contentconfig_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.contentconfig",
+                    ),
+                ),
+                (
+                    "background",
+                    models.BooleanField(default=False),
+                ),
+                (
+                    "border",
+                    models.BooleanField(default=True),
+                ),
+            ],
+            options={
+                "abstract": False,
+            },
+            bases=("xprez.contentconfig",),
+        ),
+        migrations.CreateModel(
+            name="TextContentConfig",
+            fields=[
+                (
+                    "textcontentbaseconfig_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.textcontentbaseconfig",
+                    ),
+                ),
+            ],
+            options={
+                "abstract": False,
+            },
+            bases=("xprez.textcontentbaseconfig",),
         ),
     ]

@@ -3,6 +3,25 @@
 
 {# TODO: cleanup #}
 <style>
+    [data-hidden] {
+        display: none;
+    }
+    [data-has-errors] {
+        border: 1px solid red;
+    }
+    .xprez-errors {
+        color: red;
+    }
+    [data-component="xprez-section"][data-mode="edit"] {
+        border: 1px solid green;
+    }
+    [data-component="xprez-section"][data-collapsed] .xprez-section-grid {
+        display: none;
+    }
+    [data-component="xprez-section"][data-collapsed] .xprez-section__footer {
+        display: none;
+    }
+
 </style>
 
 <div class="xprez {{ form.xprez_admin.xprez_ui_css_class }}" data-component="xprez">
@@ -24,7 +43,7 @@
             </span>
         </div>
 
-        <span class="xprez-btn xprez-btn-transparent xprez-btn--sm">
+        <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-component="xprez-all-sections-collapser">
             <i class="xprez-icon-vertical"></i>
             Collapse all
         </span>
@@ -54,8 +73,8 @@
                 <div class="xprez-section__header--centered">
                     <h3>Add section</h3>
                 </div>
-                {% comment %} {% include "./includes/add_list.html" with component_name="xprez-add-list-container-end" xprez_admin=form.xprez_admin add_position=form.xprez_admin.POSITION_CONTAINER_END add_object="section" container=form.instance %} {% endcomment %}
-                {% include "./includes/add_list.html" with component_name="xprez-add-list-container-end" xprez_admin=form.xprez_admin container=form.instance %}
+                {% comment %} {% include "./includes/add_list.html" with component_name="xprez-add-container-end" xprez_admin=form.xprez_admin add_position=form.xprez_admin.POSITION_CONTAINER_END add_object="section" container=form.instance %} {% endcomment %}
+                {% include "./includes/add_list.html" with component_name="xprez-add-container-end" xprez_admin=form.xprez_admin add_list_container=form.instance %}
             </div>
         {% endif %}
     {% endwith %}
@@ -64,7 +83,6 @@
 <script>
     window.addEventListener("DOMContentLoaded", function() {
         window.xprez = new Xprez();
-        window.xprez.sayHello();
     });
 </script>
 
