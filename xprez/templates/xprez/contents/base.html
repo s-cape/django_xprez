@@ -1,15 +1,13 @@
 {% block content %}
-<div class="{% block css_class_cont %}xprez-module-cont xprez-module-margin-bottom-{{ content.margin_bottom }} xprez-module-padding-top-{{ content.padding_top }} xprez-module-padding-bottom-{{ content.padding_bottom }}  {{ content.css_class|default:'' }} {% if content.alternate_color %}xprez-module-alternate-color{% endif %}{% endblock %}"
-     {% if content.background_color %}style="background-color: {{ content.background_color }};"{% endif %}
+<div
+    class="{% block css_class%}xprez-content {{ content.css_class|default:'' }} {% block css_class_extra %}{% endblock %}{% endblock %}"
+    {% block attrs %}{% endblock %}
 >
-    TODO:
-    {% for config in configs %}
+    TODO content configs:
+    {% for config in content.get_configs %}
         {{ config.css_breakpoint_infix }}
     {% endfor %}
-    <div
-        class="{% block css_class %}xprez-module {% block css_class_extra %}{% endblock %}{% endblock %}"
-        {% block attrs_extra %}{% endblock %}
-    >
+    <div>
         {% block content_in %}
         {% endblock %}
     </div>

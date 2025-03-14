@@ -33,10 +33,16 @@
         </div>
 
         <div class="xprez-content__actions xprez-content__actions--right">
-            <span class="xprez-icon-btn" title="Delete">
+            <span class="xprez-icon-btn" title="Delete" data-component="xprez-content-delete-trigger">
                 <i class="xprez-icon-delete"></i>
+                <span data-hidden>{{ content.admin_form.delete }}</span>
             </span>
         </div>
+    </div>
+
+    <div data-component="xprez-content-delete-info">
+        This content will be deleted when you save the changes.
+        <div data-component="xprez-content-delete-undo">undelete</div>
     </div>
 
     <div class="xprez-content__body">
@@ -93,7 +99,6 @@
                             {% include "xprez/admin/form/row.html" with field=field %}
                         {% endfor %}
                     {% endblock %}
-                    Configs:
 
                     {% for config in content.admin_form.xprez_configs %}
                         {% xprez_content_config_render_admin config %}

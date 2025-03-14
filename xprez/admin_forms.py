@@ -34,6 +34,8 @@ from .utils import import_class
 
 
 class SectionForm(forms.ModelForm):
+    delete = forms.BooleanField(required=False)
+
     class Meta:
         model = Section
         fields = "__all__"
@@ -51,6 +53,8 @@ class SectionConfigForm(forms.ModelForm):
 
 
 class BaseContentForm(forms.ModelForm):
+    delete = forms.BooleanField(required=False)
+
     base_content_fields = (
         "position",
         "section",

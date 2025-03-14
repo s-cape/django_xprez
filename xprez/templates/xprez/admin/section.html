@@ -86,10 +86,16 @@
                     </div>
                 </div>
             </div>
-            <span class="xprez-icon-btn js-delete-content" data-pk="{{ content.pk }}" data-url="TODO{#{% url xprez_admin.xprez_delete_content_url_name content.pk %}#}" title="Remove">
+            <span class="xprez-icon-btn" title="Remove" data-component="xprez-section-delete-trigger">
                 <i class="xprez-icon-delete"></i>
+                <span data-hidden>{{ section.admin_form.delete }}</span>
             </span>
         </div>
+    </div>
+
+    <div data-component="xprez-section-delete-info">
+        This section will be deleted when you save the changes.
+        <div data-component="xprez-section-delete-undo">undelete</div>
     </div>
 
     <div class="xprez-section-grid" data-component="xprez-section-grid">
@@ -120,7 +126,7 @@
                     {% include "xprez/admin/form/row.html" with field=section.admin_form.alternate_color flex=1 %}
                     {% include "xprez/admin/form/row.html" with field=section.admin_form.background_color flex=1 %}
                     {% include "xprez/admin/form/row.html" with field=section.admin_form.css_class flex=1 %}
-            
+
                     {% for config in section.admin_form.xprez_configs %}
                         {% xprez_section_config_render_admin config %}
                     {% endfor %}

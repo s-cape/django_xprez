@@ -27,7 +27,12 @@ class ContentsContainer(models.Model):
         super().save(*args, **kwargs)
 
     def polymorph(self):
-        return getattr(self, self.content_type.lower())
+        app_label, object_name = self.content_type.split(".")
+        model = apps.get_model(app_label, object_name)
+        if isinstance(self, model):
+            return self
+        else:
+            return model.objects.get(pk=self.pk)
 
     def copy_contents(self, for_container):
         for content in self.contents.all():
@@ -40,7 +45,7 @@ class ContentsContainer(models.Model):
         return self.polymorph().__str__()
 
     def render_front(self, context):
-        context["sections"] = self.get_sections()
+        context["container"] = self.polymorph()
         return render_to_string(self.front_template_name, context)
 
     def get_sections(self):
@@ -145,7 +150,10 @@ class Section(models.Model):
         inst = self.admin_form.save(commit=False)
         inst.save()
         for content in self.admin_form.xprez_contents:
-            content.save_admin_form(request)
+            if content.admin_form.cleaned_data.get("delete"):
+                content.delete()
+            else:
+                content.save_admin_form(request)
 
         for config in self.admin_form.xprez_configs:
             config.save_admin_form(request)
@@ -177,9 +185,6 @@ class Section(models.Model):
 
     def render_front(self, context):
         context["section"] = self
-        context["contents"] = self.get_contents()
-        context["configs"] = self.get_configs()
-        print(context["contents"])
         return render_to_string(self.front_template_name, context)
 
 

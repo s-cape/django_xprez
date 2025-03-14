@@ -1,6 +1,11 @@
 {% load xprez %}
 <div class="xprez-section">
-    {% for content in contents %}
+    TODO section configs:
+    {% for config in section.get_configs %}
+        {{ config.css_breakpoint_infix }}
+    {% endfor %}
+
+    {% for content in section.get_contents %}
         {% xprez_content_render_front content %}
     {% endfor %}
 </div>

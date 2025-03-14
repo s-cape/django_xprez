@@ -36,8 +36,11 @@ class XprezModelFormMixin(object):
 
     def save_xprez_sections(self, request):
         for section in self.xprez_sections:
-            section.saved = True
-            section.save_admin_form(request)
+            if section.admin_form.cleaned_data.get("delete"):
+                section.delete()
+            else:
+                section.saved = True
+                section.save_admin_form(request)
 
         # TODO: think about this. What is the best way to delete old sections/contents?
         # for section in self.instance.sections.exclude(
@@ -108,8 +111,8 @@ class XprezAdminMixin(object):
     # def xprez_add_content_before_url_name(self):
     #     return self.xprez_admin_url_name("add_content_before", include_namespace=True)
 
-    def xprez_delete_content_url_name(self):
-        return self.xprez_admin_url_name("delete_content", include_namespace=True)
+    # def xprez_delete_content_url_name(self):
+    #     return self.xprez_admin_url_name("delete_content", include_namespace=True)
 
     def xprez_copy_content_url_name(self):
         return self.xprez_admin_url_name("copy_content", include_namespace=True)
@@ -171,11 +174,11 @@ class XprezAdminMixin(object):
             #     self.xprez_admin_view(self.xprez_add_content_before_view),
             #     name=self.xprez_admin_url_name("add_content_before"),
             # ),
-            path(
-                "xprez-delete-content/<int:content_pk>/",
-                self.xprez_admin_view(self.xprez_delete_content_view),
-                name=self.xprez_admin_url_name("delete_content"),
-            ),
+            # path(
+            #     "xprez-delete-content/<int:content_pk>/",
+            #     self.xprez_admin_view(self.xprez_delete_content_view),
+            #     name=self.xprez_admin_url_name("delete_content"),
+            # ),
             path(
                 "xprez-copy-content/<int:content_pk>/",
                 self.xprez_admin_view(self.xprez_copy_content_view),

@@ -141,14 +141,12 @@
                 this.initContent.bind(this)
             );
             this.popover = new XprezSectionPopover(this);
-            this.initCollapser();
             this.addSectionBefore = new XprezAddSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-add-section-before']"), this);
             this.addSectionEnd = new XprezAddSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-add-section-end']"), this);
-            // this.xprezAddBefore = new XprezAdd(this.xprez, this.el.querySelector("[data-component='xprez-add-section-before']"));
-            // this.xprezAddEnd = new XprezAdd(this.xprez, this.el.querySelector("[data-component='xprez-add-section-end']"));
-            // this.el.querySelectorAll("[data-component='xprez-add-content-trigger']").forEach(
-            //     this.xprez.initAddContentTrigger.bind(this.xprez)
-            // );
+            this.deleter = new XprezSectionDeleter(this);
+
+            this.initCollapser();
+            // this.initDelete();
         }
 
         id() { return this.el.querySelector("[name='section-id']").value; }
@@ -178,6 +176,39 @@
             this.section = section;
             this.el = contentEl;
             this.popover = new XprezContentPopover(this);
+            this.deleter = new XprezContentDeleter(this);
+        }
+    }
+
+    class XprezDeleterBase {
+        constructor(obj) {
+            this.obj = obj;
+            this.initElements();
+            if (this.triggerEl) {
+                this.triggerEl.addEventListener("click", this.delete.bind(this));
+            }
+            if (this.undoEl) {
+                this.undoEl.addEventListener("click", this.undo.bind(this));
+            }
+        }
+        initElements() { throw new Error("Not implemented"); }
+        delete() { this.obj.el.dataset.mode = "delete"; this.inputEl.checked = true; }
+        undo() { this.obj.el.dataset.mode = ""; this.inputEl.checked = false; }
+    }
+
+    class XprezSectionDeleter extends XprezDeleterBase {
+        initElements() {
+            this.triggerEl = this.obj.el.querySelector("[data-component='xprez-section-delete-trigger']");
+            this.inputEl = this.triggerEl.querySelector("input");
+            this.undoEl = this.obj.el.querySelector("[data-component='xprez-section-delete-undo']");
+        }
+    }
+
+    class XprezContentDeleter extends XprezDeleterBase {
+        initElements() {
+            this.triggerEl = this.obj.el.querySelector("[data-component='xprez-content-delete-trigger']");
+            this.inputEl = this.triggerEl.querySelector("input");
+            this.undoEl = this.obj.el.querySelector("[data-component='xprez-content-delete-undo']");
         }
     }
 

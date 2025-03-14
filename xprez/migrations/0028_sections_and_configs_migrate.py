@@ -10,18 +10,23 @@ def forward(apps, schema_editor):
     migrate_to_sections(apps, schema_editor)
 
 
-def _set_content_type(content):
-    content.content_type = "{}.{}".format(
-        content._meta.app_label,
-        content._meta.object_name,
+def _set_content_type(obj):
+    obj.content_type = "{}.{}".format(
+        obj._meta.app_label,
+        obj._meta.object_name,
     )
-    content.save()
+    obj.save()
 
 
 def rename_content_type(apps, schema_editor):
     Content = apps.get_model("xprez", "Content")
     for content in Content.objects.all():
         polymorph = getattr(content, content.content_type.lower())
+        _set_content_type(polymorph)
+
+    ContentsContainer = apps.get_model("xprez", "ContentsContainer")
+    for container in ContentsContainer.objects.all():
+        polymorph = getattr(container, container.content_type.lower())
         _set_content_type(polymorph)
 
 
