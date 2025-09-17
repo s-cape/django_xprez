@@ -34,14 +34,22 @@
             var decimalPlaces = isFloat ? (num.split('.')[1] || []).length : 0;
 
             // Generate list of incremental numbers to display
-            for (var i = divisions; i >= 1; i--) {
+            for (var i = 0; i <= divisions; i++) {
 
                 // Preserve as int if input was int
-                var newNum = parseInt(num / divisions * i);
+                var newNum = Math.round(num / divisions * i);
+
+                // Ensure we reach the target number on the last iteration
+                if (i === divisions) {
+                    newNum = parseInt(num);
+                }
 
                 // Preserve float if input was float
                 if (isFloat) {
                     newNum = parseFloat(num / divisions * i).toFixed(decimalPlaces);
+                    if (i === divisions) {
+                        newNum = parseFloat(num).toFixed(decimalPlaces);
+                    }
                 }
 
                 // Preserve commas if input had commas
@@ -51,7 +59,7 @@
                     }
                 }
 
-                nums.unshift(newNum);
+                nums.push(newNum);
             }
 
             $this.data('counterup-nums', nums);
