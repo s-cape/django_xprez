@@ -40,6 +40,7 @@
             id="video-{{ content.pk }}"
             width="560" height="315"
             frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin"
             allow="autoplay"
             {% if content.video_type == 'youtube' %}
                 class="js-youtube" src="https://www.youtube.com/embed/{{ content.video_id }}?enablejsapi=1"
