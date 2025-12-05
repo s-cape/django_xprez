@@ -27,8 +27,8 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
 // import ParagraphButtonUI from '@ckeditor/ckeditor5-paragraph/src/paragraphbuttonui';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice.js';
 import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter.js';
-// import Table from '@ckeditor/ckeditor5-table/src/table.js';
-// import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
+import Table from '@ckeditor/ckeditor5-table/src/table.js';
+import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation.js';
 
 class Editor extends BalloonBlockEditor {}
@@ -59,8 +59,8 @@ Editor.builtinPlugins = [
 	Paragraph,
 	PasteFromOffice,
 	SimpleUploadAdapter,
-	// Table,
-	// TableToolbar,
+	Table,
+	TableToolbar,
 	TextTransformation
 ];
 
