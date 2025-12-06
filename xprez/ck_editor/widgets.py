@@ -2,6 +2,7 @@ import json
 
 from django import forms
 from django.urls import reverse
+
 from xprez.conf import settings
 
 
@@ -153,6 +154,22 @@ class CkEditorWidgetFull(CkEditorWidgetFullBase):
                 "block",
                 "alignLeft",
                 "alignRight",
+            ),
+        }
+        return config
+
+
+class CkEditorWidgetFullWithTable(CkEditorWidgetFull):
+    def get_config(self, *args, **kwargs):
+        config = super().get_config(*args, **kwargs)
+
+        config["toolbar"] += ("|", "insertTable")
+        config["blockToolbar"] += ("|", "insertTable")
+        config["table"] = {
+            "contentToolbar": (
+                "tableColumn",
+                "tableRow",
+                "mergeTableCells",
             ),
         }
         return config
