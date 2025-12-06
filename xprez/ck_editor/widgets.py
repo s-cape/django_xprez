@@ -160,8 +160,8 @@ class CkEditorWidgetFull(CkEditorWidgetFullBase):
 
 
 class CkEditorWidgetFullWithTable(CkEditorWidgetFull):
-    def get_config(self, *args, **kwargs):
-        config = super().get_config(*args, **kwargs)
+    def get_config(self, file_upload_dir, *args, **kwargs):
+        config = super().get_config(file_upload_dir, *args, **kwargs)
 
         config["toolbar"] += ("|", "insertTable")
         config["blockToolbar"] += ("|", "insertTable")
