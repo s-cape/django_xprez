@@ -46,7 +46,25 @@
         display: block;
     }
 
+    .sortable-ghost {
+        opacity: 0.4;
+        border: 1px dashed orange;
+    }
 
+    .sortable-drag {
+        border: 1px dashed blue;
+        opacity: 0.8;
+    }
+
+    .xprez-section__header,
+    .xprez-content__header {
+        cursor: grab;
+    }
+
+    .xprez-section__header:active,
+    .xprez-content__header:active {
+        cursor: grabbing;
+    }
 </style>
 
 <div class="xprez" data-component="xprez">

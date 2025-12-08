@@ -1,4 +1,13 @@
 (function() {
+    const SORTABLE_BASE_CONFIG = {
+        animation: 150,
+        filter: 'input, textarea, select, [contenteditable]',
+        preventOnFilter: false,
+        onMove: (evt) => {
+            return !evt.related.closest('input, textarea, select, [contenteditable="true"]');
+        }
+    };
+
     class Xprez {
         constructor() {
             this.el = document.querySelector("[data-component='xprez']");
@@ -11,9 +20,10 @@
             this.updateView();
             this.add = new XprezAddContainerEnd(this, this.el.querySelector("[data-component='xprez-add-container-end']"));
             this.initAllSectionsCollapser();
+            this.initSectionsSortable();
 
             // TODO open first section, just for development
-            this.sections[0].popover.show();
+            // this.sections[0].popover.show();
         }
 
         initSection(sectionEl) {
@@ -37,14 +47,19 @@
 
         setPlacementToInputs() {
             this.sectionsContainerEl.querySelectorAll("[data-component='xprez-section']").forEach(
-                (section, sectionIndex) => {
-                    const positionInputEl = section.querySelector(`input[name="${section.dataset.prefix}-position"]`);
-                    positionInputEl.value = sectionIndex;
+                (sectionEl, sectionIndex) => {
+                    const sectionPositionInputEl = sectionEl.querySelector(`input[name="${sectionEl.dataset.prefix}-position"]`);
+                    sectionPositionInputEl.value = sectionIndex;
 
-                    section.querySelectorAll("[data-component='xprez-content']").forEach(
-                        (content, contentIndex) => {
-                            const positionInputEl = content.querySelector(`input[name="${content.dataset.prefix}-position"]`);
-                            positionInputEl.value = contentIndex;
+                    const sectionId = sectionEl.querySelector('input[name="section-id"]').value;
+
+                    sectionEl.querySelectorAll("[data-component='xprez-content']").forEach(
+                        (contentEl, contentIndex) => {
+                            const contentPositionInputEl = contentEl.querySelector(`input[name="${contentEl.dataset.prefix}-position"]`);
+                            contentPositionInputEl.value = contentIndex;
+
+                            const contentSectionInputEl = contentEl.querySelector(`input[name="${contentEl.dataset.prefix}-section"]`);
+                            contentSectionInputEl.value = sectionId;
                         }
                     );
                 }
@@ -56,6 +71,14 @@
             this.allSectionsCollapserEl.addEventListener("click", function() {
                 for (const section of Object.values(this.sections)) { section.collapse(); }
             }.bind(this));
+        }
+
+        initSectionsSortable() {
+            new Sortable(this.sectionsContainerEl, {
+                ...SORTABLE_BASE_CONFIG,
+                handle: '[data-draggable-section-handle]',
+                onEnd: () => this.setPlacementToInputs()
+            });
         }
     }
 
@@ -147,6 +170,7 @@
 
             this.initCollapser();
             this.initConfigs();
+            this.initContentsSortable();
         }
 
         id() { return this.el.querySelector("[name='section-id']").value; }
@@ -185,6 +209,15 @@
         collapse() { this.el.setAttribute("data-collapsed", ""); }
         expand() { this.el.removeAttribute("data-collapsed"); }
         toggleCollapse() { this.isCollapsed() ? this.expand() : this.collapse(); }
+
+        initContentsSortable() {
+            new Sortable(this.gridEl, {
+                ...SORTABLE_BASE_CONFIG,
+                group: 'xprez-contents',
+                handle: '[data-draggable-content-handle]',
+                onEnd: () => this.xprez.setPlacementToInputs()
+            });
+        }
     }
 
    class XprezContent {
