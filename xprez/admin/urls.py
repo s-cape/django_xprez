@@ -1,4 +1,4 @@
-from . import autodiscover, contents_manager
+from xprez import autodiscover, contents_manager
 
 autodiscover()
 

@@ -107,7 +107,7 @@ class ConfigBase(models.Model):
 
 class SectionConfig(ConfigBase):
     admin_template_name = "xprez/admin/section_config.html"
-    form_class = "xprez.admin_forms.SectionConfigForm"
+    form_class = "xprez.admin.forms.SectionConfigForm"
 
     section = models.ForeignKey(
         "xprez.Section",
@@ -191,7 +191,7 @@ class SectionConfig(ConfigBase):
 
 class ContentConfig(ConfigBase):
     admin_template_name = "xprez/admin/content_configs/base.html"
-    form_class = "xprez.admin_forms.ContentConfigForm"
+    form_class = "xprez.admin.forms.ContentConfigForm"
 
     content = models.ForeignKey(
         "xprez.Content",

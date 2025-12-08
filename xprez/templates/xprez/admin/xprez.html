@@ -49,7 +49,7 @@
 
 </style>
 
-<div class="xprez {{ form.xprez_admin.xprez_ui_css_class }}" data-component="xprez">
+<div class="xprez" data-component="xprez">
     <div class="xprez-top">
         <div class="xprez-option" data-active="true" data-text-label="true">
             <label for="view">
@@ -90,7 +90,7 @@
         {% endfor %}
     </div>
 
-    {# {% include "./dev/section.html" %} #}
+    {% comment %} {% include "./dev/section.html" %} {% endcomment %}
 
     {% with allowed_contents=form.xprez_get_allowed_contents %}
         {% if allowed_contents %}

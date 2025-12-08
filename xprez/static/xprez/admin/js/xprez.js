@@ -5,17 +5,20 @@
             this.sectionsContainerEl = this.el.querySelector("[data-component='xprez-sections-container']");
             this.viewSelectEl = this.el.querySelector("[data-component='xprez-view-select']");
             this.viewSelectEl.addEventListener("change", this.updateView.bind(this));
-            this.sections = {};
+            this.sections = [];
             this.el.querySelectorAll("[data-component='xprez-section']").forEach(this.initSection.bind(this));
 
             this.updateView();
             this.add = new XprezAddContainerEnd(this, this.el.querySelector("[data-component='xprez-add-container-end']"));
             this.initAllSectionsCollapser();
+
+            // TODO open first section, just for development
+            this.sections[0].popover.show();
         }
 
         initSection(sectionEl) {
             const section = new XprezSection(this, sectionEl);
-            this.sections[section.id()] = section;
+            this.sections.push(section);
         }
 
         updateView() {
@@ -23,11 +26,11 @@
         }
 
         getContents() {
-            return Object.values(this.sections).flatMap(section => Object.values(section.contents));
+            return this.sections.flatMap(section => section.contents);
         }
 
         getPopovers() {
-            const sectionPopovers = Object.values(this.sections).flatMap(section => section.popover);
+            const sectionPopovers = this.sections.flatMap(section => section.popover);
             const contentPopovers = this.getContents().flatMap(content => content.popover);
             return [...sectionPopovers, ...contentPopovers];
         }
@@ -136,21 +139,24 @@
             this.xprez = xprez;
             this.el = sectionEl;
             this.gridEl = this.el.querySelector("[data-component='xprez-section-grid']");
-            this.contents = {};
-            this.el.querySelectorAll("[data-component='xprez-content']").forEach(
-                this.initContent.bind(this)
-            );
+            this.initContents();
             this.popover = new XprezSectionPopover(this);
             this.addSectionBefore = new XprezAddSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-add-section-before']"), this);
             this.addSectionEnd = new XprezAddSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-add-section-end']"), this);
             this.deleter = new XprezSectionDeleter(this);
 
             this.initCollapser();
-            // this.initDelete();
+            this.initConfigs();
         }
 
         id() { return this.el.querySelector("[name='section-id']").value; }
 
+        initContents() {
+            this.contents = [];
+            this.el.querySelectorAll("[data-component='xprez-content']").forEach(
+                this.initContent.bind(this)
+            );
+        }
         initContent(contentEl) {
             const ControllerClass = window[contentEl.dataset.jsControllerClass];
             if (!ControllerClass) {
@@ -158,7 +164,17 @@
                 return;
             }
             const content = new ControllerClass(this, contentEl);
-            this.contents[contentEl.querySelector("input[name='content-id']").value] = content;
+            this.contents.push(content);
+        }
+
+        initConfigs() {
+            this.configs = [];
+            this.el.querySelectorAll("[data-component='xprez-section-config']").forEach(
+                this.initConfig.bind(this)
+            );
+        }
+        initConfig(configEl) {
+            this.configs.push(new XprezSectionConfig(this, configEl));
         }
 
         initCollapser() {
@@ -271,6 +287,26 @@
         hide() {
             super.hide();
             this.content.el.dataset.mode = "";
+        }
+    }
+
+    class XprezConfigBase {
+        constructor(el) {
+            this.el = el;
+        }
+    }
+
+    class XprezSectionConfig extends XprezConfigBase {
+        constructor(section, ...args) {
+            super(...args);
+            this.section = section;
+        }
+    }
+
+    class XprezContentConfig extends XprezConfigBase {
+        constructor(content, ...args) {
+            super(...args);
+            this.content = content;
         }
     }
 

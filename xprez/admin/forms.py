@@ -7,11 +7,10 @@ from django import forms
 from django.forms import inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 
-from .conf import settings
-from .medium_editor.widgets import MediumEditorWidget
-from .models.base import Section
-from .models.configs import SectionConfig
-from .models.contents import (
+from xprez.conf import settings
+from xprez.medium_editor.widgets import MediumEditorWidget
+from xprez.models.configs import SectionConfig
+from xprez.models.contents import (
     Attachment,
     CkEditor,
     CodeInput,
@@ -30,7 +29,8 @@ from .models.contents import (
     TextImage,
     Video,
 )
-from .utils import import_class
+from xprez.models.sections import Section
+from xprez.utils import import_class
 
 
 class SectionForm(forms.ModelForm):

@@ -14,10 +14,14 @@ class CkEditorWidgetBase(forms.widgets.Textarea):
 
     class Media:
         css = {"all": ()}
-        js = tuple(settings.XPREZ_JQUERY_INIT_MEDIA_JS) + (
+        js = (
             "ck_editor/libs/ck_editor/ckeditor.js",
             "ck_editor/js/ck_editor_widget.js",
         )
+        # js = tuple(settings.XPREZ_JQUERY_INIT_MEDIA_JS) + (
+        #     "ck_editor/libs/ck_editor/ckeditor.js",
+        #     "ck_editor/js/ck_editor_widget.js",
+        # )
 
     def __init__(self, file_upload_dir=None, attrs=None):
         config = self.get_config(file_upload_dir=None)

@@ -12,24 +12,24 @@ from django.urls import re_path
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from xprez.utils import truncate_with_ellipsis
-
-from ..ck_editor import parse_text as ckeditor_parse_text
-from ..ck_editor.widgets import CkEditorWidget
-from ..conf import settings
-from ..medium_editor.utils import parse_text as medium_editor_parse_text
-from ..medium_editor.utils import render_text_parsed as medium_editor_render_text_parsed
-from ..medium_editor.widgets import MediumEditorWidget
-from ..permissions import xprez_staff_member_required
-from ..utils import random_string
-from .base import (
+from xprez.admin.fields import TemplatePathField
+from xprez.admin.permissions import xprez_staff_member_required
+from xprez.ck_editor import parse_text as ckeditor_parse_text
+from xprez.ck_editor.widgets import CkEditorWidget
+from xprez.conf import settings
+from xprez.medium_editor.utils import parse_text as medium_editor_parse_text
+from xprez.medium_editor.utils import (
+    render_text_parsed as medium_editor_render_text_parsed,
+)
+from xprez.medium_editor.widgets import MediumEditorWidget
+from xprez.models.base import (
     CLIPBOARD_TEXT_MAX_LENGTH,
     AjaxUploadFormsetContent,
     Content,
     ContentItem,
     FormsetContent,
 )
-from .fields import TemplatePathField
+from xprez.utils import random_string, truncate_with_ellipsis
 
 PHOTOSWIPE_JS = (
     "xprez/libs/photoswipe/dist/photoswipe.min.js",
@@ -78,7 +78,7 @@ class CkEditorFileUploadMixin:
 
 
 class TextContentBase(CkEditorFileUploadMixin, Content):
-    form_class = "xprez.admin_forms.TextContentBaseForm"
+    form_class = "xprez.admin.forms.TextContentBaseForm"
     admin_template_name = "xprez/admin/contents/text_base.html"
     front_template_name = "xprez/contents/text_base.html"
     icon_template_name = "xprez/admin/icons/contents/text_base.html"
@@ -91,7 +91,7 @@ class TextContentBase(CkEditorFileUploadMixin, Content):
 
 
 class TextContent(TextContentBase):
-    form_class = "xprez.admin_forms.TextContentForm"
+    form_class = "xprez.admin.forms.TextContentForm"
     admin_template_name = "xprez/admin/contents/text.html"
     front_template_name = "xprez/contents/text.html"
     icon_template_name = "xprez/admin/icons/contents/text.html"
@@ -115,7 +115,7 @@ class TextContent(TextContentBase):
 
 
 class MediumEditor(Content):
-    form_class = "xprez.admin_forms.MediumEditorForm"
+    form_class = "xprez.admin.forms.MediumEditorForm"
     admin_template_name = "xprez/admin/contents/medium_editor.html"
     front_template_name = "xprez/contents/medium_editor.html"
     icon_template_name = "xprez/admin/icons/contents/medium_editor.html"
@@ -144,7 +144,7 @@ class MediumEditor(Content):
 
 
 class CkEditor(CkEditorFileUploadMixin, Content):
-    form_class = "xprez.admin_forms.CkEditorForm"
+    form_class = "xprez.admin.forms.CkEditorForm"
     admin_template_name = "xprez/admin/contents/ck_editor.html"
     front_template_name = "xprez/contents/ck_editor.html"
     icon_template_name = "xprez/admin/icons/contents/ck_editor.html"
@@ -175,8 +175,8 @@ class CkEditor(CkEditorFileUploadMixin, Content):
 
 
 class QuoteContent(FormsetContent):
-    form_class = "xprez.admin_forms.QuoteContentForm"
-    formset_factory = "xprez.admin_forms.QuoteFormSet"
+    form_class = "xprez.admin.forms.QuoteContentForm"
+    formset_factory = "xprez.admin.forms.QuoteFormSet"
     admin_template_name = "xprez/admin/contents/quote.html"
     front_template_name = "xprez/contents/quote.html"
     icon_template_name = "xprez/admin/icons/contents/quote.html"
@@ -228,12 +228,12 @@ class Gallery(AjaxUploadFormsetContent):
         (8, "8"),
     )
 
-    form_class = "xprez.admin_forms.GalleryForm"
+    form_class = "xprez.admin.forms.GalleryForm"
     admin_template_name = "xprez/admin/contents/gallery/gallery.html"
     admin_formset_item_template_name = "xprez/admin/contents/gallery/photo.html"
     front_template_name = "xprez/contents/gallery.html"
     icon_template_name = "xprez/admin/icons/contents/gallery.html"
-    formset_factory = "xprez.admin_forms.PhotoFormSet"
+    formset_factory = "xprez.admin.forms.PhotoFormSet"
 
     width = models.CharField(
         max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
@@ -295,7 +295,7 @@ class Video(Content):
     admin_template_name = "xprez/admin/contents/video.html"
     front_template_name = "xprez/contents/video.html"
     icon_template_name = "xprez/admin/icons/contents/video.html"
-    form_class = "xprez.admin_forms.VideoForm"
+    form_class = "xprez.admin.forms.VideoForm"
 
     poster_image = models.ImageField(upload_to="video", null=True, blank=True)
     url = models.URLField()
@@ -326,7 +326,7 @@ class CodeInput(Content):
     admin_template_name = "xprez/admin/contents/code_input.html"
     front_template_name = "xprez/contents/code_input.html"
     icon_template_name = "xprez/admin/icons/contents/code_input.html"
-    form_class = "xprez.admin_forms.CodeInputForm"
+    form_class = "xprez.admin.forms.CodeInputForm"
 
     code = models.TextField()
 
@@ -338,8 +338,8 @@ class NumbersContent(FormsetContent):
     admin_template_name = "xprez/admin/contents/numbers.html"
     front_template_name = "xprez/contents/numbers.html"
     icon_template_name = "xprez/admin/icons/contents/numbers.html"
-    form_class = "xprez.admin_forms.NumbersContentForm"
-    formset_factory = "xprez.admin_forms.NumberFormSet"
+    form_class = "xprez.admin.forms.NumbersContentForm"
+    formset_factory = "xprez.admin.forms.NumberFormSet"
 
     def get_formset_queryset(self):
         return self.numbers.all()
@@ -375,7 +375,7 @@ class FeatureBoxes(Content):
     admin_template_name = "xprez/admin/contents/feature_boxes.html"
     front_template_name = "xprez/contents/feature_boxes.html"
     icon_template_name = "xprez/admin/icons/contents/feature_boxes.html"
-    form_class = "xprez.admin_forms.FeatureBoxesForm"
+    form_class = "xprez.admin.forms.FeatureBoxesForm"
 
     box_1 = models.TextField(blank=True)
     box_2 = models.TextField(blank=True)
@@ -391,7 +391,7 @@ class FeatureBoxes(Content):
 class CodeTemplate(Content):
     admin_template_name = "xprez/admin/contents/code_template.html"
     icon_template_name = "xprez/admin/icons/contents/code_template.html"
-    form_class = "xprez.admin_forms.CodeTemplateForm"
+    form_class = "xprez.admin.forms.CodeTemplateForm"
 
     template_name = TemplatePathField(
         template_dir=settings.XPREZ_CODE_TEMPLATES_DIR,
@@ -417,8 +417,8 @@ class DownloadContent(AjaxUploadFormsetContent):
     front_template_name = "xprez/contents/download.html"
     admin_formset_item_template_name = "xprez/admin/contents/download/attachment.html"
     icon_template_name = "xprez/admin/icons/contents/download.html"
-    form_class = "xprez.admin_forms.DownloadContentForm"
-    formset_factory = "xprez.admin_forms.AttachmentFormSet"
+    form_class = "xprez.admin.forms.DownloadContentForm"
+    formset_factory = "xprez.admin.forms.AttachmentFormSet"
 
     title = models.CharField(max_length=255, blank=True)
 
@@ -469,7 +469,7 @@ class Attachment(ContentItem):
 
 
 class TextImageBase(Content):
-    form_class = "xprez.admin_forms.TextImageForm"
+    form_class = "xprez.admin.forms.TextImageForm"
     admin_template_name = "xprez/admin/contents/text_image.html"
     front_template_name = "xprez/contents/text_image.html"
     icon_template_name = "xprez/admin/icons/contents/text_image.html"
@@ -508,7 +508,7 @@ class TextImage(TextImageBase):
 
 
 class GridBoxes(CkEditorFileUploadMixin, Content):
-    form_class = "xprez.admin_forms.GridBoxesForm"
+    form_class = "xprez.admin.forms.GridBoxesForm"
     admin_template_name = "xprez/admin/contents/grid_boxes/grid_boxes.html"
     front_template_name = "xprez/contents/grid_boxes.html"
     icon_template_name = "xprez/admin/icons/contents/grid_boxes.html"

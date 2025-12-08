@@ -8,7 +8,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from xprez.permissions import xprez_staff_member_required
+from xprez.admin.permissions import xprez_staff_member_required
 from xprez.utils import random_string
 
 # def random_string(length, include_special_chars=False):

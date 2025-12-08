@@ -48,12 +48,13 @@ class ContentTypeManager:
         return self._collect_media(
             "AdminMedia",
             initial=Media(
-                js=tuple(settings.XPREZ_JQUERY_INIT_MEDIA_JS)
-                + (
-                    "xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js",
-                    "xprez/admin/libs/jquery_ui/jquery-ui.min.js",
-                    "xprez/admin/js/xprez.js",
-                ),
+                js=("xprez/admin/js/xprez.js",),
+                # js=tuple(settings.XPREZ_JQUERY_INIT_MEDIA_JS)
+                # + (
+                #     "xprez/admin/libs/jquery-sortable/source/js/jquery-sortable-min.js",
+                #     "xprez/admin/libs/jquery_ui/jquery-ui.min.js",
+                #     "xprez/admin/js/xprez.js",
+                # ),
                 css={"all": ("xprez/styles/xprez-backend.css",)},
             ),
         )

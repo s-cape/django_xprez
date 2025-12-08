@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import xprez.models.fields
+import xprez.admin.fields
 
 
 class Migration(migrations.Migration):
@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="codetemplate",
             name="template_name",
-            field=xprez.models.fields.TemplatePathField(
+            field=xprez.admin.fields.TemplatePathField(
                 blank=True, max_length=255, null=True
             ),
         ),

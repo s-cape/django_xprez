@@ -1,10 +1,28 @@
 import os
 import re
 
+from django.db import models
 from django.forms.fields import ChoiceField
 
 
-class RelativeFilePathFieldForm(ChoiceField):
+class TemplatePathField(models.FilePathField):
+    def __init__(self, template_dir="", prefix="", **kwargs):
+        self.template_dir = template_dir
+        self.prefix = prefix
+        super().__init__(**kwargs)
+
+    def formfield(self, **kwargs):
+        absolute_path = os.path.join(self.template_dir, self.prefix)
+        defaults = {
+            "path": absolute_path,
+            "rel_path": self.prefix,
+            "form_class": RelativeFilePathField,
+        }
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
+
+
+class RelativeFilePathField(ChoiceField):
     """
     Custom form for RelativeFilePathField. Most of code from django.forms.FilePathField
     """
@@ -26,7 +44,7 @@ class RelativeFilePathFieldForm(ChoiceField):
             rel_path,
         )
         self.allow_files, self.allow_folders = allow_files, allow_folders
-        super(RelativeFilePathFieldForm, self).__init__(choices=(), **kwargs)
+        super().__init__(choices=(), **kwargs)
 
         if self.required:
             self.choices = []

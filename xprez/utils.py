@@ -18,7 +18,7 @@ def remove_duplicates(list_):
 
 def build_absolute_uri(location, request=None):
     if settings.XPREZ_USE_ABSOLUTE_URI:
-        if "http" not in location:
+        if location.lower().startswith(("http://", "https://", "//")):
             if request:
                 return request.build_absolute_uri(location)
             return "{}{}".format(settings.XPREZ_BASE_URL, location)
