@@ -2,6 +2,8 @@ import warnings
 from collections import OrderedDict
 
 from django.forms import Media
+from django.templatetags.static import static
+from django.utils.html import format_html
 from django.utils.module_loading import autodiscover_modules
 
 from xprez.conf import settings
@@ -49,8 +51,11 @@ class ContentTypeManager:
             "AdminMedia",
             initial=Media(
                 js=(
-                    "xprez/admin/libs/sortablejs/sortable-1.15.6.min.js",  # TODO
-                    "xprez/admin/js/xprez.js",
+                    "xprez/admin/libs/sortablejs/sortable-1.15.6.min.js",
+                    format_html(
+                        '<script type="module" src="{}"></script>',
+                        static("xprez/admin/js/xprez.js"),
+                    ),
                 ),
                 css={"all": ("xprez/styles/xprez-backend.css",)},
             ),
