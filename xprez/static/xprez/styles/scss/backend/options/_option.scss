@@ -53,7 +53,7 @@
 
 	// Text input
 
-	input[type="text"] {
+	input[type="text"], input[type="number"] {
 		font-family: inherit !important;
 		font-weight: var(--x-admin-option-input-font-weight) !important;
 		font-size: inherit !important;
