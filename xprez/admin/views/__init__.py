@@ -1,3 +1,3 @@
-from . import clipboard, content
+from . import clipboard, contents
 
-__all__ = ["clipboard", "content"]
+__all__ = ["clipboard", "contents"]

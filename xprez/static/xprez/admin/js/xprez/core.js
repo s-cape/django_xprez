@@ -1,4 +1,4 @@
-import { XprezSection } from './section.js';
+import { XprezSection } from './sections.js';
 import { XprezAddContainerEnd } from './adders.js';
 import { XprezSortable } from './sortable.js';
 
@@ -17,7 +17,7 @@ export class Xprez {
         this.initSectionsSortable();
 
         // TODO open first section, just for development
-        // this.sections[0].popover.show();
+        this.sections[0].popover.show();
     }
 
     initSection(sectionEl) {
@@ -74,4 +74,3 @@ export class Xprez {
         });
     }
 }
-

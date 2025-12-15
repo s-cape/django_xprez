@@ -1,12 +1,10 @@
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
 from django.urls import path
-from django.views.decorators.csrf import csrf_exempt
 
 from xprez import contents_manager, models
 
 
-class XprezAdminViewsContentMixin(object):
+class XprezAdminViewsContentsMixin(object):
     def xprez_add_view(self, request, content_type, container_pk, section_pk=None):
         """Adds a content. Create a section+content if section_pk is not provided."""
         content_class = contents_manager.get(content_type)

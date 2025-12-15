@@ -42,9 +42,16 @@ class SectionForm(forms.ModelForm):
 
 
 class SectionConfigForm(forms.ModelForm):
+    delete = forms.BooleanField(required=False)
+
     class Meta:
         model = SectionConfig
         fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.is_default():
+            del self.fields["delete"]
 
     # def clean(self):
     #     super().clean()

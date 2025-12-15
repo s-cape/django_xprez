@@ -30,3 +30,11 @@ export class XprezContentDeleter extends XprezDeleterBase {
     }
 }
 
+export class XprezSectionConfigDeleter extends XprezDeleterBase {
+    initElements() {
+        this.triggerEl = this.obj.el.querySelector("[data-component='xprez-section-config-delete-trigger']");
+        if (!this.triggerEl) { return; }
+        this.inputEl = this.triggerEl.querySelector("input");
+        this.undoEl = this.obj.el.querySelector("[data-component='xprez-section-config-delete-undo']");
+    }
+}

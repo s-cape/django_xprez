@@ -43,6 +43,16 @@
         display: block;
     }
 
+    [data-component="xprez-section-config"][data-mode="delete"] {
+        border: 1px solid red;
+    }
+    [data-component="xprez-section-config"][data-mode="delete"] > * {
+        display: none;
+    }
+    [data-component="xprez-section-config"][data-mode="delete"] [data-component="xprez-section-config-delete-info"] {
+        display: block;
+    }
+
     .sortable-ghost {
         opacity: 0.4;
         border: 1px dashed orange;
@@ -74,11 +84,9 @@
             <span class="xprez-option__dropdown">
                 <select class="xprez-option__select" id="view" data-component="xprez-view-select">
                     <option value="sm">Default edit view</option>
-                    <option value="sm">Small devices (500px)</option>
-                    <option value="md">Tablets (768px)</option>
-                    <option value="lg">Large devices (992px)</option>
-                    <option value="xl">Desktops (1200px)</option>
-                    <option value="xxl">Extra large devices (1500px)</option>
+                    {% for id, data in form.xprez_admin.xprez_breakpoints.items %}
+                        <option value="{{ id }}" data-infix="{{ data.infix }}">{{ data.name|safe }}</option>
+                    {% endfor %}
                 </select>
             </span>
         </div>

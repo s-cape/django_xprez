@@ -1,4 +1,9 @@
-<div class="xprez-option-group" data-component="xprez-section-config" {% if config.is_default %}data-is-default{% endif %}>
+<div
+    class="xprez-option-group" 
+    data-component="xprez-section-config"
+    {% if config.is_default %}data-is-default{% endif %}
+    data-css-breakpoint="{{ config.css_breakpoint }}"
+>
     <div class="xprez-option-group__title">
         <div class="xprez-option" data-active="true" data-text-label="false">
             <label for="{{ config.admin_form.visible.id_for_label }}">
@@ -9,9 +14,10 @@
             {{ config.admin_form.visible }}
         </div>
         <span class="xprez-option-group__title-text">{{ config.get_css_breakpoint_display|safe }}</span>
-        {% if not config.is_default %}
-            <span class="xprez-icon-btn" title="Remove breakpoint">
+        {% if config.admin_form.delete %}
+            <span class="xprez-icon-btn" title="Remove breakpoint" data-component="xprez-section-config-delete-trigger">
                 <i class="xprez-icon-delete"></i>
+                <span data-hidden>{{ config.admin_form.delete }}</span>
             </span>
         {% endif %}
     </div>
@@ -53,4 +59,11 @@
         {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align label=False icon="xprez-icon-vertical" flex=1 %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align label=False icon="xprez-icon-horizontal" flex=1 %}
     </div>
+
+    {% if config.admin_form.delete %}
+        <div data-component="xprez-section-config-delete-info">
+            This breakpoint will be deleted when you save the changes.
+            <div data-component="xprez-section-config-delete-undo">undelete</div>
+        </div>
+    {% endif %}
 </div>

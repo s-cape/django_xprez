@@ -64,10 +64,21 @@
             <span class="xprez-icon-btn" title="Add section" data-component="xprez-add-section-before-trigger">
                 <i class="xprez-icon-plus-circle"></i>
             </span>
+            {% comment %}
             <span class="xprez-icon-btn xprez-icon-btn--icon-toggle js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off">
                 <i class="xprez-icon-eye x-variant-unchecked"></i>
                 <i class="xprez-icon-eye_slash  x-variant-checked x-color-alert"></i>
             </span>
+            {% endcomment %}
+            <span class="xprez-option">
+                <label for="{{ section.admin_form.visible.id_for_label }}">
+                    <i class="xprez-icon-eye x-variant-unchecked"></i>
+                    <i class="xprez-icon-eye_slash  x-variant-checked x-color-alert"></i>
+                    <span>Visibility on/off</span>
+                </label>
+                {{ section.admin_form.visible }}
+            </span>
+
             <div class="xprez-icon-btn js-xprez-submenu-toggle xprez-submenu__toggle" title="Copy">
                 <i class="xprez-icon-copy"></i>
                 <div class="xprez-submenu">
@@ -130,6 +141,9 @@
                     {% for config in section.admin_form.xprez_configs %}
                         {% xprez_section_config_render_admin config %}
                     {% endfor %}
+                </div>
+                <div class="xprez-option-group__footer">
+                    {% include "xprez/admin/includes/add_config.html" with xprez_admin=section.admin_form.xprez_admin %}
                 </div>
             {% endblock %}
         </div>
