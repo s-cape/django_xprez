@@ -12,9 +12,6 @@
     .xprez-errors {
         color: red;
     }
-    [data-component="xprez-section"][data-mode="edit"] {
-        border: 1px solid green;
-    }
     [data-component="xprez-section"][data-collapsed] .xprez-section-grid {
         display: none;
     }
@@ -116,7 +113,7 @@
         {% endfor %}
     </div>
 
-    {# {% include "./dev/section.html" %} #}
+    {% include "./dev/section.html" %}
 
     {% with allowed_contents=form.xprez_get_allowed_contents %}
         {% if allowed_contents %}

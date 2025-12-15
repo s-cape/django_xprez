@@ -4,6 +4,10 @@
         flex-direction: column;
         gap: var(--x-admin-option-group-gap);
 
+        &:not(:first-child) {
+            margin-top: var(--x-admin-padding-lg);
+        }
+
         &--panel {
             width: 265px;
             background: var(--x-admin-option-group-panel-bg);
@@ -14,7 +18,7 @@
         &__subtitle {
             font-size: var(--x-admin-option-font-size);
             color: var(--x-admin-option-color);
-            text-align: left;
+            text-align: left; 
             line-height: 1.25;
             margin: var(--x-admin-padding-md) 0 var(--x-admin-padding-sm);
 

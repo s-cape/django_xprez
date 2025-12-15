@@ -1,6 +1,16 @@
 .xprez-section {
     margin: 1rem 0;
 
+    &[data-mode="edit"] {
+        --x-admin-section-divider-bg: #{$b-pink};
+        --x-admin-section-divider-height: 3px;
+
+        .xprez-section__header [data-component="xprez-section-popover-trigger"] {
+            --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
+            --x-admin-option-button-bg: var(--x-admin-marker-checked-text-bg);
+        }
+    }
+
     &__header {
         display: flex;
         gap: 16px;
@@ -8,7 +18,7 @@
         position: relative;
 
         > * {
-            --x-admin-option-button-bg: var(--x-admin-bg, $admin-bg);
+            --x-admin-option-button-bg: var(--x-admin-bg, #{$admin-bg});
 
             z-index: 2;
             background: var(--x-admin-bg, $admin-bg);
@@ -16,9 +26,9 @@
 
         &::before {
             content: "";
-            height: 0.5px;
+            height: var(--x-admin-section-divider-height);
             width: 100%;
-            background: $b-gray-6;
+            background: var(--x-admin-section-divider-bg);
             position: absolute;
             top: 50%;
             transform: translateY(-1px);
