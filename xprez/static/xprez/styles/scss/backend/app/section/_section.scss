@@ -32,6 +32,7 @@
             position: absolute;
             top: 50%;
             transform: translateY(-1px);
+            transition: all 0.3s ease-in-out;
         }
 
         &.--centered {
@@ -69,6 +70,8 @@
     &__actions {
         position: relative;
         padding-left: $g-b;
+        display: flex;
+        align-items: center;
     }
 	
     &__footer {
