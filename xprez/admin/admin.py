@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from xprez import contents_manager, settings
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
-from xprez.admin.views.content import XprezAdminViewsContentMixin
+from xprez.admin.views.contents import XprezAdminViewsContentsMixin
 
 
 class XprezModelFormMixin(object):
@@ -60,7 +60,7 @@ class XprezModelFormMixin(object):
     #     return self.xprez_admin.xprez_clipboard_list(request, container=self.instance)
 
 
-class XprezAdminMixin(XprezAdminViewsContentMixin, XprezAdminViewsClipboardMixin):
+class XprezAdminMixin(XprezAdminViewsContentsMixin, XprezAdminViewsClipboardMixin):
     allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
     excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
@@ -97,7 +97,7 @@ class XprezAdminMixin(XprezAdminViewsContentMixin, XprezAdminViewsClipboardMixin
 
     def xprez_admin_urls(self):
         urls = []
-        urls += XprezAdminViewsContentMixin.xprez_admin_urls(self)
+        urls += XprezAdminViewsContentsMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
         urls += contents_manager.get_urls()
         return urls
