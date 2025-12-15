@@ -64,6 +64,9 @@ class XprezAdminMixin(XprezAdminViewsContentsMixin, XprezAdminViewsClipboardMixi
     allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
     excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
 
+    xprez_breakpoints = settings.XPREZ_BREAKPOINTS
+    xprez_default_breakpoint = settings.XPREZ_DEFAULT_BREAKPOINT
+
     def xprez_get_form(self, ModelForm=None):
         ModelForm = ModelForm or self.model_form
 

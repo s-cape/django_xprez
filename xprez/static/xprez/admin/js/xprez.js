@@ -1,6 +1,6 @@
 import { Xprez } from './xprez/core.js';
 import { XprezContent } from './xprez/content.js';
-import { XprezSection } from './xprez/section.js';
+import { XprezSection } from './xprez/sections.js';
 import {
     XprezAddBase,
     XprezAddContainerEnd,

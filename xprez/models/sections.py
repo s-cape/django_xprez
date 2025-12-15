@@ -106,7 +106,10 @@ class Section(models.Model):
                 content.save_admin_form(request)
 
         for config in self.admin_form.xprez_configs:
-            config.save_admin_form(request)
+            if config.admin_form.cleaned_data.get("delete"):
+                config.delete()
+            else:
+                config.save_admin_form(request)
 
     def render_admin(self, context):
         # xprez_admin = self.admin_form.xprez_admin
