@@ -142,7 +142,7 @@
                         {% xprez_section_config_render_admin config %}
                     {% endfor %}
                 </div>
-                <div class="xprez-option-group__footer">
+                <div class="xprez-option-group__footer" data-xprez-component="xprez-section-config-adder">
                     {% include "xprez/admin/includes/add_config.html" with xprez_admin=section.admin_form.xprez_admin %}
                 </div>
             {% endblock %}

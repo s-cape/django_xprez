@@ -10,10 +10,10 @@ export class XprezSectionConfig extends XprezConfigBase {
     constructor(section, ...args) {
         super(...args);
         this.section = section;
-        if (!this.el.dataset.isDefault) {
-            this.deleter = new XprezSectionConfigDeleter(this);
-        }
+        this.deleter = new XprezSectionConfigDeleter(this);
     }
+    isDeleted() { return this.deleter.inputEl && this.deleter.inputEl.checked; }
+    cssBreakpoint() { return parseInt(this.el.dataset.cssBreakpoint); }
 }
 
 export class XprezContentConfig extends XprezConfigBase {

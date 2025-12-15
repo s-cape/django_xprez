@@ -75,3 +75,40 @@ export class XprezAddSectionEnd extends XprezAddSectionBase {
     initNewElement(el) { this.section.initContent(el); }
 }
 
+// TODO: think about inheritance
+export class XprezSectionConfigAdder {
+    constructor(xprez, section) {
+        this.xprez = xprez;
+        this.section = section;
+        this.el = this.section.el.querySelector("[data-xprez-component='xprez-section-config-adder']");
+        this.selectEl = this.el.querySelector("select");
+        this.options = this.selectEl.querySelectorAll("option");
+        this.selectEl.addEventListener("change", this.add.bind(this));
+    
+        this.setOptionsDisabledState();
+    }
+    
+    setOptionsDisabledState() {
+        var existingConfigBreakpoints = [];
+        for (const config of this.section.configs) {
+            if (!config.isDeleted()) {
+                existingConfigBreakpoints.push(config.cssBreakpoint());
+            }
+        }
+        console.log(existingConfigBreakpoints);
+        for (const option of this.options) {
+            if (existingConfigBreakpoints.includes(option.value)) {
+                console.log(option.value, "is disabled");
+                option.setAttribute("disabled", "");
+            } else {
+                console.log(option.value, "is enabled");
+                option.removeAttribute("disabled");
+            }
+        }
+    }
+
+    add() {
+        const selectedOption = this.selectEl.value;
+        console.log(selectedOption);
+    }
+}

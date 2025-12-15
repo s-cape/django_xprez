@@ -37,4 +37,13 @@ export class XprezSectionConfigDeleter extends XprezDeleterBase {
         this.inputEl = this.triggerEl.querySelector("input");
         this.undoEl = this.obj.el.querySelector("[data-component='xprez-section-config-delete-undo']");
     }
+
+    delete() {
+        super.delete();
+        this.obj.configAdder.setOptionsDisabledState();
+    }
+    undo() {
+        super.undo();
+        this.obj.configAdder.setOptionsDisabledState();
+    }
 }

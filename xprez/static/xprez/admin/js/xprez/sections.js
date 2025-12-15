@@ -1,5 +1,5 @@
 import { XprezSectionPopover } from './popovers.js';
-import { XprezAddSectionBefore, XprezAddSectionEnd } from './adders.js';
+import { XprezAddSectionBefore, XprezAddSectionEnd, XprezSectionConfigAdder } from './adders.js';
 import { XprezSectionDeleter } from './deleters.js';
 import { XprezSectionConfig } from './configs.js';
 import { XprezSortable } from './sortable.js';
@@ -17,6 +17,7 @@ export class XprezSection {
 
         this.initCollapser();
         this.initConfigs();
+        this.initConfigAdder();
         this.initContentsSortable();
     }
 
@@ -46,6 +47,10 @@ export class XprezSection {
     }
     initConfig(configEl) {
         this.configs.push(new XprezSectionConfig(this, configEl));
+    }
+
+    initConfigAdder() {
+        this.configAdder = new XprezSectionConfigAdder(this.xprez, this);
     }
 
     initCollapser() {
