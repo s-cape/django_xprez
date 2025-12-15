@@ -2,16 +2,16 @@
 {% xprez_clipboard_is_empty xprez_admin request as clipboard_is_empty %}
 
 <ul
-    {% comment %} class="xprez-submenu xprez-submenu--2-cols" {% endcomment %}
+    class="xprez-add-list"
     data-component="{{ component_name }}"
     {{ attributes|default:"" }}
 >
     <li
-        class="js-xprez-clipboard-list-trigger xprez-submenu__paste"
+        class="js-xprez-clipboard-list-trigger xprez-add-list__paste"
         {% if clipboard_is_empty %}data-hidden{% endif %}
     >
         <span class="xprez-icon">{% include "xprez/admin/icons/paste.html" %}</span>
-        <span class="xprez-submenu__label">Paste from clipboard</span>
+        <span>Paste from clipboard</span>
     </li>
 
     {% for content_type in allowed_contents %}
@@ -24,7 +24,7 @@
             {% endif %}
         >
             {{ content_type.icon }}
-            <span class="xprez-submenu__label">{{ content_type.verbose_name }}</span>
+            <span>{{ content_type.verbose_name }}</span>
         </li>
     {% endfor %}
 </ul>
