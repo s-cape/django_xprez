@@ -6,9 +6,9 @@
         </label>
         <span class="xprez-option__dropdown">
             <select class="xprez-option__select" id="add_breakpoint">
-                <option>Add breakpoint</option>
+                <option value="">Add breakpoint</option>
                 {% for id, data in xprez_admin.xprez_breakpoints.items %}
-                    <option value="{{ id }}" disabled>{{ data.name|safe }}</option>
+                    <option value="{{ id }}" disabled data-url="{% url xprez_admin.xprez_add_section_config_url_name section.pk id %}">{{ data.name|safe }}</option>
                 {% endfor %}
             </select>
         </span>

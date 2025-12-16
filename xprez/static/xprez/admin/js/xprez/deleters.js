@@ -40,10 +40,10 @@ export class XprezSectionConfigDeleter extends XprezDeleterBase {
 
     delete() {
         super.delete();
-        this.obj.configAdder.setOptionsDisabledState();
+        this.obj.section.configAdder.setOptionsDisabledState();
     }
     undo() {
         super.undo();
-        this.obj.configAdder.setOptionsDisabledState();
+        this.obj.section.configAdder.setOptionsDisabledState();
     }
 }

@@ -1,5 +1,5 @@
 import { XprezSectionPopover } from './popovers.js';
-import { XprezAddSectionBefore, XprezAddSectionEnd, XprezSectionConfigAdder } from './adders.js';
+import { XprezAdderSectionBefore, XprezAdderSectionEnd, XprezSectionConfigAdder } from './adders.js';
 import { XprezSectionDeleter } from './deleters.js';
 import { XprezSectionConfig } from './configs.js';
 import { XprezSortable } from './sortable.js';
@@ -8,22 +8,21 @@ export class XprezSection {
     constructor(xprez, sectionEl) {
         this.xprez = xprez;
         this.el = sectionEl;
-        this.gridEl = this.el.querySelector("[data-component='xprez-section-grid']");
         this.initContents();
         this.popover = new XprezSectionPopover(this);
-        this.addSectionBefore = new XprezAddSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-add-section-before']"), this);
-        this.addSectionEnd = new XprezAddSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-add-section-end']"), this);
+        this.adderBefore = new XprezAdderSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-before']"), this);
+        this.adderEnd = new XprezAdderSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-end']"), this);
         this.deleter = new XprezSectionDeleter(this);
 
         this.initCollapser();
         this.initConfigs();
-        this.initConfigAdder();
         this.initContentsSortable();
     }
 
     id() { return this.el.querySelector("[name='section-id']").value; }
 
     initContents() {
+        this.gridEl = this.el.querySelector("[data-component='xprez-section-grid']");
         this.contents = [];
         this.el.querySelectorAll("[data-component='xprez-content']").forEach(
             this.initContent.bind(this)
@@ -40,17 +39,17 @@ export class XprezSection {
     }
 
     initConfigs() {
+        this.configsContainerEl = this.el.querySelector("[data-component='xprez-section-configs']");
         this.configs = [];
         this.el.querySelectorAll("[data-component='xprez-section-config']").forEach(
             this.initConfig.bind(this)
         );
+        this.configAdder = new XprezSectionConfigAdder(this.xprez, this);
     }
     initConfig(configEl) {
-        this.configs.push(new XprezSectionConfig(this, configEl));
-    }
-
-    initConfigAdder() {
-        this.configAdder = new XprezSectionConfigAdder(this.xprez, this);
+        const config = new XprezSectionConfig(this, configEl);
+        this.configs.push(config);
+        return config;
     }
 
     initCollapser() {
@@ -70,4 +69,3 @@ export class XprezSection {
         });
     }
 }
-

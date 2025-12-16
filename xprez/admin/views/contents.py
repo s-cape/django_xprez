@@ -20,6 +20,13 @@ class XprezAdminViewsContentsMixin(object):
             content.build_admin_form(self)
             return HttpResponse(content.render_admin({"request": request}))
 
+    def xprez_add_section_config_view(self, request, section_pk, css_breakpoint):
+        """Adds or retrieves a section config for the given breakpoint."""
+        section = models.Section.objects.get(pk=section_pk)
+        config, created = section.configs.get_or_create(css_breakpoint=css_breakpoint)
+        config.build_admin_form(self)
+        return HttpResponse(config.render_admin({"request": request}))
+
     def xprez_copy_content_view(self, request, content_pk):
         content = models.Content.objects.get(pk=content_pk).polymorph()
         new_content = content.copy(position=content.position + 1)
@@ -41,6 +48,9 @@ class XprezAdminViewsContentsMixin(object):
     def xprez_copy_content_url_name(self):
         return self.xprez_admin_url_name("copy_content", include_namespace=True)
 
+    def xprez_add_section_config_url_name(self):
+        return self.xprez_admin_url_name("add_section_config", include_namespace=True)
+
     def xprez_admin_urls(self):
         return [
             path(
@@ -57,5 +67,10 @@ class XprezAdminViewsContentsMixin(object):
                 "xprez-copy-content/<int:content_pk>/",
                 self.xprez_admin_view(self.xprez_copy_content_view),
                 name=self.xprez_admin_url_name("copy_content"),
+            ),
+            path(
+                "section-config-add/<int:section_pk>/<int:css_breakpoint>/",
+                self.xprez_admin_view(self.xprez_add_section_config_view),
+                name=self.xprez_admin_url_name("add_section_config"),
             ),
         ]

@@ -99,6 +99,7 @@ class ConfigBase(models.Model):
         inst.save()
 
     def render_admin(self, context):
+        context["config"] = self
         return render_to_string(self.admin_template_name, context)
 
     class Meta:

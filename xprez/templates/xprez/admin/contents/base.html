@@ -6,58 +6,60 @@
     data-prefix="{{ content.admin_form.prefix }}"
     data-js-controller-class="{{ content.js_controller_class }}"
 >
-    <div class="xprez-content__header" data-draggable-content-handle>
-        <div class="xprez-content__name">
-            <span class="xprez-content__name-icon">
-                {% include "xprez/admin/icons/contents/text.html" %}
-            </span>
-            <div class="xprez-option" data-active="true">
-                <label >
-                    <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
-                    <i class="xprez-icon-check_circle_small x-variant-checked"></i>
-                </label>
-                <input type="checkbox" checked>
+    <div class="xprez-content-box">
+        <div class="xprez-content__header" data-draggable-content-handle>
+            <div class="xprez-content__name">
+                <span class="xprez-content__name-icon">
+                    {% include "xprez/admin/icons/contents/text.html" %}
+                </span>
+                <div class="xprez-option" data-active="true">
+                    <label >
+                        <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
+                        <i class="xprez-icon-check_circle_small x-variant-checked"></i>
+                    </label>
+                    <input type="checkbox" checked>
+                </div>
+                <span class="xprez-option-group__title-text">{{ content.verbose_name }}</span>
             </div>
-            <span class="xprez-option-group__title-text">{{ content.verbose_name }}</span>
-        </div>
 
-        <div class="xprez-content__actions">
-            {% block actions %}
-                <span class="xprez-icon-btn" title="Copy">
-                    <i class="xprez-icon-copy"></i>
-                </span>
-                <span class="xprez-icon-btn" title="Settings" data-component="xprez-content-popover-trigger">
-                    <i class="xprez-icon-settings" data-id="{{ content.pk }}"></i>
-                </span>
-            {% endblock %}
-        </div>
-
-        <div class="xprez-content__actions xprez-content__actions--right">
-            <span class="xprez-icon-btn" title="Delete" data-component="xprez-content-delete-trigger">
-                <i class="xprez-icon-delete"></i>
-                <span data-hidden>{{ content.admin_form.delete }}</span>
-            </span>
-        </div>
-    </div>
-
-    <div data-component="xprez-content-delete-info">
-        This content will be deleted when you save the changes.
-        <div data-component="xprez-content-delete-undo">undelete</div>
-    </div>
-
-    <div class="xprez-content__body">
-        {% block content %}
-            <div class="xprez-form-table">
-                {% if content.preview_image %}
-                    <img src="{% static content.preview_image %}" alt="" class="xprez-module__preview-image">
-                {% endif %}
-                {% block main_fields %}
-                    {% for field in content.admin_form.get_main_fields %}
-                        {% include 'xprez/admin/form/row.html' with field=field %}
-                    {% endfor %}
+            <div class="xprez-content__actions">
+                {% block actions %}
+                    <span class="xprez-icon-btn" title="Copy">
+                        <i class="xprez-icon-copy"></i>
+                    </span>
+                    <span class="xprez-icon-btn" title="Settings" data-component="xprez-content-popover-trigger">
+                        <i class="xprez-icon-settings" data-id="{{ content.pk }}"></i>
+                    </span>
                 {% endblock %}
             </div>
-        {% endblock %}
+
+            <div class="xprez-content__actions xprez-content__actions--right">
+                <span class="xprez-icon-btn" title="Delete" data-component="xprez-content-delete-trigger">
+                    <i class="xprez-icon-delete"></i>
+                    <span data-hidden>{{ content.admin_form.delete }}</span>
+                </span>
+            </div>
+        </div>
+
+        <div data-component="xprez-content-delete-info">
+            This content will be deleted when you save the changes.
+            <div data-component="xprez-content-delete-undo">undelete</div>
+        </div>
+
+        <div class="xprez-content__body">
+            {% block content %}
+                <div class="xprez-form-table">
+                    {% if content.preview_image %}
+                        <img src="{% static content.preview_image %}" alt="" class="xprez-module__preview-image">
+                    {% endif %}
+                    {% block main_fields %}
+                        {% for field in content.admin_form.get_main_fields %}
+                            {% include 'xprez/admin/form/row.html' with field=field %}
+                        {% endfor %}
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
     </div>
 
     <div popover="manual" class="xprez-popover" data-component="xprez-content-popover">

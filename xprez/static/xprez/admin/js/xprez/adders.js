@@ -1,21 +1,16 @@
 import { executeScripts } from './utils.js';
 
-export class XprezAddBase {
+export class XprezAdderBase {
     constructor(xprez, el) {
         this.xprez = xprez;
         this.el = el;
-
-        this.el.querySelectorAll("[data-component='xprez-add-item']").forEach(
-            this.initItem.bind(this)
-        );
+        this.bindEvents();
     }
 
-    initItem(itemEl) {
-        itemEl.addEventListener("click", this.add.bind(this, itemEl));
-    }
+    bindEvents() {}
 
-    add(itemEl) {
-        fetch(itemEl.dataset.url)
+    add(url) {
+        fetch(url)
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -26,89 +21,151 @@ export class XprezAddBase {
             })
             .then(html => {
                 const newEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild;
-                this.placeNewElement(newEl);
-                this.initNewElement(newEl);
-                executeScripts(newEl);
-                this.xprez.setPlacementToInputs();
+                this.processNewElement(newEl);
             })
             .catch(error => {
-                console.error('Error adding content:', error);
+                console.error('Error adding:', error);
             });
+    }
+
+    processNewElement(newEl) {
+        this.placeNewElement(newEl);
+        this.initNewElement(newEl);
+        executeScripts(newEl);
     }
 
     placeNewElement(el) {}
     initNewElement(el) {}
 }
 
-export class XprezAddContainerEnd extends XprezAddBase {
+export class XprezAdderItemsBase extends XprezAdderBase {
+    bindEvents() {
+        this.el.querySelectorAll("[data-component='xprez-add-item']").forEach(
+            itemEl => itemEl.addEventListener("click", () => this.add(itemEl.dataset.url))
+        );
+    }
+
+    processNewElement(newEl) {
+        super.processNewElement(newEl);
+        this.xprez.setPlacementToInputs();
+    }
+}
+
+export class XprezAdderSelectBase extends XprezAdderBase {
+    bindEvents() {
+        this.selectEl = this.el.querySelector("select");
+        this.options = this.selectEl.querySelectorAll("option");
+        this.selectEl.addEventListener("change", this.onSelectChange.bind(this));
+    }
+
+    onSelectChange() {
+        if (!this.selectEl.value) return;
+
+        const selectedOption = this.selectEl.options[this.selectEl.selectedIndex];
+        this.handleSelection(selectedOption);
+        this.selectEl.value = "";
+    }
+
+    handleSelection(selectedOption) {
+        this.add(selectedOption.dataset.url);
+    }
+}
+
+export class XprezAdderContainerEnd extends XprezAdderItemsBase {
     placeNewElement(el) { this.xprez.sectionsContainerEl.appendChild(el); }
     initNewElement(el) { this.xprez.initSection(el); }
 }
 
-export class XprezAddSectionBase extends XprezAddBase {
+export class XprezAdderSectionBase extends XprezAdderItemsBase {
     constructor(xprez, el, section) {
         super(xprez, el);
         this.section = section;
         this.setTriggerEl();
         this.triggerEl.addEventListener("click", this.toggle.bind(this));
     }
+
     setTriggerEl() {}
-    add(itemEl) {
-        super.add(itemEl);
+
+    add(url) {
+        super.add(url);
         this.hide();
     }
+
     isVisible() { return !this.el.hasAttribute("data-hidden"); }
     show() { this.el.removeAttribute("data-hidden"); }
     hide() { this.el.setAttribute("data-hidden", ""); }
     toggle() { this.isVisible() ? this.hide() : this.show(); }
 }
 
-export class XprezAddSectionBefore extends XprezAddSectionBase {
-    setTriggerEl() { this.triggerEl = this.section.el.querySelector("[data-component='xprez-add-section-before-trigger']"); }
+export class XprezAdderSectionBefore extends XprezAdderSectionBase {
+    setTriggerEl() {
+        this.triggerEl = this.section.el.querySelector("[data-component='xprez-adder-section-before-trigger']");
+    }
     placeNewElement(el) { this.section.el.before(el); }
     initNewElement(el) { this.xprez.initSection(el); }
 }
 
-export class XprezAddSectionEnd extends XprezAddSectionBase {
-    setTriggerEl() { this.triggerEl = this.section.el.querySelector("[data-component='xprez-add-section-end-trigger']"); }
+export class XprezAdderSectionEnd extends XprezAdderSectionBase {
+    setTriggerEl() {
+        this.triggerEl = this.section.el.querySelector("[data-component='xprez-adder-section-end-trigger']");
+    }
     placeNewElement(el) { this.section.gridEl.appendChild(el); }
     initNewElement(el) { this.section.initContent(el); }
 }
 
-// TODO: think about inheritance
-export class XprezSectionConfigAdder {
+export class XprezSectionConfigAdder extends XprezAdderSelectBase {
     constructor(xprez, section) {
-        this.xprez = xprez;
+        super(xprez, section.el.querySelector("[data-component='xprez-adder-section-config']"));
         this.section = section;
-        this.el = this.section.el.querySelector("[data-xprez-component='xprez-section-config-adder']");
-        this.selectEl = this.el.querySelector("select");
-        this.options = this.selectEl.querySelectorAll("option");
-        this.selectEl.addEventListener("change", this.add.bind(this));
-    
         this.setOptionsDisabledState();
     }
-    
-    setOptionsDisabledState() {
-        var existingConfigBreakpoints = [];
-        for (const config of this.section.configs) {
-            if (!config.isDeleted()) {
-                existingConfigBreakpoints.push(config.cssBreakpoint());
+
+    handleSelection(selectedOption) {
+        const selectedBreakpoint = parseInt(selectedOption.value);
+
+        const existingConfig = this.section.configs.find(
+            config => config.cssBreakpoint() === selectedBreakpoint
+        );
+
+        if (existingConfig) {
+            if (existingConfig.isDeleted()) {
+                existingConfig.deleter.undo();
+                this.setOptionsDisabledState();
             }
+        } else {
+            this.add(selectedOption.dataset.url);
         }
-        console.log(existingConfigBreakpoints);
+    }
+
+    setOptionsDisabledState() {
+        const existingBreakpoints = this.section.configs
+            .filter(config => !config.isDeleted())
+            .map(config => config.cssBreakpoint());
+
         for (const option of this.options) {
-            if (existingConfigBreakpoints.includes(option.value)) {
-                console.log(option.value, "is disabled");
+            if (existingBreakpoints.includes(parseInt(option.value))) {
                 option.setAttribute("disabled", "");
             } else {
-                console.log(option.value, "is enabled");
                 option.removeAttribute("disabled");
             }
         }
     }
 
-    add() {
-        const selectedOption = this.selectEl.value;
-        console.log(selectedOption);
+    placeNewElement(newEl) {
+        const newBreakpoint = parseInt(newEl.dataset.cssBreakpoint);
+
+        for (const config of this.section.configs) {
+            if (newBreakpoint < config.cssBreakpoint()) {
+                config.el.before(newEl);
+                return;
+            }
+        }
+
+        this.section.configsContainerEl.appendChild(newEl);
+    }
+
+    initNewElement(newEl) {
+        this.section.initConfig(newEl);
+        this.setOptionsDisabledState();
     }
 }

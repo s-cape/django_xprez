@@ -49,6 +49,9 @@
     [data-component="xprez-section-config"][data-mode="delete"] > * {
         display: none;
     }
+    [data-component="xprez-section-config"] [data-component="xprez-section-config-delete-info"] {
+        display: none;
+    }
     [data-component="xprez-section-config"][data-mode="delete"] [data-component="xprez-section-config-delete-info"] {
         display: block;
     }
@@ -121,8 +124,8 @@
                 <div class="xprez-section__header--centered">
                     <h3>Add section</h3>
                 </div>
-                {% comment %} {% include "./includes/add_list.html" with component_name="xprez-add-container-end" xprez_admin=form.xprez_admin add_position=form.xprez_admin.POSITION_CONTAINER_END add_object="section" container=form.instance %} {% endcomment %}
-                {% include "./includes/add_list.html" with component_name="xprez-add-container-end" xprez_admin=form.xprez_admin add_list_container=form.instance %}
+                {% comment %} {% include "./includes/add_list.html" with component_name="xprez-adder-container-end" xprez_admin=form.xprez_admin add_position=form.xprez_admin.POSITION_CONTAINER_END add_object="section" container=form.instance %} {% endcomment %}
+                {% include "./includes/add_list.html" with component_name="xprez-adder-container-end" xprez_admin=form.xprez_admin add_list_container=form.instance %}
             </div>
         {% endif %}
     {% endwith %}
