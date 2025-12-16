@@ -1,0 +1,17 @@
+{% block module %}
+<div
+    class="{% block css_class%}xprez-module {{ module.css_class|default:'' }} {% block css_class_extra %}{% endblock %}{% endblock %}"
+    {% block attrs %}{% endblock %}
+>
+    TODO module configs:
+    {% for config in module.get_configs %}
+        {{ config.css_breakpoint_infix }}
+    {% endfor %}
+    <div>
+        {% block module_in %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
+
+{% block js %} {% endblock %}

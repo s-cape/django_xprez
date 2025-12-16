@@ -1,0 +1,160 @@
+{% extends 'xprez/modules/base.html' %}
+{% load thumbnail xprez %}
+
+{% block css_class_extra %}xprez-gallery {{ module.width }}-width xprez-photo-connect-{{ module.divided|lower }} xprez-cols-{{ module.columns }} js-content-{{ module.pk }} js-gallery{% endblock %}
+
+{% block module_in %}
+    {% for photo in module.photos.all %}
+        {% with alt_text=photo.alt_text|default:photo.description %}
+        <div class="xprez-photo-item js-photo"
+            {% thumbnail photo.image "2000x2000" upscale=false format="WEBP" quality=90 filename_stem=alt_text as thumb %}
+            data-original_url="{{ thumb.url|build_absolute_uri }}"
+            data-original_width="{{ thumb.width }}"
+            data-original_height="{{ thumb.height }}"
+            {% endthumbnail %}
+            data-title="{% if photo.description %}{{ photo.description }}{% endif %}"
+            data-alt="{{ alt_text }}"
+        >
+            <img class="xprez-photo" alt="{{ alt_text }}"
+                {% if module.columns == 8 %}
+                    {% if module.crop %}
+                        src="{% thumbnail photo.image "400x400" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 800px) 13vw,25vw"
+                    {% else %}
+                        src="{% thumbnail photo.image "400x400" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x800" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x1000" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 800px) 13vw,25vw"
+                    {% endif %}
+                {% elif module.columns == 6 %}
+                    {% if module.crop %}
+                        src="{% thumbnail photo.image "400x400" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 800px) 17vw,25vw"
+                    {% else %}
+                        src="{% thumbnail photo.image "400x400" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x800" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x1000" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 800px) 17vw,25vw"
+                    {% endif %}
+                {% elif module.columns == 4 %}
+                    {% if module.crop %}
+                        src="{% thumbnail photo.image "400x400" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 800px) 25vw,50vw"
+                    {% else %}
+                        src="{% thumbnail photo.image "400x400" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x800" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x1000" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 800px) 25vw,50vw"
+                    {% endif %}
+                {% elif module.columns == 3 %}
+                    {% if module.crop %}
+                        src="{% thumbnail photo.image "400x400" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 800px) 33.3vw,50vw"
+                    {% else %}
+                        src="{% thumbnail photo.image "400x400" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x800" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x1000" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 800px) 33.3vw,50vw"
+                    {% endif %}
+                {% elif module.columns == 2 %}
+                    {% if module.crop %}
+                        src="{% thumbnail photo.image "400x400" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x600" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x770" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri}} 1000w,
+                                {% endthumbnail %}{% thumbnail photo.image "1500x1150" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1500w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 500px) 50vw,100vw"
+                    {% else %}
+                        src="{% thumbnail photo.image "400x400" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                                {% endthumbnail %}{% thumbnail photo.image "800x800" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x1000" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w,
+                                {% endthumbnail %}{% thumbnail photo.image "1500x1500" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1500w
+                                {% endthumbnail %}"
+                            sizes="(min-width: 500px) 50vw,100vw"
+                    {% endif %}
+                {% else %}
+                    {% if module.crop %}
+                        src="{% thumbnail photo.image "600x600" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 600w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x769" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 800w,
+                                {% endthumbnail %}{% thumbnail photo.image "1500x1153" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1500w,
+                                {% endthumbnail %}{% thumbnail photo.image "2000x1538" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 2000w,
+                                {% endthumbnail %}{% thumbnail photo.image "2500x1923" crop="30%" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 2500w
+                                {% endthumbnail %}"
+                            sizes="100vw"
+                    {% else %}
+                        src="{% thumbnail photo.image "600x600" format="WEBP" quality=70 filename_stem=alt_text as thumb %}{{ thumb.url|build_absolute_uri }}"
+                            srcset="{{ thumb.url|build_absolute_uri }} 600w,
+                                {% endthumbnail %}{% thumbnail photo.image "1000x1000" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1000w,
+                                {% endthumbnail %}{% thumbnail photo.image "1500x1500" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 1500w,
+                                {% endthumbnail %}{% thumbnail photo.image "2000x2000" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 2000w,
+                                {% endthumbnail %}{% thumbnail photo.image "2500x2500" format="WEBP" quality=70 filename_stem=alt_text as thumb %}
+                                    {{ thumb.url|build_absolute_uri }} 2500w
+                                {% endthumbnail %}"
+                            sizes="100vw"
+                    {% endif %}
+                {% endif %}
+            />
+
+            {% if photo.description %}
+                <span class="xprez-media-caption">{{ photo.description }}</span>
+            {% endif %}
+        </div>
+        {% endwith %}
+    {% endfor %}
+{% endblock %}

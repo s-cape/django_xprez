@@ -191,13 +191,15 @@ class SectionConfig(ConfigBase):
 
 
 class ContentConfig(ConfigBase):
-    admin_template_name = "xprez/admin/content_configs/base.html"
-    form_class = "xprez.admin.forms.ContentConfigForm"
+    """Config for Content/Module models."""
 
-    content = models.ForeignKey(
+    admin_template_name = "xprez/admin/module_configs/base.html"
+    form_class = "xprez.admin.forms.ModuleConfigForm"
+
+    module = models.ForeignKey(
         "xprez.Content",
         on_delete=models.CASCADE,
-        related_name="content_configs",
+        related_name="module_configs",
         editable=False,
     )
     visible = models.BooleanField(default=True)
@@ -221,27 +223,33 @@ class ContentConfig(ConfigBase):
             return cls
         else:
 
-            class ContentConfigForm(cls):
+            class ModuleConfigForm(cls):
                 class Meta(cls.Meta):
                     model = self.__class__
 
-            return ContentConfigForm
+            return ModuleConfigForm
 
     def get_form_prefix(self):
-        return "content-config-" + str(self.pk)
+        return "module-config-" + str(self.pk)
 
     class Meta:
-        verbose_name = "Content Config"
-        verbose_name_plural = "Content Configs"
-        unique_together = ("content", "css_breakpoint")
+        verbose_name = "Module Config"
+        verbose_name_plural = "Module Configs"
+        unique_together = ("module", "css_breakpoint")
 
 
 class TextContentBaseConfig(ContentConfig):
-    admin_template_name = "xprez/admin/content_configs/text_base.html"
+    admin_template_name = "xprez/admin/module_configs/text_base.html"
 
     border = models.BooleanField(default=True)
     background = models.BooleanField(default=False)
 
 
 class TextContentConfig(TextContentBaseConfig):
-    admin_template_name = "xprez/admin/content_configs/text.html"
+    admin_template_name = "xprez/admin/module_configs/text.html"
+
+
+# Aliases for new "module" terminology
+ModuleConfig = ContentConfig
+TextModuleBaseConfig = TextContentBaseConfig
+TextModuleConfig = TextContentConfig

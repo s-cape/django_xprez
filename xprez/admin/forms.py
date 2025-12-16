@@ -10,22 +10,22 @@ from django.utils.translation import gettext_lazy as _
 from xprez.conf import settings
 from xprez.medium_editor.widgets import MediumEditorWidget
 from xprez.models.configs import SectionConfig
-from xprez.models.contents import (
+from xprez.models.modules import (
     Attachment,
     CkEditor,
     CodeInput,
     CodeTemplate,
-    DownloadContent,
+    DownloadModule,
     FeatureBoxes,
     Gallery,
     GridBoxes,
     MediumEditor,
     Number,
-    NumbersContent,
+    NumbersModule,
     Photo,
     Quote,
-    QuoteContent,
-    TextContent,
+    QuoteModule,
+    TextModule,
     TextImage,
     Video,
 )
@@ -53,32 +53,20 @@ class SectionConfigForm(forms.ModelForm):
         if self.instance.is_default():
             del self.fields["delete"]
 
-    # def clean(self):
-    #     super().clean()
-    #     if self.cleaned_data.get("padding_left_choice") == "custom":
-    #         raise forms.ValidationError({"padding_left_choice": "test error"})
 
-
-class BaseContentForm(forms.ModelForm):
+class BaseModuleForm(forms.ModelForm):
     delete = forms.BooleanField(required=False)
 
-    base_content_fields = (
+    base_module_fields = (
         "position",
         "section",
         "css_class",
-        # "visible",
-        # "css_class",
-        # "margin_bottom",
-        # "padding_top",
-        # "padding_bottom",
-        # "alternate_color",
-        # "background_color",
     )
 
     options_fields = ()
 
     def get_main_fields(self):
-        excluded_fields = tuple(self.base_content_fields)
+        excluded_fields = tuple(self.base_module_fields)
         excluded_fields += self.options_fields
 
         for field in self.fields:
@@ -93,8 +81,8 @@ class BaseContentForm(forms.ModelForm):
         fields = "__all__"
 
 
-class ContentConfigForm(forms.ModelForm):
-    base_content_fields = (
+class ModuleConfigForm(forms.ModelForm):
+    base_module_fields = (
         "visible",
         "colspan",
         "rowspan",
@@ -104,26 +92,26 @@ class ContentConfigForm(forms.ModelForm):
 
     def get_extra_fields(self):
         for field in self.fields:
-            if field not in self.base_content_fields:
+            if field not in self.base_module_fields:
                 yield self[field]
 
     class Meta:
         fields = "__all__"
 
 
-class TextContentBaseForm(BaseContentForm):
+class TextModuleBaseForm(BaseModuleForm):
     class Meta:
         model = CkEditor
-        fields = ("text",) + BaseContentForm.base_content_fields
+        fields = ("text",) + BaseModuleForm.base_module_fields
         widgets = {
-            "text": import_class(settings.XPREZ_CK_EDITOR_CONTENT_WIDGET)(
+            "text": import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET)(
                 file_upload_dir="ck_editor_uploads"
             )
         }
 
 
-class TextContentForm(TextContentBaseForm):
-    options_fields = ("url",) + TextContentBaseForm.options_fields
+class TextModuleForm(TextModuleBaseForm):
+    options_fields = ("url",) + TextModuleBaseForm.options_fields
     image_clear = forms.BooleanField(required=False)
 
     def save(self, commit=True):
@@ -134,15 +122,15 @@ class TextContentForm(TextContentBaseForm):
             instance.save()
         return instance
 
-    class Meta(TextContentBaseForm.Meta):
-        model = TextContent
-        fields = TextContentBaseForm.Meta.fields + ("image", "url")
+    class Meta(TextModuleBaseForm.Meta):
+        model = TextModule
+        fields = TextModuleBaseForm.Meta.fields + ("image", "url")
 
         widgets = {"image": forms.FileInput}
-        widgets.update(TextContentBaseForm.Meta.widgets)
+        widgets.update(TextModuleBaseForm.Meta.widgets)
 
 
-class GalleryForm(BaseContentForm):
+class GalleryForm(BaseModuleForm):
     class Meta:
         model = Gallery
         fields = (
@@ -150,31 +138,31 @@ class GalleryForm(BaseContentForm):
             "columns",
             "divided",
             "crop",
-        ) + BaseContentForm.base_content_fields
+        ) + BaseModuleForm.base_module_fields
 
 
-class MediumEditorForm(BaseContentForm):
+class MediumEditorForm(BaseModuleForm):
     class Meta:
         model = MediumEditor
         fields = (
             "text",
             "box",
             "width",
-        ) + BaseContentForm.base_content_fields
+        ) + BaseModuleForm.base_module_fields
         widgets = {"text": MediumEditorWidget(file_upload_dir="medium_editor_uploads")}
 
 
-class CkEditorForm(BaseContentForm):
+class CkEditorForm(BaseModuleForm):
     class Meta:
         model = CkEditor
         fields = (
             "text",
-            "content_centered",
+            "module_centered",
             "box",
             "width",
-        ) + BaseContentForm.base_content_fields
+        ) + BaseModuleForm.base_module_fields
         widgets = {
-            "text": import_class(settings.XPREZ_CK_EDITOR_CONTENT_WIDGET)(
+            "text": import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET)(
                 file_upload_dir="ck_editor_uploads"
             )
         }
@@ -190,17 +178,17 @@ class QuoteForm(forms.ModelForm):
         }
 
 
-class QuoteContentForm(BaseContentForm):
+class QuoteModuleForm(BaseModuleForm):
     class Meta:
-        model = QuoteContent
+        model = QuoteModule
         fields = (
             "display_two",
             "title",
             "box",
-        ) + BaseContentForm.base_content_fields
+        ) + BaseModuleForm.base_module_fields
 
 
-class VideoForm(BaseContentForm):
+class VideoForm(BaseModuleForm):
     def clean_url(self):
         url = self.cleaned_data["url"]
         parsed_url = urlparse.urlparse(url)
@@ -231,22 +219,22 @@ class VideoForm(BaseContentForm):
             "poster_image",
             "url",
             "width",
-        ) + BaseContentForm.base_content_fields
+        ) + BaseModuleForm.base_module_fields
         widgets = {
             "url": forms.URLInput(attrs={"class": "long"}),
         }
 
 
-class CodeInputForm(BaseContentForm):
+class CodeInputForm(BaseModuleForm):
     class Meta:
         model = CodeInput
-        fields = ("code",) + BaseContentForm.base_content_fields
+        fields = ("code",) + BaseModuleForm.base_module_fields
 
 
-class NumbersContentForm(BaseContentForm):
+class NumbersModuleForm(BaseModuleForm):
     class Meta:
-        model = NumbersContent
-        fields = BaseContentForm.base_content_fields
+        model = NumbersModule
+        fields = BaseModuleForm.base_module_fields
 
 
 class NumberForm(forms.ModelForm):
@@ -264,14 +252,14 @@ class NumberForm(forms.ModelForm):
         )
 
 
-class FeatureBoxesForm(BaseContentForm):
+class FeatureBoxesForm(BaseModuleForm):
     class Meta:
         model = FeatureBoxes
         fields = (
             "box_1",
             "box_2",
             "box_3",
-        ) + BaseContentForm.base_content_fields
+        ) + BaseModuleForm.base_module_fields
         widgets = {
             "box_1": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
             "box_2": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
@@ -279,37 +267,37 @@ class FeatureBoxesForm(BaseContentForm):
         }
 
 
-class CodeTemplateForm(BaseContentForm):
+class CodeTemplateForm(BaseModuleForm):
     class Meta:
         model = CodeTemplate
-        fields = ("template_name",) + BaseContentForm.base_content_fields
+        fields = ("template_name",) + BaseModuleForm.base_module_fields
 
 
-class DownloadContentForm(BaseContentForm):
+class DownloadModuleForm(BaseModuleForm):
     class Meta:
-        model = DownloadContent
-        fields = ("title",) + BaseContentForm.base_content_fields
+        model = DownloadModule
+        fields = ("title",) + BaseModuleForm.base_module_fields
         widgets = {"title": forms.TextInput(attrs={"placeholder": "Files"})}
 
 
-class TextImageForm(BaseContentForm):
+class TextImageForm(BaseModuleForm):
     class Meta:
         model = TextImage
         fields = (
             "image",
             "text",
             "image_alignment",
-        ) + BaseContentForm.base_content_fields
+        ) + BaseModuleForm.base_module_fields
         widgets = {
-            "text": import_class(settings.XPREZ_TEXT_IMAGE_CONTENT_WIDGET)(),
+            "text": import_class(settings.XPREZ_TEXT_IMAGE_MODULE_WIDGET)(),
         }
 
 
-class GridBoxesForm(BaseContentForm):
+class GridBoxesForm(BaseModuleForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ckeditor_widget_tpl = import_class(
-            settings.XPREZ_GRID_BOXES_CONTENT_WIDGET
+            settings.XPREZ_GRID_BOXES_MODULE_WIDGET
         )()
 
     class Meta:
@@ -320,17 +308,17 @@ class GridBoxesForm(BaseContentForm):
             "width",
             "text_size",
             "padded",
-            "content_centered",
+            "module_centered",
             "image_sizing",
             "image_max_width",
             "boxes_filled",
             "border",
             "boxes",
-        ) + BaseContentForm.base_content_fields
+        ) + BaseModuleForm.base_module_fields
 
 
 AttachmentFormSet = inlineformset_factory(
-    DownloadContent,
+    DownloadModule,
     Attachment,
     fields=("id", "name", "position"),
     extra=0,
@@ -344,7 +332,7 @@ PhotoFormSet = inlineformset_factory(
     can_delete=True,
 )
 QuoteFormSet = inlineformset_factory(
-    QuoteContent,
+    QuoteModule,
     Quote,
     form=QuoteForm,
     fields=("id", "name", "job_title", "title", "quote", "image"),
@@ -352,7 +340,7 @@ QuoteFormSet = inlineformset_factory(
     can_delete=True,
 )
 NumberFormSet = inlineformset_factory(
-    NumbersContent,
+    NumbersModule,
     Number,
     form=NumberForm,
     fields=("id", "number", "suffix", "title"),

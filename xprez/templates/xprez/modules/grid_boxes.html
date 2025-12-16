@@ -1,0 +1,28 @@
+{% extends 'xprez/modules/base.html' %}
+
+{% block css_class_extra %}
+    xprez-grid-boxes
+    columns-{{ module.columns }}
+    {{ module.width }}-width
+    margin-{{ module.margin }}
+    textsize-{{ module.text_size }}
+    image-sizing-{{ module.image_sizing }}
+    {% if module.padded %}padded{% endif %}
+    {% if module.content_centered %}centered{% endif %}
+    {% if module.boxes_filled %}boxes_filled{% endif %}
+    {% if module.border %}border{% endif %}
+{% endblock %}
+
+{% block attrs_extra %}
+    {% if module.image_sizing == "icon" and module.image_max_width %}
+        style="--xprez-gridbox-item-image-width: {{ module.image_max_width }}px;"
+    {% endif %}
+{% endblock %}
+
+{% block module_in %}
+    {% for box in rendered_boxes %}
+        <div class="xprez-grid-box">
+            <div class="xprez-grid-box-inner">{{ box }}</div>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'xprez/modules/base.html' %}
+
+{% block css_class_extra %}xprez-feature-boxes{% endblock %}
+
+{% block module_in %}
+    {% if module.box_1 %}
+    <div class="xprez-feature-box-1">{{ module.box_1|safe }}</div>
+    {% endif %}
+    
+    {% if module.box_2 %}
+    <div class="xprez-feature-box-2">{{ module.box_2|safe }}</div>
+    {% endif %}
+    
+    {% if module.box_3 %}
+    <div class="xprez-feature-box-3">{{ module.box_3|safe }}</div>
+    {% endif %}
+{% endblock %}

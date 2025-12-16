@@ -1,0 +1,67 @@
+{% extends 'xprez/admin/modules/base.html' %}
+
+{% block options %}
+    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ module.pk }}-columns">
+        <li><span class="xprez-icon-btn-layout_1 js-option" data-formfield_value="1"></span></li>
+        <li><span class="xprez-icon-btn-layout_2 js-option" data-formfield_value="2"></span></li>
+        <li><span class="xprez-icon-btn-layout_3 js-option" data-formfield_value="3"></span></li>
+        <li><span class="xprez-icon-btn-layout_4 js-option" data-formfield_value="4"></span></li>
+        <li><span class="xprez-icon-btn-layout_6 js-option" data-formfield_value="6"></span></li>
+        <li><span class="xprez-icon-btn-layout_8 js-option" data-formfield_value="8"></span></li>
+
+    </ul>
+
+    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ module.pk }}-width">
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ module.SIZE_FULL }}">Full width</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ module.SIZE_MID }}">Mid width</span></li>
+        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ module.SIZE_TEXT }}">Text width</span></li>
+    </ul>
+
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-icon-btn-crop js-checkbox_controller" data-formfield_selector="#id_content-{{ module.pk }}-crop"></span></li>
+    </ul>
+    <ul class="xprez-module__options-group">
+        <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ module.pk }}-divided">Connected Edges</span></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    {% block dropzone %}
+    <div class="js-dropzone js-dropzone-{{ module.pk }} xprez-gallery__dropzone" data-module_pk="{{ module.pk }}" data-uploadurl="{% block upload_url %}{% url 'xprez:gallery_ajax_upload_item' module.pk %}{% endblock %}">
+        Drop files here or click to choose images from disk<br>
+    </div>
+    {% endblock %}
+    {% block items %}
+    <div class="js-item-container" data-module_pk="{{ module.pk }}">
+        {% for item in module.get_formset_queryset %}
+            {% include module.admin_formset_item_template_name with number=forloop.counter0 %}
+        {% endfor %}
+    </div>
+    {% endblock %}
+
+
+{% endblock %}
+
+{% block errors %}
+    {{ block.super }}
+    {% if module.formset.total_error_count > 0 %}
+        {{ module.formset.errors }}
+    {% endif %}
+{% endblock %}
+
+{% block hidden_fields %}
+    {{ module.admin_form }}
+    <div class="js-item-formset">
+        {{ module.formset }}
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        $(function () {
+            var $container = $('.js-content-{{ module.pk }}');
+            activateAjaxUploadFormset($container, '{{ module.identifier }}s');
+        });
+    </script>
+{% endblock %}

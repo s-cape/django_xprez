@@ -62,11 +62,11 @@ class Section(models.Model):
             instance=self, prefix=self.get_form_prefix(), data=data, files=files
         )
         self.admin_form.xprez_admin = admin
-        self.admin_form.xprez_contents_all_valid = None
-        self.admin_form.xprez_contents = [c.polymorph() for c in self.contents.all()]
+        self.admin_form.xprez_modules_all_valid = None
+        self.admin_form.xprez_modules = [m.polymorph() for m in self.modules.all()]
 
-        for content in self.admin_form.xprez_contents:
-            content.build_admin_form(admin, data, files)
+        for module in self.admin_form.xprez_modules:
+            module.build_admin_form(admin, data, files)
 
         self.admin_form.xprez_configs_all_valid = None
         self.admin_form.xprez_configs = self.get_configs()
@@ -74,16 +74,11 @@ class Section(models.Model):
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)
 
-        # self.admin_form.xprez_contents = sorted(
-        #     self.admin_form.xprez_contents,
-        #     key=lambda content: int(content.admin_form["position"].value() or 0),
-        # )
-
     def is_admin_form_valid(self):
-        self.admin_form.xprez_contents_all_valid = True
-        for content in self.admin_form.xprez_contents:
-            if not content.is_admin_form_valid():
-                self.admin_form.xprez_contents_all_valid = False
+        self.admin_form.xprez_modules_all_valid = True
+        for module in self.admin_form.xprez_modules:
+            if not module.is_admin_form_valid():
+                self.admin_form.xprez_modules_all_valid = False
 
         self.admin_form.xprez_configs_all_valid = True
         for config in self.admin_form.xprez_configs:
@@ -92,18 +87,18 @@ class Section(models.Model):
 
         return (
             self.admin_form.is_valid()
-            and self.admin_form.xprez_contents_all_valid
+            and self.admin_form.xprez_modules_all_valid
             and self.admin_form.xprez_configs_all_valid
         )
 
     def save_admin_form(self, request):
         inst = self.admin_form.save(commit=False)
         inst.save()
-        for content in self.admin_form.xprez_contents:
-            if content.admin_form.cleaned_data.get("delete"):
-                content.delete()
+        for module in self.admin_form.xprez_modules:
+            if module.admin_form.cleaned_data.get("delete"):
+                module.delete()
             else:
-                content.save_admin_form(request)
+                module.save_admin_form(request)
 
         for config in self.admin_form.xprez_configs:
             if config.admin_form.cleaned_data.get("delete"):
@@ -112,25 +107,20 @@ class Section(models.Model):
                 config.save_admin_form(request)
 
     def render_admin(self, context):
-        # xprez_admin = self.admin_form.xprez_admin
-        # form = self.admin_form
         context.update(
             {
                 "section": self,
-                # "form": form,
-                # "xprez_admin": xprez_admin,
-                "allowed_contents": self.admin_form.xprez_admin.xprez_get_allowed_contents(
+                "allowed_modules": self.admin_form.xprez_admin.xprez_get_allowed_modules(
                     container=self.container
                 ),
             }
         )
         return render_to_string(self.admin_template_name, context)
 
-    def get_contents(self):
-        if not hasattr(self, "_contents"):
-            self._contents = self.contents.filter(saved=True)
-            # self._contents = self.contents.all()  # TODO: filter(saved=True)
-        return self._contents
+    def get_modules(self):
+        if not hasattr(self, "_modules"):
+            self._modules = self.modules.filter(saved=True)
+        return self._modules
 
     def get_configs(self):
         if not hasattr(self, "_configs"):

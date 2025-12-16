@@ -8,7 +8,7 @@ from xprez import models
 
 
 class XprezAdminViewsClipboardMixin(object):
-    POSITION_CONTENT_BEFORE = "content_before"
+    POSITION_MODULE_BEFORE = "module_before"
     POSITION_SECTION_BEFORE = "section_before"
     POSITION_SECTION_END = "section_end"
     POSITION_CONTAINER_END = "container_end"
@@ -17,7 +17,7 @@ class XprezAdminViewsClipboardMixin(object):
     CLIPBOARD_MAX_LENGTH = 10
     CLIPBOARD_CONTAINER_KEY = "container"
     CLIPBOARD_SECTION_KEY = "section"
-    CLIPBOARD_CONTENT_KEY = "content"
+    CLIPBOARD_MODULE_KEY = "module"
 
     CLIPBOARD_PASTE_ACTION = "paste"
     CLIPBOARD_SYMLINK_ACTION = "symlink"
@@ -31,9 +31,9 @@ class XprezAdminViewsClipboardMixin(object):
         return HttpResponse()
 
     def _xprez_target_container_and_position(self, request, target_position, target_pk):
-        if target_position == self.POSITION_CONTENT_BEFORE:
-            before_content = models.Content.objects.get(pk=target_pk)
-            return before_content.container, before_content.position
+        if target_position == self.POSITION_MODULE_BEFORE:
+            before_module = models.Module.objects.get(pk=target_pk)
+            return before_module.container, before_module.position
         elif target_position == self.POSITION_CONTAINER_END:
             return self._get_container_instance(request, target_pk), None
 
@@ -41,37 +41,37 @@ class XprezAdminViewsClipboardMixin(object):
     def xprez_clipboard_paste(
         self, request, key, pk, action, target_position, target_pk
     ):
-        if key == self.CLIPBOARD_CONTENT_KEY:
-            contents = models.Content.objects.filter(pk=int(pk))
+        if key == self.CLIPBOARD_MODULE_KEY:
+            modules = models.Module.objects.filter(pk=int(pk))
         elif key == self.CLIPBOARD_CONTAINER_KEY:
-            contents = self._get_container_instance(request, int(pk)).contents.all()
+            modules = self._get_container_instance(request, int(pk)).modules.all()
 
         container, position = self._xprez_target_container_and_position(
             request, target_position, target_pk
         )
 
-        allowed_contents = self.xprez_get_allowed_contents(container)
+        allowed_modules = self.xprez_get_allowed_modules(container)
 
-        contents_data = []
-        for content in contents:
-            source_content = content.polymorph()
-            if source_content.__class__ not in allowed_contents:
+        modules_data = []
+        for module in modules:
+            source_module = module.polymorph()
+            if source_module.__class__ not in allowed_modules:
                 continue
 
             if action == self.CLIPBOARD_PASTE_ACTION:
-                new_content = source_content.copy(
+                new_module = source_module.copy(
                     for_container=container, position=position
                 )
             elif action == self.CLIPBOARD_SYMLINK_ACTION:
-                new_content = models.ContentSymlink.create_for_container(
-                    container, position=position, symlink=source_content
+                new_module = models.ModuleSymlink.create_for_container(
+                    container, position=position, symlink=source_module
                 )
 
-            new_content.build_admin_form(self)
-            contents_data += [
+            new_module.build_admin_form(self)
+            modules_data += [
                 {
-                    "template": new_content.render_admin({"request": request}),
-                    "content_pk": new_content.pk,
+                    "template": new_module.render_admin({"request": request}),
+                    "module_pk": new_module.pk,
                 }
             ]
             if position is not None:
@@ -79,10 +79,8 @@ class XprezAdminViewsClipboardMixin(object):
 
         return JsonResponse(
             {
-                "contents": contents_data,
-                "updated_content_positions": self._updated_contents_positions(
-                    container
-                ),
+                "modules": modules_data,
+                "updated_module_positions": self._updated_modules_positions(container),
             }
         )
 
@@ -95,26 +93,24 @@ class XprezAdminViewsClipboardMixin(object):
         target_container, position = self._xprez_target_container_and_position(
             request, target_position, target_pk
         )
-        allowed_content_types = self.xprez_get_allowed_content_types(target_container)
+        allowed_module_types = self.xprez_get_allowed_module_types(target_container)
 
         clipboard = []
         for key, pk in session_data:
             try:
                 if key == self.CLIPBOARD_CONTAINER_KEY:
                     obj = self._get_container_instance(request, pk).polymorph()
-                    contents = obj.contents.all()
-                    if any(c.content_type in allowed_content_types for c in contents):
-                        if all(
-                            c.content_type in allowed_content_types for c in contents
-                        ):
+                    modules = obj.modules.all()
+                    if any(m.module_type in allowed_module_types for m in modules):
+                        if all(m.module_type in allowed_module_types for m in modules):
                             allowed = True
                         else:
                             allowed = "partial"
                     else:
                         allowed = False
-                elif key == self.CLIPBOARD_CONTENT_KEY:
-                    obj = models.Content.objects.get(pk=pk).polymorph()
-                    allowed = obj.content_type in allowed_content_types
+                elif key == self.CLIPBOARD_MODULE_KEY:
+                    obj = models.Module.objects.get(pk=pk).polymorph()
+                    allowed = obj.module_type in allowed_module_types
 
                 clipboard += [{"key": key, "obj": obj, "allowed": allowed}]
             except ObjectDoesNotExist:
@@ -144,19 +140,19 @@ class XprezAdminViewsClipboardMixin(object):
         return [
             re_path(
                 r"^xprez-clipboard-copy/(?P<key>{}|{})/(?P<pk>[0-9]+)/$".format(
-                    self.CLIPBOARD_CONTENT_KEY, self.CLIPBOARD_CONTAINER_KEY
+                    self.CLIPBOARD_MODULE_KEY, self.CLIPBOARD_CONTAINER_KEY
                 ),
                 self.xprez_admin_view(self.xprez_clipboard_copy),
                 name=self.xprez_admin_url_name("clipboard_copy"),
             ),
             re_path(
                 r"^xprez-clipboard-paste/(?P<key>{}|{}|{})/(?P<pk>[0-9]+)/(?P<action>{}|{})/(?P<target_position>{}|{})/(?P<target_pk>[0-9]+)/$".format(
-                    self.CLIPBOARD_CONTENT_KEY,
+                    self.CLIPBOARD_MODULE_KEY,
                     self.CLIPBOARD_CONTAINER_KEY,
                     self.CLIPBOARD_SECTION_KEY,
                     self.CLIPBOARD_PASTE_ACTION,
                     self.CLIPBOARD_SYMLINK_ACTION,
-                    self.POSITION_CONTENT_BEFORE,
+                    self.POSITION_MODULE_BEFORE,
                     self.POSITION_CONTAINER_END,
                 ),
                 self.xprez_admin_view(self.xprez_clipboard_paste),
@@ -164,7 +160,7 @@ class XprezAdminViewsClipboardMixin(object):
             ),
             re_path(
                 r"^xprez-clipboard-list/(?P<target_position>{}|{})/(?P<target_pk>[0-9]+)/$".format(
-                    self.POSITION_CONTENT_BEFORE,
+                    self.POSITION_MODULE_BEFORE,
                     self.POSITION_CONTAINER_END,
                 ),
                 self.xprez_admin_view(self.xprez_clipboard_list),

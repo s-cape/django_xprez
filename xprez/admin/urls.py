@@ -1,8 +1,8 @@
-from xprez import autodiscover, contents_manager
+from xprez import autodiscover, module_type_manager
 
 autodiscover()
 
 
 app_name = "xprez"
 
-urlpatterns = [] + contents_manager.get_urls()
+urlpatterns = [] + module_type_manager.get_urls()

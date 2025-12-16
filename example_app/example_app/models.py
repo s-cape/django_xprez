@@ -26,7 +26,7 @@ class Page(ContentsContainer):
                 break
             it += 1
         new_inst.save()
-        self.copy_contents(new_inst)
+        self.copy_modules(new_inst)
         return new_inst
 
     class Meta:

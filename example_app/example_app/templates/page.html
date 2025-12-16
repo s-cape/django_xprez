@@ -12,6 +12,5 @@
         <li><a href="{{ page.get_absolute_url }}">{{ page }}</a></li>
     {% endfor %}
     </ul>
-    {% include 'xprez/container.html' with contents=page.contents.all %}
+    {% include 'xprez/container.html' with modules=page.modules.all %}
 {% endblock %}
-

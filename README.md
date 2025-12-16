@@ -55,9 +55,9 @@ Quick start
 
 6. Create models:
 ```
-    from xprez.models import ContentsContainer
+    from xprez.models import Container
 
-    class Page(ContentsContainer):
+    class Page(Container):
         title = models.CharField(max_length=255)
         slug = models.SlugField(max_length=255, unique=True)
 
@@ -81,7 +81,7 @@ Quick start
     {% load xprez %}
     {% xprez_front_media %}
     {% include 'xprez/includes/photoswipe.html' %}
-    {% include 'xprez/container.html' with contents=page.contents.all %}
+    {% include 'xprez/container.html' with container=page %}
 ```
 
 9. (optional) Change sorl thumbnail backend in settings - for seo-friendly thumbnail filenames:
@@ -121,8 +121,8 @@ TODO
 -------
 
 - add custom module tutorial to Readme
-- fix template content to save only relative path to database
-- check template content raising UnicodeDecodeError
+- fix template module to save only relative path to database
+- check template module raising UnicodeDecodeError
 - create manual for various situations (ck_editor branch)
   - using custom config and implement style sources into own building system (using get_module_path.py)
   - how to implement `xprezanchor` functionality

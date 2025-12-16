@@ -4,7 +4,6 @@
 <div
     class="xprez-section"
     data-component="xprez-section"
-    {# data-id="{{ section.pk }}" #}
     data-prefix="{{ section.admin_form.prefix }}"
 >
     {% include "./includes/add_list.html" with component_name="xprez-adder-section-before" xprez_admin=section.admin_form.xprez_admin add_list_container=section.container attributes="data-hidden" %}
@@ -18,58 +17,12 @@
             <span class="xprez-icon-btn" title="Advanced settings" data-component="xprez-section-popover-trigger">
                 <i class="xprez-icon-settings"></i>
             </span>
-                {% comment %}
-            <div class="xprez-option-row">
-                <div class="xprez-option" data-size="flex-auto" data-active="true">
-                    <label for="id1-cols">Columns</label>
-                    <span class="xprez-option__dropdown">
-                        <select class="xprez-option__select" id="id1-cols">
-                            <option value="1">1</option>
-                            <option value="2" selected>2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                    </span>
-                </div>
-                <div class="xprez-option" data-size="flex-auto" data-active="true">
-                    <label for="id1-gap">Gap</label>
-                    <span class="xprez-option__dropdown">
-                        <select class="xprez-option__select" id="id1-gap">
-                            <option value="sm">Small</option>
-                            <option value="md" selected>Medium</option>
-                            <option value="lg">Large</option>
-                            <option value="xl">X-Large</option>
-                            <option value="custom">Custom</option>
-                        </select>
-                    </span>
-                </div>
-                <div class="xprez-option" data-size="flex-auto" data-active="true">
-                    <label for="id1-max-width">Max width</label>
-                    <span class="xprez-option__dropdown">
-                        <select class="xprez-option__select" id="id1-max-width">
-                            <option value="sm">Small</option>
-                            <option value="md" selected>Medium</option>
-                            <option value="lg">Large</option>
-                            <option value="xl">X-Large</option>
-                            <option value="xl">Full</option>
-                            <option value="custom">Custom</option>
-                        </select>
-                    </span>
-                </div>
-            </div>
-                {% endcomment %}
         </div>
 
         <div class="xprez-section__actions">
             <span class="xprez-icon-btn" title="Add section" data-component="xprez-adder-section-before-trigger">
                 <i class="xprez-icon-plus-circle"></i>
             </span>
-            {% comment %}
-            <span class="xprez-icon-btn xprez-icon-btn--icon-toggle js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off">
-                <i class="xprez-icon-eye x-variant-unchecked"></i>
-                <i class="xprez-icon-eye_slash  x-variant-checked x-color-alert"></i>
-            </span>
-            {% endcomment %}
             <span class="xprez-option" data-text-label="false">
                 <label for="{{ section.admin_form.visible.id_for_label }}">
                     <i class="xprez-icon-eye x-variant-unchecked"></i>
@@ -83,14 +36,14 @@
                 <i class="xprez-icon-copy"></i>
                 <div class="xprez-submenu">
                     <div
-                        class="js-copy-content"
-                        data-url="TODO{#{% url form.xprez_admin.xprez_copy_content_url_name content.pk %}#}"
+                        class="js-copy-module"
+                        data-url="TODO"
                     >
                         Duplicate
                     </div>
                     <div
                         class="js-clipboard-copy xprez-clipboard-copy"
-                        data-url="TODO{#{% url form.xprez_admin.xprez_clipboard_copy_url_name xprez_admin.CLIPBOARD_CONTENT_KEY content.pk %}#}"
+                        data-url="TODO"
                     >
                         <span class="xprez-inline-success-message">{% include "xprez/admin/icons/checkmark.html" %} Copied</span>
                         <span class="default">Copy</span>
@@ -110,21 +63,21 @@
     </div>
 
     <div class="xprez-section-grid" data-component="xprez-section-grid">
-        {% for content in section.admin_form.xprez_contents %}
-            {% xprez_content_render_admin content %}
+        {% for module in section.admin_form.xprez_modules %}
+            {% xprez_module_render_admin module %}
         {% endfor %}
     </div>
 
     <div class="xprez-section__footer">
         <span class="xprez-btn xprez-btn-transparent" data-component="xprez-adder-section-end-trigger">
-            <i class="xprez-icon-plus_square_20"></i>Add content
+            <i class="xprez-icon-plus_square_20"></i>Add module
         </span>
         {% include "./includes/add_list.html" with component_name="xprez-adder-section-end" xprez_admin=section.admin_form.xprez_admin add_list_section=section attributes="data-hidden" %}
     </div>
 
     <div popover="manual" class="xprez-popover" data-component="xprez-section-popover">
         <div class="xprez-popover__content">
-            {% block popopover_content %}
+            {% block popopover_module %}
                 <div class="xprez-option-group">
                     <div class="xprez-option-group__heading">
                         <i class="xprez-icon-grid_3_3"></i>

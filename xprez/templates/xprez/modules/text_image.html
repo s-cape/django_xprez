@@ -1,0 +1,19 @@
+{% extends 'xprez/modules/base.html' %}
+{% load thumbnail xprez %}
+
+{% block css_class_extra %}xprez-text-image xprez-text-image-{{ module.image_alignment }}{% endblock %}
+
+{% block module_in %}
+    <div class="xprez-text-image--image">
+        <img src="{% thumbnail module.image "400x400" quality=80 format="WEBP" as thumb %}{{ thumb.url|build_absolute_uri }}"
+                    srcset="{{ thumb.url|build_absolute_uri }} 400w,
+                        {% endthumbnail %}{% thumbnail module.image "800x800" quality=85 format="WEBP" as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 800w,
+                        {% endthumbnail %}{% thumbnail module.image "1200x1200" quality=85 format="WEBP" as thumb %}
+                            {{ thumb.url|build_absolute_uri }} 1200w
+                        {% endthumbnail %}"
+                    sizes="(min-width: 1270px) 605px, (min-width: 800px) 50vw, 100vw"
+                    class="" />
+    </div>
+    <div class="xprez-text-image--text">{{ parsed_text }}</div>
+{% endblock %}

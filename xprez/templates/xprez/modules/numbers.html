@@ -1,0 +1,22 @@
+{% extends 'xprez/modules/base.html' %}
+{% load i18n %}
+
+{% load humanize xprez %}
+
+{% block css_class_extra %}xprez-numbers{% endblock %}
+
+{% block module_in %}
+    {% for number in module.numbers.all %}
+        {% if number.number %}
+        <div class="xprez-number-item js-number-container">
+            <div class="xprez-number">
+                {% language 'en' %}
+                {# When localization is eg. cs, intcomma puts &nbsp which results in jquery.counterUp failure #}
+            	<span class="xprez-number-digits js-counter-up">{{ number.number|intcomma}}</span>{% if number.suffix %}<span class="xprez-number-suffix">{{ number.suffix }}</span>{% endif %}
+                {% endlanguage %}
+            </div>
+            <div class="xprez-number-title">{{ number.title }}</div>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

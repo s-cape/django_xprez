@@ -1,0 +1,17 @@
+{% extends 'xprez/admin/modules/text_base.html' %}
+
+{% block actions %}
+    <span class="xprez-icon-btn" title="Image">
+        <i class="xprez-icon-image"></i>
+        {{ module.admin_form.image }}
+    </span>
+    {{ block.super }}
+{% endblock %}
+
+{% block main_fields %}
+    {% if module.image %}
+        <img src="{{ module.image.url }}">
+        Clear: {{ module.admin_form.image_clear }}
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

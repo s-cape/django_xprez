@@ -1,0 +1,8 @@
+{% extends "xprez/contents/text_base.html" %}
+
+{% block module_in %}
+    {% if module.image %}
+        <img src="{{ module.image.url }}" alt="{{ module.image.name }}">
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

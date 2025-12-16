@@ -9,28 +9,28 @@ from django.utils.module_loading import autodiscover_modules
 from xprez.conf import settings
 
 
-class ContentTypeManager:
-    def get(self, content_type):
-        return self._registry[content_type]
+class ModuleTypeManager:
+    def get(self, module_type):
+        return self._registry[module_type]
 
     def all_as_list(self):
-        return [content_type for key, content_type in self._registry.items()]
+        return [module_type for key, module_type in self._registry.items()]
 
     def get_urls(self):
         urls = []
-        for content in self._registry.values():
-            urls += content.get_urls()
+        for module in self._registry.values():
+            urls += module.get_urls()
         return urls
 
     @staticmethod
-    def _get_class_media(content_class, media_class_name):
-        data = getattr(content_class, media_class_name)
+    def _get_class_media(module_class, media_class_name):
+        data = getattr(module_class, media_class_name)
         css = getattr(data, "css", {})
         js = getattr(data, "js", [])
         if isinstance(css, tuple) or isinstance(css, list):
             warnings.warn(
                 "{}.{}.css should be a dict, not list/tuple".format(
-                    content_class,
+                    module_class,
                     media_class_name,
                 ),
                 DeprecationWarning,
@@ -39,11 +39,11 @@ class ContentTypeManager:
             css = {"all": css}
         return Media(css=css, js=js)
 
-    def _collect_media(self, media_class_name, initial=None, content_types=None):
+    def _collect_media(self, media_class_name, initial=None, module_types=None):
         media = initial or Media()
-        contents = self._get_allowed_contents(allowed_contents=content_types)
-        for content in contents:
-            media += ContentTypeManager._get_class_media(content, media_class_name)
+        modules = self._get_allowed_modules(allowed_modules=module_types)
+        for module in modules:
+            media += ModuleTypeManager._get_class_media(module, media_class_name)
         return media
 
     def admin_media(self):
@@ -61,44 +61,45 @@ class ContentTypeManager:
             ),
         )
 
-    def front_media(self, content_types=None):
-        return self._collect_media("FrontMedia", content_types=content_types)
+    def front_media(self, module_types=None):
+        return self._collect_media("FrontMedia", module_types=module_types)
 
     def __init__(self):
         self._registry = OrderedDict()
 
-    def register(self, content_class):
-        self._registry[content_class.class_content_type()] = content_class
+    def register(self, module_class):
+        self._registry[module_class.class_module_type()] = module_class
 
-    def unregister(self, content_class):
-        del self._registry[content_class.class_content_type()]
+    def unregister(self, module_class):
+        del self._registry[module_class.class_module_type()]
 
-    def _get_allowed_contents(
+    def _get_allowed_modules(
         self,
-        allowed_contents=None,
-        excluded_contents=None,
+        allowed_modules=None,
+        excluded_modules=None,
     ):
-        if allowed_contents is None:
-            allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
-        if excluded_contents is None:
-            excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
+        if allowed_modules is None:
+            allowed_modules = settings.XPREZ_DEFAULT_ALLOWED_MODULES
+        if excluded_modules is None:
+            excluded_modules = settings.XPREZ_DEFAULT_EXCLUDED_MODULES
 
-        content_types = []
-        if allowed_contents == "__all__":
-            content_types = self.all_as_list()
+        module_types = []
+        if allowed_modules == "__all__":
+            module_types = self.all_as_list()
         else:
-            for ct in allowed_contents:
-                content_types.append(self.get(ct))
-        if excluded_contents:
-            for ct in excluded_contents:
-                ct = self.get(ct)
-                if ct in content_types:
-                    content_types.remove(ct)
-        return content_types
+            for mt in allowed_modules:
+                module_types.append(self.get(mt))
+        if excluded_modules:
+            for mt in excluded_modules:
+                mt = self.get(mt)
+                if mt in module_types:
+                    module_types.remove(mt)
+        return module_types
 
 
-contents_manager = ContentTypeManager()
+module_type_manager = ModuleTypeManager()
+modules_manager = module_type_manager  # Alias for consistency
 
 
 def autodiscover():
-    autodiscover_modules("models", register_to=contents_manager)
+    autodiscover_modules("models", register_to=module_type_manager)

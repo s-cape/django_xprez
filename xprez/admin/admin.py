@@ -1,9 +1,9 @@
 from django.apps import apps
 from django.contrib import admin
 
-from xprez import contents_manager, settings
+from xprez import module_type_manager, settings
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
-from xprez.admin.views.contents import XprezAdminViewsContentsMixin
+from xprez.admin.views.modules import XprezAdminViewsModulesMixin
 
 
 class XprezModelFormMixin(object):
@@ -34,7 +34,7 @@ class XprezModelFormMixin(object):
         sections_to_delete = []
         for section in self.xprez_sections:
             if section.admin_form.cleaned_data.get("delete"):
-                # do not delete yet, may contain contents to-be moved to other sections
+                # do not delete yet, may contain modules to-be moved to other sections
                 sections_to_delete += [section]
             else:
                 section.saved = True
@@ -43,26 +43,16 @@ class XprezModelFormMixin(object):
         for section in sections_to_delete:
             section.delete()
 
-        # TODO: think about this. What is the best way to delete old sections/contents?
-        # for section in self.instance.sections.exclude(
-        #     pk__in=[s.id for s in self.xprez_sections]
-        # ).filter(saved=False, date_created__lt=timezone.now() - timedelta(days=5)):
-        #     section.delete()
-
     def is_multipart(self):
         return True
 
-    def xprez_get_allowed_contents(self):
-        return self.xprez_admin.xprez_get_allowed_contents(container=self.instance)
-
-    # TODO: remove, not used ... ?
-    # def xprez_clipboard_list(self, request):
-    #     return self.xprez_admin.xprez_clipboard_list(request, container=self.instance)
+    def xprez_get_allowed_modules(self):
+        return self.xprez_admin.xprez_get_allowed_modules(container=self.instance)
 
 
-class XprezAdminMixin(XprezAdminViewsContentsMixin, XprezAdminViewsClipboardMixin):
-    allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
-    excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
+class XprezAdminMixin(XprezAdminViewsModulesMixin, XprezAdminViewsClipboardMixin):
+    allowed_modules = settings.XPREZ_DEFAULT_ALLOWED_MODULES
+    excluded_modules = settings.XPREZ_DEFAULT_EXCLUDED_MODULES
 
     xprez_breakpoints = settings.XPREZ_BREAKPOINTS
     xprez_default_breakpoint = settings.XPREZ_DEFAULT_BREAKPOINT
@@ -76,15 +66,15 @@ class XprezAdminMixin(XprezAdminViewsContentsMixin, XprezAdminViewsClipboardMixi
         return Form
 
     def xprez_admin_media(self):
-        return contents_manager.admin_media()
+        return module_type_manager.admin_media()
 
-    def xprez_get_allowed_content_types(self, container):
-        return [c.__name__.lower() for c in self.xprez_get_allowed_contents(container)]
+    def xprez_get_allowed_module_types(self, container):
+        return [m.__name__.lower() for m in self.xprez_get_allowed_modules(container)]
 
-    def xprez_get_allowed_contents(self, container):
-        return contents_manager._get_allowed_contents(
-            allowed_contents=self.allowed_contents,
-            excluded_contents=self.excluded_contents,
+    def xprez_get_allowed_modules(self, container):
+        return module_type_manager._get_allowed_modules(
+            allowed_modules=self.allowed_modules,
+            excluded_modules=self.excluded_modules,
         )
 
     xprez_url_namespace = None
@@ -100,9 +90,9 @@ class XprezAdminMixin(XprezAdminViewsContentsMixin, XprezAdminViewsClipboardMixi
 
     def xprez_admin_urls(self):
         urls = []
-        urls += XprezAdminViewsContentsMixin.xprez_admin_urls(self)
+        urls += XprezAdminViewsModulesMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
-        urls += contents_manager.get_urls()
+        urls += module_type_manager.get_urls()
         return urls
 
     def _get_container_instance(self, request, object_pk):
@@ -110,8 +100,8 @@ class XprezAdminMixin(XprezAdminViewsContentsMixin, XprezAdminViewsClipboardMixi
         klass = apps.get_model(app_label, model_name)
         return klass.objects.get(pk=object_pk)
 
-    def _updated_contents_positions(self, container):
-        return {c.id: c.position for c in container.contents.all()}
+    def _updated_modules_positions(self, container):
+        return {m.id: m.position for m in container.modules.all()}
 
 
 class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):

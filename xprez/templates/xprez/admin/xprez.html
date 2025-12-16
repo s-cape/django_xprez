@@ -30,16 +30,16 @@
     [data-component="xprez-section"][data-mode="delete"] [data-component="xprez-section-delete-info"] {
         display: block;
     }
-    [data-component="xprez-content"] [data-component="xprez-content-delete-info"] {
+    [data-component="xprez-module"] [data-component="xprez-module-delete-info"] {
         display: none;
     }
-    [data-component="xprez-content"][data-mode="delete"] {
+    [data-component="xprez-module"][data-mode="delete"] {
         border: 1px solid red;
     }
-    [data-component="xprez-content"][data-mode="delete"] > * {
+    [data-component="xprez-module"][data-mode="delete"] > * {
         display: none;
     }
-    [data-component="xprez-content"][data-mode="delete"] [data-component="xprez-content-delete-info"] {
+    [data-component="xprez-module"][data-mode="delete"] [data-component="xprez-module-delete-info"] {
         display: block;
     }
 
@@ -67,12 +67,12 @@
     }
 
     .xprez-section__header,
-    .xprez-content__header {
+    .xprez-module__header {
         cursor: grab;
     }
 
     .xprez-section__header:active,
-    .xprez-content__header:active {
+    .xprez-module__header:active {
         cursor: grabbing;
     }
 </style>
@@ -118,13 +118,12 @@
 
     {% include "./dev/section.html" %}
 
-    {% with allowed_contents=form.xprez_get_allowed_contents %}
-        {% if allowed_contents %}
+    {% with allowed_modules=form.xprez_get_allowed_modules %}
+        {% if allowed_modules %}
             <div class="xprez-add-after">
                 <div class="xprez-section__header--centered">
                     <h3>Add section</h3>
                 </div>
-                {% comment %} {% include "./includes/add_list.html" with component_name="xprez-adder-container-end" xprez_admin=form.xprez_admin add_position=form.xprez_admin.POSITION_CONTAINER_END add_object="section" container=form.instance %} {% endcomment %}
                 {% include "./includes/add_list.html" with component_name="xprez-adder-container-end" xprez_admin=form.xprez_admin add_list_container=form.instance %}
             </div>
         {% endif %}
@@ -136,118 +135,3 @@
         window.xprez = new Xprez();
     });
 </script>
-
-{% comment %}
-<div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
-    <div class="xprez-top">
-        <span class="xprez-option-btn js-collapse_all">Collapse all</span>
-        <span
-            class="xprez-option-btn js-xprez-clipboard-copy-all xprez-clipboard-copy"
-            data-url="{% url form.xprez_admin.xprez_clipboard_copy_url_name form.xprez_admin.CLIPBOARD_CONTAINER_KEY form.instance.pk %}"
-        >
-            <span class="xprez-inline-success-message">{% include "xprez/admin/icons/checkmark.html" %} Copied</span>
-            <span class="default">Copy all</span>
-        </span>
-    </div>
-    <div class="js-xprez-contents-container">
-        {% for content in form.xprez_contents %}
-            {% xprez_content_render_admin content %}
-        {% endfor %}
-    </div>
-    {% with allowed_contents=form.xprez_get_allowed_contents %}
-        {% if allowed_contents %}
-            <div class="js-xprez-add xprez-add-after">
-                <h2>+ Add new piece of content +</h2>
-                {% include "./includes/add_list.html" with xprez_admin=form.xprez_admin container=form.instance %}
-            </div>
-        {% endif %}
-    {% endwith %}
-</div>
-{% endcomment %}
-{% comment %}
-<script>
-    window.popoverManager = {
-        popovers: new Map(),
-        
-        init() {
-            // Initialize all popovers on page
-            document.querySelectorAll('.xprez-popover').forEach(popover => {
-                this.initializePopover(popover);
-            });
-        },
-
-        initializePopover(popover) {
-            const popoverId = popover.id;
-            const popoverContent = popover.querySelector('.xprez-popover__content');
-
-            const openPopover = () => {
-                if (typeof popover.showPopover === 'function') {
-                    popover.showPopover();
-                } else {
-                    popover.style.display = 'block';
-                }
-            };
-
-            const closePopover = () => {
-                if (typeof popover.hidePopover === 'function') {
-                    popover.hidePopover();
-                } else {
-                    popover.style.display = 'none';
-                }
-            };
-
-            // Close when clicking outside
-            document.addEventListener('click', (event) => {
-                const isClickInside = popover.contains(event.target);
-                    const openButton = event.target.closest('[data-popover-target]');
-
-                if (!isClickInside && !openButton) {
-                    this.closePopover(popoverId);
-                }
-            });
-
-            // Save reference to drawer in drawerManager
-            this.popovers.set(popoverId, {
-                open: openPopover,
-                close: closePopover
-            });
-
-            // Initialize triggers
-            this.initializeTriggersForPopover(popoverId);
-        },
-
-        initializeTriggersForPopover(popoverId) {
-            document.querySelectorAll(`[data-popover-target="${popoverId}"]`).forEach(trigger => {
-                trigger.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    this.openPopover(popoverId);
-                });
-            });
-        },
-
-        openPopover(popoverId) {
-            const popover = this.popovers.get(popoverId);
-            if (popover) {
-                popover.open();
-            } else {
-                console.warn(`Popover with ID "${popoverId}" not found`);
-            }
-        },
-
-        closePopover(popoverId) {
-            const popover = this.popovers.get(popoverId);
-            if (popover) {
-                popover.close();
-            }
-        }
-    };
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-        popoverManager.init();
-        // popoverManager.openPopover('id2-text-settings'); // dev show popover on page load
-        // popoverManager.openPopover('id1-section-settings'); // dev show popover on page load
-    });
-
-</script>
-{% endcomment %}

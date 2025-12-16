@@ -1,0 +1,13 @@
+{% extends 'xprez/modules/base.html' %}
+
+{% block css_class_extra %}
+	xprez-text-content
+	{% if module.width %}{{ module.width }}-width{% endif %} 
+	{% if module.box %}xprez-text-content-boxed{% endif %} 
+{% endblock %}
+
+{% block module_in %}
+	{% if module.box %}<div class="xprez-text-content-boxed__content">{% endif %}
+	{{ module.render_text }}
+	{% if module.box %}</div>{% endif %}
+{% endblock %}

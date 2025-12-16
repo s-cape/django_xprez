@@ -44,19 +44,18 @@ export class XprezSectionPopover extends XprezPopoverBase {
     }
 }
 
-export class XprezContentPopover extends XprezPopoverBase {
-    bindElements(content) {
-        this.content = content;
-        this.el = this.content.el.querySelector("[data-component='xprez-content-popover']");
-        this.triggerEl = this.content.el.querySelector("[data-component='xprez-content-popover-trigger']");
+export class XprezModulePopover extends XprezPopoverBase {
+    bindElements(module) {
+        this.module = module;
+        this.el = this.module.el.querySelector("[data-component='xprez-module-popover']");
+        this.triggerEl = this.module.el.querySelector("[data-component='xprez-module-popover-trigger']");
     }
     show() {
         super.show();
-        this.content.el.dataset.mode = "edit";
+        this.module.el.dataset.mode = "edit";
     }
     hide() {
         super.hide();
-        this.content.el.dataset.mode = "";
+        this.module.el.dataset.mode = "";
     }
 }
-

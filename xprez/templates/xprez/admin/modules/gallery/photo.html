@@ -1,0 +1,14 @@
+{% load thumbnail %}
+<div class="js-item xprez-gallery__item" data-number="{{ number }}">
+    <div class="xprez-gallery-photo-buttons">
+        <span class="xprez-icon-btn-remove js-checkbox_controller"
+              data-formfield_selector="#id_gallerys-{{ module.pk }}-{{ number }}-DELETE"></span>
+    </div>
+    {% block thumb %}
+    {% thumbnail item.image "400x400" format="WEBP" quality=80 as thumb %}
+        <img src="{{ thumb.url }}" class="xprez-gallery__img"  />
+    {% endthumbnail %}
+    {% endblock %}
+    <input type="text" value="" class="js-text_controller" data-formfield_selector="#id_gallerys-{{ module.pk }}-{{ number }}-description" placeholder="Add caption" />
+    <input type="text" value="" class="js-text_controller" data-formfield_selector="#id_gallerys-{{ module.pk }}-{{ number }}-alt_text" placeholder="Add alt text" />
+</div>

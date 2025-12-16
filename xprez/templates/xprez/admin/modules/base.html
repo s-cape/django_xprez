@@ -1,0 +1,118 @@
+{% load xprez_admin %}
+<div
+    class="xprez-module"
+    data-mode="{# edit #}{# select #}"
+    data-component="xprez-module"
+    data-prefix="{{ module.admin_form.prefix }}"
+    data-js-controller-class="{{ module.js_controller_class }}"
+>
+    <div class="xprez-module-box">
+        <div class="xprez-module__header" data-draggable-module-handle>
+            <div class="xprez-module__name">
+                <span class="xprez-module__name-icon">
+                    {% include "xprez/admin/icons/modules/text.html" %}
+                </span>
+                <div class="xprez-option" data-active="true">
+                    <label >
+                        <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
+                        <i class="xprez-icon-check_circle_small x-variant-checked"></i>
+                    </label>
+                    <input type="checkbox" checked>
+                </div>
+                <span class="xprez-option-group__title-text">{{ module.verbose_name }}</span>
+            </div>
+
+            <div class="xprez-module__actions">
+                {% block actions %}
+                    <span class="xprez-icon-btn" title="Copy">
+                        <i class="xprez-icon-copy"></i>
+                    </span>
+                    <span class="xprez-icon-btn" title="Settings" data-component="xprez-module-popover-trigger">
+                        <i class="xprez-icon-settings" data-id="{{ module.pk }}"></i>
+                    </span>
+                {% endblock %}
+            </div>
+
+            <div class="xprez-module__actions xprez-module__actions--right">
+                <span class="xprez-icon-btn" title="Delete" data-component="xprez-module-delete-trigger">
+                    <i class="xprez-icon-delete"></i>
+                    <span data-hidden>{{ module.admin_form.delete }}</span>
+                </span>
+            </div>
+        </div>
+
+        <div data-component="xprez-module-delete-info">
+            This module will be deleted when you save the changes.
+            <div data-component="xprez-module-delete-undo">undelete</div>
+        </div>
+
+        <div class="xprez-module__body">
+            {% block module %}
+                <div class="xprez-form-table">
+                    {% if module.preview_image %}
+                        <img src="{% static module.preview_image %}" alt="" class="xprez-module__preview-image">
+                    {% endif %}
+                    {% block main_fields %}
+                        {% for field in module.admin_form.get_main_fields %}
+                            {% include 'xprez/admin/form/row.html' with field=field %}
+                        {% endfor %}
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+
+    <div popover="manual" class="xprez-popover" data-component="xprez-module-popover">
+        <div class="xprez-popover__content">
+            {% block popopover_module %}
+                <div class="xprez-option-group">
+                    <div class="xprez-option-group__heading">
+                        <i class="xprez-icon-grid_3_3"></i>
+                        <span class="xprez-option-group__title-text">{{ module.verbose_name }}</span>
+                        <span
+                            class="xprez-btn xprez-btn--sm"
+                            title="All settings of selected modules will be overwritten with current settings"
+                            data-component="xprez-module-sync-selected"
+                        >
+                            Sync selected
+                            <i class="xprez-icon-sync"></i>
+                        </span>
+                    </div>
+
+                    <div class="xprez-option-row">
+                        <div class="xprez-option xprez-option--marker" data-size="flex-1" data-active="true">
+                            <label for="{{ module.admin_form.prefix }}-change-similar">
+                                <span>Change style for similar modules</span>
+                            </label>
+                            <input
+                                id="{{ module.admin_form.prefix }}-change-similar"
+                                type="checkbox"
+                                checked
+                                data-component="xprez-module-change-similar"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="xprez-option-group__subtitle">Attributes</div>
+
+                    {% include "xprez/admin/form/row.html" with field=module.admin_form.css_class flex=1 %}
+                    {% block options_fields %}
+                        {% for field in module.admin_form.get_options_fields %}
+                            {% include "xprez/admin/form/row.html" with field=field %}
+                        {% endfor %}
+                    {% endblock %}
+
+                    {% for config in module.admin_form.xprez_configs %}
+                        {% xprez_module_config_render_admin config %}
+                    {% endfor %}
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+
+    {% block hidden_fields %}
+        <input type="hidden" name="module-id" value="{{ module.pk }}">
+        {{ module.admin_form.position.as_hidden }}
+        {{ module.admin_form.section.as_hidden }}
+    {% endblock %}
+</div>

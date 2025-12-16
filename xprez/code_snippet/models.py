@@ -7,7 +7,7 @@ from pygments.lexers.javascript import JavascriptLexer
 from pygments.lexers.php import PhpLexer
 from pygments.lexers.templates import DjangoLexer
 
-from xprez import contents_manager
+from xprez import modules_manager
 from xprez.models import Content
 
 
@@ -52,4 +52,4 @@ class CodeSnippet(Content):
         )
 
 
-contents_manager.register(CodeSnippet)
+modules_manager.register(CodeSnippet)

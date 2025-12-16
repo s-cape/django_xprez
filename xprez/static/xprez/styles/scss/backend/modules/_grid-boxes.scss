@@ -1,0 +1,64 @@
+:root {
+	--xprez-gb-padding: 10px;
+}
+
+.xprez-grid-boxes-admin-wrapper {
+	box-sizing: border-box;
+	border: 1px dotted $b-gray-5;
+	border-radius: 2px;
+	text-align: left;
+	padding: var(--xprez-gb-padding);
+	width: calc(50% - 1rem);
+	display: flex;
+	flex-direction: column;
+	background: var(--x-admin-module-box-bg);
+	border-radius: var(--x-admin-border-radius-lg);
+
+	.xprez & .medium-editor, .xprez & .ck-editor {
+		font-size: 14px;
+		line-height: $g*.75;
+		margin: 0;
+		padding-top: 0;
+		flex: 1;
+
+		.medium-insert-buttons-show {
+			margin-left: 20px;
+		}
+
+		.medium-insert-images figure {
+			margin: 8px 0;
+		}
+	}
+}
+
+.xprez-grid-boxes-admin-wrapper--long {
+	width: 100%;
+}
+.xprez-grid-boxes-admin-buttons {
+	border-top: 1px solid $b-gray-4;
+	text-align: center;
+	margin-bottom: -5px;
+	padding-top: 1rem;
+	margin-top: 1rem;
+
+	> * {
+		margin: 0 4px;
+	}
+}
+
+.xprez-grid-boxes-admin-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	max-width: var(--x-admin-form-width);
+	margin: 0 auto;
+}
+
+// Image sizing based on settings
+
+.xprez-module:has([data-formfield_value="icon"]:is(.active)) {
+	figure.image {
+		width: 50%;
+		display: inline-block;
+	}
+}

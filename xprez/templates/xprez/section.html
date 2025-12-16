@@ -5,7 +5,7 @@
         {{ config.css_breakpoint_infix }}
     {% endfor %}
 
-    {% for content in section.get_contents %}
-        {% xprez_content_render_front content %}
+    {% for module in section.get_modules %}
+        {% xprez_module_render_front module %}
     {% endfor %}
 </div>
