@@ -1,5 +1,6 @@
 .xprez-section {
     margin: 1rem 0;
+    position: relative;
 
     &[data-mode="edit"] {
         --x-admin-section-divider-bg: #{$b-pink};

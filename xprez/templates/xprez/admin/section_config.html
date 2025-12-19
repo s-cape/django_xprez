@@ -61,9 +61,9 @@
     </div>
 
     {% if config.admin_form.delete %}
-        <div data-component="xprez-section-config-delete-info">
+        <div class="xprez-delete-info" data-component="xprez-section-config-delete-info">
             This breakpoint will be deleted when you save the changes.
-            <div data-component="xprez-section-config-delete-undo">undelete</div>
+            <span class="xprez-btn xprez-btn__danger" data-component="xprez-section-config-delete-undo">undelete</span>
         </div>
     {% endif %}
 </div>
