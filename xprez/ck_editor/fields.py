@@ -31,4 +31,10 @@ class CkEditorFieldFull(HtmlField):
         return super().formfield(**kwargs)
 
 
+class CkEditorFieldFullWithTable(HtmlField):
+    def formfield(self, **kwargs):
+        kwargs["widget"] = widgets.CkEditorWidgetFullWithTable
+        return super().formfield(**kwargs)
+
+
 CkEditorField = CkEditorFieldFull
