@@ -106,8 +106,6 @@ class Module(models.Model):
         super().save(*args, **kwargs)
         if self.pk:
             self.get_or_create_config(settings.XPREZ_DEFAULT_BREAKPOINT)
-            # for css_breakpoint in settings.XPREZ_BREAKPOINTS.keys():
-            #     self.get_or_create_config(css_breakpoint)
 
     @property
     def verbose_name(self):
@@ -388,38 +386,3 @@ class ModuleItem(models.Model):
 
     class Meta:
         abstract = True
-
-
-# # Backward compatibility
-# class ContentsContainer(ContainerBase):
-#     pass
-
-
-# class ContentBase(ModuleBase):
-#     section = models.ForeignKey(
-#         settings.XPREZ_SECTION_MODEL_CLASS,
-#         on_delete=models.CASCADE,
-#         related_name="contents",
-#     )
-
-#     class Meta:
-#         abstract = True
-
-
-# class Content(ContentBase):
-#     pass
-
-
-# class FormsetContent(FormsetModuleMixin, ContentBase):
-#     class Meta:
-#         abstract = True
-
-
-# class AjaxUploadFormsetContent(AjaxUploadFormsetModuleMixin, ContentBase):
-#     class Meta:
-#         abstract = True
-
-
-# class ContentItem(ModuleItemMixin, models.Model):
-#     class Meta:
-#         abstract = True

@@ -122,7 +122,6 @@ TODO
 
 - add custom module tutorial to Readme
 - fix template module to save only relative path to database
-- check template module raising UnicodeDecodeError
 - create manual for various situations (ck_editor branch)
   - using custom config and implement style sources into own building system (using get_module_path.py)
   - how to implement `xprezanchor` functionality

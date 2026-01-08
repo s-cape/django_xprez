@@ -6,7 +6,7 @@
 	{% if module.box %}xprez-text-content-boxed{% endif %} 
 {% endblock %}
 
-{% block module_in %}
+{% block content %}
 	{% if module.box %}<div class="xprez-text-content-boxed__content">{% endif %}
 	{{ module.render_text }}
 	{% if module.box %}</div>{% endif %}

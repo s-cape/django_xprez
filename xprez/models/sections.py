@@ -50,8 +50,7 @@ class Section(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.pk:
-            for css_breakpoint in settings.XPREZ_BREAKPOINTS.keys():
-                self.configs.get_or_create(css_breakpoint=css_breakpoint)
+            self.configs.get_or_create(css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT)
 
     def get_form_prefix(self):
         return "section-" + str(self.pk)

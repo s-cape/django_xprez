@@ -112,38 +112,13 @@ class TextModule(TextModuleBase):
         return truncate_with_ellipsis(self.text, CLIPBOARD_TEXT_MAX_LENGTH)
 
 
-class QuotesModule(FormsetModule):
-    form_class = "xprez.admin.forms.QuotesModuleForm"
-    formset_factory = "xprez.admin.forms.QuotesItemFormSet"
-    admin_template_name = "xprez/admin/modules/quotes.html"
-    front_template_name = "xprez/modules/quotes.html"
-    icon_template_name = "xprez/admin/icons/modules/quotes.html"
+class QuoteModule(Module):
+    # form_class = "xprez.admin.forms.QuotesModuleForm"
+    # formset_factory = "xprez.admin.forms.QuotesItemFormSet"
+    admin_template_name = "xprez/admin/modules/quote.html"
+    front_template_name = "xprez/modules/quote.html"
+    icon_template_name = "xprez/admin/icons/modules/quote.html"
 
-    class Meta:
-        verbose_name = "Quote"
-
-    title = models.CharField(max_length=255, null=True, blank=True)
-    box = models.BooleanField(default=False)
-
-    display_two = models.BooleanField(default=False)
-
-    def get_formset_queryset(self):
-        return self.quotes.all()
-
-    def show_front(self):
-        quotes = self.quotes.all()
-        if len(quotes) == 0:
-            return False
-        quote = quotes.first()
-        if not quote.name or not quote.quote:
-            return False
-        return True
-
-
-class QuotesItem(ModuleItem):
-    module = models.ForeignKey(
-        QuotesModule, related_name="quotes", on_delete=models.CASCADE
-    )
     name = models.CharField(max_length=255)
     job_title = models.CharField(max_length=255)
     image = models.ImageField(upload_to="quotes", null=True, blank=True)
@@ -151,10 +126,41 @@ class QuotesItem(ModuleItem):
     quote = models.TextField()
 
     class Meta:
-        ordering = ("module", "id")
+        verbose_name = "Quote"
+
+    # title = models.CharField(max_length=255, null=True, blank=True)
+    # box = models.BooleanField(default=False)
+
+    # display_two = models.BooleanField(default=False)
+
+    # def get_formset_queryset(self):
+    #     return self.quotes.all()
+
+    # def show_front(self):
+    #     quotes = self.quotes.all()
+    #     if len(quotes) == 0:
+    #         return False
+    #     quote = quotes.first()
+    #     if not quote.name or not quote.quote:
+    #         return False
+    #     return True
 
 
-class ImagesModule(AjaxUploadFormsetModule):
+# class QuotesItem(ModuleItem):
+#     module = models.ForeignKey(
+#         QuotesModule, related_name="quotes", on_delete=models.CASCADE
+#     )
+#     name = models.CharField(max_length=255)
+#     job_title = models.CharField(max_length=255)
+#     image = models.ImageField(upload_to="quotes", null=True, blank=True)
+#     title = models.CharField(max_length=255, null=True, blank=True)
+#     quote = models.TextField()
+
+#     class Meta:
+#         ordering = ("module", "id")
+
+
+class GalleryModule(AjaxUploadFormsetModule):
     COLUMNS_CHOICES = (
         (1, "1"),
         (2, "2"),
@@ -198,11 +204,11 @@ class ImagesModule(AjaxUploadFormsetModule):
         return self.photos.all().count()
 
 
-class Image(ModuleItem):
+class GalleryItem(ModuleItem):
     module = models.ForeignKey(
-        ImagesModule, related_name="images", on_delete=models.CASCADE
+        GalleryModule, related_name="items", on_delete=models.CASCADE
     )
-    image = models.ImageField(upload_to="photos")
+    file = models.ImageField(upload_to="gallery")
     description = models.CharField(max_length=255, blank=True, null=True)
     alt_text = models.CharField(max_length=255, blank=True)
     position = models.PositiveSmallIntegerField()
@@ -210,8 +216,8 @@ class Image(ModuleItem):
     @classmethod
     def create_from_file(cls, django_file, gallery):
         photo = cls(gallery=gallery)
-        photo.position = gallery.photos.all().count()
-        photo.image.save(django_file.name.split("/")[-1], django_file)
+        photo.position = gallery.items.all().count()
+        photo.file.save(django_file.name.split("/")[-1], django_file)
         photo.save()
         return photo
 
@@ -258,7 +264,7 @@ class CodeInputModule(Module):
     admin_template_name = "xprez/admin/modules/code_input.html"
     front_template_name = "xprez/modules/code_input.html"
     icon_template_name = "xprez/admin/icons/modules/code_input.html"
-    form_class = "xprez.admin.forms.CodeInputForm"
+    form_class = "xprez.admin.forms.CodeInputModuleForm"
 
     code = models.TextField()
 
@@ -326,7 +332,7 @@ class CodeTemplateModule(Module):
             return ""
 
 
-class DownloadModule(AjaxUploadFormsetModule):
+class DownloadsModule(AjaxUploadFormsetModule):
     admin_template_name = "xprez/admin/modules/download/download.html"
     front_template_name = "xprez/modules/download.html"
     admin_formset_item_template_name = "xprez/admin/modules/download/download_item.html"
@@ -346,9 +352,9 @@ class DownloadModule(AjaxUploadFormsetModule):
         return self.attachments.all().count()
 
 
-class DownloadItem(ModuleItem):
+class DownloadsItem(ModuleItem):
     module = models.ForeignKey(
-        DownloadModule, related_name="download_items", on_delete=models.CASCADE
+        DownloadsModule, related_name="items", on_delete=models.CASCADE
     )
     file = models.FileField(upload_to="files", max_length=300)
     name = models.CharField(max_length=100, blank=True)

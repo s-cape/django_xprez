@@ -8,7 +8,8 @@ from django.forms import inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 
 from xprez.conf import settings
-from xprez.medium_editor.widgets import MediumEditorWidget
+
+# from xprez.medium_editor.widgets import MediumEditorWidget
 from xprez.models.configs import SectionConfig
 from xprez.models.modules import (
     # CkEditor,

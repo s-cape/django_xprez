@@ -1,8 +1,6 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-from xprez.migrations._operations import ContentToModule
-
 
 class Migration(migrations.Migration):
     dependencies = [
@@ -443,74 +441,5 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
             bases=("xprez.moduleconfig",),
-        ),
-        migrations.RenameModel(old_name="QuoteContent", new_name="QuotesModule"),
-        ContentToModule(model_name="QuotesModule"),
-        migrations.RenameModel(old_name="Quote", new_name="QuotesItem"),
-        migrations.RenameField(
-            model_name="QuotesItem", old_name="content", new_name="module"
-        ),
-        migrations.AlterModelOptions(
-            name="QuotesItem",
-            options={"ordering": ("module", "id")},
-        ),
-        migrations.RenameModel(old_name="Gallery", new_name="ImagesModule"),
-        ContentToModule(model_name="ImagesModule"),
-        migrations.RenameModel(old_name="Photo", new_name="Image"),
-        migrations.RenameField(
-            model_name="Image", old_name="gallery", new_name="module"
-        ),
-        migrations.AlterField(
-            model_name="image",
-            name="module",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="images",
-                to="xprez.imagesmodule",
-            ),
-        ),
-        migrations.RenameModel(old_name="Video", new_name="VideoModule"),
-        ContentToModule(model_name="VideoModule"),
-        migrations.RenameModel(old_name="CodeInput", new_name="CodeInputModule"),
-        ContentToModule(model_name="CodeInputModule"),
-        migrations.RenameModel(old_name="NumbersContent", new_name="NumbersModule"),
-        ContentToModule(model_name="NumbersModule"),
-        migrations.RenameModel(old_name="Number", new_name="NumbersItem"),
-        migrations.RenameField(
-            model_name="NumbersItem", old_name="content", new_name="module"
-        ),
-        migrations.AlterModelOptions(
-            name="NumbersItem",
-            options={"ordering": ("module", "id")},
-        ),
-        migrations.RenameModel(old_name="CodeTemplate", new_name="CodeTemplateModule"),
-        ContentToModule(model_name="CodeTemplateModule"),
-        migrations.RenameModel(old_name="DownloadContent", new_name="DownloadModule"),
-        ContentToModule(model_name="DownloadModule"),
-        migrations.RenameModel(old_name="Attachment", new_name="DownloadItem"),
-        migrations.RenameField(
-            model_name="DownloadItem", old_name="content", new_name="module"
-        ),
-        migrations.AlterField(
-            model_name="downloaditem",
-            name="module",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="download_items",
-                to="xprez.downloadmodule",
-            ),
-        ),
-        migrations.RenameModel(old_name="ContentSymlink", new_name="ModuleSymlink"),
-        ContentToModule(model_name="ModuleSymlink"),
-        migrations.AlterField(
-            model_name="modulesymlink",
-            name="symlink",
-            field=models.ForeignKey(
-                editable=False,
-                null=True,
-                on_delete=django.db.models.deletion.SET_NULL,
-                related_name="symlinked_module_set",
-                to="xprez.module",
-            ),
         ),
     ]

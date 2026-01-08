@@ -3,7 +3,7 @@
 
 {% block css_class_extra %}xprez-gallery {{ module.width }}-width xprez-photo-connect-{{ module.divided|lower }} xprez-cols-{{ module.columns }} js-content-{{ module.pk }} js-gallery{% endblock %}
 
-{% block module_in %}
+{% block content %}
     {% for photo in module.photos.all %}
         {% with alt_text=photo.alt_text|default:photo.description %}
         <div class="xprez-photo-item js-photo"

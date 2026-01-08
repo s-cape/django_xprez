@@ -4,7 +4,7 @@
 
 {% block css_class_extra %}xprez-download js-content-{{ module.pk }}{% endblock %}
 
-{% block module_in %}
+{% block content %}
     <h3>{{ module.title|default:"Files" }}</h3>
     {% for att in module.attachments.all %}
         <div class="xprez-download-item">

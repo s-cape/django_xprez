@@ -5,7 +5,7 @@
 
 {% block css_class_extra %}xprez-numbers{% endblock %}
 
-{% block module_in %}
+{% block content %}
     {% for number in module.numbers.all %}
         {% if number.number %}
         <div class="xprez-number-item js-number-container">

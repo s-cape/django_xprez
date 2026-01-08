@@ -3,7 +3,7 @@
 
 {% block css_class_extra %}xprez-text-image xprez-text-image-{{ module.image_alignment }}{% endblock %}
 
-{% block module_in %}
+{% block content %}
     <div class="xprez-text-image--image">
         <img src="{% thumbnail module.image "400x400" quality=80 format="WEBP" as thumb %}{{ thumb.url|build_absolute_uri }}"
                     srcset="{{ thumb.url|build_absolute_uri }} 400w,

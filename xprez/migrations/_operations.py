@@ -36,16 +36,6 @@ class InheritanceChangeOperation(Operation):
         self.from_remote_model = from_remote_model
         self.to_remote_model = to_remote_model
 
-    # def deconstruct(self):
-    #     kwargs = {
-    #         "model_name": self.model_name,
-    #         "from_field_name": self.from_field_name,
-    #         "to_field_name": self.to_field_name,
-    #         "from_remote_model": self.from_remote_model,
-    #         "to_remote_model": self.to_remote_model,
-    #     }
-    #     return (self.__class__.__qualname__, [], kwargs)
-
     @staticmethod
     def _replace_base(bases, from_remote_model, to_remote_model):
         from_remote_model = from_remote_model.lower()

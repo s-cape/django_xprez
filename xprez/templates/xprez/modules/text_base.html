@@ -7,7 +7,7 @@
     {% if module.content_centered %}xprez-text-content-centered{% endif %}
 {% endblock %}
 
-{% block module_in %}
+{% block content %}
     {% if module.box %}<div class="xprez-text-content-boxed__content">{% endif %}
         {{ parsed_text }}
     {% if module.box %}</div>{% endif %}
