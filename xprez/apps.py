@@ -27,12 +27,13 @@ class XprezConfig(AppConfig):
 
     @staticmethod
     def _register(modules, config):
-        from xprez import module_type_manager
+        from xprez import module_manager
 
         if config == "__all__":
             for module in modules:
-                module_type_manager.register(module)
+                module_manager.register(module)
         else:
-            modules_dict = {module.class_module_type(): module for module in modules}
-            for module_type in config:
-                module_type_manager.register(modules_dict[module_type])
+            modules_dict = {module.class_content_type(): module for module in modules}
+            for module in config:
+                if module in modules_dict:
+                    module_manager.register(modules_dict[module])

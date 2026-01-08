@@ -190,14 +190,12 @@ class SectionConfig(ConfigBase):
         ordering = ("css_breakpoint",)
 
 
-class ContentConfig(ConfigBase):
-    """Config for Content/Module models."""
-
+class ModuleConfig(ConfigBase):
     admin_template_name = "xprez/admin/module_configs/base.html"
     form_class = "xprez.admin.forms.ModuleConfigForm"
 
     module = models.ForeignKey(
-        "xprez.Content",
+        "xprez.Module",
         on_delete=models.CASCADE,
         related_name="module_configs",
         editable=False,
@@ -238,18 +236,15 @@ class ContentConfig(ConfigBase):
         unique_together = ("module", "css_breakpoint")
 
 
-class TextContentBaseConfig(ContentConfig):
+class TextModuleBaseConfig(ModuleConfig):
     admin_template_name = "xprez/admin/module_configs/text_base.html"
 
     border = models.BooleanField(default=True)
     background = models.BooleanField(default=False)
 
+    class Meta:
+        abstract = True
 
-class TextContentConfig(TextContentBaseConfig):
+
+class TextModuleConfig(TextModuleBaseConfig):
     admin_template_name = "xprez/admin/module_configs/text.html"
-
-
-# Aliases for new "module" terminology
-ModuleConfig = ContentConfig
-TextModuleBaseConfig = TextContentBaseConfig
-TextModuleConfig = TextContentConfig

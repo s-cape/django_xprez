@@ -11,23 +11,24 @@ from xprez.conf import settings
 from xprez.medium_editor.widgets import MediumEditorWidget
 from xprez.models.configs import SectionConfig
 from xprez.models.modules import (
-    Attachment,
-    CkEditor,
-    CodeInput,
-    CodeTemplate,
+    # CkEditor,
+    CodeInputModule,
+    CodeTemplateModule,
+    DownloadItem,
     DownloadModule,
-    FeatureBoxes,
-    Gallery,
-    GridBoxes,
-    MediumEditor,
-    Number,
+    Image,
+    # FeatureBoxes,
+    ImagesModule,
+    # GridBoxes,
+    # MediumEditor,
+    NumbersItem,
     NumbersModule,
-    Photo,
-    Quote,
-    QuoteModule,
+    QuotesItem,
+    QuotesModule,
     TextModule,
-    TextImage,
-    Video,
+    # TextImage,
+    TextModuleBase,
+    VideoModule,
 )
 from xprez.models.sections import Section
 from xprez.utils import import_class
@@ -101,7 +102,7 @@ class ModuleConfigForm(forms.ModelForm):
 
 class TextModuleBaseForm(BaseModuleForm):
     class Meta:
-        model = CkEditor
+        model = TextModuleBase
         fields = ("text",) + BaseModuleForm.base_module_fields
         widgets = {
             "text": import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET)(
@@ -132,7 +133,7 @@ class TextModuleForm(TextModuleBaseForm):
 
 class GalleryForm(BaseModuleForm):
     class Meta:
-        model = Gallery
+        model = ImagesModule
         fields = (
             "width",
             "columns",
@@ -141,36 +142,36 @@ class GalleryForm(BaseModuleForm):
         ) + BaseModuleForm.base_module_fields
 
 
-class MediumEditorForm(BaseModuleForm):
+# class MediumEditorForm(BaseModuleForm):
+#     class Meta:
+#         model = MediumEditor
+#         fields = (
+#             "text",
+#             "box",
+#             "width",
+#         ) + BaseModuleForm.base_module_fields
+#         widgets = {"text": MediumEditorWidget(file_upload_dir="medium_editor_uploads")}
+
+
+# class CkEditorForm(BaseModuleForm):
+#     class Meta:
+#         model = CkEditor
+#         fields = (
+#             "text",
+#             "content_centered",
+#             "box",
+#             "width",
+#         ) + BaseModuleForm.base_module_fields
+#         widgets = {
+#             "text": import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET)(
+#                 file_upload_dir="ck_editor_uploads"
+#             )
+#         }
+
+
+class QuotesItemForm(forms.ModelForm):
     class Meta:
-        model = MediumEditor
-        fields = (
-            "text",
-            "box",
-            "width",
-        ) + BaseModuleForm.base_module_fields
-        widgets = {"text": MediumEditorWidget(file_upload_dir="medium_editor_uploads")}
-
-
-class CkEditorForm(BaseModuleForm):
-    class Meta:
-        model = CkEditor
-        fields = (
-            "text",
-            "module_centered",
-            "box",
-            "width",
-        ) + BaseModuleForm.base_module_fields
-        widgets = {
-            "text": import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET)(
-                file_upload_dir="ck_editor_uploads"
-            )
-        }
-
-
-class QuoteForm(forms.ModelForm):
-    class Meta:
-        model = Quote
+        model = QuotesItem
         fields = ("id", "name", "job_title", "title", "quote", "image")
         widgets = {
             "title": forms.TextInput(attrs={"class": "long"}),
@@ -178,9 +179,9 @@ class QuoteForm(forms.ModelForm):
         }
 
 
-class QuoteModuleForm(BaseModuleForm):
+class QuotesModuleForm(BaseModuleForm):
     class Meta:
-        model = QuoteModule
+        model = QuotesModule
         fields = (
             "display_two",
             "title",
@@ -214,7 +215,7 @@ class VideoForm(BaseModuleForm):
         return url
 
     class Meta:
-        model = Video
+        model = VideoModule
         fields = (
             "poster_image",
             "url",
@@ -225,9 +226,9 @@ class VideoForm(BaseModuleForm):
         }
 
 
-class CodeInputForm(BaseModuleForm):
+class CodeInputModuleForm(BaseModuleForm):
     class Meta:
-        model = CodeInput
+        model = CodeInputModule
         fields = ("code",) + BaseModuleForm.base_module_fields
 
 
@@ -237,9 +238,9 @@ class NumbersModuleForm(BaseModuleForm):
         fields = BaseModuleForm.base_module_fields
 
 
-class NumberForm(forms.ModelForm):
+class NumbersItemForm(forms.ModelForm):
     class Meta:
-        model = Number
+        model = NumbersItem
         widgets = {
             "number": forms.NumberInput(attrs={"class": "short"}),
             "suffix": forms.TextInput(attrs={"class": "short"}),
@@ -252,24 +253,24 @@ class NumberForm(forms.ModelForm):
         )
 
 
-class FeatureBoxesForm(BaseModuleForm):
-    class Meta:
-        model = FeatureBoxes
-        fields = (
-            "box_1",
-            "box_2",
-            "box_3",
-        ) + BaseModuleForm.base_module_fields
-        widgets = {
-            "box_1": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
-            "box_2": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
-            "box_3": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
-        }
+# class FeatureBoxesForm(BaseModuleForm):
+#     class Meta:
+#         model = FeatureBoxes
+#         fields = (
+#             "box_1",
+#             "box_2",
+#             "box_3",
+#         ) + BaseModuleForm.base_module_fields
+#         widgets = {
+#             "box_1": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
+#             "box_2": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
+#             "box_3": MediumEditorWidget(mode=MediumEditorWidget.FULL_NO_INSERT_PLUGIN),
+#         }
 
 
-class CodeTemplateForm(BaseModuleForm):
+class CodeTemplateModuleForm(BaseModuleForm):
     class Meta:
-        model = CodeTemplate
+        model = CodeTemplateModule
         fields = ("template_name",) + BaseModuleForm.base_module_fields
 
 
@@ -280,69 +281,69 @@ class DownloadModuleForm(BaseModuleForm):
         widgets = {"title": forms.TextInput(attrs={"placeholder": "Files"})}
 
 
-class TextImageForm(BaseModuleForm):
-    class Meta:
-        model = TextImage
-        fields = (
-            "image",
-            "text",
-            "image_alignment",
-        ) + BaseModuleForm.base_module_fields
-        widgets = {
-            "text": import_class(settings.XPREZ_TEXT_IMAGE_MODULE_WIDGET)(),
-        }
+# class TextImageForm(BaseModuleForm):
+#     class Meta:
+#         model = TextImage
+#         fields = (
+#             "image",
+#             "text",
+#             "image_alignment",
+#         ) + BaseModuleForm.base_module_fields
+#         widgets = {
+#             "text": import_class(settings.XPREZ_TEXT_IMAGE_MODULE_WIDGET)(),
+#         }
 
 
-class GridBoxesForm(BaseModuleForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.ckeditor_widget_tpl = import_class(
-            settings.XPREZ_GRID_BOXES_MODULE_WIDGET
-        )()
+# class GridBoxesForm(BaseModuleForm):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.ckeditor_widget_tpl = import_class(
+#             settings.XPREZ_GRID_BOXES_MODULE_WIDGET
+#         )()
 
-    class Meta:
-        model = GridBoxes
-        fields = (
-            "columns",
-            "margin",
-            "width",
-            "text_size",
-            "padded",
-            "module_centered",
-            "image_sizing",
-            "image_max_width",
-            "boxes_filled",
-            "border",
-            "boxes",
-        ) + BaseModuleForm.base_module_fields
+#     class Meta:
+#         model = GridBoxes
+#         fields = (
+#             "columns",
+#             "margin",
+#             "width",
+#             "text_size",
+#             "padded",
+#             "content_centered",
+#             "image_sizing",
+#             "image_max_width",
+#             "boxes_filled",
+#             "border",
+#             "boxes",
+#         ) + BaseModuleForm.base_module_fields
 
 
-AttachmentFormSet = inlineformset_factory(
+DownloadItemFormSet = inlineformset_factory(
     DownloadModule,
-    Attachment,
+    DownloadItem,
     fields=("id", "name", "position"),
     extra=0,
     can_delete=True,
 )
-PhotoFormSet = inlineformset_factory(
-    Gallery,
-    Photo,
+ImageFormSet = inlineformset_factory(
+    ImagesModule,
+    Image,
     fields=("id", "description", "alt_text", "position"),
     extra=0,
     can_delete=True,
 )
-QuoteFormSet = inlineformset_factory(
-    QuoteModule,
-    Quote,
-    form=QuoteForm,
+QuotesItemFormSet = inlineformset_factory(
+    QuotesModule,
+    QuotesItem,
+    form=QuotesItemForm,
     fields=("id", "name", "job_title", "title", "quote", "image"),
     max_num=2,
     can_delete=True,
 )
-NumberFormSet = inlineformset_factory(
+NumbersItemFormSet = inlineformset_factory(
     NumbersModule,
-    Number,
-    form=NumberForm,
+    NumbersItem,
+    form=NumbersItemForm,
     fields=("id", "number", "suffix", "title"),
     max_num=4,
     extra=4,

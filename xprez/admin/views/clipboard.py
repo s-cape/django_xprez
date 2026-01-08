@@ -93,7 +93,7 @@ class XprezAdminViewsClipboardMixin(object):
         target_container, position = self._xprez_target_container_and_position(
             request, target_position, target_pk
         )
-        allowed_module_types = self.xprez_get_allowed_module_types(target_container)
+        allowed_modules = self.xprez_get_allowed_modules(target_container)
 
         clipboard = []
         for key, pk in session_data:
@@ -101,8 +101,8 @@ class XprezAdminViewsClipboardMixin(object):
                 if key == self.CLIPBOARD_CONTAINER_KEY:
                     obj = self._get_container_instance(request, pk).polymorph()
                     modules = obj.modules.all()
-                    if any(m.module_type in allowed_module_types for m in modules):
-                        if all(m.module_type in allowed_module_types for m in modules):
+                    if any(m in allowed_modules for m in modules):
+                        if all(m in allowed_modules for m in modules):
                             allowed = True
                         else:
                             allowed = "partial"
@@ -110,7 +110,7 @@ class XprezAdminViewsClipboardMixin(object):
                         allowed = False
                 elif key == self.CLIPBOARD_MODULE_KEY:
                     obj = models.Module.objects.get(pk=pk).polymorph()
-                    allowed = obj.module_type in allowed_module_types
+                    allowed = obj.content_type in allowed_modules
 
                 clipboard += [{"key": key, "obj": obj, "allowed": allowed}]
             except ObjectDoesNotExist:

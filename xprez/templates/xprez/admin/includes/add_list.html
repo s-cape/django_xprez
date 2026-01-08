@@ -14,17 +14,17 @@
         <span>Paste from clipboard</span>
     </li>
 
-    {% for module_type in allowed_modules %}
+    {% for module in allowed_modules %}
         <li
             data-component="xprez-add-item"
             {% if add_list_section %}
-                data-url="{% url xprez_admin.xprez_add_url_name module_type.class_module_type add_list_section.container.pk add_list_section.pk %}"
+                data-url="{% url xprez_admin.xprez_add_url_name module.class_content_type add_list_section.container.pk add_list_section.pk %}"
             {% elif add_list_container %}
-                data-url="{% url xprez_admin.xprez_add_url_name module_type.class_module_type add_list_container.pk %}"
+                data-url="{% url xprez_admin.xprez_add_url_name module.class_content_type add_list_container.pk %}"
             {% endif %}
         >
-            {{ module_type.icon }}
-            <span>{{ module_type.verbose_name }}</span>
+            {{ module.icon }}
+            <span>{{ module.verbose_name }}</span>
         </li>
     {% endfor %}
 </ul>

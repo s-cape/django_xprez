@@ -11,7 +11,7 @@
         <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_module-{{ module.pk }}-box">Box</span></li>
     </ul>
     <ul class="xprez-module__options-group">
-        <li><span class="xprez-icon-btn-align-center js-checkbox_controller" data-formfield_selector="#id_module-{{ module.pk }}-module_centered" title="Centered module"></span></li>
+        <li><span class="xprez-icon-btn-align-center js-checkbox_controller" data-formfield_selector="#id_module-{{ module.pk }}-content_centered" title="Centered module"></span></li>
     </ul>
 {% endblock %}
 
@@ -23,6 +23,6 @@
     {{ block.super }}
     {{ module.admin_form.width }}
     {{ module.admin_form.box }}
-    {{ module.admin_form.module_centered }}
+    {{ module.admin_form.content_centered }}
 {% endblock %}
 {% endcomment %}

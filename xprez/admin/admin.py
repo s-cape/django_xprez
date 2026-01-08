@@ -1,7 +1,7 @@
 from django.apps import apps
 from django.contrib import admin
 
-from xprez import module_type_manager, settings
+from xprez import module_manager, settings
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
 from xprez.admin.views.modules import XprezAdminViewsModulesMixin
 
@@ -66,13 +66,13 @@ class XprezAdminMixin(XprezAdminViewsModulesMixin, XprezAdminViewsClipboardMixin
         return Form
 
     def xprez_admin_media(self):
-        return module_type_manager.admin_media()
+        return module_manager.admin_media()
 
-    def xprez_get_allowed_module_types(self, container):
-        return [m.__name__.lower() for m in self.xprez_get_allowed_modules(container)]
+    # def xprez_get_allowed_module_content_types(self, container):
+    #     return [m.__name__.lower() for m in self.xprez_get_allowed_modules(container)]
 
     def xprez_get_allowed_modules(self, container):
-        return module_type_manager._get_allowed_modules(
+        return module_manager._get_allowed_modules(
             allowed_modules=self.allowed_modules,
             excluded_modules=self.excluded_modules,
         )
@@ -92,7 +92,7 @@ class XprezAdminMixin(XprezAdminViewsModulesMixin, XprezAdminViewsClipboardMixin
         urls = []
         urls += XprezAdminViewsModulesMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
-        urls += module_type_manager.get_urls()
+        urls += module_manager.get_urls()
         return urls
 
     def _get_container_instance(self, request, object_pk):

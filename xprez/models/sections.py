@@ -119,7 +119,7 @@ class Section(models.Model):
 
     def get_modules(self):
         if not hasattr(self, "_modules"):
-            self._modules = self.modules.filter(saved=True)
+            self._modules = list(self.modules.filter(saved=True))
         return self._modules
 
     def get_configs(self):

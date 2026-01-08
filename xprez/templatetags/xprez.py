@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django import template
 from django.forms import Media
 
-from .. import module_type_manager, settings
+from .. import module_manager, settings
 from ..utils import build_absolute_uri as _build_absolute_uri
 
 register = template.Library()
@@ -36,15 +36,11 @@ def xprez_front_media(modules=None):
     If modules is None, returns the media required by all modules.
     """
     if modules is None:
-        module_types = None
+        modules = None
     else:
-        module_types = {module.module_type for module in modules}
+        modules = {module.content_type for module in modules}
 
-    return str(
-        PrefixableMedia.from_media(
-            module_type_manager.front_media(module_types=module_types)
-        )
-    )
+    return str(PrefixableMedia.from_media(module_manager.front_media(modules=modules)))
 
 
 @register.simple_tag(takes_context=True)

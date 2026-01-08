@@ -9,12 +9,12 @@ from django.utils.module_loading import autodiscover_modules
 from xprez.conf import settings
 
 
-class ModuleTypeManager:
-    def get(self, module_type):
-        return self._registry[module_type]
+class ModuleManager:
+    def get(self, content_type):
+        return self._registry[content_type]
 
     def all_as_list(self):
-        return [module_type for key, module_type in self._registry.items()]
+        return [content_type for key, content_type in self._registry.items()]
 
     def get_urls(self):
         urls = []
@@ -39,11 +39,10 @@ class ModuleTypeManager:
             css = {"all": css}
         return Media(css=css, js=js)
 
-    def _collect_media(self, media_class_name, initial=None, module_types=None):
+    def _collect_media(self, media_class_name, initial=None, modules=None):
         media = initial or Media()
-        modules = self._get_allowed_modules(allowed_modules=module_types)
-        for module in modules:
-            media += ModuleTypeManager._get_class_media(module, media_class_name)
+        for module in self._get_allowed_modules(allowed_modules=modules):
+            media += ModuleManager._get_class_media(module, media_class_name)
         return media
 
     def admin_media(self):
@@ -61,17 +60,17 @@ class ModuleTypeManager:
             ),
         )
 
-    def front_media(self, module_types=None):
-        return self._collect_media("FrontMedia", module_types=module_types)
+    def front_media(self, modules=None):
+        return self._collect_media("FrontMedia", modules=modules)
 
     def __init__(self):
         self._registry = OrderedDict()
 
     def register(self, module_class):
-        self._registry[module_class.class_module_type()] = module_class
+        self._registry[module_class.class_content_type()] = module_class
 
     def unregister(self, module_class):
-        del self._registry[module_class.class_module_type()]
+        del self._registry[module_class.class_content_type()]
 
     def _get_allowed_modules(
         self,
@@ -83,23 +82,23 @@ class ModuleTypeManager:
         if excluded_modules is None:
             excluded_modules = settings.XPREZ_DEFAULT_EXCLUDED_MODULES
 
-        module_types = []
+        modules = []
         if allowed_modules == "__all__":
-            module_types = self.all_as_list()
+            modules = self.all_as_list()
         else:
-            for mt in allowed_modules:
-                module_types.append(self.get(mt))
+            for module in allowed_modules:
+                modules.append(self.get(module))
         if excluded_modules:
-            for mt in excluded_modules:
-                mt = self.get(mt)
-                if mt in module_types:
-                    module_types.remove(mt)
-        return module_types
+            for module in excluded_modules:
+                module = self.get(module)
+                if module in modules:
+                    modules.remove(module)
+        return modules
 
 
-module_type_manager = ModuleTypeManager()
-modules_manager = module_type_manager  # Alias for consistency
+module_manager = ModuleManager()
+modules_manager = module_manager  # Alias for consistency
 
 
 def autodiscover():
-    autodiscover_modules("models", register_to=module_type_manager)
+    autodiscover_modules("models", register_to=module_manager)

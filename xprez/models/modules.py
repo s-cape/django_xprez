@@ -17,17 +17,12 @@ from xprez.admin.permissions import xprez_staff_member_required
 from xprez.ck_editor import parse_text as ckeditor_parse_text
 from xprez.ck_editor.widgets import CkEditorWidget
 from xprez.conf import settings
-from xprez.medium_editor.utils import parse_text as medium_editor_parse_text
-from xprez.medium_editor.utils import (
-    render_text_parsed as medium_editor_render_text_parsed,
-)
-from xprez.medium_editor.widgets import MediumEditorWidget
 from xprez.models.base import (
     CLIPBOARD_TEXT_MAX_LENGTH,
-    AjaxUploadFormsetContent,
-    Content,
-    ContentItem,
-    FormsetContent,
+    AjaxUploadFormsetModule,
+    FormsetModule,
+    Module,
+    ModuleItem,
 )
 from xprez.utils import random_string, truncate_with_ellipsis
 
@@ -77,12 +72,12 @@ class CkEditorFileUploadMixin:
         ]
 
 
-class TextModuleBase(CkEditorFileUploadMixin, Content):
+class TextModuleBase(CkEditorFileUploadMixin, Module):
     form_class = "xprez.admin.forms.TextModuleBaseForm"
     admin_template_name = "xprez/admin/modules/text_base.html"
     front_template_name = "xprez/modules/text_base.html"
     icon_template_name = "xprez/admin/icons/modules/text_base.html"
-    config_model = "xprez.TextContentBaseConfig"
+    config_model = "xprez.TextModulBaseConfig"
 
     text = models.TextField(blank=True)
 
@@ -95,7 +90,7 @@ class TextModule(TextModuleBase):
     admin_template_name = "xprez/admin/modules/text.html"
     front_template_name = "xprez/modules/text.html"
     icon_template_name = "xprez/admin/icons/modules/text.html"
-    config_model = "xprez.TextContentConfig"
+    config_model = "xprez.TextModuleConfig"
 
     image = models.ImageField(upload_to="images", null=True, blank=True)
     url = models.CharField("Target URL", max_length=255, null=True, blank=True)
@@ -106,62 +101,6 @@ class TextModule(TextModuleBase):
 
     class Meta:
         verbose_name = "Text"
-        db_table = "xprez_textcontent"
-
-    def render_front(self, context):
-        context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
-            ckeditor_parse_text.parse_text(self.text, context["request"])
-        )
-        return super().render_front(context)
-
-
-class MediumEditor(Content):
-    form_class = "xprez.admin.forms.MediumEditorForm"
-    admin_template_name = "xprez/admin/modules/medium_editor.html"
-    front_template_name = "xprez/modules/medium_editor.html"
-    icon_template_name = "xprez/admin/icons/modules/medium_editor.html"
-
-    verbose_name = "Text"
-
-    text = models.TextField()
-    box = models.BooleanField(default=False)
-    width = models.CharField(
-        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
-    )
-
-    class AdminMedia:
-        js = MediumEditorWidget.Media.js
-        css = MediumEditorWidget.Media.css["all"]
-
-    def show_front(self):
-        return striptags(self.text) != ""
-
-    def get_parsed_text(self):
-        return medium_editor_parse_text(self.text)
-
-    def render_text(self):
-        return medium_editor_render_text_parsed(self.get_parsed_text())
-
-
-class CkEditor(CkEditorFileUploadMixin, Content):
-    form_class = "xprez.admin.forms.CkEditorForm"
-    admin_template_name = "xprez/admin/modules/ck_editor.html"
-    front_template_name = "xprez/modules/ck_editor.html"
-    icon_template_name = "xprez/admin/icons/modules/ck_editor.html"
-
-    text = models.TextField()
-    box = models.BooleanField(default=False)
-    width = models.CharField(
-        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_TEXT
-    )
-    module_centered = models.BooleanField(default=False)
-
-    class Meta:
-        verbose_name = "Text"
-
-    class AdminMedia:
-        js = CkEditorWidget.Media.js
-        css = {"all": CkEditorWidget.Media.css["all"]}
 
     def render_front(self, context):
         context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
@@ -170,19 +109,18 @@ class CkEditor(CkEditorFileUploadMixin, Content):
         return super().render_front(context)
 
     def clipboard_text_preview(self):
-        return truncate_with_ellipsis(striptags(self.text), CLIPBOARD_TEXT_MAX_LENGTH)
+        return truncate_with_ellipsis(self.text, CLIPBOARD_TEXT_MAX_LENGTH)
 
 
-class QuoteModule(FormsetContent):
-    form_class = "xprez.admin.forms.QuoteModuleForm"
-    formset_factory = "xprez.admin.forms.QuoteFormSet"
-    admin_template_name = "xprez/admin/modules/quote.html"
-    front_template_name = "xprez/modules/quote.html"
-    icon_template_name = "xprez/admin/icons/modules/quote.html"
+class QuotesModule(FormsetModule):
+    form_class = "xprez.admin.forms.QuotesModuleForm"
+    formset_factory = "xprez.admin.forms.QuotesItemFormSet"
+    admin_template_name = "xprez/admin/modules/quotes.html"
+    front_template_name = "xprez/modules/quotes.html"
+    icon_template_name = "xprez/admin/icons/modules/quotes.html"
 
     class Meta:
         verbose_name = "Quote"
-        db_table = "xprez_quotecontent"
 
     title = models.CharField(max_length=255, null=True, blank=True)
     box = models.BooleanField(default=False)
@@ -202,10 +140,9 @@ class QuoteModule(FormsetContent):
         return True
 
 
-class Quote(ContentItem):
-    module_foreign_key = "module"
+class QuotesItem(ModuleItem):
     module = models.ForeignKey(
-        QuoteModule, related_name="quotes", on_delete=models.CASCADE
+        QuotesModule, related_name="quotes", on_delete=models.CASCADE
     )
     name = models.CharField(max_length=255)
     job_title = models.CharField(max_length=255)
@@ -217,7 +154,7 @@ class Quote(ContentItem):
         ordering = ("module", "id")
 
 
-class Gallery(AjaxUploadFormsetContent):
+class ImagesModule(AjaxUploadFormsetModule):
     COLUMNS_CHOICES = (
         (1, "1"),
         (2, "2"),
@@ -227,15 +164,15 @@ class Gallery(AjaxUploadFormsetContent):
         (8, "8"),
     )
 
-    form_class = "xprez.admin.forms.GalleryForm"
-    admin_template_name = "xprez/admin/modules/gallery/gallery.html"
-    admin_formset_item_template_name = "xprez/admin/modules/gallery/photo.html"
-    front_template_name = "xprez/modules/gallery.html"
-    icon_template_name = "xprez/admin/icons/modules/gallery.html"
-    formset_factory = "xprez.admin.forms.PhotoFormSet"
+    form_class = "xprez.admin.forms.ImagesModuleForm"
+    admin_template_name = "xprez/admin/modules/images/images.html"
+    admin_formset_item_template_name = "xprez/admin/modules/images/image.html"
+    front_template_name = "xprez/modules/images.html"
+    icon_template_name = "xprez/admin/icons/modules/images.html"
+    formset_factory = "xprez.admin.forms.ImageFormSet"
 
     width = models.CharField(
-        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
+        max_length=50, choices=Module.SIZE_CHOICES, default=Module.SIZE_FULL
     )
     columns = models.PositiveSmallIntegerField(default=1)
     divided = models.BooleanField(default=False)
@@ -261,10 +198,9 @@ class Gallery(AjaxUploadFormsetContent):
         return self.photos.all().count()
 
 
-class Photo(ContentItem):
-    module_foreign_key = "gallery"
-    gallery = models.ForeignKey(
-        Gallery, related_name="photos", on_delete=models.CASCADE
+class Image(ModuleItem):
+    module = models.ForeignKey(
+        ImagesModule, related_name="images", on_delete=models.CASCADE
     )
     image = models.ImageField(upload_to="photos")
     description = models.CharField(max_length=255, blank=True, null=True)
@@ -283,7 +219,7 @@ class Photo(ContentItem):
         ordering = ("position",)
 
 
-class Video(Content):
+class VideoModule(Module):
     TYPE_CHOICES = (
         ("youtube", "YouTube"),
         ("vimeo", "Vimeo"),
@@ -296,7 +232,7 @@ class Video(Content):
     poster_image = models.ImageField(upload_to="video", null=True, blank=True)
     url = models.URLField()
     width = models.CharField(
-        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
+        max_length=50, choices=Module.SIZE_CHOICES, default=Module.SIZE_FULL
     )
     video_type = models.CharField(choices=TYPE_CHOICES, max_length=50)
     video_id = models.CharField(max_length=200)
@@ -318,7 +254,7 @@ class Video(Content):
         )
 
 
-class CodeInput(Content):
+class CodeInputModule(Module):
     admin_template_name = "xprez/admin/modules/code_input.html"
     front_template_name = "xprez/modules/code_input.html"
     icon_template_name = "xprez/admin/icons/modules/code_input.html"
@@ -330,7 +266,7 @@ class CodeInput(Content):
         return self.code
 
 
-class NumbersModule(FormsetContent):
+class NumbersModule(FormsetModule):
     admin_template_name = "xprez/admin/modules/numbers.html"
     front_template_name = "xprez/modules/numbers.html"
     icon_template_name = "xprez/admin/icons/modules/numbers.html"
@@ -345,7 +281,6 @@ class NumbersModule(FormsetContent):
 
     class Meta:
         verbose_name = "Numbers"
-        db_table = "xprez_numberscontent"
 
     class FrontMedia:
         js = (
@@ -355,8 +290,7 @@ class NumbersModule(FormsetContent):
         )
 
 
-class Number(ContentItem):
-    module_foreign_key = "module"
+class NumbersItem(ModuleItem):
     module = models.ForeignKey(
         NumbersModule, related_name="numbers", on_delete=models.CASCADE
     )
@@ -368,24 +302,7 @@ class Number(ContentItem):
         ordering = ("module", "id")
 
 
-class FeatureBoxes(Content):
-    admin_template_name = "xprez/admin/modules/feature_boxes.html"
-    front_template_name = "xprez/modules/feature_boxes.html"
-    icon_template_name = "xprez/admin/icons/modules/feature_boxes.html"
-    form_class = "xprez.admin.forms.FeatureBoxesForm"
-
-    box_1 = models.TextField(blank=True)
-    box_2 = models.TextField(blank=True)
-    box_3 = models.TextField(blank=True)
-
-    class Meta:
-        verbose_name = "Feature Boxes"
-
-    def show_front(self):
-        return bool(self.box_1)
-
-
-class CodeTemplate(Content):
+class CodeTemplateModule(Module):
     admin_template_name = "xprez/admin/modules/code_template.html"
     icon_template_name = "xprez/admin/icons/modules/code_template.html"
     form_class = "xprez.admin.forms.CodeTemplateForm"
@@ -409,10 +326,10 @@ class CodeTemplate(Content):
             return ""
 
 
-class DownloadModule(AjaxUploadFormsetContent):
+class DownloadModule(AjaxUploadFormsetModule):
     admin_template_name = "xprez/admin/modules/download/download.html"
     front_template_name = "xprez/modules/download.html"
-    admin_formset_item_template_name = "xprez/admin/modules/download/attachment.html"
+    admin_formset_item_template_name = "xprez/admin/modules/download/download_item.html"
     icon_template_name = "xprez/admin/icons/modules/download.html"
     form_class = "xprez.admin.forms.DownloadModuleForm"
     formset_factory = "xprez.admin.forms.AttachmentFormSet"
@@ -421,7 +338,6 @@ class DownloadModule(AjaxUploadFormsetContent):
 
     class Meta:
         verbose_name = "Files"
-        db_table = "xprez_downloadcontent"
 
     def get_formset_queryset(self):
         return self.attachments.all()
@@ -430,10 +346,9 @@ class DownloadModule(AjaxUploadFormsetContent):
         return self.attachments.all().count()
 
 
-class Attachment(ContentItem):
-    module_foreign_key = "module"
+class DownloadItem(ModuleItem):
     module = models.ForeignKey(
-        DownloadModule, related_name="attachments", on_delete=models.CASCADE
+        DownloadModule, related_name="download_items", on_delete=models.CASCADE
     )
     file = models.FileField(upload_to="files", max_length=300)
     name = models.CharField(max_length=100, blank=True)
@@ -466,115 +381,11 @@ class Attachment(ContentItem):
         ordering = ("position",)
 
 
-class TextImageBase(Content):
-    form_class = "xprez.admin.forms.TextImageForm"
-    admin_template_name = "xprez/admin/modules/text_image.html"
-    front_template_name = "xprez/modules/text_image.html"
-    icon_template_name = "xprez/admin/icons/modules/text_image.html"
-
-    ALIGNMENT_LEFT = "left"
-    ALIGNMENT_RIGHT = "right"
-    IMAGE_ALIGNMENT_CHOICES = (
-        (ALIGNMENT_LEFT, "Left"),
-        (ALIGNMENT_RIGHT, "Right"),
-    )
-
-    image = models.ImageField(upload_to="text_image_images")
-    text = models.TextField()
-    image_alignment = models.CharField(
-        choices=IMAGE_ALIGNMENT_CHOICES, default=ALIGNMENT_LEFT, max_length=15
-    )
-
-    class AdminMedia:
-        js = CkEditorWidget.Media.js
-        css = {"css": CkEditorWidget.Media.css["all"]}
-
-    class Meta:
-        verbose_name = "Image + Text"
-        abstract = True
-
-    def render_front(self, context):
-        context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
-            ckeditor_parse_text.parse_text(self.text, context["request"])
-        )
-        return super().render_front(context)
-
-
-class TextImage(TextImageBase):
-    class Meta:
-        abstract = False
-
-
-class GridBoxes(CkEditorFileUploadMixin, Content):
-    form_class = "xprez.admin.forms.GridBoxesForm"
-    admin_template_name = "xprez/admin/modules/grid_boxes/grid_boxes.html"
-    front_template_name = "xprez/modules/grid_boxes.html"
-    icon_template_name = "xprez/admin/icons/modules/grid_boxes.html"
-
-    MARGIN_CHOICES = (
-        ("none", "none"),
-        ("m", "m"),
-        ("l", "l"),
-    )
-
-    TEXT_SIZE_CHOICES = (
-        ("xs", "xs"),
-        ("s", "s"),
-        ("m", "m"),
-    )
-
-    class AdminMedia:
-        js = CkEditorWidget.Media.js + ("xprez/admin/js/grid_boxes.js",)
-        css = {"css": CkEditorWidget.Media.css["all"]}
-
-    columns = models.PositiveSmallIntegerField(default=2)
-    margin = models.CharField(max_length=4, choices=MARGIN_CHOICES, default="m")
-    width = models.CharField(
-        max_length=50, choices=Content.SIZE_CHOICES, default=Content.SIZE_FULL
-    )
-    text_size = models.CharField(max_length=2, choices=TEXT_SIZE_CHOICES, default="m")
-
-    padded = models.BooleanField(default=True)
-    module_centered = models.BooleanField(default=False)
-
-    IMAGE_SIZING_CHOICES = (
-        ("fill", "Default"),
-        ("edge", "Edge"),
-        ("icon", "Icon"),
-    )
-    image_sizing = models.CharField(
-        max_length=7, choices=IMAGE_SIZING_CHOICES, default="fill"
-    )
-    image_max_width = models.PositiveSmallIntegerField(
-        default=None, null=True, blank=True
-    )
-
-    boxes_filled = models.BooleanField(default=True)
-    border = models.BooleanField(default=True)
-    boxes = JSONField(null=True)
-
-    def render_front(self, context):
-        boxes = []
-        for box_module in self.boxes or []:
-            if striptags(box_module != ""):
-                boxes.append(
-                    ckeditor_parse_text.render_text_parsed(
-                        ckeditor_parse_text.parse_text(box_module, context["request"])
-                    )
-                )
-
-        if boxes:
-            context["rendered_boxes"] = boxes
-            return super().render_front(context)
-        else:
-            return ""
-
-
-class ContentSymlink(Content):
+class ModuleSymlink(Module):
     admin_template_name = "xprez/admin/modules/module_symlink.html"
     icon_template_name = "xprez/admin/icons/modules/module_symlink.html"
     symlink = models.ForeignKey(
-        Content,
+        Module,
         on_delete=models.SET_NULL,
         null=True,
         editable=False,
@@ -589,7 +400,3 @@ class ContentSymlink(Content):
             return self.symlink.polymorph().render_front(*args, **kwargs)
         else:
             return ""
-
-
-# Aliases for new "module" terminology
-ModuleSymlink = ContentSymlink

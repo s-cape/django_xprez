@@ -16,7 +16,7 @@ from xprez.utils import import_class
 CLIPBOARD_TEXT_MAX_LENGTH = 100
 
 
-class ContentsContainer(models.Model):
+class Container(models.Model):
     """Base container class for pages/articles that contain modules."""
 
     front_template_name = "xprez/container.html"
@@ -56,10 +56,10 @@ class ContentsContainer(models.Model):
         return self._sections
 
 
-class Content(models.Model):
+class Module(models.Model):
     """Base module class for content blocks within sections."""
 
-    config_model = "xprez.ContentConfig"
+    config_model = "xprez.ModuleConfig"
     form_class = "xprez.admin.forms.BaseModuleForm"
     js_controller_class = "XprezModule"
 
@@ -80,7 +80,7 @@ class Content(models.Model):
     saved = models.BooleanField(default=False, editable=False)
 
     position = models.PositiveSmallIntegerField(default=0)
-    module_type = models.CharField(max_length=100, editable=False)
+    content_type = models.CharField(max_length=100, editable=False)
     css_class = models.CharField(max_length=100, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
@@ -98,22 +98,23 @@ class Content(models.Model):
         css = {}
 
     def __str__(self):
-        return self.module_type
+        return self.content_type
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.module_type = self.class_module_type()
+            self.content_type = self.class_content_type()
         super().save(*args, **kwargs)
         if self.pk:
-            for css_breakpoint in settings.XPREZ_BREAKPOINTS.keys():
-                self.get_or_create_config(css_breakpoint)
+            self.get_or_create_config(settings.XPREZ_DEFAULT_BREAKPOINT)
+            # for css_breakpoint in settings.XPREZ_BREAKPOINTS.keys():
+            #     self.get_or_create_config(css_breakpoint)
 
     @property
     def verbose_name(self):
         return self._meta.verbose_name.title()
 
     @classmethod
-    def class_module_type(cls):
+    def class_content_type(cls):
         return "{}.{}".format(
             cls._meta.app_label,
             cls._meta.object_name,
@@ -135,7 +136,7 @@ class Content(models.Model):
         return "xprez/modules/{}.html".format(self.identifier())
 
     def polymorph(self):
-        app_label, object_name = self.module_type.split(".")
+        app_label, object_name = self.content_type.split(".")
         model = apps.get_model(app_label, object_name)
         if isinstance(self, model):
             return self
@@ -170,7 +171,7 @@ class Content(models.Model):
         return apps.get_model(app_label, model_name)
 
     def get_or_create_config(self, css_breakpoint):
-        config, created = self.get_config_model().objects.get_or_create(
+        config, _created = self.get_config_model().objects.get_or_create(
             module=self,
             css_breakpoint=css_breakpoint,
         )
@@ -249,7 +250,7 @@ class Content(models.Model):
     @classproperty
     def icon_template_name(cls):
         return [
-            "xprez/admin/icons/modules/{}.html".format(cls.class_module_type()),
+            "xprez/admin/icons/modules/{}.html".format(cls.class_content_type()),
             "xprez/admin/icons/modules/default.html",
         ]
 
@@ -264,13 +265,10 @@ class Content(models.Model):
         return ""
 
 
-class FormsetContent(Content):
+class FormsetModule(Module):
     """Content with inline formset support."""
 
     formset_factory = NotImplemented
-
-    class Meta:
-        abstract = True
 
     def get_formset_queryset(self):
         raise NotImplementedError()
@@ -308,8 +306,11 @@ class FormsetContent(Content):
         for item in self.get_formset_queryset():
             item.copy(inst)
 
+    class Meta:
+        abstract = True
 
-class AjaxUploadFormsetContent(FormsetContent):
+
+class AjaxUploadFormsetModule(FormsetModule):
     """Content with AJAX file upload formset support."""
 
     admin_formset_item_template_name = NotImplemented
@@ -366,13 +367,10 @@ class AjaxUploadFormsetContent(FormsetContent):
         ]
 
 
-class ContentItem(models.Model):
+class ModuleItem(models.Model):
     """Base class for items within FormsetContent modules."""
 
-    module_foreign_key = NotImplemented
-
-    class Meta:
-        abstract = True
+    module_foreign_key = "module"
 
     def copy(self, for_module, save=True):
         if not for_module:
@@ -388,11 +386,40 @@ class ContentItem(models.Model):
             inst.save()
         return inst
 
+    class Meta:
+        abstract = True
 
-# Aliases for new "module" terminology
-# Use these in new code for consistency
-Container = ContentsContainer
-Module = Content
-ModuleItem = ContentItem
-FormsetModule = FormsetContent
-AjaxUploadFormsetModule = AjaxUploadFormsetContent
+
+# # Backward compatibility
+# class ContentsContainer(ContainerBase):
+#     pass
+
+
+# class ContentBase(ModuleBase):
+#     section = models.ForeignKey(
+#         settings.XPREZ_SECTION_MODEL_CLASS,
+#         on_delete=models.CASCADE,
+#         related_name="contents",
+#     )
+
+#     class Meta:
+#         abstract = True
+
+
+# class Content(ContentBase):
+#     pass
+
+
+# class FormsetContent(FormsetModuleMixin, ContentBase):
+#     class Meta:
+#         abstract = True
+
+
+# class AjaxUploadFormsetContent(AjaxUploadFormsetModuleMixin, ContentBase):
+#     class Meta:
+#         abstract = True
+
+
+# class ContentItem(ModuleItemMixin, models.Model):
+#     class Meta:
+#         abstract = True
