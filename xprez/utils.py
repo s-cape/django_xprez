@@ -10,6 +10,13 @@ def import_class(cl):
     return getattr(m, classname)
 
 
+def class_content_type(cls):
+    return "{}.{}".format(
+        cls._meta.app_label,
+        cls._meta.object_name,
+    )
+
+
 def remove_duplicates(list_):
     seen = set()
     seen_add = seen.add

@@ -62,7 +62,7 @@ class BaseModuleForm(forms.ModelForm):
         excluded_fields += self.options_fields
 
         for field in self.fields:
-            if (field not in excluded_fields) and (field not in self.system_fields):
+            if field not in excluded_fields:
                 yield self[field]
 
     def get_options_fields(self):

@@ -11,7 +11,7 @@ from django.utils.functional import classproperty
 
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.conf import settings
-from xprez.utils import import_class
+from xprez.utils import class_content_type, import_class
 
 CLIPBOARD_TEXT_MAX_LENGTH = 100
 
@@ -25,7 +25,7 @@ class Container(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.content_type = self.__class__.__name__.lower()
+            self.content_type = class_content_type(self.__class__)
         super().save(*args, **kwargs)
 
     def polymorph(self):
@@ -112,15 +112,12 @@ class Module(models.Model):
         return self._meta.verbose_name.title()
 
     @classmethod
-    def class_content_type(cls):
-        return "{}.{}".format(
-            cls._meta.app_label,
-            cls._meta.object_name,
-        )
-
-    @classmethod
     def identifier(cls):
         return cls._meta.model_name
+
+    @classmethod
+    def class_content_type(cls):
+        return class_content_type(cls)
 
     @property
     def admin_template_name(self):
@@ -248,7 +245,7 @@ class Module(models.Model):
     @classproperty
     def icon_template_name(cls):
         return [
-            "xprez/admin/icons/modules/{}.html".format(cls.class_content_type()),
+            "xprez/admin/icons/modules/{}.html".format(cls.identifier()),
             "xprez/admin/icons/modules/default.html",
         ]
 
