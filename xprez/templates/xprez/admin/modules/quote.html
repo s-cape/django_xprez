@@ -1,10 +1,11 @@
 {% extends 'xprez/admin/modules/base.html' %}
 {% block options_class %}hidden{% endblock %}
-{% block content %}
-    <div class="xprez-form-table">
-        {% include 'xprez/admin/form/multi_row.html' with field_1=form.name field_2=form.job_title %}
+{% block main_fields %}
+    {% with module.admin_form as form %}
+        {% include 'xprez/admin/form/row.html' with field=form.name %}
+        {% include 'xprez/admin/form/row.html' with field=form.job_title %}
         {% include 'xprez/admin/form/row.html' with field=form.image %}
         {% include 'xprez/admin/form/row.html' with field=form.title %}
         {% include 'xprez/admin/form/row.html' with field=form.quote %}
-    </div>
+    {% endwith %}
 {% endblock %}

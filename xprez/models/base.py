@@ -384,8 +384,12 @@ class UploadMultiModule(MultiModule):
         cls_name = cls.__name__.lower()
         return [
             re_path(
-                r"^%s/upload-item/(?P<module_pk>\d+)/" % cls_name,
+                r"^{}/upload-item/(?P<module_pk>\d+)/".format(cls_name),
                 cls.upload_file_view,
-                name="%s_ajax_upload_item" % cls_name,
+                name=cls.get_upload_url_name(),
             ),
         ]
+
+    @classmethod
+    def get_upload_url_name(self):
+        return "{}_ajax_upload_item".format(self.__class__.__name__.lower())

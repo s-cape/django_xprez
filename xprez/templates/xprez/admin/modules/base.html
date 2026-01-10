@@ -6,48 +6,48 @@
     data-prefix="{{ module.admin_form.prefix }}"
     data-js-controller-class="{{ module.js_controller_class }}"
 >
-    <div class="xprez-module-box">
-        <div class="xprez-module__header" data-draggable-module-handle>
-            <div class="xprez-module__name">
-                <span class="xprez-module__name-icon">
-                    {% include "xprez/admin/icons/modules/text.html" %}
-                </span>
-                <div class="xprez-option" data-active="true">
-                    <label >
-                        <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
-                        <i class="xprez-icon-check_circle_small x-variant-checked"></i>
-                    </label>
-                    <input type="checkbox" checked>
-                </div>
-                <span class="xprez-option-group__title-text">{{ module.verbose_name }}</span>
+    <div class="xprez-module__header" data-draggable-module-handle>
+        <div class="xprez-module__name">
+            <span class="xprez-module__name-icon">
+                {% include "xprez/admin/icons/modules/text.html" %}
+            </span>
+            <div class="xprez-option" data-active="true">
+                <label >
+                    <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
+                    <i class="xprez-icon-check_circle_small x-variant-checked"></i>
+                </label>
+                <input type="checkbox" checked>
             </div>
-
-            <div class="xprez-module__actions">
-                {% block actions %}
-                    <span class="xprez-icon-btn" title="Copy">
-                        <i class="xprez-icon-copy"></i>
-                    </span>
-                    <span class="xprez-icon-btn" title="Settings" data-component="xprez-module-popover-trigger">
-                        <i class="xprez-icon-settings" data-id="{{ module.pk }}"></i>
-                    </span>
-                {% endblock %}
-            </div>
-
-            <div class="xprez-module__actions xprez-module__actions--right">
-                <span class="xprez-icon-btn" title="Delete" data-component="xprez-module-delete-trigger">
-                    <i class="xprez-icon-delete"></i>
-                    <span data-hidden>{{ module.admin_form.delete }}</span>
-                </span>
-            </div>
+            <span class="xprez-option-group__title-text">{{ module.verbose_name }}</span>
         </div>
 
-        <div data-component="xprez-module-delete-info">
-            This module will be deleted when you save the changes.
-            <div data-component="xprez-module-delete-undo">undelete</div>
+        <div class="xprez-module__actions">
+            {% block actions %}
+                <span class="xprez-icon-btn" title="Copy">
+                    <i class="xprez-icon-copy"></i>
+                </span>
+                <span class="xprez-icon-btn" title="Settings" data-component="xprez-module-popover-trigger">
+                    <i class="xprez-icon-settings" data-id="{{ module.pk }}"></i>
+                </span>
+            {% endblock %}
         </div>
 
+        <div class="xprez-module__actions xprez-module__actions--right">
+            <span class="xprez-icon-btn" title="Delete" data-component="xprez-module-delete-trigger">
+                <i class="xprez-icon-delete"></i>
+                <span data-hidden>{{ module.admin_form.delete }}</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="xprez-delete-info" data-component="xprez-module-delete-info">
+        This module will be deleted when you save the changes.
+        <span class="xprez-btn xprez-btn__danger" data-component="xprez-module-delete-undo">undelete</span>
+    </div>
+
+    <div class="xprez-module__body">
         <div class="xprez-module__body">
-            {% block module %}
+            {% block content %}
                 <div class="xprez-form-table">
                     {% if module.preview_image %}
                         <img src="{% static module.preview_image %}" alt="" class="xprez-module__preview-image">

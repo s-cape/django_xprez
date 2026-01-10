@@ -27,7 +27,11 @@
 
 {% block content %}
     {% block dropzone %}
-    <div class="js-dropzone js-dropzone-{{ module.pk }} xprez-gallery__dropzone" data-module_pk="{{ module.pk }}" data-uploadurl="{% block upload_url %}{% url 'xprez:gallery_ajax_upload_item' module.pk %}{% endblock %}">
+    <div
+        class="js-dropzone js-dropzone-{{ module.pk }} xprez-gallery__dropzone"
+        data-module_pk="{{ module.pk }}"
+        data-uploadurl="{% block upload_url %}{{ module.get_upload_url_name }}{% endblock %}"
+    >
         Drop files here or click to choose images from disk<br>
     </div>
     {% endblock %}
@@ -55,7 +59,6 @@
         {{ module.formset }}
     </div>
 {% endblock %}
-
 
 {% block js %}
     <script>
