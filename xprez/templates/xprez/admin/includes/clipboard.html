@@ -14,31 +14,31 @@
 				{# {{ item.key }} #}
 				<div class="xprez-clipboard-list__module">{{ item.obj.clipboard_verbose_name }}</div>
 				<i>{{ item.obj.clipboard_text_preview }}</i>
-				{% if item.allowed == "partial" %}
-					<div class="xprez-warning">
-						Some modules are not allowed here
-					</div>
-				{% endif %}
+			{% if item.available == "partial" %}
+				<div class="xprez-warning">
+					Some modules are not available here
+				</div>
+			{% endif %}
 			</div>
-			<div class="xprez-clipboard-list__actions">
-				{% if item.allowed %}
-					<span
-						class="js-clipboard-paste xprez-btn"
-						data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_PASTE_ACTION target_position target_pk %}"
-					>
-						{% include "../icons/paste.html" %} Paste
-					</span>
-					<span
-						class="js-clipboard-paste xprez-btn"
-						data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_SYMLINK_ACTION target_position target_pk %}"
-					>
-						{% include "../icons/link.html" %} Link
-					</span>
+		<div class="xprez-clipboard-list__actions">
+			{% if item.available %}
+				<span
+					class="js-clipboard-paste xprez-btn"
+					data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_PASTE_ACTION target_position target_pk %}"
+				>
+					{% include "../icons/paste.html" %} Paste
+				</span>
+				<span
+					class="js-clipboard-paste xprez-btn"
+					data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_SYMLINK_ACTION target_position target_pk %}"
+				>
+					{% include "../icons/link.html" %} Link
+				</span>
 
-				{% else %}
-					<span class="xprez-warning">not allowed</span>
-				{% endif %}
-			</div>
+			{% else %}
+				<span class="xprez-warning">not available</span>
+			{% endif %}
+		</div>
 		</div>
 	{% empty %}
 		<p>clipboard empty</p>

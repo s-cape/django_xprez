@@ -141,7 +141,7 @@ class CkEditorWidgetFull(CkEditorWidgetFullBase):
         )
         config["simpleUpload"] = {
             "uploadUrl": reverse(
-                "xprez:textcontent_file_upload",
+                "xprez:textmodule_file_upload",
                 args=[
                     file_upload_dir
                 ],  # TODO: replace textcontent_ with the correct content type

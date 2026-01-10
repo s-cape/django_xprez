@@ -190,14 +190,14 @@ class SectionConfig(ConfigBase):
         ordering = ("css_breakpoint",)
 
 
-class ContentConfig(ConfigBase):
-    admin_template_name = "xprez/admin/content_configs/base.html"
-    form_class = "xprez.admin.forms.ContentConfigForm"
+class ModuleConfig(ConfigBase):
+    admin_template_name = "xprez/admin/module_configs/base.html"
+    form_class = "xprez.admin.forms.ModuleConfigForm"
 
-    content = models.ForeignKey(
-        "xprez.Content",
+    module = models.ForeignKey(
+        "xprez.Module",
         on_delete=models.CASCADE,
-        related_name="content_configs",
+        related_name="configs",
         editable=False,
     )
     visible = models.BooleanField(default=True)
@@ -221,27 +221,30 @@ class ContentConfig(ConfigBase):
             return cls
         else:
 
-            class ContentConfigForm(cls):
+            class ModuleConfigForm(cls):
                 class Meta(cls.Meta):
                     model = self.__class__
 
-            return ContentConfigForm
+            return ModuleConfigForm
 
     def get_form_prefix(self):
-        return "content-config-" + str(self.pk)
+        return "module-config-" + str(self.pk)
 
     class Meta:
-        verbose_name = "Content Config"
-        verbose_name_plural = "Content Configs"
-        unique_together = ("content", "css_breakpoint")
+        verbose_name = "Module Config"
+        verbose_name_plural = "Module Configs"
+        unique_together = ("module", "css_breakpoint")
 
 
-class TextContentBaseConfig(ContentConfig):
-    admin_template_name = "xprez/admin/content_configs/text_base.html"
+class TextModuleBaseConfig(ModuleConfig):
+    admin_template_name = "xprez/admin/module_configs/text_base.html"
 
     border = models.BooleanField(default=True)
     background = models.BooleanField(default=False)
 
+    class Meta:
+        abstract = True
 
-class TextContentConfig(TextContentBaseConfig):
-    admin_template_name = "xprez/admin/content_configs/text.html"
+
+class TextModuleConfig(TextModuleBaseConfig):
+    admin_template_name = "xprez/admin/module_configs/text.html"

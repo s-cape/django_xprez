@@ -22,11 +22,11 @@ export class XprezSectionDeleter extends XprezDeleterBase {
     }
 }
 
-export class XprezContentDeleter extends XprezDeleterBase {
+export class XprezModuleDeleter extends XprezDeleterBase {
     initElements() {
-        this.triggerEl = this.obj.el.querySelector("[data-component='xprez-content-delete-trigger']");
+        this.triggerEl = this.obj.el.querySelector("[data-component='xprez-module-delete-trigger']");
         this.inputEl = this.triggerEl.querySelector("input");
-        this.undoEl = this.obj.el.querySelector("[data-component='xprez-content-delete-undo']");
+        this.undoEl = this.obj.el.querySelector("[data-component='xprez-module-delete-undo']");
     }
 }
 

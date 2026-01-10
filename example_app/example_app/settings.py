@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "sorl.thumbnail",
     "xprez",
-    "xprez.ck_editor",
-    "xprez.code_snippet",
     "example_app",
 ]
 

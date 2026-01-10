@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django import template
 from django.forms import Media
 
-from .. import contents_manager, settings
+from .. import module_registry, settings
 from ..utils import build_absolute_uri as _build_absolute_uri
 
 register = template.Library()
@@ -30,21 +30,17 @@ class PrefixableMedia(Media):
 
 
 @register.simple_tag()
-def xprez_front_media(contents=None):
+def xprez_front_media(modules=None):
     """
-    Returns the media required by the contents.
-    If contents is None, returns the media required by all contents.
+    Returns the media required by the modules.
+    If modules is None, returns the media required by all modules.
     """
-    if contents is None:
-        content_types = None
+    if modules is None:
+        modules = None
     else:
-        content_types = {content.content_type for content in contents}
+        modules = {module.content_type for module in modules}
 
-    return str(
-        PrefixableMedia.from_media(
-            contents_manager.front_media(content_types=content_types)
-        )
-    )
+    return str(PrefixableMedia.from_media(module_registry.front_media(modules=modules)))
 
 
 @register.simple_tag(takes_context=True)
@@ -58,17 +54,12 @@ def xprez_section_render_front(context, section):
 
 
 @register.simple_tag(takes_context=True)
-def xprez_content_render_front(context, content):
-    return content.polymorph().render_front(context.flatten())
-
-
-@register.inclusion_tag("xprez/includes/medium_image.html", takes_context=True)
-def medium_content_image(context, url, align, width, height, caption=None):
-    return _editor_content_image(context, url, align, width, height, caption=caption)
+def xprez_module_render_front(context, module):
+    return module.polymorph().render_front(context.flatten())
 
 
 @register.inclusion_tag("xprez/includes/ckeditor_image.html", takes_context=True)
-def ckeditor_content_image(
+def ckeditor_module_image(
     context,
     url,
     align,
@@ -79,7 +70,7 @@ def ckeditor_content_image(
     link_url="",
     link_new_window=False,
 ):
-    return _editor_content_image(
+    return _editor_module_image(
         context,
         url,
         align,
@@ -92,7 +83,7 @@ def ckeditor_content_image(
     )
 
 
-def _editor_content_image(
+def _editor_module_image(
     context,
     url,
     align,

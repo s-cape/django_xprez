@@ -8,7 +8,7 @@ export class XprezSection {
     constructor(xprez, sectionEl) {
         this.xprez = xprez;
         this.el = sectionEl;
-        this.initContents();
+        this.initModules();
         this.popover = new XprezSectionPopover(this);
         this.adderBefore = new XprezAdderSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-before']"), this);
         this.adderEnd = new XprezAdderSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-end']"), this);
@@ -16,26 +16,26 @@ export class XprezSection {
 
         this.initCollapser();
         this.initConfigs();
-        this.initContentsSortable();
+        this.initModulesSortable();
     }
 
     id() { return this.el.querySelector("[name='section-id']").value; }
 
-    initContents() {
+    initModules() {
         this.gridEl = this.el.querySelector("[data-component='xprez-section-grid']");
-        this.contents = [];
-        this.el.querySelectorAll("[data-component='xprez-content']").forEach(
-            this.initContent.bind(this)
+        this.modules = [];
+        this.el.querySelectorAll("[data-component='xprez-module']").forEach(
+            this.initModule.bind(this)
         );
     }
-    initContent(contentEl) {
-        const ControllerClass = window[contentEl.dataset.jsControllerClass];
+    initModule(moduleEl) {
+        const ControllerClass = window[moduleEl.dataset.jsControllerClass];
         if (!ControllerClass) {
-            console.error(`Controller class ${contentEl.dataset.jsControllerClass} not found`);
+            console.error(`Controller class ${moduleEl.dataset.jsControllerClass} not found`);
             return;
         }
-        const content = new ControllerClass(this, contentEl);
-        this.contents.push(content);
+        const module = new ControllerClass(this, moduleEl);
+        this.modules.push(module);
     }
 
     initConfigs() {
@@ -61,10 +61,10 @@ export class XprezSection {
     expand() { this.el.removeAttribute("data-collapsed"); }
     toggleCollapse() { this.isCollapsed() ? this.expand() : this.collapse(); }
 
-    initContentsSortable() {
-        this.contentsSortable = new XprezSortable(this.gridEl, {
-            group: 'xprez-contents',
-            handle: '[data-draggable-content-handle]',
+    initModulesSortable() {
+        this.modulesSortable = new XprezSortable(this.gridEl, {
+            group: 'xprez-modules',
+            handle: '[data-draggable-module-handle]',
             onEnd: () => this.xprez.setPlacementToInputs()
         });
     }

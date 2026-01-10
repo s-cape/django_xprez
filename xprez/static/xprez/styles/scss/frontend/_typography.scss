@@ -2,12 +2,12 @@
 
 .article-header__cont,
 .medium-editor, .medium-editor-simple, .medium-editor-no-insert-plugin,
-.xprez-feature-boxes, .xprez-download, .xprez-text-content {
+.xprez-feature-boxes, .xprez-download, .xprez-text-module {
 	@include cont-width($text-module-column-width);
 	@include xprez-mobile-extra-space;
 }
 
-.xprez-text-content.mid-width:not(.xprez-text-content-boxed) {
+.xprez-text-module.mid-width:not(.xprez-text-module-boxed) {
 	@include m-width;
 	@media (max-width: ($m-width + $m-space)) and (min-width: $break-m) {
 		padding-left: $m-space;
@@ -15,7 +15,7 @@
 	}
 }
 
-.xprez-text-content.full-width:not(.xprez-text-content-boxed) {
+.xprez-text-module.full-width:not(.xprez-text-module-boxed) {
 	@include full-width;
 	@media (min-width: $break-m) {
 		padding-left: $m-space;
@@ -25,11 +25,11 @@
 
 // Xprez basic text styles
 
-.xprez-text-content-centered {
+.xprez-text-module-centered {
 	text-align: center;
 }
 
-.xprez-text-content, .xprez-text-image,   
+.xprez-text-module, .xprez-text-image,   
 .xprez-feature-boxes, .xprez-grid-box {
 	@include clearfix;
 

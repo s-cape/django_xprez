@@ -4,8 +4,8 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def xprez_content_render_admin(context, content):
-    return content.render_admin(context.flatten())
+def xprez_module_render_admin(context, module):
+    return module.render_admin(context.flatten())
 
 
 @register.simple_tag(takes_context=True)
@@ -19,7 +19,7 @@ def xprez_section_config_render_admin(context, config):
 
 
 @register.simple_tag(takes_context=True)
-def xprez_content_config_render_admin(context, config):
+def xprez_module_config_render_admin(context, config):
     return config.render_admin(context.flatten())
 
 

@@ -9,28 +9,25 @@ from django.utils.module_loading import autodiscover_modules
 from xprez.conf import settings
 
 
-class ContentTypeManager:
+class ModuleRegistry:
     def get(self, content_type):
         return self._registry[content_type]
 
-    def all_as_list(self):
-        return [content_type for key, content_type in self._registry.items()]
-
     def get_urls(self):
         urls = []
-        for content in self._registry.values():
-            urls += content.get_urls()
+        for module in self._registry.values():
+            urls += module.get_urls()
         return urls
 
     @staticmethod
-    def _get_class_media(content_class, media_class_name):
-        data = getattr(content_class, media_class_name)
+    def _get_class_media(module_class, media_class_name):
+        data = getattr(module_class, media_class_name)
         css = getattr(data, "css", {})
         js = getattr(data, "js", [])
         if isinstance(css, tuple) or isinstance(css, list):
             warnings.warn(
                 "{}.{}.css should be a dict, not list/tuple".format(
-                    content_class,
+                    module_class,
                     media_class_name,
                 ),
                 DeprecationWarning,
@@ -39,11 +36,10 @@ class ContentTypeManager:
             css = {"all": css}
         return Media(css=css, js=js)
 
-    def _collect_media(self, media_class_name, initial=None, content_types=None):
+    def _collect_media(self, media_class_name, initial=None, modules=None):
         media = initial or Media()
-        contents = self._get_allowed_contents(allowed_contents=content_types)
-        for content in contents:
-            media += ContentTypeManager._get_class_media(content, media_class_name)
+        for module in self._get_available_modules(available_modules=modules):
+            media += ModuleRegistry._get_class_media(module, media_class_name)
         return media
 
     def admin_media(self):
@@ -61,44 +57,29 @@ class ContentTypeManager:
             ),
         )
 
-    def front_media(self, content_types=None):
-        return self._collect_media("FrontMedia", content_types=content_types)
+    def front_media(self, modules=None):
+        return self._collect_media("FrontMedia", modules=modules)
 
     def __init__(self):
         self._registry = OrderedDict()
 
-    def register(self, content_class):
-        self._registry[content_class.class_content_type()] = content_class
+    def register(self, module_class):
+        self._registry[module_class.class_content_type()] = module_class
 
-    def unregister(self, content_class):
-        del self._registry[content_class.class_content_type()]
+    def unregister(self, module_class):
+        del self._registry[module_class.class_content_type()]
 
-    def _get_allowed_contents(
-        self,
-        allowed_contents=None,
-        excluded_contents=None,
-    ):
-        if allowed_contents is None:
-            allowed_contents = settings.XPREZ_DEFAULT_ALLOWED_CONTENTS
-        if excluded_contents is None:
-            excluded_contents = settings.XPREZ_DEFAULT_EXCLUDED_CONTENTS
-
-        content_types = []
-        if allowed_contents == "__all__":
-            content_types = self.all_as_list()
+    def _get_available_modules(self, available_modules=None):
+        if available_modules is None:
+            available_modules = settings.XPREZ_DEFAULT_AVAILABLE_MODULES
+        if available_modules == "__all__":
+            return self._registry.values()
         else:
-            for ct in allowed_contents:
-                content_types.append(self.get(ct))
-        if excluded_contents:
-            for ct in excluded_contents:
-                ct = self.get(ct)
-                if ct in content_types:
-                    content_types.remove(ct)
-        return content_types
+            return [self.get(module) for module in available_modules]
 
 
-contents_manager = ContentTypeManager()
+module_registry = ModuleRegistry()
 
 
 def autodiscover():
-    autodiscover_modules("models", register_to=contents_manager)
+    autodiscover_modules("models", register_to=module_registry)

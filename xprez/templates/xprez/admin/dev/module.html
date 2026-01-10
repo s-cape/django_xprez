@@ -1,0 +1,39 @@
+<div class="xprez-module" data-mode="{{ mode }}">
+    <div class="xprez-module__header">
+        <div class="xprez-module__name">
+            <span class="xprez-module__name-icon">
+                {% include "xprez/admin/icons/modules/text.html" %}
+            </span>
+            <div class="xprez-option" data-active="true">
+                <label >
+                    <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
+                    <i class="xprez-icon-check_circle_small x-variant-checked"></i>
+                </label>
+                <input type="checkbox" {{ checked_state }}>
+            </div>
+            <span class="xprez-option-group__title-text">Text</span>
+        </div>
+
+        <div class="xprez-module__actions">
+            <span class="xprez-icon-btn" title="Copy">
+                <i class="xprez-icon-copy"></i>
+            </span>
+            <span class="xprez-icon-btn" title="Image">
+                <i class="xprez-icon-image"></i>
+            </span>
+            <button type="button" class="xprez-icon-btn" title="Settings" popovertarget="id2-text-settings">
+                <i class="xprez-icon-settings"></i>
+            </button>
+        </div>
+
+        <div class="xprez-module__actions xprez-module__actions--right">
+            <span class="xprez-icon-btn" title="Delete">
+                <i class="xprez-icon-delete"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="xprez-module__body">
+        modul
+    </div>
+</div>

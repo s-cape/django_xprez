@@ -62,7 +62,7 @@
                     </span>
                 {% endblock %}
                 {% block btn_toggle_visible %}
-                    <span class="xprez-icon-btn xprez-icon-btn--icon-toggle js-checkbox_controller" data-formfield_selector="#id_content-{{ content.pk }}-visible" title="Visibility on/off">
+                    <span class="xprez-icon-btn xprez-icon-btn--icon-toggle js-checkbox_controller" data-formfield_selector="#id_content-{{ module.pk }}-visible" title="Visibility on/off">
                         <i class="xprez-icon-eye x-variant-unchecked"></i>
                         <i class="xprez-icon-eye_slash  x-variant-checked x-color-alert"></i>
                     </span>
@@ -73,13 +73,13 @@
                         <div class="xprez-submenu">
                             <div
                                 class="js-copy-content"
-                                data-url="TODO{#{% url xprez_admin.xprez_copy_content_url_name content.pk %}#}"
+                                data-url="TODO{#{% url xprez_admin.xprez_copy_content_url_name module.pk %}#}"
                             >
                                 Duplicate
                             </div>
                             <div
                                 class="js-clipboard-copy xprez-clipboard-copy"
-                                data-url="TODO{#{% url xprez_admin.xprez_clipboard_copy_url_name xprez_admin.CLIPBOARD_CONTENT_KEY content.pk %}#}"
+                                data-url="TODO{#{% url xprez_admin.xprez_clipboard_copy_url_name xprez_admin.CLIPBOARD_CONTENT_KEY module.pk %}#}"
                             >
                                 <span class="xprez-inline-success-message">{% include "xprez/admin/icons/checkmark.html" %} Copied</span>
                                 <span class="default">Copy</span>
@@ -88,7 +88,7 @@
                     </div>
                 {% endblock %}
                 {% block btn_delete %}
-                    <span class="xprez-icon-btn js-delete-content" data-pk="{{ content.pk }}" data-url="TODO{#{% url xprez_admin.xprez_delete_content_url_name content.pk %}#}" title="Remove">
+                    <span class="xprez-icon-btn js-delete-content" data-pk="{{ module.pk }}" data-url="TODO{#{% url xprez_admin.xprez_delete_content_url_name module.pk %}#}" title="Remove">
                         <i class="xprez-icon-delete"></i>
                     </span>
                 {% endblock %}

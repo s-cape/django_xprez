@@ -11,19 +11,21 @@ from django.utils.functional import classproperty
 
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.conf import settings
-from xprez.utils import import_class
+from xprez.utils import class_content_type, import_class
 
 CLIPBOARD_TEXT_MAX_LENGTH = 100
 
 
-class ContentsContainer(models.Model):
+class Container(models.Model):
+    """Base container class for pages/articles that contain modules."""
+
     front_template_name = "xprez/container.html"
 
     content_type = models.CharField(max_length=100, editable=False)
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.content_type = self.__class__.__name__.lower()
+            self.content_type = class_content_type(self.__class__)
         super().save(*args, **kwargs)
 
     def polymorph(self):
@@ -34,9 +36,9 @@ class ContentsContainer(models.Model):
         else:
             return model.objects.get(pk=self.pk)
 
-    def copy_contents(self, for_container):
-        for content in self.contents.all():
-            content.polymorph().copy(for_container)
+    def copy_modules(self, for_container):
+        for module in self.modules.all():
+            module.polymorph().copy(for_container)
 
     def clipboard_verbose_name(self):
         return self.polymorph()._meta.verbose_name
@@ -50,15 +52,16 @@ class ContentsContainer(models.Model):
 
     def get_sections(self):
         if not hasattr(self, "_sections"):
-            # TODO: prefetch section configs, contents (polymorphed) and content configs (polymorphed)
-            self._sections = self.sections.filter(saved=True)  # TODO:, visible=True)
+            self._sections = self.sections.filter(saved=True)
         return self._sections
 
 
-class Content(models.Model):
-    config_model = "xprez.ContentConfig"
-    form_class = "xprez.admin.forms.BaseContentForm"
-    js_controller_class = "XprezContent"
+class Module(models.Model):
+    """Base module class for content blocks within sections."""
+
+    config_model = "xprez.ModuleConfig"
+    form_class = "xprez.admin.forms.BaseModuleForm"
+    js_controller_class = "XprezModule"
 
     SIZE_FULL = "full"
     SIZE_MID = "mid"
@@ -69,67 +72,16 @@ class Content(models.Model):
         (SIZE_TEXT, "text"),
     )
 
-    # # TODO: remove
-    # page = models.ForeignKey(
-    #     settings.XPREZ_CONTAINER_MODEL_CLASS,
-    #     on_delete=models.CASCADE,
-    #     related_name="contents",
-    #     editable=False,
-    #     null=True,
-    # )
     section = models.ForeignKey(
         settings.XPREZ_SECTION_MODEL_CLASS,
         on_delete=models.CASCADE,
-        related_name="contents",
-        # editable=False,
-        # null=True,  # TODO: remove
+        related_name="modules",
     )
     saved = models.BooleanField(default=False, editable=False)
 
     position = models.PositiveSmallIntegerField(default=0)
     content_type = models.CharField(max_length=100, editable=False)
     css_class = models.CharField(max_length=100, null=True, blank=True)
-
-    # # TODO: remove
-    # visible = models.BooleanField(default=True)
-    # alternate_color = models.BooleanField(default=False)
-    # background_color = models.CharField(max_length=30, blank=True)
-
-    # MARGIN_BOTTOM_DEFAULT = 2
-    # MARGIN_BOTTOM_CHOICES = (
-    #     (0, "None"),
-    #     (1, "S"),
-    #     (2, "M"),
-    #     (3, "L"),
-    #     (4, "XL"),
-    # )
-    # margin_bottom = models.PositiveSmallIntegerField(
-    #     choices=MARGIN_BOTTOM_CHOICES, default=MARGIN_BOTTOM_DEFAULT
-    # )
-
-    # PADDING_TOP_DEFAULT = 0
-    # PADDING_TOP_CHOICES = (
-    #     (0, "None"),
-    #     (1, "S"),
-    #     (2, "M"),
-    #     (3, "L"),
-    #     (4, "XL"),
-    # )
-    # padding_top = models.PositiveSmallIntegerField(
-    #     choices=PADDING_TOP_CHOICES, default=PADDING_TOP_DEFAULT
-    # )
-
-    # PADDING_BOTTOM_DEFAULT = 0
-    # PADDING_BOTTOM_CHOICES = (
-    #     (0, "None"),
-    #     (1, "S"),
-    #     (2, "M"),
-    #     (3, "L"),
-    #     (4, "XL"),
-    # )
-    # padding_bottom = models.PositiveSmallIntegerField(
-    #     choices=PADDING_BOTTOM_CHOICES, default=PADDING_BOTTOM_DEFAULT
-    # )
 
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
     changed = models.DateTimeField(auto_now=True, editable=False, db_index=True)
@@ -153,34 +105,30 @@ class Content(models.Model):
             self.content_type = self.class_content_type()
         super().save(*args, **kwargs)
         if self.pk:
-            for css_breakpoint in settings.XPREZ_BREAKPOINTS.keys():
-                self.get_or_create_config(css_breakpoint)
+            self.get_or_create_config(settings.XPREZ_DEFAULT_BREAKPOINT)
 
     @property
     def verbose_name(self):
         return self._meta.verbose_name.title()
 
     @classmethod
-    def class_content_type(cls):
-        return "{}.{}".format(
-            cls._meta.app_label,
-            cls._meta.object_name,
-        )
-
-    @classmethod
     def identifier(cls):
         return cls._meta.model_name
+
+    @classmethod
+    def class_content_type(cls):
+        return class_content_type(cls)
 
     @property
     def admin_template_name(self):
         return [
-            "xprez/admin/contents/{}.html".format(self.identifier()),
-            "xprez/admin/contents/base.html",
+            "xprez/admin/modules/{}.html".format(self.identifier()),
+            "xprez/admin/modules/base.html",
         ]
 
     @property
     def front_template_name(self):
-        return "xprez/contents/{}.html".format(self.identifier())
+        return "xprez/modules/{}.html".format(self.identifier())
 
     def polymorph(self):
         app_label, object_name = self.content_type.split(".")
@@ -200,12 +148,12 @@ class Content(models.Model):
             if not field.primary_key
         }
         inst = self.__class__(**initial)
-        if position is None:  # add to end
-            inst.position = self._count_new_content_position(for_container)
-        else:  # add on specific position
+        if position is None:
+            inst.position = self._count_new_module_position(for_container)
+        else:
             inst.position = position
-            if for_container.contents.filter(position=position).exists():
-                for_container.contents.filter(position__gte=position).update(
+            if for_container.modules.filter(position=position).exists():
+                for_container.modules.filter(position__gte=position).update(
                     position=F("position") + 1
                 )
         inst.container = for_container
@@ -213,62 +161,24 @@ class Content(models.Model):
             inst.save()
         return inst
 
-    # @classmethod
-    # def _count_new_content_position(cls, container):
-    #     result = container.contents.all().aggregate(Max("position"))
-    #     if result["position__max"] is not None:
-    #         position = result["position__max"] + 1
-    #     else:
-    #         position = 0
-    #     return position
-
-    # @classmethod
-    # def create_for_section(cls, section, position=None, **kwargs):
-    #     if position is None:  # add to end
-    #         position = cls._count_new_content_position(section)
-    #     else:  # add on specific position
-    #         if section.contents.filter(position=position).exists():
-    #             section.contents.filter(position__gte=position).update(
-    #                 position=F("position") + 1
-    #             )
-    #     return cls.objects.create(section=section, position=position, **kwargs)
-
-    # @property
-    # def page(self):
-    #     warnings.warn(
-    #         "page attribute is deprecated, use container instead.",
-    #         DeprecationWarning,
-    #         stacklevel=2,
-    #     )
-    #     return self.container
-
-    # @classmethod
-    # def create_for_page(cls, *args, **kwargs):
-    #     warnings.warn(
-    #         "create_for_page() is deprecated, use create_for_container() instead.",
-    #         DeprecationWarning,
-    #         stacklevel=2,
-    #     )
-    #     return cls.create_for_container(*args, **kwargs)
-
     def get_config_model(self):
         app_label, model_name = self.config_model.split(".")
         return apps.get_model(app_label, model_name)
 
     def get_or_create_config(self, css_breakpoint):
-        config, created = self.get_config_model().objects.get_or_create(
-            content=self,
+        config, _created = self.get_config_model().objects.get_or_create(
+            module=self,
             css_breakpoint=css_breakpoint,
         )
         return config
 
     def get_configs(self):
         if not hasattr(self, "_configs"):
-            self._configs = self.get_config_model().objects.filter(content=self)
+            self._configs = self.get_config_model().objects.filter(module=self)
         return self._configs
 
     def get_form_prefix(self):
-        return "content-" + str(self.pk)
+        return "module-" + str(self.pk)
 
     def get_admin_form_class(self):
         cls = import_class(self.form_class)
@@ -276,11 +186,11 @@ class Content(models.Model):
             return cls
         else:
 
-            class ContentForm(cls):
+            class ModuleForm(cls):
                 class Meta(cls.Meta):
                     model = self.__class__
 
-            return ContentForm
+            return ModuleForm
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = self.get_admin_form_class()
@@ -315,17 +225,14 @@ class Content(models.Model):
         xprez_admin = self.admin_form.xprez_admin
         context.update(
             {
-                "content": self,
+                "module": self,
                 "xprez_admin": xprez_admin,
-                # "allowed_contents": xprez_admin.xprez_get_allowed_contents(
-                #     container=self.section.container
-                # ),
             }
         )
         return render_to_string(self.admin_template_name, context)
 
     def render_front(self, context):
-        context["content"] = self
+        context["module"] = self
         return render_to_string(self.front_template_name, context)
 
     def admin_has_errors(self):
@@ -338,8 +245,8 @@ class Content(models.Model):
     @classproperty
     def icon_template_name(cls):
         return [
-            "xprez/admin/icons/contents/{}.html".format(cls.class_content_type()),
-            "xprez/admin/icons/contents/default.html",
+            "xprez/admin/icons/modules/{}.html".format(cls.identifier()),
+            "xprez/admin/icons/modules/default.html",
         ]
 
     @classproperty
@@ -353,11 +260,10 @@ class Content(models.Model):
         return ""
 
 
-class FormsetContent(Content):
-    formset_factory = NotImplemented
+class MultiModule(Module):
+    """Module with multiple child items."""
 
-    class Meta:
-        abstract = True
+    formset_factory = NotImplemented
 
     def get_formset_queryset(self):
         raise NotImplementedError()
@@ -395,8 +301,39 @@ class FormsetContent(Content):
         for item in self.get_formset_queryset():
             item.copy(inst)
 
+    class Meta:
+        abstract = True
 
-class AjaxUploadFormsetContent(FormsetContent):
+
+class MultiModuleItem(models.Model):
+    """
+    Base class for items within MultiModule modules.
+    Is expected to add `module` attribute as a foreign key to the MultiModule descendant.
+    """
+
+    module_foreign_key = "module"
+
+    def copy(self, for_module, save=True):
+        if not for_module:
+            for_module = getattr(self, self.module_foreign_key)
+        initial = {
+            field.name: getattr(self, field.name)
+            for field in self._meta.fields
+            if not field.primary_key
+        }
+        inst = self.__class__(**initial)
+        setattr(inst, self.module_foreign_key, for_module)
+        if save:
+            inst.save()
+        return inst
+
+    class Meta:
+        abstract = True
+
+
+class UploadMultiModule(MultiModule):
+    """Multi-module with AJAX file upload support."""
+
     admin_formset_item_template_name = NotImplemented
 
     class Meta:
@@ -405,23 +342,23 @@ class AjaxUploadFormsetContent(FormsetContent):
     class AdminMedia:
         js = (
             "xprez/admin/libs/dropzone/dropzone.js",
-            "xprez/admin/js/ajax_upload_formset.js",
+            "xprez/admin/js/upload_multi_module.js",
         )
 
     @classmethod
     @method_decorator(xprez_staff_member_required)
-    def upload_file_view(cls, request, content_pk):
-        content = cls.objects.get(pk=content_pk)
+    def upload_file_view(cls, request, module_pk):
+        module = cls.objects.get(pk=module_pk)
         file_list = request.FILES.getlist("file")
         if len(file_list) > 0:
             file_ = file_list[0]
             FormSet = import_class(cls.formset_factory)
-            item = FormSet.model.create_from_file(file_, content)
-            queryset = content.get_formset_queryset()
+            item = FormSet.model.create_from_file(file_, module)
+            queryset = module.get_formset_queryset()
             item_formset = FormSet(
-                instance=content,
+                instance=module,
                 queryset=queryset,
-                prefix="{}s-{}".format(cls.identifier(), content.pk),
+                prefix="{}s-{}".format(cls.identifier(), module.pk),
             )
             item_form = item_formset.forms[-1]
             return JsonResponse(
@@ -431,7 +368,7 @@ class AjaxUploadFormsetContent(FormsetContent):
                         cls.admin_formset_item_template_name,
                         {
                             "item": item,
-                            "content": content,
+                            "module": module,
                             "number": queryset.count() - 1,
                         },
                     ),
@@ -444,29 +381,12 @@ class AjaxUploadFormsetContent(FormsetContent):
         cls_name = cls.__name__.lower()
         return [
             re_path(
-                r"^%s/upload-item/(?P<content_pk>\d+)/" % cls_name,
+                r"^{}/upload-item/(?P<module_pk>\d+)/".format(cls_name),
                 cls.upload_file_view,
-                name="%s_ajax_upload_item" % cls_name,
+                name=cls.get_upload_url_name(),
             ),
         ]
 
-
-class ContentItem(models.Model):
-    content_foreign_key = NotImplemented
-
-    class Meta:
-        abstract = True
-
-    def copy(self, for_content, save=True):
-        if not for_content:
-            for_content = getattr(self, self.content_foreign_key)
-        initial = {
-            field.name: getattr(self, field.name)
-            for field in self._meta.fields
-            if not field.primary_key
-        }
-        inst = self.__class__(**initial)
-        setattr(inst, self.content_foreign_key, for_content)
-        if save:
-            inst.save()
-        return inst
+    @classmethod
+    def get_upload_url_name(self):
+        return "{}_ajax_upload_item".format(self.__class__.__name__.lower())

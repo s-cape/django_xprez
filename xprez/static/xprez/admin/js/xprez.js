@@ -1,5 +1,5 @@
 import { Xprez } from './xprez/core.js';
-import { XprezContent } from './xprez/content.js';
+import { XprezModule } from './xprez/module.js';
 import { XprezSection } from './xprez/sections.js';
 import {
     XprezAdderBase,
@@ -14,27 +14,27 @@ import {
 import {
     XprezDeleterBase,
     XprezSectionDeleter,
-    XprezContentDeleter
+    XprezModuleDeleter
 } from './xprez/deleters.js';
 import {
     XprezPopoverBase,
     XprezSectionPopover,
-    XprezContentPopover
+    XprezModulePopover
 } from './xprez/popovers.js';
 import {
     XprezConfigBase,
     XprezSectionConfig,
-    XprezContentConfig
+    XprezModuleConfig
 } from './xprez/configs.js';
 import { XprezSortable } from './xprez/sortable.js';
 import { executeScripts } from './xprez/utils.js';
 
 window.Xprez = Xprez;
-window.XprezContent = XprezContent;
+window.XprezModule = XprezModule;
 
 export {
     Xprez,
-    XprezContent,
+    XprezModule,
     XprezSection,
     XprezAdderBase,
     XprezAdderItemsBase,
@@ -46,13 +46,13 @@ export {
     XprezSectionConfigAdder,
     XprezDeleterBase,
     XprezSectionDeleter,
-    XprezContentDeleter,
+    XprezModuleDeleter,
     XprezPopoverBase,
     XprezSectionPopover,
-    XprezContentPopover,
+    XprezModulePopover,
     XprezConfigBase,
     XprezSectionConfig,
-    XprezContentConfig,
+    XprezModuleConfig,
     XprezSortable,
     executeScripts
 };

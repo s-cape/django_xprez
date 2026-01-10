@@ -1,53 +1,30 @@
 XPREZ_SECTION_MODEL_CLASS = "xprez.Section"
-XPREZ_CONTAINER_MODEL_CLASS = "xprez.ContentsContainer"
-XPREZ_CK_EDITOR_CONTENT_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
-XPREZ_GRID_BOXES_CONTENT_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
-XPREZ_TEXT_IMAGE_CONTENT_WIDGET = (
+XPREZ_CONTAINER_MODEL_CLASS = "xprez.Container"
+XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
+XPREZ_GRID_BOXES_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
+XPREZ_TEXT_IMAGE_MODULE_WIDGET = (
     "xprez.ck_editor.widgets.CkEditorWidgetFullNoInsertPlugin"
 )
 
-XPREZ_CONTENTS_AUTOREGISTER = True
-# XPREZ_CONTENTS_AUTOREGISTER_BUILTINS = [
-#     # 'mediumeditor',  # deprecated
-#     "textcontent",
-#     "ckeditor",
-#     "gridboxes",
-#     "quotecontent",
-#     "gallery",
-#     "downloadcontent",
-#     "video",
-#     "numberscontent",
-#     # "featureboxes",  # deprecated
-#     "codeinput",
-#     "codetemplate",
-#     "textimage",
-#     # "anchor",  # not yet implemented, disabled by default
-# ]
-XPREZ_CONTENTS_AUTOREGISTER_BUILTINS = [
-    "xprez.TextContent",
-    "xprez.QuoteContent",
-    "xprez.Gallery",
-    "xprez.DownloadContent",
-    "xprez.Video",
-    "xprez.NumbersContent",
-    "xprez.CodeInput",
-    "xprez.CodeTemplate",
+XPREZ_MODULES_AUTOREGISTER = True
+XPREZ_MODULES_AUTOREGISTER_BUILTINS = [
+    "xprez.TextModule",
+    "xprez.QuotesModule",
+    "xprez.ImagesModule",
+    "xprez.DownloadModule",
+    "xprez.VideoModule",
+    "xprez.NumbersModule",
+    "xprez.CodeInputModule",
+    "xprez.CodeTemplateModule",
 ]
-XPREZ_CONTENTS_AUTOREGISTER_CUSTOM = "__all__"
+XPREZ_MODULES_AUTOREGISTER_CUSTOM = "__all__"
 
-XPREZ_DEFAULT_ALLOWED_CONTENTS = "__all__"
-XPREZ_DEFAULT_EXCLUDED_CONTENTS = None
+XPREZ_DEFAULT_AVAILABLE_MODULES = "__all__"
 
-XPREZ_CODE_TEMPLATES_DIR = ""
-XPREZ_CODE_TEMPLATES_PREFIX = ""
+XPREZ_CODE_TEMPLATES_DIR = None
+XPREZ_CODE_TEMPLATES_PREFIX = "xprez/code_templates"
 XPREZ_USE_ABSOLUTE_URI = False
 XPREZ_BASE_URL = ""
-
-# XPREZ_JQUERY_INIT_MEDIA_JS = (
-#     "admin/js/vendor/jquery/jquery.js",  # use django's jquery
-#     "admin/js/jquery.init.js",  # call django's jquery init (which includes noconflict)
-#     "xprez/admin/js/jquery_revert_noconflict.js",  # revert noconflict - $ is now global again
-# )
 
 XPREZ_STAFF_MEMBER_REQUIRED = (
     "django.contrib.admin.views.decorators.staff_member_required"

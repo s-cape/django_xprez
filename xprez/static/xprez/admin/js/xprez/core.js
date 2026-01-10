@@ -29,14 +29,14 @@ export class Xprez {
         this.el.dataset.view = this.viewSelectEl.value;
     }
 
-    getContents() {
-        return this.sections.flatMap(section => section.contents);
+    getModules() {
+        return this.sections.flatMap(section => section.modules);
     }
 
     getPopovers() {
         const sectionPopovers = this.sections.flatMap(section => section.popover);
-        const contentPopovers = this.getContents().flatMap(content => content.popover);
-        return [...sectionPopovers, ...contentPopovers];
+        const modulePopovers = this.getModules().flatMap(module => module.popover);
+        return [...sectionPopovers, ...modulePopovers];
     }
 
     setPlacementToInputs() {
@@ -47,13 +47,13 @@ export class Xprez {
 
                 const sectionId = sectionEl.querySelector('input[name="section-id"]').value;
 
-                sectionEl.querySelectorAll("[data-component='xprez-content']").forEach(
-                    (contentEl, contentIndex) => {
-                        const contentPositionInputEl = contentEl.querySelector(`input[name="${contentEl.dataset.prefix}-position"]`);
-                        contentPositionInputEl.value = contentIndex;
+                sectionEl.querySelectorAll("[data-component='xprez-module']").forEach(
+                    (moduleEl, moduleIndex) => {
+                        const modulePositionInputEl = moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-position"]`);
+                        modulePositionInputEl.value = moduleIndex;
 
-                        const contentSectionInputEl = contentEl.querySelector(`input[name="${contentEl.dataset.prefix}-section"]`);
-                        contentSectionInputEl.value = sectionId;
+                        const moduleSectionInputEl = moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-section"]`);
+                        moduleSectionInputEl.value = sectionId;
                     }
                 );
             }

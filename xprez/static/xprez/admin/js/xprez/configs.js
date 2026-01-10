@@ -16,10 +16,9 @@ export class XprezSectionConfig extends XprezConfigBase {
     cssBreakpoint() { return parseInt(this.el.dataset.cssBreakpoint); }
 }
 
-export class XprezContentConfig extends XprezConfigBase {
-    constructor(content, ...args) {
+export class XprezModuleConfig extends XprezConfigBase {
+    constructor(module, ...args) {
         super(...args);
-        this.content = content;
+        this.module = module;
     }
 }
-
