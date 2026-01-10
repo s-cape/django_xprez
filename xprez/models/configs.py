@@ -197,7 +197,7 @@ class ModuleConfig(ConfigBase):
     module = models.ForeignKey(
         "xprez.Module",
         on_delete=models.CASCADE,
-        related_name="module_configs",
+        related_name="configs",
         editable=False,
     )
     visible = models.BooleanField(default=True)

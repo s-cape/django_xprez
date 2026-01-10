@@ -118,8 +118,8 @@
 
     {% include "./dev/section.html" %}
 
-    {% with allowed_modules=form.xprez_get_allowed_modules %}
-        {% if allowed_modules %}
+    {% with available_modules=form.xprez_get_available_modules %}
+        {% if available_modules %}
             <div class="xprez-add-after">
                 <div class="xprez-section__header--centered">
                     <h3>Add section</h3>

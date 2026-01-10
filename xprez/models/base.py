@@ -263,8 +263,8 @@ class Module(models.Model):
         return ""
 
 
-class FormsetModule(Module):
-    """Content with inline formset support."""
+class MultiModule(Module):
+    """Module with multiple child items."""
 
     formset_factory = NotImplemented
 
@@ -308,8 +308,34 @@ class FormsetModule(Module):
         abstract = True
 
 
-class AjaxUploadFormsetModule(FormsetModule):
-    """Content with AJAX file upload formset support."""
+class MultiModuleItem(models.Model):
+    """
+    Base class for items within MultiModule modules.
+    Is expected to add `module` attribute as a foreign key to the MultiModule descendant.
+    """
+
+    module_foreign_key = "module"
+
+    def copy(self, for_module, save=True):
+        if not for_module:
+            for_module = getattr(self, self.module_foreign_key)
+        initial = {
+            field.name: getattr(self, field.name)
+            for field in self._meta.fields
+            if not field.primary_key
+        }
+        inst = self.__class__(**initial)
+        setattr(inst, self.module_foreign_key, for_module)
+        if save:
+            inst.save()
+        return inst
+
+    class Meta:
+        abstract = True
+
+
+class UploadMultiModule(MultiModule):
+    """Multi-module with AJAX file upload support."""
 
     admin_formset_item_template_name = NotImplemented
 
@@ -319,7 +345,7 @@ class AjaxUploadFormsetModule(FormsetModule):
     class AdminMedia:
         js = (
             "xprez/admin/libs/dropzone/dropzone.js",
-            "xprez/admin/js/ajax_upload_formset.js",
+            "xprez/admin/js/upload_multi_module.js",
         )
 
     @classmethod
@@ -363,26 +389,3 @@ class AjaxUploadFormsetModule(FormsetModule):
                 name="%s_ajax_upload_item" % cls_name,
             ),
         ]
-
-
-class ModuleItem(models.Model):
-    """Base class for items within FormsetContent modules."""
-
-    module_foreign_key = "module"
-
-    def copy(self, for_module, save=True):
-        if not for_module:
-            for_module = getattr(self, self.module_foreign_key)
-        initial = {
-            field.name: getattr(self, field.name)
-            for field in self._meta.fields
-            if not field.primary_key
-        }
-        inst = self.__class__(**initial)
-        setattr(inst, self.module_foreign_key, for_module)
-        if save:
-            inst.save()
-        return inst
-
-    class Meta:
-        abstract = True

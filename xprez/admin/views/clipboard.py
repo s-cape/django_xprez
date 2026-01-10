@@ -50,12 +50,12 @@ class XprezAdminViewsClipboardMixin(object):
             request, target_position, target_pk
         )
 
-        allowed_modules = self.xprez_get_allowed_modules(container)
+        available_modules = self.xprez_get_available_modules(container)
 
         modules_data = []
         for module in modules:
             source_module = module.polymorph()
-            if source_module.__class__ not in allowed_modules:
+            if source_module.__class__ not in available_modules:
                 continue
 
             if action == self.CLIPBOARD_PASTE_ACTION:
@@ -93,7 +93,7 @@ class XprezAdminViewsClipboardMixin(object):
         target_container, position = self._xprez_target_container_and_position(
             request, target_position, target_pk
         )
-        allowed_modules = self.xprez_get_allowed_modules(target_container)
+        available_modules = self.xprez_get_available_modules(target_container)
 
         clipboard = []
         for key, pk in session_data:
@@ -101,18 +101,18 @@ class XprezAdminViewsClipboardMixin(object):
                 if key == self.CLIPBOARD_CONTAINER_KEY:
                     obj = self._get_container_instance(request, pk).polymorph()
                     modules = obj.modules.all()
-                    if any(m in allowed_modules for m in modules):
-                        if all(m in allowed_modules for m in modules):
-                            allowed = True
+                    if any(m in available_modules for m in modules):
+                        if all(m in available_modules for m in modules):
+                            available = True
                         else:
-                            allowed = "partial"
+                            available = "partial"
                     else:
-                        allowed = False
+                        available = False
                 elif key == self.CLIPBOARD_MODULE_KEY:
                     obj = models.Module.objects.get(pk=pk).polymorph()
-                    allowed = obj.content_type in allowed_modules
+                    available = obj.content_type in available_modules
 
-                clipboard += [{"key": key, "obj": obj, "allowed": allowed}]
+                clipboard += [{"key": key, "obj": obj, "available": available}]
             except ObjectDoesNotExist:
                 pass
 

@@ -106,10 +106,11 @@ class Section(models.Model):
                 config.save_admin_form(request)
 
     def render_admin(self, context):
+        xprez_admin = self.admin_form.xprez_admin
         context.update(
             {
                 "section": self,
-                "allowed_modules": self.admin_form.xprez_admin.xprez_get_allowed_modules(
+                "available_modules": xprez_admin.xprez_get_available_modules(
                     container=self.container
                 ),
             }

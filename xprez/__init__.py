@@ -9,12 +9,9 @@ from django.utils.module_loading import autodiscover_modules
 from xprez.conf import settings
 
 
-class ModuleManager:
+class ModuleRegistry:
     def get(self, content_type):
         return self._registry[content_type]
-
-    def all_as_list(self):
-        return [content_type for key, content_type in self._registry.items()]
 
     def get_urls(self):
         urls = []
@@ -41,8 +38,8 @@ class ModuleManager:
 
     def _collect_media(self, media_class_name, initial=None, modules=None):
         media = initial or Media()
-        for module in self._get_allowed_modules(allowed_modules=modules):
-            media += ModuleManager._get_class_media(module, media_class_name)
+        for module in self._get_available_modules(available_modules=modules):
+            media += ModuleRegistry._get_class_media(module, media_class_name)
         return media
 
     def admin_media(self):
@@ -72,33 +69,17 @@ class ModuleManager:
     def unregister(self, module_class):
         del self._registry[module_class.class_content_type()]
 
-    def _get_allowed_modules(
-        self,
-        allowed_modules=None,
-        excluded_modules=None,
-    ):
-        if allowed_modules is None:
-            allowed_modules = settings.XPREZ_DEFAULT_ALLOWED_MODULES
-        if excluded_modules is None:
-            excluded_modules = settings.XPREZ_DEFAULT_EXCLUDED_MODULES
-
-        modules = []
-        if allowed_modules == "__all__":
-            modules = self.all_as_list()
+    def _get_available_modules(self, available_modules=None):
+        if available_modules is None:
+            available_modules = settings.XPREZ_DEFAULT_AVAILABLE_MODULES
+        if available_modules == "__all__":
+            return self._registry.values()
         else:
-            for module in allowed_modules:
-                modules.append(self.get(module))
-        if excluded_modules:
-            for module in excluded_modules:
-                module = self.get(module)
-                if module in modules:
-                    modules.remove(module)
-        return modules
+            return [self.get(module) for module in available_modules]
 
 
-module_manager = ModuleManager()
-modules_manager = module_manager  # Alias for consistency
+module_registry = ModuleRegistry()
 
 
 def autodiscover():
-    autodiscover_modules("models", register_to=module_manager)
+    autodiscover_modules("models", register_to=module_registry)

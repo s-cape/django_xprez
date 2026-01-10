@@ -136,6 +136,31 @@ class Migration(migrations.Migration):
             bases=("xprez.module",),
         ),
         migrations.CreateModel(
+            name="QuoteModule",
+            fields=[
+                (
+                    "module_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.module",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("job_title", models.CharField(max_length=255)),
+                ("image", models.ImageField(blank=True, null=True, upload_to="quotes")),
+                ("title", models.CharField(blank=True, max_length=255, null=True)),
+                ("quote", models.TextField()),
+            ],
+            options={
+                "verbose_name": "Quote",
+            },
+            bases=("xprez.module",),
+        ),
+        migrations.CreateModel(
             name="SectionConfig",
             fields=[
                 (
@@ -364,7 +389,7 @@ class Migration(migrations.Migration):
                     "module",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="module_configs",
+                        related_name="configs",
                         to="xprez.module",
                         editable=False,
                     ),

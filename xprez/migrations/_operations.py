@@ -84,8 +84,8 @@ class InheritanceChangeOperation(Operation):
 
     def database_forwards(self, app_label, schema_editor, from_state, to_state):
         to_model = to_state.apps.get_model(app_label, self.model_name)
-        if not self.allow_migrate_model(schema_editor.connection.alias, to_model):
-            return
+        # if not self.allow_migrate_model(schema_editor.connection.alias, to_model):
+        #     return
 
         renderable_from_state = self._render_as_plain_model(app_label, from_state)
         from_model = renderable_from_state.apps.get_model(app_label, self.model_name)

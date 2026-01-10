@@ -5,6 +5,7 @@ from django.core.management.color import no_style
 from django.db import migrations, models
 from django.utils import timezone
 
+from xprez.conf import settings
 from xprez.migrations._operations import ContentToModule
 
 
@@ -22,13 +23,6 @@ def _reset_sequences(schema_editor, models):
     """
     for sql in schema_editor.connection.ops.sequence_reset_sql(no_style(), models):
         schema_editor.execute(sql)
-
-
-def _module_base_attributes(module_base):
-    attrs = {}
-    for attr in ["section", "position", "saved", "created", "changed"]:
-        attrs[attr] = getattr(module_base, attr)
-    return attrs
 
 
 def migrate_containers_sections_modules(apps, schema_editor):
@@ -60,6 +54,9 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 css_class=old_content.css_class,
                 saved=True,
             )
+            section.configs.get_or_create(
+                css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+            )
 
             Module.objects.create(
                 id=old_content_base.id,
@@ -74,56 +71,205 @@ def migrate_containers_sections_modules(apps, schema_editor):
     _reset_sequences(schema_editor, [Container, Module])
 
 
-def reorganize_modules(apps, schema_editor):
-    Module = apps.get_model("xprez", "Module")
-    Content = apps.get_model("xprez", "Content")
-    TextModule = apps.get_model("xprez", "TextModule")
+RENAMES = {
+    "Gallery": "GalleryModule",
+    "CodeInput": "CodeInputModule",
+    "CodeTemplate": "CodeTemplateModule",
+    "Download": "DownloadsModule",
+    "Numbers": "NumbersModule",
+    "Video": "VideoModule",
+}
 
-    for module_base in Module.objects.all():
-        old_content_base = Content.objects.get(id=module_base.id)
-        old_content = getattr(old_content_base, old_content_base.content_type.lower())
-        if old_content.content_type in ["ckeditor", "mediumeditor"]:
-            new_module = TextModule(
-                text=old_content.text,
-                **_module_base_attributes(module_base),
-            )
-            new_module.content_type = _content_type(new_module)
-            new_module.save()
-            module_base.delete()
-        elif old_content.content_type == "gridboxes":
-            for index, box in enumerate(old_content.boxes):
-                attributes = _module_base_attributes(module_base)
-                attributes["position"] = index
-                new_module = TextModule(
-                    text=box,
-                    **attributes,
-                )
-                new_module.content_type = _content_type(new_module)
-                new_module.save()
-            module_base.delete()
-        elif old_content.content_type == "textimage":
-            # TODO: convert textimage to text+gallery
-            module_base.delete()
-            continue
-    print("---")
-    for module in Module.objects.all():
-        print(module.content_type)
+RENAMES_LOWER = {k.lower(): v for k, v in RENAMES.items()}
 
 
 def rename_content_types(apps, schema_editor):
     Module = apps.get_model("xprez", "Module")
-    trans = {
-        "xprez.CodeInput": "xprez.CodeInputModule",
-        "xprez.CodeTemplate": "xprez.CodeTemplateModule",
-        "xprez.Download": "xprez.DownloadModule",
-        "xprez.Numbers": "xprez.NumbersModule",
-        "xprez.Quote": "xprez.QuotesModule",
-        "xprez.Video": "xprez.VideoModule",
-    }
-    for old_content_type, new_content_type in trans.items():
+    for old_content_type, new_content_type in RENAMES.items():
+        old_content_type = f"xprez.{old_content_type}"
+        new_content_type = f"xprez.{new_content_type}"
         Module.objects.filter(content_type=old_content_type).update(
             content_type=new_content_type
         )
+
+
+class ModuleProcessorBase:
+    old_content_class = None
+
+    def __init__(self, apps, module_base):
+        self.apps = apps
+        self.module_base = module_base
+        self.module_class = self.apps.get_model(*module_base.content_type.split("."))
+        self.module = self.module_class.objects.get(id=module_base.id)
+        self.load_old_content()
+
+    def load_old_content(self):
+        Content = self.apps.get_model("xprez", "Content")
+        self.old_content_base = Content.objects.get(id=self.module_base.id)
+
+        old_content_attr = self.old_content_base.content_type.lower()
+        if old_content_attr in RENAMES_LOWER:
+            old_content_class = self.apps.get_model(
+                "xprez", RENAMES_LOWER[old_content_attr]
+            )
+            self.old_content = old_content_class.objects.get(
+                id=self.old_content_base.id
+            )
+        else:
+            self.old_content = getattr(self.old_content_base, old_content_attr)
+
+    def process(self):
+        raise NotImplementedError()
+
+    def get_config_class(self, module):
+        return "xprez.ModuleConfig"
+
+    def create_config(self, module):
+        config_class = self.apps.get_model(*self.get_config_class(module).split("."))
+        config, created = config_class.objects.get_or_create(
+            module=module, css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+        )
+        print(created, config)
+
+
+class SimpleModuleProcessor(ModuleProcessorBase):
+    def process(self):
+        self.create_config(self.module)
+
+
+class ModuleReplaceProcessor(ModuleProcessorBase):
+    """
+    Replace a module with a new module(s).
+    """
+
+    def process(self):
+        self.new_modules = self.prepare_new_modules()
+        self.finalize_new_modules()
+        self.delete_processed_module()
+
+    def prepare_new_modules(self):
+        raise NotImplementedError()
+
+    def finalize_new_modules(self):
+        for new_module in self.new_modules:
+            new_module.content_type = _content_type(new_module)
+            new_module.section = self.module_base.section
+            new_module.saved = True
+            new_module.created = timezone.now()
+            new_module.changed = timezone.now()
+            new_module.save()
+            self.create_config(new_module)
+
+    def delete_processed_module(self):
+        self.module_base.delete()
+
+
+class TextModuleProcessorBase(ModuleReplaceProcessor):
+    def get_config_class(self, module):
+        return "xprez.TextModuleConfig"
+
+    def prepare_new_modules(self, **kwargs):
+        TextModule = self.apps.get_model("xprez", "TextModule")
+        return [TextModule(text=self.old_content.text)]
+
+
+class CkEditorProcessor(TextModuleProcessorBase):
+    pass
+
+
+class MediumEditorProcessor(TextModuleProcessorBase):
+    pass
+
+
+class GridboxesProcessor(TextModuleProcessorBase):
+    def prepare_new_modules(self):
+        TextModule = self.apps.get_model("xprez", "TextModule")
+        new_modules = []
+        for index, box in enumerate(self.old_content.boxes):
+            new_modules += [TextModule(position=index, text=box)]
+        return new_modules
+
+
+class QuotesProcessor(ModuleReplaceProcessor):
+    def prepare_new_modules(self):
+        QuoteModule = self.apps.get_model("xprez", "QuoteModule")
+        quotes = self.old_content.quotes.all()
+        if not self.old_content.display_two:
+            quotes = quotes[:1]
+
+        if len(quotes) > 1:
+            self.module_base.section.configs.get_or_create(
+                css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+            )[0].columns = 2
+            self.module_base.section.save()
+
+        new_modules = []
+        for index, quote in enumerate(quotes):
+            new_modules += [
+                QuoteModule(
+                    position=index,
+                    name=quote.name,
+                    job_title=quote.job_title,
+                    image=quote.image,
+                    title=quote.title,
+                    quote=quote.quote,
+                )
+            ]
+        return new_modules
+
+
+class TextImageProcessor(ModuleReplaceProcessor):
+    def prepare_new_modules(self):
+        # TODO
+        return []
+        # TextModule = self.apps.get_model("xprez", "TextModule")
+        # GalleryModule = self.apps.get_model("xprez", "GalleryModule")
+
+        # return [
+        #     self.new_module(text=self.old_content.text, image=self.old_content.image)
+        # ]
+
+
+class GalleryProcessor(SimpleModuleProcessor):
+    def process(self):
+        super().process()
+        print("TODO: process gallery")
+
+
+class ModuleSymlinkProcessor(SimpleModuleProcessor):
+    def process(self):
+        super().process()
+        print("TODO: process module symlink")
+
+
+class UnknownModuleProcessor(ModuleProcessorBase):
+    def process(self):
+        print("TODO: unknown module", self.module_base.content_type)
+
+
+PROCESSORS = {
+    "xprez.CkEditor": CkEditorProcessor,
+    "xprez.MediumEditor": MediumEditorProcessor,
+    "xprez.GridBoxes": GridboxesProcessor,
+    "xprez.QuoteContent": QuotesProcessor,
+    "xprez.TextImage": TextImageProcessor,
+    "xprez.GalleryModule": GalleryProcessor,
+    "xprez.VideoModule": SimpleModuleProcessor,
+    "xprez.CodeInputModule": SimpleModuleProcessor,
+    "xprez.NumbersModule": SimpleModuleProcessor,
+    "xprez.CodeTemplateModule": SimpleModuleProcessor,
+    "xprez.DownloadsModule": SimpleModuleProcessor,
+    "xprez.ModuleSymlink": ModuleSymlinkProcessor,
+}
+
+
+def process_modules(apps, schema_editor):
+    Module = apps.get_model("xprez", "Module")
+    for module_base in Module.objects.all():
+        processor = PROCESSORS.get(module_base.content_type, UnknownModuleProcessor)(
+            apps, module_base
+        )
+        processor.process()
 
 
 class Migration(migrations.Migration):
@@ -135,30 +281,27 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             migrate_containers_sections_modules, migrations.RunPython.noop
         ),
-        migrations.RunPython(reorganize_modules, migrations.RunPython.noop),
-        migrations.RenameModel(old_name="QuoteContent", new_name="QuotesModule"),
-        ContentToModule(model_name="QuotesModule"),
-        migrations.RenameModel(old_name="Quote", new_name="QuotesItem"),
+        migrations.RenameModel(old_name="Gallery", new_name="GalleryModule"),
+        ContentToModule(model_name="GalleryModule"),
+        migrations.RenameModel(old_name="Photo", new_name="GalleryItem"),
         migrations.RenameField(
-            model_name="QuotesItem", old_name="content", new_name="module"
+            model_name="GalleryItem", old_name="gallery", new_name="module"
         ),
-        migrations.AlterModelOptions(
-            name="QuotesItem",
-            options={"ordering": ("module", "id")},
-        ),
-        migrations.RenameModel(old_name="Gallery", new_name="ImagesModule"),
-        ContentToModule(model_name="ImagesModule"),
-        migrations.RenameModel(old_name="Photo", new_name="Image"),
         migrations.RenameField(
-            model_name="Image", old_name="gallery", new_name="module"
+            model_name="GalleryItem", old_name="image", new_name="file"
         ),
         migrations.AlterField(
-            model_name="image",
+            model_name="GalleryItem",
+            name="file",
+            field=models.ImageField(upload_to="gallery"),
+        ),
+        migrations.AlterField(
+            model_name="GalleryItem",
             name="module",
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
-                related_name="images",
-                to="xprez.imagesmodule",
+                related_name="items",
+                to="xprez.GalleryModule",
             ),
         ),
         migrations.RenameModel(old_name="Video", new_name="VideoModule"),
@@ -171,25 +314,34 @@ class Migration(migrations.Migration):
         migrations.RenameField(
             model_name="NumbersItem", old_name="content", new_name="module"
         ),
+        migrations.AlterField(
+            model_name="numbersitem",
+            name="module",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="items",
+                to="xprez.numbersmodule",
+            ),
+        ),
         migrations.AlterModelOptions(
             name="NumbersItem",
             options={"ordering": ("module", "id")},
         ),
         migrations.RenameModel(old_name="CodeTemplate", new_name="CodeTemplateModule"),
         ContentToModule(model_name="CodeTemplateModule"),
-        migrations.RenameModel(old_name="DownloadContent", new_name="DownloadModule"),
-        ContentToModule(model_name="DownloadModule"),
-        migrations.RenameModel(old_name="Attachment", new_name="DownloadItem"),
+        migrations.RenameModel(old_name="DownloadContent", new_name="DownloadsModule"),
+        ContentToModule(model_name="DownloadsModule"),
+        migrations.RenameModel(old_name="Attachment", new_name="DownloadsItem"),
         migrations.RenameField(
-            model_name="DownloadItem", old_name="content", new_name="module"
+            model_name="DownloadsItem", old_name="content", new_name="module"
         ),
         migrations.AlterField(
-            model_name="downloaditem",
+            model_name="DownloadsItem",
             name="module",
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
-                related_name="download_items",
-                to="xprez.downloadmodule",
+                related_name="items",
+                to="xprez.DownloadsModule",
             ),
         ),
         migrations.RenameModel(old_name="ContentSymlink", new_name="ModuleSymlink"),
@@ -202,8 +354,9 @@ class Migration(migrations.Migration):
                 null=True,
                 on_delete=django.db.models.deletion.SET_NULL,
                 related_name="symlinked_module_set",
-                to="xprez.module",
+                to="xprez.Module",
             ),
         ),
         migrations.RunPython(rename_content_types, migrations.RunPython.noop),
+        migrations.RunPython(process_modules, migrations.RunPython.noop),
     ]

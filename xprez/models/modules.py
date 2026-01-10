@@ -3,10 +3,8 @@ from os import makedirs, path
 
 from django.conf import settings as django_settings
 from django.db import models
-from django.db.models import JSONField
 from django.http import JsonResponse
 from django.template import TemplateDoesNotExist
-from django.template.defaultfilters import striptags
 from django.template.loader import get_template
 from django.urls import re_path
 from django.utils.decorators import method_decorator
@@ -19,10 +17,10 @@ from xprez.ck_editor.widgets import CkEditorWidget
 from xprez.conf import settings
 from xprez.models.base import (
     CLIPBOARD_TEXT_MAX_LENGTH,
-    AjaxUploadFormsetModule,
-    FormsetModule,
     Module,
-    ModuleItem,
+    MultiModule,
+    MultiModuleItem,
+    UploadMultiModule,
 )
 from xprez.utils import random_string, truncate_with_ellipsis
 
@@ -160,7 +158,7 @@ class QuoteModule(Module):
 #         ordering = ("module", "id")
 
 
-class GalleryModule(AjaxUploadFormsetModule):
+class GalleryModule(UploadMultiModule):
     COLUMNS_CHOICES = (
         (1, "1"),
         (2, "2"),
@@ -170,12 +168,12 @@ class GalleryModule(AjaxUploadFormsetModule):
         (8, "8"),
     )
 
-    form_class = "xprez.admin.forms.ImagesModuleForm"
-    admin_template_name = "xprez/admin/modules/images/images.html"
-    admin_formset_item_template_name = "xprez/admin/modules/images/image.html"
-    front_template_name = "xprez/modules/images.html"
-    icon_template_name = "xprez/admin/icons/modules/images.html"
-    formset_factory = "xprez.admin.forms.ImageFormSet"
+    form_class = "xprez.admin.forms.GalleryModuleForm"
+    admin_template_name = "xprez/admin/modules/gallery/gallery.html"
+    admin_formset_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"
+    front_template_name = "xprez/modules/gallery.html"
+    icon_template_name = "xprez/admin/icons/modules/gallery.html"
+    formset_factory = "xprez.admin.forms.GalleryItemFormSet"
 
     width = models.CharField(
         max_length=50, choices=Module.SIZE_CHOICES, default=Module.SIZE_FULL
@@ -185,13 +183,13 @@ class GalleryModule(AjaxUploadFormsetModule):
     crop = models.BooleanField(default=False)
 
     def get_formset_queryset(self):
-        return self.photos.all()
+        return self.items.all()
 
     def save_admin_form(self, request):
         super().save_admin_form(request)
-        for index, photo in enumerate(self.photos.all()):
-            photo.position = index
-            photo.save()
+        for index, item in enumerate(self.items.all()):
+            item.position = index
+            item.save()
 
     class Meta:
         verbose_name = "Gallery / Image"
@@ -204,7 +202,7 @@ class GalleryModule(AjaxUploadFormsetModule):
         return self.photos.all().count()
 
 
-class GalleryItem(ModuleItem):
+class GalleryItem(MultiModuleItem):
     module = models.ForeignKey(
         GalleryModule, related_name="items", on_delete=models.CASCADE
     )
@@ -272,7 +270,7 @@ class CodeInputModule(Module):
         return self.code
 
 
-class NumbersModule(FormsetModule):
+class NumbersModule(MultiModule):
     admin_template_name = "xprez/admin/modules/numbers.html"
     front_template_name = "xprez/modules/numbers.html"
     icon_template_name = "xprez/admin/icons/modules/numbers.html"
@@ -296,9 +294,9 @@ class NumbersModule(FormsetModule):
         )
 
 
-class NumbersItem(ModuleItem):
+class NumbersItem(MultiModuleItem):
     module = models.ForeignKey(
-        NumbersModule, related_name="numbers", on_delete=models.CASCADE
+        NumbersModule, related_name="items", on_delete=models.CASCADE
     )
     number = models.IntegerField(null=True, blank=True)
     suffix = models.CharField(max_length=10, null=True, blank=True)
@@ -311,11 +309,24 @@ class NumbersItem(ModuleItem):
 class CodeTemplateModule(Module):
     admin_template_name = "xprez/admin/modules/code_template.html"
     icon_template_name = "xprez/admin/icons/modules/code_template.html"
-    form_class = "xprez.admin.forms.CodeTemplateForm"
+    form_class = "xprez.admin.forms.CodeTemplateModuleForm"
+
+    @staticmethod
+    def get_template_dir():
+        if settings.XPREZ_CODE_TEMPLATES_DIR:
+            return settings.XPREZ_CODE_TEMPLATES_DIR
+
+        # Try TEMPLATES DIRS as fallback
+        for engine in settings.TEMPLATES:
+            if engine.get("DIRS"):
+                return engine["DIRS"][0]
+
+        return ""
 
     template_name = TemplatePathField(
-        template_dir=settings.XPREZ_CODE_TEMPLATES_DIR,
+        template_dir=get_template_dir(),
         prefix=settings.XPREZ_CODE_TEMPLATES_PREFIX,
+        match=r"^(?!\.).+",
         max_length=255,
         null=True,
         blank=True,
@@ -332,7 +343,7 @@ class CodeTemplateModule(Module):
             return ""
 
 
-class DownloadsModule(AjaxUploadFormsetModule):
+class DownloadsModule(UploadMultiModule):
     admin_template_name = "xprez/admin/modules/download/download.html"
     front_template_name = "xprez/modules/download.html"
     admin_formset_item_template_name = "xprez/admin/modules/download/download_item.html"
@@ -352,7 +363,7 @@ class DownloadsModule(AjaxUploadFormsetModule):
         return self.attachments.all().count()
 
 
-class DownloadsItem(ModuleItem):
+class DownloadsItem(MultiModuleItem):
     module = models.ForeignKey(
         DownloadsModule, related_name="items", on_delete=models.CASCADE
     )

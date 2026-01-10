@@ -1,7 +1,7 @@
 from django.apps import apps
 from django.contrib import admin
 
-from xprez import module_manager, settings
+from xprez import module_registry, settings
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
 from xprez.admin.views.modules import XprezAdminViewsModulesMixin
 
@@ -46,13 +46,12 @@ class XprezModelFormMixin(object):
     def is_multipart(self):
         return True
 
-    def xprez_get_allowed_modules(self):
-        return self.xprez_admin.xprez_get_allowed_modules(container=self.instance)
+    def xprez_get_available_modules(self):
+        return self.xprez_admin.xprez_get_available_modules(container=self.instance)
 
 
 class XprezAdminMixin(XprezAdminViewsModulesMixin, XprezAdminViewsClipboardMixin):
-    allowed_modules = settings.XPREZ_DEFAULT_ALLOWED_MODULES
-    excluded_modules = settings.XPREZ_DEFAULT_EXCLUDED_MODULES
+    available_modules = settings.XPREZ_DEFAULT_AVAILABLE_MODULES
 
     xprez_breakpoints = settings.XPREZ_BREAKPOINTS
     xprez_default_breakpoint = settings.XPREZ_DEFAULT_BREAKPOINT
@@ -66,16 +65,10 @@ class XprezAdminMixin(XprezAdminViewsModulesMixin, XprezAdminViewsClipboardMixin
         return Form
 
     def xprez_admin_media(self):
-        return module_manager.admin_media()
+        return module_registry.admin_media()
 
-    # def xprez_get_allowed_module_content_types(self, container):
-    #     return [m.__name__.lower() for m in self.xprez_get_allowed_modules(container)]
-
-    def xprez_get_allowed_modules(self, container):
-        return module_manager._get_allowed_modules(
-            allowed_modules=self.allowed_modules,
-            excluded_modules=self.excluded_modules,
-        )
+    def xprez_get_available_modules(self, container):
+        return module_registry._get_available_modules(self.available_modules)
 
     xprez_url_namespace = None
 
@@ -92,7 +85,7 @@ class XprezAdminMixin(XprezAdminViewsModulesMixin, XprezAdminViewsClipboardMixin
         urls = []
         urls += XprezAdminViewsModulesMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
-        urls += module_manager.get_urls()
+        urls += module_registry.get_urls()
         return urls
 
     def _get_container_instance(self, request, object_pk):

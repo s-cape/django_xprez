@@ -1,0 +1,27 @@
+{% extends 'xprez/modules/base.html' %}
+{% load thumbnail xprez static %}
+
+{% block css_class_extra %}xprez-quote {# {% if module.box %}xprez-quote-boxed{% endif %} #}{% endblock %}
+
+{% block content %}
+    <div class="xprez-quote-box">
+            <div class="xprez-quote__item">
+                <div class="xprez-quote__avatar">
+                    {% if module.image %}
+                        {% thumbnail module.image "210x210" format="WEBP" quality=80 crop="25%" as thumb %}
+                            <img src="{{ thumb.url|build_absolute_uri }}" class="xprez-qoute__img"/>
+                        {% endthumbnail %}
+                    {% else %}
+                        {% static "xprez/img/avatar.svg" as avatar_url %}
+                        <img src="{{ avatar_url|build_absolute_uri }}" class="xprez-qoute__img"/>
+                    {% endif %}
+                    <div class="xprez-quote__name">{{ module.name }}</div>
+                    <div class="xprez-quote__job-title">{{ module.job_title }}</div>
+                </div>
+                <div class="xprez-quote__quote">
+                    {% if module.title %}<h4>{{ module.title }}</h4>{% endif %}
+                    <p>{{ module.quote }}</p>
+                </div>
+            </div>
+    </div>
+{% endblock %}

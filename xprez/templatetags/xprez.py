@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django import template
 from django.forms import Media
 
-from .. import module_manager, settings
+from .. import module_registry, settings
 from ..utils import build_absolute_uri as _build_absolute_uri
 
 register = template.Library()
@@ -40,7 +40,7 @@ def xprez_front_media(modules=None):
     else:
         modules = {module.content_type for module in modules}
 
-    return str(PrefixableMedia.from_media(module_manager.front_media(modules=modules)))
+    return str(PrefixableMedia.from_media(module_registry.front_media(modules=modules)))
 
 
 @register.simple_tag(takes_context=True)
@@ -56,11 +56,6 @@ def xprez_section_render_front(context, section):
 @register.simple_tag(takes_context=True)
 def xprez_module_render_front(context, module):
     return module.polymorph().render_front(context.flatten())
-
-
-@register.inclusion_tag("xprez/includes/medium_image.html", takes_context=True)
-def medium_module_image(context, url, align, width, height, caption=None):
-    return _editor_module_image(context, url, align, width, height, caption=caption)
 
 
 @register.inclusion_tag("xprez/includes/ckeditor_image.html", takes_context=True)

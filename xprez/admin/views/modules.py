@@ -1,13 +1,13 @@
 from django.http import HttpResponse, JsonResponse
 from django.urls import path
 
-from xprez import models, module_manager
+from xprez import models, module_registry
 
 
 class XprezAdminViewsModulesMixin(object):
     def xprez_add_view(self, request, content_type, container_pk, section_pk=None):
         """Adds a module. Create a section+module if section_pk is not provided."""
-        module_class = module_manager.get(content_type)
+        module_class = module_registry.get(content_type)
         container = self._get_container_instance(request, container_pk)
         if section_pk is None:
             section = container.sections.create()
