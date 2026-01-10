@@ -1,6 +1,7 @@
 .xprez-content {
     border-radius: var(--x-admin-border-radius-md);
     overflow: hidden;
+    position: relative;
 
     &[data-mode="edit"],
     &[data-mode="select"] {

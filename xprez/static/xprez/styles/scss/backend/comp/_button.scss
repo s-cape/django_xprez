@@ -40,6 +40,16 @@
 			display: none;
 		}
 	}
+
+	&__danger {
+		background: $b-red;
+		color: $white;
+
+		&:hover {
+			background: darken($b-red, 4%);
+			color: $white;
+		}
+	}
 }
 
 .xprez-btn-light {

@@ -18,30 +18,6 @@
     [data-component="xprez-section"][data-collapsed] .xprez-section__footer {
         display: none;
     }
-    [data-component="xprez-section"] [data-component="xprez-section-delete-info"] {
-        display: none;
-    }
-    [data-component="xprez-section"][data-mode="delete"] {
-        border: 1px solid red;
-    }
-    [data-component="xprez-section"][data-mode="delete"] > * {
-        display: none;
-    }
-    [data-component="xprez-section"][data-mode="delete"] [data-component="xprez-section-delete-info"] {
-        display: block;
-    }
-    [data-component="xprez-content"] [data-component="xprez-content-delete-info"] {
-        display: none;
-    }
-    [data-component="xprez-content"][data-mode="delete"] {
-        border: 1px solid red;
-    }
-    [data-component="xprez-content"][data-mode="delete"] > * {
-        display: none;
-    }
-    [data-component="xprez-content"][data-mode="delete"] [data-component="xprez-content-delete-info"] {
-        display: block;
-    }
 
     [data-component="xprez-section-config"][data-mode="delete"] {
         border: 1px solid red;
@@ -55,6 +31,7 @@
     [data-component="xprez-section-config"][data-mode="delete"] [data-component="xprez-section-config-delete-info"] {
         display: block;
     }
+
 
     .sortable-ghost {
         opacity: 0.4;
@@ -116,7 +93,7 @@
         {% endfor %}
     </div>
 
-    {% include "./dev/section.html" %}
+    {% comment %} {% include "./dev/section.html" %} {% endcomment %}
 
     {% with allowed_contents=form.xprez_get_allowed_contents %}
         {% if allowed_contents %}

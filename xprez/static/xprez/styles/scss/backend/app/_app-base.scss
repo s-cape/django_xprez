@@ -1,5 +1,7 @@
 // GENERAL LAYOUT
 .xprez {
+	color: var(--x-admin-color);
+	background: var(--x-admin-bg);
 	box-sizing: border-box;
 	font-family: $admin-ui-font-family;
 	font-size: $admin-ui-font-size;
