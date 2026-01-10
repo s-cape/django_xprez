@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from example_app.models import Page
-from xprez.models import CkEditor, Section
+from xprez.models import Section, TextModule
 
 
 class SmokeTest(TestCase):
@@ -15,7 +15,7 @@ class SmokeTest(TestCase):
 
         page = Page.objects.create(title="Test Page", slug="test-page")
         section = Section.objects.create(container=page, saved=True)
-        CkEditor.objects.create(
+        TextModule.objects.create(
             section=section, text="<p>Test Module</p>", position=0, saved=True
         )
 
