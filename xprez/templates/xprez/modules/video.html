@@ -1,4 +1,4 @@
-{% extends 'xprez/modules/base.html' %}
+{% extends "xprez/modules/base.html" %}
 {% load thumbnail xprez %}
 
 {% block css_class_extra %}xprez-video {{ module.width }}-width {% if module.poster_image %}js-video-with-poster{% endif %}{% endblock %}
@@ -41,9 +41,9 @@
             width="560" height="315"
             frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
             allow="autoplay"
-            {% if module.video_type == 'youtube' %}
+            {% if module.video_type == "youtube" %}
                 class="js-youtube" src="https://www.youtube.com/embed/{{ module.video_id }}?enablejsapi=1"
-            {% elif module.video_type == 'vimeo' %}
+            {% elif module.video_type == "vimeo" %}
                 class="js-vimeo" src="https://player.vimeo.com/video/{{ module.video_id }}?color=ffffff&portrait=0&badge=0&api=1"
             {% endif %}
         ></iframe>

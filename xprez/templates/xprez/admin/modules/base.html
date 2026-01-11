@@ -54,7 +54,7 @@
                     {% endif %}
                     {% block main_fields %}
                         {% for field in module.admin_form.get_main_fields %}
-                            {% include 'xprez/admin/form/row.html' with field=field %}
+                            {% include "xprez/admin/form/row.html" with field=field %}
                         {% endfor %}
                     {% endblock %}
                 </div>

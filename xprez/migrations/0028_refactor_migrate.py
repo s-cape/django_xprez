@@ -5,6 +5,7 @@ from django.core.management.color import no_style
 from django.db import migrations, models
 from django.utils import timezone
 
+import xprez.admin.fields
 from xprez.conf import settings
 from xprez.migrations._operations import ContentToModule
 
@@ -329,6 +330,13 @@ class Migration(migrations.Migration):
         ),
         migrations.RenameModel(old_name="CodeTemplate", new_name="CodeTemplateModule"),
         ContentToModule(model_name="CodeTemplateModule"),
+        migrations.AlterField(
+            model_name="codetemplatemodule",
+            name="template_name",
+            field=xprez.admin.fields.TemplatePathField(
+                blank=True, match="^(?!\\.).+", max_length=255, null=True
+            ),
+        ),
         migrations.RenameModel(old_name="DownloadContent", new_name="DownloadsModule"),
         ContentToModule(model_name="DownloadsModule"),
         migrations.RenameModel(old_name="Attachment", new_name="DownloadsItem"),

@@ -161,6 +161,36 @@ class Migration(migrations.Migration):
             bases=("xprez.module",),
         ),
         migrations.CreateModel(
+            name="SectionSymlink",
+            fields=[
+                (
+                    "module_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.module",
+                    ),
+                ),
+                (
+                    "symlink",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="symlinked_section_set",
+                        to="xprez.section",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Linked section",
+            },
+            bases=("xprez.module",),
+        ),
+        migrations.CreateModel(
             name="SectionConfig",
             fields=[
                 (

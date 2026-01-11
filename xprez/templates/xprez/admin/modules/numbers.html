@@ -1,5 +1,4 @@
-{% extends 'xprez/admin/modules/base.html' %}
-
+{% extends "xprez/admin/modules/base.html" %}
 
 {% block options_class %}hidden{% endblock %}
 
@@ -13,7 +12,9 @@
             {{ form.id }}
             {{ form.DELETE }}
             </span>
-            {% include 'xprez/admin/form/multi_row.html' with field_1=form.number field_2=form.suffix field_3=form.title %}
+            {% include "xprez/admin/form/number.html" with form=form.number %}
+            {% include "xprez/admin/form/number.html" with form=form.suffix %}
+            {% include "xprez/admin/form/number.html" with form=form.title %}
         </div>
     {% endfor %}
 {% endblock %}

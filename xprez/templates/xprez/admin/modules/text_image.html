@@ -1,4 +1,4 @@
-{% extends 'xprez/admin/modules/base.html' %}
+{% extends "xprez/admin/modules/base.html" %}
 {% load thumbnail %}
 
 {% block options %}
@@ -25,7 +25,7 @@
                 {% endif %}
             {% endblock %}
             {% block image_input %}
-                {% include 'xprez/admin/form/row.html' with field=module.admin_form.image %}
+                {% include "xprez/admin/form/row.html" with field=module.admin_form.image %}
             {% endblock %}
         </div>
         <div class="xprez-image-text-text xprez-text-image">

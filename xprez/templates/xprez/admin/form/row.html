@@ -1,15 +1,3 @@
 <div class="xprez-option-row">
     {% include "xprez/admin/form/field.html" %}
 </div>
-
-{% comment %}
-<div class="xprez-form-row">
-    <div class="xprez-cell-label  {% if field.field.required %}xprez-required{% endif %}">
-        {{ field.label_tag }}
-    </div>
-    <div class="xprez-cell {% if field.errors %}error{% endif %}">
-        {{ field }}
-        {% include 'xprez/admin/form/field_errors.html' %}
-    </div>
-</div>
-{% endcomment %}

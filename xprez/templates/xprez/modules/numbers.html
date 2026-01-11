@@ -1,4 +1,4 @@
-{% extends 'xprez/modules/base.html' %}
+{% extends "xprez/modules/base.html" %}
 {% load i18n %}
 
 {% load humanize xprez %}
@@ -10,7 +10,7 @@
         {% if number.number %}
         <div class="xprez-number-item js-number-container">
             <div class="xprez-number">
-                {% language 'en' %}
+                {% language "en" %}
                 {# When localization is eg. cs, intcomma puts &nbsp which results in jquery.counterUp failure #}
             	<span class="xprez-number-digits js-counter-up">{{ number.number|intcomma}}</span>{% if number.suffix %}<span class="xprez-number-suffix">{{ number.suffix }}</span>{% endif %}
                 {% endlanguage %}

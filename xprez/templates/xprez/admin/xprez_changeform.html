@@ -5,10 +5,10 @@
 {% block inline_field_sets %}
     {{ block.super }}
     {% if adminform.form.instance.pk %}
-        {% include 'xprez/admin/xprez.html' with form=adminform.form %}
+        {% include "xprez/admin/xprez.html" with form=adminform.form %}
     {% else %}
         <div class="xprez text-center">
-            <input type="submit" name="_continue" class="btn btn-high btn-info btn-large" value="{% trans 'Save and continue editing' %}"/>
+            <input type="submit" name="_continue" class="btn btn-high btn-info btn-large" value="{% trans "Save and continue editing" %}"/>
         </div>
     {% endif %}
 {% endblock %}
