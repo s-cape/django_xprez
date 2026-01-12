@@ -1,0 +1,14 @@
+<div class="xprez-form-table">
+	<div class="js-item xprez-form-row" data-number="{{ number }}">
+		<div class="xprez-cell-label">
+			<label >File description:</label>
+		</div>
+		<div class="xprez-cell">
+			<input type="text" value="" class="js-text_controller" data-formfield_selector="#id_downloadcontents-{{ module.pk }}-{{ number }}-name" placeholder="{{ item.get_default_file_name }}" />
+			<span class="xprez-icon-btn-remove js-checkbox_controller" data-formfield_selector="#id_downloadcontents-{{ module.pk }}-{{ number }}-DELETE"></span>
+			<br>
+			
+			<div class="xprez-cell-info"><a href="{{ item.file.url }}" target="_blank" class="xprez-">{{ item.file.name }}</a></div>
+		</div>
+	</div>
+</div>

@@ -10,7 +10,7 @@ env/
 venv/
 build/
 develop-eggs/
-downloads/
+# downloads/
 eggs/
 lib/
 lib64/
