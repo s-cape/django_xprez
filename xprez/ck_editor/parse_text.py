@@ -55,7 +55,7 @@ def _replace_wrapper_with_templatetag(wrapper, img, request):
         link_new_window = False
 
     wrapper.replaceWith(
-        '{%% ckeditor_content_image "%s" "%s" %s %s caption="%s" alt_text="%s" link_url="%s" link_new_window=%s %%}'
+        '{%% ckeditor_image "%s" "%s" %s %s caption="%s" alt_text="%s" link_url="%s" link_new_window=%s %%}'
         % (
             src,
             align,

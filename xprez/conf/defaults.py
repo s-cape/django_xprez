@@ -9,9 +9,9 @@ XPREZ_TEXT_IMAGE_MODULE_WIDGET = (
 XPREZ_MODULES_AUTOREGISTER = True
 XPREZ_MODULES_AUTOREGISTER_BUILTINS = [
     "xprez.TextModule",
-    "xprez.QuotesModule",
-    "xprez.ImagesModule",
-    "xprez.DownloadModule",
+    "xprez.QuoteModule",
+    "xprez.GalleryModule",
+    "xprez.DownloadsModule",
     "xprez.VideoModule",
     "xprez.NumbersModule",
     "xprez.CodeInputModule",
