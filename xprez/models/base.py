@@ -112,23 +112,27 @@ class Module(models.Model):
         return self._meta.verbose_name.title()
 
     @classmethod
-    def identifier(cls):
-        return cls._meta.model_name
-
-    @classmethod
     def class_content_type(cls):
         return class_content_type(cls)
+
+    @classmethod
+    def class_content_type_underscore(cls):
+        return cls.class_content_type().replace(".", "_")
+
+    @classmethod
+    def model_name(cls):
+        return cls._meta.model_name
 
     @property
     def admin_template_name(self):
         return [
-            "xprez/admin/modules/{}.html".format(self.identifier()),
+            "xprez/admin/modules/{}.html".format(self.model_name()),
             "xprez/admin/modules/base.html",
         ]
 
     @property
     def front_template_name(self):
-        return "xprez/modules/{}.html".format(self.identifier())
+        return "xprez/modules/{}.html".format(self.model_name())
 
     def polymorph(self):
         app_label, object_name = self.content_type.split(".")
@@ -245,7 +249,7 @@ class Module(models.Model):
     @classproperty
     def icon_template_name(cls):
         return [
-            "xprez/admin/icons/modules/{}.html".format(cls.identifier()),
+            "xprez/admin/icons/modules/{}.html".format(cls.model_name()),
             "xprez/admin/icons/modules/default.html",
         ]
 
@@ -276,7 +280,7 @@ class MultiModule(Module):
             queryset=self.get_formset_queryset(),
             data=data,
             files=files,
-            prefix="{}s-{}".format(self.identifier(), self.pk),
+            prefix="{}s-{}".format(self.class_content_type_underscore(), self.pk),
         )
 
     def save_admin_form(self, request):
@@ -358,7 +362,7 @@ class UploadMultiModule(MultiModule):
             item_formset = FormSet(
                 instance=module,
                 queryset=queryset,
-                prefix="{}s-{}".format(cls.identifier(), module.pk),
+                prefix="{}s-{}".format(cls.class_content_type_underscore(), module.pk),
             )
             item_form = item_formset.forms[-1]
             return JsonResponse(
