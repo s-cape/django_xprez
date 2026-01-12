@@ -76,8 +76,8 @@ RENAMES = {
     "Gallery": "GalleryModule",
     "CodeInput": "CodeInputModule",
     "CodeTemplate": "CodeTemplateModule",
-    "Download": "DownloadsModule",
-    "Numbers": "NumbersModule",
+    "DownloadContent": "DownloadsModule",
+    "NumbersContent": "NumbersModule",
     "Video": "VideoModule",
 }
 
@@ -237,6 +237,10 @@ class GalleryProcessor(SimpleModuleProcessor):
         print("TODO: process gallery")
 
 
+class DownloadModuleProcessor(SimpleModuleProcessor):
+    pass
+
+
 class ModuleSymlinkProcessor(SimpleModuleProcessor):
     def process(self):
         super().process()
@@ -259,7 +263,7 @@ PROCESSORS = {
     "xprez.CodeInputModule": SimpleModuleProcessor,
     "xprez.NumbersModule": SimpleModuleProcessor,
     "xprez.CodeTemplateModule": SimpleModuleProcessor,
-    "xprez.DownloadsModule": SimpleModuleProcessor,
+    "xprez.DownloadsModule": DownloadModuleProcessor,
     "xprez.ModuleSymlink": ModuleSymlinkProcessor,
 }
 

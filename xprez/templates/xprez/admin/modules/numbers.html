@@ -12,9 +12,9 @@
             {{ form.id }}
             {{ form.DELETE }}
             </span>
-            {% include "xprez/admin/form/number.html" with form=form.number %}
-            {% include "xprez/admin/form/number.html" with form=form.suffix %}
-            {% include "xprez/admin/form/number.html" with form=form.title %}
+            {% include "xprez/admin/form/row.html" with field=form.number %}
+            {% include "xprez/admin/form/row.html" with field=form.suffix %}
+            {% include "xprez/admin/form/row.html" with field=form.title %}
         </div>
     {% endfor %}
 {% endblock %}

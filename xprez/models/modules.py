@@ -126,37 +126,6 @@ class QuoteModule(Module):
     class Meta:
         verbose_name = "Quote"
 
-    # title = models.CharField(max_length=255, null=True, blank=True)
-    # box = models.BooleanField(default=False)
-
-    # display_two = models.BooleanField(default=False)
-
-    # def get_formset_queryset(self):
-    #     return self.quotes.all()
-
-    # def show_front(self):
-    #     quotes = self.quotes.all()
-    #     if len(quotes) == 0:
-    #         return False
-    #     quote = quotes.first()
-    #     if not quote.name or not quote.quote:
-    #         return False
-    #     return True
-
-
-# class QuotesItem(ModuleItem):
-#     module = models.ForeignKey(
-#         QuotesModule, related_name="quotes", on_delete=models.CASCADE
-#     )
-#     name = models.CharField(max_length=255)
-#     job_title = models.CharField(max_length=255)
-#     image = models.ImageField(upload_to="quotes", null=True, blank=True)
-#     title = models.CharField(max_length=255, null=True, blank=True)
-#     quote = models.TextField()
-
-#     class Meta:
-#         ordering = ("module", "id")
-
 
 class GalleryModule(UploadMultiModule):
     COLUMNS_CHOICES = (
@@ -182,9 +151,6 @@ class GalleryModule(UploadMultiModule):
     divided = models.BooleanField(default=False)
     crop = models.BooleanField(default=False)
 
-    def get_formset_queryset(self):
-        return self.items.all()
-
     def save_admin_form(self, request):
         super().save_admin_form(request)
         for index, item in enumerate(self.items.all()):
@@ -198,8 +164,11 @@ class GalleryModule(UploadMultiModule):
         js = PHOTOSWIPE_JS
         css = PHOTOSWIPE_CSS
 
-    def show_front(self):
-        return self.photos.all().count()
+    def render_front(self, context):
+        if self.items.all().exists():
+            return super().render_front(context)
+        else:
+            return ""
 
 
 class GalleryItem(MultiModuleItem):
@@ -247,8 +216,11 @@ class VideoModule(Module):
         inst.video_id = self.admin_form.video_id
         inst.save()
 
-    def show_front(self):
-        return self.url
+    def render_front(self, context):
+        if self.url:
+            return super().render_front(context)
+        else:
+            return ""
 
     class FrontMedia:
         js = (
@@ -275,13 +247,7 @@ class NumbersModule(MultiModule):
     front_template_name = "xprez/modules/numbers.html"
     icon_template_name = "xprez/admin/icons/modules/numbers.html"
     form_class = "xprez.admin.forms.NumbersModuleForm"
-    formset_factory = "xprez.admin.forms.NumberFormSet"
-
-    def get_formset_queryset(self):
-        return self.numbers.all()
-
-    def show_front(self):
-        return self.numbers.all().count()
+    formset_factory = "xprez.admin.forms.NumbersItemFormSet"
 
     class Meta:
         verbose_name = "Numbers"
@@ -350,19 +316,19 @@ class DownloadsModule(UploadMultiModule):
         "xprez/admin/modules/downloads/downloads_item.html"
     )
     icon_template_name = "xprez/admin/icons/modules/downloads.html"
-    form_class = "xprez.admin.forms.DownloadModuleForm"
-    formset_factory = "xprez.admin.forms.AttachmentFormSet"
+    form_class = "xprez.admin.forms.DownloadsModuleForm"
+    formset_factory = "xprez.admin.forms.DownloadsItemFormSet"
 
     title = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "Files"
 
-    def get_formset_queryset(self):
-        return self.attachments.all()
-
-    def show_front(self):
-        return self.attachments.all().count()
+    def render_front(self, context):
+        if self.items.all().exists():
+            return super().render_front(context)
+        else:
+            return ""
 
 
 class DownloadsItem(MultiModuleItem):

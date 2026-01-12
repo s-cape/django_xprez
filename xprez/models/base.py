@@ -269,8 +269,10 @@ class MultiModule(Module):
 
     formset_factory = NotImplemented
 
+    items_attribute = "items"
+
     def get_formset_queryset(self):
-        raise NotImplementedError()
+        return getattr(self, self.items_attribute).all()
 
     def build_admin_form(self, admin, data=None, files=None):
         super().build_admin_form(admin, data)
