@@ -59,7 +59,7 @@ def xprez_module_render_front(context, module):
 
 
 @register.inclusion_tag("xprez/includes/ckeditor_image.html", takes_context=True)
-def ckeditor_module_image(
+def ckeditor_image(
     context,
     url,
     align,

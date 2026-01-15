@@ -2,7 +2,7 @@ import warnings
 
 from django.apps import apps
 from django.db import models
-from django.db.models import F, Max
+from django.db.models import F
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import re_path
