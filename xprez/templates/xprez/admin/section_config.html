@@ -24,6 +24,7 @@
 
     <div class="xprez-option-group__subtitle">Section</div>
     {% include "xprez/admin/form/row.html" with field=config.admin_form.margin_bottom_choice flex=1 %}
+    {% include "xprez/admin/form/field.html" with field=config.admin_form.margin_bottom_custom suffix=config.MARGIN_CUSTOM_UNITS %}
     
     <div class="xprez-option-group__subtitle">Padding</div>
     <div class="xprez-option-row">

@@ -2,10 +2,11 @@ from django.db import models
 from django.template.loader import render_to_string
 
 from xprez.conf import settings
+from xprez.models.configs import ConfigParentMixin
 from xprez.utils import import_class
 
 
-class Section(models.Model):
+class Section(ConfigParentMixin, models.Model):
     front_template_name = "xprez/section.html"
     admin_template_name = "xprez/admin/section.html"
 
@@ -50,15 +51,18 @@ class Section(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.pk:
-            self.configs.get_or_create(css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT)
+            self.configs.get_or_create(
+                css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
+                defaults=self.configs.model.get_defaults(),
+            )
 
-    def get_form_prefix(self):
+    def get_identifier(self):
         return "section-" + str(self.pk)
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class("xprez.admin.forms.SectionForm")
         self.admin_form = form_class(
-            instance=self, prefix=self.get_form_prefix(), data=data, files=files
+            instance=self, prefix=self.get_identifier(), data=data, files=files
         )
         self.admin_form.xprez_admin = admin
         self.admin_form.xprez_modules_all_valid = None
@@ -121,11 +125,6 @@ class Section(models.Model):
         if not hasattr(self, "_modules"):
             self._modules = list(self.modules.filter(saved=True))
         return self._modules
-
-    def get_configs(self):
-        if not hasattr(self, "_configs"):
-            self._configs = self.configs.filter(visible=True)
-        return self._configs
 
     def render_front(self, context):
         context["section"] = self

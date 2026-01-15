@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from xprez import module_registry, settings
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
-from xprez.admin.views.modules import XprezAdminViewsModulesMixin
+from xprez.admin.views.content import XprezAdminViewsContentMixin
 
 
 class XprezModelFormMixin(object):
@@ -50,7 +50,7 @@ class XprezModelFormMixin(object):
         return self.xprez_admin.xprez_get_available_modules(container=self.instance)
 
 
-class XprezAdminMixin(XprezAdminViewsModulesMixin, XprezAdminViewsClipboardMixin):
+class XprezAdminMixin(XprezAdminViewsContentMixin, XprezAdminViewsClipboardMixin):
     available_modules = settings.XPREZ_DEFAULT_AVAILABLE_MODULES
 
     xprez_breakpoints = settings.XPREZ_BREAKPOINTS
@@ -83,7 +83,7 @@ class XprezAdminMixin(XprezAdminViewsModulesMixin, XprezAdminViewsClipboardMixin
 
     def xprez_admin_urls(self):
         urls = []
-        urls += XprezAdminViewsModulesMixin.xprez_admin_urls(self)
+        urls += XprezAdminViewsContentMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
         urls += module_registry.get_urls()
         return urls

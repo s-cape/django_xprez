@@ -47,4 +47,4 @@ class CodeTemplateModule(Module):
 class CodeTemplateModuleForm(BaseModuleForm):
     class Meta:
         model = CodeTemplateModule
-        fields = ("template_name",) + BaseModuleForm.base_module_fields
+        fields = "__all__"

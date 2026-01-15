@@ -1,0 +1,66 @@
+CUSTOM = "custom"
+
+# Margin
+MARGIN_FULL = "full"
+MARGIN_MEDIUM = "medium"
+MARGIN_SMALL = "small"
+MARGIN_CUSTOM = CUSTOM
+MARGIN_CUSTOM_UNITS = "px"
+MARGIN_CHOICES = (
+    (MARGIN_FULL, "Full"),
+    (MARGIN_MEDIUM, "Medium"),
+    (MARGIN_SMALL, "Small"),
+    (MARGIN_CUSTOM, "Custom"),
+)
+
+# Padding
+PADDING_NONE = "none"
+PADDING_SMALL = "small"
+PADDING_MEDIUM = "medium"
+PADDING_LARGE = "large"
+PADDING_CUSTOM = CUSTOM
+PADDING_CUSTOM_UNITS = "px"
+PADDING_CHOICES = (
+    (PADDING_NONE, "None"),
+    (PADDING_SMALL, "Small"),
+    (PADDING_MEDIUM, "Medium"),
+    (PADDING_LARGE, "Large"),
+    (PADDING_CUSTOM, "Custom"),
+)
+
+# Gap
+GAP_FULL = "full"
+GAP_MEDIUM = "medium"
+GAP_SMALL = "small"
+GAP_CUSTOM = CUSTOM
+GAP_CUSTOM_UNITS = "px"
+GAP_CHOICES = (
+    (GAP_FULL, "Full"),
+    (GAP_MEDIUM, "Medium"),
+    (GAP_SMALL, "Small"),
+    (GAP_CUSTOM, "Custom"),
+)
+
+# Vertical align
+VERTICAL_ALIGN_TOP = "top"
+VERTICAL_ALIGN_MIDDLE = "middle"
+VERTICAL_ALIGN_BOTTOM = "bottom"
+VERTICAL_ALIGN_STRETCH = "stretch"
+VERTICAL_ALIGN_CHOICES = (
+    (VERTICAL_ALIGN_TOP, "Top"),
+    (VERTICAL_ALIGN_MIDDLE, "Middle"),
+    (VERTICAL_ALIGN_BOTTOM, "Bottom"),
+    (VERTICAL_ALIGN_STRETCH, "Stretch"),
+)
+
+# Horizontal align
+HORIZONTAL_ALIGN_LEFT = "left"
+HORIZONTAL_ALIGN_CENTER = "center"
+HORIZONTAL_ALIGN_RIGHT = "right"
+HORIZONTAL_ALIGN_STRETCH = "stretch"
+HORIZONTAL_ALIGN_CHOICES = (
+    (HORIZONTAL_ALIGN_LEFT, "Left"),
+    (HORIZONTAL_ALIGN_CENTER, "Center"),
+    (HORIZONTAL_ALIGN_RIGHT, "Right"),
+    (HORIZONTAL_ALIGN_STRETCH, "Stretch"),
+)

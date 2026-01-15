@@ -64,7 +64,7 @@
                 <select class="xprez-option__select" id="view" data-component="xprez-view-select">
                     <option value="sm">Default edit view</option>
                     {% for id, data in form.xprez_admin.xprez_breakpoints.items %}
-                        <option value="{{ id }}" data-infix="{{ data.infix }}">{{ data.name|safe }}</option>
+                        <option value="{{ id }}">{{ data.name|safe }}</option>
                     {% endfor %}
                 </select>
             </span>

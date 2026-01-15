@@ -9,12 +9,13 @@ from django.utils.functional import classproperty
 
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.conf import settings
+from xprez.models.configs import ConfigParentMixin
 from xprez.utils import import_class
 
 CLIPBOARD_TEXT_MAX_LENGTH = 100
 
 
-class Module(models.Model):
+class Module(ConfigParentMixin, models.Model):
     """Base module class for content blocks within sections."""
 
     config_model = "xprez.ModuleConfig"
@@ -92,7 +93,7 @@ class Module(models.Model):
 
     @property
     def front_template_name(self):
-        return "xprez/modules/{}.html".format(self.model_name())
+        return "xprez/modules/{}.html".format(self.model_name().removesuffix("module"))
 
     def polymorph(self):
         app_label, object_name = self.content_type.split(".")
@@ -130,18 +131,15 @@ class Module(models.Model):
         return apps.get_model(app_label, model_name)
 
     def get_or_create_config(self, css_breakpoint):
-        config, _created = self.get_config_model().objects.get_or_create(
+        config_model = self.get_config_model()
+        config, _created = config_model.objects.get_or_create(
             module=self,
             css_breakpoint=css_breakpoint,
+            defaults=config_model.get_defaults(self.content_type),
         )
         return config
 
-    def get_configs(self):
-        if not hasattr(self, "_configs"):
-            self._configs = self.get_config_model().objects.filter(module=self)
-        return self._configs
-
-    def get_form_prefix(self):
+    def get_identifier(self):
         return "module-" + str(self.pk)
 
     def get_admin_form_class(self):
@@ -159,7 +157,7 @@ class Module(models.Model):
     def build_admin_form(self, admin, data=None, files=None):
         form_class = self.get_admin_form_class()
         self.admin_form = form_class(
-            instance=self, prefix=self.get_form_prefix(), data=data, files=files
+            instance=self, prefix=self.get_identifier(), data=data, files=files
         )
         self.admin_form.xprez_admin = admin
 
@@ -274,7 +272,7 @@ class MultiModule(Module):
 class MultiModuleItem(models.Model):
     """
     Base class for items within MultiModule modules.
-    Is expected to add `module` attribute as a foreign key to the MultiModule descendant.
+    Expected to add `module` as a FK to the MultiModule descendant.
     """
 
     module_foreign_key = "module"

@@ -4,7 +4,7 @@ from django.urls import path
 from xprez import models, module_registry
 
 
-class XprezAdminViewsModulesMixin(object):
+class XprezAdminViewsContentMixin(object):
     def xprez_add_view(self, request, content_type, container_pk, section_pk=None):
         """Adds a module. Create a section+module if section_pk is not provided."""
         module_class = module_registry.get(content_type)

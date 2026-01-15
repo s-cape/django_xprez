@@ -1,10 +1,7 @@
 {% load xprez %}
-<div class="xprez-section">
-    TODO section configs:
-    {% for config in section.get_configs %}
-        {{ config.css_breakpoint_infix }}
-    {% endfor %}
-
+<div id="#{{ section.get_identifier }}" class="xprez-section">
+    {{ section.render_css }}
+    {{ section.render_css|safe }}
     {% for module in section.get_modules %}
         {% xprez_module_render_front module %}
     {% endfor %}
