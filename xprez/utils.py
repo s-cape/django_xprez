@@ -3,11 +3,14 @@ import random
 from .conf import settings
 
 
-def import_class(cl):
-    d = cl.rfind(".")
-    classname = cl[d + 1 : len(cl)]
-    m = __import__(cl[0:d], globals(), locals(), [classname])
-    return getattr(m, classname)
+def import_class(cls):
+    if isinstance(cls, str):
+        d = cls.rfind(".")
+        classname = cls[d + 1 : len(cls)]
+        m = __import__(cls[0:d], globals(), locals(), [classname])
+        return getattr(m, classname)
+    else:
+        return cls
 
 
 def class_content_type(cls):

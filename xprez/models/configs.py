@@ -1,8 +1,8 @@
 from django.db import models
 from django.template.loader import render_to_string
 
-from ..conf import settings
-from ..utils import import_class
+from xprez.conf import settings
+from xprez.utils import import_class
 
 BREAKPOINT_CHOICES = tuple(
     [(k, v["name"]) for k, v in settings.XPREZ_BREAKPOINTS.items()]
@@ -234,17 +234,3 @@ class ModuleConfig(ConfigBase):
         verbose_name = "Module Config"
         verbose_name_plural = "Module Configs"
         unique_together = ("module", "css_breakpoint")
-
-
-class TextModuleBaseConfig(ModuleConfig):
-    admin_template_name = "xprez/admin/module_configs/text_base.html"
-
-    border = models.BooleanField(default=True)
-    background = models.BooleanField(default=False)
-
-    class Meta:
-        abstract = True
-
-
-class TextModuleConfig(TextModuleBaseConfig):
-    admin_template_name = "xprez/admin/module_configs/text.html"
