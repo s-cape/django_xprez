@@ -4,6 +4,7 @@
 <div
     class="xprez-section"
     data-component="xprez-section"
+    data-mode="{# (empty)/edit/delete #}"
     data-prefix="{{ section.admin_form.prefix }}"
 >
     {% include "./includes/add_list.html" with component_name="xprez-adder-section-before" xprez_admin=section.admin_form.xprez_admin add_list_container=section.container attributes="data-hidden" %}

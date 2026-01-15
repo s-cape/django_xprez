@@ -1,8 +1,8 @@
 {% load static xprez_admin %}
 <div
-    class="xprez-module"
-    data-mode="{# edit #}{# select #}"
+    class="xprez-module {% if module.admin_form.errors %}xprez-module--has-errors{% endif %}"
     data-component="xprez-module"
+    data-mode="{# (empty)/edit/select/delete #}"
     data-prefix="{{ module.admin_form.prefix }}"
     data-js-controller-class="{{ module.js_controller_class }}"
 >
@@ -102,9 +102,11 @@
                         {% endfor %}
                     {% endblock %}
 
-                    {% for config in module.admin_form.xprez_configs %}
-                        {% xprez_module_config_render_admin config %}
-                    {% endfor %}
+                    <div data-component="xprez-module-configs">
+                        {% for config in module.admin_form.xprez_configs %}
+                            {% xprez_module_config_render_admin config %}
+                        {% endfor %}
+                    </div>
                 </div>
             {% endblock %}
         </div>

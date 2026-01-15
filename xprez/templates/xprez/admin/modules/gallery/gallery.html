@@ -1,5 +1,6 @@
 {% extends "xprez/admin/modules/base.html" %}
 
+{% comment %}
 {% block options %}
     <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ module.pk }}-columns">
         <li><span class="xprez-icon-btn-layout_1 js-option" data-formfield_value="1"></span></li>
@@ -24,6 +25,7 @@
         <li><span class="xprez-option-btn js-checkbox_controller" data-formfield_selector="#id_content-{{ module.pk }}-divided">Connected Edges</span></li>
     </ul>
 {% endblock %}
+{% endcomment %}
 
 {% block content %}
     {% block dropzone %}
@@ -36,11 +38,11 @@
     </div>
     {% endblock %}
     {% block items %}
-    <div class="js-item-container" data-module_pk="{{ module.pk }}">
-        {% for item in module.get_formset_queryset %}
-            {% include module.admin_formset_item_template_name with number=forloop.counter0 %}
-        {% endfor %}
-    </div>
+        <div class="js-item-container" data-module_pk="{{ module.pk }}">
+            {% for item in module.get_formset_queryset %}
+                {% include module.admin_formset_item_template_name with number=forloop.counter0 %}
+            {% endfor %}
+        </div>
     {% endblock %}
 
 
@@ -54,7 +56,8 @@
 {% endblock %}
 
 {% block hidden_fields %}
-    {{ module.admin_form }}
+    {{ block.super }}
+    {% comment %} {{ module.admin_form }} {% endcomment %}
     <div class="js-item-formset">
         {{ module.formset }}
     </div>

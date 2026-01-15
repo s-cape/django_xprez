@@ -139,6 +139,13 @@ class QuoteModuleForm(BaseModuleForm):
 
 
 class GalleryModuleForm(BaseModuleForm):
+    options_fields = (
+        "width",
+        "columns",
+        "divided",
+        "crop",
+    ) + BaseModuleForm.options_fields
+
     class Meta:
         model = GalleryModule
         fields = (
