@@ -42,7 +42,7 @@ class CkEditorFileUploadMixin:
             return JsonResponse({"url": django_settings.MEDIA_URL + filename})
 
     @classmethod
-    def get_urls(cls):
+    def get_admin_urls(cls):
         cls_name = cls.__name__.lower()
         return [
             re_path(

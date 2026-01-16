@@ -18,10 +18,6 @@ class CkEditorWidgetBase(forms.widgets.Textarea):
             "ck_editor/libs/ck_editor/ckeditor.js",
             "ck_editor/js/ck_editor_widget.js",
         )
-        # js = tuple(settings.XPREZ_JQUERY_INIT_MEDIA_JS) + (
-        #     "ck_editor/libs/ck_editor/ckeditor.js",
-        #     "ck_editor/js/ck_editor_widget.js",
-        # )
 
     def __init__(self, file_upload_dir=None, attrs=None):
         config = self.get_config(file_upload_dir=None)
@@ -141,10 +137,8 @@ class CkEditorWidgetFull(CkEditorWidgetFullBase):
         )
         config["simpleUpload"] = {
             "uploadUrl": reverse(
-                "xprez:textmodule_file_upload",
-                args=[
-                    file_upload_dir
-                ],  # TODO: replace textcontent_ with the correct content type
+                settings.XPREZ_CK_EDITOR_FILE_UPLOAD_VIEW_NAME,
+                args=[file_upload_dir],
             )
         }
         config["mediaEmbed "] = {"previewsInData": True}

@@ -30,17 +30,14 @@ class PrefixableMedia(Media):
 
 
 @register.simple_tag()
-def xprez_front_media(modules=None):
+def xprez_front_media(container=None):
     """
-    Returns the media required by the modules.
-    If modules is None, returns the media required by all modules.
+    Returns the media required by the container.
+    If container is None, returns the media required by all containers.
     """
-    if modules is None:
-        modules = None
-    else:
-        modules = {module.content_type for module in modules}
-
-    return str(PrefixableMedia.from_media(module_registry.front_media(modules=modules)))
+    return str(
+        PrefixableMedia.from_media(module_registry.front_media(container=container))
+    )
 
 
 @register.simple_tag(takes_context=True)

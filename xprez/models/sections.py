@@ -51,10 +51,14 @@ class Section(ConfigParentMixin, models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.pk:
-            self.configs.get_or_create(
-                css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
-                defaults=self.configs.model.get_defaults(),
-            )
+            self.get_or_create_config(settings.XPREZ_DEFAULT_BREAKPOINT)
+
+    def build_config(self, css_breakpoint):
+        return self.configs.model(
+            section=self,
+            css_breakpoint=css_breakpoint,
+            **settings.XPREZ_SECTION_CONFIG_DEFAULTS,
+        )
 
     def get_identifier(self):
         return "section-" + str(self.pk)

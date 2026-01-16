@@ -81,13 +81,19 @@ class Module(ConfigParentMixin, models.Model):
         return cls.class_content_type().replace(".", "_")
 
     @classmethod
+    def module_css_class(cls):
+        return cls.class_content_type().replace(".", "-").lower().removesuffix("module")
+
+    @classmethod
     def model_name(cls):
         return cls._meta.model_name
 
     @property
     def admin_template_name(self):
         return [
-            "xprez/admin/modules/{}.html".format(self.model_name()),
+            "xprez/admin/modules/{}.html".format(
+                self.model_name().removesuffix("module")
+            ),
             "xprez/admin/modules/base.html",
         ]
 
@@ -130,17 +136,31 @@ class Module(ConfigParentMixin, models.Model):
         app_label, model_name = self.config_model.split(".")
         return apps.get_model(app_label, model_name)
 
-    def get_or_create_config(self, css_breakpoint):
+    def get_configs(self):
+        return self.get_config_model().objects.filter(module=self)
+
+    def build_config(self, css_breakpoint):
         config_model = self.get_config_model()
-        config, _created = config_model.objects.get_or_create(
+        config_defaults = settings.XPREZ_MODULE_CONFIG_DEFAULTS.get(
+            "defaults", {}
+        ).copy()
+        config_defaults.update(
+            settings.XPREZ_MODULE_CONFIG_DEFAULTS.get(self.class_content_type(), {})
+        )
+        print(
+            "build config",
+            self.class_content_type(),
+            settings.XPREZ_MODULE_CONFIG_DEFAULTS.get(self.class_content_type(), {}),
+        )
+
+        return config_model(
             module=self,
             css_breakpoint=css_breakpoint,
-            defaults=config_model.get_defaults(self.content_type),
+            **config_defaults,
         )
-        return config
 
     def get_identifier(self):
-        return "module-" + str(self.pk)
+        return "{}{}".format(self.class_content_type_underscore(), "-" + str(self.pk))
 
     def get_admin_form_class(self):
         cls = import_class(self.form_class)
@@ -201,7 +221,7 @@ class Module(ConfigParentMixin, models.Model):
         return bool(self.admin_form.errors)
 
     @classmethod
-    def get_urls(cls):
+    def get_admin_urls(cls):
         return []
 
     @classproperty
@@ -341,7 +361,7 @@ class UploadMultiModule(MultiModule):
         return JsonResponse(status=400, data={"error": "No files uploaded"})
 
     @classmethod
-    def get_urls(cls):
+    def get_admin_urls(cls):
         cls_name = cls.__name__.lower()
         return [
             re_path(

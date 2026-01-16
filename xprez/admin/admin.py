@@ -85,7 +85,7 @@ class XprezAdminMixin(XprezAdminViewsContentMixin, XprezAdminViewsClipboardMixin
         urls = []
         urls += XprezAdminViewsContentMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
-        urls += module_registry.get_urls()
+        urls += module_registry.get_admin_urls()
         return urls
 
     def _get_container_instance(self, request, object_pk):

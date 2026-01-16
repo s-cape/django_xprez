@@ -1,7 +1,7 @@
 {% extends "xprez/modules/base.html" %}
 {% load thumbnail xprez %}
 
-{% block css_class_extra %}xprez-gallery {{ module.width }}-width xprez-photo-connect-{{ module.divided|lower }} xprez-cols-{{ module.columns }} js-content-{{ module.pk }} js-gallery{% endblock %}
+{% block css_class_extra %}{{ module.width }}-width xprez-photo-connect-{{ module.divided|lower }} xprez-cols-{{ module.columns }} js-content-{{ module.pk }} js-gallery{% endblock %}
 
 {% block content %}
     {% for item in module.items.all %}

@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.template.loader import render_to_string
 
@@ -13,51 +14,71 @@ BREAKPOINT_CHOICES = tuple(
 class ConfigParentMixin:
     """Mixin for Section and Module to handle CSS configuration logic."""
 
+    # def config_model(self):
+    #     raise NotImplementedError()
+
+    def build_config(self, css_breakpoint):
+        raise NotImplementedError()
+
     def get_configs(self):
-        """Retrieve and cache visible configs ordered by css_breakpoint."""
-        if not hasattr(self, "_configs"):
-            self._configs = list(
-                self.configs.filter(visible=True).order_by("css_breakpoint")
-            )
-        return self._configs
+        return self.configs.all()
+
+    def get_or_create_config(self, css_breakpoint):
+        try:
+            return self.get_configs().get(css_breakpoint=css_breakpoint)
+        except ObjectDoesNotExist:
+            config = self.build_config(css_breakpoint)
+            config.save()
+            return config
 
     def get_css(self):
         """Compute changed attributes per breakpoint."""
-        configs = self.get_configs()
-        current_attrs = self.configs.model().get_css_data()
+        configs = self.get_configs().filter(visible=True)
+        current_attrs = self.build_config(settings.XPREZ_DEFAULT_BREAKPOINT).get_css()
         result = {}
 
         for config in configs:
-            attrs = config.get_css_data()
-            changed_attrs = {}
-            for key, value in attrs.items():
-                if value != current_attrs.get(key):
-                    changed_attrs[key] = value
-            if changed_attrs:
-                result[config.css_breakpoint] = changed_attrs
+            attrs = config.get_css()
+            changed_css = self._get_changed_css(current_attrs, attrs)
+            if changed_css:
+                result[config.css_breakpoint] = changed_css
             current_attrs.update(attrs)
 
         return result
+
+    @staticmethod
+    def _get_changed_css(base_css, css):
+        changed_css = {}
+        for key, value in css.items():
+            if value != base_css.get(key):
+                changed_css[key] = value
+        return changed_css
+
+    @staticmethod
+    def _get_css_vars(attrs):
+        return "; ".join(f"--x-{k}: {v}" for k, v in attrs.items())
+
+    @staticmethod
+    def _get_breakpoint_css(selector, breakpoint, attrs):
+        css_vars = ConfigParentMixin._get_css_vars(attrs)
+        min_width = settings.XPREZ_BREAKPOINTS[breakpoint]["min_width"]
+        breakpoint_css = f"{selector} {{ {css_vars}; }}"
+        if not min_width:
+            return breakpoint_css
+        else:
+            return f"@media (min-width: {min_width}px) {{\n{breakpoint_css}\n}}"
 
     def render_css(self):
         css_data = self.get_css()
         if not css_data:
             return ""
 
-        identifier = "#" + self.get_identifier()
+        selector = "#" + self.get_identifier()
         output = []
 
         for breakpoint, attrs in css_data.items():
-            css_vars = "; ".join(f"--x-{k}: {v}" for k, v in attrs.items())
-            min_width = settings.XPREZ_BREAKPOINTS[breakpoint]["min_width"]
+            output += [self._get_breakpoint_css(selector, breakpoint, attrs)]
 
-            breakpoint_css = f"{identifier} {{ {css_vars}; }}"
-            if not min_width:
-                output += [breakpoint_css]
-            else:
-                output += [
-                    f"@media (min-width: {min_width}px) {{\n{breakpoint_css}\n}}"
-                ]
         if output:
             return "<style>\n" + "\n".join(output) + "\n</style>"
         else:
@@ -96,7 +117,7 @@ class ConfigBase(models.Model):
         context["config"] = self
         return render_to_string(self.admin_template_name, context)
 
-    def get_css_data(self):
+    def get_css(self):
         raise NotImplementedError()
 
     def _get_choice_or_custom(self, field_prefix, custom_formatter=None):
@@ -124,10 +145,6 @@ class ConfigBase(models.Model):
 class SectionConfig(ConfigBase):
     admin_template_name = "xprez/admin/section_config.html"
     form_class = "xprez.admin.forms.SectionConfigForm"
-
-    @staticmethod
-    def get_defaults():
-        return settings.XPREZ_SECTION_CONFIG_DEFAULTS.copy()
 
     section = models.ForeignKey(
         "xprez.Section",
@@ -199,7 +216,7 @@ class SectionConfig(ConfigBase):
         default=constants.HORIZONTAL_ALIGN_LEFT,
     )
 
-    def get_css_data(self):
+    def get_css(self):
         return {
             "columns": self.columns,
             "margin-bottom": self._get_choice_or_custom(
@@ -236,14 +253,6 @@ class ModuleConfig(ConfigBase):
     admin_template_name = "xprez/admin/module_configs/base.html"
     form_class = "xprez.admin.forms.ModuleConfigForm"
 
-    @staticmethod
-    def get_defaults(module_content_type=None):
-        module_defaults = settings.XPREZ_MODULE_CONFIG_DEFAULTS
-        defaults = module_defaults.get("default", {}).copy()
-        if module_content_type:
-            defaults.update(module_defaults.get(module_content_type, {}))
-        return defaults
-
     module = models.ForeignKey(
         "xprez.Module",
         on_delete=models.CASCADE,
@@ -265,7 +274,7 @@ class ModuleConfig(ConfigBase):
         default=constants.HORIZONTAL_ALIGN_LEFT,
     )
 
-    def get_css_data(self):
+    def get_css(self):
         return {
             "colspan": self.colspan,
             "rowspan": self.rowspan,
@@ -292,3 +301,4 @@ class ModuleConfig(ConfigBase):
         verbose_name = "Module Config"
         verbose_name_plural = "Module Configs"
         unique_together = ("module", "css_breakpoint")
+        ordering = ("css_breakpoint",)

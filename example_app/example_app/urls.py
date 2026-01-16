@@ -23,7 +23,7 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("xprez/", include("xprez.admin.urls")),
+    path("xprez/", include("xprez.urls")),
     path("", views.page, name="page"),
     path("<slug:slug>/", views.page, name="page"),
 ]

@@ -21,10 +21,10 @@ class ModuleRegistry:
     def unregister(self, module_class):
         del self._registry[module_class.class_content_type()]
 
-    def get_urls(self):
+    def get_admin_urls(self):
         urls = []
         for module in self._registry.values():
-            urls += module.get_urls()
+            urls += module.get_admin_urls()
         return urls
 
     @staticmethod
@@ -65,7 +65,13 @@ class ModuleRegistry:
             ),
         )
 
-    def front_media(self, modules=None):
+    def front_media(self, container=None):
+        if container is None:
+            modules = None
+        else:
+            modules = None  # TODO: optimize
+            # modules = {module.content_type for module in modules}
+
         return self._collect_media("FrontMedia", modules=modules)
 
     def _get_available_modules(self, available_modules=None):

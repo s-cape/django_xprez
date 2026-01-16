@@ -3,8 +3,6 @@
 
 {% load humanize xprez %}
 
-{% block css_class_extra %}xprez-numbers{% endblock %}
-
 {% block content %}
     {% for number in module.numbers.all %}
         {% if number.number %}
