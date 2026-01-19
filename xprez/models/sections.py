@@ -75,6 +75,11 @@ class Section(ConfigParentMixin, models.Model):
         for module in self.admin_form.xprez_modules:
             module.build_admin_form(admin, data, files)
 
+        if data:
+            self.admin_form.xprez_modules.sort(
+                key=lambda m: m.admin_form.get_position()
+            )
+
         self.admin_form.xprez_configs_all_valid = None
         self.admin_form.xprez_configs = self.get_configs()
 

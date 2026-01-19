@@ -22,6 +22,8 @@ class XprezModelFormMixin(object):
             for section in sections:
                 section.build_admin_form(self.xprez_admin, data, files)
                 self.xprez_sections.append(section)
+        if data:
+            self.xprez_sections.sort(key=lambda s: s.admin_form.get_position())
 
     def is_valid(self):
         self.xprez_sections_all_valid = True

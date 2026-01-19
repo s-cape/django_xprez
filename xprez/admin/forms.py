@@ -4,6 +4,25 @@ from xprez.models.configs import SectionConfig
 from xprez.models.sections import Section
 
 
+class PositionFormMixin:
+    def get_position(self):
+        """
+        To correctly sort sections and modules, even if they are not saved yet.
+        Get position: cleaned_data > raw data > instance.
+        """
+        if hasattr(self, "cleaned_data") and "position" in self.cleaned_data:
+            return self.cleaned_data["position"] or 0
+
+        if self.data:
+            position_key = f"{self.prefix}-position"
+            try:
+                return int(self.data.get(position_key, self.instance.position) or 0)
+            except (ValueError, TypeError):
+                pass
+
+        return self.instance.position or 0
+
+
 class DeletableFormMixin:
     """Forms with delete capability skip validation when delete=True."""
 
@@ -19,7 +38,7 @@ class DeletableFormMixin:
             self._errors = {}
 
 
-class SectionForm(DeletableFormMixin, forms.ModelForm):
+class SectionForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
     class Meta:
         model = Section
         fields = "__all__"
@@ -36,7 +55,7 @@ class SectionConfigForm(DeletableFormMixin, forms.ModelForm):
             self.fields.pop("delete", None)
 
 
-class BaseModuleForm(DeletableFormMixin, forms.ModelForm):
+class BaseModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
     base_module_fields = (
         "position",
         "section",

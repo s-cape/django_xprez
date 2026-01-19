@@ -13,6 +13,11 @@ export class XprezPopoverBase {
                 this.show();
             }
         });
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && this.isOpen()) {
+                this.hide();
+            }
+        });
     }
 
     hasErrors() { return this.el.querySelector("[data-has-errors]"); }
