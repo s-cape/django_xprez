@@ -1,0 +1,25 @@
+{% extends "xprez/admin/configs/base.html" %}
+
+{% block component_name %}xprez-module-config{% endblock %}
+{% block delete_trigger_component %}xprez-module-config-delete-trigger{% endblock %}
+{% block delete_info_component %}xprez-module-config-delete-info{% endblock %}
+{% block delete_undo_component %}xprez-module-config-delete-undo{% endblock %}
+
+{% block fields %}
+    <div class="xprez-option-group__subtitle">Grid</div>
+
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.colspan flex=1 %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.rowspan flex=1 %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align label=False icon="xprez-icon-vertical" flex=1 %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align label=False icon="xprez-icon-horizontal" flex=1 %}
+    </div>
+
+    {% block extra_fields %}
+        {% for field in config.admin_form.get_extra_fields %}
+            {% include "xprez/admin/form/field.html" with field=field %}
+        {% endfor %}
+    {% endblock %}
+{% endblock %}

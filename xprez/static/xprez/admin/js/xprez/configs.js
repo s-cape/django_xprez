@@ -1,24 +1,26 @@
-import { XprezSectionConfigDeleter } from './deleters.js';
+import { XprezSectionConfigDeleter, XprezModuleConfigDeleter } from './deleters.js';
 
 export class XprezConfigBase {
-    constructor(el) {
+    constructor(parent, el) {
+        this.parent = parent;
         this.el = el;
-    }
-}
-
-export class XprezSectionConfig extends XprezConfigBase {
-    constructor(section, ...args) {
-        super(...args);
-        this.section = section;
-        this.deleter = new XprezSectionConfigDeleter(this);
     }
     isDeleted() { return this.deleter.inputEl && this.deleter.inputEl.checked; }
     cssBreakpoint() { return parseInt(this.el.dataset.cssBreakpoint); }
 }
 
+export class XprezSectionConfig extends XprezConfigBase {
+    constructor(section, el) {
+        super(section, el);
+        this.section = section;
+        this.deleter = new XprezSectionConfigDeleter(this);
+    }
+}
+
 export class XprezModuleConfig extends XprezConfigBase {
-    constructor(module, ...args) {
-        super(...args);
+    constructor(module, el) {
+        super(module, el);
         this.module = module;
+        this.deleter = new XprezModuleConfigDeleter(this);
     }
 }

@@ -94,17 +94,17 @@ class TextModule(TextModuleBase):
 
 
 class TextModuleBaseConfig(ModuleConfig):
-    admin_template_name = "xprez/admin/module_configs/text_base.html"
+    admin_template_name = "xprez/admin/configs/modules/text_base.html"
 
     border = models.BooleanField(default=True)
     background = models.BooleanField(default=False)
 
-    class Meta:
+    class Meta(ModuleConfig.Meta):
         abstract = True
 
 
 class TextModuleConfig(TextModuleBaseConfig):
-    admin_template_name = "xprez/admin/module_configs/text.html"
+    admin_template_name = "xprez/admin/configs/modules/text.html"
 
 
 class TextModuleBaseForm(BaseModuleForm):

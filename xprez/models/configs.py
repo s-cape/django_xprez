@@ -21,15 +21,15 @@ class ConfigParentMixin:
         raise NotImplementedError()
 
     def get_configs(self):
-        return self.configs.all()
+        return self.configs.all().order_by("css_breakpoint")
 
     def get_or_create_config(self, css_breakpoint):
         try:
-            return self.get_configs().get(css_breakpoint=css_breakpoint)
+            return self.get_configs().get(css_breakpoint=css_breakpoint), False
         except ObjectDoesNotExist:
             config = self.build_config(css_breakpoint)
             config.save()
-            return config
+            return config, True
 
     def get_css(self):
         """Compute changed attributes per breakpoint."""
@@ -143,7 +143,7 @@ class ConfigBase(models.Model):
 
 
 class SectionConfig(ConfigBase):
-    admin_template_name = "xprez/admin/section_config.html"
+    admin_template_name = "xprez/admin/configs/section.html"
     form_class = "xprez.admin.forms.SectionConfigForm"
 
     section = models.ForeignKey(
@@ -250,7 +250,7 @@ class SectionConfig(ConfigBase):
 
 
 class ModuleConfig(ConfigBase):
-    admin_template_name = "xprez/admin/module_configs/base.html"
+    admin_template_name = "xprez/admin/configs/module_base.html"
     form_class = "xprez.admin.forms.ModuleConfigForm"
 
     module = models.ForeignKey(

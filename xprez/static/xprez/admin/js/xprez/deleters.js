@@ -30,20 +30,28 @@ export class XprezModuleDeleter extends XprezDeleterBase {
     }
 }
 
-export class XprezSectionConfigDeleter extends XprezDeleterBase {
-    initElements() {
-        this.triggerEl = this.obj.el.querySelector("[data-component='xprez-section-config-delete-trigger']");
+export class XprezConfigDeleterBase extends XprezDeleterBase {
+    _initElements(dataComponentName) {
+        this.triggerEl = this.obj.el.querySelector(`[data-component='xprez-${dataComponentName}-delete-trigger']`);
         if (!this.triggerEl) { return; }
         this.inputEl = this.triggerEl.querySelector("input");
-        this.undoEl = this.obj.el.querySelector("[data-component='xprez-section-config-delete-undo']");
+        this.undoEl = this.obj.el.querySelector(`[data-component='xprez-${dataComponentName}-delete-undo']`);
     }
 
     delete() {
         super.delete();
-        this.obj.section.configAdder.setOptionsDisabledState();
+        this.obj.parent.configAdder.setOptionsDisabledState();
     }
     undo() {
         super.undo();
-        this.obj.section.configAdder.setOptionsDisabledState();
+        this.obj.parent.configAdder.setOptionsDisabledState();
     }
+}
+
+export class XprezSectionConfigDeleter extends XprezConfigDeleterBase {
+    initElements() { this._initElements("section-config"); }
+}
+
+export class XprezModuleConfigDeleter extends XprezConfigDeleterBase {
+    initElements() { this._initElements("module-config"); }
 }

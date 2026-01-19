@@ -113,17 +113,16 @@ export class XprezAdderSectionEnd extends XprezAdderSectionBase {
     initNewElement(el) { this.section.initModule(el); }
 }
 
-export class XprezSectionConfigAdder extends XprezAdderSelectBase {
-    constructor(xprez, section) {
-        super(xprez, section.el.querySelector("[data-component='xprez-adder-section-config']"));
-        this.section = section;
+export class XprezConfigAdderBase extends XprezAdderSelectBase {
+    constructor(xprez, parent, componentName) {
+        super(xprez, parent.el.querySelector(`[data-component='${componentName}']`));
+        this.parent = parent;
         this.setOptionsDisabledState();
     }
 
     handleSelection(selectedOption) {
         const selectedBreakpoint = parseInt(selectedOption.value);
-
-        const existingConfig = this.section.configs.find(
+        const existingConfig = this.parent.configs.find(
             config => config.cssBreakpoint() === selectedBreakpoint
         );
 
@@ -138,7 +137,7 @@ export class XprezSectionConfigAdder extends XprezAdderSelectBase {
     }
 
     setOptionsDisabledState() {
-        const existingBreakpoints = this.section.configs
+        const existingBreakpoints = this.parent.configs
             .filter(config => !config.isDeleted())
             .map(config => config.cssBreakpoint());
 
@@ -153,19 +152,31 @@ export class XprezSectionConfigAdder extends XprezAdderSelectBase {
 
     placeNewElement(newEl) {
         const newBreakpoint = parseInt(newEl.dataset.cssBreakpoint);
-
-        for (const config of this.section.configs) {
+        for (const config of this.parent.configs) {
             if (newBreakpoint < config.cssBreakpoint()) {
                 config.el.before(newEl);
                 return;
             }
         }
-
-        this.section.configsContainerEl.appendChild(newEl);
+        this.parent.configsContainerEl.appendChild(newEl);
     }
 
     initNewElement(newEl) {
-        this.section.initConfig(newEl);
+        this.parent.initConfig(newEl);
         this.setOptionsDisabledState();
+    }
+}
+
+export class XprezSectionConfigAdder extends XprezConfigAdderBase {
+    constructor(xprez, section) {
+        super(xprez, section, "xprez-adder-section-config");
+        this.section = section;
+    }
+}
+
+export class XprezModuleConfigAdder extends XprezConfigAdderBase {
+    constructor(xprez, module) {
+        super(xprez, module, "xprez-adder-module-config");
+        this.module = module;
     }
 }

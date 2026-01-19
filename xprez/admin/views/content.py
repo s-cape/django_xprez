@@ -21,9 +21,14 @@ class XprezAdminViewsContentMixin(object):
             return HttpResponse(module.render_admin({"request": request}))
 
     def xprez_add_section_config_view(self, request, section_pk, css_breakpoint):
-        """Adds or retrieves a section config for the given breakpoint."""
         section = models.Section.objects.get(pk=section_pk)
-        config, created = section.configs.get_or_create(css_breakpoint=css_breakpoint)
+        config, _created = section.get_or_create_config(css_breakpoint)
+        config.build_admin_form(self)
+        return HttpResponse(config.render_admin({"request": request}))
+
+    def xprez_add_module_config_view(self, request, module_pk, css_breakpoint):
+        module = models.Module.objects.get(pk=module_pk).polymorph()
+        config, _created = module.get_or_create_config(css_breakpoint)
         config.build_admin_form(self)
         return HttpResponse(config.render_admin({"request": request}))
 
@@ -51,6 +56,9 @@ class XprezAdminViewsContentMixin(object):
     def xprez_add_section_config_url_name(self):
         return self.xprez_admin_url_name("add_section_config", include_namespace=True)
 
+    def xprez_add_module_config_url_name(self):
+        return self.xprez_admin_url_name("add_module_config", include_namespace=True)
+
     def xprez_admin_urls(self):
         return [
             path(
@@ -72,5 +80,10 @@ class XprezAdminViewsContentMixin(object):
                 "section-config-add/<int:section_pk>/<int:css_breakpoint>/",
                 self.xprez_admin_view(self.xprez_add_section_config_view),
                 name=self.xprez_admin_url_name("add_section_config"),
+            ),
+            path(
+                "module-config-add/<int:module_pk>/<int:css_breakpoint>/",
+                self.xprez_admin_view(self.xprez_add_module_config_view),
+                name=self.xprez_admin_url_name("add_module_config"),
             ),
         ]

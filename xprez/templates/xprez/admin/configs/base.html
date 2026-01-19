@@ -1,0 +1,33 @@
+<div
+    class="xprez-option-group"
+    data-component="{% block component_name %}{% endblock %}"
+    {% if config.is_default %}data-is-default{% endif %}
+    data-css-breakpoint="{{ config.css_breakpoint }}"
+>
+    <div class="xprez-option-group__title">
+        <div class="xprez-option" data-active="true" data-text-label="false">
+            <label for="{{ config.admin_form.visible.id_for_label }}">
+                <i class="xprez-icon-eye x-variant-checked"></i>
+                <i class="xprez-icon-eye_slash x-variant-unchecked x-color-danger"></i>
+                <span>Visible</span>
+            </label>
+            {{ config.admin_form.visible }}
+        </div>
+        <span class="xprez-option-group__title-text">{{ config.get_css_breakpoint_display|safe }}</span>
+        {% if config.admin_form.delete %}
+            <span class="xprez-icon-btn" title="Remove breakpoint" data-component="{% block delete_trigger_component %}{% endblock %}">
+                <i class="xprez-icon-delete"></i>
+                <span data-hidden>{{ config.admin_form.delete }}</span>
+            </span>
+        {% endif %}
+    </div>
+
+    {% block fields %}{% endblock %}
+
+    {% if config.admin_form.delete %}
+        <div class="xprez-delete-info" data-component="{% block delete_info_component %}{% endblock %}">
+            This breakpoint will be deleted when you save the changes.
+            <span class="xprez-btn xprez-btn__danger" data-component="{% block delete_undo_component %}{% endblock %}">undelete</span>
+        </div>
+    {% endif %}
+</div>

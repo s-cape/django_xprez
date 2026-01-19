@@ -137,7 +137,11 @@ class Module(ConfigParentMixin, models.Model):
         return apps.get_model(app_label, model_name)
 
     def get_configs(self):
-        return self.get_config_model().objects.filter(module=self)
+        return (
+            self.get_config_model()
+            .objects.filter(module=self)
+            .order_by("css_breakpoint")
+        )
 
     def build_config(self, css_breakpoint):
         config_model = self.get_config_model()
@@ -147,12 +151,6 @@ class Module(ConfigParentMixin, models.Model):
         config_defaults.update(
             settings.XPREZ_MODULE_CONFIG_DEFAULTS.get(self.class_content_type(), {})
         )
-        print(
-            "build config",
-            self.class_content_type(),
-            settings.XPREZ_MODULE_CONFIG_DEFAULTS.get(self.class_content_type(), {}),
-        )
-
         return config_model(
             module=self,
             css_breakpoint=css_breakpoint,
@@ -201,7 +199,10 @@ class Module(ConfigParentMixin, models.Model):
         inst.save()
 
         for config in self.admin_form.xprez_configs:
-            config.save_admin_form(request)
+            if config.admin_form.cleaned_data.get("delete"):
+                config.delete()
+            else:
+                config.save_admin_form(request)
 
     def render_admin(self, context):
         xprez_admin = self.admin_form.xprez_admin
@@ -268,7 +269,7 @@ class MultiModule(Module):
         self.formset.save()
 
     def is_admin_form_valid(self):
-        return self.admin_form.is_valid() and self.formset.is_valid()
+        return super().is_admin_form_valid() and self.formset.is_valid()
 
     def admin_has_errors(self):
         return super().admin_has_errors() or (

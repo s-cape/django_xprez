@@ -4,17 +4,28 @@ from xprez.models.configs import SectionConfig
 from xprez.models.sections import Section
 
 
-class SectionForm(forms.ModelForm):
-    delete = forms.BooleanField(required=False)
+class DeletableFormMixin:
+    """Forms with delete capability skip validation when delete=True."""
 
+    system_fields = ("delete",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["delete"] = forms.BooleanField(required=False)
+
+    def full_clean(self):
+        super().full_clean()
+        if getattr(self, "cleaned_data", {}).get("delete"):
+            self._errors = {}
+
+
+class SectionForm(DeletableFormMixin, forms.ModelForm):
     class Meta:
         model = Section
         fields = "__all__"
 
 
-class SectionConfigForm(forms.ModelForm):
-    delete = forms.BooleanField(required=False)
-
+class SectionConfigForm(DeletableFormMixin, forms.ModelForm):
     class Meta:
         model = SectionConfig
         fields = "__all__"
@@ -22,17 +33,14 @@ class SectionConfigForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.is_default():
-            del self.fields["delete"]
+            self.fields.pop("delete", None)
 
 
-class BaseModuleForm(forms.ModelForm):
-    delete = forms.BooleanField(required=False)
-
+class BaseModuleForm(DeletableFormMixin, forms.ModelForm):
     base_module_fields = (
         "position",
         "section",
         "css_class",
-        "delete",
     )
 
     options_fields = ()
@@ -40,6 +48,7 @@ class BaseModuleForm(forms.ModelForm):
     def get_main_fields(self):
         excluded_fields = tuple(self.base_module_fields)
         excluded_fields += self.options_fields
+        excluded_fields += self.system_fields
 
         for field in self.fields:
             if field not in excluded_fields:
@@ -53,7 +62,7 @@ class BaseModuleForm(forms.ModelForm):
         fields = "__all__"
 
 
-class ModuleConfigForm(forms.ModelForm):
+class ModuleConfigForm(DeletableFormMixin, forms.ModelForm):
     base_module_fields = (
         "visible",
         "colspan",
@@ -62,9 +71,15 @@ class ModuleConfigForm(forms.ModelForm):
         "horizontal_align",
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.is_default():
+            self.fields.pop("delete", None)
+
     def get_extra_fields(self):
+        excluded_fields = tuple(self.base_module_fields) + self.system_fields
         for field in self.fields:
-            if field not in self.base_module_fields:
+            if field not in excluded_fields:
                 yield self[field]
 
     class Meta:

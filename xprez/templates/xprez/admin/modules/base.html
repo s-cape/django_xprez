@@ -108,6 +108,9 @@
                         {% endfor %}
                     </div>
                 </div>
+                <div class="xprez-option-group__footer" data-component="xprez-adder-module-config">
+                    {% include "xprez/admin/includes/add_config_module.html" with xprez_admin=module.admin_form.xprez_admin %}
+                </div>
             {% endblock %}
         </div>
     </div>

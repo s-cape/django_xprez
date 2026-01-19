@@ -1,27 +1,11 @@
-<div
-    class="xprez-option-group" 
-    data-component="xprez-section-config"
-    {% if config.is_default %}data-is-default{% endif %}
-    data-css-breakpoint="{{ config.css_breakpoint }}"
->
-    <div class="xprez-option-group__title">
-        <div class="xprez-option" data-active="true" data-text-label="false">
-            <label for="{{ config.admin_form.visible.id_for_label }}">
-                <i class="xprez-icon-eye x-variant-checked"></i>
-                <i class="xprez-icon-eye_slash x-variant-unchecked x-color-danger"></i>
-                <span>Visible</span>
-            </label>
-            {{ config.admin_form.visible }}
-        </div>
-        <span class="xprez-option-group__title-text">{{ config.get_css_breakpoint_display|safe }}</span>
-        {% if config.admin_form.delete %}
-            <span class="xprez-icon-btn" title="Remove breakpoint" data-component="xprez-section-config-delete-trigger">
-                <i class="xprez-icon-delete"></i>
-                <span data-hidden>{{ config.admin_form.delete }}</span>
-            </span>
-        {% endif %}
-    </div>
+{% extends "xprez/admin/configs/base.html" %}
 
+{% block component_name %}xprez-section-config{% endblock %}
+{% block delete_trigger_component %}xprez-section-config-delete-trigger{% endblock %}
+{% block delete_info_component %}xprez-section-config-delete-info{% endblock %}
+{% block delete_undo_component %}xprez-section-config-delete-undo{% endblock %}
+
+{% block fields %}
     <div class="xprez-option-group__subtitle">Section</div>
     {% include "xprez/admin/form/row.html" with field=config.admin_form.margin_bottom_choice flex=1 %}
     {% include "xprez/admin/form/field.html" with field=config.admin_form.margin_bottom_custom suffix=config.MARGIN_CUSTOM_UNITS %}
@@ -60,11 +44,4 @@
         {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align label=False icon="xprez-icon-vertical" flex=1 %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align label=False icon="xprez-icon-horizontal" flex=1 %}
     </div>
-
-    {% if config.admin_form.delete %}
-        <div class="xprez-delete-info" data-component="xprez-section-config-delete-info">
-            This breakpoint will be deleted when you save the changes.
-            <span class="xprez-btn xprez-btn__danger" data-component="xprez-section-config-delete-undo">undelete</span>
-        </div>
-    {% endif %}
-</div>
+{% endblock %}
