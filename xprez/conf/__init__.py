@@ -15,7 +15,11 @@ def deep_merge(base, override):
 
 
 class SettingsLoader:
-    MERGE_SETTINGS = {"XPREZ_SECTION_CONFIG_DEFAULTS", "XPREZ_MODULE_CONFIG_DEFAULTS"}
+    MERGE_SETTINGS = {
+        "XPREZ_SECTION_CONFIG_DEFAULTS",
+        "XPREZ_MODULE_CONFIG_DEFAULTS",
+        "XPREZ_CSS",
+    }
 
     def __getattr__(self, name):
         default_value = getattr(defaults, name, None)
@@ -23,14 +27,40 @@ class SettingsLoader:
 
         if name in self.MERGE_SETTINGS:
             if default_value is None:
-                return user_value or {}
-            if user_value is None:
-                return default_value
-            return deep_merge(default_value, user_value)
+                result = user_value or {}
+            elif user_value is None:
+                result = default_value
+            else:
+                result = deep_merge(default_value, user_value)
+        elif user_value is not None:
+            result = user_value
+        else:
+            result = default_value
 
-        if user_value is not None:
-            return user_value
-        return default_value
+        # Pre-merge XPREZ_CSS config keys with default
+        if name == "XPREZ_CSS":
+            result = self._preprocess_xprez_css(result)
+
+        # Cache for next access
+        setattr(self, name, result)
+        return result
+
+    def _preprocess_xprez_css(self, css_config):
+        """Pre-merge each config key's attrs with sections/modules fallback."""
+        sections = css_config.get("sections", {})
+        modules = css_config.get("modules", {})
+        for key in list(css_config.keys()):
+            if key in ("sections", "modules"):
+                continue
+            fallback = sections if key == "section" else modules
+            for attr in fallback:
+                if attr not in css_config[key]:
+                    css_config[key][attr] = fallback[attr]
+                else:
+                    css_config[key][attr] = deep_merge(
+                        fallback[attr], css_config[key][attr]
+                    )
+        return css_config
 
 
 settings = SettingsLoader()

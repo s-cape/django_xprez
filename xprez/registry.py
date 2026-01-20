@@ -16,6 +16,13 @@ class ModuleRegistry:
         return self._registry[content_type]
 
     def register(self, module_class):
+        keys = {m.module_key for m in self._registry.values()}
+
+        if module_class.module_key in keys:
+            raise ValueError(
+                f"Module key '{module_class.module_key}' is already registered. "
+            )
+
         self._registry[module_class.class_content_type()] = module_class
 
     def unregister(self, module_class):

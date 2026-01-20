@@ -1,4 +1,16 @@
 from xprez import constants
+from xprez.constants import (
+    GAP_FULL,
+    GAP_MEDIUM,
+    GAP_SMALL,
+    MARGIN_FULL,
+    MARGIN_MEDIUM,
+    MARGIN_SMALL,
+    PADDING_LARGE,
+    PADDING_MEDIUM,
+    PADDING_NONE,
+    PADDING_SMALL,
+)
 
 XPREZ_SECTION_MODEL_CLASS = "xprez.Section"
 XPREZ_CONTAINER_MODEL_CLASS = "xprez.Container"
@@ -62,12 +74,72 @@ XPREZ_MODULE_CONFIG_DEFAULTS = {
         "vertical_align": constants.VERTICAL_ALIGN_TOP,
         "horizontal_align": constants.HORIZONTAL_ALIGN_LEFT,
     },
-    # "xprez.TextModule": {
-    #     "horizontal_align": constants.HORIZONTAL_ALIGN_STRETCH,
-    # },
-    # "xprez.GalleryModule": {
-    #     "colspan": 2,
-    #     "gallery_columns": 3,
-    #     "gallery_gap": constants.GAP_SMALL,
-    # },
+    "xprez.TextModule": {
+        "horizontal_align": constants.HORIZONTAL_ALIGN_STRETCH,
+    },
+    "xprez.GalleryModule": {
+        "colspan": 2,
+        "rowspan": 3,
+        "vertical_align": constants.VERTICAL_ALIGN_MIDDLE,
+        "horizontal_align": constants.HORIZONTAL_ALIGN_CENTER,
+    },
+}
+
+XPREZ_CSS = {
+    "sections": {
+        "margin_bottom": {
+            "format": "{}px",
+            "values": {
+                MARGIN_SMALL: {0: 10, 1: 15, 2: 20},
+                MARGIN_MEDIUM: {0: 20, 1: 30, 2: 40},
+                MARGIN_FULL: {0: 40, 1: 60, 2: 80},
+            },
+        },
+        "padding_left": {
+            "format": "{}px",
+            "values": {
+                PADDING_NONE: {0: 0},
+                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+            },
+        },
+        "padding_right": {
+            "format": "{}px",
+            "values": {
+                PADDING_NONE: {0: 0},
+                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+            },
+        },
+        "padding_top": {
+            "format": "{}px",
+            "values": {
+                PADDING_NONE: {0: 0},
+                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+            },
+        },
+        "padding_bottom": {
+            "format": "{}px",
+            "values": {
+                PADDING_NONE: {0: 0},
+                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+            },
+        },
+        "gap": {
+            "format": "{}px",
+            "values": {
+                GAP_SMALL: {0: 10, 1: 15, 2: 20},
+                GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
+                GAP_FULL: {0: 40, 1: 60, 2: 80},
+            },
+        },
+    },
+    "modules": {},
+    "xprez.TextModule": {},
 }

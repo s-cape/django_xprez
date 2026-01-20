@@ -99,6 +99,12 @@ class TextModuleBaseConfig(ModuleConfig):
     border = models.BooleanField(default=True)
     background = models.BooleanField(default=False)
 
+    def get_css(self):
+        css = super().get_css()
+        css["border"] = int(self.border)
+        css["background"] = int(self.background)
+        return css
+
     class Meta(ModuleConfig.Meta):
         abstract = True
 

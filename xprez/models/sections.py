@@ -60,13 +60,14 @@ class Section(ConfigParentMixin, models.Model):
             **settings.XPREZ_SECTION_CONFIG_DEFAULTS,
         )
 
-    def get_identifier(self):
-        return "section-" + str(self.pk)
+    @property
+    def key(self):
+        return f"section-{self.pk}"
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class("xprez.admin.forms.SectionForm")
         self.admin_form = form_class(
-            instance=self, prefix=self.get_identifier(), data=data, files=files
+            instance=self, prefix=self.key, data=data, files=files
         )
         self.admin_form.xprez_admin = admin
         self.admin_form.xprez_modules_all_valid = None

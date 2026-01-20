@@ -10,7 +10,7 @@ from django.utils.functional import classproperty
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.conf import settings
 from xprez.models.configs import ConfigParentMixin
-from xprez.utils import import_class
+from xprez.utils import class_content_type, import_class
 
 CLIPBOARD_TEXT_MAX_LENGTH = 100
 
@@ -72,34 +72,30 @@ class Module(ConfigParentMixin, models.Model):
 
     @classmethod
     def class_content_type(cls):
-        from xprez.utils import class_content_type
-
         return class_content_type(cls)
 
-    @classmethod
-    def class_content_type_underscore(cls):
-        return cls.class_content_type().replace(".", "_")
+    @classproperty
+    def module_key(cls):
+        return cls._meta.model_name.lower().removesuffix("module")
 
     @classmethod
     def module_css_class(cls):
-        return cls.class_content_type().replace(".", "-").lower().removesuffix("module")
+        return f"xprez-{cls.module_key}"
 
-    @classmethod
-    def model_name(cls):
-        return cls._meta.model_name
+    @property
+    def key(self):
+        return f"module-{self.pk}"
 
     @property
     def admin_template_name(self):
         return [
-            "xprez/admin/modules/{}.html".format(
-                self.model_name().removesuffix("module")
-            ),
+            f"xprez/admin/modules/{self.module_key}.html",
             "xprez/admin/modules/base.html",
         ]
 
     @property
     def front_template_name(self):
-        return "xprez/modules/{}.html".format(self.model_name().removesuffix("module"))
+        return f"xprez/modules/{self.module_key}.html"
 
     def polymorph(self):
         app_label, object_name = self.content_type.split(".")
@@ -146,7 +142,7 @@ class Module(ConfigParentMixin, models.Model):
     def build_config(self, css_breakpoint):
         config_model = self.get_config_model()
         config_defaults = settings.XPREZ_MODULE_CONFIG_DEFAULTS.get(
-            "defaults", {}
+            "default", {}
         ).copy()
         config_defaults.update(
             settings.XPREZ_MODULE_CONFIG_DEFAULTS.get(self.class_content_type(), {})
@@ -156,9 +152,6 @@ class Module(ConfigParentMixin, models.Model):
             css_breakpoint=css_breakpoint,
             **config_defaults,
         )
-
-    def get_identifier(self):
-        return "{}{}".format(self.class_content_type_underscore(), "-" + str(self.pk))
 
     def get_admin_form_class(self):
         cls = import_class(self.form_class)
@@ -175,7 +168,7 @@ class Module(ConfigParentMixin, models.Model):
     def build_admin_form(self, admin, data=None, files=None):
         form_class = self.get_admin_form_class()
         self.admin_form = form_class(
-            instance=self, prefix=self.get_identifier(), data=data, files=files
+            instance=self, prefix=self.key, data=data, files=files
         )
         self.admin_form.xprez_admin = admin
 
@@ -228,7 +221,7 @@ class Module(ConfigParentMixin, models.Model):
     @classproperty
     def icon_template_name(cls):
         return [
-            "xprez/admin/icons/modules/{}.html".format(cls.model_name()),
+            f"xprez/admin/icons/modules/{cls.module_key}.html",
             "xprez/admin/icons/modules/default.html",
         ]
 
@@ -261,7 +254,7 @@ class MultiModule(Module):
             queryset=self.get_formset_queryset(),
             data=data,
             files=files,
-            prefix="{}s-{}".format(self.class_content_type_underscore(), self.pk),
+            prefix=f"{self.key}-items",
         )
 
     def save_admin_form(self, request):
@@ -343,7 +336,7 @@ class UploadMultiModule(MultiModule):
             item_formset = FormSet(
                 instance=module,
                 queryset=queryset,
-                prefix="{}s-{}".format(cls.class_content_type_underscore(), module.pk),
+                prefix=f"module-{module.pk}-items",
             )
             item_form = item_formset.forms[-1]
             return JsonResponse(

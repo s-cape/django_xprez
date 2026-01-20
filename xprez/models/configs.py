@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 
 from xprez import constants
 from xprez.conf import settings
+from xprez.models.css import CssConfigMixin, CssRenderMixin
 from xprez.utils import import_class
 
 BREAKPOINT_CHOICES = tuple(
@@ -11,11 +12,8 @@ BREAKPOINT_CHOICES = tuple(
 )
 
 
-class ConfigParentMixin:
+class ConfigParentMixin(CssRenderMixin):
     """Mixin for Section and Module to handle CSS configuration logic."""
-
-    # def config_model(self):
-    #     raise NotImplementedError()
 
     def build_config(self, css_breakpoint):
         raise NotImplementedError()
@@ -31,61 +29,8 @@ class ConfigParentMixin:
             config.save()
             return config, True
 
-    def get_css(self):
-        """Compute changed attributes per breakpoint."""
-        configs = self.get_configs().filter(visible=True)
-        current_attrs = self.build_config(settings.XPREZ_DEFAULT_BREAKPOINT).get_css()
-        result = {}
 
-        for config in configs:
-            attrs = config.get_css()
-            changed_css = self._get_changed_css(current_attrs, attrs)
-            if changed_css:
-                result[config.css_breakpoint] = changed_css
-            current_attrs.update(attrs)
-
-        return result
-
-    @staticmethod
-    def _get_changed_css(base_css, css):
-        changed_css = {}
-        for key, value in css.items():
-            if value != base_css.get(key):
-                changed_css[key] = value
-        return changed_css
-
-    @staticmethod
-    def _get_css_vars(attrs):
-        return "; ".join(f"--x-{k}: {v}" for k, v in attrs.items())
-
-    @staticmethod
-    def _get_breakpoint_css(selector, breakpoint, attrs):
-        css_vars = ConfigParentMixin._get_css_vars(attrs)
-        min_width = settings.XPREZ_BREAKPOINTS[breakpoint]["min_width"]
-        breakpoint_css = f"{selector} {{ {css_vars}; }}"
-        if not min_width:
-            return breakpoint_css
-        else:
-            return f"@media (min-width: {min_width}px) {{\n{breakpoint_css}\n}}"
-
-    def render_css(self):
-        css_data = self.get_css()
-        if not css_data:
-            return ""
-
-        selector = "#" + self.get_identifier()
-        output = []
-
-        for breakpoint, attrs in css_data.items():
-            output += [self._get_breakpoint_css(selector, breakpoint, attrs)]
-
-        if output:
-            return "<style>\n" + "\n".join(output) + "\n</style>"
-        else:
-            return ""
-
-
-class ConfigBase(models.Model):
+class ConfigBase(CssConfigMixin, models.Model):
     css_breakpoint = models.PositiveSmallIntegerField(
         choices=BREAKPOINT_CHOICES,
         default=settings.XPREZ_DEFAULT_BREAKPOINT,
@@ -102,7 +47,7 @@ class ConfigBase(models.Model):
         form_class = self.get_admin_form_class()
 
         self.admin_form = form_class(
-            instance=self, prefix=self.get_identifier(), data=data, files=files
+            instance=self, prefix=self.key, data=data, files=files
         )
         self.admin_form.xprez_admin = admin
 
@@ -120,23 +65,18 @@ class ConfigBase(models.Model):
     def get_css(self):
         raise NotImplementedError()
 
-    def _get_choice_or_custom(self, field_prefix, custom_formatter=None):
+    def _get_choice_or_custom(self, field_prefix):
+        """Get CSS value - transformed choice or formatted custom."""
         choice_value = getattr(self, f"{field_prefix}_choice")
-        if choice_value != constants.CUSTOM:
-            return choice_value
-        else:
+        if choice_value == constants.CUSTOM:
             custom_value = getattr(self, f"{field_prefix}_custom")
-            return self._format(custom_formatter, custom_value)
+            return self._format_custom(field_prefix, custom_value)
+        return self._transform_css(field_prefix, choice_value)
 
-    @staticmethod
-    def _format(formatter, value):
-        if formatter:
-            if isinstance(formatter, str):
-                return formatter.format(value)
-            else:
-                return formatter(value)
-        else:
-            return value
+    def _format_custom(self, attr, value):
+        """Format custom value using format from XPREZ_CSS."""
+        mapping = self._get_css_mapping(attr)
+        return self._format_css_value(mapping, value)
 
     class Meta:
         abstract = True
@@ -219,28 +159,22 @@ class SectionConfig(ConfigBase):
     def get_css(self):
         return {
             "columns": self.columns,
-            "margin-bottom": self._get_choice_or_custom(
-                "margin_bottom", "{}" + constants.MARGIN_CUSTOM_UNITS
-            ),
-            "padding-left": self._get_choice_or_custom(
-                "padding_left", "{}" + constants.PADDING_CUSTOM_UNITS
-            ),
-            "padding-right": self._get_choice_or_custom(
-                "padding_right", "{}" + constants.PADDING_CUSTOM_UNITS
-            ),
-            "padding-top": self._get_choice_or_custom(
-                "padding_top", "{}" + constants.PADDING_CUSTOM_UNITS
-            ),
-            "padding-bottom": self._get_choice_or_custom(
-                "padding_bottom", "{}" + constants.PADDING_CUSTOM_UNITS
-            ),
-            "gap": self._get_choice_or_custom("gap", "{}" + constants.GAP_CUSTOM_UNITS),
+            "margin-bottom": self._get_choice_or_custom("margin_bottom"),
+            "padding-left": self._get_choice_or_custom("padding_left"),
+            "padding-right": self._get_choice_or_custom("padding_right"),
+            "padding-top": self._get_choice_or_custom("padding_top"),
+            "padding-bottom": self._get_choice_or_custom("padding_bottom"),
+            "gap": self._get_choice_or_custom("gap"),
             "vertical-align": self.vertical_align,
             "horizontal-align": self.horizontal_align,
         }
 
-    def get_identifier(self):
-        return "section-config-" + str(self.pk)
+    def _get_css_config_key(self):
+        return "section"
+
+    @property
+    def key(self):
+        return f"section-config-{self.pk}"
 
     class Meta:
         verbose_name = "Section Config"
@@ -282,6 +216,9 @@ class ModuleConfig(ConfigBase):
             "horizontal-align": self.horizontal_align,
         }
 
+    def _get_css_config_key(self):
+        return self.module.class_content_type()
+
     def get_admin_form_class(self):
         cls = super().get_admin_form_class()
         if cls._meta.model:
@@ -294,8 +231,9 @@ class ModuleConfig(ConfigBase):
 
             return ModuleConfigForm
 
-    def get_identifier(self):
-        return "module-config-" + str(self.pk)
+    @property
+    def key(self):
+        return f"module-config-{self.pk}"
 
     class Meta:
         verbose_name = "Module Config"

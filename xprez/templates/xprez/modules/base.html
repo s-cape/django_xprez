@@ -1,5 +1,5 @@
 {% block module %}
-    <div id="#{{ module.get_identifier }}" class="{% block css_class%}xprez-module {{ module.module_css_class }} {{ module.css_class|default:'' }} {% block css_class_extra %}{% endblock %}{% endblock %}" {% block attrs %}{% endblock %}>
+    <div id="#{{ module.key }}" class="{% block css_class%}xprez-module {{ module.module_css_class }} {{ module.css_class|default:'' }} {% block css_class_extra %}{% endblock %}{% endblock %}" {% block attrs %}{% endblock %}>
         {{ module.render_css }}
         {{ module.render_css|safe }}
         <div>
