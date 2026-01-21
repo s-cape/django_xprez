@@ -29,13 +29,13 @@ PADDING_CHOICES = (
 )
 
 # Gap
-GAP_FULL = "full"
+GAP_LARGE = "large"
 GAP_MEDIUM = "medium"
 GAP_SMALL = "small"
 GAP_CUSTOM = CUSTOM
 GAP_CUSTOM_UNITS = "px"
 GAP_CHOICES = (
-    (GAP_FULL, "Full"),
+    (GAP_LARGE, "Large"),
     (GAP_MEDIUM, "Medium"),
     (GAP_SMALL, "Small"),
     (GAP_CUSTOM, "Custom"),

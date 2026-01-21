@@ -333,12 +333,12 @@ class Migration(migrations.Migration):
                     "gap_choice",
                     models.CharField(
                         choices=[
-                            ("full", "Full"),
+                            ("large", "Large"),
                             ("medium", "Medium"),
                             ("small", "Small"),
                             ("custom", "Custom"),
                         ],
-                        default="full",
+                        default="medium",
                         max_length=20,
                         verbose_name="Gap",
                     ),
@@ -467,6 +467,7 @@ class Migration(migrations.Migration):
                 "verbose_name": "Module Config",
                 "verbose_name_plural": "Module Configs",
                 "unique_together": {("module", "css_breakpoint")},
+                "ordering": ("css_breakpoint",),
             },
         ),
         migrations.CreateModel(

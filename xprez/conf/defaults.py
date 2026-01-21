@@ -1,6 +1,6 @@
 from xprez import constants
 from xprez.constants import (
-    GAP_FULL,
+    GAP_LARGE,
     GAP_MEDIUM,
     GAP_SMALL,
     MARGIN_FULL,
@@ -62,7 +62,7 @@ XPREZ_SECTION_CONFIG_DEFAULTS = {
     "padding_right_choice": constants.PADDING_NONE,
     "padding_top_choice": constants.PADDING_NONE,
     "padding_bottom_choice": constants.PADDING_NONE,
-    "gap_choice": constants.GAP_FULL,
+    "gap_choice": constants.GAP_MEDIUM,
     "vertical_align": constants.VERTICAL_ALIGN_TOP,
     "horizontal_align": constants.HORIZONTAL_ALIGN_LEFT,
 }
@@ -136,7 +136,7 @@ XPREZ_CSS = {
             "values": {
                 GAP_SMALL: {0: 10, 1: 15, 2: 20},
                 GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
-                GAP_FULL: {0: 40, 1: 60, 2: 80},
+                GAP_LARGE: {0: 40, 1: 60, 2: 80},
             },
         },
     },

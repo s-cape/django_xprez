@@ -140,7 +140,7 @@ class SectionConfig(ConfigBase):
         "Gap",
         max_length=20,
         choices=constants.GAP_CHOICES,
-        default=constants.GAP_FULL,
+        default=constants.GAP_MEDIUM,
     )
     gap_custom = models.PositiveIntegerField(null=True, blank=True)
 
