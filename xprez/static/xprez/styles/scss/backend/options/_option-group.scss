@@ -3,10 +3,11 @@
         display: flex;
         flex-direction: column;
         gap: var(--x-admin-option-group-gap);
+        margin-top: var(--x-admin-padding-lg);
         position: relative;
 
-        &:not(:first-child) {
-            margin-top: var(--x-admin-padding-lg);
+        .xprez-popover__content > &:first-child {
+            margin-top: 0;
         }
 
         &--panel {
