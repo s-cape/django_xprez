@@ -1,19 +1,29 @@
 CUSTOM = "custom"
+NONE = ""
 
-# Margin
-MARGIN_FULL = "full"
-MARGIN_MEDIUM = "medium"
 MARGIN_SMALL = "small"
+MARGIN_MEDIUM = "medium"
+MARGIN_FULL = "full"
 MARGIN_CUSTOM = CUSTOM
 MARGIN_CUSTOM_UNITS = "px"
 MARGIN_CHOICES = (
-    (MARGIN_FULL, "Full"),
-    (MARGIN_MEDIUM, "Medium"),
     (MARGIN_SMALL, "Small"),
+    (MARGIN_MEDIUM, "Medium"),
+    (MARGIN_FULL, "Full"),
     (MARGIN_CUSTOM, "Custom"),
 )
 
-# Padding
+MAX_WIDTH_SMALL = "small"
+MAX_WIDTH_MEDIUM = "medium"
+MAX_WIDTH_FULL = "full"
+MAX_WIDTH_CUSTOM = CUSTOM
+MAX_WIDTH_CHOICES = (
+    (MAX_WIDTH_SMALL, "Small"),
+    (MAX_WIDTH_MEDIUM, "Medium"),
+    (MAX_WIDTH_FULL, "Full"),
+    (MAX_WIDTH_CUSTOM, "Custom"),
+)
+
 PADDING_NONE = "none"
 PADDING_SMALL = "small"
 PADDING_MEDIUM = "medium"
@@ -29,15 +39,17 @@ PADDING_CHOICES = (
 )
 
 # Gap
-GAP_LARGE = "large"
-GAP_MEDIUM = "medium"
+GAP_NONE = NONE
 GAP_SMALL = "small"
+GAP_MEDIUM = "medium"
+GAP_LARGE = "large"
 GAP_CUSTOM = CUSTOM
 GAP_CUSTOM_UNITS = "px"
 GAP_CHOICES = (
-    (GAP_LARGE, "Large"),
-    (GAP_MEDIUM, "Medium"),
+    (GAP_NONE, "None"),
     (GAP_SMALL, "Small"),
+    (GAP_MEDIUM, "Medium"),
+    (GAP_LARGE, "Large"),
     (GAP_CUSTOM, "Custom"),
 )
 
@@ -63,4 +75,17 @@ HORIZONTAL_ALIGN_CHOICES = (
     (HORIZONTAL_ALIGN_CENTER, "Center"),
     (HORIZONTAL_ALIGN_RIGHT, "Right"),
     (HORIZONTAL_ALIGN_STRETCH, "Stretch"),
+)
+
+CROP_NONE = ""
+CROP_1_1 = "1:1"
+CROP_3_2 = "3:2"
+CROP_4_3 = "4:3"
+CROP_16_9 = "16:9"
+CROP_CHOICES = (
+    (CROP_NONE, "None"),
+    (CROP_1_1, "1:1"),
+    (CROP_3_2, "3:2"),
+    (CROP_4_3, "4:3"),
+    (CROP_16_9, "16:9"),
 )

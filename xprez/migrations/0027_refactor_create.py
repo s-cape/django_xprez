@@ -222,9 +222,9 @@ class Migration(migrations.Migration):
                     "margin_bottom_choice",
                     models.CharField(
                         choices=[
-                            ("full", "Full"),
-                            ("medium", "Medium"),
                             ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("full", "Full"),
                             ("custom", "Custom"),
                         ],
                         default="medium",
@@ -333,9 +333,10 @@ class Migration(migrations.Migration):
                     "gap_choice",
                     models.CharField(
                         choices=[
-                            ("large", "Large"),
-                            ("medium", "Medium"),
+                            ("", "None"),
                             ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
                             ("custom", "Custom"),
                         ],
                         default="medium",
@@ -471,7 +472,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="TextModuleConfig",
+            name="TextConfig",
             fields=[
                 (
                     "moduleconfig_ptr",
@@ -491,6 +492,78 @@ class Migration(migrations.Migration):
                 (
                     "border",
                     models.BooleanField(default=True),
+                ),
+            ],
+            options={
+                "abstract": False,
+            },
+            bases=("xprez.moduleconfig",),
+        ),
+        migrations.CreateModel(
+            name="GalleryConfig",
+            fields=[
+                (
+                    "moduleconfig_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.moduleconfig",
+                    ),
+                ),
+                (
+                    "columns",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (1, "1"),
+                            (2, "2"),
+                            (3, "3"),
+                            (4, "4"),
+                            (6, "6"),
+                            (8, "8"),
+                        ],
+                        default=1,
+                    ),
+                ),
+                (
+                    "padding_horizontal_choice",
+                    models.CharField(
+                        choices=[
+                            ("none", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="none",
+                        max_length=20,
+                        verbose_name="Padding horizontal",
+                    ),
+                ),
+                (
+                    "padding_horizontal_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "padding_vertical_choice",
+                    models.CharField(
+                        choices=[
+                            ("none", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="none",
+                        max_length=20,
+                        verbose_name="Padding vertical",
+                    ),
+                ),
+                (
+                    "padding_vertical_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
                 ),
             ],
             options={

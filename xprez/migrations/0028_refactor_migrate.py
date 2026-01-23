@@ -55,7 +55,7 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 css_class=old_content.css_class,
                 saved=True,
             )
-            section.configs.get_or_create(
+            section_config, _created = section.configs.get_or_create(
                 css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
             )
 
@@ -97,6 +97,12 @@ def rename_content_types(apps, schema_editor):
 class ModuleProcessorBase:
     old_content_class = None
 
+    WIDTH_TRANS = {
+        "full": "full",
+        "mid": "medium",
+        "text": "small",
+    }
+
     def __init__(self, apps, module_base):
         self.apps = apps
         self.module_base = module_base
@@ -127,10 +133,9 @@ class ModuleProcessorBase:
 
     def create_config(self, module):
         config_class = self.apps.get_model(*self.get_config_class(module).split("."))
-        config, created = config_class.objects.get_or_create(
+        self.config, _created = config_class.objects.get_or_create(
             module=module, css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
         )
-        print(created, config)
 
 
 class SimpleModuleProcessor(ModuleProcessorBase):
@@ -167,7 +172,7 @@ class ModuleReplaceProcessor(ModuleProcessorBase):
 
 class TextModuleProcessorBase(ModuleReplaceProcessor):
     def get_config_class(self, module):
-        return "xprez.TextModuleConfig"
+        return "xprez.TextConfig"
 
     def prepare_new_modules(self, **kwargs):
         TextModule = self.apps.get_model("xprez", "TextModule")
@@ -232,9 +237,27 @@ class TextImageProcessor(ModuleReplaceProcessor):
 
 
 class GalleryProcessor(SimpleModuleProcessor):
+    GAP_TRANS = {True: "small", False: ""}
+    CROP_TRANS = {True: "4:3", False: ""}
+
     def process(self):
         super().process()
-        print("TODO: process gallery")
+        section_config = self.module.section.configs.get(
+            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+        )
+        section_config.max_width_choice = self.WIDTH_TRANS[self.old_content.width]
+        section_config.columns = self.old_content.columns
+        section_config.gap_choice = self.GAP_TRANS[self.old_content.divided]
+        section_config.save()
+
+        self.module.crop = self.CROP_TRANS[self.old_content.crop_old]
+        self.module.save()
+
+        self.config.gap_choice = self.GAP_TRANS[self.old_content.divided]
+        self.config.save()
+
+    def get_config_class(self, module):
+        return "xprez.GalleryConfig"
 
 
 class DownloadModuleProcessor(SimpleModuleProcessor):
@@ -307,6 +330,26 @@ class Migration(migrations.Migration):
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="items",
                 to="xprez.GalleryModule",
+            ),
+        ),
+        migrations.RenameField(
+            model_name="GalleryModule",
+            old_name="crop",
+            new_name="crop_old",
+        ),
+        migrations.AddField(
+            model_name="gallerymodule",
+            name="crop",
+            field=models.CharField(
+                choices=[
+                    ("", "None"),
+                    ("1:1", "1:1"),
+                    ("3:2", "3:2"),
+                    ("4:3", "4:3"),
+                    ("16:9", "16:9"),
+                ],
+                default="",
+                max_length=5,
             ),
         ),
         migrations.RenameModel(old_name="Video", new_name="VideoModule"),

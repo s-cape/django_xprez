@@ -22,14 +22,14 @@ class Module(ConfigParentMixin, models.Model):
     form_class = "xprez.admin.forms.BaseModuleForm"
     js_controller_class = "XprezModule"
 
-    SIZE_FULL = "full"
-    SIZE_MID = "mid"
-    SIZE_TEXT = "text"
-    SIZE_CHOICES = (
-        (SIZE_FULL, "full"),
-        (SIZE_MID, "mid"),
-        (SIZE_TEXT, "text"),
-    )
+    # SIZE_FULL = "full"
+    # SIZE_MID = "mid"
+    # SIZE_TEXT = "text"
+    # SIZE_CHOICES = (
+    #     (SIZE_FULL, "full"),
+    #     (SIZE_MID, "mid"),
+    #     (SIZE_TEXT, "text"),
+    # )
 
     section = models.ForeignKey(
         settings.XPREZ_SECTION_MODEL_CLASS,

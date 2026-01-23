@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.loader import render_to_string
 
+from xprez import constants
 from xprez.conf import settings
 from xprez.models.configs import ConfigParentMixin
 from xprez.utils import import_class
@@ -23,21 +24,11 @@ class Section(ConfigParentMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
     changed = models.DateTimeField(auto_now=True, editable=False, db_index=True)
 
-    MAX_WIDTH_SMALL = "small"
-    MAX_WIDTH_MEDIUM = "medium"
-    MAX_WIDTH_FULL = "full"
-    MAX_WIDTH_CUSTOM = "custom"
-    MAX_WIDTH_CHOICES = (
-        (MAX_WIDTH_SMALL, "Small"),
-        (MAX_WIDTH_MEDIUM, "Medium"),
-        (MAX_WIDTH_FULL, "Full"),
-        (MAX_WIDTH_CUSTOM, "Custom"),
-    )
     max_width_choice = models.CharField(
         verbose_name="Max width",
         max_length=16,
-        choices=MAX_WIDTH_CHOICES,
-        default=MAX_WIDTH_FULL,
+        choices=constants.MAX_WIDTH_CHOICES,
+        default=constants.MAX_WIDTH_FULL,
     )
     max_width_custom = models.PositiveIntegerField(null=True, blank=True)
 

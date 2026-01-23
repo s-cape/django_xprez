@@ -18,4 +18,9 @@ class Migration(migrations.Migration):
         migrations.DeleteModel("TextImage"),
         migrations.DeleteModel(name="Quote"),
         migrations.DeleteModel(name="QuoteContent"),
+        migrations.RemoveField(model_name="GalleryModule", name="crop_old"),
+        migrations.RemoveField(model_name="GalleryModule", name="divided"),
+        migrations.RemoveField(model_name="GalleryModule", name="columns"),
+        migrations.RemoveField(model_name="GalleryModule", name="width"),
+        migrations.RemoveField(model_name="VideoModule", name="width"),
     ]

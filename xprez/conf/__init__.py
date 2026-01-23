@@ -46,19 +46,18 @@ class SettingsLoader:
         return result
 
     def _preprocess_xprez_css(self, css_config):
-        """Pre-merge each config key's attrs with sections/modules fallback."""
-        sections = css_config.get("sections", {})
+        """Pre-merge module-specific keys with modules fallback."""
         modules = css_config.get("modules", {})
         for key in list(css_config.keys()):
             if key in ("sections", "modules"):
                 continue
-            fallback = sections if key == "section" else modules
-            for attr in fallback:
+            # All other keys are module types - merge with modules
+            for attr in modules:
                 if attr not in css_config[key]:
-                    css_config[key][attr] = fallback[attr]
+                    css_config[key][attr] = modules[attr]
                 else:
                     css_config[key][attr] = deep_merge(
-                        fallback[attr], css_config[key][attr]
+                        modules[attr], css_config[key][attr]
                     )
         return css_config
 

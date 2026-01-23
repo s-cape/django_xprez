@@ -169,8 +169,8 @@ class SectionConfig(ConfigBase):
             "horizontal-align": self.horizontal_align,
         }
 
-    def _get_css_config_key(self):
-        return "section"
+    def _get_css_config_keys(self):
+        return ["sections"]
 
     @property
     def key(self):
@@ -216,8 +216,8 @@ class ModuleConfig(ConfigBase):
             "horizontal-align": self.horizontal_align,
         }
 
-    def _get_css_config_key(self):
-        return self.module.class_content_type()
+    def _get_css_config_keys(self):
+        return [self.module.class_content_type(), "modules"]
 
     def get_admin_form_class(self):
         cls = super().get_admin_form_class()

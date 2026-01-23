@@ -15,11 +15,13 @@ class CssConfigMixin:
         return fmt.format(raw) if fmt and raw is not None else raw
 
     def _get_css_mapping(self, attr):
-        """Get XPREZ_CSS mapping for attr, falling back to sections/modules."""
+        """Get XPREZ_CSS mapping for attr, trying keys in order."""
         css = settings.XPREZ_CSS
-        key = self._get_css_config_key()
-        fallback = "sections" if key == "section" else "modules"
-        return css.get(key, {}).get(attr) or css.get(fallback, {}).get(attr)
+        for key in self._get_css_config_keys():
+            mapping = css.get(key, {}).get(attr)
+            if mapping:
+                return mapping
+        return None
 
     def _resolve_breakpoint(self, breakpoints):
         """Get value for current breakpoint, falling back to lower."""
@@ -33,8 +35,8 @@ class CssConfigMixin:
         fmt = mapping.get("format") if mapping else None
         return fmt.format(value) if fmt and value is not None else value
 
-    def _get_css_config_key(self):
-        """Return key for XPREZ_CSS lookup. Override in subclasses."""
+    def _get_css_config_keys(self):
+        """Return keys for XPREZ_CSS lookup in priority order. Override in subclasses."""
         raise NotImplementedError()
 
 
@@ -114,7 +116,7 @@ class CssRenderMixin:
         """
         Generate <style> tag with all breakpoint styles.
 
-        Returns: "<style>\n#section-config-1 { --x-columns: 1; }\n</style>"
+        Returns: "<style>#section-config-1 { --x-columns: 1; }</style>"
         """
         css_data = self.get_css_by_breakpoint()
         if not css_data:

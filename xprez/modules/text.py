@@ -58,7 +58,7 @@ class TextModuleBase(CkEditorFileUploadMixin, Module):
     admin_template_name = "xprez/admin/modules/text_base.html"
     front_template_name = "xprez/modules/text_base.html"
     icon_template_name = "xprez/admin/icons/modules/text_base.html"
-    config_model = "xprez.TextModulBaseConfig"
+    config_model = "xprez.TextBaseConfig"
 
     text = models.TextField(blank=True)
 
@@ -71,7 +71,7 @@ class TextModule(TextModuleBase):
     admin_template_name = "xprez/admin/modules/text.html"
     front_template_name = "xprez/modules/text.html"
     icon_template_name = "xprez/admin/icons/modules/text.html"
-    config_model = "xprez.TextModuleConfig"
+    config_model = "xprez.TextConfig"
 
     image = models.ImageField(upload_to="images", null=True, blank=True)
     url = models.CharField("Target URL", max_length=255, null=True, blank=True)
@@ -93,7 +93,7 @@ class TextModule(TextModuleBase):
         return truncate_with_ellipsis(self.text, CLIPBOARD_TEXT_MAX_LENGTH)
 
 
-class TextModuleBaseConfig(ModuleConfig):
+class TextBaseConfig(ModuleConfig):
     admin_template_name = "xprez/admin/configs/modules/text_base.html"
 
     border = models.BooleanField(default=True)
@@ -109,7 +109,7 @@ class TextModuleBaseConfig(ModuleConfig):
         abstract = True
 
 
-class TextModuleConfig(TextModuleBaseConfig):
+class TextConfig(TextBaseConfig):
     admin_template_name = "xprez/admin/configs/modules/text.html"
 
 

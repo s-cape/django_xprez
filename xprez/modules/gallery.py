@@ -1,7 +1,9 @@
 from django.db import models
 from django.forms import inlineformset_factory
 
+from xprez import constants
 from xprez.admin.forms import BaseModuleForm
+from xprez.models.configs import ModuleConfig
 from xprez.models.modules import Module, MultiModuleItem, UploadMultiModule
 
 PHOTOSWIPE_JS = (
@@ -16,15 +18,6 @@ PHOTOSWIPE_CSS = (
 
 
 class GalleryModule(UploadMultiModule):
-    COLUMNS_CHOICES = (
-        (1, "1"),
-        (2, "2"),
-        (3, "3"),
-        (4, "4"),
-        (6, "6"),
-        (8, "8"),
-    )
-
     form_class = "xprez.modules.gallery.GalleryModuleForm"
     admin_template_name = "xprez/admin/modules/gallery/gallery.html"
     admin_formset_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"
@@ -32,12 +25,12 @@ class GalleryModule(UploadMultiModule):
     icon_template_name = "xprez/admin/icons/modules/gallery.html"
     formset_factory = "xprez.modules.gallery.GalleryItemFormSet"
 
-    width = models.CharField(
-        max_length=50, choices=Module.SIZE_CHOICES, default=Module.SIZE_FULL
+    # max_width = models.CharField(
+    #     max_length=50, choices=Module.SIZE_CHOICES, default=Module.SIZE_FULL
+    # )
+    crop = models.CharField(
+        max_length=5, choices=constants.CROP_CHOICES, default=constants.CROP_NONE
     )
-    columns = models.PositiveSmallIntegerField(default=1)
-    divided = models.BooleanField(default=False)
-    crop = models.BooleanField(default=False)
 
     def save_admin_form(self, request):
         super().save_admin_form(request)
@@ -80,20 +73,46 @@ class GalleryItem(MultiModuleItem):
         ordering = ("position",)
 
 
+class GalleryConfig(ModuleConfig):
+    COLUMNS_CHOICES = (
+        (1, "1"),
+        (2, "2"),
+        (3, "3"),
+        (4, "4"),
+        (6, "6"),
+        (8, "8"),
+    )
+    columns = models.PositiveSmallIntegerField(choices=COLUMNS_CHOICES, default=1)
+    padding_horizontal_choice = models.CharField(
+        "Padding horizontal",
+        max_length=20,
+        choices=constants.PADDING_CHOICES,
+        default=constants.PADDING_NONE,
+    )
+    padding_horizontal_custom = models.PositiveIntegerField(null=True, blank=True)
+    padding_vertical_choice = models.CharField(
+        "Padding vertical",
+        max_length=20,
+        choices=constants.PADDING_CHOICES,
+        default=constants.PADDING_NONE,
+    )
+    padding_vertical_custom = models.PositiveIntegerField(null=True, blank=True)
+
+
 class GalleryModuleForm(BaseModuleForm):
     options_fields = (
-        "width",
-        "columns",
-        "divided",
+        # "width",
+        # "columns",
+        # "divided",
         "crop",
     ) + BaseModuleForm.options_fields
 
     class Meta:
         model = GalleryModule
         fields = (
-            "width",
-            "columns",
-            "divided",
+            # "width",
+            # "columns",
+            # "divided",
             "crop",
         ) + BaseModuleForm.base_module_fields
 
