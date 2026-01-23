@@ -140,7 +140,8 @@ class SectionConfig(ConfigBase):
         "Gap",
         max_length=20,
         choices=constants.GAP_CHOICES,
-        default=constants.GAP_MEDIUM,
+        default=constants.GAP_SMALL,
+        blank=True,
     )
     gap_custom = models.PositiveIntegerField(null=True, blank=True)
 
@@ -217,7 +218,7 @@ class ModuleConfig(ConfigBase):
         }
 
     def _get_css_config_keys(self):
-        return [self.module.class_content_type(), "modules"]
+        return [self.module.content_type, "modules"]
 
     def get_admin_form_class(self):
         cls = super().get_admin_form_class()

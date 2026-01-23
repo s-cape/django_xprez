@@ -62,7 +62,7 @@ XPREZ_SECTION_CONFIG_DEFAULTS = {
     "padding_right_choice": constants.PADDING_NONE,
     "padding_top_choice": constants.PADDING_NONE,
     "padding_bottom_choice": constants.PADDING_NONE,
-    "gap_choice": constants.GAP_MEDIUM,
+    "gap_choice": constants.GAP_SMALL,
     "vertical_align": constants.VERTICAL_ALIGN_TOP,
     "horizontal_align": constants.HORIZONTAL_ALIGN_LEFT,
 }
@@ -78,8 +78,8 @@ XPREZ_MODULE_CONFIG_DEFAULTS = {
         "horizontal_align": constants.HORIZONTAL_ALIGN_STRETCH,
     },
     "xprez.GalleryModule": {
-        "colspan": 2,
-        "rowspan": 3,
+        "colspan": 1,
+        "rowspan": 1,
         "vertical_align": constants.VERTICAL_ALIGN_MIDDLE,
         "horizontal_align": constants.HORIZONTAL_ALIGN_CENTER,
     },
@@ -142,4 +142,24 @@ XPREZ_CSS = {
     },
     "modules": {},
     "xprez.TextModule": {},
+    "xprez.GalleryModule": {
+        "padding_horizontal": {
+            "format": "{}px",
+            "values": {
+                PADDING_NONE: {0: 0},
+                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+            },
+        },
+        "padding_vertical": {
+            "format": "{}px",
+            "values": {
+                PADDING_NONE: {0: 0},
+                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+            },
+        },
+    },
 }

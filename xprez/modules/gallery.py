@@ -24,12 +24,16 @@ class GalleryModule(UploadMultiModule):
     front_template_name = "xprez/modules/gallery.html"
     icon_template_name = "xprez/admin/icons/modules/gallery.html"
     formset_factory = "xprez.modules.gallery.GalleryItemFormSet"
+    config_model = "xprez.GalleryConfig"
 
     # max_width = models.CharField(
     #     max_length=50, choices=Module.SIZE_CHOICES, default=Module.SIZE_FULL
     # )
     crop = models.CharField(
-        max_length=5, choices=constants.CROP_CHOICES, default=constants.CROP_NONE
+        max_length=5,
+        choices=constants.CROP_CHOICES,
+        default=constants.CROP_NONE,
+        blank=True,
     )
 
     def save_admin_form(self, request):
@@ -97,6 +101,17 @@ class GalleryConfig(ModuleConfig):
         default=constants.PADDING_NONE,
     )
     padding_vertical_custom = models.PositiveIntegerField(null=True, blank=True)
+
+    def get_css(self):
+        css = super().get_css()
+        css.update(
+            {
+                "columns": self.columns,
+                "padding-horizontal": self._get_choice_or_custom("padding_horizontal"),
+                "padding-vertical": self._get_choice_or_custom("padding_vertical"),
+            }
+        )
+        return css
 
 
 class GalleryModuleForm(BaseModuleForm):

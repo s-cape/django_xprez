@@ -350,6 +350,7 @@ class Migration(migrations.Migration):
                 ],
                 default="",
                 max_length=5,
+                blank=True,
             ),
         ),
         migrations.RenameModel(old_name="Video", new_name="VideoModule"),
