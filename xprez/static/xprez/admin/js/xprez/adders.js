@@ -91,10 +91,10 @@ export class XprezAdderSectionBase extends XprezAdderItemsBase {
         this.hide();
     }
 
-    isVisible() { return !this.el.hasAttribute("data-hidden"); }
+    isOpen() { return !this.el.hasAttribute("data-hidden"); }
     show() { this.el.removeAttribute("data-hidden"); }
     hide() { this.el.setAttribute("data-hidden", ""); }
-    toggle() { this.isVisible() ? this.hide() : this.show(); }
+    toggle() { this.isOpen() ? this.hide() : this.show(); }
 }
 
 export class XprezAdderSectionBefore extends XprezAdderSectionBase {

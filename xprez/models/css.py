@@ -1,5 +1,19 @@
 from xprez.conf import settings
 
+"TODO: this file need cleanup"
+
+
+class UnitsProxy:
+    """Proxy to access units from XPREZ_CSS for any field."""
+
+    def __init__(self, config):
+        self.config = config
+
+    def __getattr__(self, field_name):
+        """Returns units for any field: config.units.margin_bottom -> 'px'"""
+        mapping = self.config._get_css_mapping(field_name)
+        return mapping.get("units", "") if mapping else ""
+
 
 class CssConfigMixin:
     """Mixin for ConfigBase to transform placeholder CSS values."""
@@ -11,8 +25,7 @@ class CssConfigMixin:
         if not breakpoints:
             return value
         raw = self._resolve_breakpoint(breakpoints)
-        fmt = mapping.get("format")
-        return fmt.format(raw) if fmt and raw is not None else raw
+        return self._format_css_value(mapping, raw)
 
     def _get_css_mapping(self, attr):
         """Get XPREZ_CSS mapping for attr, trying keys in order."""
@@ -31,9 +44,14 @@ class CssConfigMixin:
         return None
 
     def _format_css_value(self, mapping, value):
-        """Apply format from mapping to value."""
-        fmt = mapping.get("format") if mapping else None
-        return fmt.format(value) if fmt and value is not None else value
+        """Apply units from mapping to value."""
+        units = mapping.get("units", "") if mapping else ""
+        return f"{value}{units}" if value is not None else value
+
+    @property
+    def units(self):
+        """Proxy for accessing units: config.units.margin_bottom"""
+        return UnitsProxy(self)
 
     def _get_css_config_keys(self):
         """Return keys for XPREZ_CSS lookup in priority order. Override in subclasses."""

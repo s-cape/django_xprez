@@ -5,7 +5,6 @@ MARGIN_SMALL = "small"
 MARGIN_MEDIUM = "medium"
 MARGIN_FULL = "full"
 MARGIN_CUSTOM = CUSTOM
-MARGIN_CUSTOM_UNITS = "px"
 MARGIN_CHOICES = (
     (MARGIN_SMALL, "Small"),
     (MARGIN_MEDIUM, "Medium"),
@@ -24,12 +23,11 @@ MAX_WIDTH_CHOICES = (
     (MAX_WIDTH_CUSTOM, "Custom"),
 )
 
-PADDING_NONE = "none"
+PADDING_NONE = NONE
 PADDING_SMALL = "small"
 PADDING_MEDIUM = "medium"
 PADDING_LARGE = "large"
 PADDING_CUSTOM = CUSTOM
-PADDING_CUSTOM_UNITS = "px"
 PADDING_CHOICES = (
     (PADDING_NONE, "None"),
     (PADDING_SMALL, "Small"),
@@ -44,7 +42,6 @@ GAP_SMALL = "small"
 GAP_MEDIUM = "medium"
 GAP_LARGE = "large"
 GAP_CUSTOM = CUSTOM
-GAP_CUSTOM_UNITS = "px"
 GAP_CHOICES = (
     (GAP_NONE, "None"),
     (GAP_SMALL, "Small"),

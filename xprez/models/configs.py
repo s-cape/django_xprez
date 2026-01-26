@@ -69,14 +69,12 @@ class ConfigBase(CssConfigMixin, models.Model):
         """Get CSS value - transformed choice or formatted custom."""
         choice_value = getattr(self, f"{field_prefix}_choice")
         if choice_value == constants.CUSTOM:
-            custom_value = getattr(self, f"{field_prefix}_custom")
-            return self._format_custom(field_prefix, custom_value)
-        return self._transform_css(field_prefix, choice_value)
-
-    def _format_custom(self, attr, value):
-        """Format custom value using format from XPREZ_CSS."""
-        mapping = self._get_css_mapping(attr)
-        return self._format_css_value(mapping, value)
+            return self._format_css_value(
+                self._get_css_mapping(field_prefix),
+                getattr(self, f"{field_prefix}_custom"),
+            )
+        else:
+            return self._transform_css(field_prefix, choice_value)
 
     class Meta:
         abstract = True
@@ -106,25 +104,29 @@ class SectionConfig(ConfigBase):
         "Padding left",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
+        default=constants.PADDING_SMALL,
+        blank=True,
     )
     padding_right_choice = models.CharField(
         "Padding right",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
+        default=constants.PADDING_SMALL,
+        blank=True,
     )
     padding_top_choice = models.CharField(
         "Padding top",
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=constants.PADDING_NONE,
+        blank=True,
     )
     padding_bottom_choice = models.CharField(
         "Padding bottom",
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=constants.PADDING_NONE,
+        blank=True,
     )
     padding_left_custom = models.PositiveIntegerField(null=True, blank=True)
     padding_right_custom = models.PositiveIntegerField(null=True, blank=True)

@@ -88,7 +88,7 @@ XPREZ_MODULE_CONFIG_DEFAULTS = {
 XPREZ_CSS = {
     "sections": {
         "margin_bottom": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 MARGIN_SMALL: {0: 10, 1: 15, 2: 20},
                 MARGIN_MEDIUM: {0: 20, 1: 30, 2: 40},
@@ -96,7 +96,7 @@ XPREZ_CSS = {
             },
         },
         "padding_left": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 PADDING_NONE: {0: 0},
                 PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -105,7 +105,7 @@ XPREZ_CSS = {
             },
         },
         "padding_right": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 PADDING_NONE: {0: 0},
                 PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -114,7 +114,7 @@ XPREZ_CSS = {
             },
         },
         "padding_top": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 PADDING_NONE: {0: 0},
                 PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -123,7 +123,7 @@ XPREZ_CSS = {
             },
         },
         "padding_bottom": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 PADDING_NONE: {0: 0},
                 PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -132,7 +132,7 @@ XPREZ_CSS = {
             },
         },
         "gap": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 GAP_SMALL: {0: 10, 1: 15, 2: 20},
                 GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
@@ -144,7 +144,7 @@ XPREZ_CSS = {
     "xprez.TextModule": {},
     "xprez.GalleryModule": {
         "padding_horizontal": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 PADDING_NONE: {0: 0},
                 PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -153,7 +153,7 @@ XPREZ_CSS = {
             },
         },
         "padding_vertical": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 PADDING_NONE: {0: 0},
                 PADDING_SMALL: {0: 10, 1: 15, 2: 20},
