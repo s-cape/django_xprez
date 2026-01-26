@@ -2,7 +2,7 @@
 
 {% block content %}
     {% if module.image %}
-        <img src="{{ module.image.url }}" alt="{{ module.image.name }}">
+        <img class="xprez-text__image" src="{{ module.image.url }}" alt="{{ module.image.name }}">
     {% endif %}
     {{ block.super }}
 {% endblock %}
