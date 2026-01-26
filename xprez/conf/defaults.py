@@ -1,16 +1,4 @@
 from xprez import constants
-from xprez.constants import (
-    GAP_LARGE,
-    GAP_MEDIUM,
-    GAP_SMALL,
-    MARGIN_FULL,
-    MARGIN_MEDIUM,
-    MARGIN_SMALL,
-    PADDING_LARGE,
-    PADDING_MEDIUM,
-    PADDING_NONE,
-    PADDING_SMALL,
-)
 
 XPREZ_SECTION_MODEL_CLASS = "xprez.Section"
 XPREZ_CONTAINER_MODEL_CLASS = "xprez.Container"
@@ -87,56 +75,64 @@ XPREZ_MODULE_CONFIG_DEFAULTS = {
 
 XPREZ_CSS = {
     "sections": {
+        "max_width": {
+            "format": "{}px",
+            "values": {
+                constants.MAX_WIDTH_SMALL: {0: "400px"},
+                constants.MAX_WIDTH_MEDIUM: {0: 720},
+                constants.MAX_WIDTH_FULL: {0: 1296},
+            },
+        },
         "margin_bottom": {
             "format": "{}px",
             "values": {
-                MARGIN_SMALL: {0: 10, 1: 15, 2: 20},
-                MARGIN_MEDIUM: {0: 20, 1: 30, 2: 40},
-                MARGIN_FULL: {0: 40, 1: 60, 2: 80},
+                constants.MARGIN_SMALL: {0: 10, 1: 15, 2: 20},
+                constants.MARGIN_MEDIUM: {0: 20, 1: 30, 2: 40},
+                constants.MARGIN_FULL: {0: 40, 1: 60, 2: 80},
             },
         },
         "padding_left": {
             "format": "{}px",
             "values": {
-                PADDING_NONE: {0: 0},
-                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                constants.PADDING_NONE: {0: 0},
+                constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
             },
         },
         "padding_right": {
             "format": "{}px",
             "values": {
-                PADDING_NONE: {0: 0},
-                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                constants.PADDING_NONE: {0: 0},
+                constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
             },
         },
         "padding_top": {
             "format": "{}px",
             "values": {
-                PADDING_NONE: {0: 0},
-                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                constants.PADDING_NONE: {0: 0},
+                constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
             },
         },
         "padding_bottom": {
             "format": "{}px",
             "values": {
-                PADDING_NONE: {0: 0},
-                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                constants.PADDING_NONE: {0: 0},
+                constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
             },
         },
         "gap": {
             "format": "{}px",
             "values": {
-                GAP_SMALL: {0: 10, 1: 15, 2: 20},
-                GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
-                GAP_LARGE: {0: 40, 1: 60, 2: 80},
+                constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
+                constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
+                constants.GAP_LARGE: {0: 40, 1: 60, 2: 80},
             },
         },
     },
@@ -146,19 +142,19 @@ XPREZ_CSS = {
         "padding_horizontal": {
             "format": "{}px",
             "values": {
-                PADDING_NONE: {0: 0},
-                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                constants.PADDING_NONE: {0: 0},
+                constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
             },
         },
         "padding_vertical": {
             "format": "{}px",
             "values": {
-                PADDING_NONE: {0: 0},
-                PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                constants.PADDING_NONE: {0: 0},
+                constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
             },
         },
     },

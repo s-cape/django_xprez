@@ -1,6 +1,6 @@
 {% load xprez %}
-<div id="#{{ section.key }}" class="xprez-section">
-    {{ section.render_css }}
+{{ section.render_css }}
+<div id="{{ section.key }}" class="xprez-section">
     {{ section.render_css|safe }}
     {% for module in section.get_modules %}
         {% xprez_module_render_front module %}
