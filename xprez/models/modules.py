@@ -141,11 +141,11 @@ class Module(ConfigParentMixin, models.Model):
 
     def build_config(self, css_breakpoint):
         config_model = self.get_config_model()
-        config_defaults = settings.XPREZ_MODULE_CONFIG_DEFAULTS.get(
-            "default", {}
-        ).copy()
+        config_defaults = (
+            settings.XPREZ_DEFAULTS["module_config"].get("default", {}).copy()
+        )
         config_defaults.update(
-            settings.XPREZ_MODULE_CONFIG_DEFAULTS.get(self.class_content_type(), {})
+            settings.XPREZ_DEFAULTS["module_config"].get(self.class_content_type(), {})
         )
         return config_model(
             module=self,

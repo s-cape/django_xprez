@@ -28,7 +28,7 @@ class Section(ConfigParentMixin, models.Model):
         verbose_name="Max width",
         max_length=16,
         choices=constants.MAX_WIDTH_CHOICES,
-        default=constants.MAX_WIDTH_FULL,
+        default=settings.XPREZ_DEFAULTS["section"]["max_width_choice"],
     )
     max_width_custom = models.PositiveIntegerField(null=True, blank=True)
 
@@ -48,8 +48,16 @@ class Section(ConfigParentMixin, models.Model):
         return self.configs.model(
             section=self,
             css_breakpoint=css_breakpoint,
-            **settings.XPREZ_SECTION_CONFIG_DEFAULTS,
+            **settings.XPREZ_DEFAULTS["section_config"],
         )
+
+    def get_css_config_keys(self):
+        return ["section", "default"]
+
+    def get_css(self):
+        return {
+            "max-width": self._get_choice_or_custom("max_width"),
+        }
 
     @property
     def key(self):

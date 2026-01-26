@@ -16,8 +16,7 @@ def deep_merge(base, override):
 
 class SettingsLoader:
     MERGE_SETTINGS = {
-        "XPREZ_SECTION_CONFIG_DEFAULTS",
-        "XPREZ_MODULE_CONFIG_DEFAULTS",
+        "XPREZ_DEFAULTS",
         "XPREZ_CSS",
     }
 
@@ -46,19 +45,21 @@ class SettingsLoader:
         return result
 
     def _preprocess_xprez_css(self, css_config):
-        """Pre-merge module-specific keys with modules fallback."""
-        modules = css_config.get("modules", {})
-        for key in list(css_config.keys()):
-            if key in ("sections", "modules"):
-                continue
-            # All other keys are module types - merge with modules
-            for attr in modules:
-                if attr not in css_config[key]:
-                    css_config[key][attr] = modules[attr]
-                else:
-                    css_config[key][attr] = deep_merge(
-                        modules[attr], css_config[key][attr]
-                    )
+        """Pre-merge module-specific keys with module.default fallback."""
+        for config_key in ["module", "module_config"]:
+            module_config = css_config.get(config_key, {})
+            defaults = module_config.get("default", {})
+            for key in list(module_config.keys()):
+                if key == "default":
+                    continue
+                # Merge default into each module type
+                for attr in defaults:
+                    if attr not in module_config[key]:
+                        module_config[key][attr] = defaults[attr]
+                    else:
+                        module_config[key][attr] = deep_merge(
+                            defaults[attr], module_config[key][attr]
+                        )
         return css_config
 
 
