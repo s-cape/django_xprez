@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 
 from xprez import constants
 from xprez.conf import settings
-from xprez.models.css import CssConfigMixin, CssRenderMixin
+from xprez.models.css import CssMixin, CssParentMixin
 from xprez.utils import import_class
 
 BREAKPOINT_CHOICES = tuple(
@@ -12,7 +12,7 @@ BREAKPOINT_CHOICES = tuple(
 )
 
 
-class ConfigParentMixin(CssRenderMixin):
+class ConfigParentMixin(CssParentMixin):
     """Mixin for Section and Module to handle CSS configuration logic."""
 
     def build_config(self, css_breakpoint):
@@ -25,12 +25,26 @@ class ConfigParentMixin(CssRenderMixin):
         try:
             return self.get_configs().get(css_breakpoint=css_breakpoint), False
         except ObjectDoesNotExist:
-            config = self.build_config(css_breakpoint)
-            config.save()
-            return config, True
+            previous_config = (
+                self.get_configs()
+                .filter(css_breakpoint__lt=css_breakpoint)
+                .order_by("-css_breakpoint")
+                .first()
+            )
+            if previous_config:
+                config = previous_config
+                config.pk = None
+                config.id = None
+                config.css_breakpoint = css_breakpoint
+                config.save()
+                return config, True
+            else:
+                config = self.build_config(css_breakpoint)
+                config.save()
+                return config, True
 
 
-class ConfigBase(CssConfigMixin, models.Model):
+class ConfigBase(CssMixin, models.Model):
     css_breakpoint = models.PositiveSmallIntegerField(
         choices=BREAKPOINT_CHOICES,
         default=settings.XPREZ_DEFAULT_BREAKPOINT,
@@ -61,20 +75,6 @@ class ConfigBase(CssConfigMixin, models.Model):
     def render_admin(self, context):
         context["config"] = self
         return render_to_string(self.admin_template_name, context)
-
-    def get_css(self):
-        raise NotImplementedError()
-
-    def _get_choice_or_custom(self, field_prefix):
-        """Get CSS value - transformed choice or formatted custom."""
-        choice_value = getattr(self, f"{field_prefix}_choice")
-        if choice_value == constants.CUSTOM:
-            return self._format_css_value(
-                self._get_css_mapping(field_prefix),
-                getattr(self, f"{field_prefix}_custom"),
-            )
-        else:
-            return self._transform_css(field_prefix, choice_value)
 
     class Meta:
         abstract = True
@@ -172,8 +172,8 @@ class SectionConfig(ConfigBase):
             "horizontal-align": self.horizontal_align,
         }
 
-    def _get_css_config_keys(self):
-        return ["sections"]
+    def get_css_config_keys(self):
+        return ["section_config", "default"]
 
     @property
     def key(self):
@@ -219,8 +219,12 @@ class ModuleConfig(ConfigBase):
             "horizontal-align": self.horizontal_align,
         }
 
-    def _get_css_config_keys(self):
-        return [self.module.content_type, "modules"]
+    def get_css_config_keys(self):
+        return [
+            f"module_config.{self.module.content_type}",
+            "module_config.default",
+            "default",
+        ]
 
     def get_admin_form_class(self):
         cls = super().get_admin_form_class()

@@ -1,7 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 from django.urls import path
 
-from xprez import models, module_registry
+from xprez import module_registry
+from xprez.models import Module, Section
 
 
 class XprezAdminViewsContentMixin(object):
@@ -21,19 +22,19 @@ class XprezAdminViewsContentMixin(object):
             return HttpResponse(module.render_admin({"request": request}))
 
     def xprez_add_section_config_view(self, request, section_pk, css_breakpoint):
-        section = models.Section.objects.get(pk=section_pk)
+        section = Section.objects.get(pk=section_pk)
         config, _created = section.get_or_create_config(css_breakpoint)
         config.build_admin_form(self)
         return HttpResponse(config.render_admin({"request": request}))
 
     def xprez_add_module_config_view(self, request, module_pk, css_breakpoint):
-        module = models.Module.objects.get(pk=module_pk).polymorph()
+        module = Module.objects.get(pk=module_pk).polymorph()
         config, _created = module.get_or_create_config(css_breakpoint)
         config.build_admin_form(self)
         return HttpResponse(config.render_admin({"request": request}))
 
     def xprez_copy_module_view(self, request, module_pk):
-        module = models.Module.objects.get(pk=module_pk).polymorph()
+        module = Module.objects.get(pk=module_pk).polymorph()
         new_module = module.copy(position=module.position + 1)
         new_module.build_admin_form(self)
 

@@ -1,8 +1,20 @@
+import { XprezCustomToggle } from './utils.js';
+
 export class XprezPopoverBase {
     constructor(...args) {
         this.bindElements(...args);
         this.bindEvents();
         this.openOnErrors();
+        this.initCustomToggles();
+    }
+
+    initCustomToggles() {
+        this.el.querySelectorAll("[data-custom-toggle-select]").forEach(fieldEl => {
+            const closestComponent = fieldEl.closest("[data-component]");
+            if (closestComponent === this.el) {
+                new XprezCustomToggle(this, fieldEl);
+            }
+        });
     }
 
     bindEvents() {
