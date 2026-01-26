@@ -84,7 +84,7 @@ XPREZ_CSS = {
             },
         },
         "margin_bottom": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 constants.MARGIN_SMALL: {0: 10, 1: 15, 2: 20},
                 constants.MARGIN_MEDIUM: {0: 20, 1: 30, 2: 40},
@@ -92,7 +92,7 @@ XPREZ_CSS = {
             },
         },
         "padding_left": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 constants.PADDING_NONE: {0: 0},
                 constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -101,7 +101,7 @@ XPREZ_CSS = {
             },
         },
         "padding_right": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 constants.PADDING_NONE: {0: 0},
                 constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -110,7 +110,7 @@ XPREZ_CSS = {
             },
         },
         "padding_top": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 constants.PADDING_NONE: {0: 0},
                 constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -119,7 +119,7 @@ XPREZ_CSS = {
             },
         },
         "padding_bottom": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 constants.PADDING_NONE: {0: 0},
                 constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -128,7 +128,7 @@ XPREZ_CSS = {
             },
         },
         "gap": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
                 constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
@@ -140,7 +140,7 @@ XPREZ_CSS = {
     "xprez.TextModule": {},
     "xprez.GalleryModule": {
         "padding_horizontal": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 constants.PADDING_NONE: {0: 0},
                 constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
@@ -149,7 +149,7 @@ XPREZ_CSS = {
             },
         },
         "padding_vertical": {
-            "format": "{}px",
+            "units": "px",
             "values": {
                 constants.PADDING_NONE: {0: 0},
                 constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},

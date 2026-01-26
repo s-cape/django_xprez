@@ -92,6 +92,7 @@ class GalleryConfig(ModuleConfig):
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=constants.PADDING_NONE,
+        blank=True,
     )
     padding_horizontal_custom = models.PositiveIntegerField(null=True, blank=True)
     padding_vertical_choice = models.CharField(
@@ -99,6 +100,7 @@ class GalleryConfig(ModuleConfig):
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=constants.PADDING_NONE,
+        blank=True,
     )
     padding_vertical_custom = models.PositiveIntegerField(null=True, blank=True)
 

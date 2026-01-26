@@ -15,6 +15,8 @@ export class Xprez {
         this.adder = new XprezAdderContainerEnd(this, this.el.querySelector("[data-component='xprez-adder-container-end']"));
         this.initAllSectionsCollapser();
         this.initSectionsSortable();
+
+        this.sections[0].popover.show();
     }
 
     initSection(sectionEl) {
