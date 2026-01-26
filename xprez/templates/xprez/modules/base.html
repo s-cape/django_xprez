@@ -1,6 +1,6 @@
 {% block module %}
     <div id="{{ module.key }}" class="{% block css_class%}xprez-module {{ module.module_css_class }} {{ module.css_class|default:'' }} {% block css_class_extra %}{% endblock %}{% endblock %}" {% block attrs %}{% endblock %}>
-        {{ module.render_css }}
+        <div class="debug-info">{{ module.render_css }}</div>
         {{ module.render_css|safe }}
         <div>
             {% block content %}

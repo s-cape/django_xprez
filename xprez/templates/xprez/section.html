@@ -1,5 +1,6 @@
 {% load xprez %}
-{{ section.render_css }}
+
+<div class="debug-info debug-info__section">{{ section.render_css }}</div>
 <div id="{{ section.key }}" class="xprez-section">
     {{ section.render_css|safe }}
     {% for module in section.get_modules %}
