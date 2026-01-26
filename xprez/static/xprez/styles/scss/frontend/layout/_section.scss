@@ -2,7 +2,11 @@
     display: grid;
     gap: var(--x-gap);
     grid-template-columns: repeat(var(--x-columns), 1fr);
+    align-content: var(--x-vertical-align);
+    justify-items: var(--x-horizontal-align);
+
     padding: var(--x-padding-top) var(--x-padding-right) var(--x-padding-bottom) var(--x-padding-left);
     max-width: var(--x-max-width);
     margin-bottom: var(--x-margin-bottom);
+    
 }
