@@ -10,10 +10,10 @@
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.margin_bottom_choice size="flex-1" %}
     </div>
-    <div class="xprez-option-row" {{ "data-hidden data-custom-toggle-select=\""|add:config.admin_form.margin_bottom_choice.html_name|add:"\""|safe }}>
+    <div class="xprez-option-row" data-hidden data-custom-toggle-select="{{ config.admin_form.margin_bottom_choice.html_name }}" >
         {% include "xprez/admin/form/field.html" with field=config.admin_form.margin_bottom_custom suffix=config.units.margin_bottom.custom size="flex-0"  %}
     </div>
-    
+
     <div class="xprez-option-group__subtitle">Padding</div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_choice label=False icon="xprez-icon-padding_t" size="flex-1" %}
@@ -47,7 +47,7 @@
 
     <div class="xprez-option-group__subtitle">Content alignment</div>
     <div class="xprez-option-row">
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align label=False icon="xprez-icon-vertical" flex=1 %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align label=False icon="xprez-icon-horizontal" flex=1 %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align_grid label=False icon="xprez-icon-vertical" flex=1 %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align_grid label=False icon="xprez-icon-horizontal" flex=1 %}
     </div>
 {% endblock %}

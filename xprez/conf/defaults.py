@@ -14,7 +14,7 @@ XPREZ_MODULES_AUTOREGISTER_BUILTINS = [
     "xprez.TextModule",
     "xprez.QuoteModule",
     "xprez.GalleryModule",
-    "xprez.DownloadsModule",
+    "xprez.FilesModule",
     "xprez.VideoModule",
     "xprez.NumbersModule",
     "xprez.CodeInputModule",
@@ -45,18 +45,18 @@ XPREZ_DEFAULT_BREAKPOINT = 0
 
 XPREZ_DEFAULTS = {
     "section": {
-        "max_width_choice": constants.MAX_WIDTH_FULL,
+        "max_width_choice": constants.MAX_WIDTH_MEDIUM,
     },
     "section_config": {
         "columns": 1,
         "margin_bottom_choice": constants.MARGIN_MEDIUM,
-        "padding_left_choice": constants.PADDING_NONE,
-        "padding_right_choice": constants.PADDING_NONE,
+        "padding_left_choice": constants.PADDING_SMALL,
+        "padding_right_choice": constants.PADDING_SMALL,
         "padding_top_choice": constants.PADDING_NONE,
         "padding_bottom_choice": constants.PADDING_NONE,
-        "gap_choice": constants.GAP_SMALL,
-        "vertical_align": constants.VERTICAL_ALIGN_TOP,
-        "horizontal_align": constants.HORIZONTAL_ALIGN_LEFT,
+        "gap_choice": constants.GAP_MEDIUM,
+        "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_STRETCH,
+        "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,
     },
     "module": {
         "default": {},
@@ -65,17 +65,20 @@ XPREZ_DEFAULTS = {
         "default": {
             "colspan": 1,
             "rowspan": 1,
-            "vertical_align": constants.VERTICAL_ALIGN_TOP,
-            "horizontal_align": constants.HORIZONTAL_ALIGN_LEFT,
+            "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_UNSET,
+            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_UNSET,
+            "vertical_align_flex": constants.VERTICAL_ALIGN_FLEX_START,
+            "horizontal_align_flex": constants.HORIZONTAL_ALIGN_FLEX_CENTER,
+            "border_radius_choice": constants.BORDER_RADIUS_MEDIUM,
         },
         "xprez.TextModule": {
-            "horizontal_align": constants.HORIZONTAL_ALIGN_STRETCH,
+            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,  # TODO: different just for testing
         },
         "xprez.GalleryModule": {
             "colspan": 1,
             "rowspan": 1,
-            "vertical_align": constants.VERTICAL_ALIGN_MIDDLE,
-            "horizontal_align": constants.HORIZONTAL_ALIGN_CENTER,
+            "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_CENTER,
+            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_CENTER,
         },
     },
 }
@@ -154,9 +157,75 @@ XPREZ_CSS = {
         "default": {},
     },
     "module_config": {
-        "default": {},
-        "xprez.TextModule": {},
+        "default": {
+            "padding_left": {
+                "units": "px",
+                "values": {
+                    constants.PADDING_NONE: {0: 0},
+                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                },
+            },
+            "padding_right": {
+                "units": "px",
+                "values": {
+                    constants.PADDING_NONE: {0: 0},
+                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                },
+            },
+            "padding_top": {
+                "units": "px",
+                "values": {
+                    constants.PADDING_NONE: {0: 0},
+                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                },
+            },
+            "padding_bottom": {
+                "units": "px",
+                "values": {
+                    constants.PADDING_NONE: {0: 0},
+                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
+                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
+                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                },
+            },
+            "border_radius": {
+                "units": "px",
+                "values": {
+                    constants.BORDER_RADIUS_NONE: {0: 0},
+                    constants.BORDER_RADIUS_SMALL: {0: 4},
+                    constants.BORDER_RADIUS_MEDIUM: {0: 8},
+                    constants.BORDER_RADIUS_LARGE: {0: 16},
+                },
+            },
+        },
+        "xprez.TextModule": {
+            "font_size": {
+                "units": "px",
+                "values": {
+                    constants.FONT_SIZE_SMALLEST: {0: 12, 2: 14},
+                    constants.FONT_SIZE_SMALL: {0: 14, 2: 16},
+                    constants.FONT_SIZE_NORMAL: {0: 16, 2: 18},
+                    constants.FONT_SIZE_LARGE: {0: 20, 2: 24},
+                    constants.FONT_SIZE_LARGEST: {0: 28, 2: 32},
+                },
+            },
+        },
         "xprez.GalleryModule": {
+            "gap": {
+                "units": "px",
+                "values": {
+                    constants.GAP_NONE: {0: 0},
+                    constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
+                    constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
+                    constants.GAP_LARGE: {0: 40, 1: 60, 2: 80},
+                },
+            },
             "padding_horizontal": {
                 "units": "px",
                 "values": {

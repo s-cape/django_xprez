@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                             ("full", "Full"),
                             ("custom", "Custom"),
                         ],
-                        default="full",
+                        default="medium",
                         max_length=16,
                         verbose_name="Max width",
                     ),
@@ -92,6 +92,8 @@ class Migration(migrations.Migration):
                 ("position", models.PositiveSmallIntegerField(default=0)),
                 ("content_type", models.CharField(editable=False, max_length=100)),
                 ("css_class", models.CharField(blank=True, max_length=100, null=True)),
+                ("alternate_color", models.BooleanField(default=False)),
+                ("background_color", models.CharField(blank=True, max_length=30)),
                 ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
                 ("changed", models.DateTimeField(auto_now=True, db_index=True)),
                 (
@@ -122,7 +124,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("text", models.TextField(blank=True)),
-                ("image", models.ImageField(upload_to="images", null=True, blank=True)),
+                ("media", models.FileField(upload_to="images", null=True, blank=True)),
                 (
                     "url",
                     models.CharField(
@@ -150,7 +152,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("name", models.CharField(max_length=255)),
-                ("job_title", models.CharField(max_length=255)),
+                ("subtitle", models.CharField(blank=True, max_length=255, null=True)),
                 ("image", models.ImageField(blank=True, null=True, upload_to="quotes")),
                 ("title", models.CharField(blank=True, max_length=255, null=True)),
                 ("quote", models.TextField()),
@@ -351,28 +353,29 @@ class Migration(migrations.Migration):
                 ),
                 ("gap_custom", models.PositiveIntegerField(blank=True, null=True)),
                 (
-                    "vertical_align",
+                    "vertical_align_grid",
                     models.CharField(
                         choices=[
-                            ("top", "Top"),
-                            ("middle", "Middle"),
-                            ("bottom", "Bottom"),
+                            ("start", "Start"),
+                            ("center", "Center"),
+                            ("end", "End"),
                             ("stretch", "Stretch"),
+                            ("baseline", "Baseline"),
                         ],
-                        default="top",
+                        default="stretch",
                         max_length=20,
                     ),
                 ),
                 (
-                    "horizontal_align",
+                    "horizontal_align_grid",
                     models.CharField(
                         choices=[
-                            ("left", "Left"),
+                            ("start", "Start"),
                             ("center", "Center"),
-                            ("right", "Right"),
+                            ("end", "End"),
                             ("stretch", "Stretch"),
                         ],
-                        default="left",
+                        default="stretch",
                         max_length=20,
                     ),
                 ),
@@ -437,36 +440,174 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "horizontal_align",
-                    models.CharField(
-                        choices=[
-                            ("left", "Left"),
-                            ("center", "Center"),
-                            ("right", "Right"),
-                            ("stretch", "Stretch"),
-                        ],
-                        default="left",
-                        max_length=20,
-                    ),
-                ),
-                (
                     "rowspan",
                     models.PositiveSmallIntegerField(
                         default=1, verbose_name="Row span"
                     ),
                 ),
                 (
-                    "vertical_align",
+                    "vertical_align_grid",
                     models.CharField(
                         choices=[
-                            ("top", "Top"),
-                            ("middle", "Middle"),
-                            ("bottom", "Bottom"),
+                            ("start", "Start"),
+                            ("center", "Center"),
+                            ("end", "End"),
                             ("stretch", "Stretch"),
+                            ("baseline", "Baseline"),
+                            ("unset", "Unset"),
                         ],
-                        default="top",
+                        default="unset",
                         max_length=20,
+                        verbose_name="Vertical align (grid)",
                     ),
+                ),
+                (
+                    "horizontal_align_grid",
+                    models.CharField(
+                        choices=[
+                            ("start", "Start"),
+                            ("center", "Center"),
+                            ("end", "End"),
+                            ("stretch", "Stretch"),
+                            ("unset", "Unset"),
+                        ],
+                        default="unset",
+                        max_length=20,
+                        verbose_name="Horizontal align (grid)",
+                    ),
+                ),
+                (
+                    "vertical_align_flex",
+                    models.CharField(
+                        choices=[
+                            ("flex-start", "Flex Start"),
+                            ("center", "Center"),
+                            ("flex-end", "Flex End"),
+                            ("stretch", "Stretch"),
+                            ("baseline", "Baseline"),
+                        ],
+                        default="flex-start",
+                        max_length=20,
+                        verbose_name="Vertical align (flex)",
+                    ),
+                ),
+                (
+                    "horizontal_align_flex",
+                    models.CharField(
+                        choices=[
+                            ("flex-start", "Flex Start"),
+                            ("center", "Center"),
+                            ("flex-end", "Flex End"),
+                        ],
+                        default="center",
+                        max_length=20,
+                        verbose_name="Horizontal align (flex)",
+                    ),
+                ),
+                ("background", models.BooleanField(default=False)),
+                ("border", models.BooleanField(default=False)),
+                (
+                    "padding_left_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding left",
+                    ),
+                ),
+                (
+                    "padding_left_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "padding_right_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding right",
+                    ),
+                ),
+                (
+                    "padding_right_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "padding_top_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding top",
+                    ),
+                ),
+                (
+                    "padding_top_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "padding_bottom_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding bottom",
+                    ),
+                ),
+                (
+                    "padding_bottom_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                ("padding_x_linked", models.BooleanField(default=True)),
+                ("padding_y_linked", models.BooleanField(default=True)),
+                ("aspect_ratio", models.CharField(blank=True, max_length=20)),
+                (
+                    "border_radius_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Border radius",
+                    ),
+                ),
+                (
+                    "border_radius_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
                 ),
             ],
             options={
@@ -491,12 +632,68 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "background",
-                    models.BooleanField(default=False),
+                    "font_size_choice",
+                    models.CharField(
+                        choices=[
+                            ("smallest", "Smallest"),
+                            ("small", "Small"),
+                            ("normal", "Normal"),
+                            ("large", "Large"),
+                            ("largest", "Largest"),
+                            ("custom", "Custom"),
+                        ],
+                        default="normal",
+                        max_length=20,
+                        verbose_name="Font size",
+                    ),
                 ),
                 (
-                    "border",
-                    models.BooleanField(default=True),
+                    "font_size_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "text_align",
+                    models.CharField(
+                        choices=[
+                            ("left", "Left"),
+                            ("center", "Center"),
+                            ("right", "Right"),
+                        ],
+                        default="left",
+                        max_length=20,
+                        verbose_name="Text align",
+                    ),
+                ),
+                (
+                    "media_role",
+                    models.CharField(
+                        choices=[
+                            ("background", "Background"),
+                            ("lead", "Lead"),
+                            ("icon", "Icon"),
+                        ],
+                        default="lead",
+                        max_length=20,
+                        verbose_name="Media role",
+                    ),
+                ),
+                ("media_background_position", models.PositiveIntegerField(default=0)),
+                ("media_lead_to_edge", models.BooleanField(default=True)),
+                ("media_icon_max_size", models.PositiveIntegerField(default=100)),
+                (
+                    "media_crop",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("1:1", "1:1"),
+                            ("3:2", "3:2"),
+                            ("4:3", "4:3"),
+                            ("16:9", "16:9"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=5,
+                    ),
                 ),
             ],
             options={
@@ -532,6 +729,23 @@ class Migration(migrations.Migration):
                         default=1,
                     ),
                 ),
+                (
+                    "gap_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="small",
+                        max_length=20,
+                        verbose_name="Gap",
+                        blank=True,
+                    ),
+                ),
+                ("gap_custom", models.PositiveIntegerField(blank=True, null=True)),
                 (
                     "padding_horizontal_choice",
                     models.CharField(

@@ -6,12 +6,12 @@
 
 {% block content %}
     <h3>{{ module.title|default:"Files" }}</h3>
-    {% for att in module.items.all %}
+    {% for item in module.items.all %}
         <div class="xprez-download-item">
             <div class="xprez-download-btn">
-                <a href="{{ att.file.url }}" class="btn btn-secondary btn-download" download="{{ att.get_name }}{% if att.get_extension %}.{{ att.get_extension }}{% endif %}">{% trans "Download" %} {{ att.get_extension }}</a>
+                <a href="{{ item.file.url }}" class="btn btn-secondary btn-download" download="{{ item.get_description }}{% if item.get_extension %}.{{ item.get_extension }}{% endif %}">{% trans "Download" %} {{ item.get_extension }}</a>
             </div>
-            <div class="xprez-download-item-name">{{ att.get_name }}</div>
+            <div class="xprez-download-item-name">{{ item.get_description }}</div>
         </div>
     {% endfor %}
 {% endblock %}

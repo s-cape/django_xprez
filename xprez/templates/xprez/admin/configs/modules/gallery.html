@@ -1,0 +1,22 @@
+{% extends "xprez/admin/configs/module_base.html" %}
+
+{% block extra_fields %}
+    <div class="xprez-option-group__subtitle">Inner grid</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.columns size="flex-1" %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.gap_choice size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.gap_custom label=False suffix=config.units.gap.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.gap_choice.html_name|add:"\""|safe size="flex-0" %}
+    </div>
+
+    <div class="xprez-option-group__subtitle">Padding</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_horizontal_choice label=False icon="xprez-icon-padding_l" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_horizontal_custom label=False suffix=config.units.padding_horizontal.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.padding_horizontal_choice.html_name|add:"\""|safe size="flex-0" %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_vertical_choice label=False icon="xprez-icon-padding_t" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_vertical_custom label=False suffix=config.units.padding_vertical.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.padding_vertical_choice.html_name|add:"\""|safe size="flex-0" %}
+    </div>
+{% endblock %}

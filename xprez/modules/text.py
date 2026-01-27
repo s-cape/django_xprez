@@ -8,6 +8,7 @@ from django.urls import re_path
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
+from xprez import constants
 from xprez.admin.forms import BaseModuleForm
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.ck_editor import parse_text as ckeditor_parse_text
@@ -73,7 +74,7 @@ class TextModule(TextModuleBase):
     icon_template_name = "xprez/admin/icons/modules/text.html"
     config_model = "xprez.TextConfig"
 
-    image = models.ImageField(upload_to="images", null=True, blank=True)
+    media = models.FileField(upload_to="images", null=True, blank=True)
     url = models.CharField("Target URL", max_length=255, null=True, blank=True)
 
     class AdminMedia:
@@ -96,21 +97,65 @@ class TextModule(TextModuleBase):
 class TextBaseConfig(ModuleConfig):
     admin_template_name = "xprez/admin/configs/modules/text_base.html"
 
-    border = models.BooleanField(default=True)
-    background = models.BooleanField(default=False)
-
-    def get_css(self):
-        css = super().get_css()
-        css["border"] = int(self.border)
-        css["background"] = int(self.background)
-        return css
+    font_size_choice = models.CharField(
+        "Font size",
+        max_length=20,
+        choices=constants.FONT_SIZE_CHOICES,
+        default=constants.FONT_SIZE_NORMAL,
+    )
+    font_size_custom = models.PositiveIntegerField(null=True, blank=True)
+    text_align = models.CharField(
+        "Text align",
+        max_length=20,
+        choices=constants.TEXT_ALIGN_CHOICES,
+        default=constants.TEXT_ALIGN_LEFT,
+    )
 
     class Meta(ModuleConfig.Meta):
         abstract = True
 
+    def get_css(self):
+        css = super().get_css()
+        css.update(
+            {
+                "font-size": self._get_choice_or_custom("font_size"),
+                "text-align": self.text_align,
+            }
+        )
+        return css
+
 
 class TextConfig(TextBaseConfig):
     admin_template_name = "xprez/admin/configs/modules/text.html"
+
+    media_role = models.CharField(
+        "Media role",
+        max_length=20,
+        choices=constants.MEDIA_ROLE_CHOICES,
+        default=constants.MEDIA_ROLE_LEAD,
+    )
+    media_background_position = models.PositiveIntegerField(default=0)
+    media_lead_to_edge = models.BooleanField(default=True)
+    media_icon_max_size = models.PositiveIntegerField(default=100)
+    media_crop = models.CharField(
+        max_length=5,
+        choices=constants.CROP_CHOICES,
+        default=constants.CROP_NONE,
+        blank=True,
+    )
+
+    def get_css(self):
+        css = super().get_css()
+        css.update(
+            {
+                "media-role": self.media_role,
+                "media-background-position": f"{self.media_background_position}%",
+                "media-lead-to-edge": int(self.media_lead_to_edge),
+                "media-icon-max-size": f"{self.media_icon_max_size}px",
+                "media-crop": self.media_crop if self.media_crop else None,
+            }
+        )
+        return css
 
 
 class TextModuleBaseForm(BaseModuleForm):
@@ -126,20 +171,20 @@ class TextModuleBaseForm(BaseModuleForm):
 
 class TextModuleForm(TextModuleBaseForm):
     options_fields = ("url",) + TextModuleBaseForm.options_fields
-    image_clear = forms.BooleanField(required=False)
+    media_clear = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["image"].widget = forms.FileInput()
+        self.fields["media"].widget = forms.FileInput()
 
     def save(self, commit=True):
         instance = super().save(commit=False)
-        if self.cleaned_data.get("image_clear"):
-            instance.image = None
+        if self.cleaned_data.get("media_clear"):
+            instance.media = None
         if commit:
             instance.save()
         return instance
 
     class Meta(TextModuleBaseForm.Meta):
         model = TextModule
-        fields = TextModuleBaseForm.Meta.fields + ("image", "url")
+        fields = TextModuleBaseForm.Meta.fields + ("media", "url")

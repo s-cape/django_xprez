@@ -3,15 +3,15 @@
 {% block actions %}
     <span class="xprez-icon-btn" title="Image">
         <i class="xprez-icon-image"></i>
-        {{ module.admin_form.image }}
+        {{ module.admin_form.media }}
     </span>
     {{ block.super }}
 {% endblock %}
 
 {% block main_fields %}
-    {% if module.image %}
-        <img src="{{ module.image.url }}">
-        Clear: {{ module.admin_form.image_clear }}
+    {% if module.media %}
+        <img src="{{ module.media.url }}">
+        Clear: {{ module.admin_form.media_clear }}
     {% endif %}
     {{ block.super }}
 {% endblock %}

@@ -84,10 +84,29 @@ class BaseModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
 class ModuleConfigForm(DeletableFormMixin, forms.ModelForm):
     base_module_fields = (
         "visible",
+        # Grid
         "colspan",
         "rowspan",
-        "vertical_align",
-        "horizontal_align",
+        "vertical_align_grid",
+        "horizontal_align_grid",
+        # Box
+        "background",
+        "border",
+        "padding_top_choice",
+        "padding_top_custom",
+        "padding_bottom_choice",
+        "padding_bottom_custom",
+        "padding_left_choice",
+        "padding_left_custom",
+        "padding_right_choice",
+        "padding_right_custom",
+        "padding_y_linked",
+        "padding_x_linked",
+        "vertical_align_flex",
+        "horizontal_align_flex",
+        "aspect_ratio",
+        "border_radius_choice",
+        "border_radius_custom",
     )
 
     def __init__(self, *args, **kwargs):

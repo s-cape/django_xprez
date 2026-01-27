@@ -3,7 +3,7 @@
 {% block main_fields %}
     {% with module.admin_form as form %}
         {% include "xprez/admin/form/row.html" with field=form.name %}
-        {% include "xprez/admin/form/row.html" with field=form.job_title %}
+        {% include "xprez/admin/form/row.html" with field=form.subtitle %}
         {% include "xprez/admin/form/row.html" with field=form.image %}
         {% include "xprez/admin/form/row.html" with field=form.title %}
         {% include "xprez/admin/form/row.html" with field=form.quote %}

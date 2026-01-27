@@ -30,7 +30,7 @@ class NumbersItem(MultiModuleItem):
     )
     number = models.IntegerField(null=True, blank=True)
     suffix = models.CharField(max_length=10, null=True, blank=True)
-    title = models.CharField(max_length=100, blank=True)
+    caption = models.CharField(max_length=100, blank=True)
 
     class Meta:
         ordering = ("module", "id")
@@ -53,7 +53,7 @@ class NumbersItemForm(forms.ModelForm):
             "id",
             "number",
             "suffix",
-            "title",
+            "caption",
         )
 
 
@@ -61,7 +61,7 @@ NumbersItemFormSet = inlineformset_factory(
     NumbersModule,
     NumbersItem,
     form=NumbersItemForm,
-    fields=("id", "number", "suffix", "title"),
+    fields=("id", "number", "suffix", "caption"),
     max_num=4,
     extra=4,
     can_delete=True,

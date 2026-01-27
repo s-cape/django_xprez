@@ -1,6 +1,6 @@
 from .code_input import *  # noqa
 from .code_template import *  # noqa
-from .downloads import *  # noqa
+from .files import *  # noqa
 from .gallery import *  # noqa
 from .numbers import *  # noqa
 from .quote import *  # noqa

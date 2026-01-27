@@ -56,7 +56,11 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 saved=True,
             )
             section_config, _created = section.configs.get_or_create(
-                css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+                css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
+                defaults={
+                    "vertical_align_grid": "stretch",
+                    "horizontal_align_grid": "stretch",
+                },
             )
 
             Module.objects.create(
@@ -76,7 +80,7 @@ RENAMES = {
     "Gallery": "GalleryModule",
     "CodeInput": "CodeInputModule",
     "CodeTemplate": "CodeTemplateModule",
-    "DownloadContent": "DownloadsModule",
+    "DownloadContent": "FilesModule",
     "NumbersContent": "NumbersModule",
     "Video": "VideoModule",
 }
@@ -134,7 +138,14 @@ class ModuleProcessorBase:
     def create_config(self, module):
         config_class = self.apps.get_model(*self.get_config_class(module).split("."))
         self.config, _created = config_class.objects.get_or_create(
-            module=module, css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+            module=module,
+            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
+            defaults={
+                "vertical_align_grid": "unset",
+                "horizontal_align_grid": "unset",
+                "vertical_align_flex": "flex-start",
+                "horizontal_align_flex": "center",
+            },
         )
 
 
@@ -178,6 +189,17 @@ class TextModuleProcessorBase(ModuleReplaceProcessor):
         TextModule = self.apps.get_model("xprez", "TextModule")
         return [TextModule(text=self.old_content.text)]
 
+    def create_config(self, module):
+        super().create_config(module)
+        # Migrate box -> background + padding
+        if getattr(self.old_content, "box", False):
+            self.config.background = True
+            self.config.padding_left_choice = "medium"
+            self.config.padding_right_choice = "medium"
+            self.config.padding_top_choice = "medium"
+            self.config.padding_bottom_choice = "medium"
+            self.config.save()
+
 
 class CkEditorProcessor(TextModuleProcessorBase):
     pass
@@ -188,12 +210,76 @@ class MediumEditorProcessor(TextModuleProcessorBase):
 
 
 class GridboxesProcessor(TextModuleProcessorBase):
+    MARGIN_TRANS = {"none": "", "m": "medium", "l": "large"}
+    TEXT_SIZE_TRANS = {"xs": "smallest", "s": "small", "m": "normal"}
+    # image_sizing: fill -> lead+edge=false, edge -> lead+edge=true, icon -> icon
+
     def prepare_new_modules(self):
         TextModule = self.apps.get_model("xprez", "TextModule")
         new_modules = []
-        for index, box in enumerate(self.old_content.boxes):
+        for index, box in enumerate(self.old_content.boxes or []):
             new_modules += [TextModule(position=index, text=box)]
         return new_modules
+
+    def finalize_new_modules(self):
+        super().finalize_new_modules()
+        # Set section-level config from GridBoxes attributes
+        section = self.module_base.section
+        section.max_width_choice = self.WIDTH_TRANS.get(
+            getattr(self.old_content, "width", "full"), "full"
+        )
+        section.save()
+
+        section_config = section.configs.get(
+            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+        )
+        section_config.columns = self.old_content.columns
+        section_config.gap_choice = self.MARGIN_TRANS.get(
+            self.old_content.margin, "medium"
+        )
+        section_config.save()
+
+    def create_config(self, module):
+        super().create_config(module)
+        # Migrate GridBoxes-specific attributes to TextConfig/ModuleConfig
+        self.config.font_size_choice = self.TEXT_SIZE_TRANS.get(
+            self.old_content.text_size, "normal"
+        )
+
+        # centered -> text_align
+        if getattr(self.old_content, "content_centered", False):
+            self.config.text_align = "center"
+
+        # padded -> padding
+        if getattr(self.old_content, "padded", False):
+            self.config.padding_left_choice = "medium"
+            self.config.padding_right_choice = "medium"
+            self.config.padding_top_choice = "medium"
+            self.config.padding_bottom_choice = "medium"
+
+        # boxes_filled -> background
+        if getattr(self.old_content, "boxes_filled", False):
+            self.config.background = True
+
+        # border
+        if getattr(self.old_content, "border", False):
+            self.config.border = True
+
+        # image_sizing -> media_role, media_lead_to_edge, media_icon_max_size
+        image_sizing = getattr(self.old_content, "image_sizing", "fill")
+        if image_sizing == "edge":
+            self.config.media_role = "lead"
+            self.config.media_lead_to_edge = True
+        elif image_sizing == "icon":
+            self.config.media_role = "icon"
+            image_max_width = getattr(self.old_content, "image_max_width", None)
+            if image_max_width:
+                self.config.media_icon_max_size = image_max_width
+        else:  # fill/default
+            self.config.media_role = "lead"
+            self.config.media_lead_to_edge = False
+
+        self.config.save()
 
 
 class QuotesProcessor(ModuleReplaceProcessor):
@@ -204,10 +290,11 @@ class QuotesProcessor(ModuleReplaceProcessor):
             quotes = quotes[:1]
 
         if len(quotes) > 1:
-            self.module_base.section.configs.get_or_create(
+            section_config = self.module_base.section.configs.get_or_create(
                 css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
-            )[0].columns = 2
-            self.module_base.section.save()
+            )[0]
+            section_config.columns = 2
+            section_config.save()
 
         new_modules = []
         for index, quote in enumerate(quotes):
@@ -215,7 +302,7 @@ class QuotesProcessor(ModuleReplaceProcessor):
                 QuoteModule(
                     position=index,
                     name=quote.name,
-                    job_title=quote.job_title,
+                    subtitle=quote.job_title,
                     image=quote.image,
                     title=quote.title,
                     quote=quote.quote,
@@ -223,22 +310,57 @@ class QuotesProcessor(ModuleReplaceProcessor):
             ]
         return new_modules
 
+    def create_config(self, module):
+        super().create_config(module)
+        # Migrate box -> background + padding
+        if getattr(self.old_content, "box", False):
+            self.config.background = True
+            self.config.padding_left_choice = "medium"
+            self.config.padding_right_choice = "medium"
+            self.config.padding_top_choice = "medium"
+            self.config.padding_bottom_choice = "medium"
+            self.config.save()
+
 
 class TextImageProcessor(ModuleReplaceProcessor):
-    def prepare_new_modules(self):
-        # TODO
-        return []
-        # TextModule = self.apps.get_model("xprez", "TextModule")
-        # GalleryModule = self.apps.get_model("xprez", "GalleryModule")
+    def get_config_class(self, module):
+        return "xprez.TextConfig"
 
-        # return [
-        #     self.new_module(text=self.old_content.text, image=self.old_content.image)
-        # ]
+    def prepare_new_modules(self):
+        TextModule = self.apps.get_model("xprez", "TextModule")
+        return [
+            TextModule(
+                text=self.old_content.text,
+                media=self.old_content.image,
+            )
+        ]
+
+    def finalize_new_modules(self):
+        super().finalize_new_modules()
+        # Set section to 2 columns for text+image layout
+        section = self.module_base.section
+        section_config = section.configs.get(
+            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+        )
+        section_config.columns = 2
+        section_config.gap_choice = "large"
+        section_config.save()
+
+
+class VideoProcessor(SimpleModuleProcessor):
+    def process(self):
+        super().process()
+        # Migrate width to Section.max_width
+        section = self.module.section
+        section.max_width_choice = self.WIDTH_TRANS.get(
+            getattr(self.old_content, "width", "full"), "full"
+        )
+        section.save()
 
 
 class GalleryProcessor(SimpleModuleProcessor):
     GAP_TRANS = {True: "small", False: ""}
-    CROP_TRANS = {True: "4:3", False: ""}
+    CROP_TRANS = {True: "3:2", False: ""}
 
     def process(self):
         super().process()
@@ -282,11 +404,11 @@ PROCESSORS = {
     "xprez.QuoteContent": QuotesProcessor,
     "xprez.TextImage": TextImageProcessor,
     "xprez.GalleryModule": GalleryProcessor,
-    "xprez.VideoModule": SimpleModuleProcessor,
+    "xprez.VideoModule": VideoProcessor,
     "xprez.CodeInputModule": SimpleModuleProcessor,
     "xprez.NumbersModule": SimpleModuleProcessor,
     "xprez.CodeTemplateModule": SimpleModuleProcessor,
-    "xprez.DownloadsModule": DownloadModuleProcessor,
+    "xprez.FilesModule": DownloadModuleProcessor,
     "xprez.ModuleSymlink": ModuleSymlinkProcessor,
 }
 
@@ -363,6 +485,9 @@ class Migration(migrations.Migration):
         migrations.RenameField(
             model_name="NumbersItem", old_name="content", new_name="module"
         ),
+        migrations.RenameField(
+            model_name="NumbersItem", old_name="title", new_name="caption"
+        ),
         migrations.AlterField(
             model_name="numbersitem",
             name="module",
@@ -385,20 +510,30 @@ class Migration(migrations.Migration):
                 blank=True, match="^(?!\\.).+", max_length=255, null=True
             ),
         ),
-        migrations.RenameModel(old_name="DownloadContent", new_name="DownloadsModule"),
-        ContentToModule(model_name="DownloadsModule"),
-        migrations.RenameModel(old_name="Attachment", new_name="DownloadsItem"),
+        migrations.RenameModel(old_name="DownloadContent", new_name="FilesModule"),
+        ContentToModule(model_name="FilesModule"),
+        migrations.RenameModel(old_name="Attachment", new_name="FilesItem"),
         migrations.RenameField(
-            model_name="DownloadsItem", old_name="content", new_name="module"
+            model_name="FilesItem", old_name="content", new_name="module"
         ),
         migrations.AlterField(
-            model_name="DownloadsItem",
+            model_name="FilesItem",
             name="module",
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="items",
-                to="xprez.DownloadsModule",
+                to="xprez.FilesModule",
             ),
+        ),
+        migrations.RenameField(
+            model_name="FilesItem",
+            old_name="name",
+            new_name="description",
+        ),
+        migrations.AlterField(
+            model_name="FilesItem",
+            name="description",
+            field=models.CharField(blank=True, max_length=255),
         ),
         migrations.RenameModel(old_name="ContentSymlink", new_name="ModuleSymlink"),
         ContentToModule(model_name="ModuleSymlink"),

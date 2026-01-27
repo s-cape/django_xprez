@@ -6,15 +6,13 @@ from xprez.admin.forms import BaseModuleForm
 from xprez.models.modules import MultiModuleItem, UploadMultiModule
 
 
-class DownloadsModule(UploadMultiModule):
-    admin_template_name = "xprez/admin/modules/downloads/downloads.html"
-    front_template_name = "xprez/modules/downloads.html"
-    admin_formset_item_template_name = (
-        "xprez/admin/modules/downloads/downloads_item.html"
-    )
-    icon_template_name = "xprez/admin/icons/modules/downloads.html"
-    form_class = "xprez.modules.downloads.DownloadsModuleForm"
-    formset_factory = "xprez.modules.downloads.DownloadsItemFormSet"
+class FilesModule(UploadMultiModule):
+    admin_template_name = "xprez/admin/modules/files/files.html"
+    front_template_name = "xprez/modules/files.html"
+    admin_formset_item_template_name = "xprez/admin/modules/files/files_item.html"
+    icon_template_name = "xprez/admin/icons/modules/files.html"
+    form_class = "xprez.modules.files.FilesModuleForm"
+    formset_factory = "xprez.modules.files.FilesItemFormSet"
 
     title = models.CharField(max_length=255, blank=True)
 
@@ -28,16 +26,16 @@ class DownloadsModule(UploadMultiModule):
             return ""
 
 
-class DownloadsItem(MultiModuleItem):
+class FilesItem(MultiModuleItem):
     module = models.ForeignKey(
-        DownloadsModule, related_name="items", on_delete=models.CASCADE
+        FilesModule, related_name="items", on_delete=models.CASCADE
     )
     file = models.FileField(upload_to="files", max_length=300)
-    name = models.CharField(max_length=100, blank=True)
+    description = models.CharField(max_length=255, blank=True)
     position = models.PositiveSmallIntegerField()
 
-    def get_name(self):
-        return self.name or self.get_default_file_name()
+    def get_description(self):
+        return self.description or self.get_default_file_name()
 
     def get_extension(self):
         try:
@@ -63,17 +61,17 @@ class DownloadsItem(MultiModuleItem):
         ordering = ("position",)
 
 
-class DownloadsModuleForm(BaseModuleForm):
+class FilesModuleForm(BaseModuleForm):
     class Meta:
-        model = DownloadsModule
+        model = FilesModule
         fields = ("title",) + BaseModuleForm.base_module_fields
         widgets = {"title": forms.TextInput(attrs={"placeholder": "Files"})}
 
 
-DownloadsItemFormSet = inlineformset_factory(
-    DownloadsModule,
-    DownloadsItem,
-    fields=("id", "name", "position"),
+FilesItemFormSet = inlineformset_factory(
+    FilesModule,
+    FilesItem,
+    fields=("id", "description", "position"),
     extra=0,
     can_delete=True,
 )

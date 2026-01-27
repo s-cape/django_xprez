@@ -78,6 +78,8 @@ class GalleryItem(MultiModuleItem):
 
 
 class GalleryConfig(ModuleConfig):
+    admin_template_name = "xprez/admin/configs/modules/gallery.html"
+
     COLUMNS_CHOICES = (
         (1, "1"),
         (2, "2"),
@@ -87,6 +89,16 @@ class GalleryConfig(ModuleConfig):
         (8, "8"),
     )
     columns = models.PositiveSmallIntegerField(choices=COLUMNS_CHOICES, default=1)
+
+    gap_choice = models.CharField(
+        "Gap",
+        max_length=20,
+        choices=constants.GAP_CHOICES,
+        default=constants.GAP_SMALL,
+        blank=True,
+    )
+    gap_custom = models.PositiveIntegerField(null=True, blank=True)
+
     padding_horizontal_choice = models.CharField(
         "Padding horizontal",
         max_length=20,
@@ -109,6 +121,7 @@ class GalleryConfig(ModuleConfig):
         css.update(
             {
                 "columns": self.columns,
+                "gap": self._get_choice_or_custom("gap"),
                 "padding-horizontal": self._get_choice_or_custom("padding_horizontal"),
                 "padding-vertical": self._get_choice_or_custom("padding_vertical"),
             }

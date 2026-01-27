@@ -12,7 +12,7 @@ class QuoteModule(Module):
     form_class = "xprez.modules.quote.QuoteModuleForm"
 
     name = models.CharField(max_length=255)
-    job_title = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to="quotes", null=True, blank=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     quote = models.TextField()
@@ -26,7 +26,7 @@ class QuoteModuleForm(BaseModuleForm):
         model = QuoteModule
         fields = (
             "name",
-            "job_title",
+            "subtitle",
             "title",
             "quote",
             "image",

@@ -1,1 +1,20 @@
 {% extends "xprez/admin/configs/modules/text_base.html" %}
+
+{% block text_extra_fields %}
+    <div class="xprez-option-group__subtitle">Image / Video</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_role size="flex-1" %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_crop size="flex-1" %}
+    </div>
+    <div class="xprez-option-row" data-hidden data-show-when-select="{{ config.admin_form.media_role.html_name }}" data-show-when-value="background">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_background_position size="flex-1" suffix="%" %}
+    </div>
+    <div class="xprez-option-row" data-hidden data-show-when-select="{{ config.admin_form.media_role.html_name }}" data-show-when-value="lead">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_lead_to_edge size="flex-1" %}
+    </div>
+    <div class="xprez-option-row" data-hidden data-show-when-select="{{ config.admin_form.media_role.html_name }}" data-show-when-value="icon">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_icon_max_size size="flex-1" suffix="px" %}
+    </div>
+{% endblock %}

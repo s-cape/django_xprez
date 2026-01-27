@@ -2,8 +2,8 @@
 
 {% block content %}
 {{ module.background }}
-    {% if module.image %}
-        <img class="xprez-text__image" src="{{ module.image.url }}" alt="{{ module.image.name }}">
+    {% if module.media %}
+        <img class="xprez-text__image" src="{{ module.media.url }}" alt="{{ module.media.name }}">
     {% endif %}
     {{ block.super }}
 {% endblock %}

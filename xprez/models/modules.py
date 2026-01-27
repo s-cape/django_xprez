@@ -41,6 +41,8 @@ class Module(ConfigParentMixin, models.Model):
     position = models.PositiveSmallIntegerField(default=0)
     content_type = models.CharField(max_length=100, editable=False)
     css_class = models.CharField(max_length=100, null=True, blank=True)
+    alternate_color = models.BooleanField(default=False)
+    background_color = models.CharField(max_length=30, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
     changed = models.DateTimeField(auto_now=True, editable=False, db_index=True)
