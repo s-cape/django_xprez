@@ -190,12 +190,16 @@ class CssParentMixin(CssMixin):
         ("#id", 0, {"a": 1}) -> "#id { --x-a: 1; }"
         ("#id", 2, {"a": 1}) -> "@media (min-width: 768px) { #id { --x-a: 1; } }"
         """
+        if not css:
+            return ""
+
         css_vars = CssParentMixin._format_css_vars(css)
         min_width = settings.XPREZ_BREAKPOINTS[breakpoint]["min_width"]
         rule = f"{selector} {{ {css_vars}; }}"
         if not min_width:
             return rule
-        return f"@media (min-width: {min_width}px) {{ {rule} }}"
+        else:
+            return f"@media (min-width: {min_width}px) {{ {rule} }}"
 
     def render_css(self):
         """
@@ -211,7 +215,9 @@ class CssParentMixin(CssMixin):
         output = []
 
         for breakpoint, css in css_data.items():
-            output += [self._format_css_rule(selector, breakpoint, css)]
+            rule = self._format_css_rule(selector, breakpoint, css)
+            if rule:
+                output += [rule]
 
         if output:
             return "<style>" + "".join(output) + "</style>"
