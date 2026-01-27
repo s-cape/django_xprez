@@ -289,7 +289,7 @@ class ModuleConfig(ConfigBase):
             "padding-right": self._get_choice_or_custom("padding_right"),
             "padding-top": self._get_choice_or_custom("padding_top"),
             "padding-bottom": self._get_choice_or_custom("padding_bottom"),
-            "aspect-ratio": self.aspect_ratio if self.aspect_ratio else None,
+            "aspect-ratio": self.aspect_ratio if self.aspect_ratio else "none",
             "border-radius": self._get_choice_or_custom("border_radius"),
         }
 
