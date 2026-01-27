@@ -9,12 +9,12 @@
     <div class="xprez-option-group__subtitle">Grid</div>
 
     <div class="xprez-option-row">
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.colspan flex=1 %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.rowspan flex=1 %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.colspan size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.rowspan size="flex-1" %}
     </div>
     <div class="xprez-option-row">
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align label=False icon="xprez-icon-vertical" flex=1 %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align label=False icon="xprez-icon-horizontal" flex=1 %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align label=False icon="xprez-icon-vertical" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align label=False icon="xprez-icon-horizontal" size="flex-1" %}
     </div>
 
     {% block extra_fields %}

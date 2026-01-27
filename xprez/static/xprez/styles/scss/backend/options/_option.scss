@@ -62,7 +62,7 @@
 		text-align: right;
 		box-shadow: none !important;
 		padding: 0 !important;
-		min-width: 20px !important;
+		min-width: 20px !important;  
 		outline: none !important;
 		flex: 1;
 		line-height: inherit !important;
@@ -72,6 +72,17 @@
 		
 		&::selection {
 			background-color: var(--x-admin-option-selection-bg, 0.2);
+		}
+	}
+
+	input[type="number"] {
+		appearance: textfield;
+		min-width: 4ch !important;
+
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			appearance: none;
+			margin: 0;
 		}
 	}
 

@@ -85,12 +85,18 @@
                         <span class="xprez-option-group__title-text">Section</span>
                     </div>
                     <div class="xprez-option-row">
-                        {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_choice flex=1 %}
-                        {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_custom label=False suffix=section.units.max_width.custom flex=0 attributes="data-hidden data-custom-toggle-select=\""|add:section.admin_form.max_width_choice.html_name|add:"\""|safe %}
+                        {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_choice size="flex-1" %}
+                        {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_custom label=False suffix=section.units.max_width.custom size="flex-0" attributes="data-hidden data-custom-toggle-select=\""|add:section.admin_form.max_width_choice.html_name|add:"\""|safe size="flex-0" %}
                     </div>
-                    {% include "xprez/admin/form/row.html" with field=section.admin_form.alternate_color flex=1 %}
-                    {% include "xprez/admin/form/row.html" with field=section.admin_form.background_color flex=1 %}
-                    {% include "xprez/admin/form/row.html" with field=section.admin_form.css_class flex=1 %}
+                    <div class="xprez-option-row">
+                        {% include "xprez/admin/form/field.html" with field=section.admin_form.alternate_color size="flex-1" %}
+                    </div>
+                    <div class="xprez-option-row">
+                        {% include "xprez/admin/form/field.html" with field=section.admin_form.background_color size="flex-1" %}
+                    </div>
+                    <div class="xprez-option-row">
+                        {% include "xprez/admin/form/field.html" with field=section.admin_form.css_class size="flex-1" %}
+                    </div>
 
                     <div data-component="xprez-section-configs">
                         {% for config in section.admin_form.xprez_configs %}

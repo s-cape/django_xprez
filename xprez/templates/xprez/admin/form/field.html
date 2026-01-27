@@ -1,6 +1,6 @@
 <div
     class="xprez-option {% if field.field.required %}required{% endif %}"
-    {% if flex is not None %}data-size="flex-{{ flex }}"{% endif %}
+    {% if size is not None %}data-size="{{ size }}"{% endif %}
     {% if field.errors %}data-has-errors{% endif %}
     data-active="true"
     {% if label is False %}data-text-label="false"{% endif %}
