@@ -68,7 +68,7 @@ class ModuleRegistry:
                         static("xprez/admin/js/xprez.js"),
                     ),
                 ),
-                css={"all": ("xprez/styles/xprez-backend.css",)},
+                css={"all": ("xprez/styles/xprez_backend.css",)},
             ),
         )
 

@@ -62,7 +62,7 @@ def variables_css(request):
         if changed:
             result += [
                 ConfigParentMixin._format_css_rule(
-                    f".xprez-module.{module_class.module_css_class()}", 0, changed
+                    f".{module_class.module_css_class()}", 0, changed
                 )
             ]
 
@@ -76,7 +76,7 @@ def variables_css(request):
             if changed:
                 result += [
                     ConfigParentMixin._format_css_rule(
-                        f".xprez-module.{module_class.module_css_class()}",
+                        f".{module_class.module_css_class()}",
                         breakpoint,
                         changed,
                     )

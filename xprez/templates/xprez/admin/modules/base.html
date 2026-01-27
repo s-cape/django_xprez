@@ -54,7 +54,9 @@
                     {% endif %}
                     {% block main_fields %}
                         {% for field in module.admin_form.get_main_fields %}
-                            {% include "xprez/admin/form/row.html" with field=field %}
+                            <div class="xprez-option-row">
+                                {% include "xprez/admin/form/field.html" with field=field %}
+                            </div>
                         {% endfor %}
                     {% endblock %}
                 </div>
@@ -95,10 +97,14 @@
 
                     <div class="xprez-option-group__subtitle">Attributes</div>
 
-                    {% include "xprez/admin/form/row.html" with field=module.admin_form.css_class flex=1 %}
+                    <div class="xprez-option-row">
+                        {% include "xprez/admin/form/field.html" with field=module.admin_form.css_class size="flex-1" %}
+                    </div>
                     {% block options_fields %}
                         {% for field in module.admin_form.get_options_fields %}
-                            {% include "xprez/admin/form/row.html" with field=field %}
+                            <div class="xprez-option-row">
+                                {% include "xprez/admin/form/field.html" with field=field size="flex-1" %}
+                            </div>
                         {% endfor %}
                     {% endblock %}
 

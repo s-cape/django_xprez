@@ -1,58 +1,6 @@
 {% load i18n %}
 {% load xprez_admin %}
 
-{# TODO: cleanup #}
-<style>
-    [data-hidden] {
-        display: none;
-    }
-    [data-has-errors] {
-        border: 1px solid red;
-    }
-    .xprez-errors {
-        color: red;
-    }
-    [data-component="xprez-section"][data-collapsed] .xprez-section-grid {
-        display: none;
-    }
-    [data-component="xprez-section"][data-collapsed] .xprez-section__footer {
-        display: none;
-    }
-
-    [data-component="xprez-section-config"][data-mode="delete"] {
-        border: 1px solid red;
-    }
-    [data-component="xprez-section-config"][data-mode="delete"] > * {
-        display: none;
-    }
-    [data-component="xprez-section-config"] [data-component="xprez-section-config-delete-info"] {
-        display: none;
-    }
-    [data-component="xprez-section-config"][data-mode="delete"] [data-component="xprez-section-config-delete-info"] {
-        display: block;
-    }
-
-    .sortable-ghost {
-        opacity: 0.4;
-        border: 1px dashed orange;
-    }
-
-    .sortable-drag {
-        border: 1px dashed blue;
-        opacity: 0.8;
-    }
-
-    .xprez-section__header,
-    .xprez-module__header {
-        cursor: grab;
-    }
-
-    .xprez-section__header:active,
-    .xprez-module__header:active {
-        cursor: grabbing;
-    }
-</style>
-
 <div class="xprez" data-component="xprez">
     <div class="xprez-top">
         <div class="xprez-option" data-active="true" data-text-label="true">

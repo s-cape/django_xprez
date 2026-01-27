@@ -1,6 +1,7 @@
 {% extends "xprez/modules/text_base.html" %}
 
 {% block content %}
+{{ module.background }}
     {% if module.image %}
         <img class="xprez-text__image" src="{{ module.image.url }}" alt="{{ module.image.name }}">
     {% endif %}

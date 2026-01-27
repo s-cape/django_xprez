@@ -90,8 +90,8 @@ XPREZ_CSS = {
                 constants.MAX_WIDTH_CUSTOM: "px",
             },
             "values": {
-                constants.MAX_WIDTH_SMALL: {0: 400},
-                constants.MAX_WIDTH_MEDIUM: {0: 720},
+                constants.MAX_WIDTH_SMALL: {0: 720},
+                constants.MAX_WIDTH_MEDIUM: {0: 1296},
                 constants.MAX_WIDTH_FULL: {0: 100},
             },
         },
