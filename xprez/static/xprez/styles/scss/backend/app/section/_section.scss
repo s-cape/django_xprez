@@ -12,6 +12,16 @@
         }
     }
 
+    &[data-collapsed] {
+        .xprez-section__footer, .xprez-section-grid {
+            display: none;
+        }
+
+        [data-component="xprez-section-collapser"] {
+            transform: rotate(-90deg);
+        }
+    }
+
     &__header {
         display: flex;
         gap: 16px;

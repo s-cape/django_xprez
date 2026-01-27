@@ -1,5 +1,5 @@
 <div
-    class="xprez-option {% if field.field.required %}required{% endif %}"
+    class="{% if placement == "module" %}{% else %}xprez-option {% endif %} {% if field.field.required %}required{% endif %}"
     {% if size is not None %}data-size="{{ size }}"{% endif %}
     {% if field.errors %}data-has-errors{% endif %}
     data-active="true"

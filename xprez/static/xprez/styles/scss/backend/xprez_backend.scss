@@ -7,11 +7,11 @@
 
 // Frontend styles
 
-@import "../frontend_old/layout";
-@import "../frontend_old/typography";
-@import "../frontend_old/editor_media";
-@import "../frontend_old/button";
-@import "../frontend_old/grid_boxes";
+@import "../frontend_old/layout"; // TODO: Remove this
+@import "../frontend_old/typography"; // TODO: Remove this
+@import "../frontend_old/editor_media"; // TODO: Remove this
+@import "../frontend_old/button"; // TODO: Remove this
+// @import "../frontend_old/grid_boxes"; // TODO: Remove this  
  
 
 // Backend styles
@@ -28,9 +28,13 @@
 @import "app/top_menu";
 @import "app/add_list";
 @import "app/delete_info";
-@import "app/content";
 @import "app/section/section";
 @import "app/section/section_grid";
+@import "app/module/module";
+@import "app/module/error";
+
+@import "tools/sortable";
+@import "tools/ui_helpers";
 
 @import "comp/button";
 @import "comp/popover";

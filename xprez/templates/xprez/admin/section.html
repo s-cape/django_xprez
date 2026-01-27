@@ -58,15 +58,15 @@
         </div>
     </div>
 
-    <div class="xprez-delete-info" data-component="xprez-section-delete-info">
-        This section will be deleted when you save the changes.
-        <span class="xprez-btn xprez-btn__danger" data-component="xprez-section-delete-undo">undelete</span>
-    </div>
-
     <div class="xprez-section-grid" data-component="xprez-section-grid">
         {% for module in section.admin_form.xprez_modules %}
             {% xprez_module_render_admin module %}
         {% endfor %}
+    </div>
+
+    <div class="xprez-delete-info" data-component="xprez-section-delete-info">
+        This section will be deleted when you save the changes.
+        <span class="xprez-btn xprez-btn__danger" data-component="xprez-section-delete-undo">undelete</span>
     </div>
 
     <div class="xprez-section__footer">
