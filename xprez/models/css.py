@@ -8,15 +8,11 @@ def _get_unit_string(mapping, choice=None):
     """Extract unit string from mapping, handling dict or string units."""
     if not mapping:
         return ""
-
     units = mapping.get("units", "")
     if isinstance(units, dict):
-        if choice:
-            return units.get(choice, "")
-        return ""
-    elif units:
+        return units.get(choice, "") if choice else ""
+    else:
         return units
-    return ""
 
 
 class ChoiceUnitsProxy:
@@ -186,9 +182,8 @@ class CssParentMixin(CssMixin):
         """
         result = []
         for k, v in css.items():
-            if isinstance(v, dict):
-                continue
-            result.append(f"--x-{k}: {v}")
+            if v is not None:
+                result += [f"--x-{k}: {v}"]
         return "; ".join(result)
 
     @staticmethod
