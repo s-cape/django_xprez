@@ -4,6 +4,21 @@ from xprez.conf import settings
 "TODO: this file need cleanup"
 
 
+def _get_unit_string(mapping, choice=None):
+    """Extract unit string from mapping, handling dict or string units."""
+    if not mapping:
+        return ""
+
+    units = mapping.get("units", "")
+    if isinstance(units, dict):
+        if choice:
+            return units.get(choice, "")
+        return ""
+    elif units:
+        return units
+    return ""
+
+
 class ChoiceUnitsProxy:
     """Proxy to access choice-specific units."""
 
@@ -14,15 +29,7 @@ class ChoiceUnitsProxy:
         """
         Returns unit for specific choice: config.units.max_width.small -> 'px'
         """
-        if not self.mapping:
-            return ""
-
-        units = self.mapping.get("units", "")
-        if isinstance(units, dict):
-            return units.get(choice, "")
-        elif units:
-            return units
-        return ""
+        return _get_unit_string(self.mapping, choice)
 
 
 class UnitsProxy:
@@ -91,14 +98,11 @@ class CssMixin:
 
     def _format_css_value(self, mapping, value, choice=None):
         """Apply units from mapping to value."""
-        if not mapping:
-            return value if value is not None else ""
+        if value is None:
+            return ""
 
-        units = mapping.get("units", "")
-        if isinstance(units, dict) and choice:
-            units = units.get(choice, "")
-
-        return f"{value}{units}" if value is not None else value
+        units = _get_unit_string(mapping, choice)
+        return f"{value}{units}"
 
     @property
     def units(self):
@@ -180,7 +184,12 @@ class CssParentMixin(CssMixin):
 
         {"columns": 2, "gap": "1rem"} -> "--x-columns: 2; --x-gap: 1rem"
         """
-        return "; ".join(f"--x-{k}: {v}" for k, v in css.items())
+        result = []
+        for k, v in css.items():
+            if isinstance(v, dict):
+                continue
+            result.append(f"--x-{k}: {v}")
+        return "; ".join(result)
 
     @staticmethod
     def _format_css_rule(selector, breakpoint, css):
