@@ -12,17 +12,19 @@ export function executeScripts(el) {
     });
 }
 
-export class XprezCustomToggle {
+export class XprezShowWhen {
     constructor(parent, el) {
         this.parent = parent;
         this.el = el;
-        this.selectEl = this.parent.el.querySelector(`[name="${this.el.getAttribute("data-custom-toggle-select")}"]`);
+        const [fieldName, targetValue] = this.el.getAttribute("data-show-when").split(":");
+        this.selectEl = this.parent.el.querySelector(`[name="${fieldName}"]`);
+        this.targetValue = targetValue;
         this.selectEl.addEventListener("change", () => this.updateVisibility());
         this.updateVisibility();
     }
 
     updateVisibility() {
-        if (this.selectEl.value === "custom") {
+        if (this.selectEl.value === this.targetValue) {
             this.el.removeAttribute("data-hidden");
         } else {
             this.el.setAttribute("data-hidden", "");

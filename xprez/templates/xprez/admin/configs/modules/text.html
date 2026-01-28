@@ -8,13 +8,13 @@
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.media_crop size="flex-1" %}
     </div>
-    <div class="xprez-option-row" data-hidden data-show-when-select="{{ config.admin_form.media_role.html_name }}" data-show-when-value="background">
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:background">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.media_background_position size="flex-1" suffix="%" %}
     </div>
-    <div class="xprez-option-row" data-hidden data-show-when-select="{{ config.admin_form.media_role.html_name }}" data-show-when-value="lead">
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:lead">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.media_lead_to_edge size="flex-1" %}
     </div>
-    <div class="xprez-option-row" data-hidden data-show-when-select="{{ config.admin_form.media_role.html_name }}" data-show-when-value="icon">
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:icon">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.media_icon_max_size size="flex-1" suffix="px" %}
     </div>
 {% endblock %}
