@@ -60,6 +60,8 @@ class BaseModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
         "position",
         "section",
         "css_class",
+        "alternate_color",
+        "background_color",
     )
 
     options_fields = ()
