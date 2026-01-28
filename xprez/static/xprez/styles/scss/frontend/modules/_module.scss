@@ -13,12 +13,8 @@
         .xprez-#{$number}-box {
             background: var(--x-box-bg);
         }
-    }
-}
-
-@each $number, $breakpoint in $breakpoints {
-    @media (min-width: $breakpoint) {
-        .xprez-#{$number}-box-reset {
+        
+        .xprez-#{$number}-nobox {
             background: transparent;
         }
     }
