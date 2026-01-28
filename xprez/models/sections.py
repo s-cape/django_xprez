@@ -32,7 +32,7 @@ class Section(ConfigParentMixin, models.Model):
     )
     max_width_custom = models.PositiveIntegerField(null=True, blank=True)
 
-    alternate_color = models.BooleanField(default=False)
+    alternate_background = models.BooleanField(default=False)
     background_color = models.CharField(max_length=30, blank=True)
     css_class = models.CharField(max_length=100, null=True, blank=True)
 
