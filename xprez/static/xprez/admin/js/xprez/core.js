@@ -16,7 +16,7 @@ export class Xprez {
         this.initAllSectionsCollapser();
         this.initSectionsSortable();
 
-        this.sections[0].popover.show();
+        // this.sections[0].popover.show();
     }
 
     initSection(sectionEl) {

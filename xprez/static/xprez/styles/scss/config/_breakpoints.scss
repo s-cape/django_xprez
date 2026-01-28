@@ -1,0 +1,16 @@
+// Breakpoints - mapped from XPREZ_BREAKPOINTS in defaults.py
+$breakpoint-base: 0px; // Basic style (> 0px)
+$breakpoint-sm: 500px; // Small devices (> 500px)
+$breakpoint-md: 768px; // Tablets (> 768px)
+$breakpoint-lg: 992px; // Large devices (> 992px)
+$breakpoint-xl: 1200px; // Desktops (> 1200px)
+$breakpoint-xxl: 1500px; // Extra large devices (> 1500px)
+
+$breakpoints: (
+    0: $breakpoint-base,
+    1: $breakpoint-sm,
+    2: $breakpoint-md,
+    3: $breakpoint-lg,
+    4: $breakpoint-xl,
+    5: $breakpoint-xxl
+);

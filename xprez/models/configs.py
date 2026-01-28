@@ -97,6 +97,7 @@ class SectionConfig(ConfigBase):
         max_length=20,
         choices=constants.MARGIN_CHOICES,
         default=constants.MARGIN_MEDIUM,
+        blank=True,
     )
     margin_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
 

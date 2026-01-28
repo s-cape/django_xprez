@@ -85,6 +85,7 @@
 
     &-row {
         display: flex;
+        flex-wrap: wrap;
         align-items: flex-start;
         gap: var(--x-admin-option-group-gap);
     }

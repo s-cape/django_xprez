@@ -1,14 +1,16 @@
 CUSTOM = "custom"
 NONE = ""
 
+MARGIN_NONE = NONE
 MARGIN_SMALL = "small"
 MARGIN_MEDIUM = "medium"
-MARGIN_FULL = "full"
+MARGIN_LARGE = "large"
 MARGIN_CUSTOM = CUSTOM
 MARGIN_CHOICES = (
+    (MARGIN_NONE, "None"),
     (MARGIN_SMALL, "Small"),
     (MARGIN_MEDIUM, "Medium"),
-    (MARGIN_FULL, "Full"),
+    (MARGIN_LARGE, "Large"),
     (MARGIN_CUSTOM, "Custom"),
 )
 
