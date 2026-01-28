@@ -50,7 +50,7 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 container=container,
                 position=old_content.position,
                 visible=old_content.visible,
-                alternate_color=old_content.alternate_color,
+                alternate_background=old_content.alternate_color,
                 background_color=old_content.background_color,
                 css_class=old_content.css_class,
                 saved=True,

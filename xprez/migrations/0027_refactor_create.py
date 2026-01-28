@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
                     "max_width_custom",
                     models.PositiveIntegerField(blank=True, null=True),
                 ),
-                ("alternate_color", models.BooleanField(default=False)),
+                ("alternate_background", models.BooleanField(default=False)),
                 ("background_color", models.CharField(blank=True, max_length=30)),
                 ("css_class", models.CharField(blank=True, max_length=100, null=True)),
                 (
