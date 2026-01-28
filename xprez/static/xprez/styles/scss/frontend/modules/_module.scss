@@ -1,4 +1,25 @@
 .xprez-module {
     grid-row: span var(--x-rowspan, 1);
     grid-column: span var(--x-colspan, 1);
+
+    &-inner {
+        padding: var(--x-padding-top, 0) var(--x-padding-right, 0) var(--x-padding-bottom, 0) var(--x-padding-left, 0);
+        
+    }
+}
+
+@each $number, $breakpoint in $breakpoints {
+    @media (min-width: $breakpoint) {
+        .xprez-#{$number}-box {
+            background: var(--x-box-bg);
+        }
+    }
+}
+
+@each $number, $breakpoint in $breakpoints {
+    @media (min-width: $breakpoint) {
+        .xprez-#{$number}-box-reset {
+            background: transparent;
+        }
+    }
 }
