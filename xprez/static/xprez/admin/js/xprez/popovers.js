@@ -1,18 +1,18 @@
-import { XprezCustomToggle } from './utils.js';
+import { XprezShowWhen } from './utils.js';
 
 export class XprezPopoverBase {
     constructor(...args) {
         this.bindElements(...args);
         this.bindEvents();
         this.openOnErrors();
-        this.initCustomToggles();
+        this.initShowWhens();
     }
 
-    initCustomToggles() {
-        this.el.querySelectorAll("[data-custom-toggle-select]").forEach(fieldEl => {
+    initShowWhens() {
+        this.el.querySelectorAll("[data-show-when]").forEach(fieldEl => {
             const closestComponent = fieldEl.closest("[data-component]");
             if (closestComponent === this.el) {
-                new XprezCustomToggle(this, fieldEl);
+                new XprezShowWhen(this, fieldEl);
             }
         });
     }

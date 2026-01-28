@@ -1,16 +1,16 @@
 import { XprezSectionConfigDeleter, XprezModuleConfigDeleter } from './deleters.js';
-import { XprezCustomToggle } from './utils.js';
+import { XprezShowWhen } from './utils.js';
 
 export class XprezConfigBase {
     constructor(parent, el) {
         this.parent = parent;
         this.el = el;
-        this.initCustomToggles();
+        this.initShowWhens();
     }
 
-    initCustomToggles() {
-        this.el.querySelectorAll("[data-custom-toggle-select]").forEach(fieldEl => {
-            new XprezCustomToggle(this, fieldEl);
+    initShowWhens() {
+        this.el.querySelectorAll("[data-show-when]").forEach(fieldEl => {
+            new XprezShowWhen(this, fieldEl);
         });
     }
 

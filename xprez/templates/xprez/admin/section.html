@@ -86,7 +86,7 @@
                     </div>
                     <div class="xprez-option-row">
                         {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_choice size="flex-1" %}
-                        {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_custom label=False suffix=section.units.max_width.custom size="flex-0" attributes="data-hidden data-custom-toggle-select=\""|add:section.admin_form.max_width_choice.html_name|add:"\""|safe size="flex-0" %}
+                        {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_custom label=False suffix=section.units.max_width.custom size="flex-0" attributes="data-hidden data-show-when=\""|add:section.admin_form.max_width_choice.html_name|add:":custom\""|safe size="flex-0" %}
                     </div>
                     <div class="xprez-option-row">
                         {% include "xprez/admin/form/field.html" with field=section.admin_form.alternate_background size="flex-1" %}

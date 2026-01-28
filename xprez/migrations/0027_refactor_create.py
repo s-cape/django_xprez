@@ -224,12 +224,14 @@ class Migration(migrations.Migration):
                     "margin_bottom_choice",
                     models.CharField(
                         choices=[
+                            ("", "None"),
                             ("small", "Small"),
                             ("medium", "Medium"),
-                            ("full", "Full"),
+                            ("large", "Large"),
                             ("custom", "Custom"),
                         ],
                         default="medium",
+                        blank=True,
                         max_length=20,
                         verbose_name="Margin bottom",
                     ),

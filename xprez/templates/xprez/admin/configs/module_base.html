@@ -19,22 +19,22 @@
     <div class="xprez-option-group__subtitle">Padding</div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_choice label=False icon="xprez-icon-padding_t" size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_custom label=False suffix=config.units.padding_top.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.padding_top_choice.html_name|add:"\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_custom label=False suffix=config.units.padding_top.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_top_choice.html_name|add:":custom\""|safe size="flex-0" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_y_linked label=False icon="xprez-icon-link_vertical x-variant-checked x-color-alert" icon2="xprez-icon-link_vertical x-variant-unchecked" size=False %}
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_bottom_choice label=False icon="xprez-icon-padding_b" size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_bottom_custom label=False suffix=config.units.padding_bottom.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.padding_bottom_choice.html_name|add:"\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_bottom_custom label=False suffix=config.units.padding_bottom.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_bottom_choice.html_name|add:":custom\""|safe size="flex-0" %}
         <div class="xprez-option__btn-spacer"></div>
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_left_choice label=False icon="xprez-icon-padding_l" size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_left_custom label=False suffix=config.units.padding_left.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.padding_left_choice.html_name|add:"\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_left_custom label=False suffix=config.units.padding_left.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_left_choice.html_name|add:":custom\""|safe size="flex-0" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_x_linked label=False icon="xprez-icon-link_vertical x-variant-checked x-color-alert" icon2="xprez-icon-link_vertical x-variant-unchecked" size=False %}
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_right_choice label=False icon="xprez-icon-padding_r" size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_right_custom label=False suffix=config.units.padding_right.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.padding_right_choice.html_name|add:"\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_right_custom label=False suffix=config.units.padding_right.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_right_choice.html_name|add:":custom\""|safe size="flex-0" %}
         <div class="xprez-option__btn-spacer"></div>
     </div>
 
@@ -52,7 +52,7 @@
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_choice size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_custom label=False suffix=config.units.border_radius.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.border_radius_choice.html_name|add:"\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_custom label=False suffix=config.units.border_radius.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.border_radius_choice.html_name|add:":custom\""|safe size="flex-0" %}
     </div>
 
     {% block extra_fields %}
