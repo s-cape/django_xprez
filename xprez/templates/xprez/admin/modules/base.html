@@ -107,6 +107,12 @@
                             </div>
                         {% endfor %}
                     {% endblock %}
+                    <div class="xprez-option-row">
+                        {% include "xprez/admin/form/field.html" with field=module.admin_form.alternate_color size="flex-1" %}
+                    </div>
+                    <div class="xprez-option-row">
+                        {% include "xprez/admin/form/field.html" with field=module.admin_form.background_color size="flex-1" %}
+                    </div>
 
                     <div data-component="xprez-module-configs">
                         {% for config in module.admin_form.xprez_configs %}
