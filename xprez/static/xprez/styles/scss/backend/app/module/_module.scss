@@ -9,18 +9,18 @@
         --x-icon-display: none;
     }
 
-    &[data-mode="edit"] {
-        --x-admin-content-header-bg: var(--x-admin-marker-checked-text-bg);
-        --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
-        --x-admin-option-button-hover-bg: var(--x-admin-marker-checked-hover-text-bg);
-    }
-
     &__header {
         padding: var(--x-admin-padding-sm) var(--x-admin-padding-md);
         background-color: var(--x-admin-content-header-bg);
         display: flex;
         align-items: center;
         gap: var(--x-admin-padding-md);
+
+        .xprez-module[data-mode="edit"] & {
+            --x-admin-content-header-bg: var(--x-admin-marker-checked-text-bg);
+            --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
+            --x-admin-option-button-hover-bg: var(--x-admin-marker-checked-hover-text-bg);  
+        }
     }
 
     &__name {

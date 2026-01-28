@@ -79,7 +79,7 @@ XPREZ_DEFAULTS = {
             "border_radius_choice": constants.BORDER_RADIUS_MEDIUM,
         },
         "xprez.TextModule": {
-            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,  # TODO: different just for testing
+            # "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,  # TODO: different just for testing
         },
         "xprez.GalleryModule": {
             "colspan": 1,

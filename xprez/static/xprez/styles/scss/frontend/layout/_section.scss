@@ -1,18 +1,23 @@
 .xprez-section {
-    display: grid;
-    gap: var(--x-gap);
-    grid-template-columns: repeat(var(--x-columns), 1fr);
-    align-content: var(--x-vertical-align);
-    justify-items: var(--x-horizontal-align);
-
-    padding: var(--x-padding-top, 0) var(--x-padding-right, 0) var(--x-padding-bottom, 0) var(--x-padding-left, 0);
-    max-width: var(--x-max-width);
+    background-color:  var(--x-background-color, transparent);
     margin-bottom: var(--x-margin-bottom);
-    margin-left: auto;
-    margin-right: auto;
 
-    & > .xprez-module {
-        align-self: var(--x-vertical-align-grid);
-        justify-self: var(--x-horizontal-align-grid);
+    &-inner {
+        display: grid;
+        gap: var(--x-gap);
+        grid-template-columns: repeat(var(--x-columns), 1fr);
+        align-content: var(--x-vertical-align);
+        justify-items: var(--x-horizontal-align);
+
+        padding: var(--x-padding-top, 0) var(--x-padding-right, 0) var(--x-padding-bottom, 0) var(--x-padding-left, 0);
+        max-width: var(--x-max-width);
+        margin-left: auto;
+        margin-right: auto;
+        
+
+        & > .xprez-module {
+            align-self: var(--x-vertical-align-grid);
+            justify-self: var(--x-horizontal-align-grid);
+        }
     }
 }
