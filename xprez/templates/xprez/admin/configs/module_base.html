@@ -16,11 +16,7 @@
         {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align_grid label=False icon="xprez-icon-horizontal" size="flex-1" %}
     </div>
 
-    <div class="xprez-option-group__subtitle">Box</div>
-    <div class="xprez-option-row">
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.background size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.border size="flex-1" %}
-    </div>
+    <div class="xprez-option-group__subtitle">Padding</div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_choice label=False icon="xprez-icon-padding_t" size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_custom label=False suffix=config.units.padding_top.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.padding_top_choice.html_name|add:"\""|safe size="flex-0" %}
@@ -40,6 +36,12 @@
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_right_choice label=False icon="xprez-icon-padding_r" size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_right_custom label=False suffix=config.units.padding_right.custom attributes="data-hidden data-custom-toggle-select=\""|add:config.admin_form.padding_right_choice.html_name|add:"\""|safe size="flex-0" %}
         <div class="xprez-option__btn-spacer"></div>
+    </div>
+
+    <div class="xprez-option-group__subtitle">Box</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.background size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.border size="flex-1" %}
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align_flex label=False icon="xprez-icon-vertical" size="flex-1" %}

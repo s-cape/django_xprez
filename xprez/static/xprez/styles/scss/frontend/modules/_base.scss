@@ -1,0 +1,4 @@
+.xprez-module {
+    grid-row: span var(--x-rowspan, 1);
+    grid-column: span var(--x-colspan, 1);
+}
