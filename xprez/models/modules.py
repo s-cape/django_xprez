@@ -5,8 +5,9 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import re_path
 from django.utils.decorators import method_decorator
-from django.utils.functional import classproperty
+from django.utils.functional import cached_property, classproperty
 
+from xprez import constants
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.conf import settings
 from xprez.models.configs import ConfigParentMixin
@@ -17,6 +18,8 @@ CLIPBOARD_TEXT_MAX_LENGTH = 100
 
 class Module(ConfigParentMixin, models.Model):
     """Base module class for content blocks within sections."""
+
+    constants = constants
 
     config_model = "xprez.ModuleConfig"
     form_class = "xprez.admin.forms.BaseModuleForm"
@@ -82,7 +85,7 @@ class Module(ConfigParentMixin, models.Model):
 
     @classmethod
     def module_css_class(cls):
-        return f"xprez-{cls.module_key}"
+        return cls.module_key
 
     @property
     def key(self):
@@ -99,6 +102,7 @@ class Module(ConfigParentMixin, models.Model):
     def front_template_name(self):
         return f"xprez/modules/{self.module_key}.html"
 
+    @cached_property
     def polymorph(self):
         app_label, object_name = self.content_type.split(".")
         model = apps.get_model(app_label, object_name)
@@ -140,6 +144,14 @@ class Module(ConfigParentMixin, models.Model):
             .objects.filter(module=self)
             .order_by("css_breakpoint")
         )
+
+    @classmethod
+    def build(cls):
+        content_type = cls.class_content_type()
+        module_defaults = {"content_type": content_type}
+        module_defaults.update(settings.XPREZ_DEFAULTS["module"].get("default", {}))
+        module_defaults.update(settings.XPREZ_DEFAULTS["module"].get(content_type, {}))
+        return cls(**module_defaults)
 
     def build_config(self, css_breakpoint):
         config_model = self.get_config_model()
@@ -232,10 +244,28 @@ class Module(ConfigParentMixin, models.Model):
         return render_to_string(cls.icon_template_name)
 
     def clipboard_verbose_name(self):
-        return self.polymorph()._meta.verbose_name
+        return self.polymorph._meta.verbose_name
 
     def clipboard_text_preview(self):
         return ""
+
+    def get_css_config_keys(self):
+        return ("module",)
+
+    def get_css_classes(self):
+        classes = {
+            "module": True,
+            self.module_css_class(): True,
+        }
+        if self.alternate_color:
+            classes["alternate-color"] = True
+        return classes
+
+    def get_css_variables(self):
+        variables = {}
+        if self.background_color:
+            variables["background-color"] = self.background_color
+        return variables
 
 
 class MultiModule(Module):

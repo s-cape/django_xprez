@@ -20,7 +20,7 @@ class ModuleSymlink(Module):
 
     def render_front(self, *args, **kwargs):
         if self.symlink:
-            return self.symlink.polymorph().render_front(*args, **kwargs)
+            return self.symlink.polymorph.render_front(*args, **kwargs)
         else:
             return ""
 

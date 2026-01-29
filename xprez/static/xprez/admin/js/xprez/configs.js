@@ -1,16 +1,23 @@
 import { XprezSectionConfigDeleter, XprezModuleConfigDeleter } from './deleters.js';
-import { XprezShowWhen } from './utils.js';
+import { XprezShowWhen, XprezFieldLink } from './utils.js';
 
 export class XprezConfigBase {
     constructor(parent, el) {
         this.parent = parent;
         this.el = el;
         this.initShowWhens();
+        this.initFieldLinks();
     }
 
     initShowWhens() {
         this.el.querySelectorAll("[data-show-when]").forEach(fieldEl => {
             new XprezShowWhen(this, fieldEl);
+        });
+    }
+
+    initFieldLinks() {
+        this.el.querySelectorAll("[data-field-link]").forEach(el => {
+            new XprezFieldLink(this, el);
         });
     }
 

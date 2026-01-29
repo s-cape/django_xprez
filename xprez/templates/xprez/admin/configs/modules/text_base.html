@@ -3,8 +3,7 @@
 {% block extra_fields %}
     <div class="xprez-option-group__subtitle">Typography</div>
     <div class="xprez-option-row">
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.font_size_choice size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.font_size_custom label=False suffix=config.units.font_size.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.font_size_choice.html_name|add:":custom\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.font_size size="flex-1" %}
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.text_align size="flex-1" %}

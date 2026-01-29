@@ -97,13 +97,12 @@ class TextModule(TextModuleBase):
 class TextBaseConfig(ModuleConfig):
     admin_template_name = "xprez/admin/configs/modules/text_base.html"
 
-    font_size_choice = models.CharField(
+    font_size = models.CharField(
         "Font size",
         max_length=20,
         choices=constants.FONT_SIZE_CHOICES,
         default=constants.FONT_SIZE_NORMAL,
     )
-    font_size_custom = models.PositiveIntegerField(null=True, blank=True)
     text_align = models.CharField(
         "Text align",
         max_length=20,
@@ -114,15 +113,15 @@ class TextBaseConfig(ModuleConfig):
     class Meta(ModuleConfig.Meta):
         abstract = True
 
+    def get_css_classes(self):
+        classes = super().get_css_classes()
+        classes["font-size"] = self.font_size
+        return classes
+
     def get_css_variables(self):
-        css = super().get_css_variables()
-        css.update(
-            {
-                "font-size": self._get_choice_or_custom("font_size"),
-                "text-align": self.text_align,
-            }
-        )
-        return css
+        variables = super().get_css_variables()
+        variables["text-align"] = self.text_align
+        return variables
 
 
 class TextConfig(TextBaseConfig):
@@ -144,18 +143,43 @@ class TextConfig(TextBaseConfig):
         blank=True,
     )
 
+    def get_css_classes(self):
+        classes = super().get_css_classes()
+        if self.module.polymorph.media:
+            classes["media-role"] = self.media_role
+            if self.media_role == constants.MEDIA_ROLE_LEAD:
+                classes["media-lead-to-edge"] = self.media_lead_to_edge
+        return classes
+
     def get_css_variables(self):
-        css = super().get_css_variables()
-        css.update(
-            {
-                "media-role": self.media_role,
-                "media-background-position": f"{self.media_background_position}%",
-                "media-lead-to-edge": int(self.media_lead_to_edge),
-                "media-icon-max-size": f"{self.media_icon_max_size}px",
-                "media-crop": self.media_crop if self.media_crop else None,
-            }
-        )
-        return css
+        variables = super().get_css_variables()
+        if self.module.polymorph.media:
+            if self.media_crop:
+                variables["media-crop"] = self.media_crop
+            if self.media_role == constants.MEDIA_ROLE_ICON:
+                variables["media-icon-max-size"] = self.media_icon_max_size
+            if self.media_role == constants.MEDIA_ROLE_BACKGROUND:
+                variables["background-position"] = self.media_background_position
+
+        return variables
+        # css.update(
+        #     {
+        #         # "media-role": self.media_role,
+        #         "media-background-position": f"{self.media_background_position}%",
+        #         # "media-lead-to-edge": int(self.media_lead_to_edge),
+        #         "media-icon-max-size": f"{self.media_icon_max_size}px",
+        #         "media-crop": self.media_crop if self.media_crop else None,
+        #     }
+        # )
+        # if self.media_lead_to_edge:
+        #     css.update(
+        #         {
+        #             "padding-top": self._get_choice_or_custom("padding_top"),
+        #             "padding-right": self._get_choice_or_custom("padding_right"),
+        #             "padding-left": self._get_choice_or_custom("padding_left"),
+        #         }
+        #     )
+        # return css
 
 
 class TextModuleBaseForm(BaseModuleForm):

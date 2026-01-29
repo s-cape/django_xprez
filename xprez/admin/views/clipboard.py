@@ -54,7 +54,7 @@ class XprezAdminViewsClipboardMixin(object):
 
         modules_data = []
         for module in modules:
-            source_module = module.polymorph()
+            source_module = module.polymorph
             if source_module.__class__ not in available_modules:
                 continue
 
@@ -99,7 +99,7 @@ class XprezAdminViewsClipboardMixin(object):
         for key, pk in session_data:
             try:
                 if key == self.CLIPBOARD_CONTAINER_KEY:
-                    obj = self._get_container_instance(request, pk).polymorph()
+                    obj = self._get_container_instance(request, pk).polymorph
                     modules = obj.modules.all()
                     if any(m in available_modules for m in modules):
                         if all(m in available_modules for m in modules):
@@ -109,7 +109,7 @@ class XprezAdminViewsClipboardMixin(object):
                     else:
                         available = False
                 elif key == self.CLIPBOARD_MODULE_KEY:
-                    obj = models.Module.objects.get(pk=pk).polymorph()
+                    obj = models.Module.objects.get(pk=pk).polymorph
                     available = obj.content_type in available_modules
 
                 clipboard += [{"key": key, "obj": obj, "available": available}]

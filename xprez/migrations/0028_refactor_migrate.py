@@ -242,7 +242,7 @@ class GridboxesProcessor(TextModuleProcessorBase):
     def create_config(self, module):
         super().create_config(module)
         # Migrate GridBoxes-specific attributes to TextConfig/ModuleConfig
-        self.config.font_size_choice = self.TEXT_SIZE_TRANS.get(
+        self.config.font_size = self.TEXT_SIZE_TRANS.get(
             self.old_content.text_size, "normal"
         )
 

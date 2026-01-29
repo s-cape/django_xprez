@@ -1,11 +1,13 @@
 {% block module %}
-    <div id="{{ module.key }}" class="{% block css_class%}xprez-module {{ module.module_css_class }} {{ module.css_class|default:'' }} {% block css_class_extra %}{% endblock %}{% endblock %}" {% block attrs %}{% endblock %}>
-        <div class="debug-info">{{ module.render_css_variables }}</div>
+{{ module.render_css_classes }} {# TODO: remove #}
+<div
+    id="{{ module.key }}"
+    class="{% block css_class %}{{ module.render_css_classes }} {{ module.css_class|default:'' }}{% endblock %}"
+    {% block attrs  %}{% endblock %} >
         {{ module.render_css_variables|safe }}
         <div class="xprez-module-inner">
-            {% block content %}
-            {% endblock %}
+            <div class="debug-info">{{ module.render_css_variables }}</div>
+            {% block content %} {% endblock %}
         </div>
-    </div>
-{% endblock %}
-{% block js %} {% endblock %}
+</div>
+{% endblock %} {% block js %} {% endblock %}

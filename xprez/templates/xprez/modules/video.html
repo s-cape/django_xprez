@@ -1,7 +1,7 @@
 {% extends "xprez/modules/base.html" %}
 {% load thumbnail xprez %}
 
-{% block css_class_extra %}{{ module.width }}-width {% if module.poster_image %}js-video-with-poster{% endif %}{% endblock %}
+{% block css_class %}{{ block.super }} {{ module.width }}-width {% if module.poster_image %}js-video-with-poster{% endif %}{% endblock %}
 
 {% block content %}
     <div class="xprez-video-item">

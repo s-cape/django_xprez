@@ -30,10 +30,19 @@ class Section(ConfigParentMixin, models.Model):
         choices=constants.MAX_WIDTH_CHOICES,
         default=settings.XPREZ_DEFAULTS["section"]["max_width_choice"],
     )
-    max_width_custom = models.PositiveIntegerField(null=True, blank=True)
-
-    alternate_background = models.BooleanField(default=False)
-    background_color = models.CharField(max_length=30, blank=True)
+    max_width_custom = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=settings.XPREZ_DEFAULTS["section"]["max_width_custom"],
+    )
+    alternate_background = models.BooleanField(
+        default=settings.XPREZ_DEFAULTS["section"]["alternate_background"]
+    )
+    background_color = models.CharField(
+        max_length=30,
+        blank=True,
+        default=settings.XPREZ_DEFAULTS["section"]["background_color"],
+    )
     css_class = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
@@ -52,7 +61,7 @@ class Section(ConfigParentMixin, models.Model):
         )
 
     def get_css_config_keys(self):
-        return ["section", "default"]
+        return ("section",)
 
     def get_css_variables(self):
         css_variables = {
@@ -73,7 +82,7 @@ class Section(ConfigParentMixin, models.Model):
         )
         self.admin_form.xprez_admin = admin
         self.admin_form.xprez_modules_all_valid = None
-        self.admin_form.xprez_modules = [m.polymorph() for m in self.modules.all()]
+        self.admin_form.xprez_modules = [m.polymorph for m in self.modules.all()]
 
         for module in self.admin_form.xprez_modules:
             module.build_admin_form(admin, data, files)

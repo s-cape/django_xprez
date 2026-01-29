@@ -47,6 +47,8 @@ XPREZ_DEFAULTS = {
     "section": {
         "max_width_choice": constants.MAX_WIDTH_MEDIUM,
         "max_width_custom": 0,
+        "alternate_background": False,
+        "background_color": "",
     },
     "section_config": {
         "columns": 1,
@@ -66,7 +68,9 @@ XPREZ_DEFAULTS = {
         "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,
     },
     "module": {
-        "default": {},
+        "default": {
+            # "background_color": "green",
+        },
     },
     "module_config": {
         "default": {
@@ -77,6 +81,18 @@ XPREZ_DEFAULTS = {
             "vertical_align_flex": constants.VERTICAL_ALIGN_FLEX_START,
             "horizontal_align_flex": constants.HORIZONTAL_ALIGN_FLEX_CENTER,
             "border_radius_choice": constants.BORDER_RADIUS_MEDIUM,
+            "border_radius_custom": 0,
+            "background": False,
+            "border": False,
+            "padding_left_choice": constants.PADDING_NONE,
+            "padding_left_custom": 0,
+            "padding_right_choice": constants.PADDING_NONE,
+            "padding_right_custom": 0,
+            "padding_top_choice": constants.PADDING_NONE,
+            "padding_top_custom": 0,
+            "padding_bottom_choice": constants.PADDING_NONE,
+            "padding_bottom_custom": 0,
+            "aspect_ratio": "",
         },
         "xprez.TextModule": {
             # "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,  # TODO: different just for testing
@@ -197,39 +213,63 @@ XPREZ_CSS = {
     "module_config": {
         "default": {
             "padding_left": {
-                "units": "px",
+                "units": {
+                    constants.PADDING_NONE: "",
+                    constants.PADDING_SMALL: "rem",
+                    constants.PADDING_MEDIUM: "rem",
+                    constants.PADDING_LARGE: "rem",
+                    constants.PADDING_CUSTOM: "px",
+                },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
+                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
+                    constants.PADDING_LARGE: {0: 2, 1: 4},
                 },
             },
             "padding_right": {
-                "units": "px",
+                "units": {
+                    constants.PADDING_NONE: "",
+                    constants.PADDING_SMALL: "rem",
+                    constants.PADDING_MEDIUM: "rem",
+                    constants.PADDING_LARGE: "rem",
+                    constants.PADDING_CUSTOM: "px",
+                },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
+                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
+                    constants.PADDING_LARGE: {0: 2, 1: 4},
                 },
             },
             "padding_top": {
-                "units": "px",
+                "units": {
+                    constants.PADDING_NONE: "",
+                    constants.PADDING_SMALL: "rem",
+                    constants.PADDING_MEDIUM: "rem",
+                    constants.PADDING_LARGE: "rem",
+                    constants.PADDING_CUSTOM: "px",
+                },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
+                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
+                    constants.PADDING_LARGE: {0: 2, 1: 4},
                 },
             },
             "padding_bottom": {
-                "units": "px",
+                "units": {
+                    constants.PADDING_NONE: "",
+                    constants.PADDING_SMALL: "rem",
+                    constants.PADDING_MEDIUM: "rem",
+                    constants.PADDING_LARGE: "rem",
+                    constants.PADDING_CUSTOM: "px",
+                },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
+                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
+                    constants.PADDING_LARGE: {0: 2, 1: 4},
                 },
             },
             "border_radius": {
@@ -237,14 +277,13 @@ XPREZ_CSS = {
                 "values": {
                     constants.BORDER_RADIUS_NONE: {0: 0},
                     constants.BORDER_RADIUS_SMALL: {0: 4},
-                    constants.BORDER_RADIUS_MEDIUM: {0: 8},
-                    constants.BORDER_RADIUS_LARGE: {0: 16},
+                    constants.BORDER_RADIUS_MEDIUM: {0: 16},
+                    constants.BORDER_RADIUS_LARGE: {0: 32},
                 },
             },
         },
         "xprez.TextModule": {
             "font_size": {
-                "units": "px",
                 "values": {
                     constants.FONT_SIZE_SMALLEST: {0: 12, 2: 14},
                     constants.FONT_SIZE_SMALL: {0: 14, 2: 16},

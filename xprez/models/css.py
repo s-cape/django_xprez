@@ -50,6 +50,9 @@ class CssMixin:
     def get_css_variables(self):
         return {}
 
+    def get_css_classes(self):
+        return {}
+
     def _get_choice_or_custom(self, field_prefix):
         """Get CSS value - transformed choice or formatted custom."""
         choice_value = getattr(self, f"{field_prefix}_choice")
@@ -129,9 +132,7 @@ class CssParentMixin(CssMixin):
 
         Returns: {0: {"columns": 2}, 2: {"columns": 3}}
         """
-        db_configs = {
-            c.css_breakpoint: c for c in self.get_configs().filter(visible=True)
-        }
+        db_configs = {c.css_breakpoint: c for c in self.get_configs()}
         current_css_variables = self.build_config(
             settings.XPREZ_DEFAULT_BREAKPOINT
         ).get_css_variables()
@@ -231,3 +232,77 @@ class CssParentMixin(CssMixin):
             return "<style>" + "".join(output) + "</style>"
         else:
             return ""
+
+    def get_css_classes_by_breakpoint(self):
+        """
+        Compute changed CSS classes per breakpoint (compared to previous).
+
+        Example for TextModule with font-size change at bp2:
+        {0: {"background": True, "font-size": "normal"}, 2: {"font-size": "large"}}
+        """
+        configs = {c.css_breakpoint: c for c in self.get_configs()}
+        current_css_classes = {}
+        result = {}
+
+        for breakpoint, config in configs.items():
+            css_classes = self._diff_css_classes(
+                current_css_classes, config.get_css_classes()
+            )
+            if css_classes:
+                result[breakpoint] = css_classes
+            current_css_classes.update(css_classes)
+
+        return result
+
+    @staticmethod
+    def _diff_css_classes(existing_css_classes, css_classes):
+        """
+        Return only classes that differ from existing.
+
+        >>> CssParentMixin._diff_css_classes(
+        ...     {"background": True, "font-size": "normal"},
+        ...     {"background": True, "font-size": "large"}
+        ... )
+        {'font-size': 'large'}
+
+        Keys that were True in existing but missing in css_classes are reset:
+        >>> CssParentMixin._diff_css_classes({"invisible": True}, {})
+        {'invisible': False}
+        """
+        changed = {}
+        for key, value in css_classes.items():
+            if value != existing_css_classes.get(key):
+                changed[key] = value
+
+        # Detect removed boolean classes: True in existing, missing in new → reset
+        for key, existing_value in existing_css_classes.items():
+            if existing_value is True and key not in css_classes:
+                changed[key] = False
+        return changed
+
+    @staticmethod
+    def _format_css_class(key, value, breakpoint=None):
+        prefix = "xprez"
+        if breakpoint is not None:
+            prefix += f"-{breakpoint}"
+
+        if value is True:
+            return f"{prefix}-{key}"
+        elif value is False:
+            return f"{prefix}-{key}-reset"
+        else:
+            return f"{prefix}-{key}-{value}"
+
+    def render_css_classes(self):
+        result = []
+
+        # Parent classes (no breakpoint prefix)
+        for key, value in self.get_css_classes().items():
+            result += [self._format_css_class(key, value)]
+
+        # Config classes (with breakpoint prefix)
+        for breakpoint, css_classes in self.get_css_classes_by_breakpoint().items():
+            for key, value in css_classes.items():
+                result += [self._format_css_class(key, value, breakpoint)]
+
+        return " ".join(result)

@@ -3,7 +3,7 @@ from django.db import models
 from django.template.loader import render_to_string
 
 from xprez import constants
-from xprez.conf import settings
+from xprez.conf import defaults, settings
 from xprez.models.css import CssMixin, CssParentMixin
 from xprez.utils import import_class
 
@@ -45,6 +45,8 @@ class ConfigParentMixin(CssParentMixin):
 
 
 class ConfigBase(CssMixin, models.Model):
+    constants = constants
+
     css_breakpoint = models.PositiveSmallIntegerField(
         choices=BREAKPOINT_CHOICES,
         default=settings.XPREZ_DEFAULT_BREAKPOINT,
@@ -96,7 +98,7 @@ class SectionConfig(ConfigBase):
         "Margin bottom",
         max_length=20,
         choices=constants.MARGIN_CHOICES,
-        default=constants.MARGIN_MEDIUM,
+        default=settings.XPREZ_DEFAULTS["section_config"]["margin_bottom_choice"],
         blank=True,
     )
     margin_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -105,36 +107,34 @@ class SectionConfig(ConfigBase):
         "Padding left",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_SMALL,
+        default=settings.XPREZ_DEFAULTS["section_config"]["padding_left_choice"],
         blank=True,
     )
+    padding_left_custom = models.PositiveIntegerField(null=True, blank=True)
     padding_right_choice = models.CharField(
         "Padding right",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_SMALL,
+        default=settings.XPREZ_DEFAULTS["section_config"]["padding_right_choice"],
         blank=True,
     )
+    padding_right_custom = models.PositiveIntegerField(null=True, blank=True)
     padding_top_choice = models.CharField(
         "Padding top",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
+        default=settings.XPREZ_DEFAULTS["section_config"]["padding_top_choice"],
         blank=True,
     )
+    padding_top_custom = models.PositiveIntegerField(null=True, blank=True)
     padding_bottom_choice = models.CharField(
         "Padding bottom",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
+        default=settings.XPREZ_DEFAULTS["section_config"]["padding_bottom_choice"],
         blank=True,
     )
-    padding_left_custom = models.PositiveIntegerField(null=True, blank=True)
-    padding_right_custom = models.PositiveIntegerField(null=True, blank=True)
-    padding_top_custom = models.PositiveIntegerField(null=True, blank=True)
     padding_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
-    padding_x_linked = models.BooleanField(default=True)
-    padding_y_linked = models.BooleanField(default=True)
 
     COLUMN_CHOICES = [(i, str(i)) for i in range(1, 8)]
     columns = models.PositiveSmallIntegerField(choices=COLUMN_CHOICES, default=1)
@@ -164,17 +164,23 @@ class SectionConfig(ConfigBase):
         return {
             "columns": self.columns,
             "margin-bottom": self._get_choice_or_custom("margin_bottom"),
-            "padding-left": self._get_choice_or_custom("padding_left"),
-            "padding-right": self._get_choice_or_custom("padding_right"),
-            "padding-top": self._get_choice_or_custom("padding_top"),
-            "padding-bottom": self._get_choice_or_custom("padding_bottom"),
+            # "padding-left": self._get_choice_or_custom("padding_left"),
+            # "padding-right": self._get_choice_or_custom("padding_right"),
+            # "padding-top": self._get_choice_or_custom("padding_top"),
+            # "padding-bottom": self._get_choice_or_custom("padding_bottom"),
+            "padding": (
+                f"{self._get_choice_or_custom('padding_top')} "
+                f"{self._get_choice_or_custom('padding_right')} "
+                f"{self._get_choice_or_custom('padding_bottom')} "
+                f"{self._get_choice_or_custom('padding_left')}"
+            ),
             "gap": self._get_choice_or_custom("gap"),
             "vertical-align-grid": self.vertical_align_grid,
             "horizontal-align-grid": self.horizontal_align_grid,
         }
 
     def get_css_config_keys(self):
-        return ["section_config", "default"]
+        return ("section_config", "default")
 
     @property
     def key(self):
@@ -199,74 +205,123 @@ class ModuleConfig(ConfigBase):
     )
     visible = models.BooleanField(default=True)
 
-    colspan = models.PositiveSmallIntegerField("Column span", default=1)
-    rowspan = models.PositiveSmallIntegerField("Row span", default=1)
+    colspan = models.PositiveSmallIntegerField(
+        "Column span",
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["colspan"],
+    )
+    rowspan = models.PositiveSmallIntegerField(
+        "Row span",
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["rowspan"],
+    )
 
     vertical_align_grid = models.CharField(
         "Vertical align (grid)",
         max_length=20,
         choices=constants.VERTICAL_ALIGN_GRID_MODULE_CHOICES,
-        default=constants.VERTICAL_ALIGN_GRID_UNSET,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "vertical_align_grid"
+        ],
     )
     horizontal_align_grid = models.CharField(
         "Horizontal align (grid)",
         max_length=20,
         choices=constants.HORIZONTAL_ALIGN_GRID_MODULE_CHOICES,
-        default=constants.HORIZONTAL_ALIGN_GRID_UNSET,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "horizontal_align_grid"
+        ],
     )
 
     vertical_align_flex = models.CharField(
         "Vertical align (flex)",
         max_length=20,
         choices=constants.VERTICAL_ALIGN_FLEX_CHOICES,
-        default=constants.VERTICAL_ALIGN_FLEX_START,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "vertical_align_flex"
+        ],
     )
     horizontal_align_flex = models.CharField(
         "Horizontal align (flex)",
         max_length=20,
         choices=constants.HORIZONTAL_ALIGN_FLEX_CHOICES,
-        default=constants.HORIZONTAL_ALIGN_FLEX_CENTER,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "horizontal_align_flex"
+        ],
     )
 
-    background = models.BooleanField(default=False)
+    background = models.BooleanField(
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["background"]
+    )
     border = models.BooleanField(default=False)
 
     padding_left_choice = models.CharField(
         "Padding left",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
+        default=settings.XPREZ_DEFAULTS["module_config"]["default"][
+            "padding_left_choice"
+        ],
         blank=True,
     )
     padding_right_choice = models.CharField(
         "Padding right",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "padding_right_choice"
+        ],
         blank=True,
     )
     padding_top_choice = models.CharField(
         "Padding top",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "padding_top_choice"
+        ],
         blank=True,
     )
     padding_bottom_choice = models.CharField(
         "Padding bottom",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "padding_bottom_choice"
+        ],
         blank=True,
     )
-    padding_left_custom = models.PositiveIntegerField(null=True, blank=True)
-    padding_right_custom = models.PositiveIntegerField(null=True, blank=True)
-    padding_top_custom = models.PositiveIntegerField(null=True, blank=True)
-    padding_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
-    padding_x_linked = models.BooleanField(default=True)
-    padding_y_linked = models.BooleanField(default=True)
-
-    aspect_ratio = models.CharField(max_length=20, blank=True)
+    padding_left_custom = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "padding_left_custom"
+        ],
+    )
+    padding_right_custom = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "padding_right_custom"
+        ],
+    )
+    padding_top_custom = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "padding_top_custom"
+        ],
+    )
+    padding_bottom_custom = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "padding_bottom_custom"
+        ],
+    )
+    aspect_ratio = models.CharField(
+        max_length=20,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["aspect_ratio"],
+    )
     border_radius_choice = models.CharField(
         "Border radius",
         max_length=20,
@@ -274,7 +329,23 @@ class ModuleConfig(ConfigBase):
         default=constants.BORDER_RADIUS_NONE,
         blank=True,
     )
-    border_radius_custom = models.PositiveIntegerField(null=True, blank=True)
+    border_radius_custom = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "border_radius_custom"
+        ],
+    )
+
+    def get_css_classes(self):
+        classes = {}
+        if not self.visible:
+            classes["invisible"] = not self.visible
+        if self.background:
+            classes["background"] = True
+        if self.border:
+            classes["border"] = True
+        return classes
 
     def get_css_variables(self):
         return {
@@ -284,12 +355,12 @@ class ModuleConfig(ConfigBase):
             "horizontal-align-grid": self.horizontal_align_grid,
             "vertical-align-flex": self.vertical_align_flex,
             "horizontal-align-flex": self.horizontal_align_flex,
-            "background": int(self.background),
-            "border": int(self.border),
-            "padding-left": self._get_choice_or_custom("padding_left"),
-            "padding-right": self._get_choice_or_custom("padding_right"),
-            "padding-top": self._get_choice_or_custom("padding_top"),
-            "padding-bottom": self._get_choice_or_custom("padding_bottom"),
+            "padding": (
+                f"{self._get_choice_or_custom('padding_top')} "
+                f"{self._get_choice_or_custom('padding_right')} "
+                f"{self._get_choice_or_custom('padding_bottom')} "
+                f"{self._get_choice_or_custom('padding_left')}"
+            ),
             "aspect-ratio": self.aspect_ratio if self.aspect_ratio else "none",
             "border-radius": self._get_choice_or_custom("border_radius"),
         }

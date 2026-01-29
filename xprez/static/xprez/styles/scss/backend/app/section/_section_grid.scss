@@ -3,4 +3,7 @@
     grid-template-columns: var(--x-admin-section-grid, var(--x-admin-section-grid-default));
     gap: var(--x-admin-section-grid-gap);
     padding: var(--x-admin-padding-xl) var(--x-admin-padding-lg);
+    max-width: var(--x-admin-section-max-width);
+    margin-left: auto;
+    margin-right: auto;
 }

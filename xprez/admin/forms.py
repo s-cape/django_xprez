@@ -102,8 +102,6 @@ class ModuleConfigForm(DeletableFormMixin, forms.ModelForm):
         "padding_left_custom",
         "padding_right_choice",
         "padding_right_custom",
-        "padding_y_linked",
-        "padding_x_linked",
         "vertical_align_flex",
         "horizontal_align_flex",
         "aspect_ratio",

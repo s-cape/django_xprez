@@ -1,4 +1,30 @@
 .xprez-module {
     grid-row: span var(--x-rowspan, 1);
     grid-column: span var(--x-colspan, 1);
+    border-radius: var(--x-border-radius, 0);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: var(--x-vertical-align-flex, stretch);
+    justify-content: var(--x-horizontal-align-flex, center);
+
+    &-inner {
+        padding: var(--x-padding, 0);
+
+        & > :last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+@each $number, $breakpoint in $breakpoints {
+    @media (min-width: $breakpoint) {
+        .xprez-#{$number}-box {
+            background: var(--x-box-bg);
+        }
+
+        .xprez-#{$number}-nobox {
+            background: transparent;
+        }
+    }
 }

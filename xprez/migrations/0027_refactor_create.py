@@ -320,8 +320,6 @@ class Migration(migrations.Migration):
                     "padding_bottom_custom",
                     models.PositiveIntegerField(blank=True, null=True),
                 ),
-                ("padding_x_linked", models.BooleanField(default=True)),
-                ("padding_y_linked", models.BooleanField(default=True)),
                 (
                     "columns",
                     models.PositiveSmallIntegerField(
@@ -588,8 +586,6 @@ class Migration(migrations.Migration):
                     "padding_bottom_custom",
                     models.PositiveIntegerField(blank=True, null=True),
                 ),
-                ("padding_x_linked", models.BooleanField(default=True)),
-                ("padding_y_linked", models.BooleanField(default=True)),
                 ("aspect_ratio", models.CharField(blank=True, max_length=20)),
                 (
                     "border_radius_choice",
@@ -634,7 +630,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "font_size_choice",
+                    "font_size",
                     models.CharField(
                         choices=[
                             ("smallest", "Smallest"),
@@ -648,10 +644,6 @@ class Migration(migrations.Migration):
                         max_length=20,
                         verbose_name="Font size",
                     ),
-                ),
-                (
-                    "font_size_custom",
-                    models.PositiveIntegerField(blank=True, null=True),
                 ),
                 (
                     "text_align",
