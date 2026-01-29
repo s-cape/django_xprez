@@ -197,39 +197,63 @@ XPREZ_CSS = {
     "module_config": {
         "default": {
             "padding_left": {
-                "units": "px",
+                "units": {
+                    constants.PADDING_NONE: "",
+                    constants.PADDING_SMALL: "rem",
+                    constants.PADDING_MEDIUM: "rem",
+                    constants.PADDING_LARGE: "rem",
+                    constants.PADDING_CUSTOM: "px",
+                },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
+                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
+                    constants.PADDING_LARGE: {0: 2, 1: 4},
                 },
             },
             "padding_right": {
-                "units": "px",
+                "units": {
+                    constants.PADDING_NONE: "",
+                    constants.PADDING_SMALL: "rem",
+                    constants.PADDING_MEDIUM: "rem",
+                    constants.PADDING_LARGE: "rem",
+                    constants.PADDING_CUSTOM: "px",
+                },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
+                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
+                    constants.PADDING_LARGE: {0: 2, 1: 4},
                 },
             },
             "padding_top": {
-                "units": "px",
+                "units": {
+                    constants.PADDING_NONE: "",
+                    constants.PADDING_SMALL: "rem",
+                    constants.PADDING_MEDIUM: "rem",
+                    constants.PADDING_LARGE: "rem",
+                    constants.PADDING_CUSTOM: "px",
+                },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
+                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
+                    constants.PADDING_LARGE: {0: 2, 1: 4},
                 },
             },
             "padding_bottom": {
-                "units": "px",
+                "units": {
+                    constants.PADDING_NONE: "",
+                    constants.PADDING_SMALL: "rem",
+                    constants.PADDING_MEDIUM: "rem",
+                    constants.PADDING_LARGE: "rem",
+                    constants.PADDING_CUSTOM: "px",
+                },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
+                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
+                    constants.PADDING_LARGE: {0: 2, 1: 4},
                 },
             },
             "border_radius": {

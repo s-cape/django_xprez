@@ -3,9 +3,17 @@
     grid-column: span var(--x-colspan, 1);
     border-radius: var(--x-border-radius, 0);
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: var(--x-vertical-align-flex, stretch);
+    justify-content: var(--x-horizontal-align-flex, center);
 
     &-inner {
         padding: var(--x-padding, 0);
+
+        & > :last-child {
+            margin-bottom: 0;
+        }
     }
 }
 

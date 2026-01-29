@@ -290,8 +290,8 @@ class ModuleConfig(ConfigBase):
             "horizontal-align-grid": self.horizontal_align_grid,
             "vertical-align-flex": self.vertical_align_flex,
             "horizontal-align-flex": self.horizontal_align_flex,
-            "background": int(self.background),
-            "border": int(self.border),
+            # "background": int(self.background),
+            # "border": int(self.border),
             "padding": (
                 f"{self._get_choice_or_custom('padding_top')} "
                 f"{self._get_choice_or_custom('padding_right')} "
