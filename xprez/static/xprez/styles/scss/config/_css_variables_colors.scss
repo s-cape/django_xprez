@@ -1,0 +1,54 @@
+@import "colors";
+
+.xprez {
+	--x-base-bg: #{$base-bg};
+	--x-base-color: #{$base-color};
+	--x-link-color: #{$link-color};
+	--x-link-hover-color: #{$link-hover-color};
+	--x-heading-color: #{$heading-color};
+	--x-heading-emphasis-color: #{$heading-emphasis-color};
+
+	@if ($h2-color) {
+		--x-h2-color: #{$h2-color};
+	} @else {
+		--x-h2-color: #{$heading-color};
+	}
+	@if ($h3-color) {
+		--x-h3-color: #{$h3-color};
+	} @else {
+		--x-h3-color: #{$heading-color};
+	}
+	@if ($h4-color) {
+		--x-h4-color: #{$h4-color};
+	} @else {
+		--x-h4-color: #{$heading-color};
+	}
+
+    --x-box-bg: #{$box-bg};
+}
+
+.xprez-module--alternate-color {
+    --x-base-color: #{$alt-base-color};
+    --x-link-color: #{$alt-link-color};
+    --x-link-hover-color: #{$alt-link-hover-color};
+    --x-heading-color: #{$alt-heading-color};
+    --x-heading-emphasis-color: #{$alt-heading-emphasis-color}; 
+   
+    @if ($alt-h2-color) {
+		--x-h2-color: #{$alt-h2-color};
+	} @else {
+		--x-h2-color: #{$alt-heading-color};
+	}
+	@if ($alt-h3-color) {
+		--x-h3-color: #{$alt-h3-color};
+	} @else {
+		--x-h3-color: #{$alt-heading-color};
+	}
+	@if ($alt-h4-color) {
+		--x-h4-color: #{$alt-h4-color};
+	} @else {
+		--x-h4-color: #{$alt-heading-color};
+	}
+
+	--x-box-bg: #{$alt-box-bg};
+}

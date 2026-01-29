@@ -4,9 +4,11 @@
     font-family: monospace;
     color: #555;
     padding: 1rem;
-    background-color: #faf7f0;
+    background-color: darken($super-light-gray, 3%);
+    margin-bottom: 1rem;
 
     &__section {
-        background-color: #f2f0fc;
+        background-color: $light-violet;
+        margin-bottom: 0;
     }
 }
