@@ -237,8 +237,8 @@ XPREZ_CSS = {
                 "values": {
                     constants.BORDER_RADIUS_NONE: {0: 0},
                     constants.BORDER_RADIUS_SMALL: {0: 4},
-                    constants.BORDER_RADIUS_MEDIUM: {0: 8},
-                    constants.BORDER_RADIUS_LARGE: {0: 16},
+                    constants.BORDER_RADIUS_MEDIUM: {0: 16},
+                    constants.BORDER_RADIUS_LARGE: {0: 32},
                 },
             },
         },

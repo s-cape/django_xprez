@@ -164,10 +164,16 @@ class SectionConfig(ConfigBase):
         return {
             "columns": self.columns,
             "margin-bottom": self._get_choice_or_custom("margin_bottom"),
-            "padding-left": self._get_choice_or_custom("padding_left"),
-            "padding-right": self._get_choice_or_custom("padding_right"),
-            "padding-top": self._get_choice_or_custom("padding_top"),
-            "padding-bottom": self._get_choice_or_custom("padding_bottom"),
+            # "padding-left": self._get_choice_or_custom("padding_left"),
+            # "padding-right": self._get_choice_or_custom("padding_right"),
+            # "padding-top": self._get_choice_or_custom("padding_top"),
+            # "padding-bottom": self._get_choice_or_custom("padding_bottom"),
+            "padding": (
+                f"{self._get_choice_or_custom('padding_top')} "
+                f"{self._get_choice_or_custom('padding_right')} "
+                f"{self._get_choice_or_custom('padding_bottom')} "
+                f"{self._get_choice_or_custom('padding_left')}"
+            ),
             "gap": self._get_choice_or_custom("gap"),
             "vertical-align-grid": self.vertical_align_grid,
             "horizontal-align-grid": self.horizontal_align_grid,
@@ -286,10 +292,12 @@ class ModuleConfig(ConfigBase):
             "horizontal-align-flex": self.horizontal_align_flex,
             "background": int(self.background),
             "border": int(self.border),
-            "padding-left": self._get_choice_or_custom("padding_left"),
-            "padding-right": self._get_choice_or_custom("padding_right"),
-            "padding-top": self._get_choice_or_custom("padding_top"),
-            "padding-bottom": self._get_choice_or_custom("padding_bottom"),
+            "padding": (
+                f"{self._get_choice_or_custom('padding_top')} "
+                f"{self._get_choice_or_custom('padding_right')} "
+                f"{self._get_choice_or_custom('padding_bottom')} "
+                f"{self._get_choice_or_custom('padding_left')}"
+            ),
             "aspect-ratio": self.aspect_ratio if self.aspect_ratio else "none",
             "border-radius": self._get_choice_or_custom("border_radius"),
         }

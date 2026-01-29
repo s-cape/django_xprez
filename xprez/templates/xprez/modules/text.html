@@ -3,7 +3,7 @@
 {% block content %}
 {{ module.background }}
     {% if module.media %}
-        <img class="xprez-text__image" src="{{ module.media.url }}" alt="{{ module.media.name }}">
+        <div class="xprez-text__image-wrapper"><img class="xprez-text__image" src="{{ module.media.url }}" alt="{{ module.media.name }}"></div>
     {% endif %}
     {{ block.super }}
 {% endblock %}
