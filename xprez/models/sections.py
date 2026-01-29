@@ -54,13 +54,13 @@ class Section(ConfigParentMixin, models.Model):
     def get_css_config_keys(self):
         return ["section", "default"]
 
-    def get_css(self):
-        css = {
+    def get_css_variables(self):
+        css_variables = {
             "max-width": self._get_choice_or_custom("max_width"),
         }
         if self.background_color:
-            css["background-color"] = self.background_color
-        return css
+            css_variables["background-color"] = self.background_color
+        return css_variables
 
     @property
     def key(self):

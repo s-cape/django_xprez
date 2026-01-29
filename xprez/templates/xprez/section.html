@@ -1,8 +1,8 @@
 {% load xprez %}
 
-<div class="debug-info debug-info__section">{{ section.render_css }}</div>
+<div class="debug-info debug-info__section">{{ section.render_css_variables }}</div>
 <div id="{{ section.key }}" class="xprez-section {% if section.alternate_background %}xprez-section--alternate-background{% endif %} {{ section.css_class|default:'' }}">
-    {{ section.render_css|safe }}
+    {{ section.render_css_variables|safe }}
     <div class="xprez-section-inner">
         {% for module in section.get_modules %}
             {% xprez_module_render_front module %}

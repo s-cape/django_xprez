@@ -4,11 +4,11 @@ from xprez.conf import settings
 "TODO: this file need cleanup"
 
 
-def _get_unit_string(mapping, choice=None):
-    """Extract unit string from mapping, handling dict or string units."""
-    if not mapping:
+def _get_unit_string(css_config, choice=None):
+    """Extract unit string from config, handling dict or string units."""
+    if not css_config:
         return ""
-    units = mapping.get("units", "")
+    units = css_config.get("units", "")
     if isinstance(units, dict):
         return units.get(choice, "") if choice else ""
     else:
@@ -18,14 +18,14 @@ def _get_unit_string(mapping, choice=None):
 class ChoiceUnitsProxy:
     """Proxy to access choice-specific units."""
 
-    def __init__(self, mapping):
-        self.mapping = mapping
+    def __init__(self, css_config):
+        self.css_config = css_config
 
     def __getattr__(self, choice):
         """
         Returns unit for specific choice: config.units.max_width.small -> 'px'
         """
-        return _get_unit_string(self.mapping, choice)
+        return _get_unit_string(self.css_config, choice)
 
 
 class UnitsProxy:
@@ -40,14 +40,14 @@ class UnitsProxy:
         - Simple: config.units.padding_top.custom -> 'px'
         - Choice-specific: config.units.max_width.custom -> 'px'
         """
-        mapping = self.config._get_css_mapping(field_name)
-        return ChoiceUnitsProxy(mapping)
+        css_config = self.config._get_css_config(field_name)
+        return ChoiceUnitsProxy(css_config)
 
 
 class CssMixin:
     """Base mixin for CSS generation from config fields."""
 
-    def get_css(self):
+    def get_css_variables(self):
         return {}
 
     def _get_choice_or_custom(self, field_prefix):
@@ -55,7 +55,7 @@ class CssMixin:
         choice_value = getattr(self, f"{field_prefix}_choice")
         if choice_value == constants.CUSTOM:
             return self._format_css_value(
-                self._get_css_mapping(field_prefix),
+                self._get_css_config(field_prefix),
                 getattr(self, f"{field_prefix}_custom"),
                 choice_value,
             )
@@ -64,24 +64,24 @@ class CssMixin:
 
     def _transform_css(self, attr, value):
         """("margin_bottom", "small") -> "20px" """
-        mapping = self._get_css_mapping(attr)
-        breakpoints = mapping.get("values", {}).get(value) if mapping else None
+        css_config = self._get_css_config(attr)
+        breakpoints = css_config.get("values", {}).get(value) if css_config else None
         if not breakpoints:
             return value
         raw = self._resolve_breakpoint(breakpoints)
-        return self._format_css_value(mapping, raw, value)
+        return self._format_css_value(css_config, raw, value)
 
-    def _get_css_mapping(self, attr):
-        """Get XPREZ_CSS mapping for attr, trying keys in order with fallback to default."""
+    def _get_css_config(self, attr):
+        """Get XPREZ_CSS config for attr, trying keys in order with fallback to default."""
         css = settings.XPREZ_CSS
         for key in self.get_css_config_keys():
             # Support dot notation for nested keys (e.g., "module.xprez.GalleryModule")
             config = css
             for part in key.split("."):
                 config = config.get(part, {})
-            mapping = config.get(attr)
-            if mapping:
-                return mapping
+            attr_config = config.get(attr)
+            if attr_config:
+                return attr_config
         # Fallback to top-level default
         return css.get("default", {}).get(attr)
 
@@ -92,12 +92,12 @@ class CssMixin:
                 return breakpoints[bp]
         return None
 
-    def _format_css_value(self, mapping, value, choice=None):
-        """Apply units from mapping to value."""
+    def _format_css_value(self, css_config, value, choice=None):
+        """Apply units from config to value."""
         if value is None:
             return ""
 
-        units = _get_unit_string(mapping, choice)
+        units = _get_unit_string(css_config, choice)
         return f"{value}{units}"
 
     @property
@@ -114,16 +114,16 @@ class CssParentMixin(CssMixin):
     """
     Extends CssMixin with responsive CSS rendering for parent elements.
 
-    Provides its own get_css() AND aggregates get_css() from child configs,
+    Provides its own get_css_variables() AND aggregates get_css_variables() from child configs,
     merging them across breakpoints into a single <style> tag.
     """
 
     css_breakpoint = settings.XPREZ_DEFAULT_BREAKPOINT
 
-    def get_css(self):
+    def get_css_variables(self):
         return {}
 
-    def get_css_by_breakpoint(self):
+    def get_css_variables_by_breakpoint(self):
         """
         Compute changed css per breakpoint (compared to defaults).
 
@@ -132,13 +132,15 @@ class CssParentMixin(CssMixin):
         db_configs = {
             c.css_breakpoint: c for c in self.get_configs().filter(visible=True)
         }
-        current_css = self.build_config(settings.XPREZ_DEFAULT_BREAKPOINT).get_css()
+        current_css_variables = self.build_config(
+            settings.XPREZ_DEFAULT_BREAKPOINT
+        ).get_css_variables()
         result = {}
         last_config = None
 
-        parent_css = self.get_css()
-        if parent_css:
-            result[0] = parent_css
+        parent_css_variables = self.get_css_variables()
+        if parent_css_variables:
+            result[0] = parent_css_variables
 
         for breakpoint in settings.XPREZ_BREAKPOINTS:
             if breakpoint in db_configs:
@@ -151,75 +153,77 @@ class CssParentMixin(CssMixin):
             else:
                 config = self.build_config(breakpoint)
 
-            css = {
+            css_variables = {
                 **result.get(breakpoint, {}),  # parent_css - if present
-                **self._diff_css(current_css, config.get_css()),
+                **self._diff_css_variables(
+                    current_css_variables, config.get_css_variables()
+                ),
             }
-            result[breakpoint] = css
-            current_css.update(css)
+            result[breakpoint] = css_variables
+            current_css_variables.update(css_variables)
 
         return result
 
     @staticmethod
-    def _diff_css(base_css, css):
+    def _diff_css_variables(base_css_variables, css_variables):
         """
         Return only css that differs from base.
 
         ({"a": 1, "b": 2}, {"a": 1, "b": 3, "c": 4}) -> {"b": 3, "c": 4}
         """
         changed = {}
-        for key, value in css.items():
-            if value != base_css.get(key):
+        for key, value in css_variables.items():
+            if value != base_css_variables.get(key):
                 changed[key] = value
         return changed
 
     @staticmethod
-    def _format_css_vars(css):
+    def _format_css_variables(css_variables):
         """
         Convert dict to CSS variables string.
 
         {"columns": 2, "gap": "1rem"} -> "--x-columns: 2; --x-gap: 1rem"
         """
         result = []
-        for k, v in css.items():
+        for k, v in css_variables.items():
             if v is not None:
                 result += [f"--x-{k}: {v}"]
         return "; ".join(result)
 
     @staticmethod
-    def _format_css_rule(selector, breakpoint, css):
+    def _format_css_rule(selector, breakpoint, css_variables):
         """
         Wrap CSS vars in selector and media query (if breakpoint has min_width).
 
         ("#id", 0, {"a": 1}) -> "#id { --x-a: 1; }"
         ("#id", 2, {"a": 1}) -> "@media (min-width: 768px) { #id { --x-a: 1; } }"
         """
-        if not css:
+        if not css_variables:
             return ""
 
-        css_vars = CssParentMixin._format_css_vars(css)
+        css_variables_string = CssParentMixin._format_css_variables(css_variables)
         min_width = settings.XPREZ_BREAKPOINTS[breakpoint]["min_width"]
-        rule = f"{selector} {{ {css_vars}; }}"
+        rule = f"{selector} {{ {css_variables_string}; }}"
         if not min_width:
             return rule
         else:
             return f"@media (min-width: {min_width}px) {{ {rule} }}"
 
-    def render_css(self):
+    def render_css_variables(self):
         """
         Generate <style> tag with all breakpoint styles.
 
         Returns: "<style>#section-config-1 { --x-columns: 1; }</style>"
         """
-        css_data = self.get_css_by_breakpoint()
+        css_data = self.get_css_variables_by_breakpoint()
         if not css_data:
             return ""
 
         selector = "#" + self.key
         output = []
 
-        for breakpoint, css in css_data.items():
-            rule = self._format_css_rule(selector, breakpoint, css)
+        for breakpoint, css_variables in css_data.items():
+            rule = self._format_css_rule(selector, breakpoint, css_variables)
             if rule:
                 output += [rule]
 

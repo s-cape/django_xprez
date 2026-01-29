@@ -116,8 +116,8 @@ class GalleryConfig(ModuleConfig):
     )
     padding_vertical_custom = models.PositiveIntegerField(null=True, blank=True)
 
-    def get_css(self):
-        css = super().get_css()
+    def get_css_variables(self):
+        css = super().get_css_variables()
         css.update(
             {
                 "columns": self.columns,

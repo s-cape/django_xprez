@@ -160,7 +160,7 @@ class SectionConfig(ConfigBase):
         default=constants.HORIZONTAL_ALIGN_GRID_STRETCH,
     )
 
-    def get_css(self):
+    def get_css_variables(self):
         return {
             "columns": self.columns,
             "margin-bottom": self._get_choice_or_custom("margin_bottom"),
@@ -276,7 +276,7 @@ class ModuleConfig(ConfigBase):
     )
     border_radius_custom = models.PositiveIntegerField(null=True, blank=True)
 
-    def get_css(self):
+    def get_css_variables(self):
         return {
             "colspan": self.colspan,
             "rowspan": self.rowspan,

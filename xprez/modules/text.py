@@ -114,8 +114,8 @@ class TextBaseConfig(ModuleConfig):
     class Meta(ModuleConfig.Meta):
         abstract = True
 
-    def get_css(self):
-        css = super().get_css()
+    def get_css_variables(self):
+        css = super().get_css_variables()
         css.update(
             {
                 "font-size": self._get_choice_or_custom("font_size"),
@@ -144,8 +144,8 @@ class TextConfig(TextBaseConfig):
         blank=True,
     )
 
-    def get_css(self):
-        css = super().get_css()
+    def get_css_variables(self):
+        css = super().get_css_variables()
         css.update(
             {
                 "media-role": self.media_role,
