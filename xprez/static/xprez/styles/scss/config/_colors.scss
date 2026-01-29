@@ -1,12 +1,37 @@
+// Colors
+
+$white: #FFF !default;
+$black: #1E1E21 !default;
+$gray: #78747D !default;
+$light-gray: #D2D2D3 !default;
+$super-light-gray: #F6F6F6 !default;
+$light-violet: #F2F0FC !default;
+
+// Base colors
+
 $base-bg: transparent !default;
-$base-color: null !default;
-$link-color: null !default;
-$link-hover-color: null !default;
+$base-color: inherit !default;
+$link-color: inherit !default;
+$link-hover-color: inherit !default;
 
 $heading-color: null !default;
-$heading-emphasis-color: null !default;
+$heading-emphasis-color: $gray !default;
 $h2-color: null !default;
 $h3-color: null !default;
 $h4-color: null !default;
 
-$box-bg: lightgray !default;
+$box-bg: $super-light-gray !default;
+
+// Alternate colors
+
+$alt-base-color: $white !default;
+$alt-link-color: $white !default;
+$alt-link-hover-color: $white !default;
+
+$alt-heading-color: inherit !default;
+$alt-heading-emphasis-color: $light-gray !default;
+$alt-h2-color: null !default;
+$alt-h3-color: null !default;
+$alt-h4-color: null !default;
+
+$alt-box-bg: $gray !default;
