@@ -47,7 +47,6 @@ class Module(ConfigParentMixin, models.Model):
     alternate_color = models.BooleanField(
         default=defaults.XPREZ_DEFAULTS["module"]["default"]["alternate_color"]
     )
-    background_color = models.CharField(max_length=30, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
     changed = models.DateTimeField(auto_now=True, editable=False, db_index=True)
@@ -262,12 +261,6 @@ class Module(ConfigParentMixin, models.Model):
         if self.alternate_color:
             classes["alternate-color"] = True
         return classes
-
-    def get_css_variables(self):
-        variables = {}
-        if self.background_color:
-            variables["background-color"] = self.background_color
-        return variables
 
 
 class MultiModule(Module):

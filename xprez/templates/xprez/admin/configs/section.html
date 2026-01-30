@@ -18,6 +18,7 @@
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_choice label=False icon="xprez-icon-padding_t" size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_custom label=False suffix=config.units.padding_top.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_top_choice.html_name|add:":custom\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field_link.html" with field_link=config.admin_form.padding_top_choice.html_name|add:":"|add:config.admin_form.padding_bottom_choice.html_name|add:","|add:config.admin_form.padding_top_custom.html_name|add:":"|add:config.admin_form.padding_bottom_custom.html_name field_link_icon="xprez-icon-padding_v"%}
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_bottom_choice label=False icon="xprez-icon-padding_b" size="flex-1" %}
@@ -27,6 +28,7 @@
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_left_choice label=False icon="xprez-icon-padding_l" size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_left_custom label=False suffix=config.units.padding_left.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_left_choice.html_name|add:":custom\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field_link.html" with field_link=config.admin_form.padding_left_choice.html_name|add:":"|add:config.admin_form.padding_right_choice.html_name|add:","|add:config.admin_form.padding_left_custom.html_name|add:":"|add:config.admin_form.padding_right_custom.html_name field_link_icon="xprez-icon-padding_h"%}
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_right_choice label=False icon="xprez-icon-padding_r" size="flex-1" %}

@@ -59,11 +59,18 @@ class CssMixin:
         if choice_value == constants.CUSTOM:
             return self._format_css_value(
                 self._get_css_config(field_prefix),
-                getattr(self, f"{field_prefix}_custom"),
+                self._get_value_or_default(f"{field_prefix}_custom"),
                 choice_value,
             )
         else:
             return self._transform_css(field_prefix, choice_value)
+
+    def _get_value_or_default(self, field_name):
+        """Return value if non-empty, else resolve default for field_name."""
+        value = getattr(self, field_name)
+        if value not in [None, constants.NONE]:
+            return value
+        return self._lookup_by_config_keys(settings.XPREZ_DEFAULTS, field_name)
 
     def _transform_css(self, attr, value):
         """("margin_bottom", "small") -> "20px" """
@@ -75,18 +82,21 @@ class CssMixin:
         return self._format_css_value(css_config, raw, value)
 
     def _get_css_config(self, attr):
-        """Get XPREZ_CSS config for attr, trying keys in order with fallback to default."""
-        css = settings.XPREZ_CSS
+        """Get XPREZ_CSS config for attr, with fallback to default."""
+        result = self._lookup_by_config_keys(settings.XPREZ_CSS, attr)
+        if result:
+            return result
+        return settings.XPREZ_CSS.get("default", {}).get(attr)
+
+    def _lookup_by_config_keys(self, source, field_name):
+        """Lookup field_name in source dict using get_css_config_keys() priority."""
         for key in self.get_css_config_keys():
-            # Support dot notation for nested keys (e.g., "module.xprez.GalleryModule")
-            config = css
+            config = source
             for part in key.split("."):
                 config = config.get(part, {})
-            attr_config = config.get(attr)
-            if attr_config:
-                return attr_config
-        # Fallback to top-level default
-        return css.get("default", {}).get(attr)
+            if field_name in config:
+                return config[field_name]
+        return None
 
     def _resolve_breakpoint(self, breakpoints):
         """Get value for current breakpoint, falling back to lower."""

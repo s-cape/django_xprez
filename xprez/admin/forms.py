@@ -61,7 +61,6 @@ class BaseModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
         "section",
         "css_class",
         "alternate_color",
-        "background_color",
     )
 
     options_fields = ()
@@ -94,6 +93,7 @@ class ModuleConfigForm(DeletableFormMixin, forms.ModelForm):
         # Box
         "background",
         "border",
+        "background_color",
         "padding_top_choice",
         "padding_top_custom",
         "padding_bottom_choice",

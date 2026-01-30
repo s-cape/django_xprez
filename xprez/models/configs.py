@@ -163,6 +163,12 @@ class SectionConfig(ConfigBase):
         default=defaults.XPREZ_DEFAULTS["section_config"]["horizontal_align_grid"],
     )
 
+    def get_css_classes(self):
+        classes = {}
+        if not self.visible:
+            classes["invisible"] = not self.visible
+        return classes
+
     def get_css_variables(self):
         return {
             "columns": self.columns,
@@ -256,6 +262,11 @@ class ModuleConfig(ConfigBase):
     )
     border = models.BooleanField(
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["border"]
+    )
+    background_color = models.CharField(
+        max_length=30,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["background_color"],
     )
 
     padding_left_choice = models.CharField(
@@ -355,7 +366,7 @@ class ModuleConfig(ConfigBase):
         return classes
 
     def get_css_variables(self):
-        return {
+        variables = {
             "colspan": self.colspan,
             "rowspan": self.rowspan,
             "vertical-align-grid": self.vertical_align_grid,
@@ -371,6 +382,9 @@ class ModuleConfig(ConfigBase):
             "aspect-ratio": self.aspect_ratio if self.aspect_ratio else "none",
             "border-radius": self._get_choice_or_custom("border_radius"),
         }
+        if self.background and self.background_color:
+            variables["background-color"] = self.background_color
+        return variables
 
     def get_css_config_keys(self):
         return [

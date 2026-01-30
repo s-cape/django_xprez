@@ -1,15 +1,16 @@
 {% extends "xprez/admin/configs/modules/text_base.html" %}
 
-{% block text_extra_fields %}
+{% block extra_fields %}
+    {{ block.super }}
     <div class="xprez-option-group__subtitle">Image / Video</div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.media_role size="flex-1" %}
     </div>
-    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_LEAD }}">
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_crop size="flex-1" %}
-    </div>
     <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_BACKGROUND }}">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.media_background_position size="flex-1" suffix="%" %}
+    </div>
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_LEAD }}">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_crop size="flex-1" %}
     </div>
     <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_LEAD }}">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.media_lead_to_edge size="flex-1" %}

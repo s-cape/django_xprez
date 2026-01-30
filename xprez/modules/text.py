@@ -192,7 +192,7 @@ class TextModuleBaseForm(BaseModuleForm):
 
     class Meta:
         model = TextModuleBase
-        fields = ("text",) + BaseModuleForm.base_module_fields
+        fields = "__all__"
 
 
 class TextModuleForm(TextModuleBaseForm):
@@ -213,4 +213,4 @@ class TextModuleForm(TextModuleBaseForm):
 
     class Meta(TextModuleBaseForm.Meta):
         model = TextModule
-        fields = TextModuleBaseForm.Meta.fields + ("media", "url")
+        fields = "__all__"

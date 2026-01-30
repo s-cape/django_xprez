@@ -113,29 +113,17 @@ class GalleryConfig(ModuleConfig):
             {
                 "columns": self.columns,
                 "gap": self._get_choice_or_custom("gap"),
-                "padding-horizontal": self._get_choice_or_custom("padding_horizontal"),
-                "padding-vertical": self._get_choice_or_custom("padding_vertical"),
             }
         )
         return css
 
 
 class GalleryModuleForm(BaseModuleForm):
-    options_fields = (
-        # "width",
-        # "columns",
-        # "divided",
-        "crop",
-    ) + BaseModuleForm.options_fields
+    options_fields = ("crop",) + BaseModuleForm.options_fields
 
     class Meta:
         model = GalleryModule
-        fields = (
-            # "width",
-            # "columns",
-            # "divided",
-            "crop",
-        ) + BaseModuleForm.base_module_fields
+        fields = "__all__"
 
 
 GalleryItemFormSet = inlineformset_factory(

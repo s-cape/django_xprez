@@ -23,8 +23,8 @@ class VideoModule(Module):
     # width = models.CharField(
     #     max_length=50, choices=Module.SIZE_CHOICES, default=Module.SIZE_FULL
     # )
-    video_type = models.CharField(choices=TYPE_CHOICES, max_length=50)
-    video_id = models.CharField(max_length=200)
+    video_type = models.CharField(choices=TYPE_CHOICES, max_length=50, editable=False)
+    video_id = models.CharField(max_length=200, editable=False)
 
     def save_admin_form(self, request):
         inst = self.admin_form.save(commit=False)
@@ -73,11 +73,7 @@ class VideoForm(BaseModuleForm):
 
     class Meta:
         model = VideoModule
-        fields = (
-            "poster_image",
-            "url",
-            # "width",
-        ) + BaseModuleForm.base_module_fields
-        widgets = {
-            "url": forms.URLInput(attrs={"class": "long"}),
-        }
+        fields = "__all__"
+        # widgets = {
+        #     "url": forms.URLInput(attrs={"class": "long"}),
+        # }

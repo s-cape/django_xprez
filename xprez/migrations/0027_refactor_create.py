@@ -96,7 +96,6 @@ class Migration(migrations.Migration):
                 ("content_type", models.CharField(editable=False, max_length=100)),
                 ("css_class", models.CharField(blank=True, max_length=100, null=True)),
                 ("alternate_color", models.BooleanField(default=False)),
-                ("background_color", models.CharField(blank=True, max_length=30)),
                 ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
                 ("changed", models.DateTimeField(auto_now=True, db_index=True)),
                 (
@@ -509,6 +508,10 @@ class Migration(migrations.Migration):
                 ),
                 ("background", models.BooleanField(default=False)),
                 ("border", models.BooleanField(default=False)),
+                (
+                    "background_color",
+                    models.CharField(blank=True, default="", max_length=30),
+                ),
                 (
                     "padding_left_choice",
                     models.CharField(

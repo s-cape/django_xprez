@@ -63,6 +63,12 @@ class Section(ConfigParentMixin, models.Model):
     def get_css_config_keys(self):
         return ("section",)
 
+    def get_css_classes(self):
+        classes = {"section": True}
+        if self.alternate_background:
+            classes["alternate-background"] = True
+        return classes
+
     def get_css_variables(self):
         css_variables = {
             "max-width": self._get_choice_or_custom("max_width"),
