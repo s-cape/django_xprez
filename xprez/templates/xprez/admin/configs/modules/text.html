@@ -5,7 +5,7 @@
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.media_role size="flex-1" %}
     </div>
-    <div class="xprez-option-row">
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_LEAD }}">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.media_crop size="flex-1" %}
     </div>
     <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_BACKGROUND }}">

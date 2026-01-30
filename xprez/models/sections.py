@@ -2,7 +2,7 @@ from django.db import models
 from django.template.loader import render_to_string
 
 from xprez import constants
-from xprez.conf import settings
+from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
 from xprez.utils import import_class
 
@@ -28,20 +28,20 @@ class Section(ConfigParentMixin, models.Model):
         verbose_name="Max width",
         max_length=16,
         choices=constants.MAX_WIDTH_CHOICES,
-        default=settings.XPREZ_DEFAULTS["section"]["max_width_choice"],
+        default=defaults.XPREZ_DEFAULTS["section"]["max_width_choice"],
     )
     max_width_custom = models.PositiveIntegerField(
         null=True,
         blank=True,
-        default=settings.XPREZ_DEFAULTS["section"]["max_width_custom"],
+        default=defaults.XPREZ_DEFAULTS["section"]["max_width_custom"],
     )
     alternate_background = models.BooleanField(
-        default=settings.XPREZ_DEFAULTS["section"]["alternate_background"]
+        default=defaults.XPREZ_DEFAULTS["section"]["alternate_background"]
     )
     background_color = models.CharField(
         max_length=30,
         blank=True,
-        default=settings.XPREZ_DEFAULTS["section"]["background_color"],
+        default=defaults.XPREZ_DEFAULTS["section"]["background_color"],
     )
     css_class = models.CharField(max_length=100, null=True, blank=True)
 

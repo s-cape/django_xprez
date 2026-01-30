@@ -3,8 +3,9 @@ from django.forms import inlineformset_factory
 
 from xprez import constants
 from xprez.admin.forms import BaseModuleForm
+from xprez.conf import defaults
 from xprez.models.configs import ModuleConfig
-from xprez.models.modules import Module, MultiModuleItem, UploadMultiModule
+from xprez.models.modules import MultiModuleItem, UploadMultiModule
 
 PHOTOSWIPE_JS = (
     "xprez/libs/photoswipe/dist/photoswipe.min.js",
@@ -32,7 +33,7 @@ class GalleryModule(UploadMultiModule):
     crop = models.CharField(
         max_length=5,
         choices=constants.CROP_CHOICES,
-        default=constants.CROP_NONE,
+        default=defaults.XPREZ_DEFAULTS["module"]["xprez.GalleryModule"]["crop"],
         blank=True,
     )
 
@@ -88,33 +89,23 @@ class GalleryConfig(ModuleConfig):
         (6, "6"),
         (8, "8"),
     )
-    columns = models.PositiveSmallIntegerField(choices=COLUMNS_CHOICES, default=1)
+    columns = models.PositiveSmallIntegerField(
+        choices=COLUMNS_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.GalleryModule"][
+            "columns"
+        ],
+    )
 
     gap_choice = models.CharField(
         "Gap",
         max_length=20,
         choices=constants.GAP_CHOICES,
-        default=constants.GAP_SMALL,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.GalleryModule"][
+            "gap_choice"
+        ],
         blank=True,
     )
     gap_custom = models.PositiveIntegerField(null=True, blank=True)
-
-    padding_horizontal_choice = models.CharField(
-        "Padding horizontal",
-        max_length=20,
-        choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
-        blank=True,
-    )
-    padding_horizontal_custom = models.PositiveIntegerField(null=True, blank=True)
-    padding_vertical_choice = models.CharField(
-        "Padding vertical",
-        max_length=20,
-        choices=constants.PADDING_CHOICES,
-        default=constants.PADDING_NONE,
-        blank=True,
-    )
-    padding_vertical_custom = models.PositiveIntegerField(null=True, blank=True)
 
     def get_css_variables(self):
         css = super().get_css_variables()

@@ -69,7 +69,10 @@ XPREZ_DEFAULTS = {
     },
     "module": {
         "default": {
-            # "background_color": "green",
+            "alternate_color": False,
+        },
+        "xprez.GalleryModule": {
+            "crop": constants.CROP_NONE,
         },
     },
     "module_config": {
@@ -95,13 +98,19 @@ XPREZ_DEFAULTS = {
             "aspect_ratio": "",
         },
         "xprez.TextModule": {
-            # "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,  # TODO: different just for testing
+            "font_size": constants.FONT_SIZE_NORMAL,
+            "text_align": constants.TEXT_ALIGN_LEFT,
+            "media_role": constants.MEDIA_ROLE_LEAD,
+            "media_background_position": 0,
+            "media_lead_to_edge": True,
+            "media_icon_max_size": 100,
+            "media_crop": constants.CROP_NONE,
         },
         "xprez.GalleryModule": {
-            "colspan": 1,
-            "rowspan": 1,
             "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_CENTER,
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_CENTER,
+            "columns": 4,
+            "gap_choice": constants.GAP_SMALL,
         },
     },
 }

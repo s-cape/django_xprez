@@ -98,7 +98,7 @@ class SectionConfig(ConfigBase):
         "Margin bottom",
         max_length=20,
         choices=constants.MARGIN_CHOICES,
-        default=settings.XPREZ_DEFAULTS["section_config"]["margin_bottom_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["margin_bottom_choice"],
         blank=True,
     )
     margin_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -107,7 +107,7 @@ class SectionConfig(ConfigBase):
         "Padding left",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=settings.XPREZ_DEFAULTS["section_config"]["padding_left_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_left_choice"],
         blank=True,
     )
     padding_left_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -115,7 +115,7 @@ class SectionConfig(ConfigBase):
         "Padding right",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=settings.XPREZ_DEFAULTS["section_config"]["padding_right_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_right_choice"],
         blank=True,
     )
     padding_right_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -123,7 +123,7 @@ class SectionConfig(ConfigBase):
         "Padding top",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=settings.XPREZ_DEFAULTS["section_config"]["padding_top_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_top_choice"],
         blank=True,
     )
     padding_top_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -131,19 +131,22 @@ class SectionConfig(ConfigBase):
         "Padding bottom",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=settings.XPREZ_DEFAULTS["section_config"]["padding_bottom_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_bottom_choice"],
         blank=True,
     )
     padding_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
 
     COLUMN_CHOICES = [(i, str(i)) for i in range(1, 8)]
-    columns = models.PositiveSmallIntegerField(choices=COLUMN_CHOICES, default=1)
+    columns = models.PositiveSmallIntegerField(
+        choices=COLUMN_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["section_config"]["columns"],
+    )
 
     gap_choice = models.CharField(
         "Gap",
         max_length=20,
         choices=constants.GAP_CHOICES,
-        default=constants.GAP_SMALL,
+        default=defaults.XPREZ_DEFAULTS["section_config"]["gap_choice"],
         blank=True,
     )
     gap_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -151,13 +154,13 @@ class SectionConfig(ConfigBase):
     vertical_align_grid = models.CharField(
         max_length=20,
         choices=constants.VERTICAL_ALIGN_GRID_SECTION_CHOICES,
-        default=constants.VERTICAL_ALIGN_GRID_STRETCH,
+        default=defaults.XPREZ_DEFAULTS["section_config"]["vertical_align_grid"],
     )
 
     horizontal_align_grid = models.CharField(
         max_length=20,
         choices=constants.HORIZONTAL_ALIGN_GRID_SECTION_CHOICES,
-        default=constants.HORIZONTAL_ALIGN_GRID_STRETCH,
+        default=defaults.XPREZ_DEFAULTS["section_config"]["horizontal_align_grid"],
     )
 
     def get_css_variables(self):
@@ -251,13 +254,15 @@ class ModuleConfig(ConfigBase):
     background = models.BooleanField(
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["background"]
     )
-    border = models.BooleanField(default=False)
+    border = models.BooleanField(
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["border"]
+    )
 
     padding_left_choice = models.CharField(
         "Padding left",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=settings.XPREZ_DEFAULTS["module_config"]["default"][
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
             "padding_left_choice"
         ],
         blank=True,
@@ -326,7 +331,9 @@ class ModuleConfig(ConfigBase):
         "Border radius",
         max_length=20,
         choices=constants.BORDER_RADIUS_CHOICES,
-        default=constants.BORDER_RADIUS_NONE,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
+            "border_radius_choice"
+        ],
         blank=True,
     )
     border_radius_custom = models.PositiveIntegerField(

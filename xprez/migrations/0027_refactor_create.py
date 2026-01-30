@@ -56,10 +56,13 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "max_width_custom",
-                    models.PositiveIntegerField(blank=True, null=True),
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
                 ),
                 ("alternate_background", models.BooleanField(default=False)),
-                ("background_color", models.CharField(blank=True, max_length=30)),
+                (
+                    "background_color",
+                    models.CharField(blank=True, default="", max_length=30),
+                ),
                 ("css_class", models.CharField(blank=True, max_length=100, null=True)),
                 (
                     "container",
@@ -338,6 +341,7 @@ class Migration(migrations.Migration):
                 (
                     "gap_choice",
                     models.CharField(
+                        blank=True,
                         choices=[
                             ("", "None"),
                             ("small", "Small"),
@@ -345,10 +349,9 @@ class Migration(migrations.Migration):
                             ("large", "Large"),
                             ("custom", "Custom"),
                         ],
-                        default="small",
+                        default="medium",
                         max_length=20,
                         verbose_name="Gap",
-                        blank=True,
                     ),
                 ),
                 ("gap_custom", models.PositiveIntegerField(blank=True, null=True)),
@@ -524,7 +527,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "padding_left_custom",
-                    models.PositiveIntegerField(blank=True, null=True),
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
                 ),
                 (
                     "padding_right_choice",
@@ -544,7 +547,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "padding_right_custom",
-                    models.PositiveIntegerField(blank=True, null=True),
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
                 ),
                 (
                     "padding_top_choice",
@@ -564,7 +567,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "padding_top_custom",
-                    models.PositiveIntegerField(blank=True, null=True),
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
                 ),
                 (
                     "padding_bottom_choice",
@@ -584,12 +587,16 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "padding_bottom_custom",
-                    models.PositiveIntegerField(blank=True, null=True),
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
                 ),
-                ("aspect_ratio", models.CharField(blank=True, max_length=20)),
+                (
+                    "aspect_ratio",
+                    models.CharField(blank=True, default="", max_length=20),
+                ),
                 (
                     "border_radius_choice",
                     models.CharField(
+                        blank=True,
                         choices=[
                             ("", "None"),
                             ("small", "Small"),
@@ -597,15 +604,14 @@ class Migration(migrations.Migration):
                             ("large", "Large"),
                             ("custom", "Custom"),
                         ],
-                        blank=True,
-                        default="",
+                        default="medium",
                         max_length=20,
                         verbose_name="Border radius",
                     ),
                 ),
                 (
                     "border_radius_custom",
-                    models.PositiveIntegerField(blank=True, null=True),
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
                 ),
             ],
             options={
@@ -720,12 +726,13 @@ class Migration(migrations.Migration):
                             (6, "6"),
                             (8, "8"),
                         ],
-                        default=1,
+                        default=4,
                     ),
                 ),
                 (
                     "gap_choice",
                     models.CharField(
+                        blank=True,
                         choices=[
                             ("", "None"),
                             ("small", "Small"),
@@ -736,50 +743,9 @@ class Migration(migrations.Migration):
                         default="small",
                         max_length=20,
                         verbose_name="Gap",
-                        blank=True,
                     ),
                 ),
                 ("gap_custom", models.PositiveIntegerField(blank=True, null=True)),
-                (
-                    "padding_horizontal_choice",
-                    models.CharField(
-                        choices=[
-                            ("", "None"),
-                            ("small", "Small"),
-                            ("medium", "Medium"),
-                            ("large", "Large"),
-                            ("custom", "Custom"),
-                        ],
-                        default="",
-                        max_length=20,
-                        verbose_name="Padding horizontal",
-                        blank=True,
-                    ),
-                ),
-                (
-                    "padding_horizontal_custom",
-                    models.PositiveIntegerField(blank=True, null=True),
-                ),
-                (
-                    "padding_vertical_choice",
-                    models.CharField(
-                        choices=[
-                            ("", "None"),
-                            ("small", "Small"),
-                            ("medium", "Medium"),
-                            ("large", "Large"),
-                            ("custom", "Custom"),
-                        ],
-                        default="",
-                        max_length=20,
-                        verbose_name="Padding vertical",
-                        blank=True,
-                    ),
-                ),
-                (
-                    "padding_vertical_custom",
-                    models.PositiveIntegerField(blank=True, null=True),
-                ),
             ],
             options={
                 "abstract": False,
