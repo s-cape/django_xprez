@@ -101,7 +101,11 @@ class SectionConfig(ConfigBase):
         default=defaults.XPREZ_DEFAULTS["section_config"]["margin_bottom_choice"],
         blank=True,
     )
-    margin_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
+    margin_bottom_custom = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["section_config"]["margin_bottom_custom"],
+    )
 
     padding_left_choice = models.CharField(
         "Padding left",

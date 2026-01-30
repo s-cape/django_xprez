@@ -58,8 +58,12 @@ def migrate_containers_sections_modules(apps, schema_editor):
             section_config, _created = section.configs.get_or_create(
                 css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
                 defaults={
-                    "vertical_align_grid": "stretch",
-                    "horizontal_align_grid": "stretch",
+                    "vertical_align_grid": settings.XPREZ_DEFAULTS["section_config"][
+                        "vertical_align_grid"
+                    ],
+                    "horizontal_align_grid": settings.XPREZ_DEFAULTS["section_config"][
+                        "horizontal_align_grid"
+                    ],
                 },
             )
 
@@ -137,14 +141,15 @@ class ModuleProcessorBase:
 
     def create_config(self, module):
         config_class = self.apps.get_model(*self.get_config_class(module).split("."))
+        default_config = settings.XPREZ_DEFAULTS["module_config"]["default"]
         self.config, _created = config_class.objects.get_or_create(
             module=module,
             css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
             defaults={
-                "vertical_align_grid": "unset",
-                "horizontal_align_grid": "unset",
-                "vertical_align_flex": "flex-start",
-                "horizontal_align_flex": "center",
+                "vertical_align_grid": default_config["vertical_align_grid"],
+                "horizontal_align_grid": default_config["horizontal_align_grid"],
+                "vertical_align_flex": default_config["vertical_align_flex"],
+                "horizontal_align_flex": default_config["horizontal_align_flex"],
             },
         )
 
@@ -477,6 +482,20 @@ class Migration(migrations.Migration):
         ),
         migrations.RenameModel(old_name="Video", new_name="VideoModule"),
         ContentToModule(model_name="VideoModule"),
+        migrations.AlterField(
+            model_name="videomodule",
+            name="video_id",
+            field=models.CharField(editable=False, max_length=200),
+        ),
+        migrations.AlterField(
+            model_name="videomodule",
+            name="video_type",
+            field=models.CharField(
+                choices=[("youtube", "YouTube"), ("vimeo", "Vimeo")],
+                editable=False,
+                max_length=50,
+            ),
+        ),
         migrations.RenameModel(old_name="CodeInput", new_name="CodeInputModule"),
         ContentToModule(model_name="CodeInputModule"),
         migrations.RenameModel(old_name="NumbersContent", new_name="NumbersModule"),
