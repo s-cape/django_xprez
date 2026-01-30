@@ -1,15 +1,21 @@
 .xprez-module {
+    --x-module-display: flex;
+    --x-box-bg: var(--x-background-color, var(--x-box-base-bg));
+    --x-box-border: var(--x-border-width, 1px) var(--x-border-style, solid) var(--x-border-color, var(--x-box-border-color));
+
     grid-row: span var(--x-rowspan, 1);
     grid-column: span var(--x-colspan, 1);
     border-radius: var(--x-border-radius, 0);
     overflow: hidden;
-    display: flex;
+    display: var(--x-module-display);
     justify-content: center;
     align-items: var(--x-vertical-align-flex, stretch);
     justify-content: var(--x-horizontal-align-flex, center);
     color: var(--x-base-color);
+    text-align: var(--x-text-align, left);
 
     &-inner {
+        // position: relative;
         padding: var(--x-padding, 0);
 
         & > :last-child {
@@ -36,12 +42,27 @@
 
 @each $number, $breakpoint in $breakpoints {
     @media (min-width: $breakpoint) {
-        .xprez-#{$number}-box {
+        .xprez-#{$number}-background {
             background: var(--x-box-bg);
         }
 
-        .xprez-#{$number}-nobox {
+        .xprez-#{$number}-background-reset {
             background: transparent;
+        }
+        .xprez-#{$number}-border {
+            border: var(--x-box-border);
+        }
+
+        .xprez-#{$number}-border-reset {
+            border: none;
+        }
+
+        .xprez-#{$number}-invisible {
+            display: none;
+        }
+
+        .xprez-#{$number}-invisible-reset {
+            display: var(--x-module-display);
         }
     }
 }

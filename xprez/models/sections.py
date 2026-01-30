@@ -68,7 +68,7 @@ class Section(ConfigParentMixin, models.Model):
             "max-width": self._get_choice_or_custom("max_width"),
         }
         if self.background_color:
-            css_variables["background-color"] = self.background_color
+            css_variables["section-background-color"] = self.background_color
         return css_variables
 
     @property

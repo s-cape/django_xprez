@@ -160,26 +160,12 @@ class TextConfig(TextBaseConfig):
                 variables["media-icon-max-size"] = self.media_icon_max_size
             if self.media_role == constants.MEDIA_ROLE_BACKGROUND:
                 variables["background-position"] = self.media_background_position
+            if self.media_lead_to_edge:
+                variables["padding-top"] = self._get_choice_or_custom("padding_top")
+                variables["padding-right"] = self._get_choice_or_custom("padding_right")
+                variables["padding-left"] = self._get_choice_or_custom("padding_left")
 
         return variables
-        # css.update(
-        #     {
-        #         # "media-role": self.media_role,
-        #         "media-background-position": f"{self.media_background_position}%",
-        #         # "media-lead-to-edge": int(self.media_lead_to_edge),
-        #         "media-icon-max-size": f"{self.media_icon_max_size}px",
-        #         "media-crop": self.media_crop if self.media_crop else None,
-        #     }
-        # )
-        # if self.media_lead_to_edge:
-        #     css.update(
-        #         {
-        #             "padding-top": self._get_choice_or_custom("padding_top"),
-        #             "padding-right": self._get_choice_or_custom("padding_right"),
-        #             "padding-left": self._get_choice_or_custom("padding_left"),
-        #         }
-        #     )
-        # return css
 
 
 class TextModuleBaseForm(BaseModuleForm):

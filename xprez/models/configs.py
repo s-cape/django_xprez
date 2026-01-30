@@ -164,10 +164,6 @@ class SectionConfig(ConfigBase):
         return {
             "columns": self.columns,
             "margin-bottom": self._get_choice_or_custom("margin_bottom"),
-            # "padding-left": self._get_choice_or_custom("padding_left"),
-            # "padding-right": self._get_choice_or_custom("padding_right"),
-            # "padding-top": self._get_choice_or_custom("padding_top"),
-            # "padding-bottom": self._get_choice_or_custom("padding_bottom"),
             "padding": (
                 f"{self._get_choice_or_custom('padding_top')} "
                 f"{self._get_choice_or_custom('padding_right')} "
