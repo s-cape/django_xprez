@@ -4,7 +4,8 @@
 {{ module.background }}
     {% if module.media %}
         <div class="xprez-text__image-wrapper">
-            <img class="xprez-text__image" src="{{ module.media.url }}" alt="{{ module.media.name }}">
+            {# TODO: sorl thum generation + width. height specification #}
+            <img class="xprez-text__image" src="{{ module.media.url }}" alt="{{ module.media.name }}" loading="lazy">
         </div>
     {% endif %}
     <div class="xprez-text__text-wrapper">{{ block.super }}</div>

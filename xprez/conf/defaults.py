@@ -96,7 +96,7 @@ XPREZ_DEFAULTS = {
             "padding_top_custom": 0,
             "padding_bottom_choice": constants.PADDING_NONE,
             "padding_bottom_custom": 0,
-            "aspect_ratio": "",
+            "aspect_ratio": constants.ASPECT_RATIO_UNSET,
         },
         "xprez.TextModule": {
             "font_size": constants.FONT_SIZE_NORMAL,

@@ -134,16 +134,22 @@ VERTICAL_ALIGN_CHOICES = VERTICAL_ALIGN_GRID_SECTION_CHOICES
 HORIZONTAL_ALIGN_CHOICES = HORIZONTAL_ALIGN_GRID_SECTION_CHOICES
 
 CROP_NONE = ""
-CROP_1_1 = "1:1"
-CROP_3_2 = "3:2"
-CROP_4_3 = "4:3"
-CROP_16_9 = "16:9"
+CROP_1_1 = "1/1"
+CROP_3_2 = "3/2"
+CROP_4_3 = "4/3"
+CROP_16_9 = "16/9"
+CROP_2_3 = "2/3"
+CROP_3_4 = "3/4"
+CROP_9_16 = "9/16"
 CROP_CHOICES = (
     (CROP_NONE, "None"),
     (CROP_1_1, "1:1"),
     (CROP_3_2, "3:2"),
     (CROP_4_3, "4:3"),
     (CROP_16_9, "16:9"),
+    (CROP_2_3, "2:3"),
+    (CROP_3_4, "3:4"),
+    (CROP_9_16, "9:16"),
 )
 
 # Font size
@@ -203,3 +209,6 @@ BORDER_RADIUS_CHOICES = (
     (BORDER_RADIUS_LARGE, "Large"),
     (BORDER_RADIUS_CUSTOM, "Custom"),
 )
+
+# Aspect ratio
+ASPECT_RATIO_UNSET = "unset"
