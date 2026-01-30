@@ -142,7 +142,7 @@ class CssParentMixin(CssMixin):
 
         Returns: {0: {"columns": 2}, 2: {"columns": 3}}
         """
-        db_configs = {c.css_breakpoint: c for c in self.get_configs()}
+        db_configs = {c.css_breakpoint: c for c in self.get_saved_configs()}
         current_css_variables = self.build_config(
             settings.XPREZ_DEFAULT_BREAKPOINT
         ).get_css_variables()
@@ -250,7 +250,7 @@ class CssParentMixin(CssMixin):
         Example for TextModule with font-size change at bp2:
         {0: {"background": True, "font-size": "normal"}, 2: {"font-size": "large"}}
         """
-        configs = {c.css_breakpoint: c for c in self.get_configs()}
+        configs = {c.css_breakpoint: c for c in self.get_saved_configs()}
         current_css_classes = {}
         result = {}
 

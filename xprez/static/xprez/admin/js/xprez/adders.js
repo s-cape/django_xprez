@@ -128,7 +128,7 @@ export class XprezConfigAdderBase extends XprezAdderSelectBase {
 
         if (existingConfig) {
             if (existingConfig.isDeleted()) {
-                existingConfig.deleter.undo();
+                existingConfig.deleter.undelete();
                 this.setOptionsDisabledState();
             }
         } else {
@@ -162,7 +162,8 @@ export class XprezConfigAdderBase extends XprezAdderSelectBase {
     }
 
     initNewElement(newEl) {
-        this.parent.initConfig(newEl);
+        const config = this.parent.initConfig(newEl);
+        config.copyValuesFromPreviousConfig();
         this.setOptionsDisabledState();
     }
 }

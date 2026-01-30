@@ -1,6 +1,7 @@
 import { Xprez } from './xprez/core.js';
-import { XprezModule } from './xprez/module.js';
+import { XprezModule } from './xprez/modules.js';
 import { XprezSection } from './xprez/sections.js';
+import { XprezFieldController } from './xprez/fields.js';
 import {
     XprezAdderBase,
     XprezAdderItemsBase,
@@ -24,7 +25,8 @@ import {
 import {
     XprezConfigBase,
     XprezSectionConfig,
-    XprezModuleConfig
+    XprezModuleConfig,
+    XprezConfigParentMixin
 } from './xprez/configs.js';
 import { XprezSortable } from './xprez/sortable.js';
 import { executeScripts } from './xprez/utils.js';
@@ -53,6 +55,8 @@ export {
     XprezConfigBase,
     XprezSectionConfig,
     XprezModuleConfig,
+    XprezConfigParentMixin,
     XprezSortable,
-    executeScripts
+    executeScripts,
+    XprezFieldController
 };

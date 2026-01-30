@@ -2,6 +2,8 @@
     class="{% if placement == "module" %}{% else %}xprez-option {% endif %} {% if field.field.required %}required{% endif %}"
     {% if size is not None %}data-size="{{ size }}"{% endif %}
     {% if field.errors %}data-has-errors{% endif %}
+    data-component="field"
+    data-field-name="{{ field.name }}"
     data-active="true"
     {% if label is False %}data-text-label="false"{% endif %}
     {{ attributes|default:"" }}

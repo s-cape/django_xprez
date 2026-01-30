@@ -42,7 +42,6 @@ export class XprezShowWhen {
 }
 
 export class XprezFieldLink {
-    /* TODO: vibe coded - review and cleanup */
     constructor(parent, el) {
         this.parent = parent;
         this.el = el;
@@ -61,20 +60,51 @@ export class XprezFieldLink {
         return str.split(',').map(g => g.split(':').filter(Boolean)).filter(g => g.length > 1);
     }
 
-    getField(name) {
+    getFieldController(name) {
+        if (this.parent.getFieldByInputName) {
+            return this.parent.getFieldByInputName(name);
+        }
+        return null;
+    }
+
+    getFieldInput(name) {
+        const controller = this.getFieldController(name);
+        if (controller) return controller.inputEl;
         return this.parent.el.querySelector(`[name="${name}"]`);
     }
 
     getFieldWrapper(name) {
-        const field = this.getField(name);
-        return field ? field.closest('.xprez-option') : null;
+        const controller = this.getFieldController(name);
+        if (controller) return controller.el;
+        const input = this.parent.el.querySelector(`[name="${name}"]`);
+        return input ? input.closest('.xprez-option') : null;
+    }
+
+    getFieldValue(name) {
+        const controller = this.getFieldController(name);
+        if (controller) return controller.getValue();
+        const input = this.parent.el.querySelector(`[name="${name}"]`);
+        return input?.value ?? null;
+    }
+
+    setFieldValue(name, value) {
+        const controller = this.getFieldController(name);
+        if (controller) {
+            controller.setValue(value);
+            return;
+        }
+        const input = this.parent.el.querySelector(`[name="${name}"]`);
+        if (input && input.value !== value) {
+            input.value = value;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
     }
 
     // State management
 
     allGroupsMatch() {
         return this.groups.every(group => {
-            const values = group.map(name => this.getField(name)?.value).filter(v => v != null);
+            const values = group.map(name => this.getFieldValue(name)).filter(v => v != null);
             return values.length > 1 && values.every(v => v === values[0]);
         });
     }
@@ -116,13 +146,11 @@ export class XprezFieldLink {
 
     syncAllGroups() {
         this.groups.forEach(group => {
-            const value = this.getField(group[0])?.value;
+            const value = this.getFieldValue(group[0]);
             if (value == null) return;
             group.slice(1).forEach(name => {
-                const field = this.getField(name);
-                if (field && field.value !== value) {
-                    field.value = value;
-                    field.dispatchEvent(new Event('change', { bubbles: true }));
+                if (this.getFieldValue(name) !== value) {
+                    this.setFieldValue(name, value);
                 }
             });
         });
@@ -130,13 +158,12 @@ export class XprezFieldLink {
 
     syncGroup(event, group) {
         if (!this.checkbox.checked) return;
-        const { name: sourceName, value } = event.target;
+        const { name: sourceName } = event.target;
+        const value = this.getFieldValue(sourceName);
         group.forEach(name => {
             if (name === sourceName) return;
-            const field = this.getField(name);
-            if (field && field.value !== value) {
-                field.value = value;
-                field.dispatchEvent(new Event('change', { bubbles: true }));
+            if (this.getFieldValue(name) !== value) {
+                this.setFieldValue(name, value);
             }
         });
     }
@@ -150,10 +177,10 @@ export class XprezFieldLink {
         });
         this.groups.forEach(group => {
             group.forEach(name => {
-                const field = this.getField(name);
-                if (field) {
-                    field.addEventListener('input', e => this.syncGroup(e, group));
-                    field.addEventListener('change', e => this.syncGroup(e, group));
+                const input = this.getFieldInput(name);
+                if (input) {
+                    input.addEventListener('input', e => this.syncGroup(e, group));
+                    input.addEventListener('change', e => this.syncGroup(e, group));
                 }
             });
         });

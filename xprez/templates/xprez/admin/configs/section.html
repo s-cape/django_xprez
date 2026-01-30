@@ -3,7 +3,7 @@
 {% block component_name %}xprez-section-config{% endblock %}
 {% block delete_trigger_component %}xprez-section-config-delete-trigger{% endblock %}
 {% block delete_info_component %}xprez-section-config-delete-info{% endblock %}
-{% block delete_undo_component %}xprez-section-config-delete-undo{% endblock %}
+{% block undelete_component %}xprez-section-config-undelete{% endblock %}
 
 {% block fields %}
     <div class="xprez-option-group__subtitle">Section</div>
@@ -50,4 +50,8 @@
         {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align_grid label=False icon="xprez-icon-vertical" size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align_grid label=False icon="xprez-icon-horizontal" size="flex-1" %}
     </div>
+{% endblock %}
+
+{% block config_hidden_fields %}
+    <input type="hidden" name="section-config-id" value="{{ config.pk }}">
 {% endblock %}

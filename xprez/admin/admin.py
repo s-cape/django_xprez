@@ -2,6 +2,7 @@ from django.apps import apps
 from django.contrib import admin
 
 from xprez import module_registry, settings
+from xprez.admin.defaults_json import XprezAdminDefaultsJsonMixin
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
 from xprez.admin.views.content import XprezAdminViewsContentMixin
 
@@ -52,7 +53,11 @@ class XprezModelFormMixin(object):
         return self.xprez_admin.xprez_get_available_modules(container=self.instance)
 
 
-class XprezAdminMixin(XprezAdminViewsContentMixin, XprezAdminViewsClipboardMixin):
+class XprezAdminMixin(
+    XprezAdminDefaultsJsonMixin,
+    XprezAdminViewsContentMixin,
+    XprezAdminViewsClipboardMixin,
+):
     available_modules = settings.XPREZ_DEFAULT_AVAILABLE_MODULES
 
     xprez_breakpoints = settings.XPREZ_BREAKPOINTS

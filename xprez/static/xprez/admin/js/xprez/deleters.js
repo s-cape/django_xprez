@@ -5,20 +5,20 @@ export class XprezDeleterBase {
         if (this.triggerEl) {
             this.triggerEl.addEventListener("click", this.delete.bind(this));
         }
-        if (this.undoEl) {
-            this.undoEl.addEventListener("click", this.undo.bind(this));
+        if (this.undeleteEl) {
+            this.undeleteEl.addEventListener("click", this.undelete.bind(this));
         }
     }
     initElements() { throw new Error("Not implemented"); }
     delete() { this.obj.el.dataset.mode = "delete"; this.inputEl.checked = true; }
-    undo() { this.obj.el.dataset.mode = ""; this.inputEl.checked = false; }
+    undelete() { this.obj.el.dataset.mode = ""; this.inputEl.checked = false; }
 }
 
 export class XprezSectionDeleter extends XprezDeleterBase {
     initElements() {
         this.triggerEl = this.obj.el.querySelector("[data-component='xprez-section-delete-trigger']");
         this.inputEl = this.triggerEl.querySelector("input");
-        this.undoEl = this.obj.el.querySelector("[data-component='xprez-section-delete-undo']");
+        this.undeleteEl = this.obj.el.querySelector("[data-component='xprez-section-undelete']");
     }
 }
 
@@ -26,7 +26,7 @@ export class XprezModuleDeleter extends XprezDeleterBase {
     initElements() {
         this.triggerEl = this.obj.el.querySelector("[data-component='xprez-module-delete-trigger']");
         this.inputEl = this.triggerEl.querySelector("input");
-        this.undoEl = this.obj.el.querySelector("[data-component='xprez-module-delete-undo']");
+        this.undeleteEl = this.obj.el.querySelector("[data-component='xprez-module-undelete']");
     }
 }
 
@@ -35,16 +35,22 @@ export class XprezConfigDeleterBase extends XprezDeleterBase {
         this.triggerEl = this.obj.el.querySelector(`[data-component='xprez-${dataComponentName}-delete-trigger']`);
         if (!this.triggerEl) { return; }
         this.inputEl = this.triggerEl.querySelector("input");
-        this.undoEl = this.obj.el.querySelector(`[data-component='xprez-${dataComponentName}-delete-undo']`);
+        this.undeleteEl = this.obj.el.querySelector(`[data-component='xprez-${dataComponentName}-undelete']`);
+    }
+
+    _afterDeleteChange() {
+        this.obj.parent.configAdder.setOptionsDisabledState();
+        this.obj.parent.updateAllFieldsActive();
     }
 
     delete() {
         super.delete();
-        this.obj.parent.configAdder.setOptionsDisabledState();
+        this._afterDeleteChange();
     }
-    undo() {
-        super.undo();
-        this.obj.parent.configAdder.setOptionsDisabledState();
+
+    undelete() {
+        super.undelete();
+        this._afterDeleteChange();
     }
 }
 

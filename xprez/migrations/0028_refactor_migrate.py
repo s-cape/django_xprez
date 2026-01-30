@@ -58,6 +58,7 @@ def migrate_containers_sections_modules(apps, schema_editor):
             section_config, _created = section.configs.get_or_create(
                 css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
                 defaults={
+                    "saved": True,
                     "vertical_align_grid": settings.XPREZ_DEFAULTS["section_config"][
                         "vertical_align_grid"
                     ],
@@ -146,6 +147,7 @@ class ModuleProcessorBase:
             module=module,
             css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
             defaults={
+                "saved": True,
                 "vertical_align_grid": default_config["vertical_align_grid"],
                 "horizontal_align_grid": default_config["horizontal_align_grid"],
                 "vertical_align_flex": default_config["vertical_align_flex"],
@@ -365,7 +367,7 @@ class VideoProcessor(SimpleModuleProcessor):
 
 class GalleryProcessor(SimpleModuleProcessor):
     GAP_TRANS = {True: "small", False: ""}
-    CROP_TRANS = {True: "3:2", False: ""}
+    CROP_TRANS = {True: "3/2", False: ""}
 
     def process(self):
         super().process()
@@ -470,10 +472,13 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 choices=[
                     ("", "None"),
-                    ("1:1", "1:1"),
-                    ("3:2", "3:2"),
-                    ("4:3", "4:3"),
-                    ("16:9", "16:9"),
+                    ("1/1", "1:1"),
+                    ("3/2", "3:2"),
+                    ("4/3", "4:3"),
+                    ("16/9", "16:9"),
+                    ("2/3", "2:3"),
+                    ("3/4", "3:4"),
+                    ("9/16", "9:16"),
                 ],
                 default="",
                 max_length=5,

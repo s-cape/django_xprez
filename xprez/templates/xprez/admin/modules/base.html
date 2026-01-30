@@ -2,6 +2,7 @@
 <div
     class="xprez-module {% if module.admin_form.errors %}xprez-module--has-errors{% endif %}"
     data-component="xprez-module"
+    data-content-type="{{ module.content_type }}"
     data-mode="{# (empty)/edit/select/delete #}"
     data-prefix="{{ module.admin_form.prefix }}"
     data-js-controller-class="{{ module.js_controller_class }}"
@@ -42,7 +43,7 @@
 
     <div class="xprez-delete-info" data-component="xprez-module-delete-info">
         This module will be deleted when you save the changes.
-        <span class="xprez-btn xprez-btn__danger" data-component="xprez-module-delete-undo">undelete</span>
+        <span class="xprez-btn xprez-btn__danger" data-component="xprez-module-undelete">undelete</span>
     </div>
 
     <div class="xprez-module__body">

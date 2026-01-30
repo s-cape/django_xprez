@@ -99,7 +99,13 @@ class Section(ConfigParentMixin, models.Model):
             )
 
         self.admin_form.xprez_configs_all_valid = None
-        self.admin_form.xprez_configs = self.get_configs()
+        if data:
+            ids = [int(id) for id in data.getlist("section-config-id")]
+            self.admin_form.xprez_configs = list(
+                self.configs.filter(pk__in=ids).order_by("css_breakpoint")
+            )
+        else:
+            self.admin_form.xprez_configs = list(self.get_saved_configs())
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)
@@ -134,6 +140,7 @@ class Section(ConfigParentMixin, models.Model):
             if config.admin_form.cleaned_data.get("delete"):
                 config.delete()
             else:
+                config.saved = True
                 config.save_admin_form(request)
 
     def render_admin(self, context):

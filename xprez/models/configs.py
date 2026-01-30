@@ -21,27 +21,16 @@ class ConfigParentMixin(CssParentMixin):
     def get_configs(self):
         return self.configs.all().order_by("css_breakpoint")
 
+    def get_saved_configs(self):
+        return self.get_configs().filter(saved=True)
+
     def get_or_create_config(self, css_breakpoint):
         try:
             return self.get_configs().get(css_breakpoint=css_breakpoint), False
         except ObjectDoesNotExist:
-            previous_config = (
-                self.get_configs()
-                .filter(css_breakpoint__lt=css_breakpoint)
-                .order_by("-css_breakpoint")
-                .first()
-            )
-            if previous_config:
-                config = previous_config
-                config.pk = None
-                config.id = None
-                config.css_breakpoint = css_breakpoint
-                config.save()
-                return config, True
-            else:
-                config = self.build_config(css_breakpoint)
-                config.save()
-                return config, True
+            config = self.build_config(css_breakpoint)
+            config.save()
+            return config, True
 
 
 class ConfigBase(CssMixin, models.Model):
@@ -52,6 +41,7 @@ class ConfigBase(CssMixin, models.Model):
         default=settings.XPREZ_DEFAULT_BREAKPOINT,
         editable=False,
     )
+    saved = models.BooleanField(default=False, editable=False)
 
     def is_default(self):
         return self.css_breakpoint == settings.XPREZ_DEFAULT_BREAKPOINT
@@ -73,6 +63,11 @@ class ConfigBase(CssMixin, models.Model):
     def save_admin_form(self, request):
         inst = self.admin_form.save(commit=False)
         inst.save()
+
+    def save(self, *args, **kwargs):
+        if self.is_default():
+            self.saved = True
+        super().save(*args, **kwargs)
 
     def render_admin(self, context):
         context["config"] = self

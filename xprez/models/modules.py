@@ -146,6 +146,9 @@ class Module(ConfigParentMixin, models.Model):
             .order_by("css_breakpoint")
         )
 
+    def get_saved_configs(self):
+        return self.get_configs().filter(saved=True)
+
     @classmethod
     def build(cls):
         content_type = cls.class_content_type()
@@ -188,7 +191,15 @@ class Module(ConfigParentMixin, models.Model):
         self.admin_form.xprez_admin = admin
 
         self.admin_form.xprez_configs_all_valid = None
-        self.admin_form.xprez_configs = self.get_configs()
+        if data:
+            ids = [int(id) for id in data.getlist("module-config-id")]
+            self.admin_form.xprez_configs = list(
+                self.get_config_model()
+                .objects.filter(module=self, pk__in=ids)
+                .order_by("css_breakpoint")
+            )
+        else:
+            self.admin_form.xprez_configs = list(self.get_saved_configs())
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)
@@ -210,6 +221,7 @@ class Module(ConfigParentMixin, models.Model):
             if config.admin_form.cleaned_data.get("delete"):
                 config.delete()
             else:
+                config.saved = True
                 config.save_admin_form(request)
 
     def render_admin(self, context):

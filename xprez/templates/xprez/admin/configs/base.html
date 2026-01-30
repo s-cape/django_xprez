@@ -27,7 +27,9 @@
     {% if config.admin_form.delete %}
         <div class="xprez-delete-info" data-component="{% block delete_info_component %}{% endblock %}">
             This breakpoint will be deleted when you save the changes.
-            <span class="xprez-btn xprez-btn__danger" data-component="{% block delete_undo_component %}{% endblock %}">undelete</span>
+            <span class="xprez-btn xprez-btn__danger" data-component="{% block undelete_component %}{% endblock %}">undelete</span>
         </div>
     {% endif %}
+
+    {% block config_hidden_fields %}{% endblock %}
 </div>

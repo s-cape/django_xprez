@@ -3,7 +3,7 @@
 {% block component_name %}xprez-module-config{% endblock %}
 {% block delete_trigger_component %}xprez-module-config-delete-trigger{% endblock %}
 {% block delete_info_component %}xprez-module-config-delete-info{% endblock %}
-{% block delete_undo_component %}xprez-module-config-delete-undo{% endblock %}
+{% block undelete_component %}xprez-module-config-undelete{% endblock %}
 
 {% block fields %}
     <div class="xprez-option-group__subtitle">Grid</div>
@@ -65,4 +65,8 @@
             </div>
         {% endfor %}
     {% endblock %}
+{% endblock %}
+
+{% block config_hidden_fields %}
+    <input type="hidden" name="module-config-id" value="{{ config.pk }}">
 {% endblock %}

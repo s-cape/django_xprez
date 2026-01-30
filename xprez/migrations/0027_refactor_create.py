@@ -222,6 +222,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
                 (
                     "margin_bottom_choice",
                     models.CharField(
@@ -426,6 +427,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
                 (
                     "module",
                     models.ForeignKey(
@@ -698,10 +700,13 @@ class Migration(migrations.Migration):
                     models.CharField(
                         choices=[
                             ("", "None"),
-                            ("1:1", "1:1"),
-                            ("3:2", "3:2"),
-                            ("4:3", "4:3"),
-                            ("16:9", "16:9"),
+                            ("1/1", "1:1"),
+                            ("3/2", "3:2"),
+                            ("4/3", "4:3"),
+                            ("16/9", "16:9"),
+                            ("2/3", "2:3"),
+                            ("3/4", "3:4"),
+                            ("9/16", "9:16"),
                         ],
                         blank=True,
                         default="",
