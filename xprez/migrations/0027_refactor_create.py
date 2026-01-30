@@ -680,7 +680,18 @@ class Migration(migrations.Migration):
                         verbose_name="Media role",
                     ),
                 ),
-                ("media_background_position", models.PositiveIntegerField(default=0)),
+                (
+                    "media_background_position",
+                    models.CharField(
+                        choices=[
+                            ("top", "Top"),
+                            ("center", "Center"),
+                            ("bottom", "Bottom"),
+                        ],
+                        default="center",
+                        max_length=10,
+                    ),
+                ),
                 ("media_lead_to_edge", models.BooleanField(default=True)),
                 ("media_icon_max_size", models.PositiveIntegerField(default=100)),
                 (
