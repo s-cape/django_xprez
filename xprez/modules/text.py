@@ -139,10 +139,12 @@ class TextConfig(TextBaseConfig):
             "media_role"
         ],
     )
-    media_background_position = models.PositiveIntegerField(
+    media_background_position = models.CharField(
+        max_length=10,
+        choices=constants.BACKGROUND_POSITION_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
             "media_background_position"
-        ]
+        ],
     )
     media_lead_to_edge = models.BooleanField(
         default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][

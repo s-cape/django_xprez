@@ -102,7 +102,7 @@ XPREZ_DEFAULTS = {
             "font_size": constants.FONT_SIZE_NORMAL,
             "text_align": constants.TEXT_ALIGN_LEFT,
             "media_role": constants.MEDIA_ROLE_LEAD,
-            "media_background_position": 0,
+            "media_background_position": constants.BACKGROUND_POSITION_CENTER,
             "media_lead_to_edge": True,
             "media_icon_max_size": 100,
             "media_crop": constants.CROP_NONE,
