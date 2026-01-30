@@ -13,6 +13,7 @@
     justify-content: var(--x-horizontal-align-flex, center);
     color: var(--x-base-color);
     text-align: var(--x-text-align, left);
+    aspect-ratio: var(--x-aspect-ratio, unset);
 
     &-inner {
         // position: relative;

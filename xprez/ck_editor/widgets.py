@@ -103,6 +103,12 @@ class CkEditorWidgetFullBase(CkEditorWidgetBase):
                         "title": "Heading 3",
                         "class": "ck-heading_heading3",
                     },
+                    {
+                        "model": "heading4",
+                        "view": "h4",
+                        "title": "Heading 4",
+                        "class": "ck-heading_heading4",
+                    },
                 ),
             },
             "fontSize": {
