@@ -1,17 +1,74 @@
-.xprez-text {
-    &__image-wrapper {
-        position: relative;
+@mixin xprez-text-image-set-margin {
+    margin-top: var(--x-media-lead-margin-top, 0);
+    margin-right: var(--x-media-lead-margin-right, 0);
+    margin-left: var(--x-media-lead-margin-left, 0);
+}
 
-        // LEAD TO EDGE
-        margin-top: calc(-1 * var(--x-padding-top, 0));
-        margin-right: calc(-1 * var(--x-padding-right, 0));
-        margin-left: calc(-1 * var(--x-padding-left, 0));
-        margin-bottom: 1rem;
+.xprez-text {
+    position: relative;
+
+    &__text-wrapper {
+        position: relative;
+        z-index: 2;
+
+        & > :last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__image-wrapper {
+        @include xprez-text-image-set-margin;
     }
 
     &__image, img {
         max-width: 100%;
         display: block;
         height: auto;
+        margin-bottom: 1rem;
+    }
+}
+
+@each $number, $breakpoint in $breakpoints {
+    @media (min-width: $breakpoint) {
+        .xprez-text__image-wrapper {
+            .xprez-#{$number}-media-lead-to-edge & {
+                --x-media-lead-margin-top: calc(-1 * var(--x-padding-top, 0));
+                --x-media-lead-margin-right: calc(-1 * var(--x-padding-right, 0));
+                --x-media-lead-margin-left: calc(-1 * var(--x-padding-left, 0));
+            }
+
+            .xprez-#{$number}-media-lead-to-edge-reset & {
+                --x-media-lead-margin-top: 0;
+                --x-media-lead-margin-right: 0;
+                --x-media-lead-margin-left: 0;
+            }
+
+            .xprez-#{$number}-media-role-lead & {
+                position: unset;
+                @include xprez-text-image-set-margin;
+
+                img {
+                    width: initial;
+                    height: auto;
+                }
+            }
+
+            .xprez-#{$number}-media-role-background & {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 1;
+                margin: 0;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: center 50%;
+                }
+            }
+        }
     }
 }

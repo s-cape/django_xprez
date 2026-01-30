@@ -182,6 +182,10 @@ class TextConfig(TextBaseConfig):
                 variables["media-icon-max-size"] = self.media_icon_max_size
             if self.media_role == constants.MEDIA_ROLE_BACKGROUND:
                 variables["background-position"] = self.media_background_position
+            if self.media_lead_to_edge:
+                variables["padding-top"] = self._get_choice_or_custom("padding_top")
+                variables["padding-right"] = self._get_choice_or_custom("padding_right")
+                variables["padding-left"] = self._get_choice_or_custom("padding_left")
 
         return variables
 

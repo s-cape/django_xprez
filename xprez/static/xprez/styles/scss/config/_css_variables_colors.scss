@@ -1,6 +1,6 @@
 @import "colors";
 
-.xprez {
+:root {
 	--x-base-bg: #{$base-bg};
 	--x-base-color: #{$base-color};
 	--x-link-color: #{$link-color};
@@ -24,10 +24,11 @@
 		--x-h4-color: #{$heading-color};
 	}
 
-    --x-box-bg: #{$box-bg};
+    --x-box-base-bg: #{$box-bg};
+	--x-box-border-color: #{$box-border-color};
 }
 
-.xprez-module--alternate-color {
+.xprez-alternate-color {
     --x-base-color: #{$alt-base-color};
     --x-link-color: #{$alt-link-color};
     --x-link-hover-color: #{$alt-link-hover-color};
@@ -50,5 +51,6 @@
 		--x-h4-color: #{$alt-heading-color};
 	}
 
-	--x-box-bg: #{$alt-box-bg};
+	--x-box-base-bg: #{$alt-box-bg};
+	--x-box-border-color: #{$alt-box-border-color};
 }

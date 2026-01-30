@@ -1,5 +1,4 @@
 {% block module %}
-{{ module.render_css_classes }} {# TODO: remove #}
 <div
     id="{{ module.key }}"
     class="{% block css_class %}{{ module.render_css_classes }} {{ module.css_class|default:'' }}{% endblock %}"
