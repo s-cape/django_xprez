@@ -13,7 +13,7 @@ from xprez.admin.forms import BaseModuleForm
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.ck_editor import parse_text as ckeditor_parse_text
 from xprez.ck_editor.widgets import CkEditorWidget
-from xprez.conf import settings
+from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
 from xprez.models.modules import CLIPBOARD_TEXT_MAX_LENGTH, Module
 from xprez.utils import import_class, random_string, truncate_with_ellipsis
@@ -101,13 +101,17 @@ class TextBaseConfig(ModuleConfig):
         "Font size",
         max_length=20,
         choices=constants.FONT_SIZE_CHOICES,
-        default=constants.FONT_SIZE_NORMAL,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
+            "font_size"
+        ],
     )
     text_align = models.CharField(
         "Text align",
         max_length=20,
         choices=constants.TEXT_ALIGN_CHOICES,
-        default=constants.TEXT_ALIGN_LEFT,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
+            "text_align"
+        ],
     )
 
     class Meta(ModuleConfig.Meta):
@@ -131,15 +135,31 @@ class TextConfig(TextBaseConfig):
         "Media role",
         max_length=20,
         choices=constants.MEDIA_ROLE_CHOICES,
-        default=constants.MEDIA_ROLE_LEAD,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
+            "media_role"
+        ],
     )
-    media_background_position = models.PositiveIntegerField(default=0)
-    media_lead_to_edge = models.BooleanField(default=True)
-    media_icon_max_size = models.PositiveIntegerField(default=100)
+    media_background_position = models.PositiveIntegerField(
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
+            "media_background_position"
+        ]
+    )
+    media_lead_to_edge = models.BooleanField(
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
+            "media_lead_to_edge"
+        ]
+    )
+    media_icon_max_size = models.PositiveIntegerField(
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
+            "media_icon_max_size"
+        ]
+    )
     media_crop = models.CharField(
         max_length=5,
         choices=constants.CROP_CHOICES,
-        default=constants.CROP_NONE,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
+            "media_crop"
+        ],
         blank=True,
     )
 
@@ -154,7 +174,7 @@ class TextConfig(TextBaseConfig):
     def get_css_variables(self):
         variables = super().get_css_variables()
         if self.module.polymorph.media:
-            if self.media_crop:
+            if self.media_role == constants.MEDIA_ROLE_LEAD and self.media_crop:
                 variables["media-crop"] = self.media_crop
             if self.media_role == constants.MEDIA_ROLE_ICON:
                 variables["media-icon-max-size"] = self.media_icon_max_size
@@ -176,7 +196,7 @@ class TextModuleBaseForm(BaseModuleForm):
 
     class Meta:
         model = TextModuleBase
-        fields = ("text",) + BaseModuleForm.base_module_fields
+        fields = "__all__"
 
 
 class TextModuleForm(TextModuleBaseForm):
@@ -197,4 +217,4 @@ class TextModuleForm(TextModuleBaseForm):
 
     class Meta(TextModuleBaseForm.Meta):
         model = TextModule
-        fields = TextModuleBaseForm.Meta.fields + ("media", "url")
+        fields = "__all__"

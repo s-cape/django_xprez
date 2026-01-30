@@ -19,4 +19,4 @@ class CodeInputModule(Module):
 class CodeInputModuleForm(BaseModuleForm):
     class Meta:
         model = CodeInputModule
-        fields = ("code",) + BaseModuleForm.base_module_fields
+        fields = "__all__"

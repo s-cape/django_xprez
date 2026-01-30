@@ -69,7 +69,10 @@ XPREZ_DEFAULTS = {
     },
     "module": {
         "default": {
-            # "background_color": "green",
+            "alternate_color": False,
+        },
+        "xprez.GalleryModule": {
+            "crop": constants.CROP_NONE,
         },
     },
     "module_config": {
@@ -83,6 +86,7 @@ XPREZ_DEFAULTS = {
             "border_radius_choice": constants.BORDER_RADIUS_MEDIUM,
             "border_radius_custom": 0,
             "background": False,
+            "background_color": "",
             "border": False,
             "padding_left_choice": constants.PADDING_NONE,
             "padding_left_custom": 0,
@@ -95,13 +99,19 @@ XPREZ_DEFAULTS = {
             "aspect_ratio": "",
         },
         "xprez.TextModule": {
-            # "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,  # TODO: different just for testing
+            "font_size": constants.FONT_SIZE_NORMAL,
+            "text_align": constants.TEXT_ALIGN_LEFT,
+            "media_role": constants.MEDIA_ROLE_LEAD,
+            "media_background_position": 0,
+            "media_lead_to_edge": True,
+            "media_icon_max_size": 100,
+            "media_crop": constants.CROP_NONE,
         },
         "xprez.GalleryModule": {
-            "colspan": 1,
-            "rowspan": 1,
             "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_CENTER,
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_CENTER,
+            "columns": 4,
+            "gap_choice": constants.GAP_SMALL,
         },
     },
 }
@@ -301,24 +311,6 @@ XPREZ_CSS = {
                     constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
                     constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
                     constants.GAP_LARGE: {0: 40, 1: 60, 2: 80},
-                },
-            },
-            "padding_horizontal": {
-                "units": "px",
-                "values": {
-                    constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
-                },
-            },
-            "padding_vertical": {
-                "units": "px",
-                "values": {
-                    constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.PADDING_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.PADDING_LARGE: {0: 40, 1: 60, 2: 80},
                 },
             },
         },

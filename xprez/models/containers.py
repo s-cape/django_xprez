@@ -41,7 +41,7 @@ class Container(models.Model):
         context["container"] = self.polymorph
         return render_to_string(self.front_template_name, context)
 
-    def get_sections(self):
-        if not hasattr(self, "_sections"):
-            self._sections = self.sections.filter(saved=True)
-        return self._sections
+    def get_sections_front(self):
+        if not hasattr(self, "_sections_front"):
+            self._sections_front = self.sections.filter(saved=True, visible=True)
+        return self._sections_front

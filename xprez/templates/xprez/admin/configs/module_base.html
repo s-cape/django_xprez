@@ -43,6 +43,9 @@
         {% include "xprez/admin/form/field.html" with field=config.admin_form.background size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.border size="flex-1" %}
     </div>
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.background.html_name }}:true">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.background_color size="flex-1" %}
+    </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align_flex label=False icon="xprez-icon-vertical" size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align_flex label=False icon="xprez-icon-horizontal" size="flex-1" %}

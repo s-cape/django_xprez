@@ -24,13 +24,7 @@ class QuoteModule(Module):
 class QuoteModuleForm(BaseModuleForm):
     class Meta:
         model = QuoteModule
-        fields = (
-            "name",
-            "subtitle",
-            "title",
-            "quote",
-            "image",
-        ) + BaseModuleForm.base_module_fields
+        fields = "__all__"
         widgets = {
             "title": forms.TextInput(attrs={"class": "long"}),
             "quote": forms.Textarea(attrs={"class": "long"}),

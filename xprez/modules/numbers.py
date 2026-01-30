@@ -39,7 +39,7 @@ class NumbersItem(MultiModuleItem):
 class NumbersModuleForm(BaseModuleForm):
     class Meta:
         model = NumbersModule
-        fields = BaseModuleForm.base_module_fields
+        fields = "__all__"
 
 
 class NumbersItemForm(forms.ModelForm):

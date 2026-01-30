@@ -1,6 +1,6 @@
 {% load xprez %}
 <div class="xprez">
-    {% for section in container.get_sections %}
+    {% for section in container.get_sections_front %}
         {% xprez_section_render_front section %}
     {% endfor %}
 </div>

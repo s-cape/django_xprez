@@ -9,7 +9,7 @@ from django.utils.functional import cached_property, classproperty
 
 from xprez import constants
 from xprez.admin.permissions import xprez_staff_member_required
-from xprez.conf import settings
+from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
 from xprez.utils import class_content_type, import_class
 
@@ -44,8 +44,9 @@ class Module(ConfigParentMixin, models.Model):
     position = models.PositiveSmallIntegerField(default=0)
     content_type = models.CharField(max_length=100, editable=False)
     css_class = models.CharField(max_length=100, null=True, blank=True)
-    alternate_color = models.BooleanField(default=False)
-    background_color = models.CharField(max_length=30, blank=True)
+    alternate_color = models.BooleanField(
+        default=defaults.XPREZ_DEFAULTS["module"]["default"]["alternate_color"]
+    )
 
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
     changed = models.DateTimeField(auto_now=True, editable=False, db_index=True)
@@ -260,12 +261,6 @@ class Module(ConfigParentMixin, models.Model):
         if self.alternate_color:
             classes["alternate-color"] = True
         return classes
-
-    def get_css_variables(self):
-        variables = {}
-        if self.background_color:
-            variables["background-color"] = self.background_color
-        return variables
 
 
 class MultiModule(Module):

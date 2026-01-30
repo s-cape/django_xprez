@@ -64,7 +64,7 @@ class FilesItem(MultiModuleItem):
 class FilesModuleForm(BaseModuleForm):
     class Meta:
         model = FilesModule
-        fields = ("title",) + BaseModuleForm.base_module_fields
+        fields = "__all__"
         widgets = {"title": forms.TextInput(attrs={"placeholder": "Files"})}
 
 
