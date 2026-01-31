@@ -1,6 +1,6 @@
 import { XprezSectionConfigDeleter, XprezModuleConfigDeleter } from './deleters.js';
-import { XprezShowWhen, XprezFieldLink } from './utils.js';
-import { XprezFieldController } from './fields.js';
+import { XprezShowWhen } from './utils.js';
+import { XprezFieldController, XprezFieldLink } from './fields.js';
 
 /** Mixin for Section/Module that own configs. Apply via Object.assign(Class.prototype, XprezConfigParentMixin) */
 export const XprezConfigParentMixin = {
@@ -12,7 +12,7 @@ export const XprezConfigParentMixin = {
     updateAllFieldsActive() {
         for (const config of this.configs) {
             for (const field of config.fields) {
-                field.updateActive();
+                field.refreshActive();
             }
         }
     }
@@ -84,10 +84,6 @@ export class XprezSectionConfig extends XprezConfigBase {
         this.section = section;
         this.deleter = new XprezSectionConfigDeleter(this);
     }
-
-    getDefault(fieldName) {
-        return this.parent.xprez.defaults.section_config[fieldName];
-    }
 }
 
 export class XprezModuleConfig extends XprezConfigBase {
@@ -95,9 +91,5 @@ export class XprezModuleConfig extends XprezConfigBase {
         super(module, el);
         this.module = module;
         this.deleter = new XprezModuleConfigDeleter(this);
-    }
-
-    getDefault(fieldName) {
-        return this.parent.section.xprez.defaults.module_config[this.parent.contentType()][fieldName];
     }
 }

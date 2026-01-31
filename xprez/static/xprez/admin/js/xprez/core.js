@@ -5,7 +5,6 @@ import { XprezSortable } from './sortable.js';
 export class Xprez {
     constructor() {
         this.el = document.querySelector("[data-component='xprez']");
-        this.defaults = JSON.parse(this.el.dataset.defaults || '{}');
         this.sectionsContainerEl = this.el.querySelector("[data-component='xprez-sections-container']");
         this.viewSelectEl = this.el.querySelector("[data-component='xprez-view-select']");
         this.viewSelectEl.addEventListener("change", this.updateView.bind(this));

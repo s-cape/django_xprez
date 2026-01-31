@@ -2,7 +2,6 @@ from django.apps import apps
 from django.contrib import admin
 
 from xprez import module_registry, settings
-from xprez.admin.defaults_json import XprezAdminDefaultsJsonMixin
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
 from xprez.admin.views.content import XprezAdminViewsContentMixin
 
@@ -54,7 +53,6 @@ class XprezModelFormMixin(object):
 
 
 class XprezAdminMixin(
-    XprezAdminDefaultsJsonMixin,
     XprezAdminViewsContentMixin,
     XprezAdminViewsClipboardMixin,
 ):

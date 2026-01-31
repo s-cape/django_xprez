@@ -27,10 +27,6 @@ export class XprezModule {
         });
     }
 
-    getDefault(fieldName) {
-        return this.section.xprez.defaults.module[this.contentType()][fieldName];
-    }
-
     initConfigs() {
         this.configsContainerEl = this.el.querySelector("[data-component='xprez-module-configs']");
         this.configs = [];

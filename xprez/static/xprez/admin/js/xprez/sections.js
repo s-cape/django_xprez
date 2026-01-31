@@ -34,10 +34,6 @@ export class XprezSection {
         });
     }
 
-    getDefault(fieldName) {
-        return this.xprez.defaults.section[fieldName];
-    }
-
     id() { return this.el.querySelector("[name='section-id']").value; }
 
     initModules() {
