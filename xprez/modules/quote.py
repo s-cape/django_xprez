@@ -2,10 +2,10 @@ from django import forms
 from django.db import models
 
 from xprez.admin.forms import BaseModuleForm
-from xprez.models.modules import Module
+from xprez.models.modules import FontSizeModuleMixin, Module
 
 
-class QuoteModule(Module):
+class QuoteModule(FontSizeModuleMixin, Module):
     admin_template_name = "xprez/admin/modules/quote.html"
     front_template_name = "xprez/modules/quote.html"
     icon_template_name = "xprez/admin/icons/modules/quote.html"

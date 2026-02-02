@@ -3,10 +3,10 @@ from django.db import models
 from django.forms import inlineformset_factory
 
 from xprez.admin.forms import BaseModuleForm
-from xprez.models.modules import MultiModuleItem, UploadMultiModule
+from xprez.models.modules import FontSizeModuleMixin, MultiModuleItem, UploadMultiModule
 
 
-class FilesModule(UploadMultiModule):
+class FilesModule(FontSizeModuleMixin, UploadMultiModule):
     admin_template_name = "xprez/admin/modules/files/files.html"
     front_template_name = "xprez/modules/files.html"
     admin_formset_item_template_name = "xprez/admin/modules/files/files_item.html"

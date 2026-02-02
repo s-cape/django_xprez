@@ -70,6 +70,7 @@ XPREZ_DEFAULTS = {
     "module": {
         "default": {
             "alternate_color": False,
+            "font_size": constants.FONT_SIZE_NORMAL,
         },
         "xprez.GalleryModule": {
             "crop": constants.CROP_NONE,
@@ -99,7 +100,6 @@ XPREZ_DEFAULTS = {
             "aspect_ratio": "",
         },
         "xprez.TextModule": {
-            "font_size": constants.FONT_SIZE_NORMAL,
             "text_align": constants.TEXT_ALIGN_LEFT,
             "media_role": constants.MEDIA_ROLE_LEAD,
             "media_background_position": constants.BACKGROUND_POSITION_CENTER,

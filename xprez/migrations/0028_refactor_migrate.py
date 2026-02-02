@@ -140,7 +140,8 @@ class ModuleProcessorBase:
     def get_config_class(self, module):
         return "xprez.ModuleConfig"
 
-    def create_config(self, module):
+    def finalize(self, module):
+        """Setup module attributes and create its config."""
         config_class = self.apps.get_model(*self.get_config_class(module).split("."))
         default_config = settings.XPREZ_DEFAULTS["module_config"]["default"]
         self.config, _created = config_class.objects.get_or_create(
@@ -158,7 +159,7 @@ class ModuleProcessorBase:
 
 class SimpleModuleProcessor(ModuleProcessorBase):
     def process(self):
-        self.create_config(self.module)
+        self.finalize(self.module)
 
 
 class ModuleReplaceProcessor(ModuleProcessorBase):
@@ -182,7 +183,7 @@ class ModuleReplaceProcessor(ModuleProcessorBase):
             new_module.created = timezone.now()
             new_module.changed = timezone.now()
             new_module.save()
-            self.create_config(new_module)
+            self.finalize(new_module)
 
     def delete_processed_module(self):
         self.module_base.delete()
@@ -196,8 +197,8 @@ class TextModuleProcessorBase(ModuleReplaceProcessor):
         TextModule = self.apps.get_model("xprez", "TextModule")
         return [TextModule(text=self.old_content.text)]
 
-    def create_config(self, module):
-        super().create_config(module)
+    def finalize(self, module):
+        super().finalize(module)
         # Migrate box -> background + padding
         if getattr(self.old_content, "box", False):
             self.config.background = True
@@ -246,12 +247,13 @@ class GridboxesProcessor(TextModuleProcessorBase):
         )
         section_config.save()
 
-    def create_config(self, module):
-        super().create_config(module)
-        # Migrate GridBoxes-specific attributes to TextConfig/ModuleConfig
-        self.config.font_size = self.TEXT_SIZE_TRANS.get(
+    def finalize(self, module):
+        super().finalize(module)
+        # Migrate GridBoxes-specific attributes
+        module.font_size = self.TEXT_SIZE_TRANS.get(
             self.old_content.text_size, "normal"
         )
+        module.save()
 
         # centered -> text_align
         if getattr(self.old_content, "content_centered", False):
@@ -317,8 +319,8 @@ class QuotesProcessor(ModuleReplaceProcessor):
             ]
         return new_modules
 
-    def create_config(self, module):
-        super().create_config(module)
+    def finalize(self, module):
+        super().finalize(module)
         # Migrate box -> background + padding
         if getattr(self.old_content, "box", False):
             self.config.background = True
@@ -485,6 +487,22 @@ class Migration(migrations.Migration):
                 blank=True,
             ),
         ),
+        migrations.AddField(
+            model_name="gallerymodule",
+            name="font_size",
+            field=models.CharField(
+                choices=[
+                    ("smallest", "Smallest"),
+                    ("small", "Small"),
+                    ("normal", "Normal"),
+                    ("large", "Large"),
+                    ("largest", "Largest"),
+                ],
+                default="normal",
+                max_length=20,
+                verbose_name="Font size",
+            ),
+        ),
         migrations.RenameModel(old_name="Video", new_name="VideoModule"),
         ContentToModule(model_name="VideoModule"),
         migrations.AlterField(
@@ -525,6 +543,22 @@ class Migration(migrations.Migration):
             name="NumbersItem",
             options={"ordering": ("module", "id")},
         ),
+        migrations.AddField(
+            model_name="numbersmodule",
+            name="font_size",
+            field=models.CharField(
+                choices=[
+                    ("smallest", "Smallest"),
+                    ("small", "Small"),
+                    ("normal", "Normal"),
+                    ("large", "Large"),
+                    ("largest", "Largest"),
+                ],
+                default="normal",
+                max_length=20,
+                verbose_name="Font size",
+            ),
+        ),
         migrations.RenameModel(old_name="CodeTemplate", new_name="CodeTemplateModule"),
         ContentToModule(model_name="CodeTemplateModule"),
         migrations.AlterField(
@@ -532,6 +566,22 @@ class Migration(migrations.Migration):
             name="template_name",
             field=xprez.admin.fields.TemplatePathField(
                 blank=True, match="^(?!\\.).+", max_length=255, null=True
+            ),
+        ),
+        migrations.AddField(
+            model_name="codetemplatemodule",
+            name="font_size",
+            field=models.CharField(
+                choices=[
+                    ("smallest", "Smallest"),
+                    ("small", "Small"),
+                    ("normal", "Normal"),
+                    ("large", "Large"),
+                    ("largest", "Largest"),
+                ],
+                default="normal",
+                max_length=20,
+                verbose_name="Font size",
             ),
         ),
         migrations.RenameModel(old_name="DownloadContent", new_name="FilesModule"),
@@ -558,6 +608,22 @@ class Migration(migrations.Migration):
             model_name="FilesItem",
             name="description",
             field=models.CharField(blank=True, max_length=255),
+        ),
+        migrations.AddField(
+            model_name="filesmodule",
+            name="font_size",
+            field=models.CharField(
+                choices=[
+                    ("smallest", "Smallest"),
+                    ("small", "Small"),
+                    ("normal", "Normal"),
+                    ("large", "Large"),
+                    ("largest", "Largest"),
+                ],
+                default="normal",
+                max_length=20,
+                verbose_name="Font size",
+            ),
         ),
         migrations.RenameModel(old_name="ContentSymlink", new_name="ModuleSymlink"),
         ContentToModule(model_name="ModuleSymlink"),

@@ -5,10 +5,10 @@ from django.template.loader import get_template
 from xprez.admin.fields import TemplatePathField
 from xprez.admin.forms import BaseModuleForm
 from xprez.conf import settings
-from xprez.models.modules import Module
+from xprez.models.modules import FontSizeModuleMixin, Module
 
 
-class CodeTemplateModule(Module):
+class CodeTemplateModule(FontSizeModuleMixin, Module):
     admin_template_name = "xprez/admin/modules/code_template.html"
     icon_template_name = "xprez/admin/icons/modules/code_template.html"
     form_class = "xprez.modules.code_template.CodeTemplateModuleForm"

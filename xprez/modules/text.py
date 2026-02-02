@@ -15,7 +15,7 @@ from xprez.ck_editor import parse_text as ckeditor_parse_text
 from xprez.ck_editor.widgets import CkEditorWidget
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
-from xprez.models.modules import CLIPBOARD_TEXT_MAX_LENGTH, Module
+from xprez.models.modules import CLIPBOARD_TEXT_MAX_LENGTH, FontSizeModuleMixin, Module
 from xprez.utils import import_class, random_string, truncate_with_ellipsis
 
 
@@ -54,7 +54,7 @@ class CkEditorFileUploadMixin:
         ]
 
 
-class TextModuleBase(CkEditorFileUploadMixin, Module):
+class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
     form_class = "xprez.modules.text.TextModuleBaseForm"
     admin_template_name = "xprez/admin/modules/text_base.html"
     front_template_name = "xprez/modules/text_base.html"
@@ -97,14 +97,6 @@ class TextModule(TextModuleBase):
 class TextBaseConfig(ModuleConfig):
     admin_template_name = "xprez/admin/configs/modules/text_base.html"
 
-    font_size = models.CharField(
-        "Font size",
-        max_length=20,
-        choices=constants.FONT_SIZE_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
-            "font_size"
-        ],
-    )
     text_align = models.CharField(
         "Text align",
         max_length=20,
@@ -116,11 +108,6 @@ class TextBaseConfig(ModuleConfig):
 
     class Meta(ModuleConfig.Meta):
         abstract = True
-
-    def get_css_classes(self):
-        classes = super().get_css_classes()
-        classes["font-size"] = self.font_size
-        return classes
 
     def get_css_variables(self):
         variables = super().get_css_variables()

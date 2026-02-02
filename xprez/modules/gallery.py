@@ -5,7 +5,7 @@ from xprez import constants
 from xprez.admin.forms import BaseModuleForm
 from xprez.conf import defaults
 from xprez.models.configs import ModuleConfig
-from xprez.models.modules import MultiModuleItem, UploadMultiModule
+from xprez.models.modules import FontSizeModuleMixin, MultiModuleItem, UploadMultiModule
 
 PHOTOSWIPE_JS = (
     "xprez/libs/photoswipe/dist/photoswipe.min.js",
@@ -18,7 +18,7 @@ PHOTOSWIPE_CSS = (
 )
 
 
-class GalleryModule(UploadMultiModule):
+class GalleryModule(FontSizeModuleMixin, UploadMultiModule):
     form_class = "xprez.modules.gallery.GalleryModuleForm"
     admin_template_name = "xprez/admin/modules/gallery/gallery.html"
     admin_formset_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"

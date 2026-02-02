@@ -23,4 +23,5 @@ class Migration(migrations.Migration):
         migrations.RemoveField(model_name="GalleryModule", name="columns"),
         migrations.RemoveField(model_name="GalleryModule", name="width"),
         migrations.RemoveField(model_name="VideoModule", name="width"),
+        migrations.RemoveField(model_name="TextConfig", name="font_size"),
     ]

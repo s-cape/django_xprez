@@ -125,6 +125,21 @@ class Migration(migrations.Migration):
                         to="xprez.module",
                     ),
                 ),
+                (
+                    "font_size",
+                    models.CharField(
+                        choices=[
+                            ("smallest", "Smallest"),
+                            ("small", "Small"),
+                            ("normal", "Normal"),
+                            ("large", "Large"),
+                            ("largest", "Largest"),
+                        ],
+                        default="normal",
+                        max_length=20,
+                        verbose_name="Font size",
+                    ),
+                ),
                 ("text", models.TextField(blank=True)),
                 ("media", models.FileField(upload_to="images", null=True, blank=True)),
                 (
@@ -151,6 +166,21 @@ class Migration(migrations.Migration):
                         primary_key=True,
                         serialize=False,
                         to="xprez.module",
+                    ),
+                ),
+                (
+                    "font_size",
+                    models.CharField(
+                        choices=[
+                            ("smallest", "Smallest"),
+                            ("small", "Small"),
+                            ("normal", "Normal"),
+                            ("large", "Large"),
+                            ("largest", "Largest"),
+                        ],
+                        default="normal",
+                        max_length=20,
+                        verbose_name="Font size",
                     ),
                 ),
                 ("name", models.CharField(max_length=255)),

@@ -98,6 +98,14 @@
 
                     <div class="xprez-option-group__subtitle">Attributes</div>
 
+                    {% if module.admin_form.font_size %}
+                        <div class="xprez-option-row">
+                            {% include "xprez/admin/form/field.html" with field=module.admin_form.font_size size="flex-1" %}
+                        </div>
+                    {% endif %}
+                    <div class="xprez-option-row">
+                        {% include "xprez/admin/form/field.html" with field=module.admin_form.alternate_color size="flex-1" %}
+                    </div>
                     <div class="xprez-option-row">
                         {% include "xprez/admin/form/field.html" with field=module.admin_form.css_class size="flex-1" %}
                     </div>
@@ -108,10 +116,6 @@
                             </div>
                         {% endfor %}
                     {% endblock %}
-                    <div class="xprez-option-row">
-                        {% include "xprez/admin/form/field.html" with field=module.admin_form.alternate_color size="flex-1" %}
-                    </div>
-
                     <div data-component="xprez-module-configs">
                         {% for config in module.admin_form.xprez_configs %}
                             {% xprez_module_config_render_admin config %}

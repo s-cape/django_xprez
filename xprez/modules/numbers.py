@@ -3,10 +3,10 @@ from django.db import models
 from django.forms import inlineformset_factory
 
 from xprez.admin.forms import BaseModuleForm
-from xprez.models.modules import MultiModule, MultiModuleItem
+from xprez.models.modules import FontSizeModuleMixin, MultiModule, MultiModuleItem
 
 
-class NumbersModule(MultiModule):
+class NumbersModule(FontSizeModuleMixin, MultiModule):
     admin_template_name = "xprez/admin/modules/numbers.html"
     front_template_name = "xprez/modules/numbers.html"
     icon_template_name = "xprez/admin/icons/modules/numbers.html"

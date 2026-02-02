@@ -275,6 +275,25 @@ class Module(ConfigParentMixin, models.Model):
         return classes
 
 
+class FontSizeModuleMixin(models.Model):
+    """Mixin that adds font_size field to modules."""
+
+    font_size = models.CharField(
+        "Font size",
+        max_length=20,
+        choices=constants.FONT_SIZE_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["module"]["default"]["font_size"],
+    )
+
+    def get_css_classes(self):
+        classes = super().get_css_classes()
+        classes["font-size"] = self.font_size
+        return classes
+
+    class Meta:
+        abstract = True
+
+
 class MultiModule(Module):
     """Module with multiple child items."""
 
