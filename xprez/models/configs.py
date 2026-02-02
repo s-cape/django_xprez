@@ -364,8 +364,6 @@ class ModuleConfig(ConfigBase):
         variables = {
             "colspan": self.colspan,
             "rowspan": self.rowspan,
-            "vertical-align-grid": self.vertical_align_grid,
-            "horizontal-align-grid": self.horizontal_align_grid,
             "vertical-align-flex": self.vertical_align_flex,
             "horizontal-align-flex": self.horizontal_align_flex,
             "padding": (
@@ -379,6 +377,10 @@ class ModuleConfig(ConfigBase):
         }
         if self.background and self.background_color:
             variables["background-color"] = self.background_color
+        if self.vertical_align_grid != constants.VERTICAL_ALIGN_GRID_UNSET:
+            variables["vertical-align-grid"] = self.vertical_align_grid
+        if self.horizontal_align_grid != constants.HORIZONTAL_ALIGN_GRID_UNSET:
+            variables["horizontal-align-grid"] = self.horizontal_align_grid
         return variables
 
     def get_css_config_keys(self):
