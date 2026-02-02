@@ -39,6 +39,12 @@
     p, li {
         color: inherit;
     }
+
+    h2, h3 {
+        strong {
+            color: var(--x-heading-emphasis-color, var(--x-heading-color));
+        }
+    }
 }
 
 @each $number, $breakpoint in $breakpoints {
