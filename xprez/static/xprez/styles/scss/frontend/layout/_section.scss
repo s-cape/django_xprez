@@ -1,5 +1,5 @@
 .xprez-section {
-    background-color:  var(--x-section-background-color, transparent);
+    background-color:  var(--x-section-background-color, #{$section-bg});
     margin-bottom: var(--x-margin-bottom);
 
     &-inner {
@@ -18,5 +18,9 @@
             align-self: var(--x-vertical-align-grid);
             justify-self: var(--x-horizontal-align-grid);
         }
+    }
+
+    &.xprez-alternate-background {
+        background-color: $alt-section-bg;
     }
 }
