@@ -14,29 +14,30 @@ export class XprezFieldController {
     }
 
     getValue() {
-        if (!this.inputEl) return null;
         if (this.inputEl.type === 'checkbox') {
             return this.inputEl.checked ? 'true' : 'false';
-        }
-        return this.inputEl.value;
-    }
-
-    setValue(value) {
-        const changed = this._setValueSilent(value);
-        if (changed) {
-            this.inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+        } else {
+            return this.inputEl.value;
         }
     }
 
-    _setValueSilent(value) {
-        if (!this.inputEl) return false;
-        if (this.getValue() === value) return false;
-
+    _applyValue(value) {
         if (this.inputEl.type === 'checkbox') {
             this.inputEl.checked = value === 'true';
         } else {
             this.inputEl.value = value;
         }
+    }
+
+    setValue(value) {
+        if (this.getValue() === value) return;
+        this._applyValue(value);
+        this.inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    _setValueSilent(value) {
+        if (this.getValue() === value) return false;
+        this._applyValue(value);
         this._previousValue = value;
         return true;
     }

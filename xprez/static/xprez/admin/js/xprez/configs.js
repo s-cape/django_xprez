@@ -42,8 +42,9 @@ export class XprezConfigBase {
     }
 
     initFieldLinks() {
+        this.fieldLinks = [];
         this.el.querySelectorAll("[data-field-link]").forEach(el => {
-            new XprezFieldLink(this, el);
+            this.fieldLinks.push(new XprezFieldLink(this, el));
         });
     }
 
@@ -59,12 +60,16 @@ export class XprezConfigBase {
     cssBreakpoint() { return parseInt(this.el.dataset.cssBreakpoint); }
 
     copyValuesFrom(sourceConfig) {
+        for (let i = 0; i < this.fieldLinks.length; i++) {
+            this.fieldLinks[i].setLinked(sourceConfig.fieldLinks[i].checkbox.checked);
+        }
         for (const field of this.fields) {
             const sourceField = sourceConfig.getFields(field.fieldName)[0];
             if (sourceField) {
                 field.setValue(sourceField.getValue());
             }
         }
+        for (const field of this.fields) { field.refreshActive(); }
     }
 
     getPreviousConfig() {
