@@ -166,7 +166,9 @@ class TextConfig(TextBaseConfig):
             if self.media_role == constants.MEDIA_ROLE_LEAD and self.media_crop:
                 variables["media-crop"] = self.media_crop
             if self.media_role == constants.MEDIA_ROLE_ICON:
-                variables["media-icon-max-size"] = self.media_icon_max_size
+                variables["media-icon-max-size"] = self._format_css_field(
+                    "media_icon_max_size"
+                )
             if self.media_role == constants.MEDIA_ROLE_BACKGROUND:
                 variables["background-position"] = self.media_background_position
             if self.media_lead_to_edge:

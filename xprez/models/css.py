@@ -36,12 +36,17 @@ class UnitsProxy:
 
     def __getattr__(self, field_name):
         """
-        Returns ChoiceUnitsProxy for any field.
-        - Simple: config.units.padding_top.custom -> 'px'
-        - Choice-specific: config.units.max_width.custom -> 'px'
+        Returns unit string for simple config, ChoiceUnitsProxy for choice-based.
+        - Simple: config.units.media_icon_max_size -> 'px'
+        - Choice-specific: config.units.padding_top.custom -> 'px'
         """
         css_config = self.config._get_css_config(field_name)
-        return ChoiceUnitsProxy(css_config)
+        if not css_config:
+            return ""
+        units = css_config.get("units", "")
+        if isinstance(units, dict):
+            return ChoiceUnitsProxy(css_config)
+        return units
 
 
 class CssMixin:
@@ -92,7 +97,8 @@ class CssMixin:
         """Lookup field_name in source dict using get_css_config_keys() priority."""
         for key in self.get_css_config_keys():
             config = source
-            for part in key.split("."):
+            parts = key if isinstance(key, (list, tuple)) else (key,)
+            for part in parts:
                 config = config.get(part, {})
             if field_name in config:
                 return config[field_name]
@@ -112,6 +118,12 @@ class CssMixin:
 
         units = _get_unit_string(css_config, choice)
         return f"{value}{units}"
+
+    def _format_css_field(self, field_name, choice=None):
+        """Format instance value for field using XPREZ_CSS units."""
+        css_config = self._get_css_config(field_name)
+        value = getattr(self, field_name, None)
+        return self._format_css_value(css_config, value, choice)
 
     @property
     def units(self):

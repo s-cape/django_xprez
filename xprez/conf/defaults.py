@@ -308,6 +308,7 @@ XPREZ_CSS = {
             },
         },
         "xprez.TextModule": {
+            "media_icon_max_size": {"units": "px"},
             "font_size": {
                 "values": {
                     constants.FONT_SIZE_SMALLEST: {0: 12, 2: 14},

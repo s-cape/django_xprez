@@ -383,9 +383,9 @@ class ModuleConfig(ConfigBase):
 
     def get_css_config_keys(self):
         return [
-            f"module_config.{self.module.content_type}",
-            "module_config.default",
-            "default",
+            ("module_config", self.module.content_type),
+            ("module_config", "default"),
+            ("default",),
         ]
 
     def get_admin_form_class(self):
