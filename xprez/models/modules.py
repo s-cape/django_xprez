@@ -282,7 +282,7 @@ class FontSizeModuleMixin(models.Model):
         "Font size",
         max_length=20,
         choices=constants.FONT_SIZE_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["module"]["default"]["font_size"],
+        default=constants.FONT_SIZE_NORMAL,
     )
 
     def get_css_classes(self):

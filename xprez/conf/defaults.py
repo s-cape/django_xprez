@@ -70,10 +70,25 @@ XPREZ_DEFAULTS = {
     "module": {
         "default": {
             "alternate_color": False,
+        },
+        "xprez.TextModule": {
             "font_size": constants.FONT_SIZE_NORMAL,
         },
         "xprez.GalleryModule": {
             "crop": constants.CROP_NONE,
+            "font_size": constants.FONT_SIZE_NORMAL,
+        },
+        "xprez.FilesModule": {
+            "font_size": constants.FONT_SIZE_NORMAL,
+        },
+        "xprez.QuoteModule": {
+            "font_size": constants.FONT_SIZE_NORMAL,
+        },
+        "xprez.NumbersModule": {
+            "font_size": constants.FONT_SIZE_NORMAL,
+        },
+        "xprez.CodeTemplateModule": {
+            "font_size": constants.FONT_SIZE_NORMAL,
         },
     },
     "module_config": {
