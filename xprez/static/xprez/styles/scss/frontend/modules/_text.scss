@@ -35,7 +35,7 @@
 
     &__image, img {
         max-width: 100%;
-        display: block;
+        display: inline-block;
         height: auto;
         margin-bottom: 1rem;
     }
@@ -73,6 +73,16 @@
                 img {
                     width: 100%;
                     height: 100%;
+                }
+            }
+
+            .xprez-#{$number}-media-role-icon & {
+                position: unset;
+                @include xprez-text-image-set-margin;
+
+                img {
+                    width: var(--x-media-icon-max-size, 100px);
+                    height: auto;
                 }
             }
         }
