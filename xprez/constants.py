@@ -159,11 +159,11 @@ FONT_SIZE_NORMAL = "normal"
 FONT_SIZE_LARGE = "large"
 FONT_SIZE_LARGEST = "largest"
 FONT_SIZE_CHOICES = (
-    (FONT_SIZE_SMALLEST, "Smallest"),
+    (FONT_SIZE_SMALLEST, "Extra Small"),
     (FONT_SIZE_SMALL, "Small"),
     (FONT_SIZE_NORMAL, "Normal"),
     (FONT_SIZE_LARGE, "Large"),
-    (FONT_SIZE_LARGEST, "Largest"),
+    (FONT_SIZE_LARGEST, "Extra Large"),
 )
 
 # Text align
