@@ -1,0 +1,32 @@
+@use "../../config/typography";
+@use "../../library/rfs" as rfs; 
+
+@if $use-xprez-typography and $use-xprez-buttons {
+    @each $size-name, $size-config in $typography-config {
+        .xprez-font-size-#{$size-name} {
+            @each $element, $properties in $size-config {
+                @if $element == "button" {
+                    .#{$xprez-button-class} {
+                        @include rfs.font-size(map-get($properties, "font-size"));
+                        line-height: map-get($properties, "line-height");
+                        padding: map-get($properties, "padding-x") map-get($properties, "padding-y");
+                        @if map-get($properties, "font-weight") {
+                            font-weight: map-get($properties, "font-weight");
+                        }
+                        @if map-get($properties, "border-radius") {
+                            border-radius: map-get($properties, "border-radius");
+                        }
+                    }
+                } 
+            } 
+        }
+    }
+
+    .xprez-module .#{$xprez-button-class} {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: $xprez-button-gap; 
+    }
+}
+

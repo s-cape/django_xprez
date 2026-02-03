@@ -1,0 +1,31 @@
+@use "../../config/typography";
+@use "../../library/rfs" as rfs;
+
+@if $use-xprez-typography {
+    @each $size-name, $size-config in $typography-config {
+        .xprez-font-size-#{$size-name} {
+            @each $element, $properties in $size-config {
+                @if $element == "ul" {
+                    ul, ol {
+                        margin-bottom: map-get($properties, "margin-bottom");
+                    }
+                } @else if $element != "button" {
+                    #{$element} {
+                        @include rfs.font-size(map-get($properties, "font-size"));
+                        line-height: map-get($properties, "line-height");
+                        margin-bottom: map-get($properties, "margin-bottom");  
+
+                        @if map-get($properties, "before-heading-margin-bottom") and $element == "p" {
+                            &:has(+ h2),
+                            &:has(+ h3),
+                            &:has(+ h4),
+                            &:has(+ blockquote) {
+                                margin-bottom: map-get($properties, "before-heading-margin-bottom");  
+                            }
+                        }
+                    }
+                }
+            } 
+        }
+    }
+}
