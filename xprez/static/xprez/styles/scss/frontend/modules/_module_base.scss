@@ -43,6 +43,7 @@
     h2, h3, h4 {
         strong {
             color: var(--x-heading-emphasis-color, var(--x-heading-color));
+            font-weight: inherit;
         }
     }
 }

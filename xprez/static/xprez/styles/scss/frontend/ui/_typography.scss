@@ -15,6 +15,10 @@
                         line-height: map-get($properties, "line-height");
                         margin-bottom: map-get($properties, "margin-bottom");  
 
+                        @if map-get($properties, "font-weight") {
+                            font-weight: map-get($properties, "font-weight");
+                        }
+
                         @if map-get($properties, "before-heading-margin-bottom") and $element == "p" {
                             &:has(+ h2),
                             &:has(+ h3),

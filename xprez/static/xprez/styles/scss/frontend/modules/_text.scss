@@ -27,17 +27,20 @@
         z-index: 1;
     }
 
+    img {
+        max-width: 100%;
+        display: inline-block;
+        height: auto;
+    }
+
     &__image {
         aspect-ratio: var(--x-media-crop, unset);
         object-fit: cover;
         object-position: var(--x-background-img-position);
-    }
-
-    &__image, img {
+        margin-bottom: 1rem;
         max-width: 100%;
         display: inline-block;
         height: auto;
-        margin-bottom: 1rem;
     }
 }
 

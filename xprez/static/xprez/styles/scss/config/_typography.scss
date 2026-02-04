@@ -1,51 +1,57 @@
 $use-xprez-typography: true !default;
 $use-xprez-buttons: true !default;
 
+$xprez-headings-font-weight: 600 !default;
+
 $xprez-button-class: "btn" !default;
 $xprez-button-font-weight: 600 !default;
-$xprez-button-border-radius: .5em !default;
+$xprez-button-border-radius: .65em !default;
 $xprez-button-gap: .5rem !default;
 
 $typography-config: (
     "smallest": (
         "h2": (
             "font-size": 1.7rem,
-            "line-height": 1.3,
-            "margin-bottom": .5rem
+            "line-height": 1.25,
+            "margin-bottom": .75rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h3": (
-            "font-size": 1.3125rem,
-            "line-height": 1.35,
-            "margin-bottom": .5rem
+            "font-size": 1.3rem,
+            "line-height": 1.2,
+            "margin-bottom": .75rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h4": (
             "font-size": 1.125rem,
-            "line-height": 1.4,
-            "margin-bottom": .25rem
+            "line-height": 1.3,
+            "margin-bottom": .75rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "p": (
             "font-size": 0.875rem,
             "line-height": 1.5,
-            "margin-bottom": 1rem,
+            "margin-bottom": .75rem,
+            "before-heading-margin-bottom": 1.5rem
         ),
         "li": (
             "font-size": 0.875rem,
             "line-height": 1.5,
-            "margin-bottom": 0.5rem
+            "margin-bottom": 0.25rem
         ),
         "blockquote": (
-            "font-size": 0.9375rem,
-            "line-height": 1.55,
-            "margin-bottom": 1.25rem
+            "font-size": 1.25rem,
+            "line-height": 1.6,
+            "margin-bottom": 1.5rem
         ),
         "ul": (
             "margin-bottom": 1.125rem
         ),
         "button": (
-            "font-size": 0.9rem,
-            "line-height": 1.2,
-            "padding-x": .65rem,
-            "padding-y": .85rem,
+            "font-size": 0.8125rem,
+            "line-height": 1,
+            "padding-x": 2em,
+            "padding-y": 1em,
             "font-weight": $xprez-button-font-weight,
             "border-radius": $xprez-button-border-radius
         )
@@ -53,42 +59,46 @@ $typography-config: (
     "small": (
         "h2": (
             "font-size": 2rem,
-            "line-height": 1.3,
-            "margin-bottom": .5rem
+            "line-height": 1.2,
+            "margin-bottom": .75rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h3": (
             "font-size": 1.625rem,
-            "line-height": 1.35,
-            "margin-bottom": .5rem
+            "line-height": 1.25,
+            "margin-bottom": .75rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h4": (
-            "font-size": 1.25rem,
+            "font-size": 1.125rem,
             "line-height": 1.3,
-            "margin-bottom": .25rem
+            "margin-bottom": .75rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "p": (
             "font-size": 1rem,
             "line-height": 1.5,
-            "margin-bottom": 1rem
+            "margin-bottom": .75rem,
+            "before-heading-margin-bottom": 1.5rem
         ),
         "li": (
             "font-size": 1rem,
             "line-height": 1.5,
-            "margin-bottom": .5rem
+            "margin-bottom": .25rem
         ),
         "blockquote": (
-            "font-size": 1.125rem,
-            "line-height": 1.55,
+            "font-size": 1.25rem,
+            "line-height": 1.6,
             "margin-bottom": 1.375rem
         ),
         "ul": (
-            "margin-bottom": 1.25rem
+            "margin-bottom": 1.125rem
         ),
         "button": (
-            "font-size": 1rem,
-            "line-height": 1.2,
-            "padding-x": .75rem,
-            "padding-y": 1rem,
+            "font-size": .875rem,
+            "line-height": 1,
+            "padding-x": 2em,
+            "padding-y": 1em,
             "font-weight": $xprez-button-font-weight,
             "border-radius": $xprez-button-border-radius
         )
@@ -97,17 +107,20 @@ $typography-config: (
         "h2": (
             "font-size": 2.5rem,
             "line-height": 1.125,
-            "margin-bottom": .75rem
+            "margin-bottom": .75rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h3": (
             "font-size": 2rem,
-            "line-height": 1.15,
-            "margin-bottom": .75rem
+            "line-height": 1.2,
+            "margin-bottom": .75rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h4": (
             "font-size": 1.5rem,
             "line-height": 1.25,
-            "margin-bottom": .75rem
+            "margin-bottom": .75rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "p": (
             "font-size": 1.125rem,
@@ -126,13 +139,13 @@ $typography-config: (
             "margin-bottom": 1.5rem
         ),
         "ul": (
-            "margin-bottom": 1.25rem
+            "margin-bottom": 1.5rem
         ),
         "button": (
             "font-size": 1rem,
-            "line-height": 1.2,
-            "padding-x": .75rem,
-            "padding-y": 1rem,
+            "line-height": 1,
+            "padding-x": 2em,
+            "padding-y": 1em,
             "font-weight": $xprez-button-font-weight,
             "border-radius": $xprez-button-border-radius
         )
@@ -141,27 +154,31 @@ $typography-config: (
         "h2": (
             "font-size": 3rem,
             "line-height": 1.1,
-            "margin-bottom": 1.375rem
+            "margin-bottom": 1rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h3": (
             "font-size": 2.375rem,
             "line-height": 1.1,
-            "margin-bottom": 1.25rem
+            "margin-bottom": 1rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h4": (
             "font-size": 1.75rem,
             "line-height": 1.2,
-            "margin-bottom": .75rem
+            "margin-bottom": 1rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "p": (
             "font-size": 1.3125rem,
-            "line-height": 1.5,
-            "margin-bottom": 1.375rem
+            "line-height": 1.4,
+            "margin-bottom": 1rem,
+            "before-heading-margin-bottom": 2.5rem
         ),
         "li": (
             "font-size": 1.3125rem,
-            "line-height": 1.5,
-            "margin-bottom": 0.5rem
+            "line-height": 1.4,
+            "margin-bottom": 0.25rem
         ),
         "blockquote": (
             "font-size": 1.4375rem,
@@ -173,9 +190,9 @@ $typography-config: (
         ),
         "button": (
             "font-size": 1.125rem,
-            "line-height": 1.2,
-            "padding-x": 1rem,
-            "padding-y": 1.5rem,
+            "line-height": 1,
+            "padding-x": 2em,
+            "padding-y": 1em,
             "font-weight": $xprez-button-font-weight,
             "border-radius": $xprez-button-border-radius
         )
@@ -183,28 +200,32 @@ $typography-config: (
     "largest": (
         "h2": (
             "font-size": 3.5rem,
-            "line-height": 1.1,
-            "margin-bottom": 1.5rem
+            "line-height": 1,
+            "margin-bottom": 1.35rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h3": (
             "font-size": 2.75rem,
             "line-height": 1.1,
-            "margin-bottom": 1.375rem
+            "margin-bottom": 1.35rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "h4": (
             "font-size": 2rem,
             "line-height": 1.2,
-            "margin-bottom": 1rem
+            "margin-bottom": 1.35rem,
+            "font-weight": $xprez-headings-font-weight
         ),
         "p": (
             "font-size": 1.5rem,
-            "line-height": 1.4,
-            "margin-bottom": 1.5rem
+            "line-height": 1.35,
+            "margin-bottom": 1.35rem,
+            "before-heading-margin-bottom": 2.5rem
         ),
         "li": (
             "font-size": 1.5rem,
-            "line-height": 1.4,
-            "margin-bottom": 0.5rem
+            "line-height": 1.35,
+            "margin-bottom": 0.75rem
         ),
         "blockquote": (
             "font-size": 1.625rem,
@@ -212,13 +233,13 @@ $typography-config: (
             "margin-bottom": 1.75rem
         ),
         "ul": (
-            "margin-bottom": 2rem
+            "margin-bottom": 2.025rem
         ),
         "button": (
-            "font-size": 1.3125rem,
-            "line-height": 1.2,
-            "padding-x": 1.25rem,
-            "padding-y": 2rem,
+            "font-size": 1.25rem,
+            "line-height": 1,
+            "padding-x": 2em,
+            "padding-y": 1em,
             "font-weight": $xprez-button-font-weight,
             "border-radius": $xprez-button-border-radius
         )
