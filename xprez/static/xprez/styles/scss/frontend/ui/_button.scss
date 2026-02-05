@@ -2,11 +2,11 @@
 @use "../../library/rfs" as rfs; 
 
 @if $use-xprez-typography and $use-xprez-buttons {
-    @each $size-name, $size-config in $typography-config {
+    @each $size-name, $size-config in $x-typography-config {
         .xprez-font-size-#{$size-name} {
             @each $element, $properties in $size-config {
                 @if $element == "button" {
-                    .#{$xprez-button-class} {
+                    .#{$x-button-class} {
                         @include rfs.font-size(map-get($properties, "font-size"));
                         line-height: map-get($properties, "line-height");
                         padding: map-get($properties, "padding-y") map-get($properties, "padding-x");
@@ -18,15 +18,15 @@
                         }
                     }
                 } 
-            } 
+            }  
         }
     }
 
-    .xprez-module .#{$xprez-button-class} {
+    .xprez-module .#{$x-button-class} {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: $xprez-button-gap; 
+        gap: $x-button-gap; 
         // text-box-trim: trim-both;
         // text-box-edge: cap alphabetic;
 
@@ -44,10 +44,10 @@
             background: var(--x-button-primary-active-bg);
         }
 
-        &.#{$xprez-button-class}-secondary {
+        &.#{$x-button-class}-secondary {
             color: var(--x-button-secondary-color);
             background: var(--x-button-secondary-bg);
-            border: var(--x-button-secondary-border-width) solid var(--x-button-secondary-border-color);
+            border: var(--x-button-secondary-border-width) solid var(--x-button-secondary-border-color); 
 
             &:hover {
                 color: var(--x-button-secondary-hover-color);

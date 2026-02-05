@@ -1,5 +1,5 @@
 .xprez-section {
-    background-color:  var(--x-section-background-color, #{$section-bg});
+    background-color:  var(--x-section-background-color, #{$x-section-bg});
     margin-bottom: var(--x-margin-bottom);
 
     &-inner {
@@ -21,6 +21,6 @@
     }
 
     &.xprez-alternate-background {
-        background-color: $alt-section-bg;
+        background-color: $x-alt-section-bg;
     }
 }

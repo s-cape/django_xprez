@@ -1,92 +1,92 @@
 @import "colors";
 
 :root {
-	--x-base-bg: #{$base-bg};
-	--x-base-color: #{$base-color};
-	--x-link-color: #{$link-color};
-	--x-link-hover-color: #{$link-hover-color};
-	--x-heading-color: #{$heading-color};
-	--x-heading-emphasis-color: #{$heading-emphasis-color};
+	--x-base-bg: #{$x-base-bg};
+	--x-base-color: #{$x-base-color};
+	--x-link-color: #{$x-link-color};
+	--x-link-hover-color: #{$x-link-hover-color};
+	--x-heading-color: #{$x-heading-color};
+	--x-heading-emphasis-color: #{$x-heading-emphasis-color};
 
-	@if ($h2-color) {
-		--x-h2-color: #{$h2-color};
+	@if ($x-h2-color) {
+		--x-h2-color: #{$x-h2-color};
 	} @else {
-		--x-h2-color: #{$heading-color};
+		--x-h2-color: #{$x-heading-color};
 	}
-	@if ($h3-color) {
-		--x-h3-color: #{$h3-color};
+	@if ($x-h3-color) {
+		--x-h3-color: #{$x-h3-color};
 	} @else {
-		--x-h3-color: #{$heading-color};
+		--x-h3-color: #{$x-heading-color};
 	}
-	@if ($h4-color) {
-		--x-h4-color: #{$h4-color};
+	@if ($x-h4-color) {
+		--x-h4-color: #{$x-h4-color};
 	} @else {
-		--x-h4-color: #{$heading-color};
+		--x-h4-color: #{$x-heading-color};
 	}
 
-    --x-box-base-bg: #{$box-bg};
-	--x-box-border-color: #{$box-border-color};
+    --x-box-base-bg: #{$x-box-bg};
+	--x-box-border-color: #{$x-box-border-color};
 
-	--x-button-primary-color: #{$button-primary-color};
-	--x-button-primary-bg: #{$button-primary-bg};
-	--x-button-primary-hover-color: #{$button-primary-hover-color};
-	--x-button-primary-hover-bg: #{$button-primary-hover-bg};
-	--x-button-primary-active-color: #{$button-primary-active-color};
-	--x-button-primary-active-bg: #{$button-primary-active-bg};
-	--x-button-primary-border-color: #{$button-primary-border-color};
-	--x-button-primary-border-width: #{$button-primary-border-width};
+	--x-button-primary-color: #{$x-button-primary-color};
+	--x-button-primary-bg: #{$x-button-primary-bg};
+	--x-button-primary-hover-color: #{$x-button-primary-hover-color};
+	--x-button-primary-hover-bg: #{$x-button-primary-hover-bg};
+	--x-button-primary-active-color: #{$x-button-primary-active-color};
+	--x-button-primary-active-bg: #{$x-button-primary-active-bg};
+	--x-button-primary-border-color: #{$x-button-primary-border-color};
+	--x-button-primary-border-width: #{$x-button-primary-border-width};
 
-	--x-button-secondary-color: #{$button-secondary-color};
-	--x-button-secondary-bg: #{$button-secondary-bg};
-	--x-button-secondary-hover-color: #{$button-secondary-hover-color};
-	--x-button-secondary-hover-bg: #{$button-secondary-hover-bg};
-	--x-button-secondary-active-color: #{$button-secondary-active-color};
-	--x-button-secondary-active-bg: #{$button-secondary-active-bg};
-	--x-button-secondary-border-color: #{$button-secondary-border-color};
-	--x-button-secondary-border-width: #{$button-secondary-border-width};
+	--x-button-secondary-color: #{$x-button-secondary-color};
+	--x-button-secondary-bg: #{$x-button-secondary-bg};
+	--x-button-secondary-hover-color: #{$x-button-secondary-hover-color};
+	--x-button-secondary-hover-bg: #{$x-button-secondary-hover-bg};
+	--x-button-secondary-active-color: #{$x-button-secondary-active-color};
+	--x-button-secondary-active-bg: #{$x-button-secondary-active-bg};
+	--x-button-secondary-border-color: #{$x-button-secondary-border-color};
+	--x-button-secondary-border-width: #{$x-button-secondary-border-width};
 }
 
 .xprez-alternate-color {
-    --x-base-color: #{$alt-base-color};
-    --x-link-color: #{$alt-link-color};
-    --x-link-hover-color: #{$alt-link-hover-color};
-    --x-heading-color: #{$alt-heading-color};
-    --x-heading-emphasis-color: #{$alt-heading-emphasis-color}; 
+    --x-base-color: #{$x-alt-base-color};
+    --x-link-color: #{$x-alt-link-color};
+    --x-link-hover-color: #{$x-alt-link-hover-color};
+    --x-heading-color: #{$x-alt-heading-color};
+    --x-heading-emphasis-color: #{$x-alt-heading-emphasis-color}; 
    
-    @if ($alt-h2-color) {
-		--x-h2-color: #{$alt-h2-color};
+    @if ($x-alt-h2-color) {
+		--x-h2-color: #{$x-alt-h2-color};
 	} @else {
-		--x-h2-color: #{$alt-heading-color};
+		--x-h2-color: #{$x-alt-heading-color};
 	}
-	@if ($alt-h3-color) {
-		--x-h3-color: #{$alt-h3-color};
+	@if ($x-alt-h3-color) {
+		--x-h3-color: #{$x-alt-h3-color};
 	} @else {
-		--x-h3-color: #{$alt-heading-color};
+		--x-h3-color: #{$x-alt-heading-color};
 	}
-	@if ($alt-h4-color) {
-		--x-h4-color: #{$alt-h4-color};
+	@if ($x-alt-h4-color) {
+		--x-h4-color: #{$x-alt-h4-color};
 	} @else {
-		--x-h4-color: #{$alt-heading-color};
+		--x-h4-color: #{$x-alt-heading-color};
 	}
 
-	--x-box-base-bg: #{$alt-box-bg};
-	--x-box-border-color: #{$alt-box-border-color};
+	--x-box-base-bg: #{$x-alt-box-bg};
+	--x-box-border-color: #{$x-alt-box-border-color};
 
-	--x-button-primary-color: #{$alt-button-primary-color};
-	--x-button-primary-bg: #{$alt-button-primary-bg};
-	--x-button-primary-hover-color: #{$alt-button-primary-hover-color};
-	--x-button-primary-hover-bg: #{$alt-button-primary-hover-bg};
-	--x-button-primary-active-color: #{$alt-button-primary-active-color};
-	--x-button-primary-active-bg: #{$alt-button-primary-active-bg};
-	--x-button-primary-border-color: #{$alt-button-primary-border-color};
-	--x-button-primary-border-width: #{$alt-button-primary-border-width};
+	--x-button-primary-color: #{$x-alt-button-primary-color};
+	--x-button-primary-bg: #{$x-alt-button-primary-bg};
+	--x-button-primary-hover-color: #{$x-alt-button-primary-hover-color};
+	--x-button-primary-hover-bg: #{$x-alt-button-primary-hover-bg};
+	--x-button-primary-active-color: #{$x-alt-button-primary-active-color};
+	--x-button-primary-active-bg: #{$x-alt-button-primary-active-bg};
+	--x-button-primary-border-color: #{$x-alt-button-primary-border-color};
+	--x-button-primary-border-width: #{$x-alt-button-primary-border-width};
 
-	--x-button-secondary-color: #{$alt-button-secondary-color};
-	--x-button-secondary-bg: #{$alt-button-secondary-bg};
-	--x-button-secondary-hover-color: #{$alt-button-secondary-hover-color};
-	--x-button-secondary-hover-bg: #{$alt-button-secondary-hover-bg};
-	--x-button-secondary-active-color: #{$alt-button-secondary-active-color};
-	--x-button-secondary-active-bg: #{$alt-button-secondary-active-bg};
-	--x-button-secondary-border-color: #{$alt-button-secondary-border-color};
-	--x-button-secondary-border-width: #{$alt-button-secondary-border-width};
+	--x-button-secondary-color: #{$x-alt-button-secondary-color};
+	--x-button-secondary-bg: #{$x-alt-button-secondary-bg};
+	--x-button-secondary-hover-color: #{$x-alt-button-secondary-hover-color};
+	--x-button-secondary-hover-bg: #{$x-alt-button-secondary-hover-bg};
+	--x-button-secondary-active-color: #{$x-alt-button-secondary-active-color};
+	--x-button-secondary-active-bg: #{$x-alt-button-secondary-active-bg};
+	--x-button-secondary-border-color: #{$x-alt-button-secondary-border-color};
+	--x-button-secondary-border-width: #{$x-alt-button-secondary-border-width};
 }

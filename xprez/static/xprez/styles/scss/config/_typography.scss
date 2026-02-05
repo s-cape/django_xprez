@@ -1,32 +1,32 @@
 $use-xprez-typography: true !default;
 $use-xprez-buttons: true !default;
 
-$xprez-headings-font-weight: 600 !default;
+$x-headings-font-weight: 600 !default;
 
-$xprez-button-class: "btn" !default;
-$xprez-button-font-weight: 600 !default;
-$xprez-button-border-radius: .65em !default;
-$xprez-button-gap: .5rem !default;
+$x-button-class: "btn" !default;
+$x-button-font-weight: 600 !default;
+$x-button-border-radius: .65em !default;
+$x-button-gap: .5rem !default;
 
-$typography-config: (
+$x-typography-config: (
     "smallest": (
         "h2": (
             "font-size": 1.7rem,
             "line-height": 1.25,
             "margin-bottom": .75rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h3": (
             "font-size": 1.3rem,
             "line-height": 1.2,
             "margin-bottom": .75rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h4": (
             "font-size": 1.125rem,
             "line-height": 1.3,
             "margin-bottom": .75rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "p": (
             "font-size": 0.875rem,
@@ -52,8 +52,8 @@ $typography-config: (
             "line-height": 1,
             "padding-x": 2em,
             "padding-y": 1em,
-            "font-weight": $xprez-button-font-weight,
-            "border-radius": $xprez-button-border-radius
+            "font-weight": $x-button-font-weight,
+            "border-radius": $x-button-border-radius
         )
     ),
     "small": (
@@ -61,19 +61,19 @@ $typography-config: (
             "font-size": 2rem,
             "line-height": 1.2,
             "margin-bottom": .75rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h3": (
             "font-size": 1.625rem,
             "line-height": 1.25,
             "margin-bottom": .75rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h4": (
             "font-size": 1.125rem,
             "line-height": 1.3,
             "margin-bottom": .75rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "p": (
             "font-size": 1rem,
@@ -99,8 +99,8 @@ $typography-config: (
             "line-height": 1,
             "padding-x": 2em,
             "padding-y": 1em,
-            "font-weight": $xprez-button-font-weight,
-            "border-radius": $xprez-button-border-radius
+            "font-weight": $x-button-font-weight,
+            "border-radius": $x-button-border-radius
         )
     ),
     "normal": (
@@ -108,19 +108,19 @@ $typography-config: (
             "font-size": 2.5rem,
             "line-height": 1.125,
             "margin-bottom": .75rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h3": (
             "font-size": 2rem,
             "line-height": 1.2,
             "margin-bottom": .75rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h4": (
             "font-size": 1.5rem,
             "line-height": 1.25,
             "margin-bottom": .75rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "p": (
             "font-size": 1.125rem,
@@ -146,8 +146,8 @@ $typography-config: (
             "line-height": 1,
             "padding-x": 2em,
             "padding-y": 1em,
-            "font-weight": $xprez-button-font-weight,
-            "border-radius": $xprez-button-border-radius
+            "font-weight": $x-button-font-weight,
+            "border-radius": $x-button-border-radius
         )
     ),
     "large": (
@@ -155,19 +155,19 @@ $typography-config: (
             "font-size": 3rem,
             "line-height": 1.1,
             "margin-bottom": 1rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h3": (
             "font-size": 2.375rem,
             "line-height": 1.1,
             "margin-bottom": 1rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h4": (
             "font-size": 1.75rem,
             "line-height": 1.2,
             "margin-bottom": 1rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "p": (
             "font-size": 1.3125rem,
@@ -193,8 +193,8 @@ $typography-config: (
             "line-height": 1,
             "padding-x": 2em,
             "padding-y": 1em,
-            "font-weight": $xprez-button-font-weight,
-            "border-radius": $xprez-button-border-radius
+            "font-weight": $x-button-font-weight,
+            "border-radius": $x-button-border-radius
         )
     ),
     "largest": (
@@ -202,19 +202,19 @@ $typography-config: (
             "font-size": 3.5rem,
             "line-height": 1,
             "margin-bottom": 1.35rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h3": (
             "font-size": 2.75rem,
             "line-height": 1.1,
             "margin-bottom": 1.35rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "h4": (
             "font-size": 2rem,
             "line-height": 1.2,
             "margin-bottom": 1.35rem,
-            "font-weight": $xprez-headings-font-weight
+            "font-weight": $x-headings-font-weight
         ),
         "p": (
             "font-size": 1.5rem,
@@ -240,8 +240,8 @@ $typography-config: (
             "line-height": 1,
             "padding-x": 2em,
             "padding-y": 1em,
-            "font-weight": $xprez-button-font-weight,
-            "border-radius": $xprez-button-border-radius
+            "font-weight": $x-button-font-weight,
+            "border-radius": $x-button-border-radius
         )
     )
 ) !default;

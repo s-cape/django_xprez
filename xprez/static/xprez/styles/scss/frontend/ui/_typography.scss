@@ -2,7 +2,7 @@
 @use "../../library/rfs" as rfs;
 
 @if $use-xprez-typography {
-    @each $size-name, $size-config in $typography-config {
+    @each $size-name, $size-config in $x-typography-config {
         .xprez-font-size-#{$size-name} {
             @each $element, $properties in $size-config {
                 @if $element == "ul" {
@@ -30,6 +30,39 @@
                     }
                 }
             } 
+        }
+    }
+}
+
+.xprez-module {
+    h2 {
+        color: var(--x-h2-color, var(--x-heading-color));
+    }
+
+    h3 {
+        color: var(--x-h3-color, var(--x-heading-color));
+    }
+
+    h4 {
+        color: var(--x-h4-color, var(--x-heading-color));
+    }
+
+    p, li {
+        color: inherit;
+    }
+
+    h2, h3, h4 {
+        strong {
+            color: var(--x-heading-emphasis-color, var(--x-heading-color));
+            font-weight: inherit;
+        }
+    }
+
+    a:not(#{x-button-class}) {
+        color: var(--x-link-color);
+
+        &:hover {
+            color: var(--x-link-hover-color);
         }
     }
 }
