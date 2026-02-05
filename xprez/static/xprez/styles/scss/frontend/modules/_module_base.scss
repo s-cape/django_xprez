@@ -34,7 +34,7 @@
     }
 }
 
-@each $number, $breakpoint in $breakpoints {
+@each $number, $breakpoint in $x-breakpoints {
     @media (min-width: $breakpoint) {
         .xprez-#{$number}-background {
             background: var(--x-box-bg);
