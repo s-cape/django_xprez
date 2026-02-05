@@ -29,7 +29,36 @@
         gap: $xprez-button-gap; 
         // text-box-trim: trim-both;
         // text-box-edge: cap alphabetic;
-        border: none;
+
+        color: var(--x-button-primary-color);
+        background: var(--x-button-primary-bg);
+        border: var(--x-button-primary-border-width) solid var(--x-button-primary-border-color);
+
+        &:hover {
+            color: var(--x-button-primary-hover-color);
+            background: var(--x-button-primary-hover-bg);
+        }
+
+        &:active {
+            color: var(--x-button-primary-active-color);
+            background: var(--x-button-primary-active-bg);
+        }
+
+        &.#{$xprez-button-class}-secondary {
+            color: var(--x-button-secondary-color);
+            background: var(--x-button-secondary-bg);
+            border: var(--x-button-secondary-border-width) solid var(--x-button-secondary-border-color);
+
+            &:hover {
+                color: var(--x-button-secondary-hover-color);
+                background: var(--x-button-secondary-hover-bg);
+            }
+
+            &:active {
+                color: var(--x-button-secondary-active-color);
+                background: var(--x-button-secondary-active-bg);
+            }
+        }
     }
 }
 

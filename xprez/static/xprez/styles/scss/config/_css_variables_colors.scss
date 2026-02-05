@@ -26,6 +26,24 @@
 
     --x-box-base-bg: #{$box-bg};
 	--x-box-border-color: #{$box-border-color};
+
+	--x-button-primary-color: #{$button-primary-color};
+	--x-button-primary-bg: #{$button-primary-bg};
+	--x-button-primary-hover-color: #{$button-primary-hover-color};
+	--x-button-primary-hover-bg: #{$button-primary-hover-bg};
+	--x-button-primary-active-color: #{$button-primary-active-color};
+	--x-button-primary-active-bg: #{$button-primary-active-bg};
+	--x-button-primary-border-color: #{$button-primary-border-color};
+	--x-button-primary-border-width: #{$button-primary-border-width};
+
+	--x-button-secondary-color: #{$button-secondary-color};
+	--x-button-secondary-bg: #{$button-secondary-bg};
+	--x-button-secondary-hover-color: #{$button-secondary-hover-color};
+	--x-button-secondary-hover-bg: #{$button-secondary-hover-bg};
+	--x-button-secondary-active-color: #{$button-secondary-active-color};
+	--x-button-secondary-active-bg: #{$button-secondary-active-bg};
+	--x-button-secondary-border-color: #{$button-secondary-border-color};
+	--x-button-secondary-border-width: #{$button-secondary-border-width};
 }
 
 .xprez-alternate-color {
@@ -53,4 +71,22 @@
 
 	--x-box-base-bg: #{$alt-box-bg};
 	--x-box-border-color: #{$alt-box-border-color};
+
+	--x-button-primary-color: #{$alt-button-primary-color};
+	--x-button-primary-bg: #{$alt-button-primary-bg};
+	--x-button-primary-hover-color: #{$alt-button-primary-hover-color};
+	--x-button-primary-hover-bg: #{$alt-button-primary-hover-bg};
+	--x-button-primary-active-color: #{$alt-button-primary-active-color};
+	--x-button-primary-active-bg: #{$alt-button-primary-active-bg};
+	--x-button-primary-border-color: #{$alt-button-primary-border-color};
+	--x-button-primary-border-width: #{$alt-button-primary-border-width};
+
+	--x-button-secondary-color: #{$alt-button-secondary-color};
+	--x-button-secondary-bg: #{$alt-button-secondary-bg};
+	--x-button-secondary-hover-color: #{$alt-button-secondary-hover-color};
+	--x-button-secondary-hover-bg: #{$alt-button-secondary-hover-bg};
+	--x-button-secondary-active-color: #{$alt-button-secondary-active-color};
+	--x-button-secondary-active-bg: #{$alt-button-secondary-active-bg};
+	--x-button-secondary-border-color: #{$alt-button-secondary-border-color};
+	--x-button-secondary-border-width: #{$alt-button-secondary-border-width};
 }

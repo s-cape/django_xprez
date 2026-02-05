@@ -9,7 +9,7 @@
         "npm-run-all": "^4.1.5",
         "postcss": "^8.2.5",
         "postcss-cli": "^8.3.1",
-        "sass": "^1.32.8"
+        "sass": "~1.66.0"
     },
     "scripts": {
         "css-prefix": "postcss styles/*.css --verbose --use autoprefixer --no-map --replace",

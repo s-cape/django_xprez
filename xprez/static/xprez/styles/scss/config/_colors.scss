@@ -1,3 +1,5 @@
+@use "../library/contrast_color" as c;
+
 // Colors
 
 $white: #FFF !default;
@@ -24,6 +26,24 @@ $h4-color: null !default;
 $section-bg: transparent !default;
 $box-bg: $super-light-gray !default;
 $box-border-color: $light-gray !default;
+ 
+$button-primary-bg: $dark-gray !default;
+$button-primary-color: c.contrast-color($button-primary-bg, $black, $white) !default;
+$button-primary-hover-bg: darken($button-primary-bg, 4%) !default;
+$button-primary-hover-color: $button-primary-color !default;
+$button-primary-active-bg: darken($button-primary-bg, 8%) !default;
+$button-primary-active-color: $button-primary-color !default;
+$button-primary-border-color: $button-primary-color !default;
+$button-primary-border-width: 0 !default;
+
+$button-secondary-bg: $light-gray !default;
+$button-secondary-color: c.contrast-color($button-secondary-bg, $black, $white) !default;
+$button-secondary-hover-bg: darken($button-secondary-bg, 4%) !default;
+$button-secondary-hover-color: $button-secondary-color !default;
+$button-secondary-active-bg: darken($button-secondary-bg, 8%) !default;
+$button-secondary-active-color: $button-secondary-color !default;
+$button-secondary-border-color: $button-secondary-color !default;
+$button-secondary-border-width: 0 !default;
 
 // Alternate colors
 
@@ -40,3 +60,21 @@ $alt-h4-color: null !default;
 $alt-section-bg: $black !default;
 $alt-box-bg: $gray !default;
 $alt-box-border-color: $dark-gray !default;
+
+$alt-button-primary-bg: $white !default;
+$alt-button-primary-color: c.contrast-color($alt-button-primary-bg, $black, $white) !default;
+$alt-button-primary-hover-bg: darken($alt-button-primary-bg, 4%) !default;
+$alt-button-primary-hover-color: $alt-button-primary-color !default;
+$alt-button-primary-active-bg: darken($alt-button-primary-bg, 8%) !default;
+$alt-button-primary-active-color: $alt-button-primary-color !default;
+$alt-button-primary-border-color: $alt-button-primary-color !default;
+$alt-button-primary-border-width: 0 !default;
+
+$alt-button-secondary-bg: $light-gray !default;
+$alt-button-secondary-color: c.contrast-color($alt-button-secondary-bg, $black, $white) !default;
+$alt-button-secondary-hover-bg: darken($alt-button-secondary-bg, 4%) !default;
+$alt-button-secondary-hover-color: $alt-button-secondary-color !default;
+$alt-button-secondary-active-bg: darken($alt-button-secondary-bg, 8%) !default;
+$alt-button-secondary-active-color: $alt-button-secondary-color !default;
+$alt-button-secondary-border-color: $alt-button-secondary-color !default;
+$alt-button-secondary-border-width: 0 !default;
