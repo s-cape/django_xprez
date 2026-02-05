@@ -46,6 +46,15 @@
             font-weight: inherit;
         }
     }
+
+    &[onclick*="window.location.href"] {
+        cursor: pointer;
+        transition: translate 0.2s ease-in-out;
+
+        &:hover {
+            translate: 0 -0.125em;
+        }
+    }
 }
 
 @each $number, $breakpoint in $breakpoints {

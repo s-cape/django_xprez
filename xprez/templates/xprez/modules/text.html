@@ -1,10 +1,17 @@
 {% extends "xprez/modules/text_base.html" %}
 
+{% block attrs  %}
+    {{ block.super }}
+    {% if module.url %}
+    onclick="if (event.target.closest('a, button')) return; window.location.href='{{ module.url }}';"
+    {% endif %}
+{% endblock %}
+
 {% block content %}
-{{ module.background }}
+    {{ module.background }}
     {% if module.media %}
         <div class="xprez-text__image-wrapper">
-            {# TODO: sorl thum generation + width. height specification #}
+            {# TODO: sorl thumb generation + width. height specification #}
             <img class="xprez-text__image" src="{{ module.media.url }}" alt="{{ module.media.name }}" loading="lazy">
         </div>
     {% endif %}
