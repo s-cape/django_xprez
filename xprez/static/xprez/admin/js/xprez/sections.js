@@ -1,38 +1,30 @@
+import { XprezContentBase } from './contents_base.js';
 import { XprezSectionPopover } from './popovers.js';
 import { XprezAdderSectionBefore, XprezAdderSectionEnd, XprezSectionConfigAdder } from './adders.js';
 import { XprezSectionDeleter } from './deleters.js';
 import { XprezSectionConfig, XprezConfigParentMixin } from './configs.js';
 import { XprezSortable } from './sortable.js';
-import { XprezFieldController } from './fields.js';
 
-export class XprezSection {
+export class XprezSection extends XprezContentBase {
     constructor(xprez, sectionEl) {
+        super(sectionEl);
         this.xprez = xprez;
-        this.el = sectionEl;
-        this.initModules();
-        this.initFields();
         this.popover = new XprezSectionPopover(this);
         this.adderBefore = new XprezAdderSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-before']"), this);
         this.adderEnd = new XprezAdderSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-end']"), this);
         this.deleter = new XprezSectionDeleter(this);
-
+        this.initModules();
+        this.initFields();
         this.initCollapser();
         this.initConfigs();
         this.initModulesSortable();
+        this.initShowWhens();
     }
 
-    initFields() {
-        this.fields = [];
-        const popoverEl = this.el.querySelector("[data-component='xprez-section-popover']");
-        if (!popoverEl) return;
-
-        const configsContainerEl = popoverEl.querySelector("[data-component='xprez-section-configs']");
-        popoverEl.querySelectorAll('[data-component="field"]').forEach(fieldEl => {
-            // Skip fields inside configs container
-            if (configsContainerEl && configsContainerEl.contains(fieldEl)) return;
-            this.fields.push(new XprezFieldController(this, fieldEl));
-        });
-    }
+    get configsContainerSelector() { return "[data-component='xprez-section-configs']"; }
+    get configSelector() { return "[data-component='xprez-section-config']"; }
+    createConfig(configEl) { return new XprezSectionConfig(this, configEl); }
+    createConfigAdder() { return new XprezSectionConfigAdder(this.xprez, this); }
 
     id() { return this.el.querySelector("[name='section-id']").value; }
 
@@ -51,20 +43,6 @@ export class XprezSection {
         }
         const module = new ControllerClass(this, moduleEl);
         this.modules.push(module);
-    }
-
-    initConfigs() {
-        this.configsContainerEl = this.el.querySelector("[data-component='xprez-section-configs']");
-        this.configs = [];
-        this.el.querySelectorAll("[data-component='xprez-section-config']").forEach(
-            this.initConfig.bind(this)
-        );
-        this.configAdder = new XprezSectionConfigAdder(this.xprez, this);
-    }
-    initConfig(configEl) {
-        const config = new XprezSectionConfig(this, configEl);
-        this.configs.push(config);
-        return config;
     }
 
     get collapsedIds() {

@@ -1,46 +1,24 @@
+import { XprezContentBase } from './contents_base.js';
 import { XprezModulePopover } from './popovers.js';
 import { XprezModuleDeleter } from './deleters.js';
 import { XprezModuleConfig, XprezConfigParentMixin } from './configs.js';
 import { XprezModuleConfigAdder } from './adders.js';
-import { XprezFieldController } from './fields.js';
 
-export class XprezModule {
+export class XprezModule extends XprezContentBase {
     constructor(section, moduleEl) {
+        super(moduleEl);
         this.section = section;
-        this.el = moduleEl;
-        this.initFields();
         this.popover = new XprezModulePopover(this);
         this.deleter = new XprezModuleDeleter(this);
+        this.initFields();
         this.initConfigs();
+        this.initShowWhens();
     }
 
-    initFields() {
-        this.fields = [];
-        const popoverEl = this.el.querySelector("[data-component='xprez-module-popover']");
-        if (!popoverEl) return;
-
-        const configsContainerEl = popoverEl.querySelector("[data-component='xprez-module-configs']");
-        popoverEl.querySelectorAll('[data-component="field"]').forEach(fieldEl => {
-            // Skip fields inside configs container
-            if (configsContainerEl && configsContainerEl.contains(fieldEl)) return;
-            this.fields.push(new XprezFieldController(this, fieldEl));
-        });
-    }
-
-    initConfigs() {
-        this.configsContainerEl = this.el.querySelector("[data-component='xprez-module-configs']");
-        this.configs = [];
-        this.el.querySelectorAll("[data-component='xprez-module-config']").forEach(
-            this.initConfig.bind(this)
-        );
-        this.configAdder = new XprezModuleConfigAdder(this.section.xprez, this);
-    }
-
-    initConfig(configEl) {
-        const config = new XprezModuleConfig(this, configEl);
-        this.configs.push(config);
-        return config;
-    }
+    get configsContainerSelector() { return "[data-component='xprez-module-configs']"; }
+    get configSelector() { return "[data-component='xprez-module-config']"; }
+    createConfig(configEl) { return new XprezModuleConfig(this, configEl); }
+    createConfigAdder() { return new XprezModuleConfigAdder(this.section.xprez, this); }
 
     contentType() { return this.el.dataset.contentType; }
 }

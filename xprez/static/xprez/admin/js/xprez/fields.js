@@ -105,6 +105,7 @@ export class XprezFieldController {
 
         const affected = this._cascadeAndSyncValues(oldValue, newValue);
         this._refreshActiveStates(affected);
+        affected.filter((f) => f !== this).forEach((f) => f.inputEl.dispatchEvent(new Event("change", { bubbles: true })));
     }
 
     _cascadeAndSyncValues(oldValue, newValue) {
@@ -251,14 +252,20 @@ export class XprezFieldLink {
 
     // Syncing
 
-    syncAllGroups(silent = false) {
+    syncAllGroups(skipCascade = false) {
         this.groups.forEach(group => {
             const value = this.getFieldValue(group[0]);
             if (value == null) return;
             group.slice(1).forEach(name => {
                 const controller = this.getFieldController(name);
                 if (controller) {
-                    silent ? controller._setValueSilent(value) : controller.setValue(value);
+                    if (skipCascade) {
+                        if (controller._setValueSilent(value)) {
+                            controller.inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+                        }
+                    } else {
+                        controller.setValue(value);
+                    }
                 }
             });
         });
@@ -356,7 +363,10 @@ export class XprezFieldLink {
                 if (input) {
                     input.addEventListener('input', () => {
                         const affected = this.syncGroupSilent(name, group);
-                        affected.forEach(c => c.refreshActive());
+                        affected.forEach((c) => {
+                            c.refreshActive();
+                            c.inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+                        });
                     });
                 }
             });

@@ -5,16 +5,6 @@ export class XprezPopoverBase {
         this.bindElements(...args);
         this.bindEvents();
         this.openOnErrors();
-        this.initShowWhens();
-    }
-
-    initShowWhens() {
-        this.el.querySelectorAll("[data-show-when]").forEach(fieldEl => {
-            const closestComponent = fieldEl.closest("[data-component]");
-            if (closestComponent === this.el) {
-                new XprezShowWhen(this, fieldEl);
-            }
-        });
     }
 
     bindEvents() {
