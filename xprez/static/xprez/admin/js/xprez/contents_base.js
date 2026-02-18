@@ -1,5 +1,4 @@
-import { XprezFieldController } from './fields.js';
-import { XprezShowWhen } from './utils.js';
+import { XprezFieldController, XprezShowWhen } from './fields.js';
 
 /** Common base for content types (Section, Module): shared fields, configs, show-when. */
 export class XprezContentBase {
@@ -14,6 +13,10 @@ export class XprezContentBase {
             if (this.configsContainerEl.contains(fieldEl)) return;
             this.fields.push(new XprezFieldController(this, fieldEl));
         });
+    }
+
+    getFieldByInputName(htmlName) {
+        return this.fields?.find(f => f.inputEl?.name === htmlName) ?? null;
     }
 
     initShowWhens() {
