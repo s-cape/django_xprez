@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("xprez", "0028_refactor_migrate"),
+        ("xprez", "0029_refactor_process_modules"),
     ]
 
     operations = [

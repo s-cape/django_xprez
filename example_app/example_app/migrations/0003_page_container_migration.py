@@ -1,6 +1,5 @@
 from django.db import migrations
-
-from xprez.migrations._operations import ContentsContainerToContainer
+from xprez.migrations._refactor_0_3_0 import ContentsContainerToContainer
 
 
 class Migration(migrations.Migration):
