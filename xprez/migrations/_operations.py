@@ -5,8 +5,15 @@ Reference:
 `https://stackoverflow.com/questions/61665607/renaming-a-django-superclass-model-and-updating-the-subclass-pointers-correctly`
 """
 
-from django.db import models
+from django.db import migrations, models
 from django.db.migrations.operations.base import Operation
+
+
+def _get_settings(name):
+    """Lazy-load setting (avoids import-time issues during migration collection)."""
+    from xprez.conf import settings
+
+    return getattr(settings, name)
 
 
 class InheritanceChangeOperation(Operation):
@@ -165,3 +172,48 @@ class ContentsContainerToContainer(InheritanceChangeOperation):
             from_remote_model="xprez.contentscontainer",
             to_remote_model="xprez.container",
         )
+
+
+def MoveModule(
+    old_model,
+    new_model,
+    extra_fields,
+    new_model_config_model="xprez.ModuleConfig",
+):
+    """
+    Returns RunPython that migrates custom module data to a built-in xprez module.
+    Use when a custom module (e.g. XprezAnchor) became built-in (AnchorModule).
+
+    extra_fields: iterable of field names to copy from old to new (same name on both).
+    Must run after ContentToModule in the same migration.
+    """
+    old_model_app, old_model_name = old_model.split(".")
+    new_model_app, new_model_name = new_model.split(".")
+    new_model_config_app, new_model_config_name = new_model_config_model.split(".")
+
+    content_type = new_model
+
+    def migrate(apps, schema_editor):
+        default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+        OldModel = apps.get_model(old_model_app, old_model_name)
+        NewModel = apps.get_model(new_model_app, new_model_name)
+        NewModelConfig = apps.get_model(new_model_config_app, new_model_config_name)
+        for old in OldModel.objects.all():
+            create_kwargs = {
+                "position": old.position,
+                "section": old.module_ptr.section,
+                "content_type": content_type,
+                "saved": True,
+            }
+            for field in extra_fields:
+                create_kwargs[field] = getattr(old, field)
+            new_module = NewModel.objects.create(**create_kwargs)
+            NewModelConfig.objects.create(
+                module=new_module,
+                css_breakpoint=default_breakpoint,
+                saved=True,
+            )
+
+            old.module_ptr.delete()
+
+    return migrations.RunPython(migrate, migrations.RunPython.noop)

@@ -20,9 +20,6 @@ class VideoModule(Module):
 
     poster_image = models.ImageField(upload_to="video", null=True, blank=True)
     url = models.URLField()
-    # width = models.CharField(
-    #     max_length=50, choices=Module.SIZE_CHOICES, default=Module.SIZE_FULL
-    # )
     video_type = models.CharField(choices=TYPE_CHOICES, max_length=50, editable=False)
     video_id = models.CharField(max_length=200, editable=False)
 

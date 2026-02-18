@@ -6,8 +6,7 @@ from django.db import migrations, models
 from django.utils import timezone
 
 import xprez.admin.fields
-from xprez.conf import settings
-from xprez.migrations._operations import ContentToModule
+from xprez.migrations._operations import ContentToModule, _get_settings
 
 
 def _content_type(obj):
@@ -27,6 +26,8 @@ def _reset_sequences(schema_editor, models):
 
 
 def migrate_containers_sections_modules(apps, schema_editor):
+    default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+    xprez_defaults = _get_settings("XPREZ_DEFAULTS")
     ContentsContainer = apps.get_model("xprez", "ContentsContainer")
     Content = apps.get_model("xprez", "Content")
 
@@ -56,13 +57,13 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 saved=True,
             )
             section_config, _created = section.configs.get_or_create(
-                css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
+                css_breakpoint=default_breakpoint,
                 defaults={
                     "saved": True,
-                    "vertical_align_grid": settings.XPREZ_DEFAULTS["section_config"][
+                    "vertical_align_grid": xprez_defaults["section_config"][
                         "vertical_align_grid"
                     ],
-                    "horizontal_align_grid": settings.XPREZ_DEFAULTS["section_config"][
+                    "horizontal_align_grid": xprez_defaults["section_config"][
                         "horizontal_align_grid"
                     ],
                 },
@@ -142,11 +143,13 @@ class ModuleProcessorBase:
 
     def finalize(self, module):
         """Setup module attributes and create its config."""
+        default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+        xprez_defaults = _get_settings("XPREZ_DEFAULTS")
         config_class = self.apps.get_model(*self.get_config_class(module).split("."))
-        default_config = settings.XPREZ_DEFAULTS["module_config"]["default"]
+        default_config = xprez_defaults["module_config"]["default"]
         self.config, _created = config_class.objects.get_or_create(
             module=module,
-            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT,
+            css_breakpoint=default_breakpoint,
             defaults={
                 "saved": True,
                 "vertical_align_grid": default_config["vertical_align_grid"],
@@ -238,9 +241,8 @@ class GridboxesProcessor(TextModuleProcessorBase):
         )
         section.save()
 
-        section_config = section.configs.get(
-            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
-        )
+        default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+        section_config = section.configs.get(css_breakpoint=default_breakpoint)
         section_config.columns = self.old_content.columns
         section_config.gap_choice = self.MARGIN_TRANS.get(
             self.old_content.margin, "medium"
@@ -299,8 +301,9 @@ class QuotesProcessor(ModuleReplaceProcessor):
             quotes = quotes[:1]
 
         if len(quotes) > 1:
+            default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
             section_config = self.module_base.section.configs.get_or_create(
-                css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+                css_breakpoint=default_breakpoint
             )[0]
             section_config.columns = 2
             section_config.save()
@@ -348,9 +351,8 @@ class TextImageProcessor(ModuleReplaceProcessor):
         super().finalize_new_modules()
         # Set section to 2 columns for text+image layout
         section = self.module_base.section
-        section_config = section.configs.get(
-            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
-        )
+        default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+        section_config = section.configs.get(css_breakpoint=default_breakpoint)
         section_config.columns = 2
         section_config.gap_choice = "large"
         section_config.save()
@@ -373,8 +375,9 @@ class GalleryProcessor(SimpleModuleProcessor):
 
     def process(self):
         super().process()
+        default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
         section_config = self.module.section.configs.get(
-            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
+            css_breakpoint=default_breakpoint
         )
         section_config.max_width_choice = self.WIDTH_TRANS[self.old_content.width]
         section_config.columns = self.old_content.columns
@@ -492,11 +495,11 @@ class Migration(migrations.Migration):
             name="font_size",
             field=models.CharField(
                 choices=[
-                    ("smallest", "Smallest"),
+                    ("smallest", "Extra Small"),
                     ("small", "Small"),
                     ("normal", "Normal"),
                     ("large", "Large"),
-                    ("largest", "Largest"),
+                    ("largest", "Extra Large"),
                 ],
                 default="normal",
                 max_length=20,
@@ -548,11 +551,11 @@ class Migration(migrations.Migration):
             name="font_size",
             field=models.CharField(
                 choices=[
-                    ("smallest", "Smallest"),
+                    ("smallest", "Extra Small"),
                     ("small", "Small"),
                     ("normal", "Normal"),
                     ("large", "Large"),
-                    ("largest", "Largest"),
+                    ("largest", "Extra Large"),
                 ],
                 default="normal",
                 max_length=20,
@@ -573,11 +576,11 @@ class Migration(migrations.Migration):
             name="font_size",
             field=models.CharField(
                 choices=[
-                    ("smallest", "Smallest"),
+                    ("smallest", "Extra Small"),
                     ("small", "Small"),
                     ("normal", "Normal"),
                     ("large", "Large"),
-                    ("largest", "Largest"),
+                    ("largest", "Extra Large"),
                 ],
                 default="normal",
                 max_length=20,
@@ -614,11 +617,11 @@ class Migration(migrations.Migration):
             name="font_size",
             field=models.CharField(
                 choices=[
-                    ("smallest", "Smallest"),
+                    ("smallest", "Extra Small"),
                     ("small", "Small"),
                     ("normal", "Normal"),
                     ("large", "Large"),
-                    ("largest", "Largest"),
+                    ("largest", "Extra Large"),
                 ],
                 default="normal",
                 max_length=20,

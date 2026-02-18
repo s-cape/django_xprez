@@ -1,7 +1,7 @@
 {% extends "xprez/modules/base.html" %}
 {% load thumbnail xprez %}
 
-{% block css_class %}{{ block.super }} {{ module.width }}-width {% if module.poster_image %}js-video-with-poster{% endif %}{% endblock %}
+{% block css_class %}{{ block.super }} {% if module.poster_image %}js-video-with-poster{% endif %}{% endblock %}
 
 {% block content %}
     <div class="xprez-video-item">
@@ -41,8 +41,9 @@
             width="560" height="315"
             frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
             allow="autoplay"
+            referrerpolicy="strict-origin-when-cross-origin"
             {% if module.video_type == "youtube" %}
-                class="js-youtube" src="https://www.youtube.com/embed/{{ module.video_id }}?enablejsapi=1"
+                class="js-youtube" src="https://www.youtube-nocookie.com/embed/{{ module.video_id }}?enablejsapi=1"
             {% elif module.video_type == "vimeo" %}
                 class="js-vimeo" src="https://player.vimeo.com/video/{{ module.video_id }}?color=ffffff&portrait=0&badge=0&api=1"
             {% endif %}

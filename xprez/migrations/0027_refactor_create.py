@@ -129,11 +129,11 @@ class Migration(migrations.Migration):
                     "font_size",
                     models.CharField(
                         choices=[
-                            ("smallest", "Smallest"),
+                            ("smallest", "Extra Small"),
                             ("small", "Small"),
                             ("normal", "Normal"),
                             ("large", "Large"),
-                            ("largest", "Largest"),
+                            ("largest", "Extra Large"),
                         ],
                         default="normal",
                         max_length=20,
@@ -172,11 +172,11 @@ class Migration(migrations.Migration):
                     "font_size",
                     models.CharField(
                         choices=[
-                            ("smallest", "Smallest"),
+                            ("smallest", "Extra Small"),
                             ("small", "Small"),
                             ("normal", "Normal"),
                             ("large", "Large"),
-                            ("largest", "Largest"),
+                            ("largest", "Extra Large"),
                         ],
                         default="normal",
                         max_length=20,
@@ -191,6 +191,28 @@ class Migration(migrations.Migration):
             ],
             options={
                 "verbose_name": "Quote",
+            },
+            bases=("xprez.module",),
+        ),
+        migrations.CreateModel(
+            name="AnchorModule",
+            fields=[
+                (
+                    "module_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.module",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                ("key", models.SlugField(blank=True, max_length=100)),
+            ],
+            options={
+                "verbose_name": "Anchor",
             },
             bases=("xprez.module",),
         ),

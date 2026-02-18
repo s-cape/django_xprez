@@ -19,6 +19,7 @@ XPREZ_MODULES_AUTOREGISTER_BUILTINS = [
     "xprez.NumbersModule",
     "xprez.CodeInputModule",
     "xprez.CodeTemplateModule",
+    "xprez.AnchorModule",
 ]
 XPREZ_MODULES_AUTOREGISTER_CUSTOM = "__all__"
 
