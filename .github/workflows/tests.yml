@@ -33,9 +33,15 @@ jobs:
 
             -   name: Install Python requirements
                 run: pip install -r example_app/requirements.txt
-
+            -   name: Install project
+                run: pip install -e .
 
             -   name: Run python tests
-                run: python manage.py test --settings=example_app.settings_ci
+                run: python manage.py test --settings=example_app.settings_ci --keepdb
                 working-directory: ./example_app
+                env:
+                    XPREZ_TEST_DB_USER: postgres
+                    XPREZ_TEST_DB_PASSWORD: postgres
+                    XPREZ_TEST_DB_NAME: xprez_example_app
+                    XPREZ_TEST_DB_HOST: localhost
 
