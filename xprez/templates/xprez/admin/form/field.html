@@ -16,13 +16,7 @@
         </label>
     {% endif %}
     {% if field.field.widget.input_type == "select" %}
-        <span class="xprez-option__dropdown">
-            <select class="xprez-option__select" name="{{ field.html_name }}">
-                {% for choice in field.field.choices %}
-                    <option value="{{ choice.0 }}" {% if choice.0 == field.value %}selected{% endif %}>{{ choice.1 }}</option>
-                {% endfor %}
-            </select>
-        </span>
+        <span class="xprez-option__dropdown">{{ field }}</span>
     {% else %}
         {{ field }}
     {% endif %}

@@ -2,6 +2,9 @@ export class XprezDeleterBase {
     constructor(obj) {
         this.obj = obj;
         this.initElements();
+        if (this.inputEl) {
+            this.obj.el.dataset.mode = this.inputEl.checked ? "delete" : "";
+        }
         if (this.triggerEl) {
             this.triggerEl.addEventListener("click", this.delete.bind(this));
         }

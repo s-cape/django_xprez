@@ -61,7 +61,7 @@ class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
     admin_icon_template_name = "xprez/admin/icons/modules/text_base.html"
     config_model = "xprez.TextBaseConfig"
 
-    text = models.TextField(blank=True)
+    text = models.TextField(blank=False)
 
     class Meta:
         abstract = True
