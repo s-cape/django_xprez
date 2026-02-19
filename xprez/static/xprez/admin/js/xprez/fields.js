@@ -5,6 +5,8 @@ export class XprezFieldController {
         this.fieldName = el.dataset.fieldName;
         this.inputEl = el.querySelector('select, input');
 
+        this.showWhens = [];
+
         if (this.inputEl) {
             this._previousValue = this.getValue();
             this.refreshActive();
@@ -13,6 +15,9 @@ export class XprezFieldController {
         }
     }
 
+    // Value
+    // Public: setValue (set + propagate), setValuePrepare + setValueConfirm (batch: apply DOM then propagate)
+    // Internal: _setValueSilent (set DOM + state, no propagation/notifications; used by sync/cascade)
     getValue() {
         if (this.inputEl.type === 'checkbox') {
             return this.inputEl.checked ? 'true' : 'false';
@@ -31,10 +36,14 @@ export class XprezFieldController {
 
     setValue(value) {
         if (this.getValue() === value) return;
-        this._applyValue(value);
-        this.inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+        this.setValuePrepare(value);
+        this.setValueConfirm();
     }
 
+    setValuePrepare(value) { this._applyValue(value); }
+    setValueConfirm() { this._propagateChange(this._previousValue, this.getValue()); }
+
+    // Internal: set DOM + state only; no propagation, no notifications
     _setValueSilent(value) {
         if (this.getValue() === value) return false;
         this._applyValue(value);
@@ -42,41 +51,47 @@ export class XprezFieldController {
         return true;
     }
 
-    _getConfigParent() {
-        return this.parent.parent;
-    }
+    // Breakpoint navigation
+    _getConfigParent() { return this.parent.parent; }
 
-    _getOrderedConfigs() {
+    _getConfigsOrdered() {
         const configParent = this._getConfigParent();
         return configParent ? configParent.getConfigsOrdered() : [];
     }
 
-    getPreviousField() {
-        if (!this.parent.cssBreakpoint) return null;  // Only config fields have breakpoints
-        const ordered = this._getOrderedConfigs();
-        const bp = this.parent.cssBreakpoint();
-        const prevConfig = ordered.filter(c => c.cssBreakpoint() < bp).pop();
-        return prevConfig?.getFields(this.fieldName)[0] ?? null;
-    }
-
-    getNextField() {
+    _getAdjacentConfig(direction) {
         if (!this.parent.cssBreakpoint) return null;
-        const ordered = this._getOrderedConfigs();
+        const ordered = this._getConfigsOrdered();
         const bp = this.parent.cssBreakpoint();
-        const nextConfig = ordered.find(c => c.cssBreakpoint() > bp);
-        return nextConfig?.getFields(this.fieldName)[0] ?? null;
+        if (direction < 0) {
+            return ordered.filter(c => c.cssBreakpoint() < bp).pop() ?? null;
+        } else {
+            return ordered.find(c => c.cssBreakpoint() > bp) ?? null;
+        }
     }
 
-    getAllFollowingFields() {
-        if (!this.parent.cssBreakpoint) return [];
+    _getPreviousConfig() { return this._getAdjacentConfig(-1); }
+    _getNextConfig() { return this._getAdjacentConfig(1); }
 
-        const ordered = this._getOrderedConfigs();
-        const bp = this.parent.cssBreakpoint();
-        return ordered
-            .filter(c => c.cssBreakpoint() > bp)
-            .flatMap(c => c.getFields(this.fieldName));
+    getPreviousField() { return this._getPreviousConfig()?.getFields(this.fieldName)[0] ?? null; }
+    getNextField() { return this._getNextConfig()?.getFields(this.fieldName)[0] ?? null; }
+
+    getNextFields() {
+        const result = [];
+        let next = this.getNextField();
+        while (next) {
+            result.push(next);
+            next = next.getNextField();
+        }
+        return result;
     }
 
+    isVisible() {
+        const hidden = this.el.closest('[data-hidden]');
+        return !hidden || !this.parent.el.contains(hidden);
+    }
+
+    // Active state (data-active).
     computeIsActive() {
         const prev = this.getPreviousField();
         if (!prev) return true;  // Base breakpoint always active
@@ -90,6 +105,11 @@ export class XprezFieldController {
         if (!isActive && this._isLinked()) {
             isActive = this.fieldLink.computeAnyActive();
         }
+        // Previous hidden by ShowWhen → this field is effectively new
+        if (!isActive) {
+            const prev = this.getPreviousField();
+            if (prev && !prev.isVisible()) isActive = true;
+        }
         this.el.dataset.active = isActive ? 'true' : 'false';
     }
 
@@ -97,48 +117,38 @@ export class XprezFieldController {
         return this.fieldLink?.checkbox?.checked ?? false;
     }
 
-    _onInputChange() {
-        const oldValue = this._previousValue;
-        const newValue = this.getValue();
+    // Single path: sync link, cascade, refresh, notify ShowWhens, dispatch
+    _propagateChange(oldValue, newValue) {
         if (oldValue === newValue) return;
         this._previousValue = newValue;
 
-        const affected = this._cascadeAndSyncValues(oldValue, newValue);
-        this._refreshActiveStates(affected);
-        affected.filter((f) => f !== this).forEach((f) => f.inputEl.dispatchEvent(new Event("change", { bubbles: true })));
-    }
-
-    _cascadeAndSyncValues(oldValue, newValue) {
-        const affected = [this];
-
-        if (this.fieldLink && this._isLinked()) {
-            const inputName = this.inputEl?.name;
-            for (const group of this.fieldLink.groups) {
-                if (!group.includes(inputName)) continue;
-                for (const name of group) {
-                    if (name === inputName) continue;
-                    const linkedField = this.fieldLink.getFieldController(name);
-                    if (linkedField && linkedField.getValue() !== newValue) {
-                        const linkedOldValue = linkedField.getValue();
-                        linkedField._setValueSilent(newValue);
-                        affected.push(linkedField);
-                        this._cascadeField(linkedField, linkedOldValue, newValue, affected);
-                    }
-                }
-            }
+        const linkResult = this.fieldLink?.syncFrom(this, oldValue, newValue)
+            ?? [{ controller: this, oldValue }];
+        const affected = linkResult.map(r => r.controller);
+        for (const { controller, oldValue: ov } of linkResult) {
+            this._cascadeField(controller, ov, newValue, affected);
         }
 
-        this._cascadeField(this, oldValue, newValue, affected);
-        return affected;
+        this._refreshActiveStates(affected);
+        affected.forEach(f => f.showWhens.forEach(sw => sw.updateVisibility()));
+        affected.filter(f => f !== this).forEach(f =>
+            f.inputEl.dispatchEvent(new Event("change", { bubbles: true }))
+        );
+    }
+
+    _onInputChange() {
+        const newValue = this.getValue();
+        if (newValue === this._previousValue) return;
+        this._propagateChange(this._previousValue, newValue);
     }
 
     _cascadeField(field, oldValue, newValue, affected) {
         const linkState = field._isLinked();
-        for (const following of field.getAllFollowingFields()) {
-            if (following.getValue() !== oldValue) break;
-            if (following._isLinked() !== linkState) break;
-            following._setValueSilent(newValue);
-            affected.push(following);
+        for (const nextField of field.getNextFields()) {
+            if (nextField.getValue() !== oldValue) break;
+            if (nextField._isLinked() !== linkState) break;
+            nextField._setValueSilent(newValue);
+            affected.push(nextField);
         }
     }
 
@@ -151,9 +161,7 @@ export class XprezFieldController {
             const next = f.getNextField();
             if (next) allFields.add(next);
         }
-        for (const f of allFields) {
-            f.refreshActive();
-        }
+        for (const f of allFields) { f.refreshActive(); }
     }
 }
 
@@ -188,25 +196,10 @@ export class XprezFieldLink {
         return str.split(',').map(g => g.split(':').filter(Boolean)).filter(g => g.length > 1);
     }
 
-    getFieldController(name) {
-        return this.parent.getFieldByInputName?.(name) ?? null;
-    }
-
-    getFieldInput(name) {
-        return this.getFieldController(name)?.inputEl ?? null;
-    }
-
-    getFieldWrapper(name) {
-        return this.getFieldController(name)?.el ?? null;
-    }
-
-    getFieldValue(name) {
-        return this.getFieldController(name)?.getValue() ?? null;
-    }
-
-    setFieldValue(name, value) {
-        this.getFieldController(name)?.setValue(value);
-    }
+    getFieldController(name) { return this.parent.getFieldByInputName?.(name) ?? null; }
+    getFieldWrapper(name) { return this.getFieldController(name)?.el ?? null; }
+    getFieldValue(name) { return this.getFieldController(name)?.getValue() ?? null; }
+    setFieldValue(name, value) { this.getFieldController(name)?.setValue(value); }
 
     // State management
 
@@ -252,38 +245,33 @@ export class XprezFieldLink {
 
     // Syncing
 
-    syncAllGroups(skipCascade = false) {
+    // Sync linked fields in same config to newValue; return { controller, oldValue } for each (for cascade)
+    syncFrom(sourceController, oldValue, newValue) {
+        const result = [{ controller: sourceController, oldValue }];
+        if (!this.checkbox.checked) return result;
+        const inputName = sourceController.inputEl?.name;
+        for (const group of this.groups) {
+            if (!group.includes(inputName)) continue;
+            for (const name of group) {
+                if (name === inputName) continue;
+                const linkedField = this.getFieldController(name);
+                if (linkedField && linkedField.getValue() !== newValue) {
+                    result.push({ controller: linkedField, oldValue: linkedField.getValue() });
+                    linkedField._setValueSilent(newValue);
+                }
+            }
+        }
+        return result;
+    }
+
+    syncAllGroups() {
         this.groups.forEach(group => {
             const value = this.getFieldValue(group[0]);
             if (value == null) return;
             group.slice(1).forEach(name => {
-                const controller = this.getFieldController(name);
-                if (controller) {
-                    if (skipCascade) {
-                        if (controller._setValueSilent(value)) {
-                            controller.inputEl.dispatchEvent(new Event("change", { bubbles: true }));
-                        }
-                    } else {
-                        controller.setValue(value);
-                    }
-                }
+                this.getFieldController(name)?.setValue(value);
             });
         });
-    }
-
-    syncGroupSilent(sourceName, group) {
-        if (!this.checkbox.checked) return [];
-        const value = this.getFieldValue(sourceName);
-        const affected = [];
-        for (const name of group) {
-            if (name === sourceName) continue;
-            const controller = this.getFieldController(name);
-            if (controller && controller.getValue() !== value) {
-                controller._setValueSilent(value);
-                affected.push(controller);
-            }
-        }
-        return affected;
     }
 
     getAllControllers() {
@@ -315,7 +303,7 @@ export class XprezFieldLink {
         const firstController = this.getFieldController(this.groups[0]?.[0]);
         if (!firstController) return affected;
 
-        for (const following of firstController.getAllFollowingFields()) {
+        for (const following of firstController.getNextFields()) {
             const nextFieldLink = following.fieldLink;
             if (!nextFieldLink) break;
             if (nextFieldLink.checkbox.checked !== wasLinked) break;
@@ -326,9 +314,7 @@ export class XprezFieldLink {
             if (!valuesMatch) break;
 
             nextFieldLink.setLinked(nowLinked);
-            if (nowLinked) {
-                nextFieldLink.syncAllGroups(true);
-            }
+            if (nowLinked) { nextFieldLink.syncAllGroups(); }
             affected.push(nextFieldLink);
         }
         return affected;
@@ -339,12 +325,10 @@ export class XprezFieldLink {
     initListeners() {
         this.checkbox.addEventListener('change', () => {
             const wasLinked = !this.checkbox.checked;
-            // Capture values BEFORE sync (for cascade comparison)
             const valuesBefore = this.getAllValues();
             this.updateUI();
-            if (this.checkbox.checked) {
-                this.syncAllGroups();
-            }
+            if (this.checkbox.checked) { this.syncAllGroups(); }
+
             const affected = this.cascadeLinkState(wasLinked, valuesBefore);
 
             const allControllers = new Set(this.getAllControllers());
@@ -356,20 +340,37 @@ export class XprezFieldLink {
                 c.getNextField()?.refreshActive();
             });
         });
+    }
+}
 
-        this.groups.forEach(group => {
-            group.forEach(name => {
-                const input = this.getFieldInput(name);
-                if (input) {
-                    input.addEventListener('input', () => {
-                        const affected = this.syncGroupSilent(name, group);
-                        affected.forEach((c) => {
-                            c.refreshActive();
-                            c.inputEl.dispatchEvent(new Event("change", { bubbles: true }));
-                        });
-                    });
-                }
-            });
-        });
+
+export class XprezShowWhen {
+    constructor(parent, el) {
+        this.el = el;
+        const [fieldName, targetValue] = this.el.getAttribute("data-show-when").split(":");
+        this.targetValue = targetValue;
+        this.controller = parent.getFieldByInputName(fieldName);
+        this.controller.showWhens.push(this);
+        this.updateVisibility();
+    }
+
+    updateVisibility() {
+        const wasHidden = this.el.hasAttribute("data-hidden");
+        if (this.controller.getValue() === this.targetValue) {
+            this.el.removeAttribute("data-hidden");
+        } else {
+            this.el.setAttribute("data-hidden", "");
+        }
+        if (wasHidden !== this.el.hasAttribute("data-hidden")) {
+            this._refreshContainedFields();
+        }
+    }
+
+    _refreshContainedFields() {
+        const fields = this.controller.parent.fields?.filter(f => this.el.contains(f.el)) ?? [];
+        for (const field of fields) {
+            field.refreshActive();
+            field.getNextField()?.refreshActive();
+        }
     }
 }

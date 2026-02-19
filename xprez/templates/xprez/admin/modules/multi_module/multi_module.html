@@ -1,0 +1,22 @@
+{% extends "xprez/admin/modules/base.html" %}
+
+{% block content %}
+    <div
+        data-component="xprez-multi-module-items"
+        data-module-pk="{{ module.pk }}"
+    >
+        {% for item in module.admin_form.xprez_items %}
+            {% include module.admin_item_template_name %}
+        {% endfor %}
+    </div>
+
+    {% block add_item %}
+        <div
+            data-component="xprez-multi-module-add"
+            data-add-url="{% url module.xprez_add_item_url_name module.pk %}"
+            data-module-pk="{{ module.pk }}"
+        >
+            <button type="button" class="xprez-btn">Add item</button>
+        </div>
+    {% endblock %}
+{% endblock %}

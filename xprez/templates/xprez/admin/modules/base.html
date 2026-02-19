@@ -5,12 +5,12 @@
     data-content-type="{{ module.content_type }}"
     data-mode="{# (empty)/edit/select/delete #}"
     data-prefix="{{ module.admin_form.prefix }}"
-    data-js-controller-class="{{ module.js_controller_class }}"
+    data-js-controller-class="{{ module.admin_js_controller_class }}"
 >
     <div class="xprez-module__header" data-draggable-module-handle>
         <div class="xprez-module__name">
             <span class="xprez-module__name-icon">
-                {% include "xprez/admin/icons/modules/text.html" %}
+                {{ module.admin_icon|safe }}
             </span>
             <div class="xprez-option" data-active="true">
                 <label >

@@ -1,5 +1,3 @@
-import { XprezShowWhen } from './utils.js';
-
 export class XprezPopoverBase {
     constructor(...args) {
         this.bindElements(...args);

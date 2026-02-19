@@ -19,6 +19,7 @@ XPREZ_MODULES_AUTOREGISTER_BUILTINS = [
     "xprez.NumbersModule",
     "xprez.CodeInputModule",
     "xprez.CodeTemplateModule",
+    "xprez.AnchorModule",
 ]
 XPREZ_MODULES_AUTOREGISTER_CUSTOM = "__all__"
 
@@ -42,6 +43,7 @@ XPREZ_BREAKPOINTS = {
     5: {"name": "Extra large devices (&gt; 1500px)", "min_width": 1500},
 }
 XPREZ_DEFAULT_BREAKPOINT = 0
+XPREZ_GALLERY_FULL_WIDTH_PX = 2700
 
 XPREZ_DEFAULTS = {
     "section": {

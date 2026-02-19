@@ -2,9 +2,9 @@
 	{% for item in clipboard %}
 		<div class="xprez-clipboard-list__item">
 			<div class="xprez-clipboard-list__icon">
-				{% with icon=item.obj.icon %}
+				{% with icon=item.obj.admin_icon %}
 					{% if icon %}
-						{{ item.obj.icon }}
+						{{ item.obj.admin_icon }}
 					{% else %}
 						{% include "../icons/clipboard_item.html" %}
 					{% endif %}

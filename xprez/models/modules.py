@@ -1,7 +1,7 @@
 from django.apps import apps
 from django.db import models
 from django.db.models import F
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import re_path
 from django.utils.decorators import method_decorator
@@ -22,8 +22,8 @@ class Module(ConfigParentMixin, models.Model):
     constants = constants
 
     config_model = "xprez.ModuleConfig"
-    form_class = "xprez.admin.forms.BaseModuleForm"
-    js_controller_class = "XprezModule"
+    admin_form_class = "xprez.admin.forms.ModuleForm"
+    admin_js_controller_class = "XprezModule"
 
     # SIZE_FULL = "full"
     # SIZE_MID = "mid"
@@ -172,7 +172,7 @@ class Module(ConfigParentMixin, models.Model):
         )
 
     def get_admin_form_class(self):
-        cls = import_class(self.form_class)
+        cls = import_class(self.admin_form_class)
         if cls._meta.model:
             return cls
         else:
@@ -203,6 +203,8 @@ class Module(ConfigParentMixin, models.Model):
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)
+        if getattr(admin, "admin_site", None):
+            self._xprez_admin_namespace = admin.admin_site.name
 
     def is_admin_form_valid(self):
         self.admin_form.xprez_configs_all_valid = True
@@ -246,15 +248,15 @@ class Module(ConfigParentMixin, models.Model):
         return []
 
     @classproperty
-    def icon_template_name(cls):
+    def admin_icon_template_name(cls):
         return [
             f"xprez/admin/icons/modules/{cls.module_key}.html",
             "xprez/admin/icons/modules/default.html",
         ]
 
     @classproperty
-    def icon(cls):
-        return render_to_string(cls.icon_template_name)
+    def admin_icon(cls):
+        return render_to_string(cls.admin_icon_template_name)
 
     def clipboard_verbose_name(self):
         return self.polymorph._meta.verbose_name
@@ -295,37 +297,78 @@ class FontSizeModuleMixin(models.Model):
 
 
 class MultiModule(Module):
-    """Module with multiple child items."""
-
-    formset_factory = NotImplemented
+    """Module with multiple child items managed via individual forms."""
 
     items_attribute = "items"
+    admin_item_template_name = "xprez/admin/modules/multi_module/multi_module_item.html"
+    admin_item_form_class = "xprez.admin.forms.MultiModuleItemForm"
+    admin_js_controller_class = "XprezMultiModule"
 
-    def get_formset_queryset(self):
-        return getattr(self, self.items_attribute).all()
+    def get_admin_item_form_class(self, item):
+        cls = import_class(self.admin_item_form_class)
+        if cls._meta.model:
+            return cls
+
+        class ItemForm(cls):
+            class Meta(cls.Meta):
+                model = item.__class__
+
+        return ItemForm
+
+    def get_items_queryset(self, data=None):
+        qs = getattr(self, self.items_attribute)
+        if data is None:
+            return qs.filter(saved=True).order_by("position")
+        ids = [int(id) for id in data.getlist("item-id")]
+        items = list(qs.filter(pk__in=ids))
+        items.sort(key=lambda item: ids.index(item.pk))
+        return items
 
     def build_admin_form(self, admin, data=None, files=None):
-        super().build_admin_form(admin, data)
-        FormSet = import_class(self.formset_factory)
-        self.formset = FormSet(
-            instance=self,
-            queryset=self.get_formset_queryset(),
-            data=data,
-            files=files,
-            prefix=f"{self.key}-items",
-        )
+        super().build_admin_form(admin, data, files)
+        items = self.get_items_queryset(data)
+        self.admin_form.xprez_items = []
+        for item in items:
+            form_class = self.get_admin_item_form_class(item)
+            item.admin_form = form_class(
+                instance=item, prefix=item.key, data=data, files=files
+            )
+            self.admin_form.xprez_items += [item]
 
     def save_admin_form(self, request):
         super().save_admin_form(request)
-        self.formset.save()
+        for index, item in enumerate(self.admin_form.xprez_items):
+            if (item.admin_form.cleaned_data or {}).get("delete"):
+                item.delete()
+            else:
+                inst = item.admin_form.save(commit=False)
+                inst.saved = True
+                inst.position = index
+                inst.save()
 
     def is_admin_form_valid(self):
-        return super().is_admin_form_valid() and self.formset.is_valid()
+        items_valid = all(
+            item.admin_form.is_valid() for item in self.admin_form.xprez_items
+        )
+        return super().is_admin_form_valid() and items_valid
 
     def admin_has_errors(self):
-        return super().admin_has_errors() or (
-            self.formset.total_error_count() > 0 and not self.formset.is_valid()
+        items_errors = any(
+            item.admin_form.errors for item in self.admin_form.xprez_items
         )
+        return super().admin_has_errors() or items_errors
+
+    def build_item(self):
+        """Build an unsaved item instance (no DB save)."""
+        item_model = getattr(self, self.items_attribute).model
+        position = getattr(self, self.items_attribute).count()
+        return item_model(**{item_model.module_foreign_key: self, "position": position})
+
+    def create_item(self):
+        """Build + save item with saved=False."""
+        item = self.build_item()
+        item.save()
+        return item
 
     def copy(self, for_container=None, save=True, position=None):
         inst = super().copy(for_container, save=save, position=position)
@@ -334,8 +377,42 @@ class MultiModule(Module):
         return inst
 
     def copy_items(self, inst):
-        for item in self.get_formset_queryset():
+        for item in getattr(self, self.items_attribute).filter(saved=True):
             item.copy(inst)
+
+    @classmethod
+    def get_admin_urls(cls):
+        cls_name = cls.__name__.lower()
+        return [
+            re_path(
+                r"^{}/add-item/(?P<module_pk>\d+)/".format(cls_name),
+                cls.add_item_view,
+                name=cls.get_add_item_url_name(),
+            ),
+        ]
+
+    @classmethod
+    @method_decorator(xprez_staff_member_required)
+    def add_item_view(cls, request, module_pk):
+        module = cls.objects.get(pk=module_pk)
+        item = module.create_item()
+        form_class = module.get_admin_item_form_class(item)
+        item.admin_form = form_class(instance=item, prefix=item.key)
+        return HttpResponse(
+            render_to_string(
+                cls.admin_item_template_name,
+                {"item": item, "module": module},
+            )
+        )
+
+    @classmethod
+    def get_add_item_url_name(cls):
+        return "{}_ajax_add_item".format(cls.__name__.lower())
+
+    @property
+    def xprez_add_item_url_name(self):
+        ns = getattr(self, "_xprez_admin_namespace", None)
+        return "{}:{}".format(ns, self.get_add_item_url_name()) if ns else ""
 
     class Meta:
         abstract = True
@@ -348,6 +425,12 @@ class MultiModuleItem(models.Model):
     """
 
     module_foreign_key = "module"
+    saved = models.BooleanField(default=False, editable=False)
+    position = models.PositiveSmallIntegerField(default=0)
+
+    @property
+    def key(self):
+        return f"item-{self.pk}"
 
     def copy(self, for_module, save=True):
         if not for_module:
@@ -365,64 +448,57 @@ class MultiModuleItem(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ("position",)
 
 
 class UploadMultiModule(MultiModule):
     """Multi-module with AJAX file upload support."""
 
-    admin_formset_item_template_name = NotImplemented
+    admin_template_name = "xprez/admin/modules/multi_module/upload_multi_module.html"
+    admin_js_controller_class = "XprezUploadMultiModule"
 
     class Meta:
         abstract = True
 
-    class AdminMedia:
-        js = (
-            "xprez/admin/libs/dropzone/dropzone.js",
-            "xprez/admin/js/upload_multi_module.js",
-        )
+    def create_item_from_file(self, file):
+        """Create item from uploaded file; saves to DB with saved=False."""
+        item_model = getattr(self, self.items_attribute).model
+        return item_model.create_from_file(file, self)
 
     @classmethod
     @method_decorator(xprez_staff_member_required)
-    def upload_file_view(cls, request, module_pk):
+    def upload_item_view(cls, request, module_pk):
+        """Handle one file per request; returns HTML for the new item row."""
         module = cls.objects.get(pk=module_pk)
-        file_list = request.FILES.getlist("file")
-        if len(file_list) > 0:
-            file_ = file_list[0]
-            FormSet = import_class(cls.formset_factory)
-            item = FormSet.model.create_from_file(file_, module)
-            queryset = module.get_formset_queryset()
-            item_formset = FormSet(
-                instance=module,
-                queryset=queryset,
-                prefix=f"module-{module.pk}-items",
+        file = request.FILES.get("file")
+        if not file:
+            return JsonResponse(status=400, data={"error": "No file uploaded"})
+        item = module.create_item_from_file(file)
+        form_class = module.get_admin_item_form_class(item)
+        item.admin_form = form_class(instance=item, prefix=item.key)
+        return HttpResponse(
+            render_to_string(
+                cls.admin_item_template_name,
+                {"item": item, "module": module},
             )
-            item_form = item_formset.forms[-1]
-            return JsonResponse(
-                data={
-                    "form": item_form.as_p(),
-                    "template": render_to_string(
-                        cls.admin_formset_item_template_name,
-                        {
-                            "item": item,
-                            "module": module,
-                            "number": queryset.count() - 1,
-                        },
-                    ),
-                }
-            )
-        return JsonResponse(status=400, data={"error": "No files uploaded"})
+        )
 
     @classmethod
     def get_admin_urls(cls):
         cls_name = cls.__name__.lower()
-        return [
+        return super().get_admin_urls() + [
             re_path(
                 r"^{}/upload-item/(?P<module_pk>\d+)/".format(cls_name),
-                cls.upload_file_view,
+                cls.upload_item_view,
                 name=cls.get_upload_url_name(),
             ),
         ]
 
     @classmethod
-    def get_upload_url_name(self):
-        return "{}_ajax_upload_item".format(self.__class__.__name__.lower())
+    def get_upload_url_name(cls):
+        return "{}_ajax_upload_item".format(cls.__name__.lower())
+
+    @property
+    def xprez_upload_item_url_name(self):
+        ns = getattr(self, "_xprez_admin_namespace", None)
+        return "{}:{}".format(ns, self.get_upload_url_name()) if ns else ""

@@ -1,14 +1,17 @@
-<div class="xprez-form-table">
-	<div class="js-item xprez-form-row" data-number="{{ number }}">
-		<div class="xprez-cell-label">
-			<label >File description:</label>
-		</div>
-		<div class="xprez-cell">
-			<input type="text" value="" class="js-text_controller" data-formfield_selector="#id_downloadcontents-{{ module.pk }}-{{ number }}-description" placeholder="{{ item.get_default_file_name }}" />
-			<span class="xprez-icon-btn-remove js-checkbox_controller" data-formfield_selector="#id_downloadcontents-{{ module.pk }}-{{ number }}-DELETE"></span>
-			<br>
+{% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
 
-			<div class="xprez-cell-info"><a href="{{ item.file.url }}" target="_blank" class="xprez-">{{ item.file.name }}</a></div>
-		</div>
-	</div>
-</div>
+{% comment %} {% block item_root_extra_class %}xprez-form-row{% endblock %} {% endcomment %}
+
+{% comment %} {% block item_header %}{% endblock %} {% endcomment %}
+
+{% block item_content %}
+    <div class="xprez-cell-label">
+        <label>File description:</label>
+    </div>
+    <div class="xprez-cell">
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.description label=False %}
+        <div class="xprez-cell-info">
+            <a href="{{ item.file.url }}" target="_blank">{{ item.file.name }}</a>
+        </div>
+    </div>
+{% endblock %}

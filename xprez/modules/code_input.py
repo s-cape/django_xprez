@@ -1,14 +1,14 @@
 from django.db import models
 
-from xprez.admin.forms import BaseModuleForm
+from xprez.admin.forms import ModuleForm
 from xprez.models.modules import Module
 
 
 class CodeInputModule(Module):
-    admin_template_name = "xprez/admin/modules/code_input.html"
     front_template_name = "xprez/modules/code_input.html"
-    icon_template_name = "xprez/admin/icons/modules/code_input.html"
-    form_class = "xprez.modules.code_input.CodeInputModuleForm"
+    admin_template_name = "xprez/admin/modules/code_input.html"
+    admin_icon_template_name = "xprez/admin/icons/modules/code_input.html"
+    admin_form_class = "xprez.modules.code_input.CodeInputModuleForm"
 
     code = models.TextField()
 
@@ -16,7 +16,7 @@ class CodeInputModule(Module):
         return self.code
 
 
-class CodeInputModuleForm(BaseModuleForm):
+class CodeInputModuleForm(ModuleForm):
     class Meta:
         model = CodeInputModule
         fields = "__all__"

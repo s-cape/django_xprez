@@ -1,15 +1,15 @@
 from django import forms
 from django.db import models
 
-from xprez.admin.forms import BaseModuleForm
+from xprez.admin.forms import ModuleForm
 from xprez.models.modules import FontSizeModuleMixin, Module
 
 
 class QuoteModule(FontSizeModuleMixin, Module):
-    admin_template_name = "xprez/admin/modules/quote.html"
     front_template_name = "xprez/modules/quote.html"
-    icon_template_name = "xprez/admin/icons/modules/quote.html"
-    form_class = "xprez.modules.quote.QuoteModuleForm"
+    admin_template_name = "xprez/admin/modules/quote.html"
+    admin_icon_template_name = "xprez/admin/icons/modules/quote.html"
+    admin_form_class = "xprez.modules.quote.QuoteModuleForm"
 
     name = models.CharField(max_length=255)
     subtitle = models.CharField(max_length=255, null=True, blank=True)
@@ -21,7 +21,7 @@ class QuoteModule(FontSizeModuleMixin, Module):
         verbose_name = "Quote"
 
 
-class QuoteModuleForm(BaseModuleForm):
+class QuoteModuleForm(ModuleForm):
     class Meta:
         model = QuoteModule
         fields = "__all__"
