@@ -1,15 +1,15 @@
 {% load static xprez_admin %}
 <div
-    class="xprez-module {% if module.admin_form.errors %}xprez-module--has-errors{% endif %}"
+    class="xprez-admin-module {% if module.admin_form.errors %}xprez-module--has-errors{% endif %}"
     data-component="xprez-module"
     data-content-type="{{ module.content_type }}"
     data-mode="{# (empty)/edit/select/delete #}"
     data-prefix="{{ module.admin_form.prefix }}"
     data-js-controller-class="{{ module.admin_js_controller_class }}"
 >
-    <div class="xprez-module__header" data-draggable-module-handle>
-        <div class="xprez-module__name">
-            <span class="xprez-module__name-icon">
+    <div class="xprez-admin-module__header" data-draggable-module-handle>
+        <div class="xprez-admin-module__name">
+            <span class="xprez-admin-module__name-icon">
                 {{ module.admin_icon|safe }}
             </span>
             <div class="xprez-option" data-active="true">
@@ -22,7 +22,7 @@
             <span class="xprez-option-group__title-text">{{ module.verbose_name }}</span>
         </div>
 
-        <div class="xprez-module__actions">
+        <div class="xprez-admin-module__actions">
             {% block actions %}
                 <span class="xprez-icon-btn" title="Copy">
                     <i class="xprez-icon-copy"></i>
@@ -33,7 +33,7 @@
             {% endblock %}
         </div>
 
-        <div class="xprez-module__actions xprez-module__actions--right">
+        <div class="xprez-admin-module__actions xprez-admin-module__actions--right">
             <span class="xprez-icon-btn" title="Delete" data-component="xprez-module-delete-trigger">
                 <i class="xprez-icon-delete"></i>
                 <span data-hidden>{{ module.admin_form.delete }}</span>
@@ -46,10 +46,10 @@
         <span class="xprez-btn xprez-btn__danger" data-component="xprez-module-undelete">undelete</span>
     </div>
 
-    <div class="xprez-module__body">
-        <div class="xprez-module__body">
-            {% block content %}
-                <div class="xprez-form-table">
+    <div class="xprez-admin-module__body">
+        {% block content %}
+            <div class="xprez-form-table">
+                <div class="xprez-option-group">
                     {% if module.preview_image %}
                         <img src="{% static module.preview_image %}" alt="" class="xprez-module__preview-image">
                     {% endif %}
@@ -61,8 +61,8 @@
                         {% endfor %}
                     {% endblock %}
                 </div>
-            {% endblock %}
-        </div>
+            </div>
+        {% endblock %}
     </div>
 
     <div popover="manual" class="xprez-popover" data-component="xprez-module-popover">

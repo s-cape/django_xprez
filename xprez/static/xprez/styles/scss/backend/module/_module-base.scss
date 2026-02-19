@@ -1,13 +1,13 @@
-.xprez-module {
+.xprez-admin-module {
+	--x-admin-option-font-size: 14px;
+
 	border: 1px solid $b-gray-4;
-	margin: $g 0;
+	margin: 1rem 0;
 	border-radius: var(--x-admin-border-radius-md);
-	background: var(--x-admin-module-bg);
+	background: var(--x-admin-module-bg); 
+	overflow: hidden;
+
 	&.collapsed .xprez-module__collapse-cont {
 		display: none;
-	}
-
-	&:has(.xprez-module__visibility-toggle.active) {
-		// background: var(--x-admin-module-bg-stripes);
 	}
 }

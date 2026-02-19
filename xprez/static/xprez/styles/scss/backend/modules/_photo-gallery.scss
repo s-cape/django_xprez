@@ -96,9 +96,9 @@
 	border-radius: 2px;
 	@include type(16px);
 	text-align: center;
-	padding: $g*1.5 15px;
+	padding: 1.5rem 15px;
 	color: $b-gray-6;
-	margin-bottom: $g;
+	margin-bottom: 1rem;
 	cursor: pointer;
 	font-style: italic;
 	overflow: hidden;

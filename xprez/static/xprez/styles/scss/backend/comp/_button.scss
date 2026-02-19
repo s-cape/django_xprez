@@ -5,12 +5,12 @@
 	background: $b-gray-5;
 	display: inline-flex;
 	align-items: center;
-	color: $txt-gray;
+	color: $admin-color;
 	gap: 8px;
 
 	&:hover {
 		background: darken($b-gray-5, 4%);
-		color: $txt-gray;
+		color: $admin-color;
 	}
 
 	*[class*="xprez-icon-"] {

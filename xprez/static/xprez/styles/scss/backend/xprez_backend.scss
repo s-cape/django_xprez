@@ -1,16 +1,18 @@
 // SCSS imports
-@import "../config";
+
+// @import "../config";
 @import "../library/mixins";
 
-@import "../css_variables";
-@import "admin-css-variables";
+// @import "../css_variables";
+@import "config/variables";
+@import "config/admin-css-variables"; 
 
 // Frontend styles
 
-@import "../frontend_old/layout"; // TODO: Remove this
-@import "../frontend_old/typography"; // TODO: Remove this
-@import "../frontend_old/editor_media"; // TODO: Remove this
-@import "../frontend_old/button"; // TODO: Remove this
+// @import "../frontend_old/layout"; // TODO: Remove this
+// @import "../frontend_old/typography"; // TODO: Remove this
+// @import "../frontend_old/editor_media"; // TODO: Remove this
+// @import "../frontend_old/button"; // TODO: Remove this
 // @import "../frontend_old/grid_boxes"; // TODO: Remove this  
  
 

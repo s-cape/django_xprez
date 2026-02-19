@@ -9,7 +9,6 @@
 	--x-admin-ui-font-weight: 400;
 
 	// General
-
 	--x-admin-border-radius-sm: 4px;
 	--x-admin-border-radius-md: 8px;
 	--x-admin-border-radius-lg: 12px;
@@ -23,7 +22,7 @@
 
 	--x-admin-module-bg: #{$b-gray-2};
 	--x-admin-module-bg-stripes: repeating-linear-gradient( 
-		-45deg,
+		-45deg, 
 		#{darken($b-gray-2, 2%)},
 		#{darken($b-gray-2, 2%)} 10px, 
 		#{$b-gray-2} 10px,
@@ -40,7 +39,7 @@
 
 	--x-admin-font-size-base: #{$admin-ui-font-size};
 	--x-admin-font-size-sm: #{$admin-ui-font-size-sm};
-	--x-admin-content-bg: white;
+	--x-admin-content-bg: transparent;
 	--x-admin-module-box-bg: white;
 	--x-admin-form-width: 800px;
 
