@@ -20,14 +20,3 @@
         </div>
     {% endblock %}
 {% endblock %}
-
-{% block errors %}
-    {{ block.super }}
-    {% for item in module.admin_form.xprez_items %}
-        {% if item.admin_form.errors %}
-            {{ item.admin_form.errors }}
-        {% endif %}
-    {% endfor %}
-{% endblock %}
-
-{% block js %}{% endblock %}

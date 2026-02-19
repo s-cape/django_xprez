@@ -14,11 +14,12 @@
     {% endblock %}
 
     {% block item_content %}
+        {% if item.admin_form.non_field_errors %}
+            <div class="xprez-errors">{{ item.admin_form.non_field_errors }}</div>
+        {% endif %}
         {% block item_fields %}
-            {% for field in item.admin_form %}
-                {% if field.name != "delete" %}
-                    {% include "xprez/admin/form/row.html" with field=field %}
-                {% endif %}
+            {% for field in item.admin_form.get_main_fields %}
+                {% include "xprez/admin/form/row.html" with field=field %}
             {% endfor %}
         {% endblock %}
     {% endblock %}

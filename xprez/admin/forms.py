@@ -85,6 +85,11 @@ class ModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
 class MultiModuleItemForm(DeletableFormMixin, forms.ModelForm):
     """Base form for items within MultiModule modules."""
 
+    def get_main_fields(self):
+        for name in self.fields:
+            if name not in self.system_fields:
+                yield self[name]
+
     class Meta:
         fields = "__all__"
 
