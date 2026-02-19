@@ -3,46 +3,55 @@ import { XprezSortable } from './sortable.js';
 import { XprezMultiModuleItemDeleter } from './deleters.js';
 import { executeScripts, getCsrfToken } from './utils.js';
 
+export class XprezMultiModuleItem {
+    constructor(module, itemEl) {
+        this.module = module;
+        this.el = itemEl;
+        const trigger = this.el.querySelector(
+            "[data-component='xprez-multi-module-item-delete']"
+        );
+        this.prefix = trigger
+            ? trigger.dataset.targetPrefix
+            : `item-${this.el.querySelector('input[name="item-id"]')?.value ?? ''}`;
+        this.deleter = new XprezMultiModuleItemDeleter(this);
+    }
+}
+
 export class XprezMultiModuleBase extends XprezModule {
     constructor(section, moduleEl) {
         super(section, moduleEl);
+        this.items = [];
         this.itemsContainer = this.el.querySelector(
             "[data-component='xprez-multi-module-items']"
         );
         if (!this.itemsContainer) return;
 
         this.initSortable();
-        this.initItemDeleters();
+        this.initItems();
     }
 
     initSortable() {
-        const hasHandles = this.itemsContainer.querySelector(
-            '.js-item-handle'
-        ) !== null;
+        const handleSelector = '[data-draggable-multi-module-item-handle]';
+        const hasHandles =
+            this.itemsContainer.querySelector(handleSelector) !== null;
         this.sortable = new XprezSortable(this.itemsContainer, {
-            handle: hasHandles ? '.js-item-handle' : undefined,
-            draggable: '.js-item, [data-item-pk]',
+            handle: hasHandles ? handleSelector : undefined,
+            draggable: '[data-component="xprez-multi-module-item"]',
         });
     }
 
-    createItemDeleter(itemEl) {
-        const trigger = itemEl.querySelector(
-            "[data-component='xprez-multi-module-item-delete']"
-        );
-        const prefix = trigger
-            ? trigger.dataset.targetPrefix
-            : `item-${itemEl.dataset.itemPk || ''}`;
-        return new XprezMultiModuleItemDeleter({ el: itemEl, prefix });
+    initItem(itemEl) {
+        const ControllerClass =
+            window[itemEl.dataset.jsControllerClass] || XprezMultiModuleItem;
+        const item = new ControllerClass(this, itemEl);
+        this.items.push(item);
+        return item;
     }
 
-    initItemDeleters() {
+    initItems() {
         this.itemsContainer
-            .querySelectorAll('.js-item, [data-item-pk]')
-            .forEach((itemEl) => this.createItemDeleter(itemEl));
-    }
-
-    initItemDeleteButtons(itemEl) {
-        this.createItemDeleter(itemEl);
+            .querySelectorAll('[data-component="xprez-multi-module-item"]')
+            .forEach((itemEl) => this.initItem(itemEl));
     }
 }
 
@@ -72,7 +81,7 @@ export class XprezMultiModule extends XprezMultiModuleBase {
                     while (temp.firstElementChild) {
                         const newEl = temp.firstElementChild;
                         this.itemsContainer.appendChild(newEl);
-                        this.initItemDeleteButtons(newEl);
+                        this.initItem(newEl);
                         executeScripts(newEl);
                     }
                     this.initSortable();
@@ -141,7 +150,7 @@ export class XprezUploadMultiModule extends XprezMultiModuleBase {
                     while (temp.firstElementChild) {
                         const newEl = temp.firstElementChild;
                         this.itemsContainer.appendChild(newEl);
-                        this.initItemDeleteButtons(newEl);
+                        this.initItem(newEl);
                         executeScripts(newEl);
                     }
                     this.initSortable();

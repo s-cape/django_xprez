@@ -6,12 +6,12 @@ from xprez.models.modules import FontSizeModuleMixin, MultiModuleItem, UploadMul
 
 
 class FilesModule(FontSizeModuleMixin, UploadMultiModule):
+    front_template_name = "xprez/modules/files.html"
     admin_template_name = "xprez/admin/modules/files/files.html"
     admin_item_template_name = "xprez/admin/modules/files/files_item.html"
+    admin_form_class = "xprez.modules.files.FilesModuleForm"
     admin_item_form_class = "xprez.modules.files.FilesItemForm"
     admin_icon_template_name = "xprez/admin/icons/modules/files.html"
-    admin_form_class = "xprez.modules.files.FilesModuleForm"
-    front_template_name = "xprez/modules/files.html"
 
     title = models.CharField(max_length=255, blank=True)
 
@@ -56,6 +56,8 @@ class FilesItem(MultiModuleItem):
 
 
 class FilesModuleForm(ModuleForm):
+    options_fields = ModuleForm.options_fields + ("font_size",)
+
     class Meta:
         model = FilesModule
         fields = "__all__"

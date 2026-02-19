@@ -41,12 +41,10 @@
         </div>
     </div>
 
-    <div class="xprez-delete-info" data-component="xprez-module-delete-info">
-        This module will be deleted when you save the changes.
-        <span class="xprez-btn xprez-btn__danger" data-component="xprez-module-undelete">undelete</span>
-    </div>
+    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-module" message_thing="module" %}
 
     <div class="xprez-admin-module__body">
+        {% include "xprez/admin/form/errors.html" with errors=module.admin_form.non_field_errors %}
         {% block content %}
             <div class="xprez-form-table">
                 <div class="xprez-option-group">
@@ -96,19 +94,6 @@
                         </div>
                     </div>
 
-                    <div class="xprez-option-group__subtitle">Attributes</div>
-
-                    {% if module.admin_form.font_size %}
-                        <div class="xprez-option-row">
-                            {% include "xprez/admin/form/field.html" with field=module.admin_form.font_size size="flex-1" %}
-                        </div>
-                    {% endif %}
-                    <div class="xprez-option-row">
-                        {% include "xprez/admin/form/field.html" with field=module.admin_form.alternate_color size="flex-1" %}
-                    </div>
-                    <div class="xprez-option-row">
-                        {% include "xprez/admin/form/field.html" with field=module.admin_form.css_class size="flex-1" %}
-                    </div>
                     {% block options_fields %}
                         {% for field in module.admin_form.get_options_fields %}
                             <div class="xprez-option-row">

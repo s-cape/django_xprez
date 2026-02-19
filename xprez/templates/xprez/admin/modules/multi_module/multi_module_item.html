@@ -1,11 +1,13 @@
-<div class="js-item xprez-multi-module-item {% block item_root_extra_class %}xprez-form-table{% endblock %}" data-item-pk="{{ item.pk }}" data-mode="">
-    <div class="xprez-delete-info" data-component="xprez-multi-module-item-delete-info">
-        This item will be deleted when you save the changes.
-        <span class="xprez-btn xprez-btn__danger" data-component="xprez-multi-module-item-undelete">undelete</span>
-    </div>
+<div
+    class="xprez-multi-module-item"
+    data-component="xprez-multi-module-item"
+    data-js-controller-class="{{ module.admin_item_js_controller_class }}"
+    data-mode=""
+>
+    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-multi-module-item" %}
     {% block item_header %}
         <div class="xprez-multi-module-item-header">
-            <span class="xprez-icon-btn-move js-item-handle">drag</span>
+            <span class="xprez-icon-btn-move" data-draggable-multi-module-item-handle>drag</span>
             <span class="xprez-icon-btn" title="Remove" data-component="xprez-multi-module-item-delete" data-target-prefix="{{ item.key }}">
                 <i class="xprez-icon-delete"></i>
                 <span data-hidden>{{ item.admin_form.delete }}</span>
@@ -14,12 +16,10 @@
     {% endblock %}
 
     {% block item_content %}
-        {% if item.admin_form.non_field_errors %}
-            <div class="xprez-errors">{{ item.admin_form.non_field_errors }}</div>
-        {% endif %}
+        {% include "xprez/admin/form/errors.html" with errors=item.admin_form.non_field_errors %}
         {% block item_fields %}
             {% for field in item.admin_form.get_main_fields %}
-                {% include "xprez/admin/form/row.html" with field=field %}
+                <div class="xprez-option-row">{% include "xprez/admin/form/row.html" with field=field %}</div>
             {% endfor %}
         {% endblock %}
     {% endblock %}

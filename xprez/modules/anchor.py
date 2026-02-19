@@ -5,7 +5,7 @@ from xprez.models import Module
 
 
 class AnchorModule(Module):
-    icon_name = "anchor"
+    admin_icon_template_name = "xprez/admin/icons/modules/anchor.html"
 
     title = models.CharField(max_length=100)
     key = models.SlugField(max_length=100, blank=True)

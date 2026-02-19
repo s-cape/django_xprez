@@ -8,8 +8,8 @@ from xprez.models.modules import FontSizeModuleMixin, Module
 class QuoteModule(FontSizeModuleMixin, Module):
     front_template_name = "xprez/modules/quote.html"
     admin_template_name = "xprez/admin/modules/quote.html"
-    admin_icon_template_name = "xprez/admin/icons/modules/quote.html"
     admin_form_class = "xprez.modules.quote.QuoteModuleForm"
+    admin_icon_template_name = "xprez/admin/icons/modules/quote.html"
 
     name = models.CharField(max_length=255)
     subtitle = models.CharField(max_length=255, null=True, blank=True)

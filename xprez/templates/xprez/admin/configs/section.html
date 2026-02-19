@@ -2,8 +2,9 @@
 
 {% block component_name %}xprez-section-config{% endblock %}
 {% block delete_trigger_component %}xprez-section-config-delete-trigger{% endblock %}
-{% block delete_info_component %}xprez-section-config-delete-info{% endblock %}
-{% block undelete_component %}xprez-section-config-undelete{% endblock %}
+{% block delete_info_content %}
+    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-section-config" message_thing="breakpoint" %}
+{% endblock %}
 
 {% block fields %}
     <div class="xprez-option-group__subtitle">Section</div>

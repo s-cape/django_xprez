@@ -303,6 +303,7 @@ class MultiModule(Module):
     admin_item_template_name = "xprez/admin/modules/multi_module/multi_module_item.html"
     admin_item_form_class = "xprez.admin.forms.MultiModuleItemForm"
     admin_js_controller_class = "XprezMultiModule"
+    admin_item_js_controller_class = "XprezMultiModuleItem"
 
     def get_admin_item_form_class(self, item):
         cls = import_class(self.admin_item_form_class)

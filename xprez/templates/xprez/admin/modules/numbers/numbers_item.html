@@ -1,7 +1,9 @@
 {% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
 
 {% block item_fields %}
-    {% include "xprez/admin/form/row.html" with field=item.admin_form.number %}
-    {% include "xprez/admin/form/row.html" with field=item.admin_form.suffix %}
-    {% include "xprez/admin/form/row.html" with field=item.admin_form.caption %}
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/row.html" with field=item.admin_form.number %}
+        {% include "xprez/admin/form/row.html" with field=item.admin_form.suffix %}
+        {% include "xprez/admin/form/row.html" with field=item.admin_form.caption %}
+    </div>
 {% endblock %}

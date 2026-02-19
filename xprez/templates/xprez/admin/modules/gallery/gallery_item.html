@@ -1,21 +1,10 @@
 {% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
 {% load thumbnail %}
 
-{% comment %}
-{% block item_root_extra_class %}xprez-gallery__item{% endblock %}
-
-{% block item_header %}
-    <div class="xprez-gallery-photo-buttons">
-        <span class="xprez-icon-btn-remove" data-component="xprez-multi-module-item-delete" data-target-prefix="{{ item.key }}"></span>
-        <span class="xprez-icon-btn-move js-item-handle"></span>
-    </div>
-{% endblock %}
-{% endcomment %}
-
 {% block item_content %}
     {% block thumb %}
         {% thumbnail item.file "400x400" format="WEBP" quality=80 as thumb %}
-            <img src="{{ thumb.url }}" class="xprez-gallery__img" />
+            <img src="{{ thumb.url }}" class="xprez-gallery__img" data-draggable-multi-module-item-handle />
         {% endthumbnail %}
     {% endblock %}
     {% include "xprez/admin/form/row.html" with field=item.admin_form.description %}

@@ -59,11 +59,12 @@ class ModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
     base_module_fields = (
         "position",
         "section",
-        "css_class",
-        "alternate_color",
     )
 
-    options_fields = ()
+    options_fields = (
+        "alternate_color",
+        "css_class",
+    )
 
     def get_main_fields(self):
         excluded_fields = tuple(self.base_module_fields)

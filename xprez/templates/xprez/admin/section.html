@@ -64,10 +64,7 @@
         {% endfor %}
     </div>
 
-    <div class="xprez-delete-info" data-component="xprez-section-delete-info">
-        This section will be deleted when you save the changes.
-        <span class="xprez-btn xprez-btn__danger" data-component="xprez-section-undelete">undelete</span>
-    </div>
+    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-section" message_thing="section" %}
 
     <div class="xprez-section__footer">
         <span class="xprez-btn xprez-btn-transparent" data-component="xprez-adder-section-end-trigger">
@@ -79,6 +76,7 @@
     <div popover="manual" class="xprez-popover" data-component="xprez-section-popover">
         <div class="xprez-popover__content">
             {% block popopover_module %}
+                {% include "xprez/admin/form/errors.html" with errors=section.admin_form.non_field_errors %}
                 <div class="xprez-option-group">
                     <div class="xprez-option-group__heading">
                         <i class="xprez-icon-grid_3_3"></i>

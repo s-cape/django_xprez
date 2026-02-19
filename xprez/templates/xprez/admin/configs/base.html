@@ -22,13 +22,11 @@
         {% endif %}
     </div>
 
+    {% include "xprez/admin/form/errors.html" with errors=config.admin_form.non_field_errors %}
     {% block fields %}{% endblock %}
 
     {% if config.admin_form.delete %}
-        <div class="xprez-delete-info" data-component="{% block delete_info_component %}{% endblock %}">
-            This breakpoint will be deleted when you save the changes.
-            <span class="xprez-btn xprez-btn__danger" data-component="{% block undelete_component %}{% endblock %}">undelete</span>
-        </div>
+        {% block delete_info_content %}{% endblock %}
     {% endif %}
 
     {% block config_hidden_fields %}{% endblock %}

@@ -24,4 +24,4 @@
         <span class="xprez-option__suffix">{{ suffix }}</span>
     {% endif %}
 </div>
-{% include "xprez/admin/form/field_errors.html" %}
+{% include "xprez/admin/form/errors.html" with errors=field.errors %}

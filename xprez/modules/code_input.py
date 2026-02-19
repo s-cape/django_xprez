@@ -7,8 +7,8 @@ from xprez.models.modules import Module
 class CodeInputModule(Module):
     front_template_name = "xprez/modules/code_input.html"
     admin_template_name = "xprez/admin/modules/code_input.html"
-    admin_icon_template_name = "xprez/admin/icons/modules/code_input.html"
     admin_form_class = "xprez.modules.code_input.CodeInputModuleForm"
+    admin_icon_template_name = "xprez/admin/icons/modules/code_input.html"
 
     code = models.TextField()
 

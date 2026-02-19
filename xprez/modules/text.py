@@ -55,11 +55,11 @@ class CkEditorFileUploadMixin:
 
 
 class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
-    admin_form_class = "xprez.modules.text.TextModuleBaseForm"
-    admin_template_name = "xprez/admin/modules/text_base.html"
-    front_template_name = "xprez/modules/text_base.html"
-    admin_icon_template_name = "xprez/admin/icons/modules/text_base.html"
     config_model = "xprez.TextBaseConfig"
+    front_template_name = "xprez/modules/text_base.html"
+    admin_template_name = "xprez/admin/modules/text_base.html"
+    admin_form_class = "xprez.modules.text.TextModuleBaseForm"
+    admin_icon_template_name = "xprez/admin/icons/modules/text_base.html"
 
     text = models.TextField(blank=False)
 
@@ -68,11 +68,11 @@ class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
 
 
 class TextModule(TextModuleBase):
-    admin_form_class = "xprez.modules.text.TextModuleForm"
-    admin_template_name = "xprez/admin/modules/text.html"
-    front_template_name = "xprez/modules/text.html"
-    admin_icon_template_name = "xprez/admin/icons/modules/text.html"
     config_model = "xprez.TextConfig"
+    front_template_name = "xprez/modules/text.html"
+    admin_template_name = "xprez/admin/modules/text.html"
+    admin_form_class = "xprez.modules.text.TextModuleForm"
+    admin_icon_template_name = "xprez/admin/icons/modules/text.html"
 
     media = models.FileField(upload_to="images", null=True, blank=True)
     url = models.CharField("Target URL", max_length=255, null=True, blank=True)
@@ -191,7 +191,7 @@ class TextModuleBaseForm(ModuleForm):
 
 
 class TextModuleForm(TextModuleBaseForm):
-    options_fields = ("url",) + ModuleForm.options_fields
+    options_fields = ModuleForm.options_fields + ("url",)
     media_clear = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):

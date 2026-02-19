@@ -19,13 +19,13 @@ PHOTOSWIPE_CSS = (
 
 
 class GalleryModule(FontSizeModuleMixin, UploadMultiModule):
+    config_model = "xprez.GalleryConfig"
     front_template_name = "xprez/modules/gallery.html"
     admin_template_name = "xprez/admin/modules/gallery/gallery.html"
-    admin_form_class = "xprez.modules.gallery.GalleryModuleForm"
     admin_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"
+    admin_form_class = "xprez.modules.gallery.GalleryModuleForm"
     admin_item_form_class = "xprez.modules.gallery.GalleryItemForm"
     admin_icon_template_name = "xprez/admin/icons/modules/gallery.html"
-    config_model = "xprez.GalleryConfig"
 
     crop = models.CharField(
         max_length=5,
@@ -262,7 +262,10 @@ class GalleryConfig(ModuleConfig):
 
 
 class GalleryModuleForm(ModuleForm):
-    options_fields = ("crop",) + ModuleForm.options_fields
+    options_fields = ModuleForm.options_fields + (
+        "font_size",
+        "crop",
+    )
 
     class Meta:
         model = GalleryModule

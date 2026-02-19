@@ -1,17 +1,8 @@
 {% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
 
-{% comment %} {% block item_root_extra_class %}xprez-form-row{% endblock %} {% endcomment %}
-
-{% comment %} {% block item_header %}{% endblock %} {% endcomment %}
-
 {% block item_content %}
-    <div class="xprez-cell-label">
-        <label>File description:</label>
-    </div>
-    <div class="xprez-cell">
-        {% include "xprez/admin/form/field.html" with field=item.admin_form.description label=False %}
-        <div class="xprez-cell-info">
-            <a href="{{ item.file.url }}" target="_blank">{{ item.file.name }}</a>
-        </div>
+    {% include "xprez/admin/form/field.html" with field=item.admin_form.description %}
+    <div>
+        <a href="{{ item.file.url }}" target="_blank">{{ item.file.name }}</a>
     </div>
 {% endblock %}
