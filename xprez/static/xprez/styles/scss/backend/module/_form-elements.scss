@@ -1,8 +1,11 @@
 .xprez-form-table {
+	--x-admin-option-font-size: 14px;
+
 	max-width: var(--x-admin-form-width);
 	line-height: 1.25;
 	margin-left: auto;
 	margin-right: auto;
+	padding: 0 0;
 
 	label {
 		font-size: .857rem;
@@ -25,6 +28,31 @@
 
 	.xprez-option-group:first-child {
 		margin-top: 0;
+	}
+
+	.xprez-option {
+		--x-admin-padding-md: .75rem;
+
+		// border: 1px solid $b-gray-3;
+		
+		&:not(:has(input[type="checkbox"])) {
+			flex: 1;
+		}
+
+		label {
+			min-width: 6rem;
+			border-right: 1px solid $b-gray-3;
+			margin-right: .5rem;
+			padding-right: .5rem;
+
+			&:has(+.xprez-option__dropdown) {
+				margin-right: 0;
+			}
+		}
+
+		input, textarea {
+			text-align: left !important;
+		}
 	}
 }
 

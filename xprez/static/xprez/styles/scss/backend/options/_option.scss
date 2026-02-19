@@ -54,7 +54,16 @@
 
 	// Text input
 
-	input[type="text"], input[type="number"] {
+	input[type="text"], 
+	input[type="number"],
+	input[type="email"],
+	input[type="password"],
+	input[type="url"],
+	input[type="tel"],
+	input[type="search"],
+	input[type="date"],
+	input[type="time"],
+	textarea {
 		font-family: inherit !important;
 		font-weight: var(--x-admin-option-input-font-weight) !important;
 		font-size: inherit !important;
@@ -76,6 +85,10 @@
 		}
 	}
 
+	textarea {
+		padding: .5rem 0 !important;
+	}
+
 	input[type="number"] {
 		appearance: textfield;
 		min-width: 4ch !important;
@@ -85,6 +98,11 @@
 			appearance: none;
 			margin: 0;
 		}
+	}
+
+	input[type="file"] {
+		width: 100% !important;
+		font-size: inherit !important;
 	}
 
 	// Checkbox
@@ -123,6 +141,7 @@
 			justify-content: center;
 			font-size: 20px;
 			margin-left: -10px;
+			align-self: center;
 		}
 
 		label {
