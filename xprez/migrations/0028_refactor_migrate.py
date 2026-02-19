@@ -45,6 +45,16 @@ class Migration(migrations.Migration):
                 to="xprez.GalleryModule",
             ),
         ),
+        migrations.AddField(
+            model_name="galleryitem",
+            name="saved",
+            field=models.BooleanField(default=False, editable=False),
+        ),
+        migrations.AlterField(
+            model_name="galleryitem",
+            name="position",
+            field=models.PositiveSmallIntegerField(default=0),
+        ),
         migrations.RenameField(
             model_name="GalleryModule",
             old_name="crop",
@@ -123,7 +133,17 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name="NumbersItem",
-            options={"ordering": ("module", "id")},
+            options={"ordering": ("position",)},
+        ),
+        migrations.AddField(
+            model_name="numbersitem",
+            name="position",
+            field=models.PositiveSmallIntegerField(default=0),
+        ),
+        migrations.AddField(
+            model_name="numbersitem",
+            name="saved",
+            field=models.BooleanField(default=False, editable=False),
         ),
         migrations.AddField(
             model_name="numbersmodule",
@@ -190,6 +210,16 @@ class Migration(migrations.Migration):
             model_name="FilesItem",
             name="description",
             field=models.CharField(blank=True, max_length=255),
+        ),
+        migrations.AddField(
+            model_name="filesitem",
+            name="saved",
+            field=models.BooleanField(default=False, editable=False),
+        ),
+        migrations.AlterField(
+            model_name="filesitem",
+            name="position",
+            field=models.PositiveSmallIntegerField(default=0),
         ),
         migrations.AddField(
             model_name="filesmodule",

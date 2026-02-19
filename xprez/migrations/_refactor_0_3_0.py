@@ -497,8 +497,10 @@ class TextImageProcessor(ModuleReplaceProcessor):
         if module.content_type == "xprez.GalleryModule":
             GalleryItem = self.apps.get_model("xprez", "GalleryItem")
             GalleryItem.objects.create(
-                module=module, file=self.old_content.image, position=0
+                module=module, file=self.old_content.image, position=0, saved=True
             )
+            self.config.columns = 1
+            self.config.save()
 
     def finalize_new_modules(self):
         super().finalize_new_modules()
@@ -520,7 +522,17 @@ class VideoProcessor(SimpleModuleProcessor):
         section.save()
 
 
-class GalleryProcessor(SimpleModuleProcessor):
+class MultiModuleProcessor(SimpleModuleProcessor):
+    """Mark existing items as saved during migration."""
+
+    items_attribute = "items"
+
+    def process(self):
+        super().process()
+        getattr(self.module, self.items_attribute).all().update(saved=True)
+
+
+class GalleryProcessor(MultiModuleProcessor):
     GAP_TRANS = {True: "small", False: ""}
     CROP_TRANS = {True: "3/2", False: ""}
 
@@ -545,7 +557,19 @@ class GalleryProcessor(SimpleModuleProcessor):
         return "xprez.GalleryConfig"
 
 
-class DownloadModuleProcessor(SimpleModuleProcessor):
+class NumbersModuleProcessor(MultiModuleProcessor):
+    pass
+
+
+class FilesModuleProcessor(MultiModuleProcessor):
+    pass
+
+
+class CodeInputModuleProcessor(SimpleModuleProcessor):
+    pass
+
+
+class CodeTemplateModuleProcessor(SimpleModuleProcessor):
     pass
 
 
@@ -563,9 +587,9 @@ BUILTIN_PROCESSORS = {
     "xprez.TextImage": TextImageProcessor,
     "xprez.GalleryModule": GalleryProcessor,
     "xprez.VideoModule": VideoProcessor,
-    "xprez.CodeInputModule": SimpleModuleProcessor,
-    "xprez.NumbersModule": SimpleModuleProcessor,
-    "xprez.CodeTemplateModule": SimpleModuleProcessor,
-    "xprez.FilesModule": DownloadModuleProcessor,
+    "xprez.CodeInputModule": CodeInputModuleProcessor,
+    "xprez.NumbersModule": NumbersModuleProcessor,
+    "xprez.CodeTemplateModule": CodeTemplateModuleProcessor,
+    "xprez.FilesModule": FilesModuleProcessor,
     "xprez.ModuleSymlink": ModuleSymlinkProcessor,
 }

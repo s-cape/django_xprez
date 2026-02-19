@@ -1,0 +1,14 @@
+{% extends "xprez/admin/modules/multi_module/multi_module.html" %}
+
+{% block add_item %}
+    <div
+        class="xprez-upload-area"
+        data-component="xprez-multi-module-upload"
+        data-upload-url="{% url module.xprez_upload_item_url_name module.pk %}"
+        data-module-pk="{{ module.pk }}"
+    >
+        <input type="file" multiple {% block upload_attrs %}{% endblock %} data-component="xprez-multi-module-file-input">
+        <span>{% block upload_hint %}Drop files here or click to choose files from disk{% endblock %}</span>
+    </div>
+    {% block after_upload %}{% endblock %}
+{% endblock %}

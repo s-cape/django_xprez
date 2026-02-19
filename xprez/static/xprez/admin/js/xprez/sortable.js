@@ -15,7 +15,6 @@ export class XprezSortable {
         const { selector } = this.dropPrevention;
         if (e.target.matches(selector) || e.target.closest(selector)) {
             e.preventDefault();
-            e.stopPropagation();
         }
     }
 

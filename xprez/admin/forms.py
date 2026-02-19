@@ -55,7 +55,7 @@ class SectionConfigForm(DeletableFormMixin, forms.ModelForm):
             self.fields.pop("delete", None)
 
 
-class BaseModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
+class ModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
     base_module_fields = (
         "position",
         "section",
@@ -77,6 +77,13 @@ class BaseModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
     def get_options_fields(self):
         for field in self.options_fields:
             yield self[field]
+
+    class Meta:
+        fields = "__all__"
+
+
+class MultiModuleItemForm(DeletableFormMixin, forms.ModelForm):
+    """Base form for items within MultiModule modules."""
 
     class Meta:
         fields = "__all__"

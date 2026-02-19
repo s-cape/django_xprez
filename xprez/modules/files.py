@@ -1,18 +1,17 @@
 from django import forms
 from django.db import models
-from django.forms import inlineformset_factory
 
-from xprez.admin.forms import BaseModuleForm
+from xprez.admin.forms import ModuleForm, MultiModuleItemForm
 from xprez.models.modules import FontSizeModuleMixin, MultiModuleItem, UploadMultiModule
 
 
 class FilesModule(FontSizeModuleMixin, UploadMultiModule):
     admin_template_name = "xprez/admin/modules/files/files.html"
+    admin_item_template_name = "xprez/admin/modules/files/files_item.html"
+    admin_item_form_class = "xprez.modules.files.FilesItemForm"
+    admin_icon_template_name = "xprez/admin/icons/modules/files.html"
+    admin_form_class = "xprez.modules.files.FilesModuleForm"
     front_template_name = "xprez/modules/files.html"
-    admin_formset_item_template_name = "xprez/admin/modules/files/files_item.html"
-    icon_template_name = "xprez/admin/icons/modules/files.html"
-    form_class = "xprez.modules.files.FilesModuleForm"
-    formset_factory = "xprez.modules.files.FilesItemFormSet"
 
     title = models.CharField(max_length=255, blank=True)
 
@@ -32,7 +31,6 @@ class FilesItem(MultiModuleItem):
     )
     file = models.FileField(upload_to="files", max_length=300)
     description = models.CharField(max_length=255, blank=True)
-    position = models.PositiveSmallIntegerField()
 
     def get_description(self):
         return self.description or self.get_default_file_name()
@@ -51,27 +49,20 @@ class FilesItem(MultiModuleItem):
 
     @classmethod
     def create_from_file(cls, django_file, module):
-        att = cls(module=module)
-        att.position = module.attachments.all().count()
-        att.file.save(django_file.name.split("/")[-1], django_file)
-        att.save()
-        return att
-
-    class Meta:
-        ordering = ("position",)
+        item = cls(module=module, position=module.items.count())
+        item.file.save(django_file.name.split("/")[-1], django_file)
+        item.save()
+        return item
 
 
-class FilesModuleForm(BaseModuleForm):
+class FilesModuleForm(ModuleForm):
     class Meta:
         model = FilesModule
         fields = "__all__"
         widgets = {"title": forms.TextInput(attrs={"placeholder": "Files"})}
 
 
-FilesItemFormSet = inlineformset_factory(
-    FilesModule,
-    FilesItem,
-    fields=("id", "description", "position"),
-    extra=0,
-    can_delete=True,
-)
+class FilesItemForm(MultiModuleItemForm):
+    class Meta:
+        model = FilesItem
+        fields = ("description",)

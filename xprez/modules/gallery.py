@@ -1,9 +1,8 @@
 from django.db import models
-from django.forms import inlineformset_factory
 from django.utils.functional import cached_property
 
 from xprez import constants
-from xprez.admin.forms import BaseModuleForm
+from xprez.admin.forms import ModuleForm, MultiModuleItemForm
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
 from xprez.models.modules import FontSizeModuleMixin, MultiModuleItem, UploadMultiModule
@@ -20,12 +19,12 @@ PHOTOSWIPE_CSS = (
 
 
 class GalleryModule(FontSizeModuleMixin, UploadMultiModule):
-    form_class = "xprez.modules.gallery.GalleryModuleForm"
-    admin_template_name = "xprez/admin/modules/gallery/gallery.html"
-    admin_formset_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"
     front_template_name = "xprez/modules/gallery.html"
-    icon_template_name = "xprez/admin/icons/modules/gallery.html"
-    formset_factory = "xprez.modules.gallery.GalleryItemFormSet"
+    admin_template_name = "xprez/admin/modules/gallery/gallery.html"
+    admin_form_class = "xprez.modules.gallery.GalleryModuleForm"
+    admin_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"
+    admin_item_form_class = "xprez.modules.gallery.GalleryItemForm"
+    admin_icon_template_name = "xprez/admin/icons/modules/gallery.html"
     config_model = "xprez.GalleryConfig"
 
     crop = models.CharField(
@@ -41,12 +40,6 @@ class GalleryModule(FontSizeModuleMixin, UploadMultiModule):
     class FrontMedia:
         js = PHOTOSWIPE_JS
         css = PHOTOSWIPE_CSS
-
-    def save_admin_form(self, request):
-        super().save_admin_form(request)
-        for index, item in enumerate(self.items.all()):
-            item.position = index
-            item.save()
 
     def render_front(self, context):
         if self.items.all().exists():
@@ -196,10 +189,6 @@ class GalleryItem(MultiModuleItem):
     file = models.ImageField(upload_to="gallery")
     description = models.CharField(max_length=255, blank=True, null=True)
     alt_text = models.CharField(max_length=255, blank=True)
-    position = models.PositiveSmallIntegerField()
-
-    class Meta:
-        ordering = ("position",)
 
     @cached_property
     def get_srcset_geometries(self):
@@ -226,8 +215,7 @@ class GalleryItem(MultiModuleItem):
 
     @classmethod
     def create_from_file(cls, django_file, gallery):
-        item = cls(gallery=gallery)
-        item.position = gallery.items.all().count()
+        item = cls(module=gallery, position=gallery.items.count())
         item.file.save(django_file.name.split("/")[-1], django_file)
         item.save()
         return item
@@ -273,18 +261,15 @@ class GalleryConfig(ModuleConfig):
         return css_variables
 
 
-class GalleryModuleForm(BaseModuleForm):
-    options_fields = ("crop",) + BaseModuleForm.options_fields
+class GalleryModuleForm(ModuleForm):
+    options_fields = ("crop",) + ModuleForm.options_fields
 
     class Meta:
         model = GalleryModule
         fields = "__all__"
 
 
-GalleryItemFormSet = inlineformset_factory(
-    GalleryModule,
-    GalleryItem,
-    fields=("id", "description", "alt_text", "position"),
-    extra=0,
-    can_delete=True,
-)
+class GalleryItemForm(MultiModuleItemForm):
+    class Meta:
+        model = GalleryItem
+        fields = ("description", "alt_text")

@@ -61,3 +61,34 @@ export class XprezSectionConfigDeleter extends XprezConfigDeleterBase {
 export class XprezModuleConfigDeleter extends XprezConfigDeleterBase {
     initElements() { this._initElements("module-config"); }
 }
+
+export class XprezMultiModuleItemDeleter extends XprezDeleterBase {
+    initElements() {
+        this.triggerEl = this.obj.el.querySelector(
+            "[data-component='xprez-multi-module-item-delete']"
+        );
+        const prefix = this.obj.prefix;
+        this.inputEl = this.obj.el.querySelector(
+            `input[name="${prefix}-delete"]`
+        );
+        this.undeleteEl = this.obj.el.querySelector(
+            "[data-component='xprez-multi-module-item-undelete']"
+        );
+    }
+
+    delete() {
+        this.obj.el.dataset.mode = "delete";
+        if (this.inputEl) {
+            this.inputEl.checked = true;
+            this.inputEl.value = "true";
+        }
+    }
+
+    undelete() {
+        this.obj.el.dataset.mode = "";
+        if (this.inputEl) {
+            this.inputEl.checked = false;
+            this.inputEl.value = "false";
+        }
+    }
+}

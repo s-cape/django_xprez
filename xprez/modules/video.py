@@ -4,22 +4,22 @@ from django import forms
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from xprez.admin.forms import BaseModuleForm
+from xprez.admin.forms import ModuleForm
 from xprez.models.modules import Module
 
 
 class VideoModule(Module):
+    front_template_name = "xprez/modules/video.html"
+    admin_template_name = "xprez/admin/modules/video.html"
+    admin_icon_template_name = "xprez/admin/icons/modules/video.html"
+    admin_form_class = "xprez.modules.video.VideoForm"
+
+    poster_image = models.ImageField(upload_to="video", null=True, blank=True)
+    url = models.URLField()
     TYPE_CHOICES = (
         ("youtube", "YouTube"),
         ("vimeo", "Vimeo"),
     )
-    admin_template_name = "xprez/admin/modules/video.html"
-    front_template_name = "xprez/modules/video.html"
-    icon_template_name = "xprez/admin/icons/modules/video.html"
-    form_class = "xprez.modules.video.VideoForm"
-
-    poster_image = models.ImageField(upload_to="video", null=True, blank=True)
-    url = models.URLField()
     video_type = models.CharField(choices=TYPE_CHOICES, max_length=50, editable=False)
     video_id = models.CharField(max_length=200, editable=False)
 
@@ -43,7 +43,7 @@ class VideoModule(Module):
         )
 
 
-class VideoForm(BaseModuleForm):
+class VideoForm(ModuleForm):
     def clean_url(self):
         url = self.cleaned_data["url"]
         parsed_url = urlparse(url)

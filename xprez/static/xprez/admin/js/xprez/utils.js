@@ -1,3 +1,11 @@
+export function getCsrfToken() {
+    const cookie = document.cookie
+        .split(";")
+        .map((c) => c.trim())
+        .find((c) => c.startsWith("csrftoken="));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : "";
+}
+
 export function executeScripts(el) {
     el.querySelectorAll("script").forEach(script => {
         const newScript = document.createElement("script");

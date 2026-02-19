@@ -3,15 +3,13 @@ from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 
 from xprez.admin.fields import TemplatePathField
-from xprez.admin.forms import BaseModuleForm
 from xprez.conf import settings
 from xprez.models.modules import FontSizeModuleMixin, Module
 
 
 class CodeTemplateModule(FontSizeModuleMixin, Module):
     admin_template_name = "xprez/admin/modules/code_template.html"
-    icon_template_name = "xprez/admin/icons/modules/code_template.html"
-    form_class = "xprez.modules.code_template.CodeTemplateModuleForm"
+    admin_icon_template_name = "xprez/admin/icons/modules/code_template.html"
 
     @staticmethod
     def get_template_dir():
@@ -42,9 +40,3 @@ class CodeTemplateModule(FontSizeModuleMixin, Module):
                 return "Invalid Template"
         else:
             return ""
-
-
-class CodeTemplateModuleForm(BaseModuleForm):
-    class Meta:
-        model = CodeTemplateModule
-        fields = "__all__"

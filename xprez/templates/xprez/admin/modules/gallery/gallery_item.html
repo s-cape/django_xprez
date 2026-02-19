@@ -1,14 +1,23 @@
+{% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
 {% load thumbnail %}
-<div class="js-item xprez-gallery__item" data-number="{{ number }}">
+
+{% comment %}
+{% block item_root_extra_class %}xprez-gallery__item{% endblock %}
+
+{% block item_header %}
     <div class="xprez-gallery-photo-buttons">
-        <span class="xprez-icon-btn-remove js-checkbox_controller"
-              data-formfield_selector="#id_gallerys-{{ module.pk }}-{{ number }}-DELETE"></span>
+        <span class="xprez-icon-btn-remove" data-component="xprez-multi-module-item-delete" data-target-prefix="{{ item.key }}"></span>
+        <span class="xprez-icon-btn-move js-item-handle"></span>
     </div>
+{% endblock %}
+{% endcomment %}
+
+{% block item_content %}
     {% block thumb %}
         {% thumbnail item.file "400x400" format="WEBP" quality=80 as thumb %}
-            <img src="{{ thumb.url }}" class="xprez-gallery__img"  />
+            <img src="{{ thumb.url }}" class="xprez-gallery__img" />
         {% endthumbnail %}
     {% endblock %}
-    <input type="text" value="" class="js-text_controller" data-formfield_selector="#id_gallerys-{{ module.pk }}-{{ number }}-description" placeholder="Add caption" />
-    <input type="text" value="" class="js-text_controller" data-formfield_selector="#id_gallerys-{{ module.pk }}-{{ number }}-alt_text" placeholder="Add alt text" />
-</div>
+    {% include "xprez/admin/form/row.html" with field=item.admin_form.description %}
+    {% include "xprez/admin/form/row.html" with field=item.admin_form.alt_text %}
+{% endblock %}

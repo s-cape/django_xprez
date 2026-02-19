@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 from xprez import constants
-from xprez.admin.forms import BaseModuleForm
+from xprez.admin.forms import ModuleForm
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.ck_editor import parse_text as ckeditor_parse_text
 from xprez.ck_editor.widgets import CkEditorWidget
@@ -55,10 +55,10 @@ class CkEditorFileUploadMixin:
 
 
 class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
-    form_class = "xprez.modules.text.TextModuleBaseForm"
+    admin_form_class = "xprez.modules.text.TextModuleBaseForm"
     admin_template_name = "xprez/admin/modules/text_base.html"
     front_template_name = "xprez/modules/text_base.html"
-    icon_template_name = "xprez/admin/icons/modules/text_base.html"
+    admin_icon_template_name = "xprez/admin/icons/modules/text_base.html"
     config_model = "xprez.TextBaseConfig"
 
     text = models.TextField(blank=True)
@@ -68,10 +68,10 @@ class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
 
 
 class TextModule(TextModuleBase):
-    form_class = "xprez.modules.text.TextModuleForm"
+    admin_form_class = "xprez.modules.text.TextModuleForm"
     admin_template_name = "xprez/admin/modules/text.html"
     front_template_name = "xprez/modules/text.html"
-    icon_template_name = "xprez/admin/icons/modules/text.html"
+    admin_icon_template_name = "xprez/admin/icons/modules/text.html"
     config_model = "xprez.TextConfig"
 
     media = models.FileField(upload_to="images", null=True, blank=True)
@@ -179,7 +179,7 @@ class TextConfig(TextBaseConfig):
         return variables
 
 
-class TextModuleBaseForm(BaseModuleForm):
+class TextModuleBaseForm(ModuleForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         widget_class = import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET)
@@ -191,7 +191,7 @@ class TextModuleBaseForm(BaseModuleForm):
 
 
 class TextModuleForm(TextModuleBaseForm):
-    options_fields = ("url",) + TextModuleBaseForm.options_fields
+    options_fields = ("url",) + ModuleForm.options_fields
     media_clear = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):

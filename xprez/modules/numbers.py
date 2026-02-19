@@ -1,17 +1,16 @@
 from django import forms
 from django.db import models
-from django.forms import inlineformset_factory
 
-from xprez.admin.forms import BaseModuleForm
+from xprez.admin.forms import MultiModuleItemForm
 from xprez.models.modules import FontSizeModuleMixin, MultiModule, MultiModuleItem
 
 
 class NumbersModule(FontSizeModuleMixin, MultiModule):
-    admin_template_name = "xprez/admin/modules/numbers.html"
     front_template_name = "xprez/modules/numbers.html"
-    icon_template_name = "xprez/admin/icons/modules/numbers.html"
-    form_class = "xprez.modules.numbers.NumbersModuleForm"
-    formset_factory = "xprez.modules.numbers.NumbersItemFormSet"
+    admin_template_name = "xprez/admin/modules/numbers/numbers.html"
+    admin_item_template_name = "xprez/admin/modules/numbers/numbers_item.html"
+    admin_item_form_class = "xprez.modules.numbers.NumbersItemForm"
+    admin_icon_template_name = "xprez/admin/icons/modules/numbers.html"
 
     class Meta:
         verbose_name = "Numbers"
@@ -32,37 +31,12 @@ class NumbersItem(MultiModuleItem):
     suffix = models.CharField(max_length=10, null=True, blank=True)
     caption = models.CharField(max_length=100, blank=True)
 
-    class Meta:
-        ordering = ("module", "id")
 
-
-class NumbersModuleForm(BaseModuleForm):
-    class Meta:
-        model = NumbersModule
-        fields = "__all__"
-
-
-class NumbersItemForm(forms.ModelForm):
+class NumbersItemForm(MultiModuleItemForm):
     class Meta:
         model = NumbersItem
+        fields = ("number", "suffix", "caption")
         widgets = {
             "number": forms.NumberInput(attrs={"class": "short"}),
             "suffix": forms.TextInput(attrs={"class": "short"}),
         }
-        fields = (
-            "id",
-            "number",
-            "suffix",
-            "caption",
-        )
-
-
-NumbersItemFormSet = inlineformset_factory(
-    NumbersModule,
-    NumbersItem,
-    form=NumbersItemForm,
-    fields=("id", "number", "suffix", "caption"),
-    max_num=4,
-    extra=4,
-    can_delete=True,
-)
