@@ -289,7 +289,8 @@ class FontSizeModuleMixin(models.Model):
 
     def get_css_classes(self):
         classes = super().get_css_classes()
-        classes["font-size"] = self.font_size
+        if self.font_size != constants.FONT_SIZE_UNSET:
+            classes["font-size"] = self.font_size
         return classes
 
     class Meta:
