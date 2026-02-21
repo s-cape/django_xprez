@@ -20,7 +20,6 @@ Quick start
 ```
     INSTALLED_APPS = [
         ...
-        'django.contrib.humanize',
         'sorl.thumbnail',
         'xprez',
         'xprez.ck_editor',

@@ -1,0 +1,49 @@
+.xprez-numbers {
+	text-align: center;
+
+	.xprez-numbers-item {
+		display: inline-block;
+		vertical-align: top;
+		visibility: hidden;
+
+		&.active {
+			visibility: visible;
+		}
+	}
+
+	.xprez-numbers-number {
+		line-height: 1;
+		color: var(--x-numbers-digit-color, inherit);
+		text-align: right;
+	}
+
+	.xprez-numbers-digits {
+		display: inline-block;
+		font-size: 3.5rem;
+		font-weight: 600;
+	}
+
+	.xprez-numbers-suffix {
+		font-size: 3.5rem;
+		font-weight: 500;
+		margin-left: 0.15em;
+		opacity: 0.8;
+	}
+
+	.xprez-numbers-title {
+		font-size: 0.75rem;
+		line-height: 1.25;
+		text-transform: uppercase;
+		font-weight: bold;
+		opacity: 0.5;
+
+		&:before {
+			content: "";
+			display: block;
+			height: 1px;
+			background-color: var(--x-numbers-stroke-bg, currentColor);
+			width: 16px;
+			margin: 0.5rem auto;
+		}
+	}
+}

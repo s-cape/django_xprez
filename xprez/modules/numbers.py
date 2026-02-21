@@ -17,11 +17,13 @@ class NumbersModule(FontSizeModuleMixin, MultiModule):
         verbose_name = "Numbers"
 
     class FrontMedia:
-        js = (
-            "xprez/libs/jquery.waypoints.min.js",
-            "xprez/libs/counter.up/jquery.counterup.js",
-            "xprez/js/numbers.js",
-        )
+        js = ("xprez/js/numbers.js",)
+
+    def save(self, *args, **kwargs):
+        is_new = not self.pk
+        super().save(*args, **kwargs)
+        if is_new:
+            self.create_item(saved=True)
 
 
 class NumbersItem(MultiModuleItem):
@@ -31,6 +33,10 @@ class NumbersItem(MultiModuleItem):
     number = models.IntegerField(null=True, blank=True)
     suffix = models.CharField(max_length=10, null=True, blank=True)
     caption = models.CharField(max_length=100, blank=True)
+
+    def number_intcomma(self):
+        """Comma-separated thousands."""
+        return f"{self.number:,}" if self.number is not None else ""
 
 
 class NumbersModuleForm(ModuleForm):

@@ -366,9 +366,10 @@ class MultiModule(Module):
         position = getattr(self, self.items_attribute).count()
         return item_model(**{item_model.module_foreign_key: self, "position": position})
 
-    def create_item(self):
-        """Build + save item with saved=False."""
+    def create_item(self, saved=False):
+        """Build + save."""
         item = self.build_item()
+        item.saved = saved
         item.save()
         return item
 
