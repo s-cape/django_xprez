@@ -129,6 +129,7 @@ class Migration(migrations.Migration):
                     "font_size",
                     models.CharField(
                         choices=[
+                            ("unset", "Unset"),
                             ("smallest", "Extra Small"),
                             ("small", "Small"),
                             ("normal", "Normal"),
@@ -172,6 +173,7 @@ class Migration(migrations.Migration):
                     "font_size",
                     models.CharField(
                         choices=[
+                            ("unset", "Unset"),
                             ("smallest", "Extra Small"),
                             ("small", "Small"),
                             ("normal", "Normal"),
@@ -501,6 +503,7 @@ class Migration(migrations.Migration):
                         default=1, verbose_name="Row span"
                     ),
                 ),
+                ("order", models.IntegerField(blank=True, null=True)),
                 (
                     "vertical_align_grid",
                     models.CharField(
@@ -696,6 +699,7 @@ class Migration(migrations.Migration):
                     "font_size",
                     models.CharField(
                         choices=[
+                            ("unset", "Unset"),
                             ("smallest", "Smallest"),
                             ("small", "Small"),
                             ("normal", "Normal"),

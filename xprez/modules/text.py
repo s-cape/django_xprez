@@ -61,7 +61,7 @@ class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
     admin_form_class = "xprez.modules.text.TextModuleBaseForm"
     admin_icon_template_name = "xprez/admin/icons/modules/text_base.html"
 
-    text = models.TextField(blank=False)
+    text = models.TextField(blank=True)
 
     class Meta:
         abstract = True
@@ -180,6 +180,8 @@ class TextConfig(TextBaseConfig):
 
 
 class TextModuleBaseForm(ModuleForm):
+    options_fields = ModuleForm.options_fields + ("font_size",)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         widget_class = import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET)
@@ -191,7 +193,7 @@ class TextModuleBaseForm(ModuleForm):
 
 
 class TextModuleForm(TextModuleBaseForm):
-    options_fields = ModuleForm.options_fields + ("url",)
+    options_fields = TextModuleBaseForm.options_fields + ("url",)
     media_clear = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):

@@ -22,10 +22,8 @@ class QuoteModule(FontSizeModuleMixin, Module):
 
 
 class QuoteModuleForm(ModuleForm):
+    options_fields = ModuleForm.options_fields + ("font_size",)
+
     class Meta:
         model = QuoteModule
         fields = "__all__"
-        widgets = {
-            "title": forms.TextInput(attrs={"class": "long"}),
-            "quote": forms.Textarea(attrs={"class": "long"}),
-        }

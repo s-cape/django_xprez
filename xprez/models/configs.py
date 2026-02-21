@@ -217,6 +217,7 @@ class ModuleConfig(ConfigBase):
         "Row span",
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["rowspan"],
     )
+    order = models.IntegerField(blank=True, null=True)
 
     vertical_align_grid = models.CharField(
         "Vertical align (grid)",
@@ -381,6 +382,8 @@ class ModuleConfig(ConfigBase):
             variables["vertical-align-grid"] = self.vertical_align_grid
         if self.horizontal_align_grid != constants.HORIZONTAL_ALIGN_GRID_UNSET:
             variables["horizontal-align-grid"] = self.horizontal_align_grid
+        if self.order is not None:
+            variables["order"] = self.order
         return variables
 
     def get_css_config_keys(self):

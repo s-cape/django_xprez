@@ -2,7 +2,7 @@ export class XprezPopoverBase {
     constructor(...args) {
         this.bindElements(...args);
         this.bindEvents();
-        this.openOnErrors();
+        queueMicrotask(() => this.openOnErrors());
     }
 
     bindEvents() {

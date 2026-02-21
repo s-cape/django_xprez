@@ -101,6 +101,7 @@ class ModuleConfigForm(DeletableFormMixin, forms.ModelForm):
         # Grid
         "colspan",
         "rowspan",
+        "order",
         "vertical_align_grid",
         "horizontal_align_grid",
         # Box

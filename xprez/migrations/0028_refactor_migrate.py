@@ -84,6 +84,7 @@ class Migration(migrations.Migration):
             name="font_size",
             field=models.CharField(
                 choices=[
+                    ("unset", "Unset"),
                     ("smallest", "Extra Small"),
                     ("small", "Small"),
                     ("normal", "Normal"),
@@ -150,6 +151,7 @@ class Migration(migrations.Migration):
             name="font_size",
             field=models.CharField(
                 choices=[
+                    ("unset", "Unset"),
                     ("smallest", "Extra Small"),
                     ("small", "Small"),
                     ("normal", "Normal"),
@@ -175,6 +177,7 @@ class Migration(migrations.Migration):
             name="font_size",
             field=models.CharField(
                 choices=[
+                    ("unset", "Unset"),
                     ("smallest", "Extra Small"),
                     ("small", "Small"),
                     ("normal", "Normal"),
@@ -226,6 +229,7 @@ class Migration(migrations.Migration):
             name="font_size",
             field=models.CharField(
                 choices=[
+                    ("unset", "Unset"),
                     ("smallest", "Extra Small"),
                     ("small", "Small"),
                     ("normal", "Normal"),
