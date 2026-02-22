@@ -1,7 +1,10 @@
 import { XprezModule } from './modules.js';
 import { XprezSortable } from './sortable.js';
 import { XprezMultiModuleItemDeleter } from './deleters.js';
-import { executeScripts, getCsrfToken } from './utils.js';
+import {
+    XprezMultiModuleAdder,
+    XprezUploadMultiModuleAdder,
+} from './adders.js';
 
 export class XprezMultiModuleItem {
     constructor(module, itemEl) {
@@ -28,6 +31,7 @@ export class XprezMultiModuleBase extends XprezModule {
 
         this.initSortable();
         this.initItems();
+        this.initAdder();
     }
 
     initSortable() {
@@ -53,109 +57,22 @@ export class XprezMultiModuleBase extends XprezModule {
             .querySelectorAll('[data-component="xprez-multi-module-item"]')
             .forEach((itemEl) => this.initItem(itemEl));
     }
+
+    initAdder() {
+        const { adderSelector, adderClass } = this.constructor;
+        if (adderSelector && adderClass) {
+            const el = this.el.querySelector(adderSelector);
+            if (el) new adderClass(this.section.xprez, el, this);
+        }
+    }
 }
 
 export class XprezMultiModule extends XprezMultiModuleBase {
-    constructor(section, moduleEl) {
-        super(section, moduleEl);
-        this.initAddButton();
-    }
-
-    initAddButton() {
-        const adder = this.el.querySelector("[data-component='xprez-multi-module-add']");
-        if (!adder) return;
-
-        const url = adder.dataset.addUrl;
-        const button = adder.querySelector('button');
-        if (!button || !url) return;
-
-        button.addEventListener('click', () => {
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error(`Server error ${response.status}`);
-                    return response.text();
-                })
-                .then(html => {
-                    const temp = document.createElement('div');
-                    temp.innerHTML = html;
-                    while (temp.firstElementChild) {
-                        const newEl = temp.firstElementChild;
-                        this.itemsContainer.appendChild(newEl);
-                        this.initItem(newEl);
-                        executeScripts(newEl);
-                    }
-                    this.initSortable();
-                })
-                .catch(error => console.error('Error adding item:', error));
-        });
-    }
+    static adderSelector = "[data-component='xprez-adder-multi-module']";
+    static adderClass = XprezMultiModuleAdder;
 }
 
 export class XprezUploadMultiModule extends XprezMultiModuleBase {
-    constructor(section, moduleEl) {
-        super(section, moduleEl);
-        this.initUpload();
-    }
-
-    initUpload() {
-        const uploadArea = this.el.querySelector("[data-component='xprez-multi-module-upload']");
-        if (!uploadArea) return;
-
-        const fileInput = uploadArea.querySelector("[data-component='xprez-multi-module-file-input']");
-        const url = uploadArea.dataset.uploadUrl;
-        if (!fileInput || !url) return;
-
-        uploadArea.addEventListener('click', (e) => {
-            if (e.target !== fileInput) fileInput.click();
-        });
-
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('xprez-upload-area--dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('xprez-upload-area--dragover');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('xprez-upload-area--dragover');
-            this.uploadFiles(url, e.dataTransfer.files);
-        });
-
-        fileInput.addEventListener('change', () => {
-            this.uploadFiles(url, fileInput.files);
-            fileInput.value = '';
-        });
-    }
-
-    uploadFiles(url, files) {
-        for (const file of files) {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            fetch(url, {
-                method: 'POST',
-                headers: { 'X-CSRFToken': getCsrfToken() },
-                body: formData,
-            })
-                .then(response => {
-                    if (!response.ok) throw new Error(`Upload error ${response.status}`);
-                    return response.text();
-                })
-                .then(html => {
-                    const temp = document.createElement('div');
-                    temp.innerHTML = html;
-                    while (temp.firstElementChild) {
-                        const newEl = temp.firstElementChild;
-                        this.itemsContainer.appendChild(newEl);
-                        this.initItem(newEl);
-                        executeScripts(newEl);
-                    }
-                    this.initSortable();
-                })
-                .catch(error => console.error('Error uploading file:', error));
-        }
-    }
+    static adderSelector = "[data-component='xprez-adder-upload-multi-module']";
+    static adderClass = XprezUploadMultiModuleAdder;
 }

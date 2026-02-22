@@ -1,4 +1,4 @@
 {% extends "xprez/admin/modules/multi_module/upload_multi_module.html" %}
 
 {% block upload_attrs %}accept="image/*"{% endblock %}
-{% block upload_hint %}Drop files here or click to choose images from disk{% endblock %}
+{% block dropzone_text %}{% trans "Drop images here or click to choose images from disk" %}{% endblock %}

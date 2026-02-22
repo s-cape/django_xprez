@@ -1,3 +1,10 @@
+// TODO:cleanup
+[data-adder-adding] {
+    opacity: 0.7;
+    background: red;
+    pointer-events: none;
+}
+
 .xprez-add-list {
     display:grid;
     grid-template-columns: repeat(3, 1fr);

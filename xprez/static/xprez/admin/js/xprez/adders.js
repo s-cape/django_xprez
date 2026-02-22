@@ -1,15 +1,30 @@
-import { executeScripts } from './utils.js';
+import { executeScripts, getCsrfToken } from './utils.js';
 
 export class XprezAdderBase {
     constructor(xprez, el) {
         this.xprez = xprez;
         this.el = el;
+        this._addingCount = 0;
         this.bindEvents();
     }
 
     bindEvents() {}
 
+    setAddingStart() {
+        this._addingCount++;
+        this.el.setAttribute('data-adder-adding', '');
+    }
+
+    setAddingEnd() {
+        this._addingCount--;
+        if (this._addingCount <= 0) {
+            this._addingCount = 0;
+            this.el.removeAttribute('data-adder-adding');
+        }
+    }
+
     add(url) {
+        this.setAddingStart();
         fetch(url)
             .then(response => {
                 if (response.ok) {
@@ -19,13 +34,16 @@ export class XprezAdderBase {
                     throw new Error(`Server returned ${response.status}: ${response.statusText}`);
                 }
             })
-            .then(html => {
-                const newEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild;
-                this.processNewElement(newEl);
-            })
+            .then(html => this.addFromHtml(html))
             .catch(error => {
                 console.error('Error adding:', error);
-            });
+            })
+            .finally(() => this.setAddingEnd());
+    }
+
+    addFromHtml(html) {
+        const newEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild;
+        if (newEl) this.processNewElement(newEl);
     }
 
     processNewElement(newEl) {
@@ -179,5 +197,74 @@ export class XprezModuleConfigAdder extends XprezConfigAdderBase {
     constructor(xprez, module) {
         super(xprez, module, "xprez-adder-module-config");
         this.module = module;
+    }
+}
+
+export class XprezMultiModuleAdderBase extends XprezAdderBase {
+    constructor(xprez, el, module) {
+        super(xprez, el);
+        this.module = module;
+    }
+
+    placeNewElement(el) { this.module.itemsContainer.appendChild(el); }
+    initNewElement(el) { this.module.initItem(el); }
+}
+
+export class XprezMultiModuleAdder extends XprezMultiModuleAdderBase {
+    bindEvents() {
+        this.el.querySelectorAll("[data-component='xprez-add-item']").forEach(
+            itemEl => itemEl.addEventListener('click', () => this.add(itemEl.dataset.url))
+        );
+    }
+}
+
+export class XprezUploadMultiModuleAdder extends XprezMultiModuleAdderBase {
+    bindEvents() {
+        const dropzone = this.el.querySelector("[data-component='xprez-multi-module-dropzone']");
+        if (!dropzone) return;
+
+        const fileInput = dropzone.querySelector("[data-component='xprez-multi-module-file-input']");
+        const url = dropzone.dataset.uploadUrl;
+        if (!fileInput || !url) return;
+
+        dropzone.addEventListener('click', (e) => {
+            if (e.target !== fileInput) fileInput.click();
+        });
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('xprez-upload-area--dragover');
+        });
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('xprez-upload-area--dragover');
+        });
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('xprez-upload-area--dragover');
+            this.uploadFiles(url, e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', () => {
+            this.uploadFiles(url, fileInput.files);
+            fileInput.value = '';
+        });
+    }
+
+    uploadFiles(url, files) {
+        for (const file of files) {
+            const formData = new FormData();
+            formData.append('file', file);
+            this.setAddingStart();
+            fetch(url, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCsrfToken() },
+                body: formData,
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error(`Upload error ${response.status}`);
+                    return response.text();
+                })
+                .then((html) => this.addFromHtml(html))
+                .catch((error) => console.error('Error uploading file:', error))
+                .finally(() => this.setAddingEnd());
+        }
     }
 }
