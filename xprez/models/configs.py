@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 
 from xprez import constants
 from xprez.conf import defaults, settings
-from xprez.models.css import CssMixin, CssParentMixin
+from xprez.models.mixins.css import CssMixin, CssParentMixin
 from xprez.utils import import_class
 
 BREAKPOINT_CHOICES = tuple(

@@ -12,7 +12,7 @@ from xprez.models import (
     SectionConfig,
     VideoModule,
 )
-from xprez.models.responsive_image import (
+from xprez.models.mixins.responsive_image import (
     _build_image_sizes,
     _build_srcset_widths,
     build_srcset_geometries,

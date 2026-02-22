@@ -5,7 +5,8 @@ from django.template.loader import get_template
 from xprez.admin.forms import ModuleForm
 from xprez.admin.fields import TemplatePathField
 from xprez.conf import settings
-from xprez.models.modules import FontSizeModuleMixin, Module
+from xprez.models.mixins.font_size import FontSizeModuleMixin
+from xprez.models.modules import Module
 
 
 class CodeTemplateModule(FontSizeModuleMixin, Module):

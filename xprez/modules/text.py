@@ -15,8 +15,11 @@ from xprez.ck_editor import parse_text as ckeditor_parse_text
 from xprez.ck_editor.widgets import CkEditorWidget
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
-from xprez.models.modules import CLIPBOARD_TEXT_MAX_LENGTH, FontSizeModuleMixin, Module
+from xprez.models.mixins.font_size import FontSizeModuleMixin
+from xprez.models.modules import Module
 from xprez.utils import import_class, random_string, truncate_with_ellipsis
+
+CLIPBOARD_TEXT_MAX_LENGTH = 100
 
 
 class CkEditorFileUploadMixin:

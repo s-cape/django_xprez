@@ -4,8 +4,9 @@ from xprez import constants
 from xprez.admin.forms import ModuleForm, MultiModuleItemForm
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
-from xprez.models.modules import FontSizeModuleMixin, MultiModuleItem, UploadMultiModule
-from xprez.models.responsive_image import (
+from xprez.models.mixins.font_size import FontSizeModuleMixin
+from xprez.models.multi_module import MultiModuleItem, UploadMultiModule
+from xprez.models.mixins.responsive_image import (
     ResponsiveImageItemMixin,
     ResponsiveImageParentMixin,
 )

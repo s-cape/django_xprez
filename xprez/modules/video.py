@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from xprez.admin.forms import ModuleForm
 from xprez.conf import settings
 from xprez.models.modules import Module
-from xprez.models.responsive_image import ResponsiveImageMixin
+from xprez.models.mixins.responsive_image import ResponsiveImageMixin
 
 
 class VideoModule(ResponsiveImageMixin, Module):

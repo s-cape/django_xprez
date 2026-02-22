@@ -7,7 +7,7 @@ from xprez.conf import settings
 
 
 class CkEditorWidgetBase(forms.widgets.Textarea):
-    template_name = "xprez/widgets/ck_editor.html"
+    template_name = "xprez/admin/widgets/ck_editor.html"
 
     def get_config(self, file_upload_dir=None):
         raise NotImplementedError

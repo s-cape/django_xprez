@@ -2,7 +2,8 @@ from django import forms
 from django.db import models
 
 from xprez.admin.forms import ModuleForm, MultiModuleItemForm
-from xprez.models.modules import FontSizeModuleMixin, MultiModuleItem, UploadMultiModule
+from xprez.models.mixins.font_size import FontSizeModuleMixin
+from xprez.models.multi_module import MultiModuleItem, UploadMultiModule
 
 
 class FilesModule(FontSizeModuleMixin, UploadMultiModule):

@@ -2,7 +2,8 @@ from django import forms
 from django.db import models
 
 from xprez.admin.forms import ModuleForm
-from xprez.models.modules import FontSizeModuleMixin, Module
+from xprez.models.mixins.font_size import FontSizeModuleMixin
+from xprez.models.modules import Module
 
 
 class QuoteModule(FontSizeModuleMixin, Module):

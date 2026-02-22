@@ -1,8 +1,8 @@
 from django.test import RequestFactory, TestCase
 
 from example_app.models import Page
-from xprez.models.modules import CLIPBOARD_TEXT_MAX_LENGTH
 from xprez.models import Section, TextModule
+from xprez.modules.text import CLIPBOARD_TEXT_MAX_LENGTH
 
 
 class TextModuleSaveTest(TestCase):
