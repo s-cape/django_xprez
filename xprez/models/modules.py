@@ -317,6 +317,15 @@ class MultiModule(Module):
 
         return ItemForm
 
+    def render_front(self, context):
+        items = (
+            getattr(self, self.items_attribute).filter(saved=True).order_by("position")
+        )
+        if not items.exists():
+            return ""
+        context = {**context, "items": items}
+        return super().render_front(context)
+
     def get_items_queryset(self, data=None):
         qs = getattr(self, self.items_attribute)
         if data is None:
@@ -361,13 +370,10 @@ class MultiModule(Module):
         return super().admin_has_errors() or items_errors
 
     def build_item(self):
-        """Build an unsaved item instance (no DB save)."""
         item_model = getattr(self, self.items_attribute).model
-        position = getattr(self, self.items_attribute).count()
-        return item_model(**{item_model.module_foreign_key: self, "position": position})
+        return item_model(**{item_model.module_foreign_key: self})
 
     def create_item(self, saved=False):
-        """Build + save."""
         item = self.build_item()
         item.saved = saved
         item.save()

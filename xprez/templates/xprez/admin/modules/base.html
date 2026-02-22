@@ -48,9 +48,6 @@
         {% block content %}
             <div class="xprez-form-table">
                 <div class="xprez-option-group">
-                    {% if module.preview_image %}
-                        <img src="{% static module.preview_image %}" alt="" class="xprez-module__preview-image">
-                    {% endif %}
                     {% block main_fields %}
                         {% for field in module.admin_form.get_main_fields %}
                             <div class="xprez-option-row">

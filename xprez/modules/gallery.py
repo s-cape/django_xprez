@@ -1,11 +1,14 @@
 from django.db import models
-from django.utils.functional import cached_property
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm, MultiModuleItemForm
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
 from xprez.models.modules import FontSizeModuleMixin, MultiModuleItem, UploadMultiModule
+from xprez.models.responsive_image import (
+    ResponsiveImageItemMixin,
+    ResponsiveImageParentMixin,
+)
 
 PHOTOSWIPE_JS = (
     "xprez/libs/photoswipe/dist/photoswipe.min.js",
@@ -18,7 +21,7 @@ PHOTOSWIPE_CSS = (
 )
 
 
-class GalleryModule(FontSizeModuleMixin, UploadMultiModule):
+class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMultiModule):
     config_model = "xprez.GalleryConfig"
     front_template_name = "xprez/modules/gallery.html"
     admin_template_name = "xprez/admin/modules/gallery/gallery.html"
@@ -41,11 +44,6 @@ class GalleryModule(FontSizeModuleMixin, UploadMultiModule):
         js = PHOTOSWIPE_JS
         css = PHOTOSWIPE_CSS
 
-    def render_front(self, context):
-        if self.items.all().exists():
-            return super().render_front(context)
-        return ""
-
     @property
     def thumbnail_crop(self):
         """Sorl crop option: 'center' when aspect crop set, else no crop."""
@@ -59,87 +57,9 @@ class GalleryModule(FontSizeModuleMixin, UploadMultiModule):
             num, den = self.crop.split("/", 1)
             return (int(num.strip()), int(den.strip()))
 
-    def get_section_max_width_px(self):
-        """Section max-width in px, or None for full-width."""
-        width_choice = self.section.max_width_choice
-        if width_choice == constants.MAX_WIDTH_FULL:
-            return None
-        elif width_choice == constants.MAX_WIDTH_CUSTOM:
-            return self.section.max_width_custom or None
-        else:
-            max_width_values = settings.XPREZ_CSS["section"]["max_width"]["values"]
-            return max_width_values.get(width_choice, {}).get(0)
-
-    @cached_property
-    def get_image_sizes(self):
-        """Build HTML sizes attribute string for responsive gallery images."""
-        max_width, ranges = self._compute_column_ranges()
-        entries = []
-        for index, (min_width, effective_columns) in enumerate(ranges):
-            if index + 1 < len(ranges):
-                next_min_width = ranges[index + 1][0]
-            else:
-                next_min_width = None
-            vw_size = f"{self._format_percentage(100 / effective_columns)}vw"
-            if max_width is None:
-                entries += [self._media_entry(vw_size, next_min_width)]
-            elif min_width >= max_width:
-                px_size = round(max_width / effective_columns)
-                entries += [self._media_entry(f"{px_size}px", next_min_width)]
-            elif next_min_width is None or next_min_width > max_width:
-                entries += [self._media_entry(vw_size, max_width)]
-                px_size = round(max_width / effective_columns)
-                entries += [self._media_entry(f"{px_size}px", next_min_width)]
-            else:
-                entries += [self._media_entry(vw_size, next_min_width)]
-        return ", ".join(entries)
-
-    @cached_property
-    def get_srcset_widths(self):
-        """Candidate widths for srcset, capped at full_width_cap."""
-        max_width = self.get_section_max_width_px()
-        full_width_cap = settings.XPREZ_GALLERY_FULL_WIDTH_PX
-        if max_width is None:
-            max_boundary = full_width_cap
-        else:
-            max_boundary = min(max_width, full_width_cap)
-        candidate_widths = set()
-        for (
-            _,
-            effective_columns,
-            next_min_width,
-        ) in self._iter_breakpoint_columns():
-            if max_width is None:
-                boundary = min(next_min_width or full_width_cap, full_width_cap)
-                pixel_width = round(boundary / effective_columns)
-                candidate_widths.add(pixel_width)
-                candidate_widths.add(pixel_width * 2)
-            elif next_min_width is not None and next_min_width <= max_boundary:
-                pixel_width = round(next_min_width / effective_columns)
-                candidate_widths.add(pixel_width)
-                candidate_widths.add(pixel_width * 2)
-            if max_width is not None and (
-                next_min_width is None or next_min_width > max_width
-            ):
-                pixel_width = round(max_boundary / effective_columns)
-                candidate_widths.add(pixel_width)
-                candidate_widths.add(pixel_width * 2)
-        retina_cap = full_width_cap * 2
-        return sorted(width for width in candidate_widths if 0 < width <= retina_cap)
-
-    # -- Private helpers --
-
-    @staticmethod
-    def _format_percentage(value):
-        rounded = round(value, 2)
-        return int(rounded) if rounded == int(rounded) else rounded
-
-    @staticmethod
-    def _media_entry(value, breakpoint=None):
-        """Wrap value in a CSS media query if breakpoint is given."""
-        if breakpoint:
-            return f"(max-width: {breakpoint}px) {value}"
-        return value
+    def get_breakpoint_ranges(self):
+        """Yield (min_width, effective_columns, next_min_width) per breakpoint."""
+        return self._iter_breakpoint_columns()
 
     def _iter_breakpoint_columns(self):
         """Yield (min_width, effective_columns, next_min_width) per breakpoint."""
@@ -172,17 +92,8 @@ class GalleryModule(FontSizeModuleMixin, UploadMultiModule):
                 next_min_width = None
             yield min_width, effective_columns, next_min_width
 
-    def _compute_column_ranges(self):
-        """Return (max_width_px, ranges) with consecutive duplicate columns removed."""
-        max_width = self.get_section_max_width_px()
-        ranges = []
-        for min_width, effective_columns, _ in self._iter_breakpoint_columns():
-            if not ranges or ranges[-1][1] != effective_columns:
-                ranges += [(min_width, effective_columns)]
-        return max_width, ranges
 
-
-class GalleryItem(MultiModuleItem):
+class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):
     module = models.ForeignKey(
         GalleryModule, related_name="items", on_delete=models.CASCADE
     )
@@ -190,28 +101,15 @@ class GalleryItem(MultiModuleItem):
     description = models.CharField(max_length=255, blank=True, null=True)
     alt_text = models.CharField(max_length=255, blank=True)
 
-    @cached_property
-    def get_srcset_geometries(self):
-        """Srcset geometry strings capped at this item's image width (no upscale)."""
-        try:
-            max_image_width = self.file.width
-        except Exception:
-            max_image_width = settings.XPREZ_GALLERY_FULL_WIDTH_PX
-        if not max_image_width:
-            max_image_width = settings.XPREZ_GALLERY_FULL_WIDTH_PX
-        capped_widths = [
-            width for width in self.module.get_srcset_widths if width <= max_image_width
-        ]
-        if not capped_widths:
-            capped_widths = [max_image_width]
+    def get_image_field(self):
+        return self.file
+
+    def get_aspect_ratio(self):
         crop_ratio = self.module.get_crop_ratio()
-        if crop_ratio:
-            numerator, denominator = crop_ratio
-            return [
-                f"{width}x{round(width * denominator / numerator)}"
-                for width in capped_widths
-            ]
-        return [f"{width}x{width}" for width in capped_widths]
+        return crop_ratio if crop_ratio else (1, 1)
+
+    def get_srcset_widths_for_geometries(self):
+        return self.module.get_srcset_widths
 
     @classmethod
     def create_from_file(cls, django_file, gallery):

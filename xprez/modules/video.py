@@ -5,10 +5,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from xprez.admin.forms import ModuleForm
+from xprez.conf import settings
 from xprez.models.modules import Module
+from xprez.models.responsive_image import ResponsiveImageMixin
 
 
-class VideoModule(Module):
+class VideoModule(ResponsiveImageMixin, Module):
     front_template_name = "xprez/modules/video.html"
     admin_template_name = "xprez/admin/modules/video.html"
     admin_form_class = "xprez.modules.video.VideoForm"
@@ -28,6 +30,25 @@ class VideoModule(Module):
         inst.video_type = self.admin_form.video_type
         inst.video_id = self.admin_form.video_id
         inst.save()
+
+    def get_breakpoint_ranges(self):
+        """Yield single-column ranges for all breakpoints."""
+        breakpoints = settings.XPREZ_BREAKPOINTS
+        bp_ids = list(breakpoints)
+        for index, bp_id in enumerate(bp_ids):
+            min_width = breakpoints[bp_id]["min_width"]
+            next_min_width = (
+                breakpoints[bp_ids[index + 1]]["min_width"]
+                if index + 1 < len(bp_ids)
+                else None
+            )
+            yield min_width, 1, next_min_width
+
+    def get_image_field(self):
+        return self.poster_image
+
+    def get_aspect_ratio(self):
+        return (16, 9)
 
     def render_front(self, context):
         if self.url:

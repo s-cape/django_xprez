@@ -4,7 +4,7 @@
 {% block css_class %}{{ block.super }} js-content-{{ module.pk }} js-gallery{% endblock %}
 
 {% block content %}
-    {% for item in module.items.all %}
+    {% for item in items %}
         {% with alt=item.alt_text|default:item.description geoms=item.get_srcset_geometries %}
         <div class="xprez-photo-item js-photo"
             {% thumbnail item.file "2000x2000" upscale=false format="WEBP" quality=90 filename_stem=alt as thumb %}

@@ -4,7 +4,7 @@
 {% block content %}
     {% trans "Files" as default_title %}
     <h3>{{ module.title|default:default_title }}</h3>
-    {% for item in module.items.all %}
+    {% for item in items %}
         <div class="xprez-download-item">
             <div class="xprez-download-btn">
                 <a href="{{ item.file.url }}" class="btn btn-secondary btn-download" download="{{ item.get_description }}{% if item.get_extension %}.{{ item.get_extension }}{% endif %}">

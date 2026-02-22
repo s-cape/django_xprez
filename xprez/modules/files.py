@@ -18,12 +18,6 @@ class FilesModule(FontSizeModuleMixin, UploadMultiModule):
     class Meta:
         verbose_name = "Files"
 
-    def render_front(self, context):
-        if self.items.all().exists():
-            return super().render_front(context)
-        else:
-            return ""
-
 
 class FilesItem(MultiModuleItem):
     module = models.ForeignKey(

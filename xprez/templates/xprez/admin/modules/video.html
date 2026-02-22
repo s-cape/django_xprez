@@ -1,23 +1,11 @@
 {% extends "xprez/admin/modules/base.html" %}
 
-{% comment %}
-{% block options %}
-    <ul class="xprez-module__options-group js-select_controller" data-formfield_selector="#id_content-{{ module.pk }}-width">
-        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ module.SIZE_FULL }}">Full width</span></li>
-        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ module.SIZE_MID }}">Mid width</span></li>
-        <li><span class="xprez-option-btn js-option" data-formfield_value="{{ module.SIZE_TEXT }}">Text width</span></li>
-    </ul>
+{% block main_fields %}
+    <div class="xprez-option-row">{% include "xprez/admin/form/field.html" with field=module.admin_form.url %}</div>
+    <div class="xprez-option-row">{% include "xprez/admin/form/field.html" with field=module.admin_form.poster_image %}</div>
+    {% if module.poster_image %}
+        {% thumbnail module.poster_image "500x278" format="WEBP" quality=70 as thumb %}
+            <img src="{{ thumb.url}}">
+        {% endthumbnail %}
+    {% endif %}
 {% endblock %}
-
-{% block content %}
-    <div class="xprez-form-table">
-        {% include "xprez/admin/form/row.html" with field=module.admin_form.url %}
-        {% include "xprez/admin/form/row.html" with field=module.admin_form.poster_image %}
-    </div>
-{% endblock %}
-
-{% block hidden_fields %}
-{{ block.super }}
-{{ module.admin_form.width }}
-{% endblock %}
-{% endcomment %}
