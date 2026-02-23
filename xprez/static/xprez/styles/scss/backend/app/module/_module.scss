@@ -57,5 +57,9 @@
     &__body {
         padding: var(--x-admin-padding-lg);
         background-color: var(--x-admin-content-bg);
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        align-items: stretch;
     }
 }

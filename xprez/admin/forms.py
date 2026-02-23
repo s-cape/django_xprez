@@ -95,17 +95,11 @@ class ModuleForm(
         return self.options_fields
 
     def get_main_fields(self):
-        excluded_fields = tuple(self.base_module_fields)
-        excluded_fields += self.options_fields
-        excluded_fields += self.system_fields
-
-        for field in self.fields:
-            if field not in excluded_fields:
-                yield self[field]
+        excluded_fields = tuple(self.base_module_fields) + self.options_fields + self.system_fields
+        return [self[field] for field in self.fields if field not in excluded_fields]
 
     def get_options_fields(self):
-        for field in self.options_fields:
-            yield self[field]
+        return [self[field] for field in self.options_fields if field in self.fields]
 
     class Meta:
         fields = "__all__"

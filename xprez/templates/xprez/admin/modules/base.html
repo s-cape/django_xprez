@@ -1,6 +1,6 @@
 {% load static xprez_admin %}
 <div
-    class="xprez-admin-module {% if module.admin_form.errors %}xprez-module--has-errors{% endif %}"
+    class="xprez-admin-module {% if module.admin_form.errors %}xprez-module--has-errors{% endif %} xprez-admin-{{ module.module_css_class }}"
     data-component="xprez-module"
     data-content-type="{{ module.content_type }}"
     data-mode="{# (empty)/edit/select/delete #}"
@@ -46,17 +46,19 @@
     <div class="xprez-admin-module__body">
         {% include "xprez/admin/form/errors.html" with errors=module.admin_form.non_field_errors %}
         {% block content %}
-            <div class="xprez-form-table">
-                <div class="xprez-option-group">
-                    {% block main_fields %}
-                        {% for field in module.admin_form.get_main_fields %}
-                            <div class="xprez-option-row">
-                                {% include "xprez/admin/form/field.html" with field=field %}
-                            </div>
-                        {% endfor %}
-                    {% endblock %}
+            {% if module.admin_form.get_main_fields  %}
+                <div class="xprez-form-table">
+                    <div class="xprez-option-group">
+                        {% block main_fields %}
+                            {% for field in module.admin_form.get_main_fields %}
+                                <div class="xprez-option-row">
+                                    {% include "xprez/admin/form/field.html" with field=field %}
+                                </div>
+                            {% endfor %}
+                        {% endblock %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         {% endblock %}
     </div>
 
