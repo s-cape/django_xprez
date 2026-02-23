@@ -232,14 +232,14 @@ export class XprezUploadMultiModuleAdder extends XprezMultiModuleAdderBase {
         });
         dropzone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropzone.classList.add('xprez-upload-area--dragover');
+            dropzone.classList.add('xprez-admin-adder__inner--dragover');
         });
         dropzone.addEventListener('dragleave', () => {
-            dropzone.classList.remove('xprez-upload-area--dragover');
+            dropzone.classList.remove('xprez-admin-adder__inner--dragover');
         });
         dropzone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropzone.classList.remove('xprez-upload-area--dragover');
+            dropzone.classList.remove('xprez-admin-adder__inner--dragover');
             this.uploadFiles(url, e.dataTransfer.files);
         });
         fileInput.addEventListener('change', () => {
