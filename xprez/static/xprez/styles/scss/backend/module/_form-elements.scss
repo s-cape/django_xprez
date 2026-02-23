@@ -7,7 +7,6 @@
 
 	label {
 		font-size: .857rem;
-
 		color: $b-gray-7;
 	}
 
@@ -30,6 +29,7 @@
 
 	.xprez-option {
 		--x-admin-padding-md: .75rem;
+		--x-admin-option-input-font-weight: 400;
 
 		// border: 1px solid $b-gray-3;
 		
@@ -37,8 +37,13 @@
 			flex: 1;
 		}
 
+		&:has(input[type="checkbox"]:last-child) {
+			padding-right: .25rem;
+		}
+
 		label {
-			min-width: 6rem;
+			flex-basis: 6rem;
+    		min-width: 6rem;
 			border-right: 1px solid $b-gray-3;
 			margin-right: .5rem;
 			padding-right: .5rem;
@@ -50,6 +55,14 @@
 
 		input, textarea {
 			text-align: left !important;
+			align-self: center;
+		}
+
+		&:has(*[required]) {
+			label {
+				font-weight: 500;
+				color: $b-gray-8;
+			}
 		}
 	}
 }
