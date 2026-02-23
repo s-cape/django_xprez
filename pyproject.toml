@@ -3,8 +3,8 @@ line-length = 88
 target-version = ["py310"]
 exclude = """
 /(
-    \.git
-  | \.venv
+    \\.git
+  | \\.venv
   | example_app
 )/
 """
