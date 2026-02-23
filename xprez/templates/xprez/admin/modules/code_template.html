@@ -1,6 +1,6 @@
 {% extends "xprez/admin/modules/base.html" %}
-{% block content %}
-    <div class="xprez-form-table">
-        {% include "xprez/admin/form/row.html" with field=module.admin_form.template_name %}
+{% block main_fields %}
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=module.admin_form.template_name %}
     </div>
 {% endblock %}
