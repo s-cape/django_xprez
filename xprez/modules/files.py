@@ -28,7 +28,7 @@ class FilesItem(MultiModuleItem):
     description = models.CharField(max_length=255, blank=True)
 
     def get_description(self):
-        return self.description or self.get_default_file_name()
+        return self.description or self.get_file_stem()
 
     def get_extension(self):
         try:
@@ -36,7 +36,7 @@ class FilesItem(MultiModuleItem):
         except (KeyError, IndexError):
             return ""
 
-    def get_default_file_name(self):
+    def get_file_stem(self):
         try:
             return self.file.name.split("/")[-1].split(".")[0]
         except (KeyError, IndexError):

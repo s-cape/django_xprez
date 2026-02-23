@@ -1,7 +1,7 @@
 {% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
 
 {% block item_header_main_text %}
-    <a href="{{ item.file.url }}" target="_blank">{{ item.file.name }}</a>
+    <a href="{{ item.file.url }}" target="_blank">{{ item.get_file_stem }}</a>
 {% endblock %}
 
 {% block item_content %}

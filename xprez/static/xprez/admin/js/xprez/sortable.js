@@ -22,33 +22,25 @@ export class XprezSortable {
         }
     };
 
-    blockEditables() {
-        this.element.querySelectorAll(PREVENT_NATIVE_DROP_SELECTOR).forEach((el) => {
-            const prev = el.style.pointerEvents;
-            el.style.pointerEvents = 'none';
-            this.blockedElements.push({ el, prev });
-        });
-    }
-
-    unblockEditables() {
-        this.blockedElements.forEach(({ el, prev }) => {
-            el.style.pointerEvents = prev;
-        });
-        this.blockedElements = [];
-    }
-
     enableDropPrevention() {
-        this.blockEditables();
         DRAG_EVENTS.forEach((event) =>
             document.addEventListener(event, this.preventNativeDrop, true)
         );
+        this.element.querySelectorAll(PREVENT_NATIVE_DROP_SELECTOR).forEach((el) => {
+            const savedPointerEvents = el.style.pointerEvents;
+            el.style.pointerEvents = 'none';
+            this.blockedElements.push({ el, savedPointerEvents });
+        });
     }
 
     disableDropPrevention() {
         DRAG_EVENTS.forEach((event) =>
             document.removeEventListener(event, this.preventNativeDrop, true)
         );
-        this.unblockEditables();
+        this.blockedElements.forEach(({ el, savedPointerEvents }) => {
+            el.style.pointerEvents = savedPointerEvents;
+        });
+        this.blockedElements = [];
     }
 
     createSortable() {
