@@ -13,10 +13,17 @@
                     #{$element} {
                         @include rfs.font-size(map-get($properties, "font-size"));
                         line-height: map-get($properties, "line-height");
-                        margin-bottom: map-get($properties, "margin-bottom");  
 
                         @if map-get($properties, "font-weight") {
                             font-weight: map-get($properties, "font-weight");
+                        }
+                        
+                        @if map-get($properties, "margin-top") {
+                            margin-top: map-get($properties, "margin-top");
+                        }
+
+                        @if map-get($properties, "margin-bottom") {
+                            margin-bottom: map-get($properties, "margin-bottom");
                         }
 
                         @if map-get($properties, "before-heading-margin-bottom") and $element == "p" {
@@ -49,6 +56,16 @@
 
     p, li {
         color: inherit;
+    }
+
+    figure {
+        margin: 0;
+    }
+    
+    figcaption {
+        font-style: $x-figcaption-font-style;
+        opacity: $x-figcaption-opacity;
+        text-align: $x-figcaption-text-align;   
     }
 
     h2, h3, h4 {
