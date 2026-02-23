@@ -197,6 +197,7 @@ class TextModuleBaseForm(ModuleForm):
 
 class TextModuleForm(TextModuleBaseForm):
     options_fields = TextModuleBaseForm.options_fields + ("url",)
+    sync_exclude = ("url",)
     media_clear = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):

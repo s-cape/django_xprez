@@ -96,6 +96,12 @@ class Migration(migrations.Migration):
                 ("content_type", models.CharField(editable=False, max_length=100)),
                 ("css_class", models.CharField(blank=True, max_length=100, null=True)),
                 ("alternate_color", models.BooleanField(default=False)),
+                (
+                    "sync_selected",
+                    models.BooleanField(
+                        default=True, verbose_name="Change style for selected modules"
+                    ),
+                ),
                 ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
                 ("changed", models.DateTimeField(auto_now=True, db_index=True)),
                 (

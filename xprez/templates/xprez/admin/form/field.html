@@ -1,11 +1,12 @@
 <div
-    class="{% if placement == "module" %}{% else %}xprez-option {% endif %} {% if field.field.required %}required{% endif %}"
+    class="{% if placement == "module" %}{% else %}xprez-option {% endif %} {% if field.field.required %}required{% endif %} {{ wrapper_class|default:"" }}"
     {% if size is not None %}data-size="{{ size }}"{% endif %}
     {% if field.errors %}data-has-errors{% endif %}
     data-component="field"
     data-field-name="{{ field.name }}"
     data-active="true"
     {% if label is False %}data-text-label="false"{% endif %}
+    {% if field.name in field.form.sync_fields %}data-sync{% endif %}
     {{ attributes|default:"" }}
 >
     {% if label is not False or icon %}

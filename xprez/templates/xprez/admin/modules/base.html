@@ -9,7 +9,7 @@
 >
     <div class="xprez-admin-module__header" data-draggable-module-handle>
         <div class="xprez-admin-module__name">
-            <span class="xprez-admin-module__name-icon">
+            <span class="xprez-admin-module__name-icon" data-component="xprez-select-trigger">
                 {{ module.admin_icon|safe }}
             </span>
             <div class="xprez-option" data-active="true">
@@ -78,17 +78,7 @@
                     </div>
 
                     <div class="xprez-option-row">
-                        <div class="xprez-option xprez-option--marker" data-size="flex-1" data-active="true">
-                            <label for="{{ module.admin_form.prefix }}-change-similar">
-                                <span>Change style for similar modules</span>
-                            </label>
-                            <input
-                                id="{{ module.admin_form.prefix }}-change-similar"
-                                type="checkbox"
-                                checked
-                                data-component="xprez-module-change-similar"
-                            >
-                        </div>
+                        {% include "xprez/admin/form/field.html" with field=module.admin_form.sync_selected size="flex-1" wrapper_class="xprez-option--marker" %}
                     </div>
 
                     <div class="xprez-option-group__subtitle">Attributes</div>

@@ -23,10 +23,31 @@ class PositionFormMixin:
         return self.instance.position or 0
 
 
+class SyncFieldsMixin:
+    SYNC_UNSAFE_WIDGETS = (forms.FileInput, forms.ClearableFileInput)
+    sync_exclude = ()
+
+    def sync_candidate_fields(self):
+        """Return iterable of field names to consider for syncing."""
+        raise NotImplementedError()
+
+    def _sync_is_safe(self, field):
+        return (field not in self.sync_exclude) and (
+            not isinstance(self.fields[field].widget, self.SYNC_UNSAFE_WIDGETS)
+        )
+
+    @property
+    def sync_fields(self):
+        return tuple(
+            field for field in self.sync_candidate_fields if self._sync_is_safe(field)
+        )
+
+
 class DeletableFormMixin:
     """Forms with delete capability skip validation when delete=True."""
 
     system_fields = ("delete",)
+    sync_fields = ()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -55,16 +76,23 @@ class SectionConfigForm(DeletableFormMixin, forms.ModelForm):
             self.fields.pop("delete", None)
 
 
-class ModuleForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
+class ModuleForm(
+    SyncFieldsMixin, DeletableFormMixin, PositionFormMixin, forms.ModelForm
+):
     base_module_fields = (
         "position",
         "section",
     )
+    system_fields = DeletableFormMixin.system_fields + ("sync_selected",)
 
     options_fields = (
         "alternate_color",
         "css_class",
     )
+
+    @property
+    def sync_candidate_fields(self):
+        return self.options_fields
 
     def get_main_fields(self):
         excluded_fields = tuple(self.base_module_fields)
@@ -95,7 +123,7 @@ class MultiModuleItemForm(DeletableFormMixin, forms.ModelForm):
         fields = "__all__"
 
 
-class ModuleConfigForm(DeletableFormMixin, forms.ModelForm):
+class ModuleConfigForm(SyncFieldsMixin, DeletableFormMixin, forms.ModelForm):
     base_module_fields = (
         "visible",
         # Grid
@@ -128,11 +156,17 @@ class ModuleConfigForm(DeletableFormMixin, forms.ModelForm):
         if self.instance.is_default():
             self.fields.pop("delete", None)
 
+    @property
+    def extra_fields(self):
+        excluded_fields = self.base_module_fields + self.system_fields
+        return tuple(name for name in self.fields if name not in excluded_fields)
+
     def get_extra_fields(self):
-        excluded_fields = tuple(self.base_module_fields) + self.system_fields
-        for field in self.fields:
-            if field not in excluded_fields:
-                yield self[field]
+        return tuple(self[name] for name in self.extra_fields)
+
+    @property
+    def sync_candidate_fields(self):
+        return self.base_module_fields + self.extra_fields
 
     class Meta:
         fields = "__all__"

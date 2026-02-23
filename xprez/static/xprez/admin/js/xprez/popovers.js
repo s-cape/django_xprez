@@ -30,6 +30,9 @@ export class XprezPopoverBase {
     isOpen() { return this.el.matches(":popover-open"); }
     show() { this.el.showPopover(); }
     hide() { this.el.hidePopover(); }
+    _hideOthers(xprez) {
+        xprez.getPopovers().filter(p => p !== this).forEach(p => p.hide());
+    }
 }
 
 export class XprezSectionPopover extends XprezPopoverBase {
@@ -39,7 +42,7 @@ export class XprezSectionPopover extends XprezPopoverBase {
         this.triggerEl = this.section.el.querySelector("[data-component='xprez-section-popover-trigger']");
     }
     show() {
-        this.section.xprez.getPopovers().filter(popover => popover !== this).forEach(popover => popover.hide());
+        this._hideOthers(this.section.xprez);
         super.show();
         this.section.el.dataset.mode = "edit";
     }
@@ -56,11 +59,28 @@ export class XprezModulePopover extends XprezPopoverBase {
         this.triggerEl = this.module.el.querySelector("[data-component='xprez-module-popover-trigger']");
     }
     show() {
+        this._hideOthers(this.module.section.xprez);
         super.show();
         this.module.el.dataset.mode = "edit";
+        // this._autoSelectSameType();
     }
     hide() {
         super.hide();
         this.module.el.dataset.mode = "";
+        // this._clearSelection();
     }
+    // _autoSelectSameType() {
+    //     const contentType = this.module.contentType();
+    //     for (const mod of this.module.section.modules) {
+    //         if (mod === this.module) continue;
+    //         mod.el.dataset.mode = mod.contentType() === contentType ? "select" : "";
+    //     }
+    // }
+    // _clearSelection() {
+    //     for (const mod of this.module.section.xprez.getModules()) {
+    //         if (mod.el.dataset.mode === "select") {
+    //             mod.el.dataset.mode = "";
+    //         }
+    //     }
+    // }
 }

@@ -32,6 +32,9 @@ class Module(ConfigParentMixin, models.Model):
     alternate_color = models.BooleanField(
         default=defaults.XPREZ_DEFAULTS["module"]["default"]["alternate_color"]
     )
+    sync_selected = models.BooleanField(
+        "Change style for selected modules", default=True
+    )
 
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
     changed = models.DateTimeField(auto_now=True, editable=False, db_index=True)
