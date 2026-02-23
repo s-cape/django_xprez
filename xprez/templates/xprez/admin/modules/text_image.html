@@ -25,7 +25,9 @@
                 {% endif %}
             {% endblock %}
             {% block image_input %}
-                {% include "xprez/admin/form/row.html" with field=module.admin_form.image %}
+                <div class="xprez-option-row">
+                    {% include "xprez/admin/form/field.html" with field=module.admin_form.image %}
+                </div>
             {% endblock %}
         </div>
         <div class="xprez-image-text-text xprez-text-image">
