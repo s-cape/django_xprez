@@ -2,8 +2,8 @@
 
 {% block item_fields %}
     <div class="xprez-option-row">
-        {% include "xprez/admin/form/row.html" with field=item.admin_form.number %}
-        {% include "xprez/admin/form/row.html" with field=item.admin_form.suffix %}
-        {% include "xprez/admin/form/row.html" with field=item.admin_form.caption %}
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.number %}
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.suffix %}
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.caption %}
     </div>
 {% endblock %}
