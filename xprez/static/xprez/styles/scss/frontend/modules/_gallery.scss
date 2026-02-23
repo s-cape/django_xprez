@@ -1,0 +1,22 @@
+.xprez-gallery {
+    .xprez-module-inner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--x-gap);
+        align-items: flex-end;
+    }
+
+    &__item {
+        &-cont {
+            --x-gallery-item-width: calc(100% / var(--x-columns) - var(--x-gap) * (var(--x-columns) - 1) / var(--x-columns));
+            flex-basis: var(--x-gallery-item-width);
+            width: var(--x-gallery-item-width);
+        }
+
+        &-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
+}

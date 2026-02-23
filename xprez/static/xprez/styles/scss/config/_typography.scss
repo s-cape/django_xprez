@@ -8,6 +8,10 @@ $x-button-font-weight: 600 !default;
 $x-button-border-radius: .65em !default;
 $x-button-gap: .5rem !default;
 
+$x-figcaption-font-style: italic !default;
+$x-figcaption-opacity: 0.7 !default;
+$x-figcaption-text-align: center !default; 
+
 $x-typography-config: (
     "smallest": (
         "h2": (
@@ -33,6 +37,11 @@ $x-typography-config: (
             "line-height": 1.5,
             "margin-bottom": .75rem,
             "before-heading-margin-bottom": 1.5rem
+        ),
+        "figcaption": (
+            "font-size": 0.75rem,
+            "line-height": 1.1,
+            "margin-top": .5rem
         ),
         "li": (
             "font-size": 0.875rem,
@@ -81,6 +90,11 @@ $x-typography-config: (
             "margin-bottom": .75rem,
             "before-heading-margin-bottom": 1.5rem
         ),
+        "figcaption": (
+            "font-size": 0.875rem,
+            "line-height": 1.1,
+            "margin-top": .5rem
+        ),
         "li": (
             "font-size": 1rem,
             "line-height": 1.5,
@@ -127,6 +141,11 @@ $x-typography-config: (
             "line-height": 1.5,
             "margin-bottom": 1rem,
             "before-heading-margin-bottom": 2rem
+        ),
+        "figcaption": (
+            "font-size": 0.9375rem,
+            "line-height": 1.1,
+            "margin-top": .5rem
         ),
         "li": (
             "font-size": 1.125rem,
@@ -175,6 +194,11 @@ $x-typography-config: (
             "margin-bottom": 1rem,
             "before-heading-margin-bottom": 2.5rem
         ),
+        "figcaption": (
+            "font-size": 1.0625rem,
+            "line-height": 1.2,
+            "margin-top": .75rem
+        ),
         "li": (
             "font-size": 1.3125rem,
             "line-height": 1.4,
@@ -221,6 +245,11 @@ $x-typography-config: (
             "line-height": 1.35,
             "margin-bottom": 1.35rem,
             "before-heading-margin-bottom": 2.5rem
+        ),
+        "figcaption": (
+            "font-size": 1.125rem,
+            "line-height": 1.2,
+            "margin-top": 1rem
         ),
         "li": (
             "font-size": 1.5rem,

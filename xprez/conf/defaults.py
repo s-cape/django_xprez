@@ -101,7 +101,7 @@ XPREZ_DEFAULTS = {
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_UNSET,
             "vertical_align_flex": constants.VERTICAL_ALIGN_FLEX_START,
             "horizontal_align_flex": constants.HORIZONTAL_ALIGN_FLEX_CENTER,
-            "border_radius_choice": constants.BORDER_RADIUS_MEDIUM,
+            "border_radius_choice": constants.BORDER_RADIUS_NONE,
             "border_radius_custom": 0,
             "background": False,
             "background_color": "",
