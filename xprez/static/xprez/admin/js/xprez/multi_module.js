@@ -10,12 +10,6 @@ export class XprezMultiModuleItem {
     constructor(module, itemEl) {
         this.module = module;
         this.el = itemEl;
-        const trigger = this.el.querySelector(
-            "[data-component='xprez-multi-module-item-delete']"
-        );
-        this.prefix = trigger
-            ? trigger.dataset.targetPrefix
-            : `item-${this.el.querySelector('input[name="item-id"]')?.value ?? ''}`;
         this.deleter = new XprezMultiModuleItemDeleter(this);
     }
 }
@@ -45,8 +39,13 @@ export class XprezMultiModuleBase extends XprezModule {
     }
 
     initItem(itemEl) {
-        const ControllerClass =
-            window[itemEl.dataset.jsControllerClass] || XprezMultiModuleItem;
+        const ControllerClass = window[itemEl.dataset.jsControllerClass];
+        if (!ControllerClass) {
+            console.error(
+                `Controller class ${itemEl.dataset.jsControllerClass} not found`
+            );
+            return;
+        }
         const item = new ControllerClass(this, itemEl);
         this.items.push(item);
         return item;

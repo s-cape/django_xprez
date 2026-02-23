@@ -543,7 +543,6 @@ class GalleryProcessor(MultiModuleProcessor):
             css_breakpoint=default_breakpoint
         )
         section_config.max_width_choice = self.WIDTH_TRANS[self.old_content.width]
-        section_config.columns = self.old_content.columns
         section_config.gap_choice = self.GAP_TRANS[self.old_content.divided]
         section_config.save()
 

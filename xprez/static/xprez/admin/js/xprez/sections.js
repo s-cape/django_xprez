@@ -43,6 +43,7 @@ export class XprezSection extends XprezContentBase {
         }
         const module = new ControllerClass(this, moduleEl);
         this.modules.push(module);
+        return module;
     }
 
     get collapsedIds() {

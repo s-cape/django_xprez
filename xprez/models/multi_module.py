@@ -42,7 +42,7 @@ class MultiModule(Module):
         qs = getattr(self, self.items_attribute)
         if data is None:
             return qs.filter(saved=True).order_by("position")
-        ids = [int(id) for id in data.getlist("item-id")]
+        ids = [int(id) for id in data.getlist(f"{self.key}-item-id")]
         items = list(qs.filter(pk__in=ids))
         items.sort(key=lambda item: ids.index(item.pk))
         return items
@@ -151,7 +151,8 @@ class MultiModuleItem(models.Model):
 
     @property
     def key(self):
-        return f"item-{self.pk}"
+        module_pk = getattr(self, f"{self.module_foreign_key}_id")
+        return f"item-module-{module_pk}-{self.pk}"
 
     def copy(self, for_module, save=True):
         if not for_module:

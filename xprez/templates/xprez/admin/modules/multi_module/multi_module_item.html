@@ -2,6 +2,7 @@
     class="xprez-admin-multi-item"
     data-component="xprez-multi-module-item"
     data-js-controller-class="{{ module.admin_item_js_controller_class }}"
+    data-prefix="{{ item.admin_form.prefix }}"
     data-mode=""
 >
     {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-multi-module-item" %}
@@ -9,7 +10,7 @@
         <div class="xprez-admin-multi-item__header">
             <span class="xprez-admin-multi-item__header-handle" data-draggable-multi-module-item-handle>{% include "xprez/admin/icons/grip.html" %}</span>
             <div class="xprez-admin-multi-item__header-text">{% block item_header_main_text %}{% endblock %}</div>
-            <span class="xprez-icon-btn" title="Remove" data-component="xprez-multi-module-item-delete" data-target-prefix="{{ item.key }}">
+            <span class="xprez-icon-btn" title="Remove" data-component="xprez-multi-module-item-delete">
                 <i class="xprez-icon-delete"></i>
                 <span data-hidden>{{ item.admin_form.delete }}</span>
             </span>
@@ -29,7 +30,7 @@
 
     <div data-component="xprez-multi-module-item-form" data-hidden>
         {% block item_hidden %}
-            <input type="hidden" name="item-id" value="{{ item.pk }}">
+            <input type="hidden" name="{{ module.key }}-item-id" value="{{ item.pk }}">
         {% endblock %}
     </div>
 </div>

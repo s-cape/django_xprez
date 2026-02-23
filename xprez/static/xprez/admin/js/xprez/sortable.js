@@ -1,33 +1,54 @@
+const PREVENT_NATIVE_DROP_SELECTOR =
+    'input, textarea, select, [contenteditable], [class*="ck-"]';
+
+const DRAG_EVENTS = ['dragenter', 'dragover', 'drop'];
+
 export class XprezSortable {
+    blockedElements = [];
+
     constructor(element, config = {}) {
         this.element = element;
         this.config = config;
-        this.dropPrevention = {
-            selector: 'input, textarea, select, [contenteditable], [class*="ck-"]',
-            events: ['dragenter', 'dragover', 'drop'],
-            handler: this.preventNativeDrop.bind(this)
-        };
-
         this.sortable = this.createSortable();
     }
 
-    preventNativeDrop(e) {
-        const { selector } = this.dropPrevention;
-        if (e.target.matches(selector) || e.target.closest(selector)) {
+    preventNativeDrop = (e) => {
+        if (
+            e.target.matches(PREVENT_NATIVE_DROP_SELECTOR) ||
+            e.target.closest(PREVENT_NATIVE_DROP_SELECTOR)
+        ) {
             e.preventDefault();
+            if (e.dataTransfer) e.dataTransfer.dropEffect = 'none';
         }
+    };
+
+    blockEditables() {
+        this.element.querySelectorAll(PREVENT_NATIVE_DROP_SELECTOR).forEach((el) => {
+            const prev = el.style.pointerEvents;
+            el.style.pointerEvents = 'none';
+            this.blockedElements.push({ el, prev });
+        });
+    }
+
+    unblockEditables() {
+        this.blockedElements.forEach(({ el, prev }) => {
+            el.style.pointerEvents = prev;
+        });
+        this.blockedElements = [];
     }
 
     enableDropPrevention() {
-        this.dropPrevention.events.forEach(event => {
-            document.addEventListener(event, this.dropPrevention.handler, true);
-        });
+        this.blockEditables();
+        DRAG_EVENTS.forEach((event) =>
+            document.addEventListener(event, this.preventNativeDrop, true)
+        );
     }
 
     disableDropPrevention() {
-        this.dropPrevention.events.forEach(event => {
-            document.removeEventListener(event, this.dropPrevention.handler, true);
-        });
+        DRAG_EVENTS.forEach((event) =>
+            document.removeEventListener(event, this.preventNativeDrop, true)
+        );
+        this.unblockEditables();
     }
 
     createSortable() {
@@ -47,4 +68,3 @@ export class XprezSortable {
         });
     }
 }
-
