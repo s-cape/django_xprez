@@ -95,7 +95,9 @@ class ModuleForm(
         return self.options_fields
 
     def get_main_fields(self):
-        excluded_fields = tuple(self.base_module_fields) + self.options_fields + self.system_fields
+        excluded_fields = (
+            tuple(self.base_module_fields) + self.options_fields + self.system_fields
+        )
         return [self[field] for field in self.fields if field not in excluded_fields]
 
     def get_options_fields(self):
