@@ -3,10 +3,14 @@
 
 {% block item_content %}
     {% block thumb %}
-        {% thumbnail item.file "400x400" format="WEBP" quality=80 as thumb %}
-            <img src="{{ thumb.url }}" class="xprez-gallery__img" data-draggable-multi-module-item-handle />
-        {% endthumbnail %}
+        <div class="xprez-admin-gallery__image-cont">
+            {% thumbnail item.file "400x400" format="WEBP" quality=80 as thumb %}
+                <img src="{{ thumb.url }}" class="xprez-admin-gallery__image" data-draggable-multi-module-item-handle />
+            {% endthumbnail %}
+        </div>
     {% endblock %}
-    {% include "xprez/admin/form/row.html" with field=item.admin_form.description %}
-    {% include "xprez/admin/form/row.html" with field=item.admin_form.alt_text %}
+    <div class="xprez-option-group">
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.description %}
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.alt_text %}
+    </div>
 {% endblock %}

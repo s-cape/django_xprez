@@ -1,6 +1,7 @@
 {% extends "xprez/admin/modules/base.html" %}
 
 {% block content %}
+{% block testovacka %}{% endblock %}
     {{ block.super }}
     {% block add_item %}
         <div class="xprez-admin-adder" data-component="xprez-adder-multi-module">
@@ -12,7 +13,7 @@
             >Add item</button>
         </div>
     {% endblock %}
-    <div data-component="xprez-multi-module-items">
+    <div class="xprez-admin-multi-items" data-component="xprez-multi-module-items">
         {% for item in module.admin_form.xprez_items %}
             {% include module.admin_item_template_name %}
         {% endfor %}

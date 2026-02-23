@@ -1,0 +1,59 @@
+.xprez-admin-multi-item {
+    position: relative;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid $b-gray-3;
+        padding-bottom: .5rem;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        &-handle {
+            cursor: grab;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            color: $b-gray-6;
+            transition: color 0.2s ease-in-out;
+        }
+    }
+
+    &__fields {
+        padding: 0 2rem;
+    }
+
+    .xprez-option {
+        display: flex;
+
+        &-group {
+            margin-top: .5rem;
+        }
+
+        label {
+            border-right: 1px solid $b-gray-3;
+            min-width: 4rem;
+        }
+
+        input {
+            text-align: left !important;
+        }
+    }
+}
+
+.xprez-admin-multi-items {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
