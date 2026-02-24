@@ -1,9 +1,12 @@
 {% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
 
-{% block item_fields %}
+{% block item_header_content %}
+    {% include "xprez/admin/form/errors.html" with errors=item.admin_form.non_field_errors %}
     <div class="xprez-option-row">
-        {% include "xprez/admin/form/field.html" with field=item.admin_form.number %}
-        {% include "xprez/admin/form/field.html" with field=item.admin_form.suffix %}
-        {% include "xprez/admin/form/field.html" with field=item.admin_form.caption %}
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.number size="sm" %}
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.suffix size="sm" %}
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.caption size="flex-auto" %}
     </div>
 {% endblock %}
+
+{% block item_content %}{% endblock %}

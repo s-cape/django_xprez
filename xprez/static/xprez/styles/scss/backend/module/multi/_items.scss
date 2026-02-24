@@ -11,8 +11,18 @@
         align-items: center;
         gap: 0.5rem;
 
-        &-text {
+        &-content {
             flex: 1;
+            
+            &:not(:has(.xprez-option-row)) {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        &-text {
+            display: block;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -31,6 +41,8 @@
     }
 
     &__fields {
+        --x-admin-option-color: #{rgba($b-gray-7, 0.8)};
+
         padding: 0 2rem;
     }
 

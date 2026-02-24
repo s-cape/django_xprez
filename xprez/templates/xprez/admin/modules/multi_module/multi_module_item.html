@@ -9,7 +9,7 @@
     {% block item_header %}
         <div class="xprez-admin-multi-item__header">
             <span class="xprez-admin-multi-item__header-handle" data-draggable-multi-module-item-handle>{% include "xprez/admin/icons/grip.html" %}</span>
-            <div class="xprez-admin-multi-item__header-text">{% block item_header_main_text %}{% endblock %}</div>
+            <div class="xprez-admin-multi-item__header-content">{% block item_header_content %}{% endblock %}</div>
             <span class="xprez-icon-btn" title="Remove" data-component="xprez-multi-module-item-delete">
                 <i class="xprez-icon-delete"></i>
                 <span data-hidden>{{ item.admin_form.delete }}</span>

@@ -25,6 +25,10 @@ input[type="text"], select, .xprez-option__dropdown {
     }
     
     &[data-size="lg"] {
+        width: 300px;
+    }
+    
+    &[data-size="xl"] {
         width: 400px;
     }
 
