@@ -16,7 +16,7 @@
         align-items: center;
         gap: var(--x-admin-padding-md);
 
-        .xprez-module[data-mode="edit"] & {
+        .xprez-admin-module[data-mode="edit"] & {
             --x-admin-content-header-bg: var(--x-admin-marker-checked-text-bg);
             --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
             --x-admin-option-button-hover-bg: var(--x-admin-marker-checked-hover-text-bg);  
