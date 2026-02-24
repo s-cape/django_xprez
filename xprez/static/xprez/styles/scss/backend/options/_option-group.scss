@@ -76,10 +76,15 @@
             margin-top: var(--x-admin-padding-xl);
             padding-top: var(--x-admin-padding-md);
             padding-bottom: var(--x-admin-padding-md);
-            border-top: 1px solid $b-gray-6;
+            border-top: var(--x-admin-option-group-border);
             position: sticky;
             bottom:  calc(var(--x-admin-padding-lg) * -1);
             background-color: var(--x-admin-popover-bg);
+        }
+
+        &[data-component="xprez-section-config"], &[data-component="xprez-module-config"] {
+            border-top: var(--x-admin-option-group-border);
+            padding-top: var(--x-admin-padding-md);
         }
     }
 

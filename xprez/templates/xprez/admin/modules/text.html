@@ -10,8 +10,27 @@
 
 {% block main_fields %}
     {% if module.media %}
-        <img src="{{ module.media.url }}">
-        Clear: {{ module.admin_form.media_clear }}
+    {# TODO: pokud je  obrazek vyssi, nez data-crop-minimum-size, tak se prida trida crop #}
+        <div class="xprez-admin-text__media-cont">
+            <div class="xprez-admin-text__img-cont crop" onclick="this.classList.toggle('crop')" data-crop-minimum-size="400">
+                <img class="xprez-admin-text__media-img" src="{{ module.media.url }}" />
+            </div>
+            <div class="xprez-admin-text__media-actions">
+                {% comment %} <span class="xprez-option" data-active="true">
+                    <label for="{{ module.admin_form.media_clear.id_for_label }}">Clear</label>
+                    {{ module.admin_form.media_clear }}
+                </span> {% endcomment %}
+                <span class="xprez-icon-btn" title="Image">
+                    {% include "xprez/admin/icons/repeat.html" %}
+                    {{ module.admin_form.media }}
+                </span>
+                <span class="xprez-icon-btn" title="Remove" data-component="xprez-multi-module-item-delete">
+                    <i class="xprez-icon-delete"></i>
+                    <span data-hidden>{{ item.admin_form.delete }}</span>
+                </span>
+            </div>
+            {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-text-media-delete" %}
+        </div>
     {% endif %}
     {{ block.super }}
 {% endblock %}
