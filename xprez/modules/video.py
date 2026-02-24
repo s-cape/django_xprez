@@ -6,8 +6,8 @@ from django.utils.translation import gettext_lazy as _
 
 from xprez.admin.forms import ModuleForm
 from xprez.conf import settings
-from xprez.models.modules import Module
 from xprez.models.mixins.responsive_image import ResponsiveImageMixin
+from xprez.models.modules import Module
 
 
 class VideoModule(ResponsiveImageMixin, Module):
@@ -24,6 +24,9 @@ class VideoModule(ResponsiveImageMixin, Module):
     )
     video_type = models.CharField(choices=TYPE_CHOICES, max_length=50, editable=False)
     video_id = models.CharField(max_length=200, editable=False)
+
+    class Meta:
+        verbose_name = "Video"
 
     def save_admin_form(self, request):
         inst = self.admin_form.save(commit=False)

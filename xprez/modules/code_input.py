@@ -12,6 +12,9 @@ class CodeInputModule(Module):
 
     code = models.TextField()
 
+    class Meta:
+        verbose_name = "Code Input"
+
     def show_front(self):
         return self.code
 
