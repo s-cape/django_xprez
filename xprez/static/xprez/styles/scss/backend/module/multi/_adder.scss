@@ -74,5 +74,10 @@
             display: none;
         }
     }
+
+    &__add-item {
+        display: flex;
+        padding: .5rem 1rem;
+    }
 }
 

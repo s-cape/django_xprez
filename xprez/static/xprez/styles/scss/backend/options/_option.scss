@@ -75,7 +75,7 @@
 		min-width: 20px !important;  
 		outline: none !important;
 		flex: 1;
-		line-height: inherit !important;
+		// line-height: inherit !important;
 		color: var(--x-admin-option-input-color) !important;
 		width: 100%;
 		margin: 0 !important;
@@ -86,7 +86,9 @@
 	}
 
 	textarea {
-		padding: .5rem 0 !important;
+		padding: .75rem 0 !important;
+		line-height: 1.4;
+		height: 8rem;
 	}
 
 	input[type="number"] {

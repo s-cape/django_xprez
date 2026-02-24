@@ -5,12 +5,14 @@
     {{ block.super }}
     {% block add_item %}
         <div class="xprez-admin-adder" data-component="xprez-adder-multi-module">
-            <button
+            <span
                 type="button"
-                class="xprez-btn"
+                class="xprez-btn xprez-btn-transparent xprez-admin-adder__add-item"
                 data-component="xprez-add-item"
                 data-url="{% url module.xprez_add_item_url_name module.pk %}"
-            >Add item</button>
+            >
+                <i class="xprez-icon-plus_square_20"></i>Add item
+            </span>
         </div>
     {% endblock %}
     <div class="xprez-admin-multi-items" data-component="xprez-multi-module-items">
