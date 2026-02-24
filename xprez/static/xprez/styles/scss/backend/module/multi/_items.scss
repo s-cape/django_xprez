@@ -41,13 +41,12 @@
     }
 
     &__fields {
-        --x-admin-option-color: #{rgba($b-gray-7, 0.8)};
-
         padding: 0 2rem;
     }
 
     .xprez-option {
         --x-admin-option-input-font-weight: 400;
+        --x-admin-option-color: #{rgba($b-gray-7, 0.8)};
 
         display: flex;
 
