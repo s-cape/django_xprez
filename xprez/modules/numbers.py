@@ -1,12 +1,16 @@
 from django import forms
 from django.db import models
 
+from xprez import constants
 from xprez.admin.forms import ModuleForm, MultiModuleItemForm
+from xprez.conf import defaults
+from xprez.models.configs import ModuleConfig
 from xprez.models.mixins.font_size import FontSizeModuleMixin
 from xprez.models.multi_module import MultiModule, MultiModuleItem
 
 
 class NumbersModule(FontSizeModuleMixin, MultiModule):
+    config_model = "xprez.NumbersConfig"
     front_template_name = "xprez/modules/numbers.html"
     admin_template_name = "xprez/admin/modules/numbers/numbers.html"
     admin_item_template_name = "xprez/admin/modules/numbers/numbers_item.html"
@@ -38,6 +42,53 @@ class NumbersItem(MultiModuleItem):
     def number_intcomma(self):
         """Comma-separated thousands."""
         return f"{self.number:,}" if self.number is not None else ""
+
+
+class NumbersConfig(ModuleConfig):
+    admin_template_name = "xprez/admin/configs/modules/numbers.html"
+
+    COLUMNS_CHOICES = (
+        (constants.COLUMNS_AUTO, "Auto"),
+        (1, "1"),
+        (2, "2"),
+        (3, "3"),
+        (4, "4"),
+        (5, "5"),
+        (6, "6"),
+        (7, "7"),
+        (8, "8"),
+    )
+    columns = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        choices=COLUMNS_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.NumbersModule"][
+            "columns"
+        ],
+    )
+
+    gap_choice = models.CharField(
+        "Gap",
+        max_length=20,
+        choices=constants.GAP_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.NumbersModule"][
+            "gap_choice"
+        ],
+        blank=True,
+    )
+    gap_custom = models.PositiveIntegerField(null=True, blank=True)
+
+    def get_css_classes(self):
+        classes = super().get_css_classes()
+        classes["numbers-columns-auto"] = self.columns is self.constants.COLUMNS_AUTO
+        return classes
+
+    def get_css_variables(self):
+        css_variables = super().get_css_variables()
+        css_variables["gap"] = self._get_choice_or_custom("gap")
+        if self.columns is not self.constants.COLUMNS_AUTO:
+            css_variables["columns"] = self.columns
+        return css_variables
 
 
 class NumbersModuleForm(ModuleForm):

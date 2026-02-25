@@ -832,4 +832,59 @@ class Migration(migrations.Migration):
             },
             bases=("xprez.moduleconfig",),
         ),
+        migrations.CreateModel(
+            name="NumbersConfig",
+            fields=[
+                (
+                    "moduleconfig_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.moduleconfig",
+                    ),
+                ),
+                (
+                    "columns",
+                    models.PositiveSmallIntegerField(
+                        blank=True,
+                        choices=[
+                            (1, "1"),
+                            (2, "2"),
+                            (3, "3"),
+                            (4, "4"),
+                            (5, "5"),
+                            (6, "6"),
+                            (7, "7"),
+                            (8, "8"),
+                        ],
+                        default=None,
+                        null=True,
+                    ),
+                ),
+                (
+                    "gap_choice",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="medium",
+                        max_length=20,
+                        verbose_name="Gap",
+                    ),
+                ),
+                ("gap_custom", models.PositiveIntegerField(blank=True, null=True)),
+            ],
+            options={
+                "abstract": False,
+            },
+            bases=("xprez.moduleconfig",),
+        ),
     ]

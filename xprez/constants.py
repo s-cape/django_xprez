@@ -52,6 +52,9 @@ GAP_CHOICES = (
     (GAP_CUSTOM, "Custom"),
 )
 
+# Numbers module columns (None = auto)
+COLUMNS_AUTO = None
+
 # Vertical align - Grid (CSS Grid values for grid positioning)
 VERTICAL_ALIGN_GRID_START = "start"
 VERTICAL_ALIGN_GRID_CENTER = "center"

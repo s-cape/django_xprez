@@ -130,6 +130,11 @@ XPREZ_DEFAULTS = {
             "columns": 4,
             "gap_choice": constants.GAP_SMALL,
         },
+        "xprez.NumbersModule": {
+            "gap_choice": constants.GAP_MEDIUM,
+            "gap_custom": 0,
+            "columns": constants.COLUMNS_AUTO,
+        },
     },
 }
 
@@ -322,6 +327,17 @@ XPREZ_CSS = {
             },
         },
         "xprez.GalleryModule": {
+            "gap": {
+                "units": "px",
+                "values": {
+                    constants.GAP_NONE: {0: 0},
+                    constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
+                    constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
+                    constants.GAP_LARGE: {0: 40, 1: 60, 2: 80},
+                },
+            },
+        },
+        "xprez.NumbersModule": {
             "gap": {
                 "units": "px",
                 "values": {

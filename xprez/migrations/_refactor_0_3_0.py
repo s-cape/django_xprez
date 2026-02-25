@@ -218,10 +218,26 @@ class ModuleProcessorBase:
             css_breakpoint=default_breakpoint,
             defaults={
                 "saved": True,
+                "colspan": default_config["colspan"],
+                "rowspan": default_config["rowspan"],
                 "vertical_align_grid": default_config["vertical_align_grid"],
                 "horizontal_align_grid": default_config["horizontal_align_grid"],
                 "vertical_align_flex": default_config["vertical_align_flex"],
                 "horizontal_align_flex": default_config["horizontal_align_flex"],
+                "border_radius_choice": default_config["border_radius_choice"],
+                "border_radius_custom": default_config["border_radius_custom"],
+                "background": default_config["background"],
+                "background_color": default_config["background_color"],
+                "border": default_config["border"],
+                "padding_left_choice": default_config["padding_left_choice"],
+                "padding_left_custom": default_config["padding_left_custom"],
+                "padding_right_choice": default_config["padding_right_choice"],
+                "padding_right_custom": default_config["padding_right_custom"],
+                "padding_top_choice": default_config["padding_top_choice"],
+                "padding_top_custom": default_config["padding_top_custom"],
+                "padding_bottom_choice": default_config["padding_bottom_choice"],
+                "padding_bottom_custom": default_config["padding_bottom_custom"],
+                "aspect_ratio": default_config["aspect_ratio"],
             },
         )
 
@@ -273,6 +289,10 @@ def _reset_sequences(schema_editor, models_list):
 def migrate_containers_sections_modules(apps, schema_editor):
     default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
     xprez_defaults = _get_settings("XPREZ_DEFAULTS")
+    section_defaults = xprez_defaults["section"]
+    section_config_defaults = xprez_defaults["section_config"]
+    module_defaults = xprez_defaults["module"]["default"]
+
     ContentsContainer = apps.get_model("xprez", "ContentsContainer")
     Content = apps.get_model("xprez", "Content")
 
@@ -296,6 +316,8 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 container=container,
                 position=old_content.position,
                 visible=old_content.visible,
+                max_width_choice=section_defaults["max_width_choice"],
+                max_width_custom=section_defaults["max_width_custom"],
                 alternate_background=old_content.alternate_color,
                 background_color=old_content.background_color,
                 css_class=old_content.css_class,
@@ -305,10 +327,39 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 css_breakpoint=default_breakpoint,
                 defaults={
                     "saved": True,
-                    "vertical_align_grid": xprez_defaults["section_config"][
+                    "columns": section_config_defaults["columns"],
+                    "margin_bottom_choice": section_config_defaults[
+                        "margin_bottom_choice"
+                    ],
+                    "margin_bottom_custom": section_config_defaults[
+                        "margin_bottom_custom"
+                    ],
+                    "padding_left_choice": section_config_defaults[
+                        "padding_left_choice"
+                    ],
+                    "padding_left_custom": section_config_defaults[
+                        "padding_left_custom"
+                    ],
+                    "padding_right_choice": section_config_defaults[
+                        "padding_right_choice"
+                    ],
+                    "padding_right_custom": section_config_defaults[
+                        "padding_right_custom"
+                    ],
+                    "padding_top_choice": section_config_defaults["padding_top_choice"],
+                    "padding_top_custom": section_config_defaults["padding_top_custom"],
+                    "padding_bottom_choice": section_config_defaults[
+                        "padding_bottom_choice"
+                    ],
+                    "padding_bottom_custom": section_config_defaults[
+                        "padding_bottom_custom"
+                    ],
+                    "gap_choice": section_config_defaults["gap_choice"],
+                    "gap_custom": section_config_defaults["gap_custom"],
+                    "vertical_align_grid": section_config_defaults[
                         "vertical_align_grid"
                     ],
-                    "horizontal_align_grid": xprez_defaults["section_config"][
+                    "horizontal_align_grid": section_config_defaults[
                         "horizontal_align_grid"
                     ],
                 },
@@ -320,6 +371,7 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 section=section,
                 position=0,
                 saved=True,
+                alternate_color=module_defaults["alternate_color"],
                 created=timezone.now(),
                 changed=timezone.now(),
             )
@@ -443,8 +495,47 @@ class QuotesProcessor(ModuleReplaceProcessor):
 
         if len(quotes) > 1:
             default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+            section_config_defaults = _get_settings("XPREZ_DEFAULTS")["section_config"]
             section_config = self.module_base.section.configs.get_or_create(
-                css_breakpoint=default_breakpoint
+                css_breakpoint=default_breakpoint,
+                defaults={
+                    "saved": True,
+                    "columns": section_config_defaults["columns"],
+                    "margin_bottom_choice": section_config_defaults[
+                        "margin_bottom_choice"
+                    ],
+                    "margin_bottom_custom": section_config_defaults[
+                        "margin_bottom_custom"
+                    ],
+                    "padding_left_choice": section_config_defaults[
+                        "padding_left_choice"
+                    ],
+                    "padding_left_custom": section_config_defaults[
+                        "padding_left_custom"
+                    ],
+                    "padding_right_choice": section_config_defaults[
+                        "padding_right_choice"
+                    ],
+                    "padding_right_custom": section_config_defaults[
+                        "padding_right_custom"
+                    ],
+                    "padding_top_choice": section_config_defaults["padding_top_choice"],
+                    "padding_top_custom": section_config_defaults["padding_top_custom"],
+                    "padding_bottom_choice": section_config_defaults[
+                        "padding_bottom_choice"
+                    ],
+                    "padding_bottom_custom": section_config_defaults[
+                        "padding_bottom_custom"
+                    ],
+                    "gap_choice": section_config_defaults["gap_choice"],
+                    "gap_custom": section_config_defaults["gap_custom"],
+                    "vertical_align_grid": section_config_defaults[
+                        "vertical_align_grid"
+                    ],
+                    "horizontal_align_grid": section_config_defaults[
+                        "horizontal_align_grid"
+                    ],
+                },
             )[0]
             section_config.columns = 2
             section_config.save()
@@ -557,7 +648,8 @@ class GalleryProcessor(MultiModuleProcessor):
 
 
 class NumbersModuleProcessor(MultiModuleProcessor):
-    pass
+    def get_config_class(self, module):
+        return "xprez.NumbersConfig"
 
 
 class FilesModuleProcessor(MultiModuleProcessor):
