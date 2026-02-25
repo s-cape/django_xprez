@@ -2,17 +2,17 @@
 {% load i18n %}
 
 {% block content %}
-    {% trans "Files" as default_title %}
-    <h3>{{ module.title|default:default_title }}</h3>
+    {% comment %} {% trans "Files" as default_title %}
+    <h3>{{ module.title|default:default_title }}</h3> {% endcomment %}
+    {% if module.title %}
+        <h4>{{ module.title }}</h4>
+    {% endif %}
     {% for item in items %}
-        <div class="xprez-download-item">
-            <div class="xprez-download-btn">
-                <a href="{{ item.file.url }}" class="btn btn-secondary btn-download" download="{{ item.get_description }}{% if item.get_extension %}.{{ item.get_extension }}{% endif %}">
-                    {% trans "Download" %}
-                    {{ item.get_extension }}
-                </a>
-            </div>
-            <div class="xprez-download-item-name">{{ item.get_description }}</div>
-        </div>
+        <p class="xprez-files__item">
+            <a href="{{ item.file.url }}" class="xprez-files__link" download="{{ item.get_description }}{% if item.get_extension %}.{{ item.get_extension }}{% endif %}">
+                {% include "xprez/admin/icons/download.html" %}
+                <span class="xprez-files__description">{{ item.get_description }}</span>
+            </a>
+        </p>
     {% endfor %}
 {% endblock %}

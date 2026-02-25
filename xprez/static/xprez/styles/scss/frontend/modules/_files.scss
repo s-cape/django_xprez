@@ -1,0 +1,47 @@
+.xprez-files {
+    .xprez-module-inner {
+        flex: 1;
+    }
+
+    &__item {
+        flex: 1;
+        padding-top: $x-files-item-padding-top;
+        padding-bottom: $x-files-item-padding-bottom;
+        margin: 0 !important;
+        line-height: $x-files-item-line-height !important;
+
+        &:not(:first-child) {
+            border-top: 1px solid var(--x-line-color);
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    &__link {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: inherit !important;
+        text-decoration: none;
+
+        &:hover {
+            .svg-icon {
+                transform: translateY(-.25rem);
+            }
+        }
+    }
+
+    .svg-icon {
+        width: $x-files-icon-size;
+        height: $x-files-icon-size;
+        flex-shrink: 0;
+        transition: transform 0.15s ease-in-out;
+    }
+
+    &__description {
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+}
