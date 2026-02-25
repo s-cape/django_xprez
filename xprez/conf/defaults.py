@@ -42,7 +42,6 @@ XPREZ_BREAKPOINTS = {
     4: {"name": "Desktops (&gt; 1200px)", "min_width": 1200},
     5: {"name": "Extra large devices (&gt; 1500px)", "min_width": 1500},
 }
-XPREZ_DEFAULT_BREAKPOINT = 0
 XPREZ_GALLERY_FULL_WIDTH_PX = 2700
 
 XPREZ_DEFAULTS = {

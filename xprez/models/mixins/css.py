@@ -73,7 +73,7 @@ class CssMixin:
     def _get_value_or_default(self, field_name):
         """Return value if non-empty, else resolve default for field_name."""
         value = getattr(self, field_name)
-        if value not in [None, constants.NONE]:
+        if value not in [None, ""]:
             return value
         return self._lookup_by_config_keys(settings.XPREZ_DEFAULTS, field_name)
 
@@ -143,7 +143,7 @@ class CssParentMixin(CssMixin):
     merging them across breakpoints into a single <style> tag.
     """
 
-    css_breakpoint = settings.XPREZ_DEFAULT_BREAKPOINT
+    css_breakpoint = 0
 
     def get_css_classes_unprefixed(self):
         value = getattr(self, "css_class", None)
@@ -159,9 +159,7 @@ class CssParentMixin(CssMixin):
         Returns: {0: {"columns": 2}, 2: {"columns": 3}}
         """
         db_configs = {c.css_breakpoint: c for c in self.get_saved_configs()}
-        current_css_variables = self.build_config(
-            settings.XPREZ_DEFAULT_BREAKPOINT
-        ).get_css_variables()
+        current_css_variables = self.build_config(0).get_css_variables()
         result = {}
         last_config = None
 

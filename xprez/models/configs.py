@@ -38,13 +38,13 @@ class ConfigBase(CssMixin, models.Model):
 
     css_breakpoint = models.PositiveSmallIntegerField(
         choices=BREAKPOINT_CHOICES,
-        default=settings.XPREZ_DEFAULT_BREAKPOINT,
+        default=0,
         editable=False,
     )
     saved = models.BooleanField(default=False, editable=False)
 
     def is_default(self):
-        return self.css_breakpoint == settings.XPREZ_DEFAULT_BREAKPOINT
+        return self.css_breakpoint == 0
 
     def get_admin_form_class(self):
         return import_class(self.form_class)

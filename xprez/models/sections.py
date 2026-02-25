@@ -51,7 +51,7 @@ class Section(ConfigParentMixin, models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.pk:
-            self.get_or_create_config(settings.XPREZ_DEFAULT_BREAKPOINT)
+            self.get_or_create_config(0)
 
     def build_config(self, css_breakpoint):
         return self.configs.model(

@@ -1,7 +1,6 @@
 CUSTOM = "custom"
-NONE = ""
 
-MARGIN_NONE = NONE
+MARGIN_NONE = ""
 MARGIN_SMALL = "small"
 MARGIN_MEDIUM = "medium"
 MARGIN_LARGE = "large"
@@ -25,7 +24,7 @@ MAX_WIDTH_CHOICES = (
     (MAX_WIDTH_CUSTOM, "Custom"),
 )
 
-PADDING_NONE = NONE
+PADDING_NONE = ""
 PADDING_SMALL = "small"
 PADDING_MEDIUM = "medium"
 PADDING_LARGE = "large"
@@ -39,7 +38,7 @@ PADDING_CHOICES = (
 )
 
 # Gap
-GAP_NONE = NONE
+GAP_NONE = ""
 GAP_SMALL = "small"
 GAP_MEDIUM = "medium"
 GAP_LARGE = "large"
@@ -202,7 +201,7 @@ BACKGROUND_POSITION_CHOICES = (
 )
 
 # Border radius
-BORDER_RADIUS_NONE = NONE
+BORDER_RADIUS_NONE = ""
 BORDER_RADIUS_SMALL = "small"
 BORDER_RADIUS_MEDIUM = "medium"
 BORDER_RADIUS_LARGE = "large"

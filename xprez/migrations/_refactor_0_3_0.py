@@ -209,7 +209,7 @@ class ModuleProcessorBase:
 
     def finalize(self, module):
         """Create/get module config from defaults. Subclasses override to map old_content to module/config."""
-        default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+        default_breakpoint = 0
         xprez_defaults = _get_settings("XPREZ_DEFAULTS")
         config_class = self.apps.get_model(*self.get_config_class(module).split("."))
         default_config = xprez_defaults["module_config"]["default"]
@@ -290,7 +290,6 @@ def _reset_sequences(schema_editor, models_list):
 
 
 def migrate_containers_sections_modules(apps, schema_editor):
-    default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
     xprez_defaults = _get_settings("XPREZ_DEFAULTS")
     section_defaults = xprez_defaults["section"]
     section_config_defaults = xprez_defaults["section_config"]
@@ -327,7 +326,7 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 saved=True,
             )
             section_config, _created = section.configs.get_or_create(
-                css_breakpoint=default_breakpoint,
+                css_breakpoint=0,
                 defaults={
                     "saved": True,
                     "columns": section_config_defaults["columns"],
@@ -443,7 +442,7 @@ class GridboxesProcessor(TextModuleProcessorBase):
         )
         section.save()
 
-        default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+        default_breakpoint = 0
         section_config = section.configs.get(css_breakpoint=default_breakpoint)
         section_config.columns = self.old_content.columns
         section_config.gap_choice = self.MARGIN_TRANS.get(
@@ -497,7 +496,7 @@ class QuotesProcessor(ModuleReplaceProcessor):
             quotes = quotes[:1]
 
         if len(quotes) > 1:
-            default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+            default_breakpoint = 0
             section_config_defaults = _get_settings("XPREZ_DEFAULTS")["section_config"]
             section_config = self.module_base.section.configs.get_or_create(
                 css_breakpoint=default_breakpoint,
@@ -599,7 +598,7 @@ class TextImageProcessor(ModuleReplaceProcessor):
     def finalize_new_modules(self):
         super().finalize_new_modules()
         section = self.module_base.section
-        default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
+        default_breakpoint = 0
         section_config = section.configs.get(css_breakpoint=default_breakpoint)
         section_config.columns = 2
         section_config.gap_choice = "large"
@@ -632,10 +631,7 @@ class GalleryProcessor(MultiModuleProcessor):
 
     def process(self):
         super().process()
-        default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
-        section_config = self.module.section.configs.get(
-            css_breakpoint=default_breakpoint
-        )
+        section_config = self.module.section.configs.get(css_breakpoint=0)
         section_config.max_width_choice = self.WIDTH_TRANS[self.old_content.width]
         section_config.gap_choice = self.GAP_TRANS[self.old_content.divided]
         section_config.save()

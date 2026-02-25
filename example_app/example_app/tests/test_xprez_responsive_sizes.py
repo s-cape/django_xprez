@@ -196,9 +196,7 @@ class GalleryModuleSizesTest(TestCase):
     def test_section_full_width_gallery_single_column_sizes_contains_100vw(self):
         section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_FULL)
         module = self._gallery_module(section)
-        config = module.get_configs().get(
-            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
-        )
+        config = module.get_configs().get(css_breakpoint=0)
         config.columns = 1
         config.saved = True
         config.save()
@@ -215,9 +213,7 @@ class GalleryModuleSizesTest(TestCase):
             saved=True,
         )
         module = self._gallery_module(section)
-        config = module.get_configs().get(
-            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
-        )
+        config = module.get_configs().get(css_breakpoint=0)
         config.columns = 1
         config.saved = True
         config.save()
@@ -229,9 +225,7 @@ class GalleryModuleSizesTest(TestCase):
     def test_section_medium_gallery_two_columns_sizes_has_half_max_width_px(self):
         section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_MEDIUM)
         gallery = GalleryModule.objects.create(section=section, position=0, saved=True)
-        config = gallery.get_configs().get(
-            css_breakpoint=settings.XPREZ_DEFAULT_BREAKPOINT
-        )
+        config = gallery.get_configs().get(css_breakpoint=0)
         config.columns = 2
         config.saved = True
         config.save()
