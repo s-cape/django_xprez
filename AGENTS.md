@@ -2,43 +2,42 @@
 
 Instructions for coding agents working in this repository.
 
-## Scope
+## Repository context
 
-- Keep changes focused on the user request.
-- Avoid ad-hoc infra changes; if needed, update `fabfile.py` or Ansible files.
-- Do not modify CSS/SCSS unless explicitly requested.
-- Prefer Bootstrap 5 utility/classes in templates instead of custom styling.
+- This is a reusable Django library (`xprez`) with an `example_app` used for integration tests and demos.
+- Favor library-safe changes over project-specific shortcuts.
+- Preserve backward compatibility for public behavior unless the task explicitly asks for a breaking change.
 
-## Python and Django
+## Scope and change discipline
+
+- Keep changes narrowly focused on the user request.
+- Do not mix unrelated refactors with functional fixes.
+- Do not revert unrelated local changes you did not create.
+
+## Python and Django conventions
 
 - Follow Django coding style: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
-- Use Black-compatible formatting.
-- Prefer `l += [item]` over `l.append(item)` where practical.
-- Keep comments minimal; only document non-obvious intent.
-- Keep docstrings concise (one-liners when possible).
-- Avoid duplication; extract helpers/mixins when repeated logic appears.
+- Keep Python code Black-compatible (`pyproject.toml` is configured for it).
+- Keep comments/docstrings concise and focused on non-obvious context.
+- Prefer small helper functions/mixins instead of duplicated logic.
 
-## Django Templates
+## Templates and frontend code
 
-- Use double quotes (`"`) instead of single quotes (`'`).
-- Do not add `{% load ... %}` for libraries already provided via `TEMPLATES["OPTIONS"]["builtins"]`.
-- Keep template-tag indentation consistent and nested.
+- Follow existing local style in each file (do not mass-normalize quote style).
+- Do not assume Bootstrap; this library ships its own frontend/admin markup and styles.
+- Keep existing `data-component` and JS hook attributes stable unless a change requires updating both templates and scripts.
+- For JavaScript, prefer plain JavaScript and avoid adding framework dependencies.
 
-## JavaScript
+## Validation and tests
 
-- Prefer vanilla JavaScript.
-- Prefer classes when they improve structure.
-- Prefer `data-*` attributes for DOM targeting and behavior hooks.
-
-## Project workflow
-
-- Use `./run` wrapper commands instead of activating virtualenv directly.
-  - Examples: `./run`, `./run test`, `./run check`, `./run <manage.py command>`.
-- Before starting `./run` development server, check whether it is already running.
-- Prefer small, targeted tests after non-trivial changes.
-- Avoid high-cost tests (for example, browser/end-to-end) unless explicitly requested.
+- Run lightweight, relevant checks for changed code.
+- Python formatting/lint baseline is pre-commit + Black (see `.pre-commit-config.yaml`).
+- Main CI test command is:
+  - `python manage.py test --settings=example_app.settings_ci --keepdb` (from `example_app/`)
+- If you change frontend assets, rebuild only the affected asset package(s):
+  - `xprez/ck_editor/assets/ckeditor5`
+  - `xprez/static/xprez`
 
 ## Git practices
 
-- Make small, descriptive commits grouped by logical change.
-- Do not revert unrelated local changes you did not create.
+- Prefer small, descriptive commits grouped by logical change.
