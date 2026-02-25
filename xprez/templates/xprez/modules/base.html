@@ -5,7 +5,7 @@
     {% block attrs  %}{% endblock %} >
         {{ module.render_css_variables|safe }}
         <div class="xprez-module-inner">
-            <div class="debug-info">{{ module.render_css_variables }}</div>
+            {#<div class="debug-info">{{ module.render_css_variables }}</div>#}
             {% block content %} {% endblock %}
         </div>
 </div>

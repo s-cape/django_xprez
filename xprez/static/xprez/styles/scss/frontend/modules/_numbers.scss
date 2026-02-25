@@ -13,6 +13,7 @@
 	}
 
 	&__item {
+		flex: 1;
 		border-radius: #{$x-numbers-item-border-radius};
 		min-width: #{$x-numbers-item-auto-min-width};
 		max-width: #{$x-numbers-item-auto-max-width};

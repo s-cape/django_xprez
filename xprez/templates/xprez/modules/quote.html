@@ -2,24 +2,27 @@
 {% load thumbnail xprez static %}
 
 {% block content %}
-    <div class="xprez-quote-box">
-            <div class="xprez-quote__item">
-                <div class="xprez-quote__avatar">
-                    {% if module.image %}
-                        {% thumbnail module.image "210x210" format="WEBP" quality=80 crop="25%" as thumb %}
-                            <img src="{{ thumb.url|build_absolute_uri }}" class="xprez-qoute__img"/>
-                        {% endthumbnail %}
-                    {% else %}
-                        {% static "xprez/img/avatar.svg" as avatar_url %}
-                        <img src="{{ avatar_url|build_absolute_uri }}" class="xprez-qoute__img"/>
-                    {% endif %}
-                    <div class="xprez-quote__name">{{ module.name }}</div>
-                    <div class="xprez-quote__job-title">{{ module.subtitle }}</div>
-                </div>
-                <div class="xprez-quote__quote">
-                    {% if module.title %}<h4>{{ module.title }}</h4>{% endif %}
-                    <p>{{ module.quote }}</p>
-                </div>
+    <div class="xprez-quote">
+        <div class="xprez-quote__quote">
+            {% if module.title %}<h4 class="xprez-quote__title">{{ module.title }}</h4>{% endif %}
+            <p class="xprez-quote__text">„{{ module.quote }}“</p>
+        </div>
+
+        <figure class="xprez-quote__avatar">
+            {% if module.image %}
+                {% thumbnail module.image "210x210" format="WEBP" quality=80 crop="25%" as thumb %}
+                    <img src="{{ thumb.url|build_absolute_uri }}" class="xprez-qoute__avatar-img" alt="{{ module.name }}"/>
+                {% endthumbnail %}
+            {% else %}
+                {% static "xprez/img/avatar.svg" as avatar_url %}
+                <img src="{{ avatar_url|build_absolute_uri }}" class="xprez-qoute__avatar-img" alt="{{ module.name }}"/>
+            {% endif %}
+            <div class="xprez-quote__avatar-text">
+                <p class="xprez-quote__name">{{ module.name }}</p>
+                {% if module.subtitle %}
+                    <figcaption class="xprez-quote__job-title">{{ module.subtitle }}</figcaption>
+                {% endif %}
             </div>
+        </figure>
     </div>
 {% endblock %}

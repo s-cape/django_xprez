@@ -3,19 +3,15 @@
 $x-numbers-item-auto-min-width: 180px !default;
 $x-numbers-item-auto-max-width: 240px !default;
 $x-numbers-item-auto-gap: 2rem !default;
-
 $x-numbers-item-align-items: flex-start !default;
 $x-numbers-item-padding: .5rem 1rem !default;
 $x-numbers-item-border-radius: .5rem !default;
-
 $x-numbers-item-text-gap: .25rem !default;
-
 $x-numbers-figcaption-font-style: normal !default;
 $x-numbers-figcaption-opacity: 0.7 !default;
-$x-numbers-figcaption-text-align: center !default; 
+$x-numbers-figcaption-text-align: left !default; 
 $x-numbers-figcaption-text-transform: uppercase !default;
 $x-numbers-figcaption-font-weight: 600 !default;
-
 $x-numbers-number-font-size: 4rem !default;
 $x-numbers-number-font-weight: 700 !default;
 
@@ -24,3 +20,17 @@ $x-numbers-number-font-weight: 700 !default;
 $x-gallery-figcaption-font-style: italic !default;
 $x-gallery-figcaption-opacity: 0.7 !default;
 $x-gallery-figcaption-text-align: center !default; 
+
+// QUOTE
+
+$x-quote-avatar-width: 4.375rem !default;
+$x-quote-quote-opacity: 0.7 !default;
+$x-quote-subtitle-opacity: 0.7 !default;
+$x-quote-name-font-weight: 700 !default;
+$x-quote-quote-font-style: italic !default;
+$x-quote-quote-font-weight: 400 !default;
+$x-quote-subtitle-font-style: italic !default;
+$x-quote-subtitle-font-weight: 400 !default;
+$x-quote-show-divider: true !default;
+$x-quote-divider-width: 50% !default;
+$x-quote-divider-height: .15em !default;
