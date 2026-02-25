@@ -19,7 +19,7 @@ Features
     - Custom: simply subclass `Module` in your app; they auto-register and appear in the same admin UI and frontend.
 - **Responsive**
   - Layout (visibility, columns, padding, margin, colspan) per breakpoint.
-  - Responsive images (srcset, breakpoint-aware sizes) for gallery and video.
+  - Responsive images (srcset, breakpoint-aware sizes).
 - **Styles**
   - Ready-made frontend CSS included.
   - Or import xprez SCSS into your build; link `/xprez/variables.css` for breakpoint variables.
