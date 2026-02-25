@@ -21,6 +21,6 @@
     }
 
     &.xprez-alternate-background {
-        background-color: $x-alt-section-bg;
+        background-color:  var(--x-section-background-color, #{$x-alt-section-bg});
     }
 }

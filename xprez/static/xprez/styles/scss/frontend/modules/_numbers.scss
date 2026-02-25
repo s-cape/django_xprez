@@ -1,49 +1,44 @@
+@use "../../library/rfs" as rfs; 
+
 .xprez-numbers {
 	text-align: center;
 
-	.xprez-numbers-item {
-		display: inline-block;
-		vertical-align: top;
-		visibility: hidden;
-
-		&.active {
-			visibility: visible;
-		}
+	.xprez-module-inner {
+		flex: 1;
+		display: flex;
+		flex-wrap: wrap;
+		@include rfs.gap($x-numbers-item-auto-gap);
+		justify-content: center;
+		align-items: flex-start;
 	}
 
-	.xprez-numbers-number {
-		line-height: 1;
-		color: var(--x-numbers-digit-color, inherit);
-		text-align: right;
+	&__item {
+		border-radius: #{$x-numbers-item-border-radius};
+		min-width: #{$x-numbers-item-auto-min-width};
+		max-width: #{$x-numbers-item-auto-max-width};
+		display: flex;
+		flex-direction: column;
+		gap: #{$x-numbers-item-text-gap};
+		align-items: center;
+		justify-content: center;
+		background-color: var(--x-numbers-item-bg);
+		align-items: #{$x-numbers-item-align-items};
+		@include rfs.padding(#{$x-numbers-item-padding});
 	}
 
-	.xprez-numbers-digits {
-		display: inline-block;
-		font-size: 3.5rem;
-		font-weight: 600;
-	}
+	figcaption {
+        font-style: #{$x-numbers-figcaption-font-style};
+        opacity: #{$x-numbers-figcaption-opacity};
+        text-align: #{$x-numbers-figcaption-text-align};  
+		text-transform: #{$x-numbers-figcaption-text-transform}; 
+		font-weight: #{$x-numbers-figcaption-font-weight};
+		letter-spacing: 0.05rem;;
+    }
 
-	.xprez-numbers-suffix {
-		font-size: 3.5rem;
-		font-weight: 500;
-		margin-left: 0.15em;
-		opacity: 0.8;
-	}
-
-	.xprez-numbers-title {
-		font-size: 0.75rem;
-		line-height: 1.25;
-		text-transform: uppercase;
-		font-weight: bold;
-		opacity: 0.5;
-
-		&:before {
-			content: "";
-			display: block;
-			height: 1px;
-			background-color: var(--x-numbers-stroke-bg, currentColor);
-			width: 16px;
-			margin: 0.5rem auto;
-		}
+	&__number-cont {
+		margin-bottom: 0 !important;
+		line-height: 1 !important;
+		font-weight: #{$x-numbers-number-font-weight};
+		letter-spacing: 0.05rem;
 	}
 }

@@ -9,7 +9,14 @@
                     ul, ol {
                         margin-bottom: map-get($properties, "margin-bottom");
                     }
-                } @else if $element != "button" {
+                } @else if $element == "display" {
+                    .xprez-display {
+                        line-height: map-get($properties, "line-height");
+                        font-weight: map-get($properties, "font-weight");
+                        font-size: map-get($properties, "font-size");   
+                    }
+                }
+                @else if $element != "button" {
                     #{$element} {
                         @include rfs.font-size(map-get($properties, "font-size"));
                         line-height: map-get($properties, "line-height");
@@ -42,6 +49,10 @@
 }
 
 .xprez-module {
+    .xprez-display {
+        color: var(--display-color, var(--x-heading-color));
+    }
+
     h2 {
         color: var(--x-h2-color, var(--x-heading-color));
     }
@@ -62,12 +73,6 @@
         margin: 0;
     }
     
-    figcaption {
-        font-style: $x-figcaption-font-style;
-        opacity: $x-figcaption-opacity;
-        text-align: $x-figcaption-text-align;   
-    }
-
     h2, h3, h4 {
         strong {
             color: var(--x-heading-emphasis-color, var(--x-heading-color));

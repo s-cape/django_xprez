@@ -44,6 +44,9 @@
 	--x-button-secondary-active-bg: #{$x-button-secondary-active-bg};
 	--x-button-secondary-border-color: #{$x-button-secondary-border-color};
 	--x-button-secondary-border-width: #{$x-button-secondary-border-width};
+
+	--x-line-color: #{$x-line-color};
+	--x-numbers-item-bg: #{$x-numbers-item-bg};
 }
 
 .xprez-alternate-color {
@@ -89,4 +92,7 @@
 	--x-button-secondary-active-bg: #{$x-alt-button-secondary-active-bg};
 	--x-button-secondary-border-color: #{$x-alt-button-secondary-border-color};
 	--x-button-secondary-border-width: #{$x-alt-button-secondary-border-width};
+
+	--x-line-color: #{$x-alt-line-color};
+	--x-numbers-item-bg: #{$x-alt-numbers-item-bg};
 }

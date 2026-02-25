@@ -6,12 +6,14 @@
 {% block content %}
     {% for item in items %}
         {% if item.number %}
-            <div class="xprez-numbers-item" data-numbers-item>
-                <div class="xprez-numbers-number">
-                    <span class="xprez-numbers-digits" data-numbers-counter>{{ item.number_intcomma }}</span>{% if item.suffix %}<span class="xprez-numbers-suffix">{{ item.suffix }}</span>{% endif %}
+            <figure class="xprez-numbers__item" data-numbers-item>
+                <div class="xprez-display">
+                    <span class="xprez-numbers__number">
+                        <span class="xprez-numbers-digits" data-numbers-counter>{{ item.number_intcomma }}</span>{% if item.suffix %}<span class="xprez-numbers__suffix">{{ item.suffix }}</span>{% endif %}
+                    </span>
                 </div>
-                <div class="xprez-numbers-title">{{ item.caption }}</div>
-            </div>
+                <figcaption class="xprez-numbers__caption">{{ item.caption }}</figcaption>
+            </figure>
         {% endif %}
     {% endfor %}
 {% endblock %}

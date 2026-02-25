@@ -47,6 +47,7 @@
     .xprez-option {
         --x-admin-option-input-font-weight: 400;
         --x-admin-option-color: #{rgba($b-gray-7, 0.8)};
+        --x-admin-option-font-size: 13px;
 
         display: flex;
 
@@ -62,6 +63,10 @@
         input {
             text-align: left !important;
         }
+    }
+
+    .xprez-delete-info {
+        padding: .6rem;
     }
 }
 

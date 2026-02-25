@@ -19,4 +19,10 @@
             display: block;
         }
     }
+
+    figcaption {
+        font-style: #{$x-gallery-figcaption-font-style};
+        opacity: #{$x-gallery-figcaption-opacity};
+        text-align: #{$x-gallery-figcaption-text-align};   
+    }
 }
