@@ -208,7 +208,7 @@ class ModuleProcessorBase:
         return "xprez.ModuleConfig"
 
     def finalize(self, module):
-        """Setup module attributes and create its config."""
+        """Create/get module config from defaults. Subclasses override to map old_content to module/config."""
         default_breakpoint = _get_settings("XPREZ_DEFAULT_BREAKPOINT")
         xprez_defaults = _get_settings("XPREZ_DEFAULTS")
         config_class = self.apps.get_model(*self.get_config_class(module).split("."))
@@ -253,12 +253,14 @@ class ModuleReplaceProcessor(ModuleProcessorBase):
     def process(self):
         self.new_modules = self.prepare_new_modules()
         self.finalize_new_modules()
-        self.delete_processed_module()
+        self.delete_replaced_module()
 
     def prepare_new_modules(self):
+        """Return list of new module instances (unsaved). Subclasses must implement."""
         raise NotImplementedError()
 
     def finalize_new_modules(self):
+        """Save each new module to DB and call finalize(module) for each."""
         for new_module in self.new_modules:
             new_module.content_type = _content_type(new_module)
             new_module.section = self.module_base.section
@@ -268,7 +270,8 @@ class ModuleReplaceProcessor(ModuleProcessorBase):
             new_module.save()
             self.finalize(new_module)
 
-    def delete_processed_module(self):
+    def delete_replaced_module(self):
+        """Remove the original module that was replaced by new_modules."""
         self.module_base.delete()
 
 
@@ -398,7 +401,7 @@ class TextModuleProcessorBase(ModuleReplaceProcessor):
     def get_config_class(self, module):
         return "xprez.TextConfig"
 
-    def prepare_new_modules(self, **kwargs):
+    def prepare_new_modules(self):
         TextModule = self.apps.get_model("xprez", "TextModule")
         return [TextModule(text=self.old_content.text)]
 
