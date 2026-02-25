@@ -5,7 +5,6 @@ Instructions for coding agents working in this repository.
 ## Repository context
 
 - This is a reusable Django library (`xprez`) with an `example_app` used for integration tests and demos.
-- Favor library-safe changes over project-specific shortcuts.
 - Preserve backward compatibility for public behavior unless the task explicitly asks for a breaking change.
 
 ## Scope and change discipline
@@ -33,7 +32,7 @@ Instructions for coding agents working in this repository.
 - Run lightweight, relevant checks for changed code.
 - Python formatting/lint baseline is pre-commit + Black (see `.pre-commit-config.yaml`).
 - Main CI test command is:
-  - `python manage.py test --settings=example_app.settings_ci --keepdb` (from `example_app/`)
+  - `python manage.py test --settings=example_app.settings_ci` (from `example_app/`)
 - If you change frontend assets, rebuild only the affected asset package(s):
   - `xprez/ck_editor/assets/ckeditor5`
   - `xprez/static/xprez`
