@@ -53,7 +53,7 @@ class ConfigBase(CssMixin, models.Model):
         form_class = self.get_admin_form_class()
 
         self.admin_form = form_class(
-            instance=self, prefix=self.key, data=data, files=files
+            instance=self, prefix=self.instance_key, data=data, files=files
         )
         self.admin_form.xprez_admin = admin
 
@@ -187,7 +187,7 @@ class SectionConfig(ConfigBase):
         return ("section_config", "default")
 
     @property
-    def key(self):
+    def instance_key(self):
         return f"section-config-{self.pk}"
 
     class Meta:
@@ -406,7 +406,7 @@ class ModuleConfig(ConfigBase):
             return ModuleConfigForm
 
     @property
-    def key(self):
+    def instance_key(self):
         return f"module-config-{self.pk}"
 
     class Meta:

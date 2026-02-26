@@ -42,7 +42,7 @@ class MultiModule(Module):
         qs = getattr(self, self.items_attribute)
         if data is None:
             return qs.filter(saved=True).order_by("position")
-        ids = [int(id) for id in data.getlist(f"{self.key}-item-id")]
+        ids = [int(id) for id in data.getlist(f"{self.instance_key}-item-id")]
         items = list(qs.filter(pk__in=ids))
         items.sort(key=lambda item: ids.index(item.pk))
         return items
@@ -54,7 +54,7 @@ class MultiModule(Module):
         for item in items:
             form_class = self.get_admin_item_form_class(item)
             item.admin_form = form_class(
-                instance=item, prefix=item.key, data=data, files=files
+                instance=item, prefix=item.instance_key, data=data, files=files
             )
             self.admin_form.xprez_items += [item]
 
@@ -118,7 +118,7 @@ class MultiModule(Module):
         module = cls.objects.get(pk=module_pk)
         item = module.create_item()
         form_class = module.get_admin_item_form_class(item)
-        item.admin_form = form_class(instance=item, prefix=item.key)
+        item.admin_form = form_class(instance=item, prefix=item.instance_key)
         return HttpResponse(
             render_to_string(
                 cls.admin_item_template_name,
@@ -150,7 +150,7 @@ class MultiModuleItem(models.Model):
     position = models.PositiveSmallIntegerField(default=0)
 
     @property
-    def key(self):
+    def instance_key(self):
         module_pk = getattr(self, f"{self.module_foreign_key}_id")
         return f"item-module-{module_pk}-{self.pk}"
 
@@ -197,7 +197,7 @@ class UploadMultiModule(MultiModule):
             return JsonResponse(status=400, data={"error": "No file uploaded"})
         item = module.create_item_from_file(file)
         form_class = module.get_admin_item_form_class(item)
-        item.admin_form = form_class(instance=item, prefix=item.key)
+        item.admin_form = form_class(instance=item, prefix=item.instance_key)
         return HttpResponse(
             render_to_string(
                 cls.admin_item_template_name,

@@ -244,7 +244,7 @@ class CssParentMixin(CssMixin):
         if not css_data:
             return ""
 
-        selector = "#" + self.key
+        selector = "#" + self.instance_key
         output = []
 
         for breakpoint, css_variables in css_data.items():

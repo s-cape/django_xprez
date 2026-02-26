@@ -30,7 +30,7 @@
 
     <div data-component="xprez-multi-module-item-form" data-hidden>
         {% block item_hidden %}
-            <input type="hidden" name="{{ module.key }}-item-id" value="{{ item.pk }}">
+            <input type="hidden" name="{{ module.instance_key }}-item-id" value="{{ item.pk }}">
         {% endblock %}
     </div>
 </div>

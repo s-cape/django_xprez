@@ -77,7 +77,7 @@ class Module(ConfigParentMixin, models.Model):
         return cls.module_key
 
     @property
-    def key(self):
+    def instance_key(self):
         return f"module-{self.pk}"
 
     @property
@@ -174,7 +174,7 @@ class Module(ConfigParentMixin, models.Model):
     def build_admin_form(self, admin, data=None, files=None):
         form_class = self.get_admin_form_class()
         self.admin_form = form_class(
-            instance=self, prefix=self.key, data=data, files=files
+            instance=self, prefix=self.instance_key, data=data, files=files
         )
         self.admin_form.xprez_admin = admin
 
