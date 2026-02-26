@@ -72,6 +72,33 @@
     figure {
         margin: 0;
     }
+
+    blockquote {
+        font-style: $x-blockquote-font-style;
+        font-weight: $x-blockquote-font-weight;
+        color: var(--x-blockquote-color, inherit);
+
+        p {
+            font-size: inherit;
+            line-height: inherit;
+            font-weight: inherit;
+            margin: 0;
+
+            @if $x-blockquote-show-lines{
+                margin: $x-blocquote-divider-gap 0;
+            }
+        }
+
+        @if $x-blockquote-show-lines {
+            &::before, &::after {
+                content: "";
+                display: block;
+                height: $x-blockquote-divider-height;
+                background-color: var(--x-blockquote-line-color, var(--x-base-line-color));
+                width: $x-blockquote-divider-width;
+            }
+        }
+    }
     
     h2, h3, h4 {
         strong {

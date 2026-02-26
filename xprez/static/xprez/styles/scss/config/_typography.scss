@@ -8,6 +8,13 @@ $x-button-font-weight: 600 !default;
 $x-button-border-radius: .65em !default;
 $x-button-gap: .5rem !default;
 
+$x-blockquote-show-lines: true !default;
+$x-blockquote-font-style: italic !default;
+$x-blockquote-font-weight: 400 !default;
+$x-blockquote-divider-height: .15em !default;
+$x-blockquote-divider-width: 40% !default;
+$x-blocquote-divider-gap: 1em !default;
+
 $x-typography-config: (
     "smallest": (
         "h2": (
@@ -100,7 +107,7 @@ $x-typography-config: (
         "blockquote": (
             "font-size": 1.25rem,
             "line-height": 1.6,
-            "margin-bottom": 1.375rem
+            "margin-bottom": 1.5rem
         ),
         "ul": (
             "margin-bottom": 1.125rem
@@ -158,7 +165,7 @@ $x-typography-config: (
         "blockquote": (
             "font-size": 1.25rem,
             "line-height": 1.6,
-            "margin-bottom": 1.5rem
+            "margin-bottom": 2rem
         ),
         "ul": (
             "margin-bottom": 1.5rem
