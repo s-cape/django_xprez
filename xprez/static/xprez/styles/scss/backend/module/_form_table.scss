@@ -34,7 +34,7 @@
 
 		// border: 1px solid $b-gray-3;
 		
-		&:not(:has(input[type="checkbox"])) {
+		&:not(:has(> input[type="checkbox"])) {
 			flex: 1;
 		}
 
@@ -42,7 +42,7 @@
 			padding-right: .25rem;
 		}
 
-		label {
+		& > label {
 			flex-basis: 6rem;
     		min-width: 6rem;
 			border-right: 1px solid $b-gray-3;
@@ -67,119 +67,3 @@
 		}
 	}
 }
-
-// .xprez-title-form-table {
-// 	border-bottom: 1px solid $b-gray-4;
-// }
-
-// .xprez-form-row {
-// 	display: flex;
-// 	flex-wrap: nowrap;
-// }
-
-// .xprez-cell-label {
-// 	min-width: 130px;
-// 	text-align: right;
-// 	padding: 5px 10px 0 0;
-// 	vertical-align: top;
-// }
-
-// .xprez-cell {
-// 	padding: 5px 10px;
-// 	flex: 1;
-// 	max-width: 700px;
-
-// 	label {
-// 		display: inline-block;
-// 		text-align: right;
-// 		padding: 0 5px;
-// 	}
-
-// 	.clearable-file-input {
-// 		padding-left: 10px;
-// 	}
-
-// 	input[type=checkbox] {
-// 		width: unset;
-// 		margin-top: .25rem;
-// 	}
-
-// 	input[type=number] {
-// 		width: 90px;
-// 	}
-
-// 	input, textarea, select {
-// 		box-sizing: border-box;
-// 	}
-// }
-
-// .xprez-cell-info {
-// 	@include type-b(12px);
-// }
-
-// .xprez-multi-field {
-// 	float: left;
-// 	margin-right: 10px;
-
-// 	&:last-child {
-// 		margin-right: 0;
-// 	}
-
-// 	label {
-// 		float: left;
-// 		margin-right: 10px;
-// 	}
-// }
-
-// .xprez-multi-field-cell {
-// 	float: left;
-// }
-
-// .xprez-sub-info {
-// 	display: block;
-// 	font-size: 11px;
-// 	line-height: 1.3;
-// 	padding-left: 5px;
-
-// 	.error & {
-// 		color: $b-red;
-// 	}
-// }
-
-// .xprez-required {
-// 	label {
-// 		&:after {
-// 			content: '*';
-// 			margin: 0 0 0 5px;
-// 			position: absolute;
-// 			color: $b-gray-6;
-// 		}
-// 	}
-// }
-
-// .xprez-drag-handle {
-// 	cursor: move;
-// }
-
-
-// /// form tags
-
-// input, textarea {
-// 	.error & {
-// 		border-color: $b-red;
-// 	}
-
-// 	&.long {
-// 		width: 500px;
-// 	}
-
-// 	&.short {
-// 		width: 50px;
-// 	}
-
-// }
-
-// textarea {
-// 	height: 100px;
-// 	width: calc(100% - 5px);
-// }

@@ -3,7 +3,7 @@
     {% with thumb=value|xprez_file_thumbnail %}
         <a href="{{ value.url }}" target="_blank" rel="noopener">
             {% if thumb %}
-                <img src="{{ thumb.url }}" alt="">
+                <img src="{{ thumb.url }}" alt="" class="xprez-option__file-img">
             {% else %}
                 {{ link_text|default:value }}
             {% endif %}

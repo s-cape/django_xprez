@@ -30,7 +30,7 @@
 
 	// Label
 
-	label {
+	& > label {
 		flex-basis: max-content;
 		padding: var(--x-admin-padding-md) var(--x-admin-option-gap) var(--x-admin-padding-md) 0;
 		font-size: inherit;
@@ -124,7 +124,7 @@
 		}
 	}
 
-	&:has(input[type="checkbox"]) {
+	&:has(> input[type="checkbox"]) {
 		--x-admin-checkbox-icon: '\e90d';
 		--x-admin-checkbox-color: var(--x-admin-option-color);
 		--x-admin-checkbox-bg: var(--x-admin-option-bg);
@@ -160,7 +160,7 @@
 
 	// Toggle
 
-	&:has(input[type="checkbox"]):has(.x-variant-checked) {
+	&:has(> input[type="checkbox"]):has(.x-variant-checked) {
 		--x-admin-checkbox-bg: transparent;
 		--x-admin-checkbox-checked-bg: transparent;
 
@@ -193,7 +193,7 @@
 		}
 	}
 
-	&:has(input[type="checkbox"]:checked) {
+	&:has(> input[type="checkbox"]:checked) {
 		.x-variant-unchecked {
 			display: none;
 		}

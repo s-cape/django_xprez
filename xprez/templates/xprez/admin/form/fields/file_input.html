@@ -3,21 +3,35 @@
 
 {% block field %}
     {% with widget=field|xprez_widget_context %}
-        <span class="xprez-option__file">
-            <div class="xprez-file__input">
-                <input type="{{ widget.type }}" name="{{ widget.name }}"{% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
-            </div>
+        <div class="xprez-option__file">
             {% if widget.is_initial %}
                 <div class="xprez-file__current">
-                    {{ widget.initial_text }}: {% include "xprez/includes/file_preview.html" with value=widget.value %}
+                    {# {{ widget.initial_text }}: #}{% include "xprez/includes/file_preview.html" with value=widget.value %}
                 </div>
-                {% if not widget.required %}
-                    <div class="xprez-file__clear">
-                        <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}{% if widget.attrs.checked %} checked{% endif %}>
+
+                {% comment %} {% if not widget.required %}
+                    <div class="xprez-file__clear xprez-option" data-active="true">
+                        <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}{% if widget.attrs.checked %} checked{% endif %} >
                         <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>
                     </div>
-                {% endif %}
+                {% endif %} {% endcomment %}
             {% endif %}
-        </span>
+            <div class="xprez-file__input" style="display: none;">
+                <input id="{{ widget.name }}" type="{{ widget.type }}" name="{{ widget.name }}"{% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
+            </div>
+
+            <div class="xprez-option__file-actions">
+                <label class="xprez-icon-btn" title="Image" for="{{ widget.name }}">
+                    {% include "xprez/shared/icons/modules/gallery.html" %}
+                </label>
+                {% if widget.is_initial and not widget.required %}
+                    <span class="xprez-icon-btn" title="Remove" data-component="xprez-text-media-delete-trigger">
+                        <i class="xprez-icon-delete"></i>
+                        <span data-hidden>{{ module.admin_form.media_clear }}</span>
+                    </span>
+                {% endif %}
+            </div>
+            {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-text-media" message_subject="image" %}
+        </div>
     {% endwith %}
 {% endblock %}
