@@ -1,0 +1,6 @@
+{% extends "xprez/includes/video_embeds/_base.html" %}
+
+{% block video_provider %}youtube{% endblock %}
+{% block js_controller_class %}XprezVideoYoutube{% endblock %}
+
+{% block embed_src %}https://www.youtube-nocookie.com/embed/{{ video_id }}?enablejsapi=1{% endblock %}

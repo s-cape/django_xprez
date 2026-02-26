@@ -31,8 +31,7 @@ Instructions for coding agents working in this repository.
 
 - Run lightweight, relevant checks for changed code.
 - Python formatting/lint baseline is pre-commit + Black (see `.pre-commit-config.yaml`).
-- Main CI test command is:
-  - `python manage.py test --settings=example_app.settings_ci` (from `example_app/`)
+- Main CI test command: `python manage.py test --settings=example_app.settings_ci` (from `example_app/`). For localhost testing, use a `.venv` in the project root.
 - If you change frontend assets, rebuild only the affected asset package(s):
   - `xprez/ck_editor/assets/ckeditor5`
   - `xprez/static/xprez`

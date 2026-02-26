@@ -91,8 +91,13 @@ class ResponsiveImageParentMixin:
             return max_width_values.get(width_choice, {}).get(0)
 
     def get_breakpoint_ranges(self):
-        """Yield (min_width, effective_columns, next_min_width) per breakpoint."""
-        raise NotImplementedError
+        """Return (min_width, effective_columns, next_min_width) per breakpoint; default is single-column."""
+        breakpoints = settings.XPREZ_BREAKPOINTS
+        widths = [breakpoints[bp]["min_width"] for bp in breakpoints]
+        return [
+            (w, 1, widths[i + 1] if i + 1 < len(widths) else None)
+            for i, w in enumerate(widths)
+        ]
 
     def get_column_ranges(self):
         """Return (max_width_px, [(min_width, effective_columns), ...]) collapsing consecutive duplicates."""
