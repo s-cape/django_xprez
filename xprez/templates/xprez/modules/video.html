@@ -4,17 +4,20 @@
 {% block css_class %}{{ block.super }} {% if module.poster_image %}js-video-with-poster{% endif %}{% endblock %}
 
 {% block content %}
-    <div class="xprez-video-item">
+    <div class="xprez-video__item">
         {% if module.poster_image %}
             {% with geoms=module.get_srcset_geometries %}
-                <div class="js-poster xprez-video-poster-{{ module.video_id }}">
+                <div class="xprez-video__poster js-poster xprez-video-poster-{{ module.video_id }}">
                     {% thumbnail module.poster_image geoms.0 crop="50%" format="WEBP" quality=70 as t_src %}
-                    <img class="w-100 h-100 object-fit-cover d-block"
+                    <img class="xprez-video__poster-img"
                          src="{{ t_src.url|build_absolute_uri }}"
                          {% endthumbnail %}
                          srcset="{% for geom in geoms %}{% thumbnail module.poster_image geom crop="50%" format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
                          sizes="{{ module.get_image_sizes }}"
-                         alt="" />
+                         alt="{{ module.video_type }} video poster" />
+                    <div class="xprez-video__btn-cont">
+                        {% include "xprez/admin/icons/video_play.html" %}
+                    </div>
                 </div>
             {% endwith %}
         {% endif %}
@@ -25,9 +28,9 @@
             allow="autoplay"
             referrerpolicy="strict-origin-when-cross-origin"
             {% if module.video_type == "youtube" %}
-                class="js-youtube" src="https://www.youtube-nocookie.com/embed/{{ module.video_id }}?enablejsapi=1"
+                class="xprez-video__iframe js-youtube" src="https://www.youtube-nocookie.com/embed/{{ module.video_id }}?enablejsapi=1"
             {% elif module.video_type == "vimeo" %}
-                class="js-vimeo" src="https://player.vimeo.com/video/{{ module.video_id }}?color=ffffff&portrait=0&badge=0&api=1"
+                class="xprez-video__iframe js-vimeo" src="https://player.vimeo.com/video/{{ module.video_id }}?color=ffffff&portrait=0&badge=0&api=1"
             {% endif %}
         ></iframe>
     </div>

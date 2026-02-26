@@ -48,9 +48,14 @@
 
 	--x-numbers-item-bg: #{$x-numbers-item-bg};
 
+	--x-quote-line-color: #{$x-quote-line-color};
+
 	--x-files-line-color: #{$x-files-line-color};
 	--x-files-extension-bg: #{$x-files-extension-bg};
 	--x-files-extension-color: #{$x-files-extension-color};
+
+	--x-video-btn-circle-color: #{$x-video-btn-circle-color};
+	--x-video-btn-triangle-color: #{$x-video-btn-triangle-color};
 }
 
 .xprez-alternate-color {
@@ -99,6 +104,8 @@
 	--x-button-secondary-border-width: #{$x-alt-button-secondary-border-width};
 
 	--x-numbers-item-bg: #{$x-alt-numbers-item-bg};
+
+	--x-quote-line-color: #{$x-alt-quote-line-color};
 
 	--x-files-line-color: #{$x-alt-files-line-color};
 	--x-files-extension-bg: #{$x-alt-files-extension-bg};

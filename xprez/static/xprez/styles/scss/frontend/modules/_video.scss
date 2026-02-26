@@ -1,0 +1,61 @@
+@use "../../library/rfs" as rfs;
+
+.xprez-video {
+    .xprez-module-inner {
+        flex: 1;
+    }
+
+    &__item {
+        position: relative;
+        aspect-ratio: var(--x-video-aspect-ratio, 16/9);
+    }
+
+    &__poster {
+        position: absolute;
+        top: 0; right: 0;
+        height: 100%;
+        width: 100%;
+    }
+
+    &__poster-img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+    }
+
+    &__iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__btn-cont {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: $x-video-btn-size;
+        height: $x-video-btn-size;
+    }
+
+    &__btn-icon {
+        width: 100%;
+        height: 100%;
+        transition: transform 0.2s ease-in-out;
+        transform-origin: center center;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    &__btn-icon-circle {
+        fill: var(--x-video-btn-circle-color);
+    }
+
+    &__btn-icon-triangle {
+        fill: var(--x-video-btn-triangle-color);
+    }
+}

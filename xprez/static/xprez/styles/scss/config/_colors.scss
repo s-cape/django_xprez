@@ -49,9 +49,14 @@ $x-button-secondary-border-width: 0 !default;
 
 $x-numbers-item-bg: none !default;
 
+$x-quote-line-color: $x-base-line-color !default;
+
 $x-files-line-color: $x-base-line-color !default;
 $x-files-extension-bg: color-mix(in srgb, var(--x-files-line-color, var(--x-base-line-color)) 30%, transparent) !default;
 $x-files-extension-color: $x-base-color !default;
+
+$x-video-btn-circle-color: $white !default;
+$x-video-btn-triangle-color: $black !default;
 
 // Alternate colors
 
@@ -89,6 +94,8 @@ $x-alt-button-secondary-border-color: $x-alt-button-secondary-color !default;
 $x-alt-button-secondary-border-width: 0 !default;
 
 $x-alt-numbers-item-bg: $gray !default;
+
+$x-alt-quote-line-color: $x-alt-base-line-color !default;
 
 $x-alt-files-line-color: $x-alt-base-line-color !default;
 $x-alt-files-extension-bg: color-mix(in srgb, var(--x-files-line-color, var(--x-base-line-color)) 30%, transparent) !default;
