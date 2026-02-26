@@ -29,7 +29,7 @@ def xprez_clipboard_is_empty(xprez_admin, request):
 
 
 @register.filter
-def xprez_file_thumbnail(value, size="200x200"):
+def xprez_file_thumbnail(value, size="400x200"):
     """Try to generate a sorl-thumbnail for value; return thumb or None on failure."""
     if not value:
         return None
