@@ -78,3 +78,31 @@ export class XprezMultiModuleItemDeleter extends XprezDeleterBase {
         );
     }
 }
+
+export class XprezTextMediaDeleter extends XprezDeleterBase {
+    initElements() {
+        this.mediaEl = this.obj.el.querySelector("[data-component='xprez-text-media']");
+        this.triggerEl = this.mediaEl.querySelector(
+            "[data-component='xprez-text-media-delete-trigger']"
+        );
+        this.inputEl = this.triggerEl.querySelector("input");
+        this.undeleteEl = this.mediaEl.querySelector(
+            "[data-component='xprez-text-media-undelete']"
+        );
+    }
+
+    delete() {
+        if ("hasSavedMedia" in this.mediaEl.dataset) {
+            this.mediaEl.dataset.mode = "delete";
+            this.inputEl.checked = true;
+        } else {
+            this.mediaEl.setAttribute("data-hidden", "");
+            this.obj._clearPreview();
+        }
+    }
+
+    undelete() {
+        this.mediaEl.dataset.mode = "";
+        this.inputEl.checked = false;
+    }
+}

@@ -76,6 +76,7 @@ class TextModule(TextModuleBase):
     admin_template_name = "xprez/admin/modules/text.html"
     admin_form_class = "xprez.modules.text.TextModuleForm"
     admin_icon_template_name = "xprez/shared/icons/modules/text.html"
+    admin_js_controller_class = "XprezTextModule"
 
     media = models.FileField(upload_to="images", null=True, blank=True)
     url = models.CharField("Target URL", max_length=255, null=True, blank=True)

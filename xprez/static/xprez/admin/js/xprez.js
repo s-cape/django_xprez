@@ -30,10 +30,12 @@ import {
 } from './xprez/configs.js';
 import { XprezSortable } from './xprez/sortable.js';
 import { XprezMultiModuleItem, XprezMultiModule, XprezUploadMultiModule } from './xprez/multi_module.js';
+import { XprezTextModule } from './xprez/text_module.js';
 import { executeScripts } from './xprez/utils.js';
 
 window.Xprez = Xprez;
 window.XprezModule = XprezModule;
+window.XprezTextModule = XprezTextModule;
 window.XprezMultiModuleItem = XprezMultiModuleItem;
 window.XprezMultiModule = XprezMultiModule;
 window.XprezUploadMultiModule = XprezUploadMultiModule;
@@ -41,6 +43,7 @@ window.XprezUploadMultiModule = XprezUploadMultiModule;
 export {
     Xprez,
     XprezModule,
+    XprezTextModule,
     XprezSection,
     XprezAdderBase,
     XprezAdderItemsBase,

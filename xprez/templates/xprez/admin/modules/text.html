@@ -9,28 +9,28 @@
 {% endblock %}
 
 {% block main_fields %}
-    {% if module.media %}
     {# TODO: pokud je  obrazek vyssi, nez data-crop-minimum-size, tak se prida trida crop #}
-        <div class="xprez-admin-text__media-cont">
-            <div class="xprez-admin-text__img-cont crop" onclick="this.classList.toggle('crop')" data-crop-minimum-size="400">
-                <img class="xprez-admin-text__media-img" src="{{ module.media.url }}" />
-            </div>
-            <div class="xprez-admin-text__media-actions">
-                {% comment %} <span class="xprez-option" data-active="true">
-                    <label for="{{ module.admin_form.media_clear.id_for_label }}">Clear</label>
-                    {{ module.admin_form.media_clear }}
-                </span> {% endcomment %}
-                <span class="xprez-icon-btn" title="Image">
-                    {% include "xprez/shared/icons/repeat.html" %}
-                    {{ module.admin_form.media }}
-                </span>
-                <span class="xprez-icon-btn" title="Remove" data-component="xprez-multi-module-item-delete">
-                    <i class="xprez-icon-delete"></i>
-                    <span data-hidden>{{ item.admin_form.delete }}</span>
-                </span>
-            </div>
-            {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-text-media-delete" %}
+    <div
+        class="xprez-admin-text__media-cont"
+        data-component="xprez-text-media"
+        data-mode=""
+        data-media-input-name="{{ module.admin_form.media.html_name }}"
+        {% if not module.media %}data-hidden{% endif %}
+        {% if module.media %}data-has-saved-media{% endif %}
+    >
+        <div class="xprez-admin-text__img-cont crop" onclick="this.classList.toggle('crop')" data-crop-minimum-size="400">
+            <img class="xprez-admin-text__media-img" data-text-media-img{% if module.media %} src="{{ module.media.url }}"{% endif %} />
         </div>
-    {% endif %}
+        <div class="xprez-admin-text__media-actions">
+            <label class="xprez-icon-btn" title="Image" for="{{ module.admin_form.media.id_for_label }}">
+                {% include "xprez/shared/icons/repeat.html" %}
+            </label>
+            <span class="xprez-icon-btn" title="Remove" data-component="xprez-text-media-delete-trigger">
+                <i class="xprez-icon-delete"></i>
+                <span data-hidden>{{ module.admin_form.media_clear }}</span>
+            </span>
+        </div>
+        {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-text-media" message_subject="image" %}
+    </div>
     {{ block.super }}
 {% endblock %}
