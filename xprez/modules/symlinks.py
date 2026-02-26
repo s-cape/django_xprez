@@ -6,7 +6,7 @@ from xprez.models.modules import Module
 
 class ModuleSymlink(Module):
     admin_template_name = "xprez/admin/modules/module_symlink.html"
-    admin_icon_template_name = "xprez/admin/icons/modules/module_symlink.html"
+    admin_icon_template_name = "xprez/shared/icons/modules/module_symlink.html"
     symlink = models.ForeignKey(
         Module,
         on_delete=models.SET_NULL,
@@ -27,7 +27,7 @@ class ModuleSymlink(Module):
 
 class SectionSymlink(Module):
     admin_template_name = "xprez/admin/modules/section_symlink.html"
-    admin_icon_template_name = "xprez/admin/icons/modules/section_symlink.html"
+    admin_icon_template_name = "xprez/shared/icons/modules/section_symlink.html"
     symlink = models.ForeignKey(
         settings.XPREZ_SECTION_MODEL_CLASS,
         on_delete=models.SET_NULL,

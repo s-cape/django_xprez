@@ -62,7 +62,7 @@ class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
     front_template_name = "xprez/modules/text_base.html"
     admin_template_name = "xprez/admin/modules/text_base.html"
     admin_form_class = "xprez.modules.text.TextModuleBaseForm"
-    admin_icon_template_name = "xprez/admin/icons/modules/text_base.html"
+    admin_icon_template_name = "xprez/shared/icons/modules/text_base.html"
 
     text = models.TextField(blank=True)
 
@@ -75,7 +75,7 @@ class TextModule(TextModuleBase):
     front_template_name = "xprez/modules/text.html"
     admin_template_name = "xprez/admin/modules/text.html"
     admin_form_class = "xprez.modules.text.TextModuleForm"
-    admin_icon_template_name = "xprez/admin/icons/modules/text.html"
+    admin_icon_template_name = "xprez/shared/icons/modules/text.html"
 
     media = models.FileField(upload_to="images", null=True, blank=True)
     url = models.CharField("Target URL", max_length=255, null=True, blank=True)

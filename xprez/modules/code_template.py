@@ -12,7 +12,7 @@ from xprez.models.modules import Module
 class CodeTemplateModule(FontSizeModuleMixin, Module):
     admin_form_class = "xprez.modules.code_template.CodeTemplateModuleForm"
     admin_template_name = "xprez/admin/modules/code_template.html"
-    admin_icon_template_name = "xprez/admin/icons/modules/code_template.html"
+    admin_icon_template_name = "xprez/shared/icons/modules/code_template.html"
 
     @staticmethod
     def get_template_dir():

@@ -238,8 +238,8 @@ class Module(ConfigParentMixin, models.Model):
     @classproperty
     def admin_icon_template_name(cls):
         return [
-            f"xprez/admin/icons/modules/{cls.module_key}.html",
-            "xprez/admin/icons/modules/default.html",
+            f"xprez/shared/icons/modules/{cls.module_key}.html",
+            "xprez/shared/icons/modules/default.html",
         ]
 
     @classproperty

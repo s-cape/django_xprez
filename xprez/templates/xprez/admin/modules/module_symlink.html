@@ -8,7 +8,7 @@
 {% block content %}
 	<div class="xprez-module__content-info">
 		{% if module.symlink %}
-			{% include "xprez/admin/icons/page.html" %} <strong>{{ module.symlink.section.container.polymorph }}</strong>
+			{% include "xprez/shared/icons/page.html" %} <strong>{{ module.symlink.section.container.polymorph }}</strong>
 			<span class="xprez-module__content-info-arr">&#x203A;</span>
 			{{ module.symlink.polymorph.admin_icon }} <strong>{{ module.symlink.polymorph.verbose_name }}</strong>
 		{% else %}

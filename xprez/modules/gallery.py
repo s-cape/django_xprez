@@ -5,11 +5,11 @@ from xprez.admin.forms import ModuleForm, MultiModuleItemForm
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
 from xprez.models.mixins.font_size import FontSizeModuleMixin
-from xprez.models.multi_module import MultiModuleItem, UploadMultiModule
 from xprez.models.mixins.responsive_image import (
     ResponsiveImageItemMixin,
     ResponsiveImageParentMixin,
 )
+from xprez.models.multi_module import MultiModuleItem, UploadMultiModule
 
 PHOTOSWIPE_JS = (
     "xprez/libs/photoswipe/dist/photoswipe.min.js",
@@ -29,7 +29,7 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
     admin_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"
     admin_form_class = "xprez.modules.gallery.GalleryModuleForm"
     admin_item_form_class = "xprez.modules.gallery.GalleryItemForm"
-    admin_icon_template_name = "xprez/admin/icons/modules/gallery.html"
+    admin_icon_template_name = "xprez/shared/icons/modules/gallery.html"
 
     crop = models.CharField(
         max_length=5,

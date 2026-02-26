@@ -12,7 +12,7 @@ class FilesModule(FontSizeModuleMixin, UploadMultiModule):
     admin_item_template_name = "xprez/admin/modules/files/files_item.html"
     admin_form_class = "xprez.modules.files.FilesModuleForm"
     admin_item_form_class = "xprez.modules.files.FilesItemForm"
-    admin_icon_template_name = "xprez/admin/icons/modules/files.html"
+    admin_icon_template_name = "xprez/shared/icons/modules/files.html"
 
     title = models.CharField(max_length=255, blank=True)
 

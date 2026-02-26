@@ -14,7 +14,7 @@ class VideoModule(ResponsiveImageMixin, Module):
     front_template_name = "xprez/modules/video.html"
     admin_template_name = "xprez/admin/modules/video.html"
     admin_form_class = "xprez.modules.video.VideoForm"
-    admin_icon_template_name = "xprez/admin/icons/modules/video.html"
+    admin_icon_template_name = "xprez/shared/icons/modules/video.html"
 
     poster_image = models.ImageField(upload_to="video", null=True, blank=True)
     url = models.URLField()

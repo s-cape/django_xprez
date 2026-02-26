@@ -16,7 +16,7 @@ class NumbersModule(FontSizeModuleMixin, MultiModule):
     admin_item_template_name = "xprez/admin/modules/numbers/numbers_item.html"
     admin_form_class = "xprez.modules.numbers.NumbersModuleForm"
     admin_item_form_class = "xprez.modules.numbers.NumbersItemForm"
-    admin_icon_template_name = "xprez/admin/icons/modules/numbers.html"
+    admin_icon_template_name = "xprez/shared/icons/modules/numbers.html"
 
     class Meta:
         verbose_name = "Numbers"
