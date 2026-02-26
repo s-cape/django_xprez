@@ -30,10 +30,15 @@
                         <img
                             class="xprez-admin-text__media-img"
                             data-component="xprez-file-input-img"
-                            {% if thumb %}src="{{ thumb.url }}"{% endif %}
+                            {% if thumb %}src="{{ thumb.url }}"{% else %}data-hidden{% endif %}
                         />
+                        <span
+                            data-component="xprez-file-input-filename"
+                            {% if thumb or not widget.value %}data-hidden{% endif %}
+                        >
+                            {{ widget.value|xprez_file_name }}
+                        </span>
                     {% endwith %}
-                    <span data-component="xprez-file-input-filename" data-hidden></span>
                 </div>
                 <div class="xprez-admin-text__media-actions">
                     <label class="xprez-icon-btn" title="Replace" data-component="xprez-file-input-replace-btn">

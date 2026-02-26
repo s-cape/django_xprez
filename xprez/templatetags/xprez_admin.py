@@ -1,4 +1,7 @@
+from pathlib import Path
+
 from django import template
+from sorl.thumbnail import get_thumbnail
 
 register = template.Library()
 
@@ -29,14 +32,22 @@ def xprez_clipboard_is_empty(xprez_admin, request):
 
 
 @register.filter
+def xprez_file_name(value):
+    """Return the filename (no directory path) for a file field value."""
+    name = getattr(value, "name", None) or str(value)
+    return Path(name).name
+
+
+@register.filter
 def xprez_file_thumbnail(value, size="400x200"):
     """Try to generate a sorl-thumbnail for value; return thumb or None on failure."""
     if not value:
         return None
     try:
-        from sorl.thumbnail import get_thumbnail
-
-        return get_thumbnail(value, size, format="WEBP", quality=80)
+        thumb = get_thumbnail(value, size, format="WEBP", quality=80)
+        if thumb and thumb.storage.exists(thumb.name):
+            return thumb
+        return None
     except Exception:
         return None
 
