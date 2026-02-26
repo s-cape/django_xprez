@@ -7,7 +7,7 @@
     data-mode="{# (empty)/edit/delete #}"
     data-prefix="{{ section.admin_form.prefix }}"
 >
-    {% include "./includes/add_list.html" with component_name="xprez-adder-section-before" xprez_admin=section.admin_form.xprez_admin add_list_container=section.container attributes="data-hidden" %}
+    {% include "./includes/add_section.html" with class_name="xprez-add-before" component_name="xprez-adder-section-before" xprez_admin=section.admin_form.xprez_admin add_list_container=section.container attributes="data-hidden" %}
 
     <div class="xprez-section__header" data-draggable-section-handle>
         <span class="xprez-icon-btn" title="Collapse" data-component="xprez-section-collapser">
