@@ -1,10 +1,13 @@
 .xprez-section {
+    --x-admin-section-main-divider-bg: var(--x-admin-section-divider-bg);
+    --x-admin-section-main-divider-height: var(--x-admin-section-divider-height);
+
     margin: 1rem 0;
     position: relative;
 
     &[data-mode="edit"] {
-        --x-admin-section-divider-bg: #{$b-pink};
-        --x-admin-section-divider-height: 3px;
+        --x-admin-section-main-divider-bg: #{$b-pink};
+        --x-admin-section-main-divider-height: 3px;
 
         .xprez-section__header [data-component="xprez-section-popover-trigger"] {
             --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
@@ -37,9 +40,9 @@
 
         &::before {
             content: "";
-            height: var(--x-admin-section-divider-height);
+            height: var(--x-admin-section-main-divider-height);
             width: 100%;
-            background: var(--x-admin-section-divider-bg);
+            background: var(--x-admin-section-main-divider-bg);
             position: absolute;
             top: 50%;
             transform: translateY(-1px);
