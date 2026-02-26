@@ -1,0 +1,27 @@
+{% block wrapper %}
+    <div
+        class="{% if placement == "module" %}{% else %}xprez-option {% endif %} {% if field.field.required %}required{% endif %} {{ wrapper_class|default:"" }}"
+        {% if size is not None %}data-size="{{ size }}"{% endif %}
+        {% if field.errors %}data-has-errors{% endif %}
+        data-component="field"
+        data-field-name="{{ field.name }}"
+        data-active="true"
+        {% if label is False %}data-text-label="false"{% endif %}
+        {% if field.name in field.form.sync_fields %}data-sync{% endif %}
+        {{ attributes|default:"" }}
+    >
+        {% if label is not False or icon %}
+            <label for="{{ field.id_for_label }}">
+                {% if icon %}<i class="{{ icon }}"></i>{% endif %}
+                {% if icon2 %}<i class="{{ icon2 }}"></i>{% endif %}
+                {% if label is not False %}<span>{{ label|default:field.label }}</span>{% endif %}
+            </label>
+        {% endif %}
+
+        {% block field %}{{ field }}{% endblock %}
+        {% if suffix %}
+            <span class="xprez-option__suffix">{{ suffix }}</span>
+        {% endif %}
+    </div>
+    {% include "xprez/admin/form/errors.html" with errors=field.errors %}
+{% endblock %}

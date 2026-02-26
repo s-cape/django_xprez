@@ -3,9 +3,4 @@
 {% block main_fields %}
     <div class="xprez-option-row">{% include "xprez/admin/form/field.html" with field=module.admin_form.url %}</div>
     <div class="xprez-option-row">{% include "xprez/admin/form/field.html" with field=module.admin_form.poster_image %}</div>
-    {% if module.poster_image %}
-        {% thumbnail module.poster_image "500x278" format="WEBP" quality=70 as thumb %}
-            <img src="{{ thumb.url}}">
-        {% endthumbnail %}
-    {% endif %}
 {% endblock %}
