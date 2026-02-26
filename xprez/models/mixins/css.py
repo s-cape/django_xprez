@@ -73,7 +73,7 @@ class CssMixin:
     def _get_value_or_default(self, field_name):
         """Return value if non-empty, else resolve default for field_name."""
         value = getattr(self, field_name)
-        if value not in [None, constants.NONE]:
+        if value not in [None, ""]:
             return value
         return self._lookup_by_config_keys(settings.XPREZ_DEFAULTS, field_name)
 
@@ -143,7 +143,11 @@ class CssParentMixin(CssMixin):
     merging them across breakpoints into a single <style> tag.
     """
 
-    css_breakpoint = settings.XPREZ_DEFAULT_BREAKPOINT
+    css_breakpoint = 0
+
+    def get_css_classes_unprefixed(self):
+        value = getattr(self, "css_class", None)
+        return value.strip().split() if value else []
 
     def get_css_variables(self):
         return {}
@@ -155,9 +159,7 @@ class CssParentMixin(CssMixin):
         Returns: {0: {"columns": 2}, 2: {"columns": 3}}
         """
         db_configs = {c.css_breakpoint: c for c in self.get_saved_configs()}
-        current_css_variables = self.build_config(
-            settings.XPREZ_DEFAULT_BREAKPOINT
-        ).get_css_variables()
+        current_css_variables = self.build_config(0).get_css_variables()
         result = {}
         last_config = None
 
@@ -205,38 +207,38 @@ class CssParentMixin(CssMixin):
         """
         Convert dict to CSS variables string.
 
-        {"columns": 2, "gap": "1rem"} -> "--x-columns: 2; --x-gap: 1rem"
+        {"columns": 2, "gap": "1rem"} -> "--x-columns: 2;--x-gap: 1rem"
         """
         result = []
         for k, v in css_variables.items():
             if v is not None:
                 result += [f"--x-{k}: {v}"]
-        return "; ".join(result)
+        return ";".join(result)
 
     @staticmethod
     def _format_css_rule(selector, breakpoint, css_variables):
         """
         Wrap CSS vars in selector and media query (if breakpoint has min_width).
 
-        ("#id", 0, {"a": 1}) -> "#id { --x-a: 1; }"
-        ("#id", 2, {"a": 1}) -> "@media (min-width: 768px) { #id { --x-a: 1; } }"
+        ("#id", 0, {"a": 1}) -> "#id{--x-a: 1;}"
+        ("#id", 2, {"a": 1}) -> "@media (min-width: 768px){#id{--x-a: 1;}}"
         """
         if not css_variables:
             return ""
 
         css_variables_string = CssParentMixin._format_css_variables(css_variables)
         min_width = settings.XPREZ_BREAKPOINTS[breakpoint]["min_width"]
-        rule = f"{selector} {{ {css_variables_string}; }}"
+        rule = f"{selector}{{{css_variables_string};}}"
         if not min_width:
             return rule
         else:
-            return f"@media (min-width: {min_width}px) {{ {rule} }}"
+            return f"@media (min-width: {min_width}px) {{{rule}}}"
 
     def render_css_variables(self):
         """
         Generate <style> tag with all breakpoint styles.
 
-        Returns: "<style>#section-config-1 { --x-columns: 1; }</style>"
+        Returns: "<style>#section-config-1{--x-columns: 1;}</style>"
         """
         css_data = self.get_css_variables_by_breakpoint()
         if not css_data:
@@ -317,14 +319,10 @@ class CssParentMixin(CssMixin):
 
     def render_css_classes(self):
         result = []
-
-        # Parent classes (no breakpoint prefix)
         for key, value in self.get_css_classes().items():
             result += [self._format_css_class(key, value)]
-
-        # Config classes (with breakpoint prefix)
         for breakpoint, css_classes in self.get_css_classes_by_breakpoint().items():
             for key, value in css_classes.items():
                 result += [self._format_css_class(key, value, breakpoint)]
-
+        result += self.get_css_classes_unprefixed()
         return " ".join(result)

@@ -1,0 +1,12 @@
+{% extends "xprez/admin/configs/module_base.html" %}
+
+{% block extra_fields %}
+    <div class="xprez-option-group__subtitle">Inner grid</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.columns size="flex-1" %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.gap_choice size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.gap_custom label=False suffix=config.units.gap.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.gap_choice.html_name|add:":custom\""|safe size="flex-0" %}
+    </div>
+{% endblock %}

@@ -58,7 +58,7 @@ class Module(ConfigParentMixin, models.Model):
             self.content_type = self.class_content_type()
         super().save(*args, **kwargs)
         if self.pk:
-            self.get_or_create_config(settings.XPREZ_DEFAULT_BREAKPOINT)
+            self.get_or_create_config(0)
 
     @property
     def verbose_name(self):

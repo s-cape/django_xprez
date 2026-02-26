@@ -1,7 +1,7 @@
 {% block module %}
 <div
     id="{{ module.key }}"
-    class="{% block css_class %}{{ module.render_css_classes }} {{ module.css_class|default:'' }}{% endblock %}"
+    class="{% block css_class %}{{ module.render_css_classes }}{% endblock %}"
     {% block attrs  %}{% endblock %} >
         {{ module.render_css_variables|safe }}
         <div class="xprez-module-inner">

@@ -59,7 +59,7 @@ class XprezAdminMixin(
     available_modules = settings.XPREZ_DEFAULT_AVAILABLE_MODULES
 
     xprez_breakpoints = settings.XPREZ_BREAKPOINTS
-    xprez_default_breakpoint = settings.XPREZ_DEFAULT_BREAKPOINT
+    xprez_default_breakpoint = 0
 
     def xprez_get_form(self, ModelForm=None):
         ModelForm = ModelForm or self.model_form

@@ -42,7 +42,6 @@ XPREZ_BREAKPOINTS = {
     4: {"name": "Desktops (&gt; 1200px)", "min_width": 1200},
     5: {"name": "Extra large devices (&gt; 1500px)", "min_width": 1500},
 }
-XPREZ_DEFAULT_BREAKPOINT = 0
 XPREZ_GALLERY_FULL_WIDTH_PX = 2700
 
 XPREZ_DEFAULTS = {
@@ -129,6 +128,11 @@ XPREZ_DEFAULTS = {
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_CENTER,
             "columns": 4,
             "gap_choice": constants.GAP_SMALL,
+        },
+        "xprez.NumbersModule": {
+            "gap_choice": constants.GAP_MEDIUM,
+            "gap_custom": 0,
+            "columns": constants.COLUMNS_AUTO,
         },
     },
 }
@@ -322,6 +326,17 @@ XPREZ_CSS = {
             },
         },
         "xprez.GalleryModule": {
+            "gap": {
+                "units": "px",
+                "values": {
+                    constants.GAP_NONE: {0: 0},
+                    constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
+                    constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
+                    constants.GAP_LARGE: {0: 40, 1: 60, 2: 80},
+                },
+            },
+        },
+        "xprez.NumbersModule": {
             "gap": {
                 "units": "px",
                 "values": {
