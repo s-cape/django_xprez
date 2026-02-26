@@ -1,29 +1,64 @@
-function initPosters() {
-    $('.js-video-with-poster').each(function (index, el) {
-        var $el = $(el);
-        var $poster = $el.find('.js-poster');
-        $poster.on('click', function () {
-            var $youtube = $el.find('.js-youtube');
-            if ($youtube.length) {
-                new YT.Player($youtube.attr('id'), {
-                  events: {
-                    'onReady': function(event) {
-                        event.target.playVideo();
-                    }
-                  }
+(function () {
+    "use strict";
+
+    class XprezVideoBase {
+        hidePoster(poster, delay) {
+            setTimeout(
+                function () { poster.style.display = "none"; },
+                delay || 0
+            );
+        }
+    }
+
+    class XprezVideoYoutube extends XprezVideoBase {
+        play(iframe, poster) {
+            if (typeof YT !== "undefined" && YT.Player) {
+                new YT.Player(iframe, {
+                    events: { onReady: function (e) { e.target.playVideo(); } },
                 });
-                setTimeout(function() {
-                    $poster.hide();
-                }, 250);
+                this.hidePoster(poster, 250);
             }
+        }
+    }
 
-            var $vimeo = $el.find('.js-vimeo');
-            if ($vimeo.length) {
-                new Vimeo.Player($vimeo[0]).play();
-                $poster.hide();
+    class XprezVideoVimeo extends XprezVideoBase {
+        play(iframe, poster) {
+            if (typeof Vimeo !== "undefined" && Vimeo.Player) {
+                new Vimeo.Player(iframe).play();
+                this.hidePoster(poster);
             }
-        })
-    });
-}
+        }
+    }
 
-$(function () { initPosters() });
+    window.XprezVideoBase = XprezVideoBase;
+    window.XprezVideoYoutube = XprezVideoYoutube;
+    window.XprezVideoVimeo = XprezVideoVimeo;
+
+    function onPosterClick(container, poster) {
+        const iframe = container.querySelector("[data-js-controller-class]");
+        if (!iframe) return;
+        const handlerName = iframe.getAttribute("data-js-controller-class");
+        const HandlerClass = handlerName && window[handlerName];
+        if (typeof HandlerClass === "function") {
+            const handler = new HandlerClass();
+            handler.play(iframe, poster);
+        }
+    }
+
+    function init() {
+        document.querySelectorAll("[data-video-with-poster]").forEach(function (container) {
+            const poster = container.querySelector("[data-video-poster]");
+            if (poster) {
+                poster.addEventListener("click", function () {
+                    onPosterClick(container, poster);
+                });
+            }
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();

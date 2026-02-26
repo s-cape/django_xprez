@@ -44,6 +44,11 @@ XPREZ_BREAKPOINTS = {
 }
 XPREZ_GALLERY_FULL_WIDTH_PX = 2700
 
+XPREZ_VIDEO_PROVIDERS = [
+    "xprez.modules.video.YouTubeVideoProvider",
+    "xprez.modules.video.VimeoVideoProvider",
+]
+
 XPREZ_DEFAULTS = {
     "section": {
         "max_width_choice": constants.MAX_WIDTH_MEDIUM,
