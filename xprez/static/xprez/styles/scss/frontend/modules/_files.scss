@@ -11,7 +11,7 @@
         line-height: $x-files-item-line-height !important;
 
         &:not(:first-child) {
-            border-top: 1px solid var(--x-line-color);
+            border-top: 1px solid var(--x-files-line-color, var(--x-base-line-color));
         }
 
         &:last-child {
@@ -43,5 +43,23 @@
     &__description {
         word-break: break-word;
         overflow-wrap: anywhere;
+        flex: 1;
+    }
+
+    &__extension {
+        font-size: $x-files-extension-font-size;
+        font-weight: 400;
+        background-color: var(--x-files-extension-bg);
+        color: var(--x-files-extension-color);
+        padding: 0.125em 0.25em;
+        border-radius: 0.25em;
+        font-weight: 600;
+        min-width: 3rem;
+        opacity: $x-files-extension-opacity;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        padding: 0.2em 0.25em;
     }
 }

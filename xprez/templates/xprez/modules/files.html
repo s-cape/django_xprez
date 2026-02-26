@@ -11,7 +11,8 @@
         <p class="xprez-files__item">
             <a href="{{ item.file.url }}" class="xprez-files__link" download="{{ item.get_description }}{% if item.get_extension %}.{{ item.get_extension }}{% endif %}">
                 {% include "xprez/admin/icons/download.html" %}
-                <span class="xprez-files__description">{{ item.get_description }}</span>
+                <span class="xprez-files__description">{{ item.get_description }} </span>
+                <span class="xprez-files__extension">{% if item.get_extension %}{{ item.get_extension }}{% endif %}</span>
             </a>
         </p>
     {% endfor %}

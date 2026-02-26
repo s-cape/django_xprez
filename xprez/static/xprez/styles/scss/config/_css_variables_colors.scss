@@ -5,6 +5,7 @@
 	--x-base-color: #{$x-base-color};
 	--x-link-color: #{$x-link-color};
 	--x-link-hover-color: #{$x-link-hover-color};
+	--x-base-line-color: #{$x-base-line-color};
 	--x-heading-color: #{$x-heading-color};
 	--x-heading-emphasis-color: #{$x-heading-emphasis-color};
 
@@ -45,14 +46,18 @@
 	--x-button-secondary-border-color: #{$x-button-secondary-border-color};
 	--x-button-secondary-border-width: #{$x-button-secondary-border-width};
 
-	--x-line-color: #{$x-line-color};
 	--x-numbers-item-bg: #{$x-numbers-item-bg};
+
+	--x-files-line-color: #{$x-files-line-color};
+	--x-files-extension-bg: #{$x-files-extension-bg};
+	--x-files-extension-color: #{$x-files-extension-color};
 }
 
 .xprez-alternate-color {
     --x-base-color: #{$x-alt-base-color};
     --x-link-color: #{$x-alt-link-color};
     --x-link-hover-color: #{$x-alt-link-hover-color};
+	--x-base-line-color: #{$x-alt-base-line-color};
     --x-heading-color: #{$x-alt-heading-color};
     --x-heading-emphasis-color: #{$x-alt-heading-emphasis-color}; 
    
@@ -93,6 +98,9 @@
 	--x-button-secondary-border-color: #{$x-alt-button-secondary-border-color};
 	--x-button-secondary-border-width: #{$x-alt-button-secondary-border-width};
 
-	--x-line-color: #{$x-alt-line-color};
 	--x-numbers-item-bg: #{$x-alt-numbers-item-bg};
+
+	--x-files-line-color: #{$x-alt-files-line-color};
+	--x-files-extension-bg: #{$x-alt-files-extension-bg};
+	--x-files-extension-color: #{$x-alt-files-extension-color};
 }

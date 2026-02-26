@@ -17,6 +17,7 @@ $x-base-bg: transparent !default;
 $x-base-color: inherit !default;
 $x-link-color: $blue !default; 
 $x-link-hover-color: darken($x-link-color, 7%) !default;
+$x-base-line-color: $light-gray !default;
 
 $x-heading-color: null !default;
 $x-heading-emphasis-color: $gray !default;
@@ -46,14 +47,18 @@ $x-button-secondary-active-color: $x-button-secondary-color !default;
 $x-button-secondary-border-color: $x-button-secondary-color !default;
 $x-button-secondary-border-width: 0 !default;
 
-$x-line-color: $light-gray !default;
 $x-numbers-item-bg: none !default;
+
+$x-files-line-color: $x-base-line-color !default;
+$x-files-extension-bg: color-mix(in srgb, var(--x-files-line-color, var(--x-base-line-color)) 30%, transparent) !default;
+$x-files-extension-color: $x-base-color !default;
 
 // Alternate colors
 
 $x-alt-base-color: $white !default;
 $x-alt-link-color: $white !default;
 $x-alt-link-hover-color: darken($x-alt-link-color, 7%) !default;
+$x-alt-base-line-color: $light-gray !default;
 
 $x-alt-heading-color: inherit !default;
 $x-alt-heading-emphasis-color: $light-gray !default;
@@ -83,5 +88,8 @@ $x-alt-button-secondary-active-color: $x-alt-button-secondary-color !default;
 $x-alt-button-secondary-border-color: $x-alt-button-secondary-color !default;
 $x-alt-button-secondary-border-width: 0 !default;
 
-$x-alt-line-color: $light-gray !default;
 $x-alt-numbers-item-bg: $gray !default;
+
+$x-alt-files-line-color: $x-alt-base-line-color !default;
+$x-alt-files-extension-bg: color-mix(in srgb, var(--x-files-line-color, var(--x-base-line-color)) 30%, transparent) !default;
+$x-alt-files-extension-color: $x-alt-base-color !default;

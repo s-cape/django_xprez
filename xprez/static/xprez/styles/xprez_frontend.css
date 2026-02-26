@@ -1,10 +1,10 @@
-/* Error: Undefined mixin.
+/* Error: Undefined variable.
  *    ,
- * 10 |         @include rfs.gap($x-numbers-item-auto-gap);
- *    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ * 50 |         font-size: $x-files-extension-font-size;
+ *    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  *    '
- *   styles/scss/frontend/modules/_numbers.scss 10:3  @import
- *   styles/scss/frontend/xprez_frontend.scss 13:9    root stylesheet */
+ *   styles/scss/frontend/modules/_files.scss 50:20  @import
+ *   styles/scss/frontend/xprez_frontend.scss 16:9   root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -14,5 +14,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Undefined mixin.\a    \2577 \a 10 \2502          @include rfs.gap($x-numbers-item-auto-gap);\a    \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles/scss/frontend/modules/_numbers.scss 10:3  @import\a   styles/scss/frontend/xprez_frontend.scss 13:9    root stylesheet";
+  content: "Error: Undefined variable.\a    \2577 \a 50 \2502          font-size: $x-files-extension-font-size;\a    \2502                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles/scss/frontend/modules/_files.scss 50:20  @import\a   styles/scss/frontend/xprez_frontend.scss 16:9   root stylesheet";
 }
