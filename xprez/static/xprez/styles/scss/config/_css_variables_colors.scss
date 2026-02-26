@@ -3,8 +3,6 @@
 :root {
 	--x-base-bg: #{$x-base-bg};
 	--x-base-color: #{$x-base-color};
-	--x-link-color: #{$x-link-color};
-	--x-link-hover-color: #{$x-link-hover-color};
 	--x-base-line-color: #{$x-base-line-color};
 	--x-heading-color: #{$x-heading-color};
 	--x-heading-emphasis-color: #{$x-heading-emphasis-color};
@@ -14,16 +12,28 @@
 	} @else {
 		--x-h2-color: #{$x-heading-color};
 	}
+
 	@if ($x-h3-color) {
 		--x-h3-color: #{$x-h3-color};
 	} @else {
 		--x-h3-color: #{$x-heading-color};
 	}
+
 	@if ($x-h4-color) {
 		--x-h4-color: #{$x-h4-color};
 	} @else {
 		--x-h4-color: #{$x-heading-color};
 	}
+
+    @if ($x-blockquote-color) {
+        --x-blockquote-color: #{$x-blockquote-color};
+    } @else {
+        --x-blockquote-color: #{$x-heading-color};
+    }
+
+	--x-link-color: #{$x-link-color};
+	--x-link-hover-color: #{$x-link-hover-color};
+	--x-blockquote-line-color: #{$x-blockquote-line-color};
 
     --x-box-base-bg: #{$x-box-bg};
 	--x-box-border-color: #{$x-box-border-color};
@@ -60,8 +70,6 @@
 
 .xprez-alternate-color {
     --x-base-color: #{$x-alt-base-color};
-    --x-link-color: #{$x-alt-link-color};
-    --x-link-hover-color: #{$x-alt-link-hover-color};
 	--x-base-line-color: #{$x-alt-base-line-color};
     --x-heading-color: #{$x-alt-heading-color};
     --x-heading-emphasis-color: #{$x-alt-heading-emphasis-color}; 
@@ -71,16 +79,28 @@
 	} @else {
 		--x-h2-color: #{$x-alt-heading-color};
 	}
+
 	@if ($x-alt-h3-color) {
 		--x-h3-color: #{$x-alt-h3-color};
 	} @else {
 		--x-h3-color: #{$x-alt-heading-color};
 	}
+
 	@if ($x-alt-h4-color) {
 		--x-h4-color: #{$x-alt-h4-color};
 	} @else {
 		--x-h4-color: #{$x-alt-heading-color};
 	}
+
+    @if ($x-alt-blockquote-color) {
+        --x-blockquote-color: #{$x-alt-blockquote-color};
+    } @else {
+        --x-blockquote-color: #{$x-alt-heading-color};
+    }
+
+	--x-link-color: #{$x-alt-link-color};
+    --x-link-hover-color: #{$x-alt-link-hover-color};
+	--x-blockquote-line-color: #{$x-alt-blockquote-line-color};
 
 	--x-box-base-bg: #{$x-alt-box-bg};
 	--x-box-border-color: #{$x-alt-box-border-color};

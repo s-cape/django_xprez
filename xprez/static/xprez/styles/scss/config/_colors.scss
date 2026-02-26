@@ -15,8 +15,6 @@ $blue: #1256a4 !default;
 
 $x-base-bg: transparent !default;
 $x-base-color: inherit !default;
-$x-link-color: $blue !default; 
-$x-link-hover-color: darken($x-link-color, 7%) !default;
 $x-base-line-color: $light-gray !default;
 
 $x-heading-color: null !default;
@@ -24,6 +22,10 @@ $x-heading-emphasis-color: $gray !default;
 $x-h2-color: null !default;
 $x-h3-color: null !default;
 $x-h4-color: null !default;
+$x-link-color: $blue !default; 
+$x-link-hover-color: darken($x-link-color, 7%) !default;
+$x-blockquote-color: null !default;
+$x-blockquote-line-color: $x-base-line-color !default;
 
 $x-section-bg: transparent !default;
 $x-box-bg: $super-light-gray !default;
@@ -70,6 +72,8 @@ $x-alt-heading-emphasis-color: $light-gray !default;
 $x-alt-h2-color: null !default;
 $x-alt-h3-color: null !default;
 $x-alt-h4-color: null !default;
+$x-alt-blockquote-color: null !default;
+$x-alt-blockquote-line-color: $x-alt-base-line-color !default;
 
 $x-alt-section-bg: $black !default;
 $x-alt-box-bg: $dark-gray !default;
