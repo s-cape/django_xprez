@@ -8,6 +8,7 @@ export class XprezFileInputFieldController extends XprezFieldController {
         if (!this.containerEl) return;
 
         this.imgEl = this.containerEl.querySelector("[data-component='xprez-file-input-img']");
+        this.filenameEl = this.containerEl.querySelector("[data-component='xprez-file-input-filename']");
         this.addBtnEl = fieldEl.querySelector("[data-component='xprez-file-input-add-btn']");
         this.replaceBtnEl = this.containerEl.querySelector(
             "[data-component='xprez-file-input-replace-btn']"
@@ -40,7 +41,16 @@ export class XprezFileInputFieldController extends XprezFieldController {
     }
 
     _setPreview(file) {
-        setFilePreviewImage(this.imgEl, file);
+        this.filenameEl.textContent = file.name;
+        if (file.type.startsWith("image/")) {
+            setFilePreviewImage(this.imgEl, file);
+            this.imgEl.removeAttribute("data-hidden");
+            this.filenameEl.setAttribute("data-hidden", "");
+        } else {
+            clearFilePreviewImage(this.imgEl);
+            this.imgEl.setAttribute("data-hidden", "");
+            this.filenameEl.removeAttribute("data-hidden");
+        }
         this.replaceBtnEl.append(this.inputEl);
         this.containerEl.removeAttribute("data-hidden");
         this.addBtnEl.setAttribute("data-hidden", "");
@@ -50,6 +60,8 @@ export class XprezFileInputFieldController extends XprezFieldController {
         this.inputEl.value = "";
         this._previousValue = "";
         clearFilePreviewImage(this.imgEl);
+        this.imgEl.removeAttribute("data-hidden");
+        this.filenameEl.setAttribute("data-hidden", "");
         this.addBtnEl.append(this.inputEl);
         this.containerEl.setAttribute("data-hidden", "");
         this.addBtnEl.removeAttribute("data-hidden");
