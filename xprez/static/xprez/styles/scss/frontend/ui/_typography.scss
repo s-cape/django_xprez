@@ -26,11 +26,11 @@
                         }
                         
                         @if map-get($properties, "margin-top") {
-                            margin-top: map-get($properties, "margin-top");
+                            @include rfs.margin-top(map-get($properties, "margin-top"));
                         }
 
                         @if map-get($properties, "margin-bottom") {
-                            margin-bottom: map-get($properties, "margin-bottom");
+                            @include rfs.margin-bottom(map-get($properties, "margin-bottom"));
                         }
 
                         @if map-get($properties, "before-heading-margin-bottom") and $element == "p" {
@@ -38,7 +38,7 @@
                             &:has(+ h3),
                             &:has(+ h4),
                             &:has(+ blockquote) {
-                                margin-bottom: map-get($properties, "before-heading-margin-bottom");  
+                                @include rfs.margin-bottom(map-get($properties, "before-heading-margin-bottom")); 
                             }
                         }
                     }
@@ -77,11 +77,13 @@
         font-style: $x-blockquote-font-style;
         font-weight: $x-blockquote-font-weight;
         color: var(--x-blockquote-color, inherit);
+        letter-spacing: $x-blockquote-letter-spacing;
 
         p {
             font-size: inherit;
             line-height: inherit;
             font-weight: inherit;
+            letter-spacing: inherit;
             margin: 0;
 
             @if $x-blockquote-show-lines{
