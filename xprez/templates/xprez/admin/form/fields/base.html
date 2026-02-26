@@ -1,6 +1,7 @@
 {% block wrapper %}
     <div
         class="{% if placement == "module" %}{% else %}xprez-option {% endif %} {% if field.field.required %}required{% endif %} {{ wrapper_class|default:"" }}"
+        data-js-controller-class="{% block js_controller_class %}XprezFieldController{% endblock %}"
         {% if size is not None %}data-size="{{ size }}"{% endif %}
         {% if field.errors %}data-has-errors{% endif %}
         data-component="field"

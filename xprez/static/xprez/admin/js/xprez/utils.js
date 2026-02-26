@@ -19,3 +19,20 @@ export function executeScripts(el) {
         }
     });
 }
+
+export function setFilePreviewImage(imgEl, file) {
+    if (imgEl.dataset.previewObjectUrl) {
+        URL.revokeObjectURL(imgEl.dataset.previewObjectUrl);
+    }
+    const url = URL.createObjectURL(file);
+    imgEl.dataset.previewObjectUrl = url;
+    imgEl.src = url;
+}
+
+export function clearFilePreviewImage(imgEl) {
+    if (imgEl.dataset.previewObjectUrl) {
+        URL.revokeObjectURL(imgEl.dataset.previewObjectUrl);
+        delete imgEl.dataset.previewObjectUrl;
+    }
+    imgEl.removeAttribute("src");
+}
