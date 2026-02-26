@@ -32,10 +32,13 @@ import { XprezSortable } from './xprez/sortable.js';
 import { XprezMultiModuleItem, XprezMultiModule, XprezUploadMultiModule } from './xprez/multi_module.js';
 import { XprezTextModule } from './xprez/text_module.js';
 import { executeScripts } from './xprez/utils.js';
+import { XprezFileInputFieldController } from './xprez/file_input.js';
 
 window.Xprez = Xprez;
 window.XprezModule = XprezModule;
 window.XprezTextModule = XprezTextModule;
+window.XprezFieldController = XprezFieldController;
+window.XprezFileInputFieldController = XprezFileInputFieldController;
 window.XprezMultiModuleItem = XprezMultiModuleItem;
 window.XprezMultiModule = XprezMultiModule;
 window.XprezUploadMultiModule = XprezUploadMultiModule;
@@ -68,5 +71,6 @@ export {
     XprezMultiModule,
     XprezUploadMultiModule,
     XprezFieldController,
+    XprezFileInputFieldController,
     executeScripts
 };

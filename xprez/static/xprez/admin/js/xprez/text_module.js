@@ -1,5 +1,6 @@
 import { XprezModule } from './modules.js';
 import { XprezTextMediaDeleter } from './deleters.js';
+import { setFilePreviewImage, clearFilePreviewImage } from './utils.js';
 
 export class XprezTextModule extends XprezModule {
     constructor(section, moduleEl) {
@@ -23,21 +24,12 @@ export class XprezTextModule extends XprezModule {
     }
 
     _setPreview(file) {
-        if (this.mediaImgEl.dataset.previewObjectUrl) {
-            URL.revokeObjectURL(this.mediaImgEl.dataset.previewObjectUrl);
-        }
-        const url = URL.createObjectURL(file);
-        this.mediaImgEl.dataset.previewObjectUrl = url;
-        this.mediaImgEl.src = url;
+        setFilePreviewImage(this.mediaImgEl, file);
         this.textMediaEl.removeAttribute("data-hidden");
     }
 
     _clearPreview() {
         this.mediaFileInput.value = "";
-        if (this.mediaImgEl.dataset.previewObjectUrl) {
-            URL.revokeObjectURL(this.mediaImgEl.dataset.previewObjectUrl);
-            delete this.mediaImgEl.dataset.previewObjectUrl;
-        }
-        this.mediaImgEl.removeAttribute("src");
+        clearFilePreviewImage(this.mediaImgEl);
     }
 }

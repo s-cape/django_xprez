@@ -3,6 +3,7 @@ import { XprezModulePopover } from './popovers.js';
 import { XprezModuleDeleter } from './deleters.js';
 import { XprezModuleConfig, XprezConfigParentMixin } from './configs.js';
 import { XprezModuleConfigAdder } from './adders.js';
+import { resolveFieldControllerClass } from './fields.js';
 
 export class XprezModule extends XprezContentBase {
     constructor(section, moduleEl) {
@@ -13,6 +14,20 @@ export class XprezModule extends XprezContentBase {
         this.initFields();
         this.initConfigs();
         this.initShowWhens();
+    }
+
+    initFields() {
+        this.fields = [];
+        this.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
+            if (this.configsContainerEl.contains(fieldEl)) return;
+            this.initField(fieldEl);
+        });
+    }
+
+    initField(fieldEl) {
+        const field = new (resolveFieldControllerClass(fieldEl))(this, fieldEl);
+        this.fields.push(field);
+        return field;
     }
 
     get configsContainerSelector() { return "[data-component='xprez-module-configs']"; }

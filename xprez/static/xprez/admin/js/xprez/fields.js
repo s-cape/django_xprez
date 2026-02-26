@@ -374,3 +374,12 @@ export class XprezShowWhen {
         }
     }
 }
+
+export function resolveFieldControllerClass(fieldEl) {
+    const className = fieldEl.dataset.jsControllerClass;
+    if (className && !window[className]) {
+        console.error(`Field controller class ${className} not found`);
+    }
+    return (className && window[className]) || XprezFieldController;
+}
+
