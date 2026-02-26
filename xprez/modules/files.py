@@ -53,10 +53,9 @@ class FilesItem(MultiModuleItem):
 class FilesModuleForm(ModuleForm):
     options_fields = ModuleForm.options_fields + ("font_size",)
 
-    class Meta:
-        model = FilesModule
-        fields = "__all__"
-        widgets = {"title": forms.TextInput(attrs={"placeholder": "Files"})}
+    # class Meta:
+    #     model = FilesModule
+    #     fields = "__all__"
 
 
 class FilesItemForm(MultiModuleItemForm):

@@ -99,7 +99,3 @@ class NumbersItemForm(MultiModuleItemForm):
     class Meta:
         model = NumbersItem
         fields = ("number", "suffix", "caption")
-        widgets = {
-            "number": forms.NumberInput(attrs={"class": "short"}),
-            "suffix": forms.TextInput(attrs={"class": "short"}),
-        }

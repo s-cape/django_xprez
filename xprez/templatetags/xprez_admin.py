@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from django import template
+from PIL import Image
 from sorl.thumbnail import get_thumbnail
 
 register = template.Library()
@@ -44,10 +45,9 @@ def xprez_file_thumbnail(value, size="400x200"):
     if not value:
         return None
     try:
-        thumb = get_thumbnail(value, size, format="WEBP", quality=80)
-        if thumb and thumb.storage.exists(thumb.name):
-            return thumb
-        return None
+        with value.open("rb") as f:
+            Image.open(f)  # check if file is an image
+        return get_thumbnail(value, size, format="WEBP", quality=80) or None
     except Exception:
         return None
 
