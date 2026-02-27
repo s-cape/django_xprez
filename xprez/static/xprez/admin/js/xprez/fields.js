@@ -15,6 +15,10 @@ export class XprezFieldController {
         }
     }
 
+    syncAllowed() {
+        return this.el.hasAttribute("data-sync-allowed");
+    }
+
     // Value
     // Public: setValue (set + propagate), setValuePrepare + setValueConfirm (batch: apply DOM then propagate)
     // Internal: _setValueSilent (set DOM + state, no propagation/notifications; used by sync/cascade)

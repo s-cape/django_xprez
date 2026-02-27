@@ -25,7 +25,7 @@ export class XprezAdderBase {
 
     add(url) {
         this.setAddingStart();
-        fetch(url)
+        return fetch(url)
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -138,20 +138,24 @@ export class XprezConfigAdderBase extends XprezAdderSelectBase {
         this.setOptionsDisabledState();
     }
 
-    handleSelection(selectedOption) {
-        const selectedBreakpoint = parseInt(selectedOption.value);
+    addBreakpoint(breakpoint) {
         const existingConfig = this.parent.configs.find(
-            config => config.cssBreakpoint() === selectedBreakpoint
+            c => c.cssBreakpoint() === breakpoint
         );
-
         if (existingConfig) {
             if (existingConfig.isDeleted()) {
                 existingConfig.deleter.undelete();
                 this.setOptionsDisabledState();
             }
-        } else {
-            this.add(selectedOption.dataset.url);
+            return Promise.resolve();
         }
+        const option = [...this.options].find(o => parseInt(o.value) === breakpoint);
+        if (!option?.dataset.url) return Promise.resolve();
+        return this.add(option.dataset.url);
+    }
+
+    handleSelection(selectedOption) {
+        this.addBreakpoint(parseInt(selectedOption.value));
     }
 
     setOptionsDisabledState() {

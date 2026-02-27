@@ -8,7 +8,7 @@ export const XprezConfigParentMixin = {
             .filter(c => !c.isDeleted())
             .sort((a, b) => a.cssBreakpoint() - b.cssBreakpoint());
     },
-    updateAllFieldsActive() {
+    updateConfigFieldsActive() {
         for (const config of this.configs) {
             for (const field of config.fields) {
                 field.refreshActive();

@@ -62,25 +62,11 @@ export class XprezModulePopover extends XprezPopoverBase {
         this._hideOthers(this.module.section.xprez);
         super.show();
         this.module.el.dataset.mode = "edit";
-        // this._autoSelectSameType();
+        this.module.section.xprez.sync.selectRelated(this.module);
     }
     hide() {
+        this.module.section.xprez.sync.clearSelection();
         super.hide();
         this.module.el.dataset.mode = "";
-        // this._clearSelection();
     }
-    // _autoSelectSameType() {
-    //     const contentType = this.module.contentType();
-    //     for (const mod of this.module.section.modules) {
-    //         if (mod === this.module) continue;
-    //         mod.el.dataset.mode = mod.contentType() === contentType ? "select" : "";
-    //     }
-    // }
-    // _clearSelection() {
-    //     for (const mod of this.module.section.xprez.getModules()) {
-    //         if (mod.el.dataset.mode === "select") {
-    //             mod.el.dataset.mode = "";
-    //         }
-    //     }
-    // }
 }

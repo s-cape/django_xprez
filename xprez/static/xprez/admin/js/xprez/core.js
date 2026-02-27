@@ -1,6 +1,7 @@
 import { XprezSection } from './sections.js';
 import { XprezAdderContainerEnd } from './adders.js';
 import { XprezSortable } from './sortable.js';
+import { XprezSyncManager } from './sync.js';
 
 export class Xprez {
     constructor() {
@@ -12,11 +13,10 @@ export class Xprez {
         this.el.querySelectorAll("[data-component='xprez-section']").forEach(this.initSection.bind(this));
 
         this.updateView();
+        this.sync = new XprezSyncManager(this);
         this.adder = new XprezAdderContainerEnd(this, this.el.querySelector("[data-component='xprez-adder-container-end']"));
         this.initAllSectionsCollapser();
         this.initSectionsSortable();
-
-        // this.sections[0].popover.show();
     }
 
     initSection(sectionEl) {

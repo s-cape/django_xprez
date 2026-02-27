@@ -3,21 +3,20 @@
     class="xprez-admin-module {% if module.admin_form.errors %}xprez-module--has-errors{% endif %} xprez-admin-{{ module.module_css_class }}"
     data-component="xprez-module"
     data-content-type="{{ module.content_type }}"
-    data-mode="{# (empty)/edit/select/delete #}"
+    data-mode="{# (empty)/edit/selectable/selected/delete #}"
     data-prefix="{{ module.admin_form.prefix }}"
     data-js-controller-class="{{ module.admin_js_controller_class }}"
 >
     <div class="xprez-admin-module__header" data-draggable-module-handle>
         <div class="xprez-admin-module__name">
-            <span class="xprez-admin-module__name-icon" data-component="xprez-select-trigger">
+            <span class="xprez-admin-module__name-icon">
                 {{ module.admin_icon|safe }}
             </span>
-            <div class="xprez-option" data-active="true">
-                <label >
+            <div class="xprez-option" data-component="xprez-select-trigger">
+                <label>
                     <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
                     <i class="xprez-icon-check_circle_small x-variant-checked"></i>
                 </label>
-                <input type="checkbox" checked>
             </div>
             <span class="xprez-option-group__title-text">{{ module.verbose_name }}</span>
         </div>
@@ -73,15 +72,19 @@
                             class="xprez-btn xprez-btn--sm"
                             title="All settings of selected modules will be overwritten with current settings"
                             data-component="xprez-module-sync-selected"
+                            data-hidden
                         >
-                            Sync selected
+                            Sync selected (<span data-component="xprez-module-sync-selected-count"></span>)
                             <i class="xprez-icon-sync"></i>
                         </span>
                     </div>
 
+                    {% comment %}
+                    {# TODO: module grouping needs to be remembered first #}
                     <div class="xprez-option-row">
-                        {% include "xprez/admin/form/field.html" with field=module.admin_form.sync_selected size="flex-1" wrapper_class="xprez-option--marker" %}
+                        {% include "xprez/admin/form/field.html" with field=module.admin_form.live_sync size="flex-1" wrapper_class="xprez-option--marker" %}
                     </div>
+                    {% endcomment %}
 
                     <div class="xprez-option-group__subtitle">Attributes</div>
 

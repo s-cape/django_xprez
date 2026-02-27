@@ -29,6 +29,7 @@ import {
     XprezConfigParentMixin
 } from './xprez/configs.js';
 import { XprezSortable } from './xprez/sortable.js';
+import { XprezSyncManager, XprezModuleSyncMixin } from './xprez/sync.js';
 import { XprezMultiModuleItem, XprezMultiModule, XprezUploadMultiModule } from './xprez/multi_module.js';
 import { XprezTextModule } from './xprez/text_module.js';
 import { executeScripts } from './xprez/utils.js';
@@ -46,8 +47,9 @@ window.XprezUploadMultiModule = XprezUploadMultiModule;
 export {
     Xprez,
     XprezModule,
-    XprezTextModule,
     XprezSection,
+    XprezFieldController,
+    XprezFileInputFieldController,
     XprezAdderBase,
     XprezAdderItemsBase,
     XprezAdderSelectBase,
@@ -67,10 +69,11 @@ export {
     XprezModuleConfig,
     XprezConfigParentMixin,
     XprezSortable,
+    XprezSyncManager,
+    XprezModuleSyncMixin,
     XprezMultiModuleItem,
     XprezMultiModule,
     XprezUploadMultiModule,
-    XprezFieldController,
-    XprezFileInputFieldController,
+    XprezTextModule,
     executeScripts
 };

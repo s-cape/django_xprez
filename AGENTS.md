@@ -26,6 +26,7 @@ Instructions for coding agents working in this repository.
 - Do not assume Bootstrap; this library ships its own frontend/admin markup and styles.
 - Keep existing `data-component` and JS hook attributes stable unless a change requires updating both templates and scripts.
 - For JavaScript, prefer plain JavaScript and avoid adding framework dependencies.
+- Do not add null guards for DOM elements that are contractually expected to exist (e.g. required `data-component` elements in a template). Guards imply optional presence; fail loudly instead so missing elements are caught early.
 
 ## Validation and tests
 

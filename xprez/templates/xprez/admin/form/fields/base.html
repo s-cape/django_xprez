@@ -8,7 +8,7 @@
         data-field-name="{{ field.name }}"
         data-active="true"
         {% if label is False %}data-text-label="false"{% endif %}
-        {% if field.name in field.form.sync_fields %}data-sync{% endif %}
+        {% if field.name in field.form.sync_fields %}data-sync-allowed{% endif %}
         {{ attributes|default:"" }}
     >
         {% if label is not False or icon %}

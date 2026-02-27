@@ -4,6 +4,7 @@ import { XprezModuleDeleter } from './deleters.js';
 import { XprezModuleConfig, XprezConfigParentMixin } from './configs.js';
 import { XprezModuleConfigAdder } from './adders.js';
 import { resolveFieldControllerClass } from './fields.js';
+import { XprezModuleSyncMixin } from './sync.js';
 
 export class XprezModule extends XprezContentBase {
     constructor(section, moduleEl) {
@@ -14,6 +15,7 @@ export class XprezModule extends XprezContentBase {
         this.initFields();
         this.initConfigs();
         this.initShowWhens();
+        this.initSync();
     }
 
     initFields() {
@@ -38,4 +40,4 @@ export class XprezModule extends XprezContentBase {
     contentType() { return this.el.dataset.contentType; }
 }
 
-Object.assign(XprezModule.prototype, XprezConfigParentMixin);
+Object.assign(XprezModule.prototype, XprezConfigParentMixin, XprezModuleSyncMixin);

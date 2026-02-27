@@ -97,9 +97,9 @@ class Migration(migrations.Migration):
                 ("css_class", models.CharField(blank=True, max_length=100, null=True)),
                 ("alternate_color", models.BooleanField(default=False)),
                 (
-                    "sync_selected",
+                    "live_sync",
                     models.BooleanField(
-                        default=True, verbose_name="Change style for selected modules"
+                        default=True, verbose_name="Propagate edits to selected modules"
                     ),
                 ),
                 ("created", models.DateTimeField(auto_now_add=True, db_index=True)),

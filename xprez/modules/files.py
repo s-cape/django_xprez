@@ -30,17 +30,25 @@ class FilesItem(MultiModuleItem):
     def get_description(self):
         return self.description or self.get_file_stem()
 
-    def get_extension(self):
+    def get_file_name(self):
         try:
-            return self.file.name.split("/")[-1].split(".")[-1].lower()
-        except (KeyError, IndexError):
+            return self.file.name.split("/")[-1]
+        except (IndexError, AttributeError):
+            return ""
+
+    def get_file_extension(self):
+        name = self.get_file_name()
+        if "." in name:
+            return name.rsplit(".", 1)[-1].lower()
+        else:
             return ""
 
     def get_file_stem(self):
-        try:
-            return self.file.name.split("/")[-1].split(".")[0]
-        except (KeyError, IndexError):
-            return "unnamed"
+        name = self.get_file_name()
+        if name:
+            return name.rsplit(".", 1)[0]
+        else:
+            return ""
 
     @classmethod
     def create_from_file(cls, django_file, module):

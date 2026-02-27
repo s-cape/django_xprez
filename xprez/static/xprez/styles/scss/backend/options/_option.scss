@@ -160,7 +160,8 @@
 
 	// Toggle
 
-	&:has(> input[type="checkbox"]):has(.x-variant-checked) {
+	&:has(> input[type="checkbox"]):has(.x-variant-checked),
+	&[data-component="xprez-select-trigger"] {
 		--x-admin-checkbox-bg: transparent;
 		--x-admin-checkbox-checked-bg: transparent;
 
