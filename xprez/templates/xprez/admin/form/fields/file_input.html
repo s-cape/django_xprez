@@ -19,16 +19,16 @@
             </label>
         
             <div
-                class="xprez-admin-text__media-cont"
+                class="xprez-admin-file-input__media-cont"
                 data-component="xprez-file-input"
                 data-mode=""
                 {% if not widget.is_initial %}data-hidden{% endif %}
                 {% if widget.is_initial %}data-has-saved-file{% endif %}
             >
-                <div class="xprez-admin-text__img-cont">
+                <div class="xprez-admin-file-input__img-cont">
                     {% with thumb=widget.value|xprez_file_thumbnail %}
                         <img
-                            class="xprez-admin-text__media-img"
+                            class="xprez-admin-file-input__media-img"
                             data-component="xprez-file-input-img"
                             {% if thumb %}src="{{ thumb.url }}"{% else %}data-hidden{% endif %}
                         />
@@ -40,7 +40,7 @@
                         </span>
                     {% endwith %}
                 </div>
-                <div class="xprez-admin-text__media-actions">
+                <div class="xprez-admin-file-input__media-actions">
                     <label class="xprez-icon-btn" title="Replace" data-component="xprez-file-input-replace-btn">
                         {% include "xprez/shared/icons/repeat.html" %}
                         {% if widget.is_initial %}

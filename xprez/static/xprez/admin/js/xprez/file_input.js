@@ -41,15 +41,25 @@ export class XprezFileInputFieldController extends XprezFieldController {
     }
 
     _setPreview(file) {
-        this.filenameEl.textContent = file.name;
+        if (this.filenameEl) {
+            this.filenameEl.textContent = file.name;
+        }
         if (file.type.startsWith("image/")) {
             setFilePreviewImage(this.imgEl, file);
-            this.imgEl.removeAttribute("data-hidden");
-            this.filenameEl.setAttribute("data-hidden", "");
+            if (this.imgEl) {
+                this.imgEl.removeAttribute("data-hidden");
+            }
+            if (this.filenameEl) {
+                this.filenameEl.setAttribute("data-hidden", "");
+            }
         } else {
             clearFilePreviewImage(this.imgEl);
-            this.imgEl.setAttribute("data-hidden", "");
-            this.filenameEl.removeAttribute("data-hidden");
+            if (this.imgEl) {
+                this.imgEl.setAttribute("data-hidden", "");
+            }
+            if (this.filenameEl) {
+                this.filenameEl.removeAttribute("data-hidden");
+            }
         }
         this.replaceBtnEl.append(this.inputEl);
         this.containerEl.removeAttribute("data-hidden");

@@ -4,8 +4,90 @@
     padding: .35rem 0;
     margin-left: -.5rem;
 
-    .xprez-admin-text__media-img {
+    .xprez-admin-file-input__media-img {
         max-height: 170px;
         max-width: 100%;
+    }
+}
+
+.xprez-admin-file-input {
+    --item-action-menu-translate: 100%;
+
+    &__media-cont {
+        position: relative;
+        overflow: hidden;
+        border-radius: var(--x-admin-border-radius-md);
+
+        &:hover {
+            --item-action-menu-translate: 0;
+        }
+    }
+
+    &__img-cont {
+        position: relative;
+
+        &.crop {
+            aspect-ratio: 2/1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &::before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: .5rem;
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+                z-index: 1;
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: transparent;
+                color: white;
+                transition: background-color 0.2s ease-in-out;
+            }
+
+            &:hover::after {
+                height: 100%;
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='xprez-icon-svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707'/%3E%3C/svg%3E") rgba(0,0,0,0.3) no-repeat center center / 24px;
+            }
+        }
+    }
+
+    &__media-img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+
+        .crop > & {
+            position: absolute;
+            left: 0;
+        }
+    }
+
+    &__media-actions {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        padding: .5rem;
+        background: $b-gray-3;
+        display: flex;
+        flex-direction: column;
+        gap: .25rem;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.2s ease-in-out;
+        transform: translateX(var(--item-action-menu-translate));
+        // border-radius: 0 0 var(--x-admin-border-radius-sm) var(--x-admin-border-radius-sm);
     }
 }
