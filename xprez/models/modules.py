@@ -32,10 +32,12 @@ class Module(ConfigParentMixin, models.Model):
     alternate_color = models.BooleanField(
         default=defaults.XPREZ_DEFAULTS["module"]["default"]["alternate_color"]
     )
-    live_sync = models.BooleanField("Change style for selected modules", default=True)
 
-    created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
-    changed = models.DateTimeField(auto_now=True, editable=False, db_index=True)
+    live_sync = models.BooleanField("Change style for selected modules", default=True)
+    sync_group = models.SmallIntegerField(null=True, blank=True)
+
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    changed = models.DateTimeField(auto_now=True, editable=False)
 
     class Meta:
         ordering = ("position",)

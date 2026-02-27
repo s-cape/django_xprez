@@ -21,8 +21,8 @@ class Section(ConfigParentMixin, models.Model):
     position = models.PositiveSmallIntegerField(default=0)
     visible = models.BooleanField(default=True)
     saved = models.BooleanField(default=False, editable=False)
-    created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
-    changed = models.DateTimeField(auto_now=True, editable=False, db_index=True)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    changed = models.DateTimeField(auto_now=True, editable=False)
 
     max_width_choice = models.CharField(
         verbose_name="Max width",

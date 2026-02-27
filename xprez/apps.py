@@ -5,7 +5,7 @@ from xprez.conf import settings
 
 class XprezConfig(AppConfig):
     name = "xprez"
-    default_auto_field = "django.db.models.BigAutoField"
+    default_auto_field = "django.db.models.AutoField"
 
     def ready(self):
         self.autoregister_modules()

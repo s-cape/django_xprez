@@ -38,8 +38,8 @@ class Migration(migrations.Migration):
                 ("position", models.PositiveSmallIntegerField(default=0)),
                 ("visible", models.BooleanField(default=True)),
                 ("saved", models.BooleanField(default=False, editable=False)),
-                ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
-                ("changed", models.DateTimeField(auto_now=True, db_index=True)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("changed", models.DateTimeField(auto_now=True)),
                 (
                     "max_width_choice",
                     models.CharField(
@@ -99,11 +99,12 @@ class Migration(migrations.Migration):
                 (
                     "live_sync",
                     models.BooleanField(
-                        default=True, verbose_name="Propagate edits to selected modules"
+                        default=True, verbose_name="Change style for selected modules"
                     ),
                 ),
-                ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
-                ("changed", models.DateTimeField(auto_now=True, db_index=True)),
+                ("sync_group", models.SmallIntegerField(blank=True, null=True)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("changed", models.DateTimeField(auto_now=True)),
                 (
                     "section",
                     models.ForeignKey(
@@ -670,7 +671,7 @@ class Migration(migrations.Migration):
                             ("large", "Large"),
                             ("custom", "Custom"),
                         ],
-                        default="medium",
+                        default="",
                         max_length=20,
                         verbose_name="Border radius",
                     ),
@@ -851,6 +852,7 @@ class Migration(migrations.Migration):
                     models.PositiveSmallIntegerField(
                         blank=True,
                         choices=[
+                            (None, "Auto"),
                             (1, "1"),
                             (2, "2"),
                             (3, "3"),

@@ -106,14 +106,18 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="videomodule",
             name="video_type",
-            field=models.CharField(
-                choices=[("youtube", "YouTube"), ("vimeo", "Vimeo")],
-                editable=False,
-                max_length=50,
-            ),
+            field=models.CharField(editable=False, max_length=50),
+        ),
+        migrations.AlterModelOptions(
+            name="videomodule",
+            options={"verbose_name": "Video"},
         ),
         migrations.RenameModel(old_name="CodeInput", new_name="CodeInputModule"),
         ContentToModule(model_name="CodeInputModule"),
+        migrations.AlterModelOptions(
+            name="codeinputmodule",
+            options={"verbose_name": "Code Input"},
+        ),
         migrations.RenameModel(old_name="NumbersContent", new_name="NumbersModule"),
         ContentToModule(model_name="NumbersModule"),
         migrations.RenameModel(old_name="Number", new_name="NumbersItem"),
@@ -165,6 +169,10 @@ class Migration(migrations.Migration):
         ),
         migrations.RenameModel(old_name="CodeTemplate", new_name="CodeTemplateModule"),
         ContentToModule(model_name="CodeTemplateModule"),
+        migrations.AlterModelOptions(
+            name="codetemplatemodule",
+            options={"verbose_name": "Code Template"},
+        ),
         migrations.AlterField(
             model_name="codetemplatemodule",
             name="template_name",
