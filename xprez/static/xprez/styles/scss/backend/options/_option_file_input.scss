@@ -1,3 +1,7 @@
+.xprez-admin-module {
+    --item-action-menu-translate: 100%;
+}
+
 .xprez-option__file-input {
     display: flex;
     align-items: center;
@@ -11,8 +15,6 @@
 }
 
 .xprez-admin-file-input {
-    --item-action-menu-translate: 100%;
-
     &__media-cont {
         position: relative;
         overflow: hidden;
