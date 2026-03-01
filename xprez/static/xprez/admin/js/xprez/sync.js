@@ -58,25 +58,31 @@ export class XprezSyncManager {
         }
     }
 
+    queueItem(targetParent, targetBreakpoint, fieldName, value) {
+        this._queue.push({ targetParent, targetBreakpoint, fieldName, value });
+    }
+
     syncField(field) {
         const targetBreakpoint = field.parent.cssBreakpoint?.() ?? null;
-        for (const targetModule of this.getSelectedModules()) {
-            this._queue.push({ sourceField: field, targetModule, targetBreakpoint });
+        for (const targetParent of this.getSelectedModules()) {
+            this.queueItem(targetParent, targetBreakpoint, field.fieldName, field.getValue());
         }
     }
 
     async processQueue() {
         if (this._processing) return;
         this._startProcessing();
-        const affectedModules = new Set();
+        const affectedParents = new Set();
         try {
             while (this._queue.length > 0) {
                 const action = this._queue.shift();
-                affectedModules.add(action.targetModule);
-                await this._ensureBreakpoint(action.targetModule, action.targetBreakpoint);
+                if (this._isRedundant(action)) continue;
+
+                affectedParents.add(action.targetParent);
+                await this._ensureBreakpoint(action.targetParent, action.targetBreakpoint);
                 this._processItem(action);
             }
-            this._finalizeSync(affectedModules);
+            this._finalizeSync(affectedParents);
         } finally {
             await this._stopProcessing();
             if (this._queue.length > 0) this.processQueue();
@@ -96,41 +102,63 @@ export class XprezSyncManager {
         this.xprez.el.toggleAttribute("data-sync-processing", false);
     }
 
-    async _ensureBreakpoint(module, breakpoint) {
+    getEffectiveValue(parent, breakpoint, fieldName) {
+        const config = parent.configs.find(
+            (c) => !c.isDeleted() && c.cssBreakpoint() === breakpoint
+        );
+        if (config) return config.getFields(fieldName)[0]?.getValue();
+        const inherited = parent.configs
+            .filter((c) => !c.isDeleted() && c.cssBreakpoint() < breakpoint)
+            .sort((a, b) => b.cssBreakpoint() - a.cssBreakpoint())[0];
+        return inherited?.getFields(fieldName)[0]?.getValue();
+    }
+
+    _isRedundant({ targetParent, targetBreakpoint, fieldName, value }) {
+        if (targetBreakpoint === null) return false;
+        if (targetParent.configs.find(c => !c.isDeleted() && c.cssBreakpoint() === targetBreakpoint)) {
+            return false;
+        }
+        return this.getEffectiveValue(targetParent, targetBreakpoint, fieldName) === value;
+    }
+
+    async _ensureBreakpoint(parent, breakpoint) {
         if (breakpoint !== null) {
-            await module.configAdder.addBreakpoint(breakpoint);
+            await parent.configAdder.addBreakpoint(breakpoint);
         }
     }
 
-    _processItem({sourceField, targetModule, targetBreakpoint}) {
+    _processItem({ targetParent, targetBreakpoint, fieldName, value }) {
         let targetField;
         if (targetBreakpoint == null) {
-            targetField = targetModule.fields.find(f => f.fieldName === sourceField.fieldName);
+            targetField = targetParent.fields.find(f => f.fieldName === fieldName);
         } else {
-            const config = targetModule.configs.find(
+            const config = targetParent.configs.find(
                 c => !c.isDeleted() && c.cssBreakpoint() === targetBreakpoint
             );
-            targetField = config?.getFields(sourceField.fieldName)[0];
+            targetField = config?.getFields(fieldName)[0];
         }
-        if (targetField) targetField._setValueSilent(sourceField.getValue());
+        if (targetField) {
+            targetField._setValueSilent(value);
+        }
     }
 
-    _finalizeSync(affectedModules) {
-        for (const module of affectedModules) {
-            for (const config of module.configs) {
+    _finalizeSync(affectedParents) {
+        for (const parent of affectedParents) {
+            for (const config of parent.configs) {
                 if (config.isDeleted()) continue;
                 for (const fieldLink of config.fieldLinks) {
                     fieldLink.setLinked(fieldLink.allGroupsMatch());
                 }
             }
             const allFields = [
-                ...module.fields,
-                ...module.configs.flatMap((c) => c.fields),
+                ...parent.fields,
+                ...parent.configs.flatMap((c) => c.fields),
             ];
             for (const field of allFields) {
                 for (const sw of field.showWhens) sw.updateVisibility();
                 field.refreshActive();
             }
+            parent.checkShortcuts?.();
         }
     }
 }

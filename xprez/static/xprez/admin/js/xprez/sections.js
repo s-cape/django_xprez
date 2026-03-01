@@ -4,6 +4,7 @@ import { XprezAdderSectionBefore, XprezAdderSectionEnd, XprezSectionConfigAdder 
 import { XprezSectionDeleter } from './deleters.js';
 import { XprezSectionConfig, XprezConfigParentMixin } from './configs.js';
 import { XprezSortable } from './sortable.js';
+import { XprezShortcutParentMixin } from './shortcuts.js';
 
 export class XprezSection extends XprezContentBase {
     constructor(xprez, sectionEl) {
@@ -19,6 +20,7 @@ export class XprezSection extends XprezContentBase {
         this.initConfigs();
         this.initModulesSortable();
         this.initShowWhens();
+        this.initShortcuts();
     }
 
     get configsContainerSelector() { return "[data-component='xprez-section-configs']"; }
@@ -77,3 +79,4 @@ export class XprezSection extends XprezContentBase {
 }
 
 Object.assign(XprezSection.prototype, XprezConfigParentMixin);
+Object.assign(XprezSection.prototype, XprezShortcutParentMixin);

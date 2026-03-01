@@ -34,7 +34,7 @@ class Module(ConfigParentMixin, models.Model):
     )
 
     live_sync = models.BooleanField("Change style for selected modules", default=True)
-    sync_group = models.SmallIntegerField(null=True, blank=True)
+    # sync_group = models.SmallIntegerField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     changed = models.DateTimeField(auto_now=True, editable=False)

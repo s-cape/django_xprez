@@ -28,8 +28,13 @@ export class XprezPopoverBase {
     }
 
     isOpen() { return this.el.matches(":popover-open"); }
-    show() { this.el.showPopover(); }
-    hide() { this.el.hidePopover(); }
+    show() {
+        this.el.showPopover();
+    }
+    hide() {
+        this.el.hidePopover();
+        this.parent.checkShortcuts?.();
+    }
     _hideOthers(xprez) {
         xprez.getPopovers().filter(p => p !== this).forEach(p => p.hide());
     }
@@ -37,36 +42,36 @@ export class XprezPopoverBase {
 
 export class XprezSectionPopover extends XprezPopoverBase {
     bindElements(section) {
-        this.section = section;
-        this.el = this.section.el.querySelector("[data-component='xprez-section-popover']");
-        this.triggerEl = this.section.el.querySelector("[data-component='xprez-section-popover-trigger']");
+        this.parent = section;
+        this.el = this.parent.el.querySelector("[data-component='xprez-section-popover']");
+        this.triggerEl = this.parent.el.querySelector("[data-component='xprez-section-popover-trigger']");
     }
     show() {
-        this._hideOthers(this.section.xprez);
+        this._hideOthers(this.parent.xprez);
         super.show();
-        this.section.el.dataset.mode = "edit";
+        this.parent.el.dataset.mode = "edit";
     }
     hide() {
         super.hide();
-        this.section.el.dataset.mode = "";
+        this.parent.el.dataset.mode = "";
     }
 }
 
 export class XprezModulePopover extends XprezPopoverBase {
     bindElements(module) {
-        this.module = module;
-        this.el = this.module.el.querySelector("[data-component='xprez-module-popover']");
-        this.triggerEl = this.module.el.querySelector("[data-component='xprez-module-popover-trigger']");
+        this.parent = module;
+        this.el = this.parent.el.querySelector("[data-component='xprez-module-popover']");
+        this.triggerEl = this.parent.el.querySelector("[data-component='xprez-module-popover-trigger']");
     }
     show() {
-        this._hideOthers(this.module.section.xprez);
+        this._hideOthers(this.parent.section.xprez);
         super.show();
-        this.module.el.dataset.mode = "edit";
-        this.module.section.xprez.sync.selectRelated(this.module);
+        this.parent.el.dataset.mode = "edit";
+        this.parent.section.xprez.sync.selectRelated(this.parent);
     }
     hide() {
-        this.module.section.xprez.sync.clearSelection();
+        this.parent.section.xprez.sync.clearSelection();
         super.hide();
-        this.module.el.dataset.mode = "";
+        this.parent.el.dataset.mode = "";
     }
 }

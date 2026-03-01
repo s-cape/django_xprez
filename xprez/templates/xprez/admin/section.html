@@ -18,6 +18,12 @@
             <span class="xprez-icon-btn" title="Advanced settings" data-component="xprez-section-popover-trigger">
                 <i class="xprez-icon-settings"></i>
             </span>
+
+            <div class="xprez-option-row" data-component="xprez-shortcuts" data-hidden>
+                {% for field in section.admin_form.shortcuts %}
+                    {% include "xprez/admin/form/field.html" with field=field size="flex-auto" js_controller_class="XprezShortcutFieldController" %}
+                {% endfor %}
+            </div>
         </div>
 
         <div class="xprez-section__actions">

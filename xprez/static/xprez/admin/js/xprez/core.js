@@ -9,11 +9,11 @@ export class Xprez {
         this.sectionsContainerEl = this.el.querySelector("[data-component='xprez-sections-container']");
         this.viewSelectEl = this.el.querySelector("[data-component='xprez-view-select']");
         this.viewSelectEl.addEventListener("change", this.updateView.bind(this));
+        this.sync = new XprezSyncManager(this);
         this.sections = [];
         this.el.querySelectorAll("[data-component='xprez-section']").forEach(this.initSection.bind(this));
 
         this.updateView();
-        this.sync = new XprezSyncManager(this);
         this.adder = new XprezAdderContainerEnd(this, this.el.querySelector("[data-component='xprez-adder-container-end']"));
         this.initAllSectionsCollapser();
         this.initSectionsSortable();

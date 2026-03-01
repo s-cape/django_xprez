@@ -1,5 +1,7 @@
 from django import forms
 
+from xprez.admin.shortcuts import ShortcutsForm
+from xprez.conf import settings
 from xprez.models.configs import SectionConfig
 from xprez.models.sections import Section
 
@@ -60,6 +62,8 @@ class DeletableFormMixin:
 
 
 class SectionForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
+    shortcuts = ShortcutsForm(settings.XPREZ_DEFAULTS["section_shortcuts"])
+
     class Meta:
         model = Section
         fields = "__all__"

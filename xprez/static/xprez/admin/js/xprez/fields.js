@@ -138,6 +138,7 @@ export class XprezFieldController {
         affected.filter(f => f !== this).forEach(f =>
             f.inputEl.dispatchEvent(new Event("change", { bubbles: true }))
         );
+        this.parent?.parent?.checkShortcuts?.();
     }
 
     _onInputChange() {

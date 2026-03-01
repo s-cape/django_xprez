@@ -13,7 +13,7 @@ export class XprezDeleterBase {
         }
     }
     initElements() { throw new Error("Not implemented"); }
-    delete() { this.obj.el.dataset.mode = "delete"; this.inputEl.checked = true;}
+    delete() { this.obj.el.dataset.mode = "delete"; this.inputEl.checked = true; }
     undelete() { this.obj.el.dataset.mode = ""; this.inputEl.checked = false; }
 }
 
