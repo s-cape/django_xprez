@@ -35,7 +35,7 @@ class ShortcutsForm(forms.Form):
                 choices += [(value, label)]
                 for fname, breakpoint_map in config.items():
                     shortcut_attrs.setdefault(fname, {})[value] = breakpoint_map
-            choices += [(constants.CUSTOM, "Custom")]
+            choices += [("advanced", "Advanced")]
 
         self.fields[field_name] = forms.ChoiceField(
             label=field_config["label"],

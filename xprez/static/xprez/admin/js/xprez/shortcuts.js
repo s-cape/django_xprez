@@ -1,4 +1,4 @@
-const CUSTOM = "custom";
+const ADVANCED = "advanced";
 
 export class XprezShortcutFieldController {
     constructor(parent, el) {
@@ -23,27 +23,27 @@ export class XprezShortcutFieldController {
         } else {
             const sync = this.parent.xprez.sync;
             for (const [fieldName, breakpointMap] of Object.entries(this.config)) {
-                const presetKeys = Object.keys(breakpointMap).filter((k) => k !== CUSTOM);
+                const presetKeys = Object.keys(breakpointMap).filter((k) => k !== ADVANCED);
                 const breakpoints = Object.keys(breakpointMap[presetKeys[0]] || {}).map(Number);
                 const matched = presetKeys.find((key) =>
                     breakpoints.every(
                         (bp) => String(sync.getEffectiveValue(this.parent, bp, fieldName) ?? "") === String(breakpointMap[key][bp])
                     )
                 );
-                this.inputEl.value = matched ?? CUSTOM;
+                this.inputEl.value = matched ?? ADVANCED;
             }
         }
     }
 
     _onSelectActivate(e) {
-        if (this.getValue() !== CUSTOM) return;
+        if (this.getValue() !== ADVANCED) return;
         this.inputEl.blur();
         this.parent.popover.show();
     }
 
     _onChange() {
         const value = this.getValue();
-        if (value === CUSTOM) {
+        if (value === ADVANCED) {
             this.parent.popover.show();
             if (this.config.clone) {
                 this._apply(value);
