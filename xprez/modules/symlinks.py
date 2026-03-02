@@ -1,6 +1,5 @@
 from django.db import models
 
-from xprez.conf import settings
 from xprez.models.modules import Module
 
 
@@ -29,7 +28,7 @@ class SectionSymlink(Module):
     admin_template_name = "xprez/admin/modules/section_symlink.html"
     admin_icon_template_name = "xprez/shared/icons/modules/section_symlink.html"
     symlink = models.ForeignKey(
-        settings.XPREZ_SECTION_MODEL_CLASS,
+        "xprez.Section",
         on_delete=models.SET_NULL,
         null=True,
         editable=False,

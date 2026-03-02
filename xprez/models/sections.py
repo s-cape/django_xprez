@@ -12,7 +12,7 @@ class Section(ConfigParentMixin, models.Model):
     admin_template_name = "xprez/admin/section.html"
 
     container = models.ForeignKey(
-        settings.XPREZ_CONTAINER_MODEL_CLASS,
+        "xprez.Container",
         on_delete=models.SET_NULL,
         related_name="sections",
         editable=False,

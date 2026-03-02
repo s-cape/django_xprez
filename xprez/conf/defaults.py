@@ -1,7 +1,5 @@
 from xprez import constants
 
-XPREZ_SECTION_MODEL_CLASS = "xprez.Section"
-XPREZ_CONTAINER_MODEL_CLASS = "xprez.Container"
 XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
 XPREZ_GRID_BOXES_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
 XPREZ_TEXT_IMAGE_MODULE_WIDGET = (
@@ -317,7 +315,12 @@ XPREZ_CSS = {
             },
         },
         "gap": {
-            "units": "px",
+            "units": {
+                constants.GAP_SMALL: "px",
+                constants.GAP_MEDIUM: "px",
+                constants.GAP_LARGE: "px",
+                constants.GAP_CUSTOM: "px",
+            },
             "values": {
                 constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
                 constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
@@ -391,7 +394,13 @@ XPREZ_CSS = {
                 },
             },
             "border_radius": {
-                "units": "px",
+                "units": {
+                    constants.BORDER_RADIUS_NONE: "",
+                    constants.BORDER_RADIUS_SMALL: "px",
+                    constants.BORDER_RADIUS_MEDIUM: "px",
+                    constants.BORDER_RADIUS_LARGE: "px",
+                    constants.BORDER_RADIUS_CUSTOM: "px",
+                },
                 "values": {
                     constants.BORDER_RADIUS_NONE: {0: 0},
                     constants.BORDER_RADIUS_SMALL: {0: 4},
@@ -414,7 +423,13 @@ XPREZ_CSS = {
         },
         "xprez.GalleryModule": {
             "gap": {
-                "units": "px",
+                "units": {
+                    constants.GAP_NONE: "",
+                    constants.GAP_SMALL: "px",
+                    constants.GAP_MEDIUM: "px",
+                    constants.GAP_LARGE: "px",
+                    constants.GAP_CUSTOM: "px",
+                },
                 "values": {
                     constants.GAP_NONE: {0: 0},
                     constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
@@ -425,7 +440,13 @@ XPREZ_CSS = {
         },
         "xprez.NumbersModule": {
             "gap": {
-                "units": "px",
+                "units": {
+                    constants.GAP_NONE: "",
+                    constants.GAP_SMALL: "px",
+                    constants.GAP_MEDIUM: "px",
+                    constants.GAP_LARGE: "px",
+                    constants.GAP_CUSTOM: "px",
+                },
                 "values": {
                     constants.GAP_NONE: {0: 0},
                     constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},

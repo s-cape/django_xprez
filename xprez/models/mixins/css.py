@@ -6,13 +6,10 @@ from xprez.conf import settings
 
 def _get_unit_string(css_config, choice=None):
     """Extract unit string from config, handling dict or string units."""
-    if not css_config:
-        return ""
-    units = css_config.get("units", "")
-    if isinstance(units, dict):
-        return units.get(choice, "") if choice else ""
+    if css_config and choice:
+        return css_config.get("units", {}).get(choice, "")
     else:
-        return units
+        return ""
 
 
 class ChoiceUnitsProxy:
