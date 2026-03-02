@@ -83,23 +83,57 @@ XPREZ_DEFAULTS = {
                 {
                     "value": 2,
                     "label": "2",
-                    "config": {"columns": {0: 2, 1: 2, 2: 2, 3: 2, 4: 2, 5: 2}},
+                    "config": {"columns": {0: 1, 1: 2, 2: 2, 3: 2, 4: 2, 5: 2}},
                 },
                 {
                     "value": 3,
                     "label": "3",
-                    "config": {"columns": {0: 3, 1: 3, 2: 3, 3: 3, 4: 3, 5: 3}},
+                    "config": {"columns": {0: 1, 1: 2, 2: 3, 3: 3, 4: 3, 5: 3}},
                 },
                 {
                     "value": 4,
                     "label": "4",
-                    "config": {"columns": {0: 1, 1: 1, 2: 2, 3: 2, 4: 4, 5: 4}},
+                    "config": {"columns": {0: 1, 1: 2, 2: 3, 3: 3, 4: 4, 5: 4}},
+                },
+                {
+                    "value": 5,
+                    "label": "5",
+                    "config": {"columns": {0: 2, 1: 2, 2: 3, 3: 4, 4: 5, 5: 5}},
+                },
+                {
+                    "value": 6,
+                    "label": "6",
+                    "config": {"columns": {0: 2, 1: 3, 2: 3, 3: 4, 4: 6, 5: 6}},
+                },
+                {
+                    "value": 7,
+                    "label": "7",
+                    "config": {"columns": {0: 2, 1: 3, 2: 4, 3: 5, 4: 7, 5: 7}},
+                },
+                {
+                    "value": 8,
+                    "label": "8",
+                    "config": {"columns": {0: 2, 1: 3, 2: 4, 3: 6, 4: 8, 5: 8}},
                 },
             ),
         },
         "gap": {
             "label": "Gap",
             "choices": (
+                {
+                    "value": constants.GAP_NONE,
+                    "label": "None",
+                    "config": {
+                        "gap_choice": {
+                            0: constants.GAP_NONE,
+                            1: constants.GAP_NONE,
+                            2: constants.GAP_NONE,
+                            3: constants.GAP_NONE,
+                            4: constants.GAP_NONE,
+                            5: constants.GAP_NONE,
+                        },
+                    },
+                },
                 {
                     "value": constants.GAP_SMALL,
                     "label": "Small",
@@ -230,33 +264,57 @@ XPREZ_DEFAULTS = {
                     {
                         "value": 2,
                         "label": "2",
-                        "config": {"columns": {0: 2, 1: 2, 2: 2, 3: 2, 4: 2, 5: 2}},
+                        "config": {"columns": {0: 1, 1: 2, 2: 2, 3: 2, 4: 2, 5: 2}},
                     },
                     {
                         "value": 3,
                         "label": "3",
-                        "config": {"columns": {0: 3, 1: 3, 2: 3, 3: 3, 4: 3, 5: 3}},
+                        "config": {"columns": {0: 1, 1: 2, 2: 3, 3: 3, 4: 3, 5: 3}},
                     },
                     {
                         "value": 4,
                         "label": "4",
-                        "config": {"columns": {0: 4, 1: 4, 2: 4, 3: 4, 4: 4, 5: 4}},
+                        "config": {"columns": {0: 1, 1: 2, 2: 3, 3: 3, 4: 4, 5: 4}},
+                    },
+                    {
+                        "value": 5,
+                        "label": "5",
+                        "config": {"columns": {0: 2, 1: 2, 2: 3, 3: 4, 4: 5, 5: 5}},
                     },
                     {
                         "value": 6,
                         "label": "6",
-                        "config": {"columns": {0: 6, 1: 6, 2: 6, 3: 6, 4: 6, 5: 6}},
+                        "config": {"columns": {0: 2, 1: 3, 2: 3, 3: 4, 4: 6, 5: 6}},
+                    },
+                    {
+                        "value": 7,
+                        "label": "7",
+                        "config": {"columns": {0: 2, 1: 3, 2: 4, 3: 5, 4: 7, 5: 7}},
                     },
                     {
                         "value": 8,
                         "label": "8",
-                        "config": {"columns": {0: 8, 1: 8, 2: 8, 3: 8, 4: 8, 5: 8}},
+                        "config": {"columns": {0: 2, 1: 3, 2: 4, 3: 6, 4: 8, 5: 8}},
                     },
                 ),
             },
             "gap": {
                 "label": "Gap",
                 "choices": (
+                    {
+                        "value": constants.GAP_NONE,
+                        "label": "None",
+                        "config": {
+                            "gap_choice": {
+                                0: constants.GAP_NONE,
+                                1: constants.GAP_NONE,
+                                2: constants.GAP_NONE,
+                                3: constants.GAP_NONE,
+                                4: constants.GAP_NONE,
+                                5: constants.GAP_NONE,
+                            },
+                        },
+                    },
                     {
                         "value": constants.GAP_SMALL,
                         "label": "Small",

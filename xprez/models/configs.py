@@ -135,7 +135,7 @@ class SectionConfig(ConfigBase):
     )
     padding_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
 
-    COLUMN_CHOICES = [(i, str(i)) for i in range(1, 8)]
+    COLUMN_CHOICES = [(i, str(i)) for i in range(1, 9)]
     columns = models.PositiveSmallIntegerField(
         choices=COLUMN_CHOICES,
         default=defaults.XPREZ_DEFAULTS["section_config"]["columns"],
