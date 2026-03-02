@@ -36,6 +36,25 @@
             --x-admin-content-header-bg: var(--x-admin-marker-checked-text-bg);
             --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
             --x-admin-option-button-hover-bg: var(--x-admin-marker-checked-hover-text-bg);  
+            --x-admin-option-bg: var(--x-admin-marker-checked-bg);
+            --x-admin-option-color: var(--x-admin-marker-checked-color);
+        }
+
+        .xprez-admin-module[data-mode="edit"] &,
+        .xprez-admin-module[data-mode="selected"] &,
+        .xprez-admin-module[data-mode="selectable"] & {
+            .xprez-option {
+                opacity: 1;
+            }
+        }
+
+        .xprez-admin-module[data-mode="selectable"] & {
+            --x-admin-option-bg: transparent;
+        }
+        
+        .xprez-admin-module[data-mode="selected"] & {
+            --x-admin-option-bg: var(--x-admin-marker-checked-bg);
+            --x-admin-option-color: var(--x-admin-marker-checked-color);
         }
     }
 
@@ -82,7 +101,20 @@
 
 [data-component="xprez"][data-sync-processing] {
     [data-component="xprez-module-sync-selected"] {
-        background-color: $b-red;
+        background-color: $b-green;
         color: $white;
+    }
+
+    .xprez-icon-sync {
+        animation: xprez-admin-module-sync-spin 1s linear infinite;
+
+        @keyframes xprez-admin-module-sync-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     }
 }
