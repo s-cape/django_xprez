@@ -47,10 +47,6 @@ XPREZ_VIDEO_PROVIDERS = [
     "xprez.modules.video.VimeoVideoProvider",
 ]
 
-XPREZ_SECTION_SHORTCUT_CLONE_CHOICES = {
-    "max_width_choice": constants.MAX_WIDTH_CHOICES,
-}
-
 XPREZ_DEFAULTS = {
     "section": {
         "max_width_choice": constants.MAX_WIDTH_MEDIUM,
@@ -218,6 +214,93 @@ XPREZ_DEFAULTS = {
             "gap_choice": constants.GAP_MEDIUM,
             "gap_custom": 0,
             "columns": constants.COLUMNS_AUTO,
+        },
+    },
+    "module_shortcuts": {
+        "default": {},
+        "xprez.GalleryModule": {
+            "columns": {
+                "label": "Columns",
+                "choices": (
+                    {
+                        "value": 1,
+                        "label": "1",
+                        "config": {"columns": {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1}},
+                    },
+                    {
+                        "value": 2,
+                        "label": "2",
+                        "config": {"columns": {0: 2, 1: 2, 2: 2, 3: 2, 4: 2, 5: 2}},
+                    },
+                    {
+                        "value": 3,
+                        "label": "3",
+                        "config": {"columns": {0: 3, 1: 3, 2: 3, 3: 3, 4: 3, 5: 3}},
+                    },
+                    {
+                        "value": 4,
+                        "label": "4",
+                        "config": {"columns": {0: 4, 1: 4, 2: 4, 3: 4, 4: 4, 5: 4}},
+                    },
+                    {
+                        "value": 6,
+                        "label": "6",
+                        "config": {"columns": {0: 6, 1: 6, 2: 6, 3: 6, 4: 6, 5: 6}},
+                    },
+                    {
+                        "value": 8,
+                        "label": "8",
+                        "config": {"columns": {0: 8, 1: 8, 2: 8, 3: 8, 4: 8, 5: 8}},
+                    },
+                ),
+            },
+            "gap": {
+                "label": "Gap",
+                "choices": (
+                    {
+                        "value": constants.GAP_SMALL,
+                        "label": "Small",
+                        "config": {
+                            "gap_choice": {
+                                0: constants.GAP_SMALL,
+                                1: constants.GAP_SMALL,
+                                2: constants.GAP_SMALL,
+                                3: constants.GAP_SMALL,
+                                4: constants.GAP_SMALL,
+                                5: constants.GAP_SMALL,
+                            },
+                        },
+                    },
+                    {
+                        "value": constants.GAP_MEDIUM,
+                        "label": "Medium",
+                        "config": {
+                            "gap_choice": {
+                                0: constants.GAP_MEDIUM,
+                                1: constants.GAP_MEDIUM,
+                                2: constants.GAP_MEDIUM,
+                                3: constants.GAP_MEDIUM,
+                                4: constants.GAP_MEDIUM,
+                                5: constants.GAP_MEDIUM,
+                            },
+                        },
+                    },
+                    {
+                        "value": constants.GAP_LARGE,
+                        "label": "Large",
+                        "config": {
+                            "gap_choice": {
+                                0: constants.GAP_LARGE,
+                                1: constants.GAP_LARGE,
+                                2: constants.GAP_LARGE,
+                                3: constants.GAP_LARGE,
+                                4: constants.GAP_LARGE,
+                                5: constants.GAP_LARGE,
+                            },
+                        },
+                    },
+                ),
+            },
         },
     },
 }

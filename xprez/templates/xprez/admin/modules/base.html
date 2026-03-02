@@ -30,6 +30,17 @@
                     <i class="xprez-icon-settings" data-id="{{ module.pk }}"></i>
                 </span>
             {% endblock %}
+            {% block shortcuts %}
+                {% if module.admin_form.shortcuts %}
+                    <div class="xprez-option-row" data-component="xprez-shortcuts" data-hidden>
+                        {% block shortcut_fields %}
+                            {% for field in module.admin_form.shortcuts %}
+                                {% include "xprez/admin/form/field.html" with field=field size="flex-auto" js_controller_class="XprezShortcutFieldController" %}
+                            {% endfor %}
+                        {% endblock shortcut_fields %}
+                    </div>
+                {% endif %}
+            {% endblock shortcuts %}
         </div>
 
         <div class="xprez-admin-module__actions xprez-admin-module__actions--right">

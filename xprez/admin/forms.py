@@ -1,6 +1,6 @@
 from django import forms
 
-from xprez.admin.shortcuts import ShortcutsForm
+from xprez.admin.shortcuts import ShortcutsMixin
 from xprez.conf import settings
 from xprez.models.configs import SectionConfig
 from xprez.models.sections import Section
@@ -61,8 +61,10 @@ class DeletableFormMixin:
             self._errors = {}
 
 
-class SectionForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
-    shortcuts = ShortcutsForm(settings.XPREZ_DEFAULTS["section_shortcuts"])
+class SectionForm(
+    DeletableFormMixin, PositionFormMixin, ShortcutsMixin, forms.ModelForm
+):
+    shortcuts_config = settings.XPREZ_DEFAULTS["section_shortcuts"]
 
     class Meta:
         model = Section
@@ -81,7 +83,11 @@ class SectionConfigForm(DeletableFormMixin, forms.ModelForm):
 
 
 class ModuleForm(
-    SyncFieldsMixin, DeletableFormMixin, PositionFormMixin, forms.ModelForm
+    SyncFieldsMixin,
+    DeletableFormMixin,
+    PositionFormMixin,
+    ShortcutsMixin,
+    forms.ModelForm,
 ):
     base_module_fields = (
         "position",
@@ -106,6 +112,14 @@ class ModuleForm(
 
     def get_options_fields(self):
         return [self[field] for field in self.options_fields if field in self.fields]
+
+    @property
+    def shortcuts_config(self):
+        config = settings.XPREZ_DEFAULTS["module_shortcuts"]
+        result = {}
+        for key in ["default", self.instance.content_type]:
+            result.update(config.get(key, {}))
+        return result
 
     class Meta:
         fields = "__all__"

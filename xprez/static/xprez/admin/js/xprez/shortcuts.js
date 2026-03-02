@@ -36,9 +36,13 @@ export class XprezShortcutFieldController {
     }
 
     _onSelectActivate(e) {
-        if (this.getValue() !== CUSTOM) return;
-        this.inputEl.blur();
-        this.parent.popover.show();
+        if (!this.parent.popover.isOpen()) {
+            this.parent.popover.hideOthers();
+        }
+        if (this.getValue() === CUSTOM) {
+            this.inputEl.blur();
+            this.parent.popover.show();
+        }
     }
 
     _onChange() {

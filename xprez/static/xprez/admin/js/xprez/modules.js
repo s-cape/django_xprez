@@ -5,6 +5,7 @@ import { XprezModuleConfig, XprezConfigParentMixin } from './configs.js';
 import { XprezModuleConfigAdder } from './adders.js';
 import { resolveFieldControllerClass } from './fields.js';
 import { XprezModuleSyncMixin } from './sync.js';
+import { XprezShortcutParentMixin } from './shortcuts.js';
 
 export class XprezModule extends XprezContentBase {
     constructor(section, moduleEl) {
@@ -16,11 +17,12 @@ export class XprezModule extends XprezContentBase {
         this.initConfigs();
         this.initShowWhens();
         this.initSync();
+        this.initShortcuts();
     }
 
     initFields() {
         this.fields = [];
-        this.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
+        this.popover.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
             if (this.configsContainerEl.contains(fieldEl)) return;
             this.initField(fieldEl);
         });
@@ -37,7 +39,9 @@ export class XprezModule extends XprezContentBase {
     createConfig(configEl) { return new XprezModuleConfig(this, configEl); }
     createConfigAdder() { return new XprezModuleConfigAdder(this.section.xprez, this); }
 
+    get xprez() { return this.section.xprez; }
+
     contentType() { return this.el.dataset.contentType; }
 }
 
-Object.assign(XprezModule.prototype, XprezConfigParentMixin, XprezModuleSyncMixin);
+Object.assign(XprezModule.prototype, XprezConfigParentMixin, XprezModuleSyncMixin, XprezShortcutParentMixin);

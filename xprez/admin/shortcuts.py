@@ -3,25 +3,29 @@ import json
 from django import forms
 
 from xprez import constants
-from xprez.conf import settings
+
+
+class ShortcutsMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.shortcuts_config:
+            self.shortcuts = ShortcutsForm(self)
+        else:
+            self.shortcuts = None
 
 
 class ShortcutsForm(forms.Form):
-    def __init__(self, config, *args, **kwargs):
+    def __init__(self, parent, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.config = config
+        self.parent = parent
 
-        for field_name, field_config in self.config.items():
+        for field_name, field_config in self.parent.shortcuts_config.items():
             self.add_field(field_name, field_config)
 
     def add_field(self, field_name, field_config):
         if "clone" in field_config:
             clone_field = field_config["clone"]
-            choices = list(
-                getattr(settings, "XPREZ_SECTION_SHORTCUT_CLONE_CHOICES", {}).get(
-                    clone_field, ()
-                )
-            )
+            choices = list(self.parent.instance._meta.get_field(clone_field).choices)
             shortcut_attrs = {"clone": clone_field}
         else:
             choices = []

@@ -35,8 +35,8 @@ export class XprezPopoverBase {
         this.el.hidePopover();
         this.parent.checkShortcuts?.();
     }
-    _hideOthers(xprez) {
-        xprez.getPopovers().filter(p => p !== this).forEach(p => p.hide());
+    hideOthers() {
+        this.parent.xprez.getPopovers().filter(p => p !== this).forEach(p => p.hide());
     }
 }
 
@@ -47,7 +47,7 @@ export class XprezSectionPopover extends XprezPopoverBase {
         this.triggerEl = this.parent.el.querySelector("[data-component='xprez-section-popover-trigger']");
     }
     show() {
-        this._hideOthers(this.parent.xprez);
+        this.hideOthers();
         super.show();
         this.parent.el.dataset.mode = "edit";
     }
@@ -64,7 +64,7 @@ export class XprezModulePopover extends XprezPopoverBase {
         this.triggerEl = this.parent.el.querySelector("[data-component='xprez-module-popover-trigger']");
     }
     show() {
-        this._hideOthers(this.parent.section.xprez);
+        this.hideOthers();
         super.show();
         this.parent.el.dataset.mode = "edit";
         this.parent.section.xprez.sync.selectRelated(this.parent);
