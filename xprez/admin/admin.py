@@ -94,9 +94,8 @@ class XprezAdminMixin(
         return urls
 
     def _get_container_instance(self, request, object_pk):
-        app_label, model_name = settings.XPREZ_CONTAINER_MODEL_CLASS.split(".")
-        klass = apps.get_model(app_label, model_name)
-        return klass.objects.get(pk=object_pk)
+        cls = apps.get_model("xprez", "Container")
+        return cls.objects.get(pk=object_pk)
 
     def _updated_modules_positions(self, container):
         return {m.id: m.position for m in container.modules.all()}

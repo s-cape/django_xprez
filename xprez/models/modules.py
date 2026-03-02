@@ -20,7 +20,7 @@ class Module(ConfigParentMixin, models.Model):
     admin_js_controller_class = "XprezModule"
 
     section = models.ForeignKey(
-        settings.XPREZ_SECTION_MODEL_CLASS,
+        "xprez.Section",
         on_delete=models.CASCADE,
         related_name="modules",
     )

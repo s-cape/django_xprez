@@ -1,7 +1,5 @@
 from xprez import constants
 
-XPREZ_SECTION_MODEL_CLASS = "xprez.Section"
-XPREZ_CONTAINER_MODEL_CLASS = "xprez.Container"
 XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
 XPREZ_GRID_BOXES_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
 XPREZ_TEXT_IMAGE_MODULE_WIDGET = (
