@@ -5,11 +5,21 @@
 
 	.xprez-module-inner {
 		flex: 1;
-		display: flex;
 		flex-wrap: wrap;
-		@include rfs.gap($x-numbers-item-auto-gap);
-		justify-content: center;
+		gap: var(--x-gap);
+		justify-content: flex-start;
 		align-items: flex-start;
+		display: var(--x-numbers-display);
+		grid-template-columns: repeat(var(--x-columns), 1fr);
+	}
+
+	&__digits {
+		display: inline;
+		text-align: right;
+	}
+
+	&__number {
+		display: inline-flex;
 	}
 
 	&__item {
@@ -42,4 +52,16 @@
 		font-weight: #{$x-numbers-number-font-weight};
 		letter-spacing: 0.05rem;
 	}
+}
+
+@each $number, $breakpoint in $x-breakpoints {
+    @media (min-width: $breakpoint) {
+        .xprez-#{$number}-numbers-columns-auto {
+			--x-numbers-display: flex;
+        }
+
+        .xprez-#{$number}-numbers-columns-auto-reset {
+			--x-numbers-display: grid;
+        }
+    }
 }
