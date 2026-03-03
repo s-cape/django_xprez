@@ -37,10 +37,10 @@
         aspect-ratio: var(--x-media-crop, unset);
         object-fit: cover;
         object-position: var(--x-background-img-position);
-        margin-bottom: 1rem;
         max-width: 100%;
         display: inline-block;
         height: auto;
+        @include margin-bottom(1.5rem);
     }
 }
 
