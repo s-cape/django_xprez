@@ -241,7 +241,7 @@ XPREZ_DEFAULTS = {
         "xprez.GalleryModule": {
             "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_CENTER,
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_CENTER,
-            "columns": 4,
+            "columns": 1,
             "gap_choice": constants.GAP_SMALL,
         },
         "xprez.NumbersModule": {
