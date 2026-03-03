@@ -12,7 +12,9 @@
                         <span class="xprez-numbers-digits" data-numbers-counter>{{ item.number_intcomma }}</span>{% if item.suffix %}<span class="xprez-numbers__suffix">{{ item.suffix }}</span>{% endif %}
                     </span>
                 </div>
-                <figcaption class="xprez-numbers__caption">{{ item.caption }}</figcaption>
+                {% if item.caption %}
+                    <figcaption class="xprez-numbers__caption">{{ item.caption }}</figcaption>
+                {% endif %}
             </figure>
         {% endif %}
     {% endfor %}
