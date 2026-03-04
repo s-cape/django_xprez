@@ -1,3 +1,5 @@
+@use "../../library/rfs" as rfs; 
+
 @mixin xprez-text-image-set-margin {
     margin-top: var(--x-media-lead-margin-top, 0);
     margin-right: var(--x-media-lead-margin-right, 0);
@@ -40,12 +42,12 @@
         max-width: 100%;
         display: inline-block;
         height: auto;
-        @include margin-bottom(1.5rem);
+        @include rfs.margin-bottom(1.5rem);
     }
 }
 
 @each $number, $breakpoint in $x-breakpoints {
-    @media (min-width: $breakpoint) {
+    @media (max-width: $breakpoint) {
         .xprez-text__image-wrapper {
             .xprez-#{$number}-media-lead-to-edge & {
                 --x-media-lead-margin-top: calc(-1 * var(--x-padding-top, 0));

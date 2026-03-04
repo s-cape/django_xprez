@@ -17,25 +17,25 @@ def _media_entry(value, breakpoint=None):
 
 
 def _build_image_sizes(max_width, column_ranges):
-    """Build HTML sizes string from (max_width_px, [(min_width, cols), ...])."""
+    """Build HTML sizes string from (max_width_px, [(max_width, cols), ...])."""
     entries = []
-    for index, (min_width, effective_columns) in enumerate(column_ranges):
-        if index + 1 < len(column_ranges):
-            next_min_width = column_ranges[index + 1][0]
+    for index, (bp_max_width, effective_columns) in enumerate(column_ranges):
+        if index > 0:
+            prev_max_width = column_ranges[index - 1][0]
         else:
-            next_min_width = None
+            prev_max_width = None
         vw_size = f"{_format_percentage(100 / effective_columns)}vw"
         if max_width is None:
-            entries += [_media_entry(vw_size, next_min_width)]
-        elif min_width >= max_width:
+            entries += [_media_entry(vw_size, bp_max_width)]
+        elif bp_max_width is None or bp_max_width >= max_width:
             px_size = round(max_width / effective_columns)
-            entries += [_media_entry(f"{px_size}px", next_min_width)]
-        elif next_min_width is None or next_min_width > max_width:
+            entries += [_media_entry(f"{px_size}px", bp_max_width)]
+        elif prev_max_width is None or prev_max_width < max_width:
             entries += [_media_entry(vw_size, max_width)]
             px_size = round(max_width / effective_columns)
-            entries += [_media_entry(f"{px_size}px", next_min_width)]
+            entries += [_media_entry(f"{px_size}px", bp_max_width)]
         else:
-            entries += [_media_entry(vw_size, next_min_width)]
+            entries += [_media_entry(vw_size, bp_max_width)]
     return ", ".join(entries)
 
 
@@ -46,18 +46,19 @@ def _build_srcset_widths(max_width, full_width_cap, breakpoint_ranges):
     else:
         max_boundary = min(max_width, full_width_cap)
     candidate_widths = set()
-    for _, effective_columns, next_min_width in breakpoint_ranges:
+    for bp_max_width, effective_columns, prev_max_width in breakpoint_ranges:
         if max_width is None:
-            boundary = min(next_min_width or full_width_cap, full_width_cap)
+            boundary = bp_max_width if bp_max_width else full_width_cap
+            boundary = min(boundary, full_width_cap)
             pixel_width = round(boundary / effective_columns)
             candidate_widths.add(pixel_width)
             candidate_widths.add(pixel_width * 2)
-        elif next_min_width is not None and next_min_width <= max_boundary:
-            pixel_width = round(next_min_width / effective_columns)
+        elif prev_max_width is not None and prev_max_width >= max_boundary:
+            pixel_width = round(prev_max_width / effective_columns)
             candidate_widths.add(pixel_width)
             candidate_widths.add(pixel_width * 2)
         if max_width is not None and (
-            next_min_width is None or next_min_width > max_width
+            prev_max_width is None or prev_max_width < max_width
         ):
             pixel_width = round(max_boundary / effective_columns)
             candidate_widths.add(pixel_width)
@@ -91,21 +92,27 @@ class ResponsiveImageParentMixin:
             return max_width_values.get(width_choice, {}).get(0)
 
     def get_breakpoint_ranges(self):
-        """Return (min_width, effective_columns, next_min_width) per breakpoint; default is single-column."""
+        """
+        Return (max_width, effective_columns, prev_max_width) per breakpoint;
+        default is single-column.
+        """
         breakpoints = settings.XPREZ_BREAKPOINTS
-        widths = [breakpoints[bp]["min_width"] for bp in breakpoints]
+        widths = [breakpoints[bp]["max_width"] for bp in breakpoints]
         return [
-            (w, 1, widths[i + 1] if i + 1 < len(widths) else None)
+            (w, 1, widths[i - 1] if i > 0 else None)
             for i, w in enumerate(widths)
         ]
 
     def get_column_ranges(self):
-        """Return (max_width_px, [(min_width, effective_columns), ...]) collapsing consecutive duplicates."""
+        """
+        Return (max_width_px, [(max_width, effective_columns), ...])
+        collapsing consecutive duplicates.
+        """
         max_width = self.get_section_max_width_px()
         ranges = []
-        for min_width, effective_columns, _ in self.get_breakpoint_ranges():
+        for bp_max_width, effective_columns, _ in self.get_breakpoint_ranges():
             if not ranges or ranges[-1][1] != effective_columns:
-                ranges += [(min_width, effective_columns)]
+                ranges += [(bp_max_width, effective_columns)]
         return max_width, ranges
 
     @cached_property
@@ -128,7 +135,10 @@ class ResponsiveImageItemMixin:
     """Mixin for individual image items that produce srcset geometry strings."""
 
     def get_image_field(self):
-        """Return the ImageField instance for this item (e.g. self.file, self.poster_image)."""
+        """
+        Return the ImageField instance for this item
+        (e.g. self.file, self.poster_image).
+        """
         raise NotImplementedError
 
     def get_aspect_ratio(self):
@@ -141,7 +151,10 @@ class ResponsiveImageItemMixin:
 
     @cached_property
     def get_srcset_geometries(self):
-        """List of 'WxH' geometry strings for srcset, capped at image's natural width."""
+        """
+        List of 'WxH' geometry strings for srcset,
+        capped at image's natural width.
+        """
         try:
             cap_width = self.get_image_field().width
         except Exception:

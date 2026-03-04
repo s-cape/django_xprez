@@ -18,7 +18,7 @@
 
     &-inner {
         // position: relative;
-        padding: var(--x-padding, 0); 
+        padding: var(--x-padding, 0);  
 
         & > :last-child {
             margin-bottom: 0;
@@ -36,7 +36,7 @@
 }
 
 @each $number, $breakpoint in $x-breakpoints {
-    @media (min-width: $breakpoint) {
+    @media (max-width: $breakpoint) {
         .xprez-#{$number}-background {
             background: var(--x-box-bg);
         }
