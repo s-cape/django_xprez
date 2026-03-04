@@ -565,7 +565,7 @@ XPREZ_CSS = {
         "xprez.GalleryModule": {
             "gap": {
                 "units": {
-                    constants.GAP_NONE: "",
+                    constants.GAP_NONE: "px",
                     constants.GAP_SMALL: "px",
                     constants.GAP_MEDIUM: "px",
                     constants.GAP_LARGE: "px",
@@ -582,7 +582,7 @@ XPREZ_CSS = {
         "xprez.NumbersModule": {
             "gap": {
                 "units": {
-                    constants.GAP_NONE: "",
+                    constants.GAP_NONE: "px",
                     constants.GAP_SMALL: "px",
                     constants.GAP_MEDIUM: "px",
                     constants.GAP_LARGE: "px",

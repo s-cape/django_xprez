@@ -10,7 +10,7 @@ def _get_unit_string(css_config, choice=None):
         return ""
     units = css_config.get("units", "")
     if isinstance(units, dict):
-        return units.get(choice, "") if choice else ""
+        return units.get(choice, "") if choice is not None else ""
     return units
 
 
