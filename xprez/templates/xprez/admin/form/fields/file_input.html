@@ -7,7 +7,7 @@
     {% with widget=field|xprez_widget_context %}
         <div class="xprez-option__file-input">
             <label
-                class="xprez-icon-btn"
+                class="xprez-icon-btn xprez-option__file-input-upload-btn"
                 title="Add file"
                 data-component="xprez-file-input-add-btn"
                 {% if widget.is_initial %}data-hidden{% endif %}
@@ -16,6 +16,7 @@
                 {% if not widget.is_initial %}
                     <input type="{{ widget.type }}" name="{{ widget.name }}"{% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
                 {% endif %}
+                <span class="xprez-option__file-input-upload-btn-text">{% trans "Add file" %}</span>
             </label>
         
             <div
@@ -32,6 +33,11 @@
                             data-component="xprez-file-input-img"
                             {% if thumb %}src="{{ thumb.url }}"{% else %}data-hidden{% endif %}
                         />
+                        {% if not thumb %}
+                            <span class="xprez-admin-file-input__media-file-icon">
+                                {% include "xprez/shared/icons/paperclip.html" %}
+                            </span>
+                        {% endif %}
                         <span
                             data-component="xprez-file-input-filename"
                             {% if thumb or not widget.value %}data-hidden{% endif %}

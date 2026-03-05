@@ -7,15 +7,33 @@
     align-items: center;
     padding: .35rem 0;
     margin-left: -.5rem;
+    width: 100%;
 
     .xprez-admin-file-input__media-img {
         max-height: 170px;
         max-width: 100%;
     }
 
-    svg {
-        width: 1.5rem;
-        height: 1.5rem;
+    &-upload-btn {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: .5rem;
+        width: 100%;
+        padding-left: .25rem;
+        height: auto;
+        min-height: var(--x-admin-icon-button-size);
+
+        svg {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+
+        }
+
+        input[type="file"] {
+            height: 0;
+        }
     }
 }
 
@@ -32,6 +50,10 @@
 
     &__img-cont {
         position: relative;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        line-height: 1.2;
 
         &.crop {
             aspect-ratio: 2/1;
@@ -79,6 +101,16 @@
             position: absolute;
             left: 0;
         }
+    }
+
+    &__media-file-icon {
+        width: 2.5rem;
+        height: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $b-gray-2;
+        border-radius: var(--x-admin-border-radius-sm);
     }
 
     &__media-actions {
