@@ -1,0 +1,13 @@
+.ck-editor {
+    --ck-focus-ring: 1px solid transparent;
+    --ck-inner-shadow: none;
+    --ck-spacing-standard: 0;
+
+    color: var(--x-admin-option-input-color);
+    flex: 1;
+}
+ 
+.ck-placeholder {
+    font-style: italic;
+    opacity: 0.7;
+}

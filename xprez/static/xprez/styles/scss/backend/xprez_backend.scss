@@ -39,12 +39,8 @@
 @import "comp/button";
 @import "comp/popover";
 
-@import "modules/ck_editor";
-@import "modules/grid_boxes";
-@import "modules/image_text";
-@import "modules/medium_editor";
-@import "modules/photo_gallery";
-@import "modules/text";
+@import "modules_specific/ck_editor";
+@import "modules_specific/photo_gallery";
 
 @import "module/form_table";
 @import "module/module_base";
@@ -53,9 +49,8 @@
 @import "module/multi/adder";
 @import "module/multi/items";
 
-@import "options/text_button"; 
-@import "options/icon_button"; 
-@import "options/deprecated_options";
+@import "ui/icon_button"; 
+
 @import "options/option_container";
 @import "options/option_group";
 @import "options/option";

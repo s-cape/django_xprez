@@ -43,7 +43,7 @@
     &__media-cont {
         position: relative;
         overflow: hidden;
-        border-radius: var(--x-admin-border-radius-md);
+        border-radius: var(--x-admin-border-radius-sm);
         background: $b-gray-1;
 
         &:hover {
@@ -125,6 +125,7 @@
         word-wrap: break-word;
         overflow-wrap: break-word;
         word-break: break-word;
+        color: var(--x-admin-option-input-color);
     }
 
     &__media-actions {
@@ -141,6 +142,6 @@
         align-items: center;
         transition: transform 0.2s ease-in-out;
         transform: translateX(var(--item-action-menu-translate));
-        border-radius: var(--x-admin-border-radius-md);
+        border-radius: var(--x-admin-border-radius-sm);
     }
 }
