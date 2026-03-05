@@ -13,17 +13,25 @@ class XprezModelFormMixin(object):
         self.xprez_sections_all_valid = None
         if instance:
             sections = instance.sections.all()
+            section_symlinks = instance.sectionsymlinks.all()
             if data is None:
                 sections = sections.filter(saved=True)
+                section_symlinks = section_symlinks.filter(saved=True)
             else:
-                ids = [int(id) for id in data.getlist("section-id")]
-                sections = sections.filter(pk__in=ids)
+                section_ids = [int(id) for id in data.getlist("section-id")]
+                section_symlink_ids = [
+                    int(id) for id in data.getlist("section-symlink-id")
+                ]
+                sections = sections.filter(pk__in=section_ids)
+                section_symlinks = section_symlinks.filter(pk__in=section_symlink_ids)
 
             for section in sections:
                 section.build_admin_form(self.xprez_admin, data, files)
                 self.xprez_sections.append(section)
-        if data:
-            self.xprez_sections.sort(key=lambda s: s.admin_form.get_position())
+            for section_symlink in section_symlinks:
+                section_symlink.build_admin_form(self.xprez_admin, data, files)
+                self.xprez_sections.append(section_symlink)
+        self.xprez_sections.sort(key=lambda s: s.admin_form.get_position())
 
     def is_valid(self):
         self.xprez_sections_all_valid = True
@@ -48,16 +56,14 @@ class XprezModelFormMixin(object):
     def is_multipart(self):
         return True
 
-    def xprez_get_available_modules(self):
-        return self.xprez_admin.xprez_get_available_modules(container=self.instance)
+    def xprez_add_menu_module_classes(self):
+        return self.xprez_admin.xprez_add_menu_module_classes(self.instance)
 
 
 class XprezAdminMixin(
     XprezAdminViewsContentMixin,
     XprezAdminViewsClipboardMixin,
 ):
-    available_modules = settings.XPREZ_DEFAULT_AVAILABLE_MODULES
-
     xprez_breakpoints = settings.XPREZ_BREAKPOINTS
     xprez_default_breakpoint = 0
 
@@ -72,8 +78,21 @@ class XprezAdminMixin(
     def xprez_admin_media(self):
         return module_registry.admin_media()
 
-    def xprez_get_available_modules(self, container):
-        return module_registry._get_available_modules(self.available_modules)
+    def xprez_allowed_modules(self, container=None):
+        return module_registry.allowed_modules()
+
+    def xprez_add_menu_modules(self, container=None):
+        return module_registry.add_menu_modules()
+
+    def xprez_allowed_module_classes(self, container=None):
+        return module_registry.module_classes(
+            include=self.xprez_allowed_modules(container)
+        )
+
+    def xprez_add_menu_module_classes(self, container=None):
+        return module_registry.module_classes(
+            include=self.xprez_add_menu_modules(container)
+        )
 
     xprez_url_namespace = None
 
@@ -96,9 +115,6 @@ class XprezAdminMixin(
     def _get_container_instance(self, request, object_pk):
         cls = apps.get_model("xprez", "Container")
         return cls.objects.get(pk=object_pk)
-
-    def _updated_modules_positions(self, container):
-        return {m.id: m.position for m in container.modules.all()}
 
 
 class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):

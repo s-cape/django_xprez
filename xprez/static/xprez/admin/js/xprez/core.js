@@ -1,5 +1,5 @@
-import { XprezSection } from './sections.js';
-import { XprezAdderContainerEnd } from './adders.js';
+import { XprezSection, XprezSectionSymlink } from './sections.js';
+import { XprezSectionAdderContainerEnd } from './adders.js';
 import { XprezSortable } from './sortable.js';
 import { XprezSyncManager } from './sync.js';
 
@@ -10,18 +10,31 @@ export class Xprez {
         this.viewSelectEl = this.el.querySelector("[data-component='xprez-view-select']");
         this.viewSelectEl.addEventListener("change", this.updateView.bind(this));
         this.sync = new XprezSyncManager(this);
-        this.sections = [];
-        this.el.querySelectorAll("[data-component='xprez-section']").forEach(this.initSection.bind(this));
-
+        this.initSections();
         this.updateView();
-        this.adder = new XprezAdderContainerEnd(this, this.el.querySelector("[data-component='xprez-adder-container-end']"));
+        this.adder = new XprezSectionAdderContainerEnd(this, this.el.querySelector("[data-component='xprez-adder-container-end']"));
         this.initAllSectionsCollapser();
         this.initSectionsSortable();
     }
 
-    initSection(sectionEl) {
-        const section = new XprezSection(this, sectionEl);
-        this.sections.push(section);
+    initSections() {
+        this.sections = [];
+        this.sectionSymlinks = [];
+        this.sectionsContainerEl.querySelectorAll(
+            "[data-component='xprez-section'], [data-component='xprez-section-symlink']"
+        ).forEach(this.initSection.bind(this));
+    }
+
+    initSection(el) {
+        if (el.dataset.component === "xprez-section") {
+            const section = new XprezSection(this, el);
+            this.sections.push(section);
+            return section;
+        } else if (el.dataset.component === "xprez-section-symlink") {
+            const sectionSymlink = new XprezSectionSymlink(this, el);
+            this.sectionSymlinks.push(sectionSymlink);
+            return sectionSymlink;
+        } else throw new Error(el.dataset.component);
     }
 
     updateView() {
@@ -39,24 +52,21 @@ export class Xprez {
     }
 
     setPlacementToInputs() {
-        this.sectionsContainerEl.querySelectorAll("[data-component='xprez-section']").forEach(
-            (sectionEl, sectionIndex) => {
-                const sectionPositionInputEl = sectionEl.querySelector(`input[name="${sectionEl.dataset.prefix}-position"]`);
-                sectionPositionInputEl.value = sectionIndex;
+        this.sectionsContainerEl.querySelectorAll(
+            "[data-component='xprez-section'], [data-component='xprez-section-symlink']"
+        ).forEach((sectionEl, sectionIndex) => {
+            sectionEl.querySelector(`input[name="${sectionEl.dataset.prefix}-position"]`).value = sectionIndex;
+        });
 
-                const sectionId = sectionEl.querySelector('input[name="section-id"]').value;
-
-                sectionEl.querySelectorAll("[data-component='xprez-module']").forEach(
-                    (moduleEl, moduleIndex) => {
-                        const modulePositionInputEl = moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-position"]`);
-                        modulePositionInputEl.value = moduleIndex;
-
-                        const moduleSectionInputEl = moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-section"]`);
-                        moduleSectionInputEl.value = sectionId;
-                    }
-                );
-            }
-        );
+        this.sections.forEach(section => {
+            const sectionId = section.el.querySelector('input[name="section-id"]').value;
+            section.el.querySelectorAll("[data-component='xprez-module']").forEach(
+                (moduleEl, moduleIndex) => {
+                    moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-position"]`).value = moduleIndex;
+                    moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-section"]`).value = sectionId;
+                }
+            );
+        });
     }
 
     initAllSectionsCollapser() {

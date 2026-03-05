@@ -1,0 +1,20 @@
+<div class="xprez-icon-btn xprez-submenu__toggle" title="Copy" data-component="xprez-copy-menu">
+    <i class="xprez-icon-copy"></i>
+    <div class="xprez-submenu">
+        <div
+            data-component="xprez-duplicate-trigger"
+            data-url="{{ duplicate_url }}"
+        >
+            {% include "xprez/shared/icons/repeat.html" %} Duplicate
+        </div>
+        <div
+            class="xprez-clipboard-clip"
+            data-component="xprez-clipboard-clip"
+            data-url="{{ clipboard_url }}"
+        >
+            {% include "xprez/shared/icons/paste.html" %}
+            <span class="xprez-inline-success-message">{% include "xprez/shared/icons/checkmark.html" %} Clipped</span>
+            <span class="default">Clip</span>
+        </div>
+    </div>
+</div>

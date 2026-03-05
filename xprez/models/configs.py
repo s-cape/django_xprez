@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.mixins.css import CssMixin, CssParentMixin
-from xprez.utils import import_class
+from xprez.utils import copy_model, import_class
 
 BREAKPOINT_CHOICES = tuple(
     [(k, v["name"]) for k, v in settings.XPREZ_BREAKPOINTS.items()]
@@ -31,6 +31,21 @@ class ConfigParentMixin(CssParentMixin):
             config = self.build_config(css_breakpoint)
             config.save()
             return config, True
+
+    def duplicate_configs_to(self, target, saved=False):
+        for config in self.get_saved_configs():
+            existing_config = (
+                target.get_configs()
+                .filter(css_breakpoint=config.css_breakpoint)
+                .first()
+            )
+            new_config = copy_model(config)
+            setattr(new_config, config.parent_attr, target)
+            new_config.saved = saved
+            if existing_config:
+                new_config.pk = existing_config.pk
+                new_config._state.adding = False
+            new_config.save()
 
 
 class ConfigBase(CssMixin, models.Model):
@@ -78,6 +93,7 @@ class ConfigBase(CssMixin, models.Model):
 
 
 class SectionConfig(ConfigBase):
+    parent_attr = "section"
     admin_template_name = "xprez/admin/configs/section.html"
     form_class = "xprez.admin.forms.SectionConfigForm"
 
@@ -198,6 +214,7 @@ class SectionConfig(ConfigBase):
 
 
 class ModuleConfig(ConfigBase):
+    parent_attr = "module"
     admin_template_name = "xprez/admin/configs/module_base.html"
     form_class = "xprez.admin.forms.ModuleConfigForm"
 

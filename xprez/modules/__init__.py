@@ -5,6 +5,6 @@ from .files import *  # noqa
 from .gallery import *  # noqa
 from .numbers import *  # noqa
 from .quote import *  # noqa
-from .symlinks import *  # noqa
+from .symlink import *  # noqa
 from .text import *  # noqa
 from .video import *  # noqa

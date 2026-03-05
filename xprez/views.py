@@ -66,7 +66,7 @@ def variables_css(request):
         module_current_css_variables.update(css)
 
     # Specific module CSS
-    for module_class in module_registry._registry.values():
+    for module_class in module_registry.module_classes():
         # BP0: Diff specific module vs default module
         module = module_class.build()
         config = module.build_config(0)

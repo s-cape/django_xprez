@@ -5,11 +5,12 @@ import { XprezFieldController } from './xprez/fields.js';
 import {
     XprezAdderBase,
     XprezAdderItemsBase,
+    XprezContentAdderBase,
     XprezAdderSelectBase,
-    XprezAdderContainerEnd,
-    XprezAdderSectionBase,
-    XprezAdderSectionBefore,
-    XprezAdderSectionEnd,
+    XprezSectionAdderContainerEnd,
+    XprezContentAdderSectionBase,
+    XprezSectionAdderSectionBefore,
+    XprezModuleAdderSectionEnd,
     XprezSectionConfigAdder
 } from './xprez/adders.js';
 import {
@@ -34,7 +35,9 @@ import { XprezShortcutFieldController, XprezShortcutParentMixin } from './xprez/
 import { XprezMultiModuleItem, XprezMultiModule, XprezUploadMultiModule } from './xprez/multi_module.js';
 import { XprezTextModule } from './xprez/text_module.js';
 import { executeScripts } from './xprez/utils.js';
+import { XprezCopyMenu, XprezClipboardClip } from './xprez/copy.js';
 import { XprezFileInputFieldController } from './xprez/file_input.js';
+import { XprezClipboardList } from './xprez/clipboard.js';
 
 window.Xprez = Xprez;
 window.XprezModule = XprezModule;
@@ -54,11 +57,12 @@ export {
     XprezFileInputFieldController,
     XprezAdderBase,
     XprezAdderItemsBase,
+    XprezContentAdderBase,
     XprezAdderSelectBase,
-    XprezAdderContainerEnd,
-    XprezAdderSectionBase,
-    XprezAdderSectionBefore,
-    XprezAdderSectionEnd,
+    XprezSectionAdderContainerEnd,
+    XprezContentAdderSectionBase,
+    XprezSectionAdderSectionBefore,
+    XprezModuleAdderSectionEnd,
     XprezSectionConfigAdder,
     XprezDeleterBase,
     XprezSectionDeleter,
@@ -79,5 +83,8 @@ export {
     XprezMultiModule,
     XprezUploadMultiModule,
     XprezTextModule,
+    XprezClipboardClip,
+    XprezClipboardList,
+    XprezCopyMenu,
     executeScripts
 };

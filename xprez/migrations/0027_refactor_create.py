@@ -70,7 +70,7 @@ class Migration(migrations.Migration):
                         editable=False,
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
-                        related_name="sections",
+                        related_name="%(class)ss",
                         to="xprez.container",
                     ),
                 ),
@@ -102,7 +102,7 @@ class Migration(migrations.Migration):
                         default=True, verbose_name="Change style for selected modules"
                     ),
                 ),
-                ("sync_group", models.SmallIntegerField(blank=True, null=True)),
+                ("sync_group", models.PositiveIntegerField(blank=True, null=True)),
                 ("created", models.DateTimeField(auto_now_add=True)),
                 ("changed", models.DateTimeField(auto_now=True)),
                 (
@@ -229,14 +229,27 @@ class Migration(migrations.Migration):
             name="SectionSymlink",
             fields=[
                 (
-                    "module_ptr",
-                    models.OneToOneField(
+                    "id",
+                    models.AutoField(
                         auto_created=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        parent_link=True,
                         primary_key=True,
                         serialize=False,
-                        to="xprez.module",
+                        verbose_name="ID",
+                    ),
+                ),
+                ("position", models.PositiveSmallIntegerField(default=0)),
+                ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("changed", models.DateTimeField(auto_now=True)),
+                (
+                    "container",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="%(class)ss",
+                        to="xprez.container",
                     ),
                 ),
                 (
@@ -253,7 +266,6 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Linked section",
             },
-            bases=("xprez.module",),
         ),
         migrations.CreateModel(
             name="SectionConfig",
@@ -395,6 +407,7 @@ class Migration(migrations.Migration):
                             (5, "5"),
                             (6, "6"),
                             (7, "7"),
+                            (8, "8"),
                         ],
                         default=1,
                     ),

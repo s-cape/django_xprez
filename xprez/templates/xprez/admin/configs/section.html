@@ -1,8 +1,10 @@
 {% extends "xprez/admin/configs/base.html" %}
 
 {% block component_name %}xprez-section-config{% endblock %}
-{% block delete_trigger_component %}xprez-section-config-delete-trigger{% endblock %}
-{% block delete_info_content %}
+{% block delete_trigger %}
+    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-config-delete-trigger" title="Remove breakpoint" delete_field=config.admin_form.delete %}
+{% endblock %}
+{% block delete_info %}
     {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-section-config" message_subject="breakpoint" %}
 {% endblock %}
 

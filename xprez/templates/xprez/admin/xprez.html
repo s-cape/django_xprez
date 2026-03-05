@@ -40,9 +40,9 @@
         {% endfor %}
     </div>
 
-    {% with available_modules=form.xprez_get_available_modules %}
+    {% with available_modules=form.xprez_add_menu_module_classes %}
         {% if available_modules %}
-            {% include "./includes/add_section.html" with component_name="xprez-adder-container-end" xprez_admin=form.xprez_admin add_list_container=form.instance %}
+            {% include "./includes/adders/section.html" with component_name="xprez-adder-container-end" xprez_admin=form.xprez_admin adder_container=form.instance %}
         {% endif %}
     {% endwith %}
 </div>

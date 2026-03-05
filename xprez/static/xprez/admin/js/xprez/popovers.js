@@ -9,7 +9,7 @@ export class XprezPopoverBase {
         document.addEventListener("click", (e) => {
             if (this.isOpen() && (!e.target.closest("[popover]"))) {
                 this.hide();
-            } else if (!this.isOpen() && this.triggerEl.contains(e.target)) {
+            } else if (!this.isOpen() && this.triggerEl?.contains(e.target)) {
                 this.show();
             }
         });

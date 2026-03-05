@@ -3,6 +3,7 @@ import { XprezModulePopover } from './popovers.js';
 import { XprezModuleDeleter } from './deleters.js';
 import { XprezModuleConfig, XprezConfigParentMixin } from './configs.js';
 import { XprezModuleConfigAdder } from './adders.js';
+import { XprezModuleCopyMenu } from './copy.js';
 import { resolveFieldControllerClass } from './fields.js';
 import { XprezModuleSyncMixin } from './sync.js';
 import { XprezShortcutParentMixin } from './shortcuts.js';
@@ -18,14 +19,13 @@ export class XprezModule extends XprezContentBase {
         this.initShowWhens();
         this.initSync();
         this.initShortcuts();
+        this.initCopyMenus();
     }
 
     initFields() {
         this.fields = [];
-        const shortcutsContainer = this.el.querySelector("[data-component='xprez-shortcuts']");
         this.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
-            if (this.configsContainerEl?.contains(fieldEl)) return;
-            if (shortcutsContainer?.contains(fieldEl)) return;
+            if (this.isUnmanaged(fieldEl)) return;
             this.initField(fieldEl);
         });
     }
@@ -42,6 +42,13 @@ export class XprezModule extends XprezContentBase {
     createConfigAdder() { return new XprezModuleConfigAdder(this.section.xprez, this); }
 
     get xprez() { return this.section.xprez; }
+
+    initCopyMenus() {
+        this.el.querySelectorAll('[data-component="xprez-copy-menu"]').forEach(el => {
+            if (this.isUnmanaged(el)) return;
+            new XprezModuleCopyMenu(el, this);
+        });
+    }
 
     contentType() { return this.el.dataset.contentType; }
 }

@@ -1,4 +1,5 @@
 import { executeScripts, getCsrfToken } from './utils.js';
+import { XprezClipboardList } from './clipboard.js';
 
 export class XprezAdderBase {
     constructor(xprez, el) {
@@ -28,13 +29,13 @@ export class XprezAdderBase {
         return fetch(url)
             .then(response => {
                 if (response.ok) {
-                    return response.text();
+                    return response.json();
                 } else {
                     console.log("TODO: show error message");
                     throw new Error(`Server returned ${response.status}: ${response.statusText}`);
                 }
             })
-            .then(html => this.addFromHtml(html))
+            .then(items => items.forEach(({ html }) => this.addFromHtml(html)))
             .catch(error => {
                 console.error('Error adding:', error);
             })
@@ -69,6 +70,31 @@ export class XprezAdderItemsBase extends XprezAdderBase {
     }
 }
 
+export class XprezDuplicateAdder extends XprezAdderItemsBase {
+    constructor(xprez, el, copyMenu) {
+        super(xprez, el);
+        this.copyMenu = copyMenu;
+    }
+
+    bindEvents() {
+        this.el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.copyMenu.el.removeAttribute('data-open');
+            this.add(this.el.dataset.url);
+        });
+    }
+
+    placeNewElement(el) { this.copyMenu.parent.el.insertAdjacentElement('afterend', el); }
+}
+
+export class XprezSectionDuplicateAdder extends XprezDuplicateAdder {
+    initNewElement(el) { this.xprez.initSection(el); }
+}
+
+export class XprezModuleDuplicateAdder extends XprezDuplicateAdder {
+    initNewElement(el) { this.copyMenu.parent.section.initModule(el); }
+}
+
 export class XprezAdderSelectBase extends XprezAdderBase {
     bindEvents() {
         this.selectEl = this.el.querySelector("select");
@@ -89,12 +115,19 @@ export class XprezAdderSelectBase extends XprezAdderBase {
     }
 }
 
-export class XprezAdderContainerEnd extends XprezAdderItemsBase {
+export class XprezContentAdderBase extends XprezAdderItemsBase {
+    constructor(xprez, el) {
+        super(xprez, el);
+        this.clipboardList = new XprezClipboardList(this);
+    }
+}
+
+export class XprezSectionAdderContainerEnd extends XprezContentAdderBase {
     placeNewElement(el) { this.xprez.sectionsContainerEl.appendChild(el); }
     initNewElement(el) { this.xprez.initSection(el); }
 }
 
-export class XprezAdderSectionBase extends XprezAdderItemsBase {
+export class XprezContentAdderSectionBase extends XprezContentAdderBase {
     constructor(xprez, el, section) {
         super(xprez, el);
         this.section = section;
@@ -115,7 +148,7 @@ export class XprezAdderSectionBase extends XprezAdderItemsBase {
     toggle() { this.isOpen() ? this.hide() : this.show(); }
 }
 
-export class XprezAdderSectionBefore extends XprezAdderSectionBase {
+export class XprezSectionAdderSectionBefore extends XprezContentAdderSectionBase {
     setTriggerEl() {
         this.triggerEl = this.section.el.querySelector("[data-component='xprez-adder-section-before-trigger']");
     }
@@ -123,7 +156,7 @@ export class XprezAdderSectionBefore extends XprezAdderSectionBase {
     initNewElement(el) { this.xprez.initSection(el); }
 }
 
-export class XprezAdderSectionEnd extends XprezAdderSectionBase {
+export class XprezModuleAdderSectionEnd extends XprezContentAdderSectionBase {
     setTriggerEl() {
         this.triggerEl = this.section.el.querySelector("[data-component='xprez-adder-section-end-trigger']");
     }
