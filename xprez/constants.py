@@ -1,5 +1,9 @@
 CUSTOM = "custom"
 
+MODULE_KEY = "module"
+SECTION_KEY = "section"
+CONTAINER_KEY = "container"
+
 MARGIN_NONE = ""
 MARGIN_SMALL = "small"
 MARGIN_MEDIUM = "medium"

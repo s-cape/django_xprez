@@ -24,8 +24,8 @@
         <div class="xprez-admin-module__actions">
             {% block actions %}
                 {% with xprez_admin=module.admin_form.xprez_admin %}
-                    {% url xprez_admin.xprez_duplicate_module_url_name module.pk as duplicate_url %}
-                    {% url xprez_admin.xprez_clipboard_clip_url_name "module" module.pk as clipboard_url %}
+                    {% url xprez_admin.xprez_duplicate_url_name module_pk=module.pk as duplicate_url %}
+                    {% url xprez_admin.xprez_clipboard_clip_url_name xprez_admin.constants.MODULE_KEY module.pk as clipboard_url %}
                     {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clipboard_url=clipboard_url %}
                 {% endwith %}
                 <span class="xprez-icon-btn" title="Settings" data-component="xprez-module-popover-trigger">

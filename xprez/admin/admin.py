@@ -1,7 +1,7 @@
 from django.apps import apps
 from django.contrib import admin
 
-from xprez import module_registry, settings
+from xprez import constants, module_registry, settings
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
 from xprez.admin.views.content import XprezAdminViewsContentMixin
 
@@ -64,6 +64,7 @@ class XprezAdminMixin(
     XprezAdminViewsContentMixin,
     XprezAdminViewsClipboardMixin,
 ):
+    constants = constants
     xprez_breakpoints = settings.XPREZ_BREAKPOINTS
     xprez_default_breakpoint = 0
 

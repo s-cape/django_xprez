@@ -32,8 +32,8 @@
     </span>
 
     {% with xprez_admin=section.admin_form.xprez_admin %}
-        {% url xprez_admin.xprez_duplicate_section_url_name section.pk as duplicate_url %}
-        {% url xprez_admin.xprez_clipboard_clip_url_name "section" section.pk as clipboard_url %}
+        {% url xprez_admin.xprez_duplicate_url_name section_pk=section.pk as duplicate_url %}
+        {% url xprez_admin.xprez_clipboard_clip_url_name xprez_admin.constants.SECTION_KEY section.pk as clipboard_url %}
         {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clipboard_url=clipboard_url %}
     {% endwith %}
     {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title="Remove" delete_field=section.admin_form.delete %}

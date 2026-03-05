@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
 from django.utils.functional import cached_property
 
-from xprez import models
+from xprez import constants, models
 
 CLIPBOARD_DUPLICATE_ACTION = "duplicate"
 CLIPBOARD_SYMLINK_ACTION = "symlink"
@@ -94,7 +94,7 @@ class ClipboardItemBase:
 
 
 class ClipboardItemModule(ClipboardItemBase):
-    key = "module"
+    key = constants.MODULE_KEY
 
     def _get_obj(self):
         return models.Module.objects.get(pk=self.pk).polymorph
@@ -125,7 +125,7 @@ class ClipboardItemModule(ClipboardItemBase):
 
 
 class ClipboardItemSection(ClipboardItemBase):
-    key = "section"
+    key = constants.SECTION_KEY
 
     def _get_obj(self):
         return models.Section.objects.get(pk=self.pk)
@@ -156,7 +156,7 @@ class ClipboardItemSection(ClipboardItemBase):
 
 
 class ClipboardItemContainer(ClipboardItemBase):
-    key = "container"
+    key = constants.CONTAINER_KEY
 
     def _get_obj(self):
         return models.Container.objects.get(pk=self.pk).polymorph
@@ -206,6 +206,22 @@ class XprezAdminViewsClipboardMixin(object):
         for cls in [ClipboardItemModule, ClipboardItemSection, ClipboardItemContainer]
     }
 
+    def xprez_duplicate_section_view(self, request, section_pk):
+        section = models.Section.objects.get(pk=section_pk)
+        new_section = section.duplicate_to(section.container)
+        new_section.build_admin_form(self)
+        return JsonResponse(
+            [{"html": new_section.render_admin({"request": request})}], safe=False
+        )
+
+    def xprez_duplicate_module_view(self, request, module_pk):
+        module = models.Module.objects.get(pk=module_pk).polymorph
+        new_module = module.duplicate_to(module.section)
+        new_module.build_admin_form(self)
+        return JsonResponse(
+            [{"html": new_module.render_admin({"request": request})}], safe=False
+        )
+
     def xprez_clipboard_clip(self, request, key, pk):
         self._add_clipboard_entry(request, (key, int(pk)))
         return HttpResponse()
@@ -232,9 +248,6 @@ class XprezAdminViewsClipboardMixin(object):
         else:
             return HttpResponseBadRequest()
 
-    def xprez_clipboard_is_empty(self, request):
-        return not bool(request.session.get(self.CLIPBOARD_SESSION_KEY, False))
-
     def xprez_clipboard_list(
         self, request, target_container_pk, target_section_pk=None
     ):
@@ -257,6 +270,9 @@ class XprezAdminViewsClipboardMixin(object):
             },
         )
 
+    def xprez_duplicate_url_name(self):
+        return self.xprez_admin_url_name("duplicate", include_namespace=True)
+
     def xprez_clipboard_clip_url_name(self):
         return self.xprez_admin_url_name("clipboard_clip", include_namespace=True)
 
@@ -266,8 +282,21 @@ class XprezAdminViewsClipboardMixin(object):
     def xprez_clipboard_list_url_name(self):
         return self.xprez_admin_url_name("clipboard_list", include_namespace=True)
 
+    def xprez_clipboard_is_empty(self, request):
+        return not bool(request.session.get(self.CLIPBOARD_SESSION_KEY, False))
+
     def xprez_admin_urls(self):
         return [
+            path(
+                f"xprez-duplicate/{constants.SECTION_KEY}/<int:section_pk>/",
+                self.xprez_admin_view(self.xprez_duplicate_section_view),
+                name=self.xprez_admin_url_name("duplicate"),
+            ),
+            path(
+                f"xprez-duplicate/{constants.MODULE_KEY}/<int:module_pk>/",
+                self.xprez_admin_view(self.xprez_duplicate_module_view),
+                name=self.xprez_admin_url_name("duplicate"),
+            ),
             path(
                 "xprez-clipboard-clip/<str:key>/<int:pk>/",
                 self.xprez_admin_view(self.xprez_clipboard_clip),
