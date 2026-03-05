@@ -24,7 +24,7 @@ export class XprezModule extends XprezContentBase {
 
     initFields() {
         this.fields = [];
-        this.popover.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
+        this.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
             if (this.isUnmanaged(fieldEl)) return;
             this.initField(fieldEl);
         });

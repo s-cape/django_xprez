@@ -55,32 +55,32 @@ class ResponsiveImageHelpersTest(TestCase):
 
     def test_build_image_sizes_single_column_full_width(self):
         max_width = None
-        column_ranges = [(0, 1), (500, 1), (768, 1)]
+        column_ranges = [(None, 1), (1499, 1), (1199, 1)]
         result = _build_image_sizes(max_width, column_ranges)
         self.assertEqual(
             result,
-            "(max-width: 500px) 100vw, (max-width: 768px) 100vw, 100vw",
+            "100vw, (max-width: 1499px) 100vw, (max-width: 1199px) 100vw",
         )
 
     def test_build_image_sizes_single_column_capped(self):
         max_width = 1296
-        column_ranges = [(0, 1)]
+        column_ranges = [(None, 1)]
         result = _build_image_sizes(max_width, column_ranges)
-        self.assertEqual(result, "(max-width: 1296px) 100vw, 1296px")
+        self.assertEqual(result, "1296px")
 
     def test_build_image_sizes_two_columns(self):
         max_width = 1296
-        column_ranges = [(0, 1), (768, 2)]
+        column_ranges = [(None, 2), (991, 1)]
         result = _build_image_sizes(max_width, column_ranges)
         self.assertEqual(
             result,
-            "(max-width: 768px) 100vw, (max-width: 1296px) 50vw, 648px",
+            "648px, (max-width: 991px) 100vw",
         )
 
     def test_build_srcset_widths_single_column_capped(self):
         max_width = 1296
         full_width_cap = settings.XPREZ_GALLERY_FULL_WIDTH_PX
-        breakpoint_ranges = [(0, 1, 500), (500, 1, 768), (768, 1, None)]
+        breakpoint_ranges = [(None, 1, None), (1499, 1, None), (1199, 1, 1499)]
         result = _build_srcset_widths(max_width, full_width_cap, breakpoint_ranges)
         self.assertIsInstance(result, list)
         self.assertEqual(result, sorted(result))
@@ -90,7 +90,7 @@ class ResponsiveImageHelpersTest(TestCase):
         result = _build_srcset_widths(
             max_width=900,
             full_width_cap=1000,
-            breakpoint_ranges=[(0, 1, 500), (500, 2, 1200), (1200, 3, None)],
+            breakpoint_ranges=[(None, 3, None), (1199, 2, None), (499, 1, 1199)],
         )
         self.assertEqual(result, [300, 450, 500, 600, 900, 1000])
 
@@ -98,7 +98,7 @@ class ResponsiveImageHelpersTest(TestCase):
         result = _build_srcset_widths(
             max_width=None,
             full_width_cap=1000,
-            breakpoint_ranges=[(0, 1, 500), (500, 2, None)],
+            breakpoint_ranges=[(None, 2, None), (499, 1, None)],
         )
         self.assertEqual(result, [500, 1000])
 
@@ -136,10 +136,10 @@ class VideoModuleSizesTest(TestCase):
         module = self._video_module(section)
         ranges = list(module.get_breakpoint_ranges())
         self.assertGreater(len(ranges), 0)
-        for min_width, effective_columns, next_min_width in ranges:
+        for max_width, effective_columns, prev_max_width in ranges:
             self.assertEqual(effective_columns, 1)
-            self.assertIsInstance(min_width, int)
-            self.assertTrue(next_min_width is None or isinstance(next_min_width, int))
+            self.assertTrue(max_width is None or isinstance(max_width, int))
+            self.assertTrue(prev_max_width is None or isinstance(prev_max_width, int))
 
     def test_get_srcset_widths_non_empty_sorted_capped(self):
         section = _create_page_and_section()
@@ -160,7 +160,7 @@ class VideoModuleSizesTest(TestCase):
         module = self._video_module(section)
         self.assertEqual(
             module.get_image_sizes,
-            "(max-width: 1296px) 100vw, 1296px",
+            "1296px",
         )
 
     def test_section_custom_width_get_section_max_width_px_custom(self):
@@ -219,7 +219,7 @@ class GalleryModuleSizesTest(TestCase):
         config.save()
         self.assertEqual(
             module.get_image_sizes,
-            "(max-width: 500px) 100vw, (max-width: 1296px) 50vw, 648px",
+            "648px, (max-width: 1499px) 100vw",
         )
 
     def test_section_medium_gallery_two_columns_sizes_has_half_max_width_px(self):
@@ -231,70 +231,66 @@ class GalleryModuleSizesTest(TestCase):
         config.save()
         self.assertEqual(
             gallery.get_image_sizes,
-            "(max-width: 1296px) 50vw, 648px",
+            "648px",
         )
 
     def test_section_and_gallery_multi_breakpoint_configs_exact_sizes(self):
         """Section and gallery have different columns/colspan; assert exact sizes."""
         section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_MEDIUM)
         section_c0 = section.get_configs().get(css_breakpoint=0)
-        section_c0.columns = 1
+        section_c0.columns = 4
         section_c0.saved = True
         section_c0.save()
         SectionConfig.objects.create(
-            section=section, css_breakpoint=1, columns=2, saved=True
+            section=section, css_breakpoint=2, columns=2, saved=True
         )
         SectionConfig.objects.create(
-            section=section, css_breakpoint=2, columns=4, saved=True
+            section=section, css_breakpoint=4, columns=1, saved=True
         )
         gallery = GalleryModule.objects.create(section=section, position=0, saved=True)
         gallery_c0 = gallery.get_configs().get(css_breakpoint=0)
-        gallery_c0.columns = 1
+        gallery_c0.columns = 4
         gallery_c0.saved = True
         gallery_c0.save()
         GalleryConfig.objects.create(
-            module=gallery, css_breakpoint=1, columns=2, saved=True
+            module=gallery, css_breakpoint=2, columns=2, saved=True
         )
         GalleryConfig.objects.create(
-            module=gallery, css_breakpoint=2, columns=4, saved=True
+            module=gallery, css_breakpoint=4, columns=1, saved=True
         )
-        # Effective: bp0 1*1=1, bp1 2*2=4, bp2 4*4=16 → (0,1), (500,4), (768,16)
+        # Effective: bp0 4*4=16, bp2 2*2=4, bp4 1*1=1 → (None,16), (1199,4), (767,1)
         self.assertEqual(
             gallery.get_image_sizes,
-            "(max-width: 500px) 100vw, (max-width: 768px) 25vw, "
-            "(max-width: 1296px) 6.25vw, 81px",
+            "81px, (max-width: 1199px) 25vw, (max-width: 767px) 100vw",
         )
 
     def test_section_and_gallery_with_colspan_exact_sizes(self):
         """Gallery colspan changes effective_columns at a breakpoint."""
         section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_MEDIUM)
         sc0 = section.get_configs().get(css_breakpoint=0)
-        sc0.columns = 1
+        sc0.columns = 4
         sc0.saved = True
         sc0.save()
         SectionConfig.objects.create(
-            section=section, css_breakpoint=1, columns=2, saved=True
+            section=section, css_breakpoint=2, columns=2, saved=True
         )
         SectionConfig.objects.create(
-            section=section, css_breakpoint=2, columns=4, saved=True
+            section=section, css_breakpoint=4, columns=1, saved=True
         )
         gallery = GalleryModule.objects.create(section=section, position=0, saved=True)
         gc0 = gallery.get_configs().get(css_breakpoint=0)
-        gc0.columns = 1
+        gc0.columns = 2
+        gc0.colspan = 2
         gc0.saved = True
         gc0.save()
         GalleryConfig.objects.create(
-            module=gallery, css_breakpoint=1, columns=2, saved=True
+            module=gallery, css_breakpoint=2, columns=2, saved=True
         )
         GalleryConfig.objects.create(
-            module=gallery,
-            css_breakpoint=2,
-            columns=2,
-            colspan=2,
-            saved=True,
+            module=gallery, css_breakpoint=4, columns=1, saved=True
         )
-        # Effective: bp0 1, bp1 2*2=4, bp2 4*2//2=4 → (0,1), (500,4)
+        # Effective: bp0 4*2//2=4, bp2 2*2=4, bp4 1*1=1 → (None,4), (767,1)
         self.assertEqual(
             gallery.get_image_sizes,
-            "(max-width: 500px) 100vw, (max-width: 1296px) 25vw, 324px",
+            "324px, (max-width: 767px) 100vw",
         )

@@ -59,11 +59,11 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
             return (int(num.strip()), int(den.strip()))
 
     def get_breakpoint_ranges(self):
-        """Yield (min_width, effective_columns, next_min_width) per breakpoint."""
+        """Yield (max_width, effective_columns, prev_max_width) per breakpoint."""
         return self._iter_breakpoint_columns()
 
     def _iter_breakpoint_columns(self):
-        """Yield (min_width, effective_columns, next_min_width) per breakpoint."""
+        """Yield (max_width, effective_columns, prev_max_width) per breakpoint."""
         breakpoints = settings.XPREZ_BREAKPOINTS
         section_configs = {
             config.css_breakpoint: config for config in self.section.get_saved_configs()
@@ -85,13 +85,13 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
                 1,
                 current_section_cols * current_gallery_cols // current_colspan,
             )
-            min_width = breakpoints[bp_id]["min_width"]
-            if index + 1 < len(bp_ids):
-                next_bp_id = bp_ids[index + 1]
-                next_min_width = breakpoints[next_bp_id]["min_width"]
+            max_width = breakpoints[bp_id]["max_width"]
+            if index > 0:
+                prev_bp_id = bp_ids[index - 1]
+                prev_max_width = breakpoints[prev_bp_id]["max_width"]
             else:
-                next_min_width = None
-            yield min_width, effective_columns, next_min_width
+                prev_max_width = None
+            yield max_width, effective_columns, prev_max_width
 
 
 class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):

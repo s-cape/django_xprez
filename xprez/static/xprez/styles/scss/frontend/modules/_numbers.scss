@@ -5,18 +5,28 @@
 
 	.xprez-module-inner {
 		flex: 1;
-		display: flex;
 		flex-wrap: wrap;
-		@include rfs.gap($x-numbers-item-auto-gap);
-		justify-content: center;
+		gap: var(--x-gap);
+		justify-content: flex-start;
 		align-items: flex-start;
+		display: var(--x-numbers-display);
+		grid-template-columns: repeat(var(--x-columns), 1fr);
+	}
+
+	&__digits {
+		display: inline;
+		text-align: right;
+	}
+
+	&__number {
+		display: inline-flex;
 	}
 
 	&__item {
-		flex: 1;
+		// flex: 1;
 		border-radius: #{$x-numbers-item-border-radius};
-		min-width: #{$x-numbers-item-auto-min-width};
-		max-width: #{$x-numbers-item-auto-max-width};
+		min-width: var(--x-numbers-item-auto-min-width, 0);
+		// max-width: var(--x-numbers-item-auto-max-width, 100%);
 		display: flex;
 		flex-direction: column;
 		gap: #{$x-numbers-item-text-gap};
@@ -42,4 +52,18 @@
 		font-weight: #{$x-numbers-number-font-weight};
 		letter-spacing: 0.05rem;
 	}
+}
+
+@each $number, $breakpoint in $x-breakpoints {
+    @media (max-width: $breakpoint) {
+        .xprez-#{$number}-numbers-columns-auto {
+			--x-numbers-display: flex;
+			--x-numbers-item-auto-min-width: #{$x-numbers-item-auto-min-width};
+			--x-numbers-item-auto-max-width: #{$x-numbers-item-auto-max-width};
+        }
+
+        .xprez-#{$number}-numbers-columns-auto-reset {
+			--x-numbers-display: grid;
+        }
+    }
 }

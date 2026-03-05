@@ -15,5 +15,7 @@
             <img class="xprez-text__image" src="{{ module.media.url }}" alt="{{ module.media.name }}" loading="lazy">
         </div>
     {% endif %}
-    <div class="xprez-text__text-wrapper">{{ block.super }}</div>
+    {% if module.text %}
+        <div class="xprez-text__text-wrapper">{{ block.super }}</div>
+    {% endif %}
 {% endblock %}

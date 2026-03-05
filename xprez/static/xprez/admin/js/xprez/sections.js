@@ -44,7 +44,7 @@ export class XprezSection extends XprezContentBase {
     }
 
     get unmanagedContainers() {
-        return [this.gridEl, this.configsContainerEl].filter(Boolean);
+        return [...super.unmanagedContainers, this.gridEl];
     }
 
     get configsContainerSelector() { return "[data-component='xprez-section-configs']"; }

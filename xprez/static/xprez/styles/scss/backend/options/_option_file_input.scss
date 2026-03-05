@@ -7,15 +7,35 @@
     align-items: center;
     padding: .35rem 0;
     margin-left: -.5rem;
+    width: 100%;
 
     .xprez-admin-file-input__media-img {
         max-height: 170px;
         max-width: 100%;
     }
 
-    svg {
-        width: 1.5rem;
-        height: 1.5rem;
+    &-upload-btn {
+        --x-admin-option-button-hover-bg: #{$b-gray-2};
+        
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: .5rem;
+        width: 100%;
+        padding-left: .25rem;
+        height: auto;
+        min-height: var(--x-admin-icon-button-size);
+
+        svg {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+
+        }
+
+        input[type="file"] {
+            height: 0;
+        }
     }
 }
 
@@ -24,6 +44,7 @@
         position: relative;
         overflow: hidden;
         border-radius: var(--x-admin-border-radius-md);
+        background: $b-gray-1;
 
         &:hover {
             --item-action-menu-translate: 0;
@@ -32,6 +53,10 @@
 
     &__img-cont {
         position: relative;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        line-height: 1.2;
 
         &.crop {
             aspect-ratio: 2/1;
@@ -81,20 +106,41 @@
         }
     }
 
+    &__media-file-icon {
+        width: 2.5rem;
+        min-height: 2.5rem;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: darken($b-gray-2, 2%);
+        border-radius: var(--x-admin-border-radius-sm);
+        flex-shrink: 0;
+    }
+
+    &__media-file-name {
+        display: inline-block;
+        padding: .5rem .75rem .5rem 0;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+
     &__media-actions {
         position: absolute;
         top: 0;
         bottom: 0;
         right: 0;
-        padding: .5rem;
+        padding: .25rem;
         background: $b-gray-3;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         gap: .25rem;
         justify-content: center;
         align-items: center;
         transition: transform 0.2s ease-in-out;
         transform: translateX(var(--item-action-menu-translate));
-        // border-radius: 0 0 var(--x-admin-border-radius-sm) var(--x-admin-border-radius-sm);
+        border-radius: var(--x-admin-border-radius-md);
     }
 }

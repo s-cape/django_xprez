@@ -5,7 +5,7 @@
 
 // @import "../css_variables";
 @import "config/variables";
-@import "config/admin-css-variables"; 
+@import "config/admin_css_variables"; 
 
 // Frontend styles
 
@@ -18,7 +18,7 @@
 
 // Backend styles
 
-@import "font/app-font";
+@import "font/app_font";
 @import "font/icons";
 
 @import "app/app_base";
@@ -28,11 +28,10 @@
 @import "app/submenu";
 @import "app/top_menu";
 @import "app/add_list";
+@import "app/error";
 @import "app/delete_info";
 @import "app/section/section";
 @import "app/section/section_grid";
-@import "app/module/module";
-@import "app/module/error";
 
 @import "tools/sortable";
 @import "tools/ui_helpers";
@@ -40,25 +39,25 @@
 @import "comp/button";
 @import "comp/popover";
 
-@import "modules/ck-editor";
-@import "modules/grid-boxes";
-@import "modules/image-text";
-@import "modules/medium-editor";
-@import "modules/photo-gallery";
+@import "modules/ck_editor";
+@import "modules/grid_boxes";
+@import "modules/image_text";
+@import "modules/medium_editor";
+@import "modules/photo_gallery";
 @import "modules/text";
 
 @import "module/form_table";
-@import "module/module-base";
-@import "module/module-content";
-@import "module/module-title";
+@import "module/module_base";
+@import "module/module_content";
+@import "module/module_title";
 @import "module/multi/adder";
 @import "module/multi/items";
 
-@import "options/text-button"; 
-@import "options/icon-button"; 
-@import "options/deprecated-options";
-@import "options/option-container";
-@import "options/option-group";
+@import "options/text_button"; 
+@import "options/icon_button"; 
+@import "options/deprecated_options";
+@import "options/option_container";
+@import "options/option_group";
 @import "options/option";
-@import "options/option-size";
+@import "options/option_size";
 @import "options/option_file_input";

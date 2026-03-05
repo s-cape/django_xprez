@@ -10,7 +10,7 @@ def _get_unit_string(css_config, choice=None):
         return ""
     units = css_config.get("units", "")
     if isinstance(units, dict):
-        return units.get(choice, "") if choice else ""
+        return units.get(choice, "") if choice is not None else ""
     return units
 
 
@@ -130,7 +130,10 @@ class CssMixin:
         return UnitsProxy(self)
 
     def get_css_config_keys(self):
-        """Return keys for XPREZ_CSS lookup in priority order. Override in subclasses."""
+        """
+        Return keys for XPREZ_CSS lookup in priority order.
+        Override in subclasses.
+        """
         raise NotImplementedError()
 
 
@@ -138,8 +141,9 @@ class CssParentMixin(CssMixin):
     """
     Extends CssMixin with responsive CSS rendering for parent elements.
 
-    Provides its own get_css_variables() AND aggregates get_css_variables() from child configs,
-    merging them across breakpoints into a single <style> tag.
+    Provides its own get_css_variables() AND aggregates
+    get_css_variables() from child configs, merging them across
+    breakpoints into a single <style> tag.
     """
 
     css_breakpoint = 0
@@ -217,21 +221,21 @@ class CssParentMixin(CssMixin):
     @staticmethod
     def _format_css_rule(selector, breakpoint, css_variables):
         """
-        Wrap CSS vars in selector and media query (if breakpoint has min_width).
+        Wrap CSS vars in selector and media query (if breakpoint has max_width).
 
         ("#id", 0, {"a": 1}) -> "#id{--x-a: 1;}"
-        ("#id", 2, {"a": 1}) -> "@media (min-width: 768px){#id{--x-a: 1;}}"
+        ("#id", 3, {"a": 1}) -> "@media (max-width: 991px){#id{--x-a: 1;}}"
         """
         if not css_variables:
             return ""
 
         css_variables_string = CssParentMixin._format_css_variables(css_variables)
-        min_width = settings.XPREZ_BREAKPOINTS[breakpoint]["min_width"]
+        max_width = settings.XPREZ_BREAKPOINTS[breakpoint]["max_width"]
         rule = f"{selector}{{{css_variables_string};}}"
-        if not min_width:
+        if max_width is None:
             return rule
         else:
-            return f"@media (min-width: {min_width}px) {{{rule}}}"
+            return f"@media (max-width: {max_width}px) {{{rule}}}"
 
     def render_css_variables(self):
         """

@@ -5,10 +5,11 @@ export class XprezContentBase {
     constructor(el) {
         this.el = el;
         this.configsContainerEl = this.el.querySelector(this.configsContainerSelector);
+        this.shortcutsContainerEl = this.el.querySelector("[data-component='xprez-shortcuts']");
     }
 
     get unmanagedContainers() {
-        return [this.configsContainerEl].filter(Boolean);
+        return [this.configsContainerEl, this.shortcutsContainerEl];
     }
 
     isUnmanaged(el) {

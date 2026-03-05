@@ -2,6 +2,9 @@
     border-radius: var(--x-admin-border-radius-md);
     overflow: hidden;
     position: relative;
+	border: 1px solid $b-gray-4;
+	margin: 1rem 0;
+	background: var(--x-admin-module-bg); 
 
     &[data-mode="edit"],
     &[data-mode="selected"],

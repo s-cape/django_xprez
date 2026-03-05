@@ -38,12 +38,12 @@ XPREZ_STAFF_MEMBER_REQUIRED = (
 )
 
 XPREZ_BREAKPOINTS = {
-    0: {"name": "Basic style (&gt; 0px)", "min_width": 0},
-    1: {"name": "Small devices (&gt; 500px)", "min_width": 500},
-    2: {"name": "Tablets (&gt; 768px)", "min_width": 768},
-    3: {"name": "Large devices (&gt; 992px)", "min_width": 992},
-    4: {"name": "Desktops (&gt; 1200px)", "min_width": 1200},
-    5: {"name": "Extra large devices (&gt; 1500px)", "min_width": 1500},
+    0: {"name": "Base style (all sizes &lt; ∞)", "max_width": None},
+    1: {"name": "Desktops (&lt; 1500px)", "max_width": 1499},
+    2: {"name": "Large devices (&lt; 1200px)", "max_width": 1199},
+    3: {"name": "Tablets (&lt; 992px)", "max_width": 991},
+    4: {"name": "Small devices (&lt; 768px)", "max_width": 767},
+    5: {"name": "Mobile (&lt; 500px)", "max_width": 499},
 }
 XPREZ_GALLERY_FULL_WIDTH_PX = 2700
 
@@ -88,37 +88,37 @@ XPREZ_DEFAULTS = {
                 {
                     "value": 2,
                     "label": "2",
-                    "config": {"columns": {0: 1, 1: 2, 2: 2, 3: 2, 4: 2, 5: 2}},
+                    "config": {"columns": {0: 2, 1: 2, 2: 2, 3: 2, 4: 2, 5: 1}},
                 },
                 {
                     "value": 3,
                     "label": "3",
-                    "config": {"columns": {0: 1, 1: 2, 2: 3, 3: 3, 4: 3, 5: 3}},
+                    "config": {"columns": {0: 3, 1: 3, 2: 3, 3: 3, 4: 2, 5: 1}},
                 },
                 {
                     "value": 4,
                     "label": "4",
-                    "config": {"columns": {0: 1, 1: 2, 2: 3, 3: 3, 4: 4, 5: 4}},
+                    "config": {"columns": {0: 4, 1: 4, 2: 3, 3: 3, 4: 2, 5: 1}},
                 },
                 {
                     "value": 5,
                     "label": "5",
-                    "config": {"columns": {0: 2, 1: 2, 2: 3, 3: 4, 4: 5, 5: 5}},
+                    "config": {"columns": {0: 5, 1: 5, 2: 4, 3: 3, 4: 2, 5: 2}},
                 },
                 {
                     "value": 6,
                     "label": "6",
-                    "config": {"columns": {0: 2, 1: 3, 2: 3, 3: 4, 4: 6, 5: 6}},
+                    "config": {"columns": {0: 6, 1: 6, 2: 4, 3: 3, 4: 3, 5: 2}},
                 },
                 {
                     "value": 7,
                     "label": "7",
-                    "config": {"columns": {0: 2, 1: 3, 2: 4, 3: 5, 4: 7, 5: 7}},
+                    "config": {"columns": {0: 7, 1: 7, 2: 5, 3: 4, 4: 3, 5: 2}},
                 },
                 {
                     "value": 8,
                     "label": "8",
-                    "config": {"columns": {0: 2, 1: 3, 2: 4, 3: 6, 4: 8, 5: 8}},
+                    "config": {"columns": {0: 8, 1: 8, 2: 6, 3: 4, 4: 3, 5: 2}},
                 },
             ),
         },
@@ -246,7 +246,7 @@ XPREZ_DEFAULTS = {
         "xprez.GalleryModule": {
             "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_CENTER,
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_CENTER,
-            "columns": 4,
+            "columns": 1,
             "gap_choice": constants.GAP_SMALL,
         },
         "xprez.NumbersModule": {
@@ -269,37 +269,37 @@ XPREZ_DEFAULTS = {
                     {
                         "value": 2,
                         "label": "2",
-                        "config": {"columns": {0: 1, 1: 2, 2: 2, 3: 2, 4: 2, 5: 2}},
+                        "config": {"columns": {0: 2, 1: 2, 2: 2, 3: 2, 4: 2, 5: 1}},
                     },
                     {
                         "value": 3,
                         "label": "3",
-                        "config": {"columns": {0: 1, 1: 2, 2: 3, 3: 3, 4: 3, 5: 3}},
+                        "config": {"columns": {0: 3, 1: 3, 2: 3, 3: 3, 4: 2, 5: 1}},
                     },
                     {
                         "value": 4,
                         "label": "4",
-                        "config": {"columns": {0: 1, 1: 2, 2: 3, 3: 3, 4: 4, 5: 4}},
+                        "config": {"columns": {0: 4, 1: 4, 2: 3, 3: 3, 4: 2, 5: 1}},
                     },
                     {
                         "value": 5,
                         "label": "5",
-                        "config": {"columns": {0: 2, 1: 2, 2: 3, 3: 4, 4: 5, 5: 5}},
+                        "config": {"columns": {0: 5, 1: 5, 2: 4, 3: 3, 4: 2, 5: 2}},
                     },
                     {
                         "value": 6,
                         "label": "6",
-                        "config": {"columns": {0: 2, 1: 3, 2: 3, 3: 4, 4: 6, 5: 6}},
+                        "config": {"columns": {0: 6, 1: 6, 2: 4, 3: 3, 4: 3, 5: 2}},
                     },
                     {
                         "value": 7,
                         "label": "7",
-                        "config": {"columns": {0: 2, 1: 3, 2: 4, 3: 5, 4: 7, 5: 7}},
+                        "config": {"columns": {0: 7, 1: 7, 2: 5, 3: 4, 4: 3, 5: 2}},
                     },
                     {
                         "value": 8,
                         "label": "8",
-                        "config": {"columns": {0: 2, 1: 3, 2: 4, 3: 6, 4: 8, 5: 8}},
+                        "config": {"columns": {0: 8, 1: 8, 2: 6, 3: 4, 4: 3, 5: 2}},
                     },
                 ),
             },
@@ -395,9 +395,9 @@ XPREZ_CSS = {
             },
             "values": {
                 constants.MARGIN_NONE: {0: 0},
-                constants.MARGIN_SMALL: {0: 1, 1: 1.5, 3: 2},
-                constants.MARGIN_MEDIUM: {0: 2, 1: 3, 3: 5},
-                constants.MARGIN_LARGE: {0: 4, 1: 6, 3: 10},
+                constants.MARGIN_SMALL: {0: 2, 2: 1.5, 4: 1},
+                constants.MARGIN_MEDIUM: {0: 5, 2: 3, 4: 2},
+                constants.MARGIN_LARGE: {0: 10, 2: 6, 4: 4},
             },
         },
         "padding_left": {
@@ -410,9 +410,9 @@ XPREZ_CSS = {
             },
             "values": {
                 constants.PADDING_NONE: {0: 0},
-                constants.PADDING_SMALL: {0: 1, 1: 2},
-                constants.PADDING_MEDIUM: {0: 2, 1: 4},
-                constants.PADDING_LARGE: {0: 4, 1: 8},
+                constants.PADDING_SMALL: {0: 2, 4: 1},
+                constants.PADDING_MEDIUM: {0: 4, 4: 2},
+                constants.PADDING_LARGE: {0: 8, 4: 4},
             },
         },
         "padding_right": {
@@ -425,9 +425,9 @@ XPREZ_CSS = {
             },
             "values": {
                 constants.PADDING_NONE: {0: 0},
-                constants.PADDING_SMALL: {0: 1, 1: 2},
-                constants.PADDING_MEDIUM: {0: 2, 1: 4},
-                constants.PADDING_LARGE: {0: 4, 1: 8},
+                constants.PADDING_SMALL: {0: 2, 4: 1},
+                constants.PADDING_MEDIUM: {0: 4, 4: 2},
+                constants.PADDING_LARGE: {0: 8, 4: 4},
             },
         },
         "padding_top": {
@@ -440,9 +440,9 @@ XPREZ_CSS = {
             },
             "values": {
                 constants.PADDING_NONE: {0: 0},
-                constants.PADDING_SMALL: {0: 1, 1: 1.5, 3: 2},
-                constants.PADDING_MEDIUM: {0: 2, 1: 3, 3: 5},
-                constants.PADDING_LARGE: {0: 4, 1: 6, 3: 10},
+                constants.PADDING_SMALL: {0: 2, 2: 1.5, 4: 1},
+                constants.PADDING_MEDIUM: {0: 5, 2: 3, 4: 2},
+                constants.PADDING_LARGE: {0: 10, 2: 6, 4: 4},
             },
         },
         "padding_bottom": {
@@ -455,9 +455,9 @@ XPREZ_CSS = {
             },
             "values": {
                 constants.PADDING_NONE: {0: 0},
-                constants.PADDING_SMALL: {0: 1, 1: 1.5, 3: 2},
-                constants.PADDING_MEDIUM: {0: 2, 1: 3, 3: 5},
-                constants.PADDING_LARGE: {0: 4, 1: 6, 3: 10},
+                constants.PADDING_SMALL: {0: 2, 2: 1.5, 4: 1},
+                constants.PADDING_MEDIUM: {0: 5, 2: 3, 4: 2},
+                constants.PADDING_LARGE: {0: 10, 2: 6, 4: 4},
             },
         },
         "gap": {
@@ -468,9 +468,9 @@ XPREZ_CSS = {
                 constants.GAP_CUSTOM: "px",
             },
             "values": {
-                constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
-                constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
-                constants.GAP_LARGE: {0: 40, 1: 60, 2: 80},
+                constants.GAP_SMALL: {0: 20, 3: 15, 5: 10},
+                constants.GAP_MEDIUM: {0: 40, 3: 30, 5: 20},
+                constants.GAP_LARGE: {0: 80, 3: 60, 5: 40},
             },
         },
     },
@@ -489,9 +489,9 @@ XPREZ_CSS = {
                 },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
-                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
-                    constants.PADDING_LARGE: {0: 2, 1: 4},
+                    constants.PADDING_SMALL: {0: 1, 4: 0.5},
+                    constants.PADDING_MEDIUM: {0: 2, 4: 1},
+                    constants.PADDING_LARGE: {0: 4, 4: 2},
                 },
             },
             "padding_right": {
@@ -504,9 +504,9 @@ XPREZ_CSS = {
                 },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
-                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
-                    constants.PADDING_LARGE: {0: 2, 1: 4},
+                    constants.PADDING_SMALL: {0: 1, 4: 0.5},
+                    constants.PADDING_MEDIUM: {0: 2, 4: 1},
+                    constants.PADDING_LARGE: {0: 4, 4: 2},
                 },
             },
             "padding_top": {
@@ -519,9 +519,9 @@ XPREZ_CSS = {
                 },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
-                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
-                    constants.PADDING_LARGE: {0: 2, 1: 4},
+                    constants.PADDING_SMALL: {0: 1, 4: 0.5},
+                    constants.PADDING_MEDIUM: {0: 2, 4: 1},
+                    constants.PADDING_LARGE: {0: 4, 4: 2},
                 },
             },
             "padding_bottom": {
@@ -534,9 +534,9 @@ XPREZ_CSS = {
                 },
                 "values": {
                     constants.PADDING_NONE: {0: 0},
-                    constants.PADDING_SMALL: {0: 0.5, 1: 1},
-                    constants.PADDING_MEDIUM: {0: 1, 1: 2},
-                    constants.PADDING_LARGE: {0: 2, 1: 4},
+                    constants.PADDING_SMALL: {0: 1, 4: 0.5},
+                    constants.PADDING_MEDIUM: {0: 2, 4: 1},
+                    constants.PADDING_LARGE: {0: 4, 4: 2},
                 },
             },
             "border_radius": {
@@ -559,18 +559,18 @@ XPREZ_CSS = {
             "media_icon_max_size": {"units": "px"},
             "font_size": {
                 "values": {
-                    constants.FONT_SIZE_SMALLEST: {0: 12, 2: 14},
-                    constants.FONT_SIZE_SMALL: {0: 14, 2: 16},
-                    constants.FONT_SIZE_NORMAL: {0: 16, 2: 18},
-                    constants.FONT_SIZE_LARGE: {0: 20, 2: 24},
-                    constants.FONT_SIZE_LARGEST: {0: 28, 2: 32},
+                    constants.FONT_SIZE_SMALLEST: {0: 14, 3: 12},
+                    constants.FONT_SIZE_SMALL: {0: 16, 3: 14},
+                    constants.FONT_SIZE_NORMAL: {0: 18, 3: 16},
+                    constants.FONT_SIZE_LARGE: {0: 24, 3: 20},
+                    constants.FONT_SIZE_LARGEST: {0: 32, 3: 28},
                 },
             },
         },
         "xprez.GalleryModule": {
             "gap": {
                 "units": {
-                    constants.GAP_NONE: "",
+                    constants.GAP_NONE: "px",
                     constants.GAP_SMALL: "px",
                     constants.GAP_MEDIUM: "px",
                     constants.GAP_LARGE: "px",
@@ -578,16 +578,16 @@ XPREZ_CSS = {
                 },
                 "values": {
                     constants.GAP_NONE: {0: 0},
-                    constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.GAP_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.GAP_SMALL: {0: 20, 3: 15, 5: 10},
+                    constants.GAP_MEDIUM: {0: 40, 3: 30, 5: 20},
+                    constants.GAP_LARGE: {0: 80, 3: 60, 5: 40},
                 },
             },
         },
         "xprez.NumbersModule": {
             "gap": {
                 "units": {
-                    constants.GAP_NONE: "",
+                    constants.GAP_NONE: "px",
                     constants.GAP_SMALL: "px",
                     constants.GAP_MEDIUM: "px",
                     constants.GAP_LARGE: "px",
@@ -595,9 +595,9 @@ XPREZ_CSS = {
                 },
                 "values": {
                     constants.GAP_NONE: {0: 0},
-                    constants.GAP_SMALL: {0: 10, 1: 15, 2: 20},
-                    constants.GAP_MEDIUM: {0: 20, 1: 30, 2: 40},
-                    constants.GAP_LARGE: {0: 40, 1: 60, 2: 80},
+                    constants.GAP_SMALL: {0: 20, 3: 15, 5: 10},
+                    constants.GAP_MEDIUM: {0: 40, 3: 30, 5: 20},
+                    constants.GAP_LARGE: {0: 80, 3: 60, 5: 40},
                 },
             },
         },
