@@ -99,7 +99,7 @@ class ModuleForm(
         "position",
         "section",
     )
-    system_fields = DeletableFormMixin.system_fields + ("live_sync",)
+    system_fields = DeletableFormMixin.system_fields + ("live_sync", "sync_group")
 
     options_fields = (
         "alternate_color",

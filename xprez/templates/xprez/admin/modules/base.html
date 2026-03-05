@@ -122,5 +122,6 @@
         <input type="hidden" name="module-id" value="{{ module.pk }}">
         {{ module.admin_form.position.as_hidden }}
         {{ module.admin_form.section.as_hidden }}
+        {{ module.admin_form.sync_group.as_hidden }}
     {% endblock %}
 </div>
