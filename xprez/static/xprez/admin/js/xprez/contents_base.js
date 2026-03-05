@@ -9,7 +9,7 @@ export class XprezContentBase {
     }
 
     get unmanagedContainers() {
-        return [this.configsContainerEl, this.shortcutsContainerEl];
+        return [this.configsContainerEl, this.shortcutsContainerEl].filter(c => c !== null);
     }
 
     isUnmanaged(el) {
