@@ -22,8 +22,10 @@ export class XprezModule extends XprezContentBase {
 
     initFields() {
         this.fields = [];
+        const shortcutsContainer = this.el.querySelector("[data-component='xprez-shortcuts']");
         this.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
             if (this.configsContainerEl?.contains(fieldEl)) return;
+            if (shortcutsContainer?.contains(fieldEl)) return;
             this.initField(fieldEl);
         });
     }
