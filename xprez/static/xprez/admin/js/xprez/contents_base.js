@@ -7,10 +7,18 @@ export class XprezContentBase {
         this.configsContainerEl = this.el.querySelector(this.configsContainerSelector);
     }
 
+    get unmanagedContainers() {
+        return [this.configsContainerEl].filter(Boolean);
+    }
+
+    isUnmanaged(el) {
+        return this.unmanagedContainers.some(c => c.contains(el));
+    }
+
     initFields() {
         this.fields = [];
         this.popover.el.querySelectorAll('[data-component="field"]').forEach(fieldEl => {
-            if (this.configsContainerEl.contains(fieldEl)) return;
+            if (this.isUnmanaged(fieldEl)) return;
             this.fields.push(new XprezFieldController(this, fieldEl));
         });
     }
@@ -21,7 +29,7 @@ export class XprezContentBase {
 
     initShowWhens() {
         this.popover.el.querySelectorAll("[data-show-when]").forEach(showWhenEl => {
-            if (this.configsContainerEl?.contains(showWhenEl)) return;
+            if (this.isUnmanaged(showWhenEl)) return;
             new XprezShowWhen(this, showWhenEl);
         });
     }

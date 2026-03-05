@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.models.modules import Module
-from xprez.utils import import_class
+from xprez.utils import copy_model, import_class
 
 
 class MultiModule(Module):
@@ -91,15 +91,14 @@ class MultiModule(Module):
         item.save()
         return item
 
-    def copy(self, for_container=None, save=True, position=None):
-        inst = super().copy(for_container, save=save, position=position)
-        if save:
-            self.copy_items(inst)
-        return inst
+    def duplicate_to(self, target_section, saved=False):
+        new_module = super().duplicate_to(target_section, saved=saved)
+        self.duplicate_items(new_module, saved=saved)
+        return new_module
 
-    def copy_items(self, inst):
+    def duplicate_items(self, new_module, saved=False):
         for item in getattr(self, self.items_attribute).filter(saved=True):
-            item.copy(inst)
+            item.duplicate_to(new_module, saved=saved)
 
     @classmethod
     def get_admin_urls(cls):
@@ -154,19 +153,12 @@ class MultiModuleItem(models.Model):
         module_pk = getattr(self, f"{self.module_foreign_key}_id")
         return f"item-module-{module_pk}-{self.pk}"
 
-    def copy(self, for_module, save=True):
-        if not for_module:
-            for_module = getattr(self, self.module_foreign_key)
-        initial = {
-            field.name: getattr(self, field.name)
-            for field in self._meta.fields
-            if not field.primary_key
-        }
-        inst = self.__class__(**initial)
-        setattr(inst, self.module_foreign_key, for_module)
-        if save:
-            inst.save()
-        return inst
+    def duplicate_to(self, target_module, saved=False):
+        new_item = copy_model(self)
+        setattr(new_item, self.module_foreign_key, target_module)
+        new_item.saved = saved
+        new_item.save()
+        return new_item
 
     class Meta:
         abstract = True

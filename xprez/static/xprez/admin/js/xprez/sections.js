@@ -1,19 +1,38 @@
 import { XprezContentBase } from './contents_base.js';
 import { XprezSectionPopover } from './popovers.js';
-import { XprezAdderSectionBefore, XprezAdderSectionEnd, XprezSectionConfigAdder } from './adders.js';
+import { XprezSectionAdderSectionBefore, XprezModuleAdderSectionEnd, XprezSectionConfigAdder } from './adders.js';
+import { XprezSectionCopyMenu } from './copy.js';
 import { XprezSectionDeleter } from './deleters.js';
 import { XprezSectionConfig, XprezConfigParentMixin } from './configs.js';
 import { XprezSortable } from './sortable.js';
 import { XprezShortcutParentMixin } from './shortcuts.js';
+import { XprezCollapserMixin } from './collapser.js';
+
+export class XprezSectionSymlink {
+    constructor(xprez, el) {
+        this.xprez = xprez;
+        this.el = el;
+        this.deleter = new XprezSectionDeleter(this);
+        this.adderBefore = new XprezSectionAdderSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-before']"), this);
+        this.initCollapser();
+    }
+
+    id() { return this.el.querySelector("[name='section-symlink-id']").value; }
+    get collapsedStorageKey() { return "xprez-section-symlinks-collapsed"; }
+    get modules() { return []; }
+    get popover() { return null; }
+}
+
+Object.assign(XprezSectionSymlink.prototype, XprezCollapserMixin);
 
 export class XprezSection extends XprezContentBase {
     constructor(xprez, sectionEl) {
         super(sectionEl);
         this.xprez = xprez;
-        this.popover = new XprezSectionPopover(this);
-        this.adderBefore = new XprezAdderSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-before']"), this);
-        this.adderEnd = new XprezAdderSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-end']"), this);
         this.deleter = new XprezSectionDeleter(this);
+        this.popover = new XprezSectionPopover(this);
+        this.adderBefore = new XprezSectionAdderSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-before']"), this);
+        this.adderEnd = new XprezModuleAdderSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-end']"), this);
         this.initModules();
         this.initFields();
         this.initCollapser();
@@ -21,6 +40,11 @@ export class XprezSection extends XprezContentBase {
         this.initModulesSortable();
         this.initShowWhens();
         this.initShortcuts();
+        this.initCopyMenus();
+    }
+
+    get unmanagedContainers() {
+        return [this.gridEl, this.configsContainerEl].filter(Boolean);
     }
 
     get configsContainerSelector() { return "[data-component='xprez-section-configs']"; }
@@ -29,6 +53,7 @@ export class XprezSection extends XprezContentBase {
     createConfigAdder() { return new XprezSectionConfigAdder(this.xprez, this); }
 
     id() { return this.el.querySelector("[name='section-id']").value; }
+    get collapsedStorageKey() { return "xprez-sections-collapsed"; }
 
     initModules() {
         this.gridEl = this.el.querySelector("[data-component='xprez-section-grid']");
@@ -48,25 +73,11 @@ export class XprezSection extends XprezContentBase {
         return module;
     }
 
-    get collapsedIds() {
-        try { return JSON.parse(localStorage.getItem("xprez-sections-collapsed") || "[]"); } catch { return []; }
-    }
-    initCollapser() {
-        this.collapserEl = this.el.querySelector("[data-component='xprez-section-collapser']");
-        this.collapserEl.addEventListener("click", this.toggleCollapse.bind(this));
-        const id = this.id();
-        if (id && this.collapsedIds.includes(id)) this.el.setAttribute("data-collapsed", "");
-    }
-    isCollapsed() { return this.el.hasAttribute("data-collapsed"); }
-    collapse() { this.el.setAttribute("data-collapsed", ""); this.persistCollapse(); }
-    expand() { this.el.removeAttribute("data-collapsed"); this.persistCollapse(); }
-    toggleCollapse() { this.isCollapsed() ? this.expand() : this.collapse(); }
-    persistCollapse() {
-        const id = this.id();
-        if (!id) return;
-        let ids = this.collapsedIds.filter(i => i !== id);
-        if (this.isCollapsed()) ids.push(id);
-        localStorage.setItem("xprez-sections-collapsed", JSON.stringify(ids));
+    initCopyMenus() {
+        this.el.querySelectorAll('[data-component="xprez-copy-menu"]').forEach(el => {
+            if (this.isUnmanaged(el)) return;
+            new XprezSectionCopyMenu(el, this);
+        });
     }
 
     initModulesSortable() {
@@ -78,5 +89,4 @@ export class XprezSection extends XprezContentBase {
     }
 }
 
-Object.assign(XprezSection.prototype, XprezConfigParentMixin);
-Object.assign(XprezSection.prototype, XprezShortcutParentMixin);
+Object.assign(XprezSection.prototype, XprezCollapserMixin, XprezConfigParentMixin, XprezShortcutParentMixin);

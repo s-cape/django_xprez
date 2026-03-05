@@ -1,6 +1,16 @@
+import copy
 import random
 
 from .conf import settings
+
+
+def copy_model(instance):
+    """Return an unsaved shallow copy of a model instance, ready for insert."""
+    inst = copy.copy(instance)
+    inst.pk = None
+    inst.id = None
+    inst._state.adding = True
+    return inst
 
 
 def import_class(cls):

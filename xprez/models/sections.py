@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import pluralize
 from django.template.loader import render_to_string
 
 from xprez import constants
@@ -7,14 +8,11 @@ from xprez.models.configs import ConfigParentMixin
 from xprez.utils import import_class
 
 
-class Section(ConfigParentMixin, models.Model):
-    front_template_name = "xprez/section.html"
-    admin_template_name = "xprez/admin/section.html"
-
+class SectionBase(models.Model):
     container = models.ForeignKey(
         "xprez.Container",
         on_delete=models.SET_NULL,
-        related_name="sections",
+        related_name="%(class)ss",
         editable=False,
         null=True,
     )
@@ -23,6 +21,40 @@ class Section(ConfigParentMixin, models.Model):
     saved = models.BooleanField(default=False, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     changed = models.DateTimeField(auto_now=True, editable=False)
+
+    class Meta:
+        abstract = True
+        ordering = ("position",)
+
+    @property
+    def instance_key(self):
+        return f"{self._meta.model_name}-{self.pk}"
+
+    def render_front(self, context):
+        raise NotImplementedError
+
+    def render_admin(self, context):
+        context[
+            "available_modules"
+        ] = self.admin_form.xprez_admin.xprez_add_menu_module_classes(self.container)
+        return render_to_string(self.admin_template_name, context)
+
+    def build_admin_form(self, admin, data=None, files=None):
+        raise NotImplementedError
+
+    def is_admin_form_valid(self):
+        raise NotImplementedError
+
+    def save_admin_form(self, request):
+        raise NotImplementedError
+
+    def duplicate_to(self, target_container, saved=False):
+        raise NotImplementedError
+
+
+class Section(ConfigParentMixin, SectionBase):
+    front_template_name = "xprez/section.html"
+    admin_template_name = "xprez/admin/sections/section.html"
 
     max_width_choice = models.CharField(
         verbose_name="Max width",
@@ -45,8 +77,9 @@ class Section(ConfigParentMixin, models.Model):
     )
     css_class = models.CharField(max_length=100, null=True, blank=True)
 
-    class Meta:
-        ordering = ("position",)
+    @property
+    def instance_key(self):
+        return f"section-{self.pk}"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -76,10 +109,6 @@ class Section(ConfigParentMixin, models.Model):
         if self.background_color:
             css_variables["section-background-color"] = self.background_color
         return css_variables
-
-    @property
-    def instance_key(self):
-        return f"section-{self.pk}"
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class("xprez.admin.forms.SectionForm")
@@ -144,22 +173,73 @@ class Section(ConfigParentMixin, models.Model):
                 config.save_admin_form(request)
 
     def render_admin(self, context):
-        xprez_admin = self.admin_form.xprez_admin
-        context.update(
-            {
-                "section": self,
-                "available_modules": xprez_admin.xprez_get_available_modules(
-                    container=self.container
-                ),
-            }
-        )
-        return render_to_string(self.admin_template_name, context)
+        context["section"] = self
+        return super().render_admin(context)
 
     def get_modules(self):
         if not hasattr(self, "_modules"):
             self._modules = list(self.modules.filter(saved=True))
         return self._modules
 
+    def duplicate_to(self, target_container, saved=False):
+        new_section = self.__class__.objects.create(
+            container=target_container, saved=saved
+        )
+        self.duplicate_configs_to(new_section, saved=saved)
+        for module in self.modules.filter(saved=True):
+            module.polymorph.duplicate_to(new_section, saved=saved)
+        return new_section
+
+    def clipboard_verbose_name(self):
+        return self._meta.verbose_name
+
+    def clipboard_text_preview(self):
+        count = self.modules.filter(saved=True).count()
+        return f"{count} module{pluralize(count)}"
+
     def render_front(self, context):
         context["section"] = self
         return render_to_string(self.front_template_name, context)
+
+
+class SectionSymlink(SectionBase):
+    admin_template_name = "xprez/admin/sections/section_symlink.html"
+
+    symlink = models.ForeignKey(
+        "xprez.Section",
+        on_delete=models.SET_NULL,
+        null=True,
+        editable=False,
+        related_name="symlinked_section_set",
+    )
+
+    class Meta:
+        verbose_name = "Linked section"
+
+    def build_admin_form(self, admin, data=None, files=None):
+        form_class = import_class("xprez.admin.forms.SectionSymlinkForm")
+        self.admin_form = form_class(
+            instance=self, prefix=self.instance_key, data=data, files=files
+        )
+        self.admin_form.xprez_admin = admin
+
+    def is_admin_form_valid(self):
+        return self.admin_form.is_valid()
+
+    def save_admin_form(self, request):
+        inst = self.admin_form.save(commit=False)
+        inst.save()
+
+    def render_admin(self, context):
+        context["section_symlink"] = self
+        return super().render_admin(context)
+
+    def duplicate_to(self, target_container, saved=False):
+        return SectionSymlink.objects.create(
+            container=target_container, symlink=self.symlink, saved=saved
+        )
+
+    def render_front(self, context):
+        if self.symlink:
+            return self.symlink.render_front(context)
+        return ""

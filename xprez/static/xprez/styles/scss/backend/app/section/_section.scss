@@ -16,7 +16,7 @@
     }
 
     &[data-collapsed] {
-        .xprez-section__footer, .xprez-section-grid {
+        .xprez-section__footer, .xprez-section-grid, .xprez-section__body {
             display: none;
         }
 

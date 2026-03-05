@@ -27,9 +27,11 @@ class Container(models.Model):
         else:
             return model.objects.get(pk=self.pk)
 
-    def copy_modules(self, for_container):
-        for module in self.modules.all():
-            module.polymorph.copy(for_container)
+    def duplicate_to(self, target_container, saved=False):
+        for section in self.sections.filter(saved=True):
+            section.duplicate_to(target_container, saved=saved)
+        for symlink in self.sectionsymlinks.filter(saved=True):
+            symlink.duplicate_to(target_container, saved=saved)
 
     def clipboard_verbose_name(self):
         return self.polymorph._meta.verbose_name
@@ -43,5 +45,7 @@ class Container(models.Model):
 
     def get_sections_front(self):
         if not hasattr(self, "_sections_front"):
-            self._sections_front = self.sections.filter(saved=True, visible=True)
+            sections = list(self.sections.filter(saved=True, visible=True))
+            symlinks = list(self.sectionsymlinks.filter(saved=True, visible=True))
+            self._sections_front = sorted(sections + symlinks, key=lambda s: s.position)
         return self._sections_front

@@ -15,10 +15,7 @@
         </div>
         <span class="xprez-option-group__title-text">{{ config.get_css_breakpoint_display|safe }}</span>
         {% if config.admin_form.delete %}
-            <span class="xprez-icon-btn" title="Remove breakpoint" data-component="{% block delete_trigger_component %}{% endblock %}">
-                <i class="xprez-icon-delete"></i>
-                <span data-hidden>{{ config.admin_form.delete }}</span>
-            </span>
+            {% block delete_trigger %}{% endblock %}
         {% endif %}
     </div>
 
@@ -26,7 +23,7 @@
     {% block fields %}{% endblock %}
 
     {% if config.admin_form.delete %}
-        {% block delete_info_content %}{% endblock %}
+        {% block delete_info %}{% endblock %}
     {% endif %}
 
     {% block config_hidden_fields %}{% endblock %}

@@ -4,6 +4,7 @@ from django import template
 from PIL import Image
 from sorl.thumbnail import get_thumbnail
 
+
 register = template.Library()
 
 

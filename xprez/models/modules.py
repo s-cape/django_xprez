@@ -1,13 +1,12 @@
 from django.apps import apps
 from django.db import models
-from django.db.models import F
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property, classproperty
 
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
-from xprez.utils import class_content_type, import_class
+from xprez.utils import class_content_type, copy_model, import_class
 
 
 class Module(ConfigParentMixin, models.Model):
@@ -34,7 +33,7 @@ class Module(ConfigParentMixin, models.Model):
     )
 
     live_sync = models.BooleanField("Change style for selected modules", default=True)
-    # sync_group = models.SmallIntegerField(null=True, blank=True)
+    sync_group = models.PositiveIntegerField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     changed = models.DateTimeField(auto_now=True, editable=False)
@@ -100,28 +99,13 @@ class Module(ConfigParentMixin, models.Model):
         else:
             return model.objects.get(pk=self.pk)
 
-    def copy(self, for_container=None, save=True, position=None):
-        if not for_container:
-            for_container = self.container
-
-        initial = {
-            field.name: getattr(self, field.name)
-            for field in self._meta.fields
-            if not field.primary_key
-        }
-        inst = self.__class__(**initial)
-        if position is None:
-            inst.position = self._count_new_module_position(for_container)
-        else:
-            inst.position = position
-            if for_container.modules.filter(position=position).exists():
-                for_container.modules.filter(position__gte=position).update(
-                    position=F("position") + 1
-                )
-        inst.container = for_container
-        if save:
-            inst.save()
-        return inst
+    def duplicate_to(self, target_section, saved=False):
+        new_module = copy_model(self)
+        new_module.section = target_section
+        new_module.saved = saved
+        new_module.save()
+        self.duplicate_configs_to(new_module, saved=saved)
+        return new_module
 
     def get_config_model(self):
         app_label, model_name = self.config_model.split(".")

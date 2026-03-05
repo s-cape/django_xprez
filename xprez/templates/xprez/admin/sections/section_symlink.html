@@ -1,0 +1,41 @@
+{% extends "xprez/admin/sections/section_base.html" %}
+
+{% block extra_css_classes %} xprez-section--symlink{% endblock %}
+{% block data_component %}xprez-section-symlink{% endblock %}
+{% block data_prefix %}{{ section_symlink.admin_form.prefix }}{% endblock %}
+
+{% block data_mode %}{# (empty)/delete #}{% endblock %}
+
+{% block before_header %}
+    {% include "xprez/admin/includes/adders/section.html" with class_name="xprez-add-before" component_name="xprez-adder-section-before" xprez_admin=section_symlink.admin_form.xprez_admin adder_container=section_symlink.container attributes="data-hidden" %}
+{% endblock %}
+
+{% block header_settings %}
+    <span class="xprez-admin-module__name-icon">
+        {% include "xprez/shared/icons/link.html" %}
+    </span>
+{% endblock %}
+
+{% block header_actions %}
+    {{ block.super }}
+    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title="Remove" delete_field=section_symlink.admin_form.delete %}
+{% endblock %}
+
+{% block section_body %}
+    <div class="xprez-admin-module__body xprez-section__body">
+        <div class="xprez-module__content-info">
+            {% include "xprez/shared/icons/page.html" %} <strong>{{ section_symlink.symlink.container.polymorph }}</strong>
+            <span class="xprez-module__content-info-arr">&#x203A;</span>
+            {% include "xprez/shared/icons/link.html" %} <strong>Section ({{ section_symlink.symlink.modules.count }} modules)</strong>
+        </div>
+    </div>
+{% endblock %}
+
+{% block delete_info %}
+    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-section" message_subject="link" %}
+{% endblock %}
+
+{% block hidden_fields %}
+    <input type="hidden" name="section-symlink-id" value="{{ section_symlink.pk }}">
+    {{ section_symlink.admin_form.position.as_hidden }}
+{% endblock %}

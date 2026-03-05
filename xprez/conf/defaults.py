@@ -18,10 +18,15 @@ XPREZ_MODULES_AUTOREGISTER_BUILTINS = [
     "xprez.CodeInputModule",
     "xprez.CodeTemplateModule",
     "xprez.AnchorModule",
+    "xprez.ModuleSymlink",
 ]
 XPREZ_MODULES_AUTOREGISTER_CUSTOM = "__all__"
 
-XPREZ_DEFAULT_AVAILABLE_MODULES = "__all__"
+XPREZ_MODULES_ALLOWED = "__all__"
+XPREZ_MODULES_ALLOWED_EXCLUDE = []
+XPREZ_MODULES_ADD_MENU = None
+XPREZ_MODULES_ADD_MENU_EXCLUDE = ["xprez.ModuleSymlink"]
+
 
 XPREZ_CODE_TEMPLATES_DIR = None
 XPREZ_CODE_TEMPLATES_PREFIX = "xprez/code_templates"

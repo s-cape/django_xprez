@@ -3,7 +3,7 @@ from django import forms
 from xprez.admin.shortcuts import ShortcutsMixin
 from xprez.conf import settings
 from xprez.models.configs import SectionConfig
-from xprez.models.sections import Section
+from xprez.models.sections import Section, SectionSymlink
 
 
 class PositionFormMixin:
@@ -69,6 +69,12 @@ class SectionForm(
     class Meta:
         model = Section
         fields = "__all__"
+
+
+class SectionSymlinkForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
+    class Meta:
+        model = SectionSymlink
+        fields = ("position",)
 
 
 class SectionConfigForm(DeletableFormMixin, forms.ModelForm):

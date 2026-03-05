@@ -47,7 +47,12 @@ $submenu-color: #343A40;
 		overflow: visible;
 		position: relative;
 
-		&.active .xprez-submenu {
+		// TODO:kaplick:review Beat the [class*="xprez-icon-btn"] { overflow: hidden } rule
+		&[class*="xprez-icon-btn"] {
+			overflow: visible;
+		}
+
+		&[data-open] .xprez-submenu {
 			display: flex;
 			visibility: visible;
 			opacity: 1;
@@ -74,4 +79,9 @@ $submenu-color: #343A40;
 			color: white;
 		}
 	}
+}
+
+// TODO:kaplick:review Allow the submenu to overflow the module boundary when open
+.xprez-admin-module:has(.xprez-submenu__toggle[data-open]) {
+	overflow: visible;
 }

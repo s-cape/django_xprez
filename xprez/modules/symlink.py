@@ -22,24 +22,3 @@ class ModuleSymlink(Module):
             return self.symlink.polymorph.render_front(*args, **kwargs)
         else:
             return ""
-
-
-class SectionSymlink(Module):
-    admin_template_name = "xprez/admin/modules/section_symlink.html"
-    admin_icon_template_name = "xprez/shared/icons/modules/section_symlink.html"
-    symlink = models.ForeignKey(
-        "xprez.Section",
-        on_delete=models.SET_NULL,
-        null=True,
-        editable=False,
-        related_name="symlinked_section_set",
-    )
-
-    class Meta:
-        verbose_name = "Linked section"
-
-    def render_front(self, context):
-        if self.symlink:
-            return self.symlink.render_front(context)
-        else:
-            return ""
