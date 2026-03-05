@@ -33,7 +33,7 @@ XPREZ_STAFF_MEMBER_REQUIRED = (
 )
 
 XPREZ_BREAKPOINTS = {
-    0: {"name": "Extra large devices (&lt; ∞)", "max_width": None},
+    0: {"name": "Base style (all sizes &lt; ∞)", "max_width": None},
     1: {"name": "Desktops (&lt; 1500px)", "max_width": 1499},
     2: {"name": "Large devices (&lt; 1200px)", "max_width": 1199},
     3: {"name": "Tablets (&lt; 992px)", "max_width": 991},

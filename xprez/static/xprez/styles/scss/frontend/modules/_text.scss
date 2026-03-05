@@ -27,6 +27,10 @@
         bottom: 0;
         left: 0;
         z-index: 1;
+
+        &:has(+ .xprez-text__text-wrapper) .xprez-text__image {
+            @include rfs.margin-bottom(1.5rem);
+        }
     }
 
     img {
@@ -42,7 +46,6 @@
         max-width: 100%;
         display: inline-block;
         height: auto;
-        @include rfs.margin-bottom(1.5rem);
     }
 }
 
