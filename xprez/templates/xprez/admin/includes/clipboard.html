@@ -41,9 +41,18 @@
                 {% else %}
                     <span class="xprez-warning">cannot paste here</span>
                 {% endif %}
+                <span
+                    class="xprez-btn xprez-btn--danger"
+                    data-component="xprez-clipboard-remove"
+                    data-url="{{ item.remove_url }}"
+                >
+                    {% include "xprez/shared/icons/cross.html" %} Remove
+                </span>
             </div>
         </div>
-    {% empty %}
-        <p>clipboard empty</p>
     {% endfor %}
+    <p
+        data-component="xprez-clipboard-empty"
+        {% if clipboard %}data-hidden{% endif %}
+    >clipboard empty</p>
 </div>

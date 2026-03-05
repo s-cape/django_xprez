@@ -6,6 +6,7 @@ from django.db import models
 from django.http import JsonResponse
 from django.urls import re_path
 from django.utils.decorators import method_decorator
+from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 
 from xprez import constants
@@ -95,7 +96,7 @@ class TextModule(TextModuleBase):
         return super().render_front(context)
 
     def clipboard_text_preview(self):
-        return truncate_with_ellipsis(self.text, CLIPBOARD_TEXT_MAX_LENGTH)
+        return truncate_with_ellipsis(strip_tags(self.text), CLIPBOARD_TEXT_MAX_LENGTH)
 
 
 class TextBaseConfig(ModuleConfig):

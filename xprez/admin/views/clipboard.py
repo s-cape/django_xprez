@@ -79,6 +79,13 @@ class ClipboardItemBase:
     def symlink_url(self):
         return self._paste_url(CLIPBOARD_SYMLINK_ACTION)
 
+    @property
+    def remove_url(self):
+        return reverse(
+            self.xprez_admin.xprez_clipboard_remove_url_name(),
+            args=[self.key, self.obj.pk],
+        )
+
     def _duplicate_modules_to(self, source_section, target_section):
         for module in source_section.modules.filter(saved=True):
             source_module = module.polymorph
@@ -226,6 +233,10 @@ class XprezAdminViewsClipboardMixin(object):
         self._add_clipboard_entry(request, (key, int(pk)))
         return HttpResponse()
 
+    def xprez_clipboard_remove(self, request, key, pk):
+        self._remove_clipboard_entry(request, (key, int(pk)))
+        return HttpResponse()
+
     def xprez_clipboard_paste(
         self, request, key, pk, action, target_container_pk, target_section_pk=None
     ):
@@ -276,6 +287,9 @@ class XprezAdminViewsClipboardMixin(object):
     def xprez_clipboard_clip_url_name(self):
         return self.xprez_admin_url_name("clipboard_clip", include_namespace=True)
 
+    def xprez_clipboard_remove_url_name(self):
+        return self.xprez_admin_url_name("clipboard_remove", include_namespace=True)
+
     def xprez_clipboard_paste_url_name(self):
         return self.xprez_admin_url_name("clipboard_paste", include_namespace=True)
 
@@ -301,6 +315,11 @@ class XprezAdminViewsClipboardMixin(object):
                 "xprez-clipboard-clip/<str:key>/<int:pk>/",
                 self.xprez_admin_view(self.xprez_clipboard_clip),
                 name=self.xprez_admin_url_name("clipboard_clip"),
+            ),
+            path(
+                "xprez-clipboard-remove/<str:key>/<int:pk>/",
+                self.xprez_admin_view(self.xprez_clipboard_remove),
+                name=self.xprez_admin_url_name("clipboard_remove"),
             ),
             path(
                 "xprez-clipboard-paste/<str:key>/<int:pk>/<str:action>/<int:target_container_pk>/",
@@ -329,9 +348,13 @@ class XprezAdminViewsClipboardMixin(object):
             pk, self, target_container, target_section
         )
 
+    def _normalize_entry(self, entry):
+        """Normalize to list to match JSON session serialization."""
+        return list(entry)
+
     def _add_clipboard_entry(self, request, entry):
         session_data = request.session.get(self.CLIPBOARD_SESSION_KEY, [])
-        session_data.insert(0, entry)
+        session_data.insert(0, self._normalize_entry(entry))
         request.session[self.CLIPBOARD_SESSION_KEY] = session_data[
             : self.CLIPBOARD_MAX_LENGTH
         ]
@@ -339,7 +362,7 @@ class XprezAdminViewsClipboardMixin(object):
     def _remove_clipboard_entry(self, request, entry):
         session_data = request.session.get(self.CLIPBOARD_SESSION_KEY, [])
         request.session[self.CLIPBOARD_SESSION_KEY] = [
-            e for e in session_data if e != entry
+            e for e in session_data if e != self._normalize_entry(entry)
         ]
 
     def _get_clipboard_items(self, request, target_container, target_section=None):

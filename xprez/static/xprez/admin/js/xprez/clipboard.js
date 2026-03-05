@@ -22,15 +22,26 @@ export class XprezClipboardList {
                     this.listContainerEl.innerHTML = html;
                     this.show();
                     executeScripts(this.listContainerEl);
-                    this.bindPasteButtons();
+                    this.onLoad();
                 });
         }
     }
 
-    bindPasteButtons() {
+    onLoad() {
+        this.emptyEl = this.listContainerEl.querySelector('[data-component="xprez-clipboard-empty"]');
         this.listContainerEl.querySelectorAll('[data-component="xprez-clipboard-paste"]').forEach(btn => {
             btn.addEventListener('click', () => this.onPaste(btn));
         });
+        this.listContainerEl.querySelectorAll('[data-component="xprez-clipboard-remove"]').forEach(btn => {
+            btn.addEventListener('click', () => this.onRemove(btn));
+        });
+    }
+
+    checkEmpty() {
+        const remaining = this.listContainerEl.querySelectorAll('.xprez-clipboard-list__item');
+        if (!remaining.length) {
+            this.emptyEl.removeAttribute('data-hidden');
+        }
     }
 
     onPaste(btn) {
@@ -43,6 +54,19 @@ export class XprezClipboardList {
                 items.forEach(({ html }) => this.adder.addFromHtml(html));
                 this.hide();
                 this.adder.hide();
+            });
+    }
+
+    onRemove(btn) {
+        fetch(btn.dataset.url, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': getCsrfToken() },
+        })
+            .then(response => {
+                if (response.ok) {
+                    btn.closest('.xprez-clipboard-list__item').remove();
+                    this.checkEmpty();
+                }
             });
     }
 }
