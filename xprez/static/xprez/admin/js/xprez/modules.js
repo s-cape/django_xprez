@@ -22,8 +22,8 @@ export class XprezModule extends XprezContentBase {
 
     initFields() {
         this.fields = [];
-        this.popover.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
-            if (this.configsContainerEl.contains(fieldEl)) return;
+        this.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
+            if (this.configsContainerEl?.contains(fieldEl)) return;
             this.initField(fieldEl);
         });
     }
