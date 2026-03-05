@@ -28,16 +28,16 @@
             >
                 <div class="xprez-admin-file-input__img-cont">
                     {% with thumb=widget.value|xprez_file_thumbnail %}
-                        <img
-                            class="xprez-admin-file-input__media-img"
-                            data-component="xprez-file-input-img"
-                            {% if thumb %}src="{{ thumb.url }}"{% else %}data-hidden{% endif %}
-                        />
                         {% if not thumb %}
                             <span class="xprez-admin-file-input__media-file-icon">
                                 {% include "xprez/shared/icons/paperclip.html" %}
                             </span>
                         {% endif %}
+                        <img
+                            class="xprez-admin-file-input__media-img"
+                            data-component="xprez-file-input-img"
+                            {% if thumb %}src="{{ thumb.url }}"{% else %}data-hidden{% endif %}
+                        />
                         <span
                             class="xprez-admin-file-input__media-file-name"
                             data-component="xprez-file-input-filename"
