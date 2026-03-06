@@ -132,7 +132,9 @@ export class XprezContentAdderSectionBase extends XprezContentAdderBase {
         super(xprez, el);
         this.section = section;
         this.setTriggerEl();
-        this.triggerEl.addEventListener("click", this.toggle.bind(this));
+        if (this.triggerEl) {
+            this.triggerEl.addEventListener("click", this.toggle.bind(this));
+        }
     }
 
     setTriggerEl() {}

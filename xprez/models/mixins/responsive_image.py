@@ -31,12 +31,15 @@ def _build_image_sizes(max_width, column_ranges):
             px_size = round(max_width / effective_columns)
             entries += [_media_entry(f"{px_size}px", bp_max_width)]
         elif prev_max_width is None or prev_max_width < max_width:
-            entries += [_media_entry(vw_size, max_width)]
-            px_size = round(max_width / effective_columns)
-            entries += [_media_entry(f"{px_size}px", bp_max_width)]
+            entries += [_media_entry(vw_size, bp_max_width)]
         else:
             entries += [_media_entry(vw_size, bp_max_width)]
     return ", ".join(entries)
+
+
+def _round_boundary_up(px):
+    """Round a breakpoint boundary up to the nearest 100 for clean srcset steps."""
+    return ((px + 99) // 100) * 100
 
 
 def _build_srcset_widths(max_width, full_width_cap, breakpoint_ranges):
@@ -45,25 +48,16 @@ def _build_srcset_widths(max_width, full_width_cap, breakpoint_ranges):
         max_boundary = full_width_cap
     else:
         max_boundary = min(max_width, full_width_cap)
-    candidate_widths = set()
-    for bp_max_width, effective_columns, prev_max_width in breakpoint_ranges:
-        if max_width is None:
-            boundary = bp_max_width if bp_max_width else full_width_cap
-            boundary = min(boundary, full_width_cap)
-            pixel_width = round(boundary / effective_columns)
-            candidate_widths.add(pixel_width)
-            candidate_widths.add(pixel_width * 2)
-        elif prev_max_width is not None and prev_max_width >= max_boundary:
-            pixel_width = round(prev_max_width / effective_columns)
-            candidate_widths.add(pixel_width)
-            candidate_widths.add(pixel_width * 2)
-        if max_width is not None and (
-            prev_max_width is None or prev_max_width < max_width
-        ):
-            pixel_width = round(max_boundary / effective_columns)
-            candidate_widths.add(pixel_width)
-            candidate_widths.add(pixel_width * 2)
     retina_cap = full_width_cap * 2
+    candidate_widths = set()
+    for bp_max_width, effective_columns, _prev_max_width in breakpoint_ranges:
+        if bp_max_width is None or bp_max_width >= max_boundary:
+            boundary = max_boundary
+        else:
+            boundary = _round_boundary_up(bp_max_width)
+        pixel_width = round(boundary / effective_columns)
+        candidate_widths.add(pixel_width)
+        candidate_widths.add(pixel_width * 2)
     return sorted(width for width in candidate_widths if 0 < width <= retina_cap)
 
 

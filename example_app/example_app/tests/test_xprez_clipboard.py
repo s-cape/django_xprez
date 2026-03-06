@@ -113,7 +113,8 @@ class ClipboardListViewTest(TestCase):
         session.save()
         response = self.client.get(self._list_url(self.section))
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "clipboard empty")
+        # empty-message element is always in DOM; data-hidden hides it when non-empty
+        self.assertContains(response, "data-hidden\n    >clipboard empty")
         self.assertContains(response, 'data-component="xprez-clipboard-paste"')
 
     def test_list_shows_section_when_in_clipboard(self):
@@ -123,7 +124,7 @@ class ClipboardListViewTest(TestCase):
         # section items can only be pasted at container level (no target_section)
         response = self.client.get(self._list_url())
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "clipboard empty")
+        self.assertContains(response, "data-hidden\n    >clipboard empty")
         self.assertContains(response, 'data-component="xprez-clipboard-paste"')
 
     def test_list_shows_container_when_in_clipboard(self):
@@ -133,7 +134,7 @@ class ClipboardListViewTest(TestCase):
         # container items can only be pasted at container level (no target_section)
         response = self.client.get(self._list_url())
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "clipboard empty")
+        self.assertContains(response, "data-hidden\n    >clipboard empty")
         self.assertContains(response, 'data-component="xprez-clipboard-paste"')
 
     def test_list_container_level_shows_container_paste_button(self):
@@ -141,7 +142,7 @@ class ClipboardListViewTest(TestCase):
         session["xprez_clipboard"] = [("container", self.page.pk)]
         session.save()
         response = self.client.get(self._list_url())
-        self.assertNotContains(response, "clipboard empty")
+        self.assertContains(response, "data-hidden\n    >clipboard empty")
         self.assertContains(response, 'data-component="xprez-clipboard-paste"')
 
     def test_list_container_level_module_shows_paste_button(self):
@@ -150,7 +151,7 @@ class ClipboardListViewTest(TestCase):
         session.save()
         response = self.client.get(self._list_url())
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "clipboard empty")
+        self.assertContains(response, "data-hidden\n    >clipboard empty")
         self.assertContains(response, 'data-component="xprez-clipboard-paste"')
 
     def test_list_shows_unavailable_when_module_not_in_available_modules(self):

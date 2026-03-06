@@ -72,10 +72,7 @@ class ResponsiveImageHelpersTest(TestCase):
         max_width = 1296
         column_ranges = [(None, 2), (991, 1)]
         result = _build_image_sizes(max_width, column_ranges)
-        self.assertEqual(
-            result,
-            "648px, (max-width: 991px) 100vw",
-        )
+        self.assertEqual(result, "648px, (max-width: 991px) 100vw")
 
     def test_build_srcset_widths_single_column_capped(self):
         max_width = 1296
@@ -92,6 +89,7 @@ class ResponsiveImageHelpersTest(TestCase):
             full_width_cap=1000,
             breakpoint_ranges=[(None, 3, None), (1199, 2, None), (499, 1, 1199)],
         )
+        # 3 cols → 300, 600; 2 cols → 450, 900; bp=499 (rounds to 500) / 1 col → 500, 1000
         self.assertEqual(result, [300, 450, 500, 600, 900, 1000])
 
     def test_build_srcset_widths_exact_boundaries_full_width(self):
@@ -100,6 +98,7 @@ class ResponsiveImageHelpersTest(TestCase):
             full_width_cap=1000,
             breakpoint_ranges=[(None, 2, None), (499, 1, None)],
         )
+        # 2 cols at cap → 500, 1000; bp=499 (rounds to 500) / 1 col → same 500, 1000
         self.assertEqual(result, [500, 1000])
 
 
@@ -184,7 +183,6 @@ class GalleryModuleSizesTest(TestCase):
         sizes = module.get_image_sizes
         self.assertIsInstance(sizes, str)
         self.assertTrue("vw" in sizes or "px" in sizes)
-        self.assertIn("(max-width:", sizes)
 
     def test_section_medium_get_srcset_widths_non_empty(self):
         section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_MEDIUM)
@@ -219,7 +217,7 @@ class GalleryModuleSizesTest(TestCase):
         config.save()
         self.assertEqual(
             module.get_image_sizes,
-            "648px, (max-width: 1499px) 100vw",
+            "1296px, (max-width: 1499px) 648px",
         )
 
     def test_section_medium_gallery_two_columns_sizes_has_half_max_width_px(self):
