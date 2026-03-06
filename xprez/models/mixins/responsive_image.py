@@ -98,10 +98,7 @@ class ResponsiveImageParentMixin:
         """
         breakpoints = settings.XPREZ_BREAKPOINTS
         widths = [breakpoints[bp]["max_width"] for bp in breakpoints]
-        return [
-            (w, 1, widths[i - 1] if i > 0 else None)
-            for i, w in enumerate(widths)
-        ]
+        return [(w, 1, widths[i - 1] if i > 0 else None) for i, w in enumerate(widths)]
 
     def get_column_ranges(self):
         """
