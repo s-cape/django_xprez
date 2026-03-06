@@ -161,6 +161,7 @@ RENAMES = {
     "DownloadContent": "FilesModule",
     "NumbersContent": "NumbersModule",
     "Video": "VideoModule",
+    "ContentSymlink": "ModuleSymlink",
 }
 
 RENAMES_LOWER = {k.lower(): v for k, v in RENAMES.items()}
@@ -664,9 +665,7 @@ class CodeTemplateModuleProcessor(SimpleModuleProcessor):
 
 
 class ModuleSymlinkProcessor(SimpleModuleProcessor):
-    def process(self):
-        super().process()
-        print("TODO: process module symlink")
+    pass
 
 
 BUILTIN_PROCESSORS = {

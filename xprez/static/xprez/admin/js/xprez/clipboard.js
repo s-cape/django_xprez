@@ -1,4 +1,4 @@
-import { getCsrfToken, executeScripts } from './utils.js';
+import { xprezGetCsrfToken, xprezExecuteScripts } from './utils.js';
 
 export class XprezClipboardList {
     constructor(adder) {
@@ -21,7 +21,7 @@ export class XprezClipboardList {
                 .then(html => {
                     this.listContainerEl.innerHTML = html;
                     this.show();
-                    executeScripts(this.listContainerEl);
+                    xprezExecuteScripts(this.listContainerEl);
                     this.onLoad();
                 });
         }
@@ -47,7 +47,7 @@ export class XprezClipboardList {
     onPaste(btn) {
         fetch(btn.dataset.url, {
             method: 'POST',
-            headers: { 'X-CSRFToken': getCsrfToken() },
+            headers: { 'X-CSRFToken': xprezGetCsrfToken() },
         })
             .then(response => response.json())
             .then(items => {
@@ -60,7 +60,7 @@ export class XprezClipboardList {
     onRemove(btn) {
         fetch(btn.dataset.url, {
             method: 'POST',
-            headers: { 'X-CSRFToken': getCsrfToken() },
+            headers: { 'X-CSRFToken': xprezGetCsrfToken() },
         })
             .then(response => {
                 if (response.ok) {

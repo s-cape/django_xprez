@@ -1,4 +1,4 @@
-import { executeScripts, getCsrfToken } from './utils.js';
+import { xprezExecuteScripts, xprezGetCsrfToken } from './utils.js';
 import { XprezClipboardList } from './clipboard.js';
 
 export class XprezAdderBase {
@@ -50,7 +50,7 @@ export class XprezAdderBase {
     processNewElement(newEl) {
         this.placeNewElement(newEl);
         this.initNewElement(newEl);
-        executeScripts(newEl);
+        xprezExecuteScripts(newEl);
     }
 
     placeNewElement(el) {}
@@ -243,7 +243,10 @@ export class XprezMultiModuleAdderBase extends XprezAdderBase {
         this.module = module;
     }
 
-    placeNewElement(el) { this.module.itemsContainer.appendChild(el); }
+    placeNewElement(el) {
+        this.module.itemsContainer.appendChild(el);
+        this.module.setItemPositionsToInputs();
+    }
     initNewElement(el) { this.module.initItem(el); }
 }
 
@@ -292,7 +295,7 @@ export class XprezUploadMultiModuleAdder extends XprezMultiModuleAdderBase {
             this.setAddingStart();
             fetch(url, {
                 method: 'POST',
-                headers: { 'X-CSRFToken': getCsrfToken() },
+                headers: { 'X-CSRFToken': xprezGetCsrfToken() },
                 body: formData,
             })
                 .then(response => {

@@ -58,6 +58,11 @@ class ConfigBase(CssMixin, models.Model):
     )
     saved = models.BooleanField(default=False, editable=False)
 
+    def save(self, *args, **kwargs):
+        if self.is_default():
+            self.saved = True
+        super().save(*args, **kwargs)
+
     def is_default(self):
         return self.css_breakpoint == 0
 
@@ -73,16 +78,18 @@ class ConfigBase(CssMixin, models.Model):
         self.admin_form.xprez_admin = admin
 
     def is_admin_form_valid(self):
-        return self.admin_form.is_valid()
+        if getattr(self.admin_form, "deleted", False):
+            return True
+        else:
+            return self.admin_form.is_valid()
 
     def save_admin_form(self, request):
-        inst = self.admin_form.save(commit=False)
-        inst.save()
-
-    def save(self, *args, **kwargs):
-        if self.is_default():
-            self.saved = True
-        super().save(*args, **kwargs)
+        if getattr(self.admin_form, "deleted", False):
+            self.delete()
+        elif self.admin_form.is_valid():
+            inst = self.admin_form.save(commit=False)
+            inst.saved = True
+            inst.save()
 
     def render_admin(self, context):
         context["config"] = self

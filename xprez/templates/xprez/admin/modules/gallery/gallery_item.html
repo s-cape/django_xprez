@@ -1,7 +1,7 @@
 {% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
 {% load thumbnail %}
 
-{% block item_content %}
+{% block content %}
     {% block thumb %}
         <div class="xprez-admin-gallery__image-cont">
             {% thumbnail item.file "400x400" format="WEBP" quality=80 as thumb %}

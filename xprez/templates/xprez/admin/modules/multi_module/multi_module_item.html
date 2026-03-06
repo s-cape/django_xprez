@@ -6,21 +6,20 @@
     data-mode=""
 >
     {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-multi-module-item" %}
-    {% block item_header %}
+    {% block header %}
         <div class="xprez-admin-multi-item__header">
             <span class="xprez-admin-multi-item__header-handle" data-draggable-multi-module-item-handle>{% include "xprez/shared/icons/grip.html" %}</span>
-            <div class="xprez-admin-multi-item__header-content">{% block item_header_content %}{% endblock %}</div>
-            <span class="xprez-icon-btn" title="Remove" data-component="xprez-multi-module-item-delete">
-                <i class="xprez-icon-delete"></i>
-                <span data-hidden>{{ item.admin_form.delete }}</span>
-            </span>
+            <div class="xprez-admin-multi-item__header-content">{% block header_content %}{% endblock %}</div>
+            {% block delete_trigger %}
+                {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-multi-module-item-delete" title="Remove" delete_field=item.admin_form.delete %}
+            {% endblock %}
         </div>
     {% endblock %}
 
-    {% block item_content %}
+    {% block content %}
         <div class="xprez-admin-multi-item__fields">
             {% include "xprez/admin/form/errors.html" with errors=item.admin_form.non_field_errors %}
-            {% block item_fields %}
+            {% block main_fields %}
                 {% for field in item.admin_form.get_main_fields %}
                     <div class="xprez-option-row">{% include "xprez/admin/form/field.html" with field=field %}</div>
                 {% endfor %}
@@ -28,9 +27,8 @@
         </div>
     {% endblock %}
 
-    <div data-component="xprez-multi-module-item-form" data-hidden>
-        {% block item_hidden %}
-            <input type="hidden" name="{{ module.instance_key }}-item-id" value="{{ item.pk }}">
-        {% endblock %}
-    </div>
+    {% block hidden_fields %}
+        <input type="hidden" name="{{ module.instance_key }}-item-id" value="{{ item.pk }}">
+        {{ item.admin_form.position.as_hidden }}
+    {% endblock %}
 </div>

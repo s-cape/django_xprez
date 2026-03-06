@@ -1,4 +1,4 @@
-import { getCsrfToken } from './utils.js';
+import { xprezGetCsrfToken } from './utils.js';
 import { XprezSectionDuplicateAdder, XprezModuleDuplicateAdder } from './adders.js';
 
 export class XprezClipboardClip {
@@ -12,7 +12,7 @@ export class XprezClipboardClip {
         e.stopPropagation();
         fetch(this.el.dataset.url, {
             method: 'POST',
-            headers: { 'X-CSRFToken': getCsrfToken() },
+            headers: { 'X-CSRFToken': xprezGetCsrfToken() },
         }).then(() => {
             this.el.classList.add('success');
             setTimeout(() => {

@@ -1,4 +1,5 @@
 {% extends "xprez/admin/modules/base.html" %}
+{% load i18n %}
 
 {% block content %}
     {{ block.super }}
@@ -16,7 +17,7 @@
                 data-component="xprez-add-item"
                 data-url="{% url module.xprez_add_item_url_name module.pk %}"
             >
-                <i class="xprez-icon-plus_square_20"></i>Add item
+                <i class="xprez-icon-plus_square_20"></i>{% block add_item_text %}{% trans "Add item" %}{% endblock %}
             </span>
         </div>
     {% endblock %}

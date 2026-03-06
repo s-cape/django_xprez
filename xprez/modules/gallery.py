@@ -43,7 +43,7 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
 
     class FrontMedia:
         js = PHOTOSWIPE_JS
-        css = PHOTOSWIPE_CSS
+        css = {"all": PHOTOSWIPE_CSS}
 
     @property
     def thumbnail_crop(self):
@@ -174,4 +174,4 @@ class GalleryModuleForm(ModuleForm):
 class GalleryItemForm(MultiModuleItemForm):
     class Meta:
         model = GalleryItem
-        fields = ("description", "alt_text")
+        fields = "__all__"

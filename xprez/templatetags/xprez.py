@@ -3,41 +3,16 @@
 from __future__ import unicode_literals
 
 from django import template
-from django.forms import Media
 
-from .. import module_registry, settings
+from ..media import FrontendMediaCollector
 from ..utils import build_absolute_uri as _build_absolute_uri
 
 register = template.Library()
 
 
-class PrefixableMedia(Media):
-    @staticmethod
-    def from_media(media):
-        prefixable = PrefixableMedia()
-        prefixable._css_lists = media._css_lists
-        prefixable._js_lists = media._js_lists
-        return prefixable
-
-    def absolute_path(self, path):
-        absolute_path = super().absolute_path(path)
-        if settings.XPREZ_USE_ABSOLUTE_URI and not path.startswith(
-            ("http://", "https://", "//")
-        ):
-            return "{}{}".format(settings.XPREZ_BASE_URL, absolute_path)
-        else:
-            return absolute_path
-
-
 @register.simple_tag()
 def xprez_front_media(container=None):
-    """
-    Returns the media required by the container.
-    If container is None, returns the media required by all containers.
-    """
-    return str(
-        PrefixableMedia.from_media(module_registry.front_media(container=container))
-    )
+    return str(FrontendMediaCollector(container=container).get_media())
 
 
 @register.simple_tag(takes_context=True)
