@@ -101,7 +101,8 @@ export class XprezTextMediaDeleter extends XprezDeleterBase {
             this.inputEl.checked = true;
         } else {
             this.mediaEl.setAttribute("data-hidden", "");
-            this.obj._clearPreview();
+            this.obj.mediaFileInput.value = "";
+            this.obj._clearMediaPreview();
         }
     }
 

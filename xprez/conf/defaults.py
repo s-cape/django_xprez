@@ -45,7 +45,19 @@ XPREZ_BREAKPOINTS = {
     4: {"name": "Small devices (&lt; 768px)", "max_width": 767},
     5: {"name": "Mobile (&lt; 500px)", "max_width": 499},
 }
-XPREZ_GALLERY_FULL_WIDTH_PX = 2700
+XPREZ_SRCSET_WIDTHS = (160, 320, 480, 640, 960, 1280, 1920, 2560)
+XPREZ_IMAGE_EXTENSIONS = (
+    "avif",
+    "bmp",
+    "gif",
+    "jpeg",
+    "jpg",
+    "png",
+    "svg",
+    "tiff",
+    "webp",
+)
+XPREZ_VIDEO_EXTENSIONS = ("avi", "mov", "mp4", "ogg", "webm")
 
 XPREZ_VIDEO_PROVIDERS = (
     "xprez.modules.video.YouTubeVideoProvider",

@@ -36,12 +36,12 @@
                         {% endif %}
                         <img
                             class="xprez-admin-file-input__media-img"
-                            data-component="xprez-file-input-img"
+                            data-media-preview="image"
                             {% if thumb %}src="{{ thumb.url }}"{% else %}data-hidden{% endif %}
                         />
                         <span
                             class="xprez-admin-file-input__media-file-name"
-                            data-component="xprez-file-input-filename"
+                            data-media-preview="fallback"
                             {% if thumb or not widget.value %}data-hidden{% endif %}
                         >
                             {{ widget.value|xprez_file_name }}

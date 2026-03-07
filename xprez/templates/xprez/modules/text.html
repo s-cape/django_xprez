@@ -1,4 +1,5 @@
 {% extends "xprez/modules/text_base.html" %}
+{% load thumbnail xprez %}
 
 {% block attrs  %}
     {{ block.super }}
@@ -11,8 +12,33 @@
     {{ module.background }}
     {% if module.media %}
         <div class="xprez-text__image-wrapper">
-            {# TODO: sorl thumb generation + width. height specification #}
-            <img class="xprez-text__image" src="{{ module.media.url }}" alt="{{ module.media.name }}" loading="lazy">
+            {% if module.media_is_image %}
+                <picture>
+                    {% for source in module.get_media_image_sources %}
+                        {% if source.max_width %}
+                            <source
+                                media="(max-width: {{ source.max_width }}px)"
+                                srcset="{% for geom in source.geometries %}{% thumbnail module.media geom crop=source.thumbnail_crop format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
+                                sizes="{{ module.get_image_sizes }}">
+                        {% else %}
+                            {% thumbnail module.media source.geometries.0 crop=source.thumbnail_crop format="WEBP" quality=70 as t_src %}
+                            <img class="xprez-text__image"
+                                src="{{ t_src.url|build_absolute_uri }}"
+                                {% endthumbnail %}
+                                srcset="{% for geom in source.geometries %}{% thumbnail module.media geom crop=source.thumbnail_crop format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
+                                sizes="{{ module.get_image_sizes }}"
+                                alt="{{ module.media.name }}"
+                                loading="lazy">
+                        {% endif %}
+                    {% endfor %}
+                </picture>
+            {% elif module.media_is_video %}
+                <video class="xprez-text__image" data-observer-autoplay muted loop playsinline preload="metadata">
+                    <source src="{{ module.media.url }}" type="{{ module.media_mime_type }}">
+                </video>
+            {% else %}
+                <img class="xprez-text__image" src="{{ module.media.url }}" alt="{{ module.media.name }}" loading="lazy">
+            {% endif %}
         </div>
     {% endif %}
     {% if module.text %}

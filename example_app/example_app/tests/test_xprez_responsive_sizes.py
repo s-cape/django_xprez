@@ -13,9 +13,8 @@ from xprez.models import (
     VideoModule,
 )
 from xprez.models.mixins.responsive_image import (
-    _build_image_sizes,
-    _build_srcset_widths,
-    build_srcset_geometries,
+    ResponsiveImageItemMixin,
+    ResponsiveImageParentMixin,
 )
 
 
@@ -35,28 +34,36 @@ class ResponsiveImageHelpersTest(TestCase):
 
     def test_build_srcset_geometries_16_9_returns_wxh(self):
         widths = [500, 1000]
-        result = build_srcset_geometries(widths, 16, 9, cap_width=None)
+        result = ResponsiveImageItemMixin.build_srcset_geometries(
+            widths, 16, 9, cap_width=None
+        )
         self.assertEqual(result, ["500x281", "1000x562"])
 
     def test_build_srcset_geometries_caps_at_cap_width(self):
         widths = [500, 1000, 1500]
-        result = build_srcset_geometries(widths, 16, 9, cap_width=800)
-        self.assertEqual(result, ["500x281"])
+        result = ResponsiveImageItemMixin.build_srcset_geometries(
+            widths, 16, 9, cap_width=800
+        )
+        self.assertEqual(result, ["500x281", "800x450"])
 
     def test_build_srcset_geometries_square_ratio(self):
         widths = [200, 400]
-        result = build_srcset_geometries(widths, 1, 1, cap_width=None)
+        result = ResponsiveImageItemMixin.build_srcset_geometries(
+            widths, 1, 1, cap_width=None
+        )
         self.assertEqual(result, ["200x200", "400x400"])
 
     def test_build_srcset_geometries_uses_cap_when_all_widths_exceed_it(self):
         widths = [1000, 1200]
-        result = build_srcset_geometries(widths, 16, 9, cap_width=800)
+        result = ResponsiveImageItemMixin.build_srcset_geometries(
+            widths, 16, 9, cap_width=800
+        )
         self.assertEqual(result, ["800x450"])
 
     def test_build_image_sizes_single_column_full_width(self):
         max_width = None
         column_ranges = [(None, 1), (1499, 1), (1199, 1)]
-        result = _build_image_sizes(max_width, column_ranges)
+        result = ResponsiveImageParentMixin.build_image_sizes(max_width, column_ranges)
         self.assertEqual(
             result,
             "100vw, (max-width: 1499px) 100vw, (max-width: 1199px) 100vw",
@@ -65,45 +72,24 @@ class ResponsiveImageHelpersTest(TestCase):
     def test_build_image_sizes_single_column_capped(self):
         max_width = 1296
         column_ranges = [(None, 1)]
-        result = _build_image_sizes(max_width, column_ranges)
+        result = ResponsiveImageParentMixin.build_image_sizes(max_width, column_ranges)
         self.assertEqual(result, "1296px")
 
     def test_build_image_sizes_two_columns(self):
         max_width = 1296
         column_ranges = [(None, 2), (991, 1)]
-        result = _build_image_sizes(max_width, column_ranges)
+        result = ResponsiveImageParentMixin.build_image_sizes(max_width, column_ranges)
         self.assertEqual(result, "648px, (max-width: 991px) 100vw")
 
-    def test_build_srcset_widths_single_column_capped(self):
-        max_width = 1296
-        full_width_cap = settings.XPREZ_GALLERY_FULL_WIDTH_PX
-        breakpoint_ranges = [(None, 1, None), (1499, 1, None), (1199, 1, 1499)]
-        result = _build_srcset_widths(max_width, full_width_cap, breakpoint_ranges)
-        self.assertIsInstance(result, list)
-        self.assertEqual(result, sorted(result))
-        self.assertTrue(all(0 < w <= full_width_cap * 2 for w in result))
-
-    def test_build_srcset_widths_exact_boundaries_with_max_width(self):
-        result = _build_srcset_widths(
-            max_width=900,
-            full_width_cap=1000,
-            breakpoint_ranges=[(None, 3, None), (1199, 2, None), (499, 1, 1199)],
-        )
-        # 3 cols → 300, 600; 2 cols → 450, 900; bp=499 (rounds to 500) / 1 col → 500, 1000
-        self.assertEqual(result, [300, 450, 500, 600, 900, 1000])
-
-    def test_build_srcset_widths_exact_boundaries_full_width(self):
-        result = _build_srcset_widths(
-            max_width=None,
-            full_width_cap=1000,
-            breakpoint_ranges=[(None, 2, None), (499, 1, None)],
-        )
-        # 2 cols at cap → 500, 1000; bp=499 (rounds to 500) / 1 col → same 500, 1000
-        self.assertEqual(result, [500, 1000])
+    def test_xprez_srcset_widths_is_non_empty_and_sorted(self):
+        """Default XPREZ_SRCSET_WIDTHS is non-empty and strictly ascending."""
+        widths = list(settings.XPREZ_SRCSET_WIDTHS)
+        self.assertGreater(len(widths), 0)
+        self.assertEqual(widths, sorted(widths))
 
 
 class VideoModuleSizesTest(TestCase):
-    """VideoModule get_section_max_width_px, get_srcset_widths, get_image_sizes."""
+    """VideoModule get_section_max_width_px and get_image_sizes."""
 
     def _video_module(self, section):
         return VideoModule.objects.create(
@@ -135,19 +121,9 @@ class VideoModuleSizesTest(TestCase):
         module = self._video_module(section)
         ranges = list(module.get_breakpoint_ranges())
         self.assertGreater(len(ranges), 0)
-        for max_width, effective_columns, prev_max_width in ranges:
+        for max_width, effective_columns in ranges:
             self.assertEqual(effective_columns, 1)
             self.assertTrue(max_width is None or isinstance(max_width, int))
-            self.assertTrue(prev_max_width is None or isinstance(prev_max_width, int))
-
-    def test_get_srcset_widths_non_empty_sorted_capped(self):
-        section = _create_page_and_section()
-        module = self._video_module(section)
-        widths = module.get_srcset_widths
-        self.assertGreater(len(widths), 0)
-        self.assertEqual(widths, sorted(widths))
-        cap = settings.XPREZ_GALLERY_FULL_WIDTH_PX * 2
-        self.assertTrue(all(0 < w <= cap for w in widths))
 
     def test_get_image_sizes_full_width_contains_100vw(self):
         section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_FULL)
@@ -172,7 +148,7 @@ class VideoModuleSizesTest(TestCase):
 
 
 class GalleryModuleSizesTest(TestCase):
-    """GalleryModule get_srcset_widths/get_image_sizes for section+config variants."""
+    """GalleryModule get_image_sizes for section+config variants."""
 
     def _gallery_module(self, section):
         return GalleryModule.objects.create(section=section, position=0, saved=True)
@@ -183,13 +159,6 @@ class GalleryModuleSizesTest(TestCase):
         sizes = module.get_image_sizes
         self.assertIsInstance(sizes, str)
         self.assertTrue("vw" in sizes or "px" in sizes)
-
-    def test_section_medium_get_srcset_widths_non_empty(self):
-        section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_MEDIUM)
-        module = self._gallery_module(section)
-        widths = module.get_srcset_widths
-        self.assertGreater(len(widths), 0)
-        self.assertEqual(widths, sorted(widths))
 
     def test_section_full_width_gallery_single_column_sizes_contains_100vw(self):
         section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_FULL)

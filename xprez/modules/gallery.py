@@ -45,25 +45,19 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
         js = PHOTOSWIPE_JS
         css = {"all": PHOTOSWIPE_CSS}
 
-    @property
-    def thumbnail_crop(self):
-        """Sorl crop option: 'center' when aspect crop set, else no crop."""
-        return "center" if self.crop else ""
-
     def get_crop_ratio(self):
         """Return (numerator, denominator) from self.crop (e.g. '3/4'), or None."""
-        if not self.crop or "/" not in self.crop:
-            return None
+        return self.parse_crop_string(self.crop)
+
+    @property
+    def thumbnail_crop(self):
+        if self.get_crop_ratio():
+            return "center"
         else:
-            num, den = self.crop.split("/", 1)
-            return (int(num.strip()), int(den.strip()))
+            return ""
 
     def get_breakpoint_ranges(self):
-        """Yield (max_width, effective_columns, prev_max_width) per breakpoint."""
-        return self._iter_breakpoint_columns()
-
-    def _iter_breakpoint_columns(self):
-        """Yield (max_width, effective_columns, prev_max_width) per breakpoint."""
+        result = []
         breakpoints = settings.XPREZ_BREAKPOINTS
         section_configs = {
             config.css_breakpoint: config for config in self.section.get_saved_configs()
@@ -74,8 +68,7 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
         current_section_cols = 1
         current_gallery_cols = 1
         current_colspan = 1
-        bp_ids = list(breakpoints)
-        for index, bp_id in enumerate(bp_ids):
+        for bp_id in breakpoints:
             if bp_id in section_configs:
                 current_section_cols = section_configs[bp_id].columns
             if bp_id in gallery_configs:
@@ -85,13 +78,8 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
                 1,
                 current_section_cols * current_gallery_cols // current_colspan,
             )
-            max_width = breakpoints[bp_id]["max_width"]
-            if index > 0:
-                prev_bp_id = bp_ids[index - 1]
-                prev_max_width = breakpoints[prev_bp_id]["max_width"]
-            else:
-                prev_max_width = None
-            yield max_width, effective_columns, prev_max_width
+            result += [(breakpoints[bp_id]["max_width"], effective_columns)]
+        return result
 
 
 class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):
@@ -108,9 +96,6 @@ class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):
     def get_aspect_ratio(self):
         crop_ratio = self.module.get_crop_ratio()
         return crop_ratio if crop_ratio else (1, 1)
-
-    def get_srcset_widths_for_geometries(self):
-        return self.module.get_srcset_widths
 
     @classmethod
     def create_from_file(cls, django_file, gallery):

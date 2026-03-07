@@ -1,14 +1,13 @@
 import { XprezFieldController } from './fields.js';
-import { setFilePreviewImage, clearFilePreviewImage } from './utils.js';
+import { WithMediaPreview } from './media_preview.js';
 
-export class XprezFileInputFieldController extends XprezFieldController {
+export class XprezFileInputFieldController extends WithMediaPreview(XprezFieldController) {
     constructor(parent, fieldEl) {
         super(parent, fieldEl);
         this.containerEl = fieldEl.querySelector("[data-component='xprez-file-input']");
         if (!this.containerEl) return;
 
-        this.imgEl = this.containerEl.querySelector("[data-component='xprez-file-input-img']");
-        this.filenameEl = this.containerEl.querySelector("[data-component='xprez-file-input-filename']");
+        this._initMediaPreviewEls(this.containerEl);
         this.addBtnEl = fieldEl.querySelector("[data-component='xprez-file-input-add-btn']");
         this.replaceBtnEl = this.containerEl.querySelector(
             "[data-component='xprez-file-input-replace-btn']"
@@ -41,25 +40,9 @@ export class XprezFileInputFieldController extends XprezFieldController {
     }
 
     _setPreview(file) {
-        if (this.filenameEl) {
-            this.filenameEl.textContent = file.name;
-        }
-        if (file.type.startsWith("image/")) {
-            setFilePreviewImage(this.imgEl, file);
-            if (this.imgEl) {
-                this.imgEl.removeAttribute("data-hidden");
-            }
-            if (this.filenameEl) {
-                this.filenameEl.setAttribute("data-hidden", "");
-            }
-        } else {
-            clearFilePreviewImage(this.imgEl);
-            if (this.imgEl) {
-                this.imgEl.setAttribute("data-hidden", "");
-            }
-            if (this.filenameEl) {
-                this.filenameEl.removeAttribute("data-hidden");
-            }
+        this._applyMediaPreview(file);
+        if (this.mediaPreviewFallbackEl) {
+            this.mediaPreviewFallbackEl.textContent = file.name;
         }
         this.replaceBtnEl.append(this.inputEl);
         this.containerEl.removeAttribute("data-hidden");
@@ -69,9 +52,7 @@ export class XprezFileInputFieldController extends XprezFieldController {
     _clearPreview() {
         this.inputEl.value = "";
         this._previousValue = "";
-        clearFilePreviewImage(this.imgEl);
-        this.imgEl.removeAttribute("data-hidden");
-        this.filenameEl.setAttribute("data-hidden", "");
+        this._clearMediaPreview();
         this.addBtnEl.append(this.inputEl);
         this.containerEl.setAttribute("data-hidden", "");
         this.addBtnEl.removeAttribute("data-hidden");

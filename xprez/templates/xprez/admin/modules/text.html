@@ -19,7 +19,8 @@
         {% if module.media %}data-has-saved-media{% endif %}
     >
         <div class="xprez-admin-file-input__img-cont crop" onclick="this.classList.toggle('crop')" data-crop-minimum-size="400">
-            <img class="xprez-admin-file-input__media-img" data-text-media-img{% if module.media %} src="{{ module.media.url }}"{% endif %} />
+            <img class="xprez-admin-file-input__media-img"{% if module.media_is_image %} src="{{ module.media.url }}"{% endif %} data-media-preview="image" />
+            <video class="xprez-admin-file-input__media-video"{% if module.media_is_video %} src="{{ module.media.url }}"{% endif %} data-media-preview="video"></video>
         </div>
         <div class="xprez-admin-file-input__media-actions">
             <label class="xprez-icon-btn" title="Image" for="{{ module.admin_form.media.id_for_label }}">

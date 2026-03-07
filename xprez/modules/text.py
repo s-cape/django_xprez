@@ -1,3 +1,4 @@
+import mimetypes
 from os import makedirs, path
 
 from django import forms
@@ -17,6 +18,10 @@ from xprez.ck_editor.widgets import CkEditorWidget
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
 from xprez.models.mixins.font_size import FontSizeModuleMixin
+from xprez.models.mixins.responsive_image import (
+    ResponsiveImageMixin,
+    ResponsiveImageSourcesMixin,
+)
 from xprez.models.modules import Module
 from xprez.utils import import_class, random_string, truncate_with_ellipsis
 
@@ -71,7 +76,7 @@ class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
         abstract = True
 
 
-class TextModule(TextModuleBase):
+class TextModule(ResponsiveImageSourcesMixin, ResponsiveImageMixin, TextModuleBase):
     config_model = "xprez.TextConfig"
     front_template_name = "xprez/modules/text.html"
     admin_template_name = "xprez/admin/modules/text.html"
@@ -86,8 +91,49 @@ class TextModule(TextModuleBase):
         js = CkEditorWidget.Media.js
         css = {"css": CkEditorWidget.Media.css["all"]}
 
+    class FrontMedia:
+        js = ("xprez/js/observer_autoplay.js",)
+
     class Meta:
         verbose_name = "Text"
+
+    def get_media_extension(self):
+        name = self.media.name or ""
+        if "." in name:
+            return name.rsplit(".", 1)[-1].lower()
+        else:
+            return ""
+
+    IMAGE_EXTENSIONS = settings.XPREZ_IMAGE_EXTENSIONS
+    VIDEO_EXTENSIONS = settings.XPREZ_VIDEO_EXTENSIONS
+
+    @property
+    def media_is_image(self):
+        return self.get_media_extension() in self.IMAGE_EXTENSIONS
+
+    @property
+    def media_is_video(self):
+        return self.get_media_extension() in self.VIDEO_EXTENSIONS
+
+    @property
+    def media_mime_type(self):
+        mime, _ = mimetypes.guess_type(self.media.name)
+        return mime or ""
+
+    def get_image_field(self):
+        return self.media
+
+    def get_config_crop(self, config):
+        return config.media_crop if config else None
+
+    def get_aspect_ratio(self):
+        """Base-config crop ratio for get_srcset_geometries; falls back to (1, 1)."""
+        config = self.configs.filter(css_breakpoint=0).first()
+        crop = self.parse_crop_string(self.get_config_crop(config))
+        if crop:
+            return crop
+        else:
+            return (1, 1)
 
     def render_front(self, context):
         context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
