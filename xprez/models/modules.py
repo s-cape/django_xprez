@@ -175,27 +175,29 @@ class Module(ConfigParentMixin, models.Model):
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)
-        if getattr(admin, "admin_site", None):
-            self._xprez_admin_namespace = admin.admin_site.name
+        if getattr(admin, "xprez_url_namespace", None):
+            self._xprez_admin_namespace = admin.xprez_url_namespace
 
     def is_admin_form_valid(self):
+        is_valid = self.admin_form.is_valid()
+        if getattr(self.admin_form, "deleted", False):
+            return True
         self.admin_form.xprez_configs_all_valid = True
         for config in self.admin_form.xprez_configs:
             if not config.is_admin_form_valid():
                 self.admin_form.xprez_configs_all_valid = False
 
-        return self.admin_form.is_valid() and self.admin_form.xprez_configs_all_valid
+        return is_valid and self.admin_form.xprez_configs_all_valid
 
     def save_admin_form(self, request):
-        inst = self.admin_form.save(commit=False)
-        inst.saved = True
-        inst.save()
+        if getattr(self.admin_form, "deleted", False):
+            self.delete()
+        elif self.admin_form.is_valid():
+            inst = self.admin_form.save(commit=False)
+            inst.saved = True
+            inst.save()
 
-        for config in self.admin_form.xprez_configs:
-            if config.admin_form.cleaned_data.get("delete"):
-                config.delete()
-            else:
-                config.saved = True
+            for config in self.admin_form.xprez_configs:
                 config.save_admin_form(request)
 
     def render_admin(self, context):

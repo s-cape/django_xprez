@@ -43,10 +43,12 @@ class SectionBase(models.Model):
         raise NotImplementedError
 
     def is_admin_form_valid(self):
-        raise NotImplementedError
+        return self.admin_form.is_valid()
 
     def save_admin_form(self, request):
-        raise NotImplementedError
+        inst = self.admin_form.save(commit=False)
+        inst.saved = True
+        inst.save()
 
     def duplicate_to(self, target_container, saved=False):
         raise NotImplementedError
@@ -140,6 +142,9 @@ class Section(ConfigParentMixin, SectionBase):
             config.build_admin_form(admin, data, files)
 
     def is_admin_form_valid(self):
+        super_is_valid = super().is_admin_form_valid()
+        if getattr(self.admin_form, "deleted", False):
+            return True
         self.admin_form.xprez_modules_all_valid = True
         for module in self.admin_form.xprez_modules:
             if not module.is_admin_form_valid():
@@ -151,26 +156,18 @@ class Section(ConfigParentMixin, SectionBase):
                 self.admin_form.xprez_configs_all_valid = False
 
         return (
-            self.admin_form.is_valid()
+            super_is_valid
             and self.admin_form.xprez_modules_all_valid
             and self.admin_form.xprez_configs_all_valid
         )
 
     def save_admin_form(self, request):
-        inst = self.admin_form.save(commit=False)
-        inst.save()
+        super().save_admin_form(request)
         for module in self.admin_form.xprez_modules:
-            if module.admin_form.cleaned_data.get("delete"):
-                module.delete()
-            else:
-                module.save_admin_form(request)
+            module.save_admin_form(request)
 
         for config in self.admin_form.xprez_configs:
-            if config.admin_form.cleaned_data.get("delete"):
-                config.delete()
-            else:
-                config.saved = True
-                config.save_admin_form(request)
+            config.save_admin_form(request)
 
     def render_admin(self, context):
         context["section"] = self
@@ -222,13 +219,6 @@ class SectionSymlink(SectionBase):
             instance=self, prefix=self.instance_key, data=data, files=files
         )
         self.admin_form.xprez_admin = admin
-
-    def is_admin_form_valid(self):
-        return self.admin_form.is_valid()
-
-    def save_admin_form(self, request):
-        inst = self.admin_form.save(commit=False)
-        inst.save()
 
     def render_admin(self, context):
         context["section_symlink"] = self

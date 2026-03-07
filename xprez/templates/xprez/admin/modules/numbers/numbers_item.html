@@ -1,6 +1,6 @@
 {% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
 
-{% block item_header_content %}
+{% block header_content %}
     {% include "xprez/admin/form/errors.html" with errors=item.admin_form.non_field_errors %}
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=item.admin_form.number size="sm" %}
@@ -9,4 +9,4 @@
     </div>
 {% endblock %}
 
-{% block item_content %}{% endblock %}
+{% block content %}{% endblock %}

@@ -4,6 +4,7 @@ from django.contrib import admin
 from xprez import constants, module_registry, settings
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
 from xprez.admin.views.content import XprezAdminViewsContentMixin
+from xprez.media import AdminMediaCollector
 
 
 class XprezModelFormMixin(object):
@@ -43,11 +44,9 @@ class XprezModelFormMixin(object):
     def xprez_save(self, request):
         sections_to_delete = []
         for section in self.xprez_sections:
-            if section.admin_form.cleaned_data.get("delete"):
+            if getattr(section.admin_form, "deleted", False):
                 # do not delete yet, may contain modules to-be moved to other sections
                 sections_to_delete += [section]
-            else:
-                section.saved = True
             section.save_admin_form(request)
 
         for section in sections_to_delete:
@@ -77,13 +76,14 @@ class XprezAdminMixin(
         return Form
 
     def xprez_admin_media(self):
-        return module_registry.admin_media()
+        return AdminMediaCollector().get_media()
 
     def xprez_allowed_modules(self, container=None):
         return module_registry.allowed_modules()
 
     def xprez_add_menu_modules(self, container=None):
-        return module_registry.add_menu_modules()
+        allowed = set(self.xprez_allowed_modules(container))
+        return [ct for ct in module_registry.add_menu_modules() if ct in allowed]
 
     def xprez_allowed_module_classes(self, container=None):
         return module_registry.module_classes(

@@ -35,7 +35,19 @@ export class XprezMultiModuleBase extends XprezModule {
         this.sortable = new XprezSortable(this.itemsContainer, {
             handle: hasHandles ? handleSelector : undefined,
             draggable: '[data-component="xprez-multi-module-item"]',
+            onEnd: () => this.setItemPositionsToInputs(),
         });
+    }
+
+    setItemPositionsToInputs() {
+        this.itemsContainer
+            .querySelectorAll("[data-component='xprez-multi-module-item']")
+            .forEach((itemEl, itemIndex) => {
+                const input = itemEl.querySelector(
+                    `input[name="${itemEl.dataset.prefix}-position"]`
+                );
+                if (input) input.value = itemIndex;
+            });
     }
 
     initItem(itemEl) {

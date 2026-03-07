@@ -23,9 +23,9 @@ XPREZ_MODULES_AUTOREGISTER_BUILTINS = [
 XPREZ_MODULES_AUTOREGISTER_CUSTOM = "__all__"
 
 XPREZ_MODULES_ALLOWED = "__all__"
-XPREZ_MODULES_ALLOWED_EXCLUDE = []
+XPREZ_MODULES_ALLOWED_EXCLUDE = ()
 XPREZ_MODULES_ADD_MENU = None
-XPREZ_MODULES_ADD_MENU_EXCLUDE = ["xprez.ModuleSymlink"]
+XPREZ_MODULES_ADD_MENU_EXCLUDE = ("xprez.ModuleSymlink",)
 
 
 XPREZ_CODE_TEMPLATES_DIR = None
@@ -47,10 +47,18 @@ XPREZ_BREAKPOINTS = {
 }
 XPREZ_GALLERY_FULL_WIDTH_PX = 2700
 
-XPREZ_VIDEO_PROVIDERS = [
+XPREZ_VIDEO_PROVIDERS = (
     "xprez.modules.video.YouTubeVideoProvider",
     "xprez.modules.video.VimeoVideoProvider",
-]
+)
+
+XPREZ_ADMIN_MEDIA_JS = (
+    "xprez/admin/libs/sortablejs/sortable-1.15.6.min.js",
+    ("xprez/admin/js/xprez.js", "module"),
+)
+XPREZ_ADMIN_MEDIA_CSS = {"all": ("xprez/styles/xprez_backend.css",)}
+XPREZ_FRONT_MEDIA_JS = ()
+XPREZ_FRONT_MEDIA_CSS = {}
 
 XPREZ_DEFAULTS = {
     "section": {

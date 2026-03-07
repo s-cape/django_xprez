@@ -12,7 +12,8 @@ export class Xprez {
         this.sync = new XprezSyncManager(this);
         this.initSections();
         this.updateView();
-        this.adder = new XprezSectionAdderContainerEnd(this, this.el.querySelector("[data-component='xprez-adder-container-end']"));
+        const adderEl = this.el.querySelector("[data-component='xprez-adder-container-end']");
+        this.adder = adderEl ? new XprezSectionAdderContainerEnd(this, adderEl) : null;
         this.initAllSectionsCollapser();
         this.initSectionsSortable();
     }

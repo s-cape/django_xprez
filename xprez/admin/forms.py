@@ -54,10 +54,12 @@ class DeletableFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["delete"] = forms.BooleanField(required=False)
+        self.deleted = False
 
     def full_clean(self):
         super().full_clean()
-        if getattr(self, "cleaned_data", {}).get("delete"):
+        self.deleted = bool(getattr(self, "cleaned_data", {}).get("delete"))
+        if self.deleted:
             self._errors = {}
 
 
@@ -131,8 +133,16 @@ class ModuleForm(
         fields = "__all__"
 
 
-class MultiModuleItemForm(DeletableFormMixin, forms.ModelForm):
+class MultiModuleItemForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
     """Base form for items within MultiModule modules."""
+
+    system_fields = DeletableFormMixin.system_fields + ("position",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        fk_name = getattr(self.instance.__class__, "module_foreign_key", None)
+        if fk_name and fk_name in self.fields:
+            self.fields.pop(fk_name)
 
     def get_main_fields(self):
         for name in self.fields:

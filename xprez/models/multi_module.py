@@ -42,10 +42,8 @@ class MultiModule(Module):
         qs = getattr(self, self.items_attribute)
         if data is None:
             return qs.filter(saved=True).order_by("position")
-        ids = [int(id) for id in data.getlist(f"{self.instance_key}-item-id")]
-        items = list(qs.filter(pk__in=ids))
-        items.sort(key=lambda item: ids.index(item.pk))
-        return items
+        else:
+            return list(qs.all())
 
     def build_admin_form(self, admin, data=None, files=None):
         super().build_admin_form(admin, data, files)
@@ -57,25 +55,29 @@ class MultiModule(Module):
                 instance=item, prefix=item.instance_key, data=data, files=files
             )
             self.admin_form.xprez_items += [item]
+        if data:
+            self.admin_form.xprez_items.sort(
+                key=lambda item: item.admin_form.get_position()
+            )
+
+    def is_admin_form_valid(self):
+        super_is_valid = super().is_admin_form_valid()
+        if getattr(self.admin_form, "deleted", False):
+            return True
+        self.admin_form.xprez_items_all_valid = True
+        for item in self.admin_form.xprez_items:
+            if not item.is_admin_form_valid():
+                self.admin_form.xprez_items_all_valid = False
+        return super_is_valid and self.admin_form.xprez_items_all_valid
 
     def save_admin_form(self, request):
         super().save_admin_form(request)
-        for index, item in enumerate(self.admin_form.xprez_items):
-            if (item.admin_form.cleaned_data or {}).get("delete"):
-                item.delete()
-            else:
-                inst = item.admin_form.save(commit=False)
-                inst.saved = True
-                inst.position = index
-                inst.save()
-
-    def is_admin_form_valid(self):
-        items_valid = all(
-            item.admin_form.is_valid() for item in self.admin_form.xprez_items
-        )
-        return super().is_admin_form_valid() and items_valid
+        for item in self.admin_form.xprez_items:
+            item.save_admin_form(request)
 
     def admin_has_errors(self):
+        if getattr(self.admin_form, "deleted", False):
+            return False
         items_errors = any(
             item.admin_form.errors for item in self.admin_form.xprez_items
         )
@@ -118,12 +120,11 @@ class MultiModule(Module):
         item = module.create_item()
         form_class = module.get_admin_item_form_class(item)
         item.admin_form = form_class(instance=item, prefix=item.instance_key)
-        return HttpResponse(
-            render_to_string(
-                cls.admin_item_template_name,
-                {"item": item, "module": module},
-            )
+        html = render_to_string(
+            cls.admin_item_template_name,
+            {"item": item, "module": module},
         )
+        return JsonResponse([{"html": html}], safe=False)
 
     @classmethod
     def get_add_item_url_name(cls):
@@ -152,6 +153,22 @@ class MultiModuleItem(models.Model):
     def instance_key(self):
         module_pk = getattr(self, f"{self.module_foreign_key}_id")
         return f"item-module-{module_pk}-{self.pk}"
+
+    def is_admin_form_valid(self):
+        is_valid = self.admin_form.is_valid()
+        if getattr(self.admin_form, "deleted", False):
+            return True
+        else:
+            return is_valid
+
+    def save_admin_form(self, request):
+        if getattr(self.admin_form, "deleted", False):
+            self.delete()
+        elif self.admin_form.is_valid():
+            inst = self.admin_form.save(commit=False)
+            inst.position = self.admin_form.get_position()
+            inst.saved = True
+            inst.save()
 
     def duplicate_to(self, target_module, saved=False):
         new_item = copy_model(self)

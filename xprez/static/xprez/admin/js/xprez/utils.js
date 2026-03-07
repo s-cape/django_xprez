@@ -1,4 +1,4 @@
-export function getCsrfToken() {
+export function xprezGetCsrfToken() {
     const cookie = document.cookie
         .split(";")
         .map((c) => c.trim())
@@ -6,7 +6,7 @@ export function getCsrfToken() {
     return cookie ? decodeURIComponent(cookie.split("=")[1]) : "";
 }
 
-export function executeScripts(el) {
+export function xprezExecuteScripts(el) {
     el.querySelectorAll("script").forEach(script => {
         const newScript = document.createElement("script");
         if (script.src) {

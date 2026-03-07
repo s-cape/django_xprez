@@ -23,14 +23,16 @@
 
         <div class="xprez-admin-module__actions">
             {% block actions %}
-                {% with xprez_admin=module.admin_form.xprez_admin %}
-                    {% url xprez_admin.xprez_duplicate_url_name module_pk=module.pk as duplicate_url %}
-                    {% url xprez_admin.xprez_clipboard_clip_url_name xprez_admin.constants.MODULE_KEY module.pk as clipboard_url %}
+                {% block copy_menu %}
+                    {% url module.admin_form.xprez_admin.xprez_duplicate_url_name module_pk=module.pk as duplicate_url %}
+                    {% url module.admin_form.xprez_admin.xprez_clipboard_clip_url_name module.admin_form.xprez_admin.constants.MODULE_KEY module.pk as clipboard_url %}
                     {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clipboard_url=clipboard_url %}
-                {% endwith %}
-                <span class="xprez-icon-btn" title="Settings" data-component="xprez-module-popover-trigger">
-                    <i class="xprez-icon-settings" data-id="{{ module.pk }}"></i>
-                </span>
+                {% endblock %}
+                {% block popover_trigger %}
+                    <span class="xprez-icon-btn" title="Settings" data-component="xprez-module-popover-trigger">
+                        <i class="xprez-icon-settings" data-id="{{ module.pk }}"></i>
+                    </span>
+                {% endblock %}
             {% endblock %}
             {% block shortcuts %}
                 {% if module.admin_form.shortcuts %}
@@ -46,11 +48,15 @@
         </div>
 
         <div class="xprez-admin-module__actions xprez-admin-module__actions--right">
-            {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-module-delete-trigger" title="Delete" delete_field=module.admin_form.delete %}
+            {% block delete_trigger %}
+                {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-module-delete-trigger" title="Delete" delete_field=module.admin_form.delete %}
+            {% endblock %}
         </div>
     </div>
 
-    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-module" message_subject="module" %}
+    {% block delete_info %}
+        {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-module" message_subject="module" %}
+    {% endblock %}
 
     <div class="xprez-admin-module__body">
         {% include "xprez/admin/form/errors.html" with errors=module.admin_form.non_field_errors %}
