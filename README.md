@@ -100,8 +100,7 @@ class PageAdmin(XprezAdmin):
 
 ```django-html
 {% load xprez %}
-{% xprez_front_media %}
-{% include 'xprez/includes/photoswipe.html' %}
+{% xprez_front_media page %}
 {% include 'xprez/container.html' with container=page %}
 ```
 

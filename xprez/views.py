@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
 from xprez import module_registry
 from xprez.conf import settings
@@ -106,3 +107,7 @@ def variables_css(request):
             specific_current_css_variables.update(specific_css_variables)
 
     return HttpResponse("\n".join(result), content_type="text/css")
+
+
+def photoswipe_html(request):
+    return render(request, "xprez/includes/photoswipe.html")

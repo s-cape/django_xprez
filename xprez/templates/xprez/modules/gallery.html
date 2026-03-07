@@ -2,6 +2,7 @@
 {% load thumbnail xprez %}
 
 {% block css_class %}{{ block.super }} js-content-{{ module.pk }} js-gallery{% endblock %}
+{% block attrs %}data-photoswipe-url="{% url 'xprez:photoswipe' %}"{% endblock %}
 
 {% block content %}
     {% for item in items %}

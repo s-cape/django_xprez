@@ -5,12 +5,10 @@
 {% endblock %}
 
 {% block content %}
-    {% include 'xprez/includes/photoswipe.html' %}
-
     <ul class="">
-    {% for page in pages %}
-        <li><a href="{{ page.get_absolute_url }}">{{ page }}</a></li>
-    {% endfor %}
+        {% for page in pages %}
+            <li><a href="{{ page.get_absolute_url }}">{{ page }}</a></li>
+        {% endfor %}
     </ul>
     {% xprez_container_render_front page %}
 {% endblock %}
