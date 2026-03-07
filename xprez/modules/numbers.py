@@ -10,6 +10,7 @@ from xprez.models.multi_module import MultiModule, MultiModuleItem
 
 
 class NumbersModule(FontSizeModuleMixin, MultiModule):
+    front_cacheable = True
     config_model = "xprez.NumbersConfig"
     front_template_name = "xprez/modules/numbers.html"
     admin_template_name = "xprez/admin/modules/numbers/numbers.html"

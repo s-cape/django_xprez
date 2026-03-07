@@ -7,6 +7,7 @@ from xprez.models.modules import Module
 
 
 class QuoteModule(FontSizeModuleMixin, Module):
+    front_cacheable = True
     front_template_name = "xprez/modules/quote.html"
     admin_template_name = "xprez/admin/modules/quote.html"
     admin_form_class = "xprez.modules.quote.QuoteModuleForm"

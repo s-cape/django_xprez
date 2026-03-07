@@ -17,17 +17,17 @@ def xprez_front_media(container=None):
 
 @register.simple_tag(takes_context=True)
 def xprez_container_render_front(context, container):
-    return container.render_front(context.flatten())
+    return container.render_front_cached(context.flatten())
 
 
 @register.simple_tag(takes_context=True)
 def xprez_section_render_front(context, section):
-    return section.render_front(context.flatten())
+    return section.render_front_cached(context.flatten())
 
 
 @register.simple_tag(takes_context=True)
 def xprez_module_render_front(context, module):
-    return module.polymorph.render_front(context.flatten())
+    return module.polymorph.render_front_cached(context.flatten())
 
 
 @register.inclusion_tag("xprez/includes/ckeditor_image.html", takes_context=True)

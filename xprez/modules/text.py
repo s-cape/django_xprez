@@ -77,6 +77,7 @@ class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
 
 
 class TextModule(ResponsiveImageSourcesMixin, ResponsiveImageMixin, TextModuleBase):
+    front_cacheable = True
     config_model = "xprez.TextConfig"
     front_template_name = "xprez/modules/text.html"
     admin_template_name = "xprez/admin/modules/text.html"

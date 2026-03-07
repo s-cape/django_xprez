@@ -33,6 +33,9 @@ XPREZ_CODE_TEMPLATES_PREFIX = "xprez/code_templates"
 XPREZ_USE_ABSOLUTE_URI = False
 XPREZ_BASE_URL = ""
 
+XPREZ_FRONT_CACHE_ENABLED = False
+XPREZ_FRONT_CACHE_TIMEOUT = None  # None = use cache backend default
+
 XPREZ_STAFF_MEMBER_REQUIRED = (
     "django.contrib.admin.views.decorators.staff_member_required"
 )

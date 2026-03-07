@@ -23,6 +23,7 @@ PHOTOSWIPE_CSS = (
 
 
 class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMultiModule):
+    front_cacheable = True
     config_model = "xprez.GalleryConfig"
     front_template_name = "xprez/modules/gallery.html"
     admin_template_name = "xprez/admin/modules/gallery/gallery.html"

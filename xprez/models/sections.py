@@ -1,14 +1,17 @@
 from django.db import models
 from django.template.defaultfilters import pluralize
 from django.template.loader import render_to_string
+from django.utils.functional import cached_property
 
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
+from xprez.models.mixins.cache import ContentFrontCacheMixin, FrontCacheMixin
 from xprez.utils import import_class
 
 
 class SectionBase(models.Model):
+    front_cacheable = False
     container = models.ForeignKey(
         "xprez.Container",
         on_delete=models.SET_NULL,
@@ -54,7 +57,8 @@ class SectionBase(models.Model):
         raise NotImplementedError
 
 
-class Section(ConfigParentMixin, SectionBase):
+class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
+    KEY = constants.SECTION_KEY
     front_template_name = "xprez/section.html"
     admin_template_name = "xprez/admin/sections/section.html"
 
@@ -81,12 +85,23 @@ class Section(ConfigParentMixin, SectionBase):
 
     @property
     def instance_key(self):
-        return f"section-{self.pk}"
+        return f"{self.KEY}-{self.pk}"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.pk:
             self.get_or_create_config(0)
+
+    def invalidate_front_cache(self):
+        super().invalidate_front_cache()
+        if self.container_id:
+            self.container.bump_front_cache_version()
+        for symlinked in self.symlinked_section_set.filter(saved=True):
+            symlinked.invalidate_front_cache()
+
+    @cached_property
+    def front_cacheable(self):
+        return all(m.polymorph.front_cacheable for m in self.get_modules())
 
     def build_config(self, css_breakpoint):
         return self.configs.model(
@@ -199,7 +214,9 @@ class Section(ConfigParentMixin, SectionBase):
         return render_to_string(self.front_template_name, context)
 
 
-class SectionSymlink(SectionBase):
+class SectionSymlink(FrontCacheMixin, SectionBase):
+    KEY = constants.SECTION_SYMLINK_KEY
+    front_cacheable = False
     admin_template_name = "xprez/admin/sections/section_symlink.html"
 
     symlink = models.ForeignKey(
@@ -212,6 +229,11 @@ class SectionSymlink(SectionBase):
 
     class Meta:
         verbose_name = "Linked section"
+
+    def invalidate_front_cache(self):
+        super().invalidate_front_cache()
+        if self.container_id:
+            self.container.bump_front_cache_version()
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class("xprez.admin.forms.SectionSymlinkForm")
@@ -231,5 +253,12 @@ class SectionSymlink(SectionBase):
 
     def render_front(self, context):
         if self.symlink:
-            return self.symlink.render_front(context)
-        return ""
+            return self.symlink.render_front_cached(context)
+        else:
+            return ""
+
+    def render_front_cached(self, context):
+        if self.symlink:
+            return self.symlink.render_front_cached(context)
+        else:
+            return ""

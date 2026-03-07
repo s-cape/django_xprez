@@ -7,6 +7,7 @@ from xprez.models.multi_module import MultiModuleItem, UploadMultiModule
 
 
 class FilesModule(FontSizeModuleMixin, UploadMultiModule):
+    front_cacheable = True
     front_template_name = "xprez/modules/files.html"
     admin_template_name = "xprez/admin/modules/files/files.html"
     admin_item_template_name = "xprez/admin/modules/files/files_item.html"

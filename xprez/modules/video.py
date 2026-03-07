@@ -62,6 +62,7 @@ def get_video_providers():
 
 
 class VideoModule(ResponsiveImageMixin, Module):
+    front_cacheable = True
     front_template_name = "xprez/modules/video.html"
     admin_template_name = "xprez/admin/modules/video.html"
     admin_form_class = "xprez.modules.video.VideoForm"

@@ -3,12 +3,15 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
 
+from xprez import constants
+from xprez.models.mixins.cache import FrontCacheMixin
 from xprez.utils import class_content_type
 
 
-class Container(models.Model):
+class Container(FrontCacheMixin, models.Model):
     """Base container class for pages/articles that contain modules."""
 
+    KEY = constants.CONTAINER_KEY
     front_template_name = "xprez/container.html"
 
     content_type = models.CharField(max_length=100, editable=False)
@@ -17,6 +20,10 @@ class Container(models.Model):
         if not self.pk:
             self.content_type = class_content_type(self.__class__)
         super().save(*args, **kwargs)
+
+    @cached_property
+    def front_cacheable(self):
+        return all(s.front_cacheable for s in self.get_sections_front())
 
     @cached_property
     def polymorph(self):

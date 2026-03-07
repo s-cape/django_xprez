@@ -2,6 +2,7 @@ CUSTOM = "custom"
 
 MODULE_KEY = "module"
 SECTION_KEY = "section"
+SECTION_SYMLINK_KEY = "section_symlink"
 CONTAINER_KEY = "container"
 
 MARGIN_NONE = ""

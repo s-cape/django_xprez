@@ -6,12 +6,14 @@ from django.utils.functional import cached_property, classproperty
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
+from xprez.models.mixins.cache import ContentFrontCacheMixin
 from xprez.utils import class_content_type, copy_model, import_class
 
 
-class Module(ConfigParentMixin, models.Model):
+class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
     """Base module class for content blocks within sections."""
 
+    KEY = constants.MODULE_KEY
     constants = constants
 
     config_model = "xprez.ModuleConfig"
@@ -58,6 +60,16 @@ class Module(ConfigParentMixin, models.Model):
         super().save(*args, **kwargs)
         if self.pk:
             self.get_or_create_config(0)
+
+    def invalidate_front_cache(self):
+        super().invalidate_front_cache()
+        self.section.bump_front_cache_version()
+        if self.section.container_id:
+            self.section.container.bump_front_cache_version()
+        module_symlink_model = apps.get_model("xprez", "ModuleSymlink")
+        if not isinstance(self, module_symlink_model):
+            for symlinked in self.symlinked_module_set.filter(saved=True):
+                symlinked.invalidate_front_cache()
 
     @property
     def verbose_name(self):

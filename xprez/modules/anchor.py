@@ -5,6 +5,7 @@ from xprez.models import Module
 
 
 class AnchorModule(Module):
+    front_cacheable = True
     admin_icon_template_name = "xprez/shared/icons/modules/anchor.html"
 
     title = models.CharField(max_length=100)

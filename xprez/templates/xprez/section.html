@@ -1,8 +1,7 @@
 {% load xprez %}
 
-<div class="debug-info debug-info__section">{{ section.render_css_variables }}</div>
-<div id="{{ section.instance_key }}" class="{{ section.render_css_classes }}">
-    {{ section.render_css_variables|safe }}
+<div id="{{ section.instance_key }}" class="{{ section.front_css_classes_cached }}">
+    {{ section.front_css_variables_cached|safe }}
     <div class="xprez-section-inner">
         {% for module in section.get_modules %}
             {% xprez_module_render_front module %}

@@ -62,6 +62,8 @@ class ConfigBase(CssMixin, models.Model):
         if self.is_default():
             self.saved = True
         super().save(*args, **kwargs)
+        if self.pk:
+            getattr(self, self.parent_attr).invalidate_front_cache()
 
     def is_default(self):
         return self.css_breakpoint == 0

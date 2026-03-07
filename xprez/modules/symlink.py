@@ -22,3 +22,9 @@ class ModuleSymlink(Module):
             return self.symlink.polymorph.render_front(*args, **kwargs)
         else:
             return ""
+
+    def render_front_cached(self, *args, **kwargs):
+        if self.symlink:
+            return self.symlink.polymorph.render_front_cached(*args, **kwargs)
+        else:
+            return ""
