@@ -24,10 +24,15 @@ class NumbersModule(FontSizeModuleMixin, MultiModule):
         js = ("xprez/js/numbers.js",)
 
     def save(self, *args, **kwargs):
+        no_initial_item = kwargs.pop("no_initial_item", False)
         is_new = not self.pk
         super().save(*args, **kwargs)
-        if is_new:
+        if is_new and not no_initial_item:
             self.create_item(saved=True)
+
+    def duplicate_to(self, target_section, saved=False, **kwargs):
+        kwargs["no_initial_item"] = True
+        return super().duplicate_to(target_section, saved=saved, **kwargs)
 
 
 class NumbersItem(MultiModuleItem):

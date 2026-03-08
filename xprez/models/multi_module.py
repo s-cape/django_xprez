@@ -94,9 +94,9 @@ class MultiModule(Module):
         item.save()
         return item
 
-    def duplicate_to(self, target_section, saved=False):
-        new_module = super().duplicate_to(target_section, saved=saved)
-        self.duplicate_items(new_module, saved=saved)
+    def duplicate_to(self, target_section, saved=False, **kwargs):
+        new_module = super().duplicate_to(target_section, saved=saved, **kwargs)
+        self.duplicate_items(new_module, saved=True)
         return new_module
 
     def duplicate_items(self, new_module, saved=False):

@@ -99,11 +99,11 @@ class Module(ConfigParentMixin, models.Model):
         else:
             return model.objects.get(pk=self.pk)
 
-    def duplicate_to(self, target_section, saved=False):
+    def duplicate_to(self, target_section, saved=False, **kwargs):
         new_module = copy_model(self)
         new_module.section = target_section
         new_module.saved = saved
-        new_module.save()
+        new_module.save(**kwargs)
         self.duplicate_configs_to(new_module, saved=saved)
         return new_module
 
