@@ -1,3 +1,8 @@
+User Documentation
+==================
+
+- [User guide](user/README.md)
+
 Developer Documentation
 =======================
 

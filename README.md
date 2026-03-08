@@ -128,8 +128,11 @@ See the [built-in modules](xprez/modules/) source for more examples.
 THUMBNAIL_BACKEND = 'xprez.contrib.sorl_thumbnail.thumbnail_backend.NamingThumbnailBackend'
 ```
 
-For a full example, see the [example_app](example_app/) in this repository.
 
 ---
+
+For user documentation, see [docs/user/README.md](docs/user/README.md).
+
+For an example, see the [example_app](example_app/) in this repository.
 
 For development and contributing, see [docs/development.md](docs/development.md).
