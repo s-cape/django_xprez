@@ -19,7 +19,7 @@ export const WithSignals = (Base) =>
             this._listeners[event] = this._listeners[event].filter((f) => f !== fn);
         }
 
-        emit(event) {
-            (this._listeners[event] || []).forEach((fn) => fn());
+        emit(event, data) {
+            (this._listeners[event] || []).forEach((fn) => fn(data));
         }
     };

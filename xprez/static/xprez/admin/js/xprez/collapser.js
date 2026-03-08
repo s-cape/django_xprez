@@ -14,12 +14,12 @@ export const XprezCollapserMixin = {
     collapse() {
         this.el.setAttribute("data-collapsed", "");
         this.persistCollapse();
-        this.xprez.allSectionsCollapseExpand?.updateButtonState();
+        this.xprez.emit('section-collapse-changed');
     },
     expand() {
         this.el.removeAttribute("data-collapsed");
         this.persistCollapse();
-        this.xprez.allSectionsCollapseExpand?.updateButtonState();
+        this.xprez.emit('section-collapse-changed');
     },
     toggleCollapse() { this.isCollapsed() ? this.expand() : this.collapse(); },
     persistCollapse() {
@@ -38,6 +38,7 @@ export class XprezAllSectionsCollapseExpand extends XprezControllerBase {
         this.expanderEl = this.el.querySelector("[data-xprez-all-sections-expander]");
         this.collapserEl.addEventListener("click", this.collapseAll.bind(this));
         this.expanderEl.addEventListener("click", this.expandAll.bind(this));
+        this.xprez.on('section-collapse-changed', () => this.updateButtonState());
         this.updateButtonState();
     }
 
@@ -62,7 +63,6 @@ export class XprezAllSectionsCollapseExpand extends XprezControllerBase {
         for (const section of Object.values(this.xprez.sections)) {
             section.collapse();
         }
-        this.updateButtonState();
     }
 
     expandAll() {
@@ -70,6 +70,5 @@ export class XprezAllSectionsCollapseExpand extends XprezControllerBase {
         for (const section of Object.values(this.xprez.sections)) {
             section.expand();
         }
-        this.updateButtonState();
     }
 }
