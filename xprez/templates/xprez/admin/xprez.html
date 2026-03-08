@@ -18,10 +18,16 @@
             </span>
         </div>
 
-        <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-xprez-all-sections-collapser>
-            <i class="xprez-icon-vertical"></i>
-            Collapse all
-        </span>
+        <div data-controller="XprezAllSectionsCollapseExpand">
+            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-xprez-all-sections-collapser>
+                <i class="xprez-icon-vertical"></i>
+                Collapse all
+            </span>
+            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-xprez-all-sections-expander>
+                <i class="xprez-icon-vertical"></i>
+                Expand all
+            </span>
+        </div>
         <span class="xprez-btn xprez-btn-transparent xprez-btn--sm {# success #}">
             <span class="xprez-btn__inner xprez-btn__success">
                 {% include "xprez/shared/icons/checkmark.html" %}

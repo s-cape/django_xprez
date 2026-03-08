@@ -5,7 +5,6 @@ export class XprezControllerBase {
         this.el._xprezController = this;
     }
 
-    /** Walk up the parent chain to the root Xprez instance. */
     get xprez() {
         let p = this;
         while (p.parent !== null) {
@@ -23,5 +22,10 @@ export class XprezControllerBase {
             throw new Error(`[xprez] Double-binding: ${el._xprezController.constructor.name} already bound`, { cause: el });
         }
         return new ControllerClass(this, el);
+    }
+
+    mountChildOrNull(el) {
+        if (!el) return null;
+        return this.mountChild(el);
     }
 }

@@ -1,5 +1,4 @@
-import { XprezSection, XprezSectionSymlink } from './sections.js';
-import { XprezSectionAdderContainerEnd } from './adders.js';
+import { XprezSectionSymlink } from './sections.js';
 import { XprezSortable } from './sortable.js';
 import { XprezSyncManager } from './sync.js';
 import { XprezControllerBase } from './controller_base.js';
@@ -13,9 +12,12 @@ export class Xprez extends XprezControllerBase {
         this.sync = new XprezSyncManager(this);
         this.initSections();
         this.updateView();
-        const adderEl = this.el.querySelector("[data-controller='XprezSectionAdderContainerEnd']");
-        this.adder = adderEl ? this.mountChild(adderEl) : null;
-        this.initAllSectionsCollapser();
+        this.adder = this.mountChildOrNull(
+            this.el.querySelector("[data-controller='XprezSectionAdderContainerEnd']")
+        );
+        this.allSectionsCollapseExpand = this.mountChildOrNull(
+            this.el.querySelector("[data-controller='XprezAllSectionsCollapseExpand']")
+        );
         this.initSectionsSortable();
     }
 
@@ -60,19 +62,11 @@ export class Xprez extends XprezControllerBase {
 
         this.sections.forEach(section => {
             const sectionId = section.el.querySelector('input[name="section-id"]').value;
-            // gridEl direct children are always module roots
             Array.from(section.gridEl.children).forEach((moduleEl, moduleIndex) => {
                 moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-position"]`).value = moduleIndex;
                 moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-section"]`).value = sectionId;
             });
         });
-    }
-
-    initAllSectionsCollapser() {
-        this.allSectionsCollapserEl = this.el.querySelector("[data-xprez-all-sections-collapser]");
-        this.allSectionsCollapserEl.addEventListener("click", function() {
-            for (const section of Object.values(this.sections)) { section.collapse(); }
-        }.bind(this));
     }
 
     initSectionsSortable() {

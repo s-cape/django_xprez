@@ -45,9 +45,11 @@ import { XprezCopyMenu, XprezSectionCopyMenu, XprezModuleCopyMenu, XprezClipboar
 import { XprezFileInputFieldController } from './xprez/file_input.js';
 import { XprezClipboardList } from './xprez/clipboard.js';
 import { XprezControllerBase } from './xprez/controller_base.js';
+import { XprezAllSectionsCollapseExpand } from './xprez/collapser.js';
 
 // Root controllers resolvable by name from data-controller attributes
 window.Xprez = Xprez;
+window.XprezAllSectionsCollapseExpand = XprezAllSectionsCollapseExpand;
 window.XprezSection = XprezSection;
 window.XprezSectionSymlink = XprezSectionSymlink;
 window.XprezSectionPopover = XprezSectionPopover;
@@ -82,6 +84,7 @@ window.XprezMultiModuleAdderBase = XprezMultiModuleAdderBase;
 export {
     XprezControllerBase,
     Xprez,
+    XprezAllSectionsCollapseExpand,
     XprezModule,
     XprezSection,
     XprezSectionSymlink,
