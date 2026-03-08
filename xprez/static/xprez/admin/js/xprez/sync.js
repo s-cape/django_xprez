@@ -10,15 +10,21 @@ export class XprezSyncManager {
     selectRelated(module) {
         const contentType = module.contentType();
         const sectionModules = module.section.modules;
+        const group = module.getSyncGroup();
         const modules = this.xprez.getModules();
         for (const m of modules) {
-            if (m === module || m.el.dataset.mode === "delete") {
-                continue;
-            } else if (sectionModules.includes(m) && m.contentType() === contentType) {
-                m.setSyncMode("selected", {updateUI: false});
-            } else {
-                m.setSyncMode("selectable", {updateUI: false});
-            }
+            if (m === module || m.el.dataset.mode === "delete") continue;
+
+            const inSameSection = sectionModules.includes(m);
+            const mGroup = m.getSyncGroup();
+            const hasSameGroup = group !== "" && mGroup === group;
+            const sameSectionAndTypeAndInGroup =
+                inSameSection &&
+                m.contentType() === contentType &&
+                (group === "" || mGroup === group);
+
+            const selected = hasSameGroup || sameSectionAndTypeAndInGroup;
+            m.setSyncMode(selected ? "selected" : "selectable", {updateUI: false});
         }
         module.updateSyncSelectedUI();
     }
@@ -58,15 +64,15 @@ export class XprezSyncManager {
         }
     }
 
-    queueItem(targetParent, targetBreakpoint, fieldName, value) {
-        this._queue.push({ targetParent, targetBreakpoint, fieldName, value });
-    }
-
     syncField(field) {
         const targetBreakpoint = field.parent.cssBreakpoint?.() ?? null;
         for (const targetParent of this.getSelectedModules()) {
             this.queueItem(targetParent, targetBreakpoint, field.fieldName, field.getValue());
         }
+    }
+
+    queueItem(targetParent, targetBreakpoint, fieldName, value) {
+        this._queue.push({ targetParent, targetBreakpoint, fieldName, value });
     }
 
     async processQueue() {
@@ -169,9 +175,9 @@ export const XprezModuleSyncMixin = {
         this.syncSelectedBtn = this.popover.el.querySelector("[data-xprez-module-sync-selected]");
         this.syncSelectedCountEl = this.popover.el.querySelector("[data-xprez-module-sync-selected-count]");
         this.syncSelectTrigger.addEventListener("click", (e) => {
-            if (this.el.dataset.mode === "edit") return;
+            if (!["selected", "selectable"].includes(this.el.dataset.mode)) return;
             e.stopPropagation();
-            this.setSyncMode(this.el.dataset.mode === "selected" ? "selectable" : "selected");
+            this.toggleSyncSelected();
         });
         this.syncSelectedBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -179,10 +185,52 @@ export const XprezModuleSyncMixin = {
         });
     },
 
+    syncModuleId() {
+        return this.el.querySelector("[name='module-id']")?.value ?? "";
+    },
+
+    getSyncGroup() {
+        return this.el.querySelector(`[name="${this.el.dataset.prefix}-sync_group"]`)?.value ?? "";
+    },
+
+    setSyncGroup(value) {
+        const input = this.el.querySelector(`[name="${this.el.dataset.prefix}-sync_group"]`);
+        input.value = value;
+    },
+
+    assignSyncGroupForNew() {
+        const contentType = this.contentType();
+        const peers = this.section.modules.filter(
+            (m) => m !== this && m.el.dataset.mode !== "delete" && m.contentType() === contentType
+        );
+        const groups = new Set(peers.map((m) => m.getSyncGroup()).filter((g) => g !== ""));
+        const assigned = groups.size === 1 ? [...groups][0] : "";
+        this.setSyncGroup(assigned);
+    },
+
     setSyncMode(mode, options = {}) {
         this.el.dataset.mode = mode;
         if (options.updateUI !== false) {
             this.section.xprez.sync.getEditedModule()?.updateSyncSelectedUI();
+        }
+    },
+
+    toggleSyncSelected() {
+        const mode = this.el.dataset.mode;
+        if (mode === "selected") {
+            this.setSyncMode("selectable");
+            this.setSyncGroup(this.syncModuleId());
+        } else if (mode === "selectable") {
+            this.setSyncMode("selected");
+            const sync = this.section.xprez.sync;
+            const edited = sync.getEditedModule();
+            const groupId = edited?.syncModuleId() ?? "";
+            if (groupId !== "") {
+                const modulesInGroup = [...sync.getSelectedModules(), edited];
+                for (const m of modulesInGroup) {
+                    m.setSyncGroup(groupId);
+                }
+            }
         }
     },
 

@@ -87,7 +87,7 @@ export class XprezSectionDuplicateAdder extends XprezDuplicateAdder {
 }
 
 export class XprezModuleDuplicateAdder extends XprezDuplicateAdder {
-    initNewElement(el) { this.parent.parent.section.initModule(el); }
+    initNewElement(el) { this.parent.parent.section.initNewModule(el); }
 }
 
 export class XprezAdderSelectBase extends XprezAdderBase {
@@ -160,7 +160,7 @@ export class XprezModuleAdderSectionEnd extends XprezContentAdderSectionBase {
         this.triggerEl = this.section.el.querySelector("[data-xprez-adder-section-end-trigger]");
     }
     placeNewElement(el) { this.section.gridEl.appendChild(el); }
-    initNewElement(el) { this.section.initModule(el); }
+    initNewElement(el) { this.section.initNewModule(el); }
 }
 
 export class XprezConfigAdderBase extends XprezAdderSelectBase {

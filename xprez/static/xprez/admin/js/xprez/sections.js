@@ -63,6 +63,12 @@ export class XprezSection extends XprezContentBase {
         return module;
     }
 
+    initNewModule(moduleEl) {
+        const module = this.initModule(moduleEl);
+        module.assignSyncGroupForNew();
+        return module;
+    }
+
     initCopyMenus() {
         this.el.querySelectorAll('[data-controller="XprezSectionCopyMenu"]').forEach(el => {
             if (this.isUnmanaged(el)) return;
