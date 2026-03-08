@@ -113,7 +113,9 @@ export class XprezAdderSelectBase extends XprezAdderBase {
 export class XprezContentAdderBase extends XprezAdderItemsBase {
     constructor(parent, el) {
         super(parent, el);
-        this.clipboardList = new XprezClipboardList(this);
+        this.clipboardList = this.mountChild(
+            this.el.querySelector('[data-controller="XprezClipboardList"]')
+        );
     }
 }
 

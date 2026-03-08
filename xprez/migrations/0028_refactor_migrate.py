@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="galleryitem",
             name="position",
-            field=models.PositiveSmallIntegerField(default=0),
+            field=models.PositiveSmallIntegerField(blank=True, default=0),
         ),
         migrations.RenameField(
             model_name="GalleryModule",
@@ -145,7 +145,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="numbersitem",
             name="position",
-            field=models.PositiveSmallIntegerField(default=0),
+            field=models.PositiveSmallIntegerField(blank=True, default=0),
         ),
         migrations.AddField(
             model_name="numbersitem",
@@ -233,7 +233,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="filesitem",
             name="position",
-            field=models.PositiveSmallIntegerField(default=0),
+            field=models.PositiveSmallIntegerField(blank=True, default=0),
         ),
         migrations.AddField(
             model_name="filesmodule",

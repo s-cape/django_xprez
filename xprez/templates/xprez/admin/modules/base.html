@@ -1,6 +1,7 @@
 {% load static xprez_admin %}
 <div
-    class="xprez-admin-module {% if module.admin_form.errors %}xprez-module--has-errors{% endif %} xprez-admin-{{ module.module_css_class }}"
+    class="xprez-admin-module xprez-admin-{{ module.module_css_class }}"
+    {% if module.admin_has_errors %}data-has-errors{% endif %} 
     data-controller="{{ module.admin_js_controller_class }}"
     data-content-type="{{ module.content_type }}"
     data-mode="{# (empty)/edit/selectable/selected/delete #}"

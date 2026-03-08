@@ -48,7 +48,7 @@
 
     {% with available_modules=form.xprez_add_menu_module_classes %}
         {% if available_modules %}
-            {% include "./includes/adders/section.html" with controller_class="XprezSectionAdderContainerEnd" xprez_admin=form.xprez_admin adder_container=form.instance %}
+            {% include "./includes/adders/content_container_end.html" with xprez_admin=form.xprez_admin adder_container=form.instance %}
         {% endif %}
     {% endwith %}
 </div>

@@ -16,7 +16,7 @@ class SectionBase(models.Model):
         editable=False,
         null=True,
     )
-    position = models.PositiveSmallIntegerField(default=0)
+    position = models.PositiveSmallIntegerField(default=0, blank=True)
     visible = models.BooleanField(default=True)
     saved = models.BooleanField(default=False, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)

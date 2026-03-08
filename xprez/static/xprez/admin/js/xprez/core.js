@@ -2,8 +2,9 @@ import { XprezSectionSymlink } from './sections.js';
 import { XprezSortable } from './sortable.js';
 import { XprezSyncManager } from './sync.js';
 import { XprezControllerBase } from './controller_base.js';
+import { WithSignals } from './signals.js';
 
-export class Xprez extends XprezControllerBase {
+export class Xprez extends WithSignals(XprezControllerBase) {
     constructor(parent, el) {
         super(parent, el);
         this.sectionsContainerEl = this.el.querySelector("[data-xprez-sections-container]");

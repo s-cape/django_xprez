@@ -1,29 +1,49 @@
 import { xprezGetCsrfToken, xprezExecuteScripts } from './utils.js';
+import { XprezControllerBase } from './controller_base.js';
 
-export class XprezClipboardList {
-    constructor(adder) {
-        this.adder = adder;
-        this.triggerEl = adder.el.querySelector('[data-xprez-clipboard-list-trigger]');
-        this.listContainerEl = adder.el.querySelector('[data-xprez-clipboard-list-container]');
-        this.triggerEl.addEventListener('click', this.onTriggerClick.bind(this));
+export class XprezClipboardList extends XprezControllerBase {
+    constructor(parent, el) {
+        super(parent, el);
+        this.listContainerEl = this.el;
+        this.triggerEl = this.el.nextElementSibling?.querySelector(
+            '[data-xprez-clipboard-list-trigger]'
+        );
+        if (this.triggerEl) {
+            this.triggerEl.addEventListener('click', this.onTriggerClick.bind(this));
+        }
+        this.xprez.on('clipboard-clipped', () => this.onClipboardClipped());
+    }
+
+    get adder() {
+        return this.parent;
     }
 
     isOpen() { return !this.listContainerEl.hasAttribute('data-hidden'); }
     show() { this.listContainerEl.removeAttribute('data-hidden'); }
     hide() { this.listContainerEl.setAttribute('data-hidden', ''); }
 
+    onClipboardClipped() {
+        if (this.triggerEl) this.triggerEl.removeAttribute('data-hidden');
+        if (this.isOpen()) this.loadList();
+    }
+
+    loadList() {
+        if (!this.triggerEl?.dataset.url) return;
+        fetch(this.triggerEl.dataset.url)
+            .then(response => response.text())
+            .then(html => {
+                this.listContainerEl.innerHTML = html;
+                this.show();
+                xprezExecuteScripts(this.listContainerEl);
+                this.onLoad();
+            });
+    }
+
     onTriggerClick() {
         if (this.isOpen()) {
             this.hide();
         } else {
-            fetch(this.triggerEl.dataset.url)
-                .then(response => response.text())
-                .then(html => {
-                    this.listContainerEl.innerHTML = html;
-                    this.show();
-                    xprezExecuteScripts(this.listContainerEl);
-                    this.onLoad();
-                });
+            this.loadList();
         }
     }
 

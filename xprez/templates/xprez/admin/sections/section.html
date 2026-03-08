@@ -5,7 +5,7 @@
 {% block data_prefix %}{{ section.admin_form.prefix }}{% endblock %}
 
 {% block before_header %}
-    {% include "xprez/admin/includes/adders/section.html" with class_name="xprez-add-before" controller_class="XprezSectionAdderSectionBefore" xprez_admin=section.admin_form.xprez_admin adder_container=section.container attributes="data-hidden" %}
+    {% include "xprez/admin/includes/adders/content_section_before.html" with xprez_admin=section.admin_form.xprez_admin adder_container=section.container %}
 {% endblock %}
 
 {% block header_settings %}
@@ -52,7 +52,7 @@
         <span class="xprez-btn xprez-btn-transparent" data-xprez-adder-section-end-trigger>
             <i class="xprez-icon-plus_square_20"></i>Add content
         </span>
-        {% include "xprez/admin/includes/adders/list.html" with controller_class="XprezModuleAdderSectionEnd" xprez_admin=section.admin_form.xprez_admin adder_container=section.container adder_section=section attributes="data-hidden" %}
+        {% include "xprez/admin/includes/adders/content_section_end.html" with xprez_admin=section.admin_form.xprez_admin adder_container=section.container adder_section=section %}
     </div>
 
     <div popover="manual" class="xprez-popover" data-controller="XprezSectionPopover">

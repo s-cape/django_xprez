@@ -25,7 +25,7 @@ class Module(ConfigParentMixin, models.Model):
     )
     saved = models.BooleanField(default=False, editable=False)
 
-    position = models.PositiveSmallIntegerField(default=0)
+    position = models.PositiveSmallIntegerField(default=0, blank=True)
     content_type = models.CharField(max_length=100, editable=False)
     css_class = models.CharField(max_length=100, null=True, blank=True)
     alternate_color = models.BooleanField(

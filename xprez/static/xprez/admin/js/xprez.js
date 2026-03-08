@@ -67,6 +67,7 @@ window.XprezModuleConfigAdder = XprezModuleConfigAdder;
 window.XprezModuleConfig = XprezModuleConfig;
 window.XprezModuleCopyMenu = XprezModuleCopyMenu;
 window.XprezClipboardClip = XprezClipboardClip;
+window.XprezClipboardList = XprezClipboardList;
 window.XprezTextModule = XprezTextModule;
 window.XprezMultiModule = XprezMultiModule;
 window.XprezUploadMultiModule = XprezUploadMultiModule;

@@ -148,7 +148,7 @@ class MultiModuleItem(models.Model):
 
     module_foreign_key = "module"
     saved = models.BooleanField(default=False, editable=False)
-    position = models.PositiveSmallIntegerField(default=0)
+    position = models.PositiveSmallIntegerField(default=0, blank=True)
 
     @property
     def instance_key(self):

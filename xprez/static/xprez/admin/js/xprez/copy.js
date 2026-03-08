@@ -13,6 +13,7 @@ export class XprezClipboardClip extends XprezControllerBase {
             method: 'POST',
             headers: { 'X-CSRFToken': xprezGetCsrfToken() },
         }).then(() => {
+            this.xprez.emit('clipboard-clipped');
             this.el.classList.add('success');
             setTimeout(() => {
                 this.el.classList.remove('success');

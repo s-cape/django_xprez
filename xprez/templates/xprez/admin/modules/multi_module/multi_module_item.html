@@ -3,6 +3,7 @@
     data-controller="{{ module.admin_item_js_controller_class }}"
     data-prefix="{{ item.admin_form.prefix }}"
     data-mode=""
+    {% if item.admin_has_errors %}data-has-errors{% endif %}
 >
     {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-multi-module-item" %}
     {% block header %}

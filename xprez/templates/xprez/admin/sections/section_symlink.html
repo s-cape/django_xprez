@@ -7,7 +7,7 @@
 {% block data_mode %}{# (empty)/delete #}{% endblock %}
 
 {% block before_header %}
-    {% include "xprez/admin/includes/adders/section.html" with class_name="xprez-add-before" controller_class="XprezSectionAdderSectionBefore" xprez_admin=section_symlink.admin_form.xprez_admin adder_container=section_symlink.container attributes="data-hidden" %}
+    {% include "xprez/admin/includes/adders/content_section_before.html" with xprez_admin=section_symlink.admin_form.xprez_admin adder_container=section_symlink.container %}
 {% endblock %}
 
 {% block header_settings %}
