@@ -1,10 +1,9 @@
 import { xprezGetCsrfToken } from './utils.js';
-import { XprezSectionDuplicateAdder, XprezModuleDuplicateAdder } from './adders.js';
+import { XprezControllerBase } from './controller_base.js';
 
-export class XprezClipboardClip {
-    constructor(el, copyMenu) {
-        this.el = el;
-        this.copyMenu = copyMenu;
+export class XprezClipboardClip extends XprezControllerBase {
+    constructor(parent, el) {
+        super(parent, el);
         this.el.addEventListener('click', this.onClick.bind(this));
     }
 
@@ -17,28 +16,24 @@ export class XprezClipboardClip {
             this.el.classList.add('success');
             setTimeout(() => {
                 this.el.classList.remove('success');
-                this.copyMenu.el.removeAttribute('data-open');
+                this.parent.el.removeAttribute('data-open');
             }, 2000);
         });
     }
 }
 
-export class XprezCopyMenu {
-    constructor(el, parent) {
-        this.el = el;
-        this.parent = parent;
+export class XprezCopyMenu extends XprezControllerBase {
+    constructor(parent, el) {
+        super(parent, el);
         this.initDuplicateAdder();
         this.initSubmenuToggle();
         this.initClipboard();
     }
 
     initDuplicateAdder() {
-        this.duplicateAdder = new (this.duplicateAdderClass)(
-            this.parent.xprez,
-            this.el.querySelector('[data-component="xprez-duplicate-trigger"]'),
-            this
-        );
-    } 
+        const triggerEl = this.el.querySelector('[data-xprez-duplicate-trigger]');
+        this.duplicateAdder = this.mountChild(triggerEl);
+    }
 
     initSubmenuToggle() {
         this.el.addEventListener('click', (e) => {
@@ -58,15 +53,11 @@ export class XprezCopyMenu {
     }
 
     initClipboard() {
-        const clipEl = this.el.querySelector('[data-component="xprez-clipboard-clip"]');
-        new XprezClipboardClip(clipEl, this);
+        const clipEl = this.el.querySelector('[data-controller="XprezClipboardClip"]');
+        this.mountChild(clipEl);
     }
 }
 
-export class XprezSectionCopyMenu extends XprezCopyMenu {
-    get duplicateAdderClass() { return XprezSectionDuplicateAdder; }
-}
+export class XprezSectionCopyMenu extends XprezCopyMenu {}
 
-export class XprezModuleCopyMenu extends XprezCopyMenu {
-    get duplicateAdderClass() { return XprezModuleDuplicateAdder; }
-}
+export class XprezModuleCopyMenu extends XprezCopyMenu {}

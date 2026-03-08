@@ -1,7 +1,7 @@
 from django.db import models
 
 from xprez import constants
-from xprez.admin.forms import ModuleForm, MultiModuleItemForm
+from xprez.admin.forms import ModuleForm
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
 from xprez.models.mixins.font_size import FontSizeModuleMixin
@@ -28,7 +28,6 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
     admin_template_name = "xprez/admin/modules/gallery/gallery.html"
     admin_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"
     admin_form_class = "xprez.modules.gallery.GalleryModuleForm"
-    admin_item_form_class = "xprez.modules.gallery.GalleryItemForm"
     admin_icon_template_name = "xprez/shared/icons/modules/gallery.html"
 
     crop = models.CharField(
@@ -84,7 +83,10 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
 
 class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):
     module = models.ForeignKey(
-        GalleryModule, related_name="items", on_delete=models.CASCADE
+        GalleryModule,
+        related_name="items",
+        on_delete=models.CASCADE,
+        editable=False,
     )
     file = models.ImageField(upload_to="gallery")
     description = models.CharField(max_length=255, blank=True, null=True)
@@ -155,10 +157,4 @@ class GalleryModuleForm(ModuleForm):
 
     class Meta:
         model = GalleryModule
-        fields = "__all__"
-
-
-class GalleryItemForm(MultiModuleItemForm):
-    class Meta:
-        model = GalleryItem
         fields = "__all__"

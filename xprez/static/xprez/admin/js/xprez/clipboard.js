@@ -3,8 +3,8 @@ import { xprezGetCsrfToken, xprezExecuteScripts } from './utils.js';
 export class XprezClipboardList {
     constructor(adder) {
         this.adder = adder;
-        this.triggerEl = adder.el.querySelector('[data-component="xprez-clipboard-list-trigger"]');
-        this.listContainerEl = adder.el.querySelector('[data-component="xprez-clipboard-list-container"]');
+        this.triggerEl = adder.el.querySelector('[data-xprez-clipboard-list-trigger]');
+        this.listContainerEl = adder.el.querySelector('[data-xprez-clipboard-list-container]');
         this.triggerEl.addEventListener('click', this.onTriggerClick.bind(this));
     }
 
@@ -28,11 +28,11 @@ export class XprezClipboardList {
     }
 
     onLoad() {
-        this.emptyEl = this.listContainerEl.querySelector('[data-component="xprez-clipboard-empty"]');
-        this.listContainerEl.querySelectorAll('[data-component="xprez-clipboard-paste"]').forEach(btn => {
+        this.emptyEl = this.listContainerEl.querySelector('[data-xprez-clipboard-empty]');
+        this.listContainerEl.querySelectorAll('[data-xprez-clipboard-paste]').forEach(btn => {
             btn.addEventListener('click', () => this.onPaste(btn));
         });
-        this.listContainerEl.querySelectorAll('[data-component="xprez-clipboard-remove"]').forEach(btn => {
+        this.listContainerEl.querySelectorAll('[data-xprez-clipboard-remove]').forEach(btn => {
             btn.addEventListener('click', () => this.onRemove(btn));
         });
     }

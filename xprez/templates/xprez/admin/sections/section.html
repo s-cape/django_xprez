@@ -5,15 +5,15 @@
 {% block data_prefix %}{{ section.admin_form.prefix }}{% endblock %}
 
 {% block before_header %}
-    {% include "xprez/admin/includes/adders/section.html" with class_name="xprez-add-before" component_name="xprez-adder-section-before" xprez_admin=section.admin_form.xprez_admin adder_container=section.container attributes="data-hidden" %}
+    {% include "xprez/admin/includes/adders/section.html" with class_name="xprez-add-before" controller_class="XprezSectionAdderSectionBefore" xprez_admin=section.admin_form.xprez_admin adder_container=section.container attributes="data-hidden" %}
 {% endblock %}
 
 {% block header_settings %}
-    <span class="xprez-icon-btn" title="Advanced settings" data-component="xprez-section-popover-trigger">
+    <span class="xprez-icon-btn" title="Advanced settings" data-xprez-section-popover-trigger>
         <i class="xprez-icon-settings"></i>
     </span>
 
-    <div class="xprez-option-row" data-component="xprez-shortcuts" data-hidden>
+    <div class="xprez-option-row" data-xprez-shortcuts data-hidden>
         {% for field in section.admin_form.shortcuts %}
             {% include "xprez/admin/form/field.html" with field=field size="flex-auto" js_controller_class="XprezShortcutFieldController" %}
         {% endfor %}
@@ -34,13 +34,13 @@
     {% with xprez_admin=section.admin_form.xprez_admin %}
         {% url xprez_admin.xprez_duplicate_url_name section_pk=section.pk as duplicate_url %}
         {% url xprez_admin.xprez_clipboard_clip_url_name xprez_admin.constants.SECTION_KEY section.pk as clipboard_url %}
-        {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clipboard_url=clipboard_url %}
+        {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clipboard_url=clipboard_url copy_menu_controller="XprezSectionCopyMenu" duplicate_controller="XprezSectionDuplicateAdder" %}
     {% endwith %}
     {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title="Remove" delete_field=section.admin_form.delete %}
 {% endblock %}
 
 {% block section_body %}
-    <div class="xprez-section-grid" data-component="xprez-section-grid">
+    <div class="xprez-section-grid" data-xprez-section-grid>
         {% for module in section.admin_form.xprez_modules %}
             {% xprez_module_render_admin module %}
         {% endfor %}
@@ -49,13 +49,13 @@
     {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-section" message_subject="section" %}
 
     <div class="xprez-section__footer">
-        <span class="xprez-btn xprez-btn-transparent" data-component="xprez-adder-section-end-trigger">
+        <span class="xprez-btn xprez-btn-transparent" data-xprez-adder-section-end-trigger>
             <i class="xprez-icon-plus_square_20"></i>Add content
         </span>
-        {% include "xprez/admin/includes/adders/list.html" with component_name="xprez-adder-section-end" xprez_admin=section.admin_form.xprez_admin adder_container=section.container adder_section=section attributes="data-hidden" %}
+        {% include "xprez/admin/includes/adders/list.html" with controller_class="XprezModuleAdderSectionEnd" xprez_admin=section.admin_form.xprez_admin adder_container=section.container adder_section=section attributes="data-hidden" %}
     </div>
 
-    <div popover="manual" class="xprez-popover" data-component="xprez-section-popover">
+    <div popover="manual" class="xprez-popover" data-controller="XprezSectionPopover">
         <div class="xprez-popover__content">
             {% include "xprez/admin/form/errors.html" with errors=section.admin_form.non_field_errors %}
             <div class="xprez-option-group">
@@ -77,13 +77,13 @@
                     {% include "xprez/admin/form/field.html" with field=section.admin_form.css_class size="flex-1" %}
                 </div>
 
-                <div data-component="xprez-section-configs">
+                <div data-xprez-section-configs>
                     {% for config in section.admin_form.xprez_configs %}
                         {% xprez_section_config_render_admin config %}
                     {% endfor %}
                 </div>
             </div>
-            <div class="xprez-option-group__footer" data-component="xprez-adder-section-config">
+            <div class="xprez-option-group__footer" data-controller="XprezSectionConfigAdder">
                 {% include "xprez/admin/includes/adders/config_section.html" with xprez_admin=section.admin_form.xprez_admin %}
             </div>
         </div>

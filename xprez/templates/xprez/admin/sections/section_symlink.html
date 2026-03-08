@@ -1,13 +1,13 @@
 {% extends "xprez/admin/sections/section_base.html" %}
 
 {% block extra_css_classes %} xprez-section--symlink{% endblock %}
-{% block data_component %}xprez-section-symlink{% endblock %}
+{% block data_controller %}XprezSectionSymlink{% endblock %}
 {% block data_prefix %}{{ section_symlink.admin_form.prefix }}{% endblock %}
 
 {% block data_mode %}{# (empty)/delete #}{% endblock %}
 
 {% block before_header %}
-    {% include "xprez/admin/includes/adders/section.html" with class_name="xprez-add-before" component_name="xprez-adder-section-before" xprez_admin=section_symlink.admin_form.xprez_admin adder_container=section_symlink.container attributes="data-hidden" %}
+    {% include "xprez/admin/includes/adders/section.html" with class_name="xprez-add-before" controller_class="XprezSectionAdderSectionBefore" xprez_admin=section_symlink.admin_form.xprez_admin adder_container=section_symlink.container attributes="data-hidden" %}
 {% endblock %}
 
 {% block header_settings %}

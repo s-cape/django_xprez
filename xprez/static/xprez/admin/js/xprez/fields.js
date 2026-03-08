@@ -1,7 +1,8 @@
-export class XprezFieldController {
+import { XprezControllerBase } from './controller_base.js';
+
+export class XprezFieldController extends XprezControllerBase {
     constructor(parent, el) {
-        this.parent = parent;
-        this.el = el;
+        super(parent, el);
         this.fieldName = el.dataset.fieldName;
         this.inputEl = el.querySelector('select, input');
 
@@ -381,7 +382,7 @@ export class XprezShowWhen {
 }
 
 export function resolveFieldControllerClass(fieldEl) {
-    const className = fieldEl.dataset.jsControllerClass;
+    const className = fieldEl.dataset.controller;
     if (className && !window[className]) {
         console.error(`Field controller class ${className} not found`);
     }

@@ -1,11 +1,12 @@
 import { XprezFieldController, XprezShowWhen } from './fields.js';
+import { XprezControllerBase } from './controller_base.js';
 
 /** Common base for content types (Section, Module): shared fields, configs, show-when. */
-export class XprezContentBase {
-    constructor(el) {
-        this.el = el;
+export class XprezContentBase extends XprezControllerBase {
+    constructor(parent, el) {
+        super(parent, el);
         this.configsContainerEl = this.el.querySelector(this.configsContainerSelector);
-        this.shortcutsContainerEl = this.el.querySelector("[data-component='xprez-shortcuts']");
+        this.shortcutsContainerEl = this.el.querySelector("[data-xprez-shortcuts]");
     }
 
     get unmanagedContainers() {
@@ -18,7 +19,7 @@ export class XprezContentBase {
 
     initFields() {
         this.fields = [];
-        this.popover.el.querySelectorAll('[data-component="field"]').forEach(fieldEl => {
+        this.popover.el.querySelectorAll('[data-xprez-field]').forEach(fieldEl => {
             if (this.isUnmanaged(fieldEl)) return;
             this.fields.push(new XprezFieldController(this, fieldEl));
         });

@@ -19,28 +19,28 @@ export class XprezDeleterBase {
 
 export class XprezSectionDeleter extends XprezDeleterBase {
     initElements() {
-        this.triggerEl = this.obj.el.querySelector("[data-component='xprez-section-delete-trigger']");
+        this.triggerEl = this.obj.el.querySelector("[data-xprez-section-delete-trigger]");
         if (!this.triggerEl) { return; }
         this.inputEl = this.triggerEl.querySelector("input");
-        this.undeleteEl = this.obj.el.querySelector("[data-component='xprez-section-undelete']");
+        this.undeleteEl = this.obj.el.querySelector("[data-xprez-section-undelete]");
     }
 }
 
 export class XprezModuleDeleter extends XprezDeleterBase {
     initElements() {
-        this.triggerEl = this.obj.el.querySelector("[data-component='xprez-module-delete-trigger']");
+        this.triggerEl = this.obj.el.querySelector("[data-xprez-module-delete-trigger]");
         if (!this.triggerEl) { return; }
         this.inputEl = this.triggerEl.querySelector("input");
-        this.undeleteEl = this.obj.el.querySelector("[data-component='xprez-module-undelete']");
+        this.undeleteEl = this.obj.el.querySelector("[data-xprez-module-undelete]");
     }
 }
 
 export class XprezConfigDeleterBase extends XprezDeleterBase {
     _initElements(dataComponentName) {
-        this.triggerEl = this.obj.el.querySelector(`[data-component='xprez-${dataComponentName}-delete-trigger']`);
+        this.triggerEl = this.obj.el.querySelector(`[data-xprez-${dataComponentName}-delete-trigger]`);
         if (!this.triggerEl) { return; }
         this.inputEl = this.triggerEl.querySelector("input");
-        this.undeleteEl = this.obj.el.querySelector(`[data-component='xprez-${dataComponentName}-undelete']`);
+        this.undeleteEl = this.obj.el.querySelector(`[data-xprez-${dataComponentName}-undelete]`);
     }
 
     _afterDeleteChange() {
@@ -70,28 +70,28 @@ export class XprezModuleConfigDeleter extends XprezConfigDeleterBase {
 export class XprezMultiModuleItemDeleter extends XprezDeleterBase {
     initElements() {
         this.triggerEl = this.obj.el.querySelector(
-            "[data-component='xprez-multi-module-item-delete']"
+            "[data-xprez-multi-module-item-delete]"
         );
         this.inputEl = this.obj.el.querySelector(
             `input[name="${this.obj.el.dataset.prefix}-delete"]`
         );
         this.undeleteEl = this.obj.el.querySelector(
-            "[data-component='xprez-multi-module-item-undelete']"
+            "[data-xprez-multi-module-item-undelete]"
         );
     }
 }
 
 export class XprezTextMediaDeleter extends XprezDeleterBase {
     initElements() {
-        this.mediaEl = this.obj.el.querySelector("[data-component='xprez-text-media']");
+        this.mediaEl = this.obj.el.querySelector("[data-xprez-text-media]");
         if (!this.mediaEl) { return; }
         this.triggerEl = this.mediaEl.querySelector(
-            "[data-component='xprez-text-media-delete-trigger']"
+            "[data-xprez-text-media-delete-trigger]"
         );
         if (!this.triggerEl) { return; }
         this.inputEl = this.triggerEl.querySelector("input");
         this.undeleteEl = this.mediaEl.querySelector(
-            "[data-component='xprez-text-media-undelete']"
+            "[data-xprez-text-media-undelete]"
         );
     }
 

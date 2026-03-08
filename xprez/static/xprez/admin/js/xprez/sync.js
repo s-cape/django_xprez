@@ -165,9 +165,9 @@ export class XprezSyncManager {
 
 export const XprezModuleSyncMixin = {
     initSync() {
-        this.syncSelectTrigger = this.el.querySelector("[data-component='xprez-select-trigger']");
-        this.syncSelectedBtn = this.popover.el.querySelector("[data-component='xprez-module-sync-selected']");
-        this.syncSelectedCountEl = this.popover.el.querySelector("[data-component='xprez-module-sync-selected-count']");
+        this.syncSelectTrigger = this.el.querySelector("[data-xprez-select-trigger]");
+        this.syncSelectedBtn = this.popover.el.querySelector("[data-xprez-module-sync-selected]");
+        this.syncSelectedCountEl = this.popover.el.querySelector("[data-xprez-module-sync-selected-count]");
         this.syncSelectTrigger.addEventListener("click", (e) => {
             if (this.el.dataset.mode === "edit") return;
             e.stopPropagation();

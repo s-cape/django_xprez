@@ -30,9 +30,6 @@ class MyModule(Module):
     body = models.TextField(blank=True)
 
     front_template_name = "myapp/modules/my.html"
-
-    class Meta:
-        verbose_name = "My module"
 ```
 
 Template `myapp/templates/myapp/modules/my.html`:
@@ -61,9 +58,6 @@ class FeaturedModule(Module):
     title = models.CharField(max_length=200)
     config_model = "myapp.FeaturedConfig"
     front_template_name = "myapp/modules/featured.html"
-
-    class Meta:
-        verbose_name = "Featured"
 
 class FeaturedConfig(ModuleConfig):
     spacing = models.PositiveIntegerField(null=True, blank=True, default=24)
@@ -95,9 +89,6 @@ class TeamModule(MultiModule):
     admin_form_class = "myapp.forms.TeamModuleForm"
     admin_item_form_class = "myapp.forms.TeamMemberForm"
     admin_item_template_name = "myapp/admin/team_member.html"
-
-    class Meta:
-        verbose_name = "Team"
 
 class TeamMember(MultiModuleItem):
     module = models.ForeignKey(

@@ -1,6 +1,6 @@
 {% extends "xprez/admin/configs/base.html" %}
 
-{% block component_name %}xprez-module-config{% endblock %}
+{% block controller_class %}XprezModuleConfig{% endblock %}
 {% block delete_trigger %}
     {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-module-config-delete-trigger" title="Remove breakpoint" delete_field=config.admin_form.delete %}
 {% endblock %}

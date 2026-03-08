@@ -3,7 +3,7 @@
 
 <ul
     class="xprez-add-list"
-    data-component="{{ component_name }}"
+    data-controller="{{ controller_class }}"
     {{ attributes|default:"" }}
 >
     {% if adder_section %}
@@ -12,14 +12,14 @@
         {% url xprez_admin.xprez_clipboard_list_url_name adder_container.pk as clipboard_list_url %}
     {% endif %}
     <li
-        data-component="xprez-clipboard-list-trigger"
+        data-xprez-clipboard-list-trigger
         data-url="{{ clipboard_list_url }}"
         {% if clipboard_is_empty %}data-hidden{% endif %}
     >
         <span class="xprez-icon">{% include "xprez/shared/icons/paste.html" %}</span>
         <span>Paste from clipboard</span>
     </li>
-    <li data-component="xprez-clipboard-list-container" data-hidden></li>
+    <li data-xprez-clipboard-list-container data-hidden></li>
 
     {% for module in available_modules %}
         {% if adder_section %}
@@ -27,7 +27,7 @@
         {% else %}
             {% url xprez_admin.xprez_add_url_name module.class_content_type adder_container.pk as add_url %}
         {% endif %}
-        <li data-component="xprez-add-item" data-url="{{ add_url }}">
+        <li data-xprez-add-item data-url="{{ add_url }}">
             {{ module.admin_icon }}
             <span>{{ module.verbose_name }}</span>
         </li>

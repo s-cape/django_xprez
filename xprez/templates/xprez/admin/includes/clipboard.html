@@ -1,4 +1,4 @@
-<div class="xprez-clipboard-list" data-component="xprez-clipboard-list">
+<div class="xprez-clipboard-list" data-xprez-clipboard-list>
     {% for item in clipboard %}
         <div class="xprez-clipboard-list__item">
             <div class="xprez-clipboard-list__icon">
@@ -26,14 +26,14 @@
                 {% if item.allowed %}
                     <span
                         class="xprez-btn"
-                        data-component="xprez-clipboard-paste"
+                        data-xprez-clipboard-paste
                         data-url="{{ item.duplicate_url }}"
                     >
                         {% include "xprez/shared/icons/paste.html" %} Paste
                     </span>
                     <span
                         class="xprez-btn"
-                        data-component="xprez-clipboard-paste"
+                        data-xprez-clipboard-paste
                         data-url="{{ item.symlink_url }}"
                     >
                         {% include "xprez/shared/icons/link.html" %} Link
@@ -43,7 +43,7 @@
                 {% endif %}
                 <span
                     class="xprez-btn xprez-btn--danger"
-                    data-component="xprez-clipboard-remove"
+                    data-xprez-clipboard-remove
                     data-url="{{ item.remove_url }}"
                 >
                     {% include "xprez/shared/icons/cross.html" %} Remove
@@ -52,7 +52,7 @@
         </div>
     {% endfor %}
     <p
-        data-component="xprez-clipboard-empty"
+        data-xprez-clipboard-empty
         {% if clipboard %}data-hidden{% endif %}
     >clipboard empty</p>
 </div>

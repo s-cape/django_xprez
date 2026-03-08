@@ -15,14 +15,14 @@
 
     &[data-mode="edit"],
     &[data-mode="selected"] {
-        [data-component="xprez-select-trigger"] {
+        [data-xprez-select-trigger] {
             .x-variant-checked { display: inline; }
             .x-variant-unchecked { display: none; }
         }
     }
 
     &[data-mode="selectable"] {
-        [data-component="xprez-select-trigger"] {
+        [data-xprez-select-trigger] {
             .x-variant-checked { display: none; }
             .x-variant-unchecked { display: inline; }
         }
@@ -102,8 +102,8 @@
     }
 }
 
-[data-component="xprez"][data-sync-processing] {
-    [data-component="xprez-module-sync-selected"] {
+.xprez[data-sync-processing] {
+    [data-xprez-module-sync-selected] {
         background-color: $b-green;
         color: $white;
     }

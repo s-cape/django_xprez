@@ -3,7 +3,7 @@ export const XprezCollapserMixin = {
         try { return JSON.parse(localStorage.getItem(this.collapsedStorageKey) || "[]"); } catch { return []; }
     },
     initCollapser() {
-        this.collapserEl = this.el.querySelector("[data-component='xprez-section-collapser']");
+        this.collapserEl = this.el.querySelector("[data-xprez-section-collapser]");
         this.collapserEl.addEventListener("click", this.toggleCollapse.bind(this));
         const id = this.id();
         if (id && this.collapsedIds().includes(id)) this.el.setAttribute("data-collapsed", "");

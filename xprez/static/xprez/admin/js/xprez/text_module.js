@@ -5,7 +5,7 @@ import { WithMediaPreview } from './media_preview.js';
 export class XprezTextModule extends WithMediaPreview(XprezModule) {
     constructor(section, moduleEl) {
         super(section, moduleEl);
-        this.textMediaEl = this.el.querySelector("[data-component='xprez-text-media']");
+        this.textMediaEl = this.el.querySelector("[data-xprez-text-media]");
         this.mediaDeleter = new XprezTextMediaDeleter(this);
         this.initMediaPreview();
     }

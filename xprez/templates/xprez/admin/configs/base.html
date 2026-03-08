@@ -1,6 +1,6 @@
 <div
-    class="xprez-option-group"
-    data-component="{% block component_name %}{% endblock %}"
+    class="xprez-option-group xprez-option-group--config"
+    data-controller="{% block controller_class %}{% endblock %}"
     {% if config.is_default %}data-is-default{% endif %}
     data-css-breakpoint="{{ config.css_breakpoint }}"
 >

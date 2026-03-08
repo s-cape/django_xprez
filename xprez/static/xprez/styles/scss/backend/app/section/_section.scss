@@ -9,7 +9,7 @@
         --x-admin-section-main-divider-bg: #{$b-pink};
         --x-admin-section-main-divider-height: 3px;
 
-        .xprez-section__header [data-component="xprez-section-popover-trigger"] {
+        .xprez-section__header [data-xprez-section-popover-trigger] {
             --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
             --x-admin-option-button-bg: var(--x-admin-marker-checked-text-bg);
         }
@@ -20,7 +20,7 @@
             display: none;
         }
 
-        [data-component="xprez-section-collapser"] {
+        [data-xprez-section-collapser] {
             transform: rotate(-90deg);
         }
     }

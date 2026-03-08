@@ -1,9 +1,10 @@
+import { XprezControllerBase } from './controller_base.js';
+
 const ADVANCED = "advanced";
 
-export class XprezShortcutFieldController {
+export class XprezShortcutFieldController extends XprezControllerBase {
     constructor(parent, el) {
-        this.parent = parent;
-        this.el = el;
+        super(parent, el);
         this.inputEl = el.querySelector('select');
         this.config = JSON.parse(this.inputEl.dataset.shortcut);
         this.el.addEventListener("click", (e) => e.stopPropagation());
@@ -77,9 +78,9 @@ export class XprezShortcutFieldController {
 export const XprezShortcutParentMixin = {
     initShortcuts() {
         this.shortcuts = [];
-        this.shortcutsEl = this.el.querySelector("[data-component='xprez-shortcuts']");
+        this.shortcutsEl = this.el.querySelector("[data-xprez-shortcuts]");
         if (this.shortcutsEl) {
-            this.shortcutsEl.querySelectorAll('[data-js-controller-class="XprezShortcutFieldController"]').forEach((fieldEl) => {
+            this.shortcutsEl.querySelectorAll('[data-controller="XprezShortcutFieldController"]').forEach((fieldEl) => {
                 this.shortcuts.push(new XprezShortcutFieldController(this, fieldEl));
             });
             this.shortcutsEl.removeAttribute("data-hidden");

@@ -72,8 +72,9 @@ class MultiModule(Module):
 
     def save_admin_form(self, request):
         super().save_admin_form(request)
-        for item in self.admin_form.xprez_items:
-            item.save_admin_form(request)
+        if not getattr(self.admin_form, "deleted", False):
+            for item in self.admin_form.xprez_items:
+                item.save_admin_form(request)
 
     def admin_has_errors(self):
         if getattr(self.admin_form, "deleted", False):

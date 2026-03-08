@@ -4,17 +4,17 @@
 {% block content %}
     {{ block.super }}
     
-    <div class="xprez-admin-multi-items" data-component="xprez-multi-module-items">
+    <div class="xprez-admin-multi-items" data-xprez-multi-module-items>
         {% for item in module.admin_form.xprez_items %}
             {% include module.admin_item_template_name %}
         {% endfor %}
     </div>
     {% block add_item %}
-        <div class="xprez-admin-adder" data-component="xprez-adder-multi-module">
+        <div class="xprez-admin-adder" data-controller="XprezMultiModuleAdder">
             <span
                 type="button"
                 class="xprez-btn xprez-btn-transparent xprez-admin-adder__add-item"
-                data-component="xprez-add-item"
+                data-xprez-add-item
                 data-url="{% url module.xprez_add_item_url_name module.pk %}"
             >
                 <i class="xprez-icon-plus_square_20"></i>{% block add_item_text %}{% trans "Add item" %}{% endblock %}

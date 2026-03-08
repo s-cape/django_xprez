@@ -1,18 +1,17 @@
 {% load static xprez_admin %}
 <div
     class="xprez-admin-module {% if module.admin_form.errors %}xprez-module--has-errors{% endif %} xprez-admin-{{ module.module_css_class }}"
-    data-component="xprez-module"
+    data-controller="{{ module.admin_js_controller_class }}"
     data-content-type="{{ module.content_type }}"
     data-mode="{# (empty)/edit/selectable/selected/delete #}"
     data-prefix="{{ module.admin_form.prefix }}"
-    data-js-controller-class="{{ module.admin_js_controller_class }}"
 >
     <div class="xprez-admin-module__header" data-draggable-module-handle>
         <div class="xprez-admin-module__name">
             <span class="xprez-admin-module__name-icon">
                 {{ module.admin_icon|safe }}
             </span>
-            <div class="xprez-option" data-component="xprez-select-trigger">
+            <div class="xprez-option" data-xprez-select-trigger>
                 <label>
                     <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
                     <i class="xprez-icon-check_circle_small x-variant-checked"></i>
@@ -26,17 +25,17 @@
                 {% block copy_menu %}
                     {% url module.admin_form.xprez_admin.xprez_duplicate_url_name module_pk=module.pk as duplicate_url %}
                     {% url module.admin_form.xprez_admin.xprez_clipboard_clip_url_name module.admin_form.xprez_admin.constants.MODULE_KEY module.pk as clipboard_url %}
-                    {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clipboard_url=clipboard_url %}
+                    {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clipboard_url=clipboard_url copy_menu_controller="XprezModuleCopyMenu" duplicate_controller="XprezModuleDuplicateAdder" %}
                 {% endblock %}
                 {% block popover_trigger %}
-                    <span class="xprez-icon-btn" title="Settings" data-component="xprez-module-popover-trigger">
+                    <span class="xprez-icon-btn" title="Settings" data-xprez-module-popover-trigger>
                         <i class="xprez-icon-settings" data-id="{{ module.pk }}"></i>
                     </span>
                 {% endblock %}
             {% endblock %}
             {% block shortcuts %}
                 {% if module.admin_form.shortcuts %}
-                    <div class="xprez-option-row" data-component="xprez-shortcuts" data-hidden>
+                    <div class="xprez-option-row" data-xprez-shortcuts data-hidden>
                         {% block shortcut_fields %}
                             {% for field in module.admin_form.shortcuts %}
                                 {% include "xprez/admin/form/field.html" with field=field size="flex-auto" js_controller_class="XprezShortcutFieldController" %}
@@ -77,7 +76,7 @@
         {% endblock %}
     </div>
 
-    <div popover="manual" class="xprez-popover" data-component="xprez-module-popover">
+    <div popover="manual" class="xprez-popover" data-controller="XprezModulePopover">
         <div class="xprez-popover__content">
             {% block popover %}
                 <div class="xprez-option-group">
@@ -87,10 +86,10 @@
                         <span
                             class="xprez-btn xprez-btn--sm"
                             title="All settings of selected modules will be overwritten with current settings"
-                            data-component="xprez-module-sync-selected"
+                            data-xprez-module-sync-selected
                             data-hidden
                         >
-                            <span>Sync selected (<span data-component="xprez-module-sync-selected-count"></span>)</span>
+                            <span>Sync selected (<span data-xprez-module-sync-selected-count></span>)</span>
                             <i class="xprez-icon-sync"></i>
                         </span>
                     </div>
@@ -111,13 +110,13 @@
                             </div>
                         {% endfor %}
                     {% endblock %}
-                    <div data-component="xprez-module-configs">
+                    <div data-xprez-module-configs>
                         {% for config in module.admin_form.xprez_configs %}
                             {% xprez_module_config_render_admin config %}
                         {% endfor %}
                     </div>
                 </div>
-                <div class="xprez-option-group__footer" data-component="xprez-adder-module-config">
+                <div class="xprez-option-group__footer" data-controller="XprezModuleConfigAdder">
                     {% include "xprez/admin/includes/adders/config_module.html" with xprez_admin=module.admin_form.xprez_admin %}
                 </div>
             {% endblock %}

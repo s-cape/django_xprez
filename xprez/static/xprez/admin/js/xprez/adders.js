@@ -1,10 +1,10 @@
 import { xprezExecuteScripts, xprezGetCsrfToken } from './utils.js';
 import { XprezClipboardList } from './clipboard.js';
+import { XprezControllerBase } from './controller_base.js';
 
-export class XprezAdderBase {
-    constructor(xprez, el) {
-        this.xprez = xprez;
-        this.el = el;
+export class XprezAdderBase extends XprezControllerBase {
+    constructor(parent, el) {
+        super(parent, el);
         this._addingCount = 0;
         this.bindEvents();
     }
@@ -59,7 +59,7 @@ export class XprezAdderBase {
 
 export class XprezAdderItemsBase extends XprezAdderBase {
     bindEvents() {
-        this.el.querySelectorAll("[data-component='xprez-add-item']").forEach(
+        this.el.querySelectorAll("[data-xprez-add-item]").forEach(
             itemEl => itemEl.addEventListener("click", () => this.add(itemEl.dataset.url))
         );
     }
@@ -71,20 +71,15 @@ export class XprezAdderItemsBase extends XprezAdderBase {
 }
 
 export class XprezDuplicateAdder extends XprezAdderItemsBase {
-    constructor(xprez, el, copyMenu) {
-        super(xprez, el);
-        this.copyMenu = copyMenu;
-    }
-
     bindEvents() {
         this.el.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.copyMenu.el.removeAttribute('data-open');
+            this.parent.el.removeAttribute('data-open');
             this.add(this.el.dataset.url);
         });
     }
 
-    placeNewElement(el) { this.copyMenu.parent.el.insertAdjacentElement('afterend', el); }
+    placeNewElement(el) { this.parent.parent.el.insertAdjacentElement('afterend', el); }
 }
 
 export class XprezSectionDuplicateAdder extends XprezDuplicateAdder {
@@ -92,7 +87,7 @@ export class XprezSectionDuplicateAdder extends XprezDuplicateAdder {
 }
 
 export class XprezModuleDuplicateAdder extends XprezDuplicateAdder {
-    initNewElement(el) { this.copyMenu.parent.section.initModule(el); }
+    initNewElement(el) { this.parent.parent.section.initModule(el); }
 }
 
 export class XprezAdderSelectBase extends XprezAdderBase {
@@ -116,8 +111,8 @@ export class XprezAdderSelectBase extends XprezAdderBase {
 }
 
 export class XprezContentAdderBase extends XprezAdderItemsBase {
-    constructor(xprez, el) {
-        super(xprez, el);
+    constructor(parent, el) {
+        super(parent, el);
         this.clipboardList = new XprezClipboardList(this);
     }
 }
@@ -128,9 +123,9 @@ export class XprezSectionAdderContainerEnd extends XprezContentAdderBase {
 }
 
 export class XprezContentAdderSectionBase extends XprezContentAdderBase {
-    constructor(xprez, el, section) {
-        super(xprez, el);
-        this.section = section;
+    constructor(parent, el) {
+        super(parent, el);
+        this.section = this.parent;
         this.setTriggerEl();
         if (this.triggerEl) {
             this.triggerEl.addEventListener("click", this.toggle.bind(this));
@@ -152,7 +147,7 @@ export class XprezContentAdderSectionBase extends XprezContentAdderBase {
 
 export class XprezSectionAdderSectionBefore extends XprezContentAdderSectionBase {
     setTriggerEl() {
-        this.triggerEl = this.section.el.querySelector("[data-component='xprez-adder-section-before-trigger']");
+        this.triggerEl = this.section.el.querySelector("[data-xprez-adder-section-before-trigger]");
     }
     placeNewElement(el) { this.section.el.before(el); }
     initNewElement(el) { this.xprez.initSection(el); }
@@ -160,16 +155,15 @@ export class XprezSectionAdderSectionBefore extends XprezContentAdderSectionBase
 
 export class XprezModuleAdderSectionEnd extends XprezContentAdderSectionBase {
     setTriggerEl() {
-        this.triggerEl = this.section.el.querySelector("[data-component='xprez-adder-section-end-trigger']");
+        this.triggerEl = this.section.el.querySelector("[data-xprez-adder-section-end-trigger]");
     }
     placeNewElement(el) { this.section.gridEl.appendChild(el); }
     initNewElement(el) { this.section.initModule(el); }
 }
 
 export class XprezConfigAdderBase extends XprezAdderSelectBase {
-    constructor(xprez, parent, componentName) {
-        super(xprez, parent.el.querySelector(`[data-component='${componentName}']`));
-        this.parent = parent;
+    constructor(parent, el) {
+        super(parent, el);
         this.setOptionsDisabledState();
     }
 
@@ -225,24 +219,14 @@ export class XprezConfigAdderBase extends XprezAdderSelectBase {
     }
 }
 
-export class XprezSectionConfigAdder extends XprezConfigAdderBase {
-    constructor(xprez, section) {
-        super(xprez, section, "xprez-adder-section-config");
-        this.section = section;
-    }
-}
+export class XprezSectionConfigAdder extends XprezConfigAdderBase {}
 
-export class XprezModuleConfigAdder extends XprezConfigAdderBase {
-    constructor(xprez, module) {
-        super(xprez, module, "xprez-adder-module-config");
-        this.module = module;
-    }
-}
+export class XprezModuleConfigAdder extends XprezConfigAdderBase {}
 
 export class XprezMultiModuleAdderBase extends XprezAdderBase {
-    constructor(xprez, el, module) {
-        super(xprez, el);
-        this.module = module;
+    constructor(parent, el) {
+        super(parent, el);
+        this.module = this.parent;
     }
 
     placeNewElement(el) {
@@ -254,7 +238,7 @@ export class XprezMultiModuleAdderBase extends XprezAdderBase {
 
 export class XprezMultiModuleAdder extends XprezMultiModuleAdderBase {
     bindEvents() {
-        this.el.querySelectorAll("[data-component='xprez-add-item']").forEach(
+        this.el.querySelectorAll("[data-xprez-add-item]").forEach(
             itemEl => itemEl.addEventListener('click', () => this.add(itemEl.dataset.url))
         );
     }
@@ -262,10 +246,10 @@ export class XprezMultiModuleAdder extends XprezMultiModuleAdderBase {
 
 export class XprezUploadMultiModuleAdder extends XprezMultiModuleAdderBase {
     bindEvents() {
-        const dropzone = this.el.querySelector("[data-component='xprez-multi-module-dropzone']");
+        const dropzone = this.el.querySelector("[data-xprez-multi-module-dropzone]");
         if (!dropzone) return;
 
-        const fileInput = dropzone.querySelector("[data-component='xprez-multi-module-file-input']");
+        const fileInput = dropzone.querySelector("[data-xprez-multi-module-file-input]");
         const url = dropzone.dataset.uploadUrl;
         if (!fileInput || !url) return;
 

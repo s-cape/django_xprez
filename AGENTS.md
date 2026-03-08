@@ -24,9 +24,9 @@ Instructions for coding agents working in this repository.
 
 - Follow existing local style in each file (do not mass-normalize quote style).
 - Do not assume Bootstrap; this library ships its own frontend/admin markup and styles.
-- Keep existing `data-component` and JS hook attributes stable unless a change requires updating both templates and scripts.
+- Keep existing `data-xprez-*` and JS hook attributes stable unless a change requires updating both templates and scripts.
 - For JavaScript, prefer plain JavaScript and avoid adding framework dependencies.
-- Do not add null guards for DOM elements that are contractually expected to exist (e.g. required `data-component` elements in a template). Guards imply optional presence; fail loudly instead so missing elements are caught early.
+- Do not add null guards for DOM elements that are contractually expected to exist (e.g. required `data-xprez-*` elements in a template). Guards imply optional presence; fail loudly instead so missing elements are caught early.
 
 ## Validation and tests
 
