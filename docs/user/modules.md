@@ -19,8 +19,7 @@ Custom modules
 
 Subclass `Module` in your app, set `front_template_name` to your template path, and define your fields. Custom modules auto-register and appear in the same admin UI and frontend. See the [built-in modules](../../xprez/modules/) source for examples.
 
-Simple module
-~~~~~~~~~~~~~
+### Simple module
 
 ```python
 from django.db import models
@@ -49,8 +48,7 @@ Template `myapp/templates/myapp/modules/my.html`:
 {% endblock %}
 ```
 
-Module with custom config class
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### Module with custom config class
 
 Use `config_model` and a `ModuleConfig` subclass for breakpoint-specific layout. Override `get_css_variables` for CSS custom properties and `get_css_classes` for conditional classes:
 
@@ -83,8 +81,7 @@ class FeaturedConfig(ModuleConfig):
         return css_variables
 ```
 
-MultiModule (multiple items)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### MultiModule (multiple items)
 
 Subclass `MultiModule` for modules with repeatable items (e.g. gallery, numbers):
 
@@ -103,7 +100,9 @@ class TeamModule(MultiModule):
         verbose_name = "Team"
 
 class TeamMember(MultiModuleItem):
-    module = models.ForeignKey(TeamModule, related_name="items", on_delete=models.CASCADE)
+    module = models.ForeignKey(
+        TeamModule, related_name="items", on_delete=models.CASCADE, editable=False
+    )
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=100, blank=True)
     photo = models.ImageField(upload_to="team", null=True, blank=True)
