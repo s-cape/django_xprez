@@ -87,8 +87,7 @@ class ClipboardItemBase:
         )
 
     def _duplicate_modules_to(self, source_section, target_section):
-        for module in source_section.modules.filter(saved=True):
-            source_module = module.polymorph
+        for source_module in source_section.modules.filter(saved=True).polymorphs():
             if source_module.__class__ not in self.allowed_module_classes:
                 continue
             source_module.duplicate_to(target_section)
@@ -146,8 +145,7 @@ class ClipboardItemSection(ClipboardItemBase):
 
     @property
     def contained_modules(self):
-        modules = self.obj.modules.filter(saved=True).only("content_type")
-        return [m.polymorph for m in modules]
+        return self.obj.modules.filter(saved=True).polymorphs()
 
     def duplicate(self, request, target_section=None):
         new_section = models.Section.objects.create(container=self.target_container)
@@ -177,12 +175,11 @@ class ClipboardItemContainer(ClipboardItemBase):
 
     @property
     def contained_modules(self):
-        modules = models.Module.objects.filter(
+        return models.Module.objects.filter(
             section__container=self.obj,
             section__saved=True,
             saved=True,
-        ).only("content_type")
-        return [m.polymorph for m in modules]
+        ).polymorphs()
 
     def duplicate(self, request, target_section=None):
         items = []

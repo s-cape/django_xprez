@@ -120,7 +120,7 @@ class Section(ConfigParentMixin, SectionBase):
         )
         self.admin_form.xprez_admin = admin
         self.admin_form.xprez_modules_all_valid = None
-        self.admin_form.xprez_modules = [m.polymorph for m in self.modules.all()]
+        self.admin_form.xprez_modules = self.modules.all().polymorphs()
 
         for module in self.admin_form.xprez_modules:
             module.build_admin_form(admin, data, files)
@@ -177,7 +177,7 @@ class Section(ConfigParentMixin, SectionBase):
 
     def get_modules(self):
         if not hasattr(self, "_modules"):
-            self._modules = list(self.modules.filter(saved=True))
+            self._modules = self.modules.filter(saved=True).polymorphs()
         return self._modules
 
     def duplicate_to(self, target_container, saved=False):
@@ -185,8 +185,8 @@ class Section(ConfigParentMixin, SectionBase):
             container=target_container, saved=saved
         )
         self.duplicate_configs_to(new_section, saved=saved)
-        for module in self.modules.filter(saved=True):
-            module.polymorph.duplicate_to(new_section, saved=saved)
+        for module in self.modules.filter(saved=True).polymorphs():
+            module.duplicate_to(new_section, saved=saved)
         return new_section
 
     def clipboard_verbose_name(self):

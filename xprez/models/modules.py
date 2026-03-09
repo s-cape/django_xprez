@@ -6,6 +6,7 @@ from django.utils.functional import cached_property, classproperty
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
+from xprez.models.querysets.modules import ModuleQuerySet
 from xprez.utils import class_content_type, copy_model, import_class
 
 
@@ -37,6 +38,8 @@ class Module(ConfigParentMixin, models.Model):
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     changed = models.DateTimeField(auto_now=True, editable=False)
+
+    objects = ModuleQuerySet.as_manager()
 
     class Meta:
         ordering = ("position",)
