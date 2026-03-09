@@ -38,7 +38,7 @@ export class XprezShortcutFieldController extends XprezControllerBase {
 
     _onSelectActivate(e) {
         if (!this.parent.popover.isOpen()) {
-            this.parent.popover.hideOthers();
+            this.parent.xprez.emit("popover-active", null);
         }
         if (this.getValue() === ADVANCED) {
             this.inputEl.blur();

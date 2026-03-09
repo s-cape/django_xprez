@@ -1,0 +1,5 @@
+# Generated build artifacts — suppress diffs, mark as generated on GitHub
+*.min.js -diff linguist-generated=true
+xprez/static/xprez/styles/xprez_backend.css -diff linguist-generated=true
+xprez/static/xprez/styles/xprez_frontend.css -diff linguist-generated=true
+package-lock.json -diff linguist-generated=true

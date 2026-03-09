@@ -23,7 +23,7 @@ class NumbersModule(FontSizeModuleMixin, MultiModule):
         verbose_name = "Numbers"
 
     class FrontMedia:
-        js = ("xprez/js/numbers.js",)
+        js = ("xprez/js/numbers.min.js",)
 
     def save(self, *args, **kwargs):
         no_initial_item = kwargs.pop("no_initial_item", False)

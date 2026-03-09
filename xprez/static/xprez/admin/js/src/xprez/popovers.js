@@ -8,8 +8,8 @@ export class XprezPopoverBase extends XprezControllerBase {
     }
 
     bindEvents() {
-        this.xprez.on('popover-show', (opening) => {
-            if (opening !== this) this.hide();
+        this.xprez.on("popover-active", (active) => {
+            if (active !== this) this.hide();
         });
         document.addEventListener("click", (e) => {
             if (this.isOpen() && (!e.target.closest("[popover]"))) {
@@ -34,7 +34,7 @@ export class XprezPopoverBase extends XprezControllerBase {
 
     isOpen() { return this.el.matches(":popover-open"); }
     show() {
-        this.xprez.emit('popover-show', this);
+        this.xprez.emit("popover-active", this);
         this.el.showPopover();
     }
     hide() {

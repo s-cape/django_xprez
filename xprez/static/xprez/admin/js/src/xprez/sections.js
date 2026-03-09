@@ -23,6 +23,7 @@ export class XprezSectionSymlink extends XprezControllerBase {
 Object.assign(XprezSectionSymlink.prototype, XprezCollapserMixin);
 
 export class XprezSection extends XprezContentBase {
+    static KEY = "section";
     constructor(xprez, sectionEl) {
         super(xprez, sectionEl);
         this.deleter = new XprezSectionDeleter(this);

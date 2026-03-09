@@ -5,6 +5,7 @@ import { XprezControllerBase } from './controller_base.js';
 import { WithSignals } from './signals.js';
 
 export class Xprez extends WithSignals(XprezControllerBase) {
+    static KEY = "xprez";
     constructor() {
         super(null, document.querySelector("[data-controller='Xprez']"));
         this.sectionsContainerEl = this.el.querySelector("[data-xprez-sections-container]");

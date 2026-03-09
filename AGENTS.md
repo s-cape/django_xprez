@@ -35,7 +35,7 @@ Instructions for coding agents working in this repository.
 - Main CI test command: `python manage.py test --settings=example_app.settings_ci` (from `example_app/`). For localhost testing, use a `.venv` in the project root.
 - If you change frontend assets, rebuild only the affected asset package(s):
   - `xprez/ck_editor/assets/ckeditor5`
-  - `xprez/static/xprez`
+  - `xprez/static/xprez` — run `npm run build` from this directory; this compiles CSS (sass + postcss) and bundles the admin JS from `admin/js/src/` into `admin/js/xprez.min.js`
 
 ## Git practices
 

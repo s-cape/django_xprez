@@ -5,10 +5,10 @@ export class XprezControllerBase {
         this.el._xprezController = this;
     }
 
-    get xprez() { return this._findAncestor("Xprez"); }
-    get config() { return this._findAncestor("XprezConfigBase"); }
-    get module() { return this._findAncestor("XprezModule"); }
-    get section() { return this._findAncestor("XprezSection"); }
+    get xprez() { return this._findAncestor("xprez"); }
+    get config() { return this._findAncestor("config"); }
+    get module() { return this._findAncestor("module"); }
+    get section() { return this._findAncestor("section"); }
 
     mountChild(el, options={}) {
         if (el == null && options.allowNull) return null;
@@ -22,10 +22,10 @@ export class XprezControllerBase {
         return new ControllerClass(this, el);
     }
 
-    _isInstance(obj, className) {
+    _isInstance(obj, key) {
         let proto = obj;
         while (proto !== null) {
-            if (proto.constructor?.name === className) return true;
+            if (proto.constructor?.KEY === key) return true;
             proto = Object.getPrototypeOf(proto);
         }
         return false;

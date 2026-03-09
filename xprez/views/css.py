@@ -1,13 +1,14 @@
+"""Variables CSS generation for the variables.css view."""
+
 from django.http import HttpResponse
-from django.shortcuts import render
 
 from xprez import module_registry
 from xprez.conf import settings
 from xprez.models import ConfigParentMixin, Module, Section
 
 
-def variables_css(request):
-    # TODO: move most of the code to models/css.py
+def css_variables_global(request):
+    """Build and return CSS of variables for .xprez-section and .xprez-module."""
     result = []
     breakpoints = list(settings.XPREZ_BREAKPOINTS.keys())
 
@@ -107,7 +108,3 @@ def variables_css(request):
             specific_current_css_variables.update(specific_css_variables)
 
     return HttpResponse("\n".join(result), content_type="text/css")
-
-
-def photoswipe_html(request):
-    return render(request, "xprez/includes/photoswipe.html")

@@ -101,7 +101,7 @@ class VideoModule(ResponsiveImageMixin, Module):
 
     class FrontMedia:
         js = (
-            "xprez/js/video.js",
+            "xprez/js/video.min.js",
             "//www.youtube.com/iframe_api",
             "//player.vimeo.com/api/player.js",
         )

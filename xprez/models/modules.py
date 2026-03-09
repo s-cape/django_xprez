@@ -66,9 +66,9 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
 
     def invalidate_front_cache(self):
         super().invalidate_front_cache()
-        self.section.bump_front_cache_version()
+        self.section.invalidate_front_cache()
         if self.section.container_id:
-            self.section.container.bump_front_cache_version()
+            self.section.container.invalidate_front_cache()
         module_symlink_model = apps.get_model("xprez", "ModuleSymlink")
         if not isinstance(self, module_symlink_model):
             for symlinked in self.symlinked_module_set.filter(saved=True):

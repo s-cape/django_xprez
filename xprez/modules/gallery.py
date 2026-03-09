@@ -15,7 +15,7 @@ from xprez.models.multi_module import MultiModuleItem, UploadMultiModule
 PHOTOSWIPE_JS = (
     "xprez/libs/photoswipe/dist/photoswipe.min.js",
     "xprez/libs/photoswipe/dist/photoswipe-ui-default.min.js",
-    "xprez/js/photoswipe.js",
+    "xprez/js/photoswipe.min.js",
 )
 PHOTOSWIPE_CSS = (
     "xprez/libs/photoswipe/dist/photoswipe.css",

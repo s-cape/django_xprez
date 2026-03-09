@@ -19,6 +19,7 @@ export const XprezConfigParentMixin = {
 };
 
 export class XprezConfigBase extends XprezControllerBase {
+    static KEY = "config";
     constructor(parent, el) {
         super(parent, el);
         this.initFields();

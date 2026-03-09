@@ -96,13 +96,13 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
     def invalidate_front_cache(self):
         super().invalidate_front_cache()
         if self.container_id:
-            self.container.bump_front_cache_version()
+            self.container.invalidate_front_cache()
         for symlinked in self.symlinked_section_set.filter(saved=True):
             symlinked.invalidate_front_cache()
 
     @cached_property
     def front_cacheable(self):
-        return all(m.polymorph.front_cacheable for m in self.get_modules())
+        return all(m.polymorph.front_cacheable for m in self.get_modules_front())
 
     def build_config(self, css_breakpoint):
         return self.configs.model(
@@ -235,7 +235,7 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
     def invalidate_front_cache(self):
         super().invalidate_front_cache()
         if self.container_id:
-            self.container.bump_front_cache_version()
+            self.container.invalidate_front_cache()
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class("xprez.admin.forms.SectionSymlinkForm")

@@ -103,6 +103,7 @@
 }
 
 .xprez[data-sync-processing] {
+    .xprez-admin-module[data-mode="selected"] [data-xprez-select-trigger],
     [data-xprez-module-sync-selected] {
         background-color: $b-green;
         color: $white;

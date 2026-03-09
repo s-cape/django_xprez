@@ -6,6 +6,7 @@ import { XprezModuleSyncMixin } from './sync.js';
 import { XprezShortcutParentMixin } from './shortcuts.js';
 
 export class XprezModule extends XprezContentBase {
+    static KEY = "module";
     constructor(section, moduleEl) {
         super(section, moduleEl);
         this.popover = this.mountChild(this.el.querySelector("[data-controller='XprezModulePopover']"));

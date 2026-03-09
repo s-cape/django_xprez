@@ -276,6 +276,32 @@ class ModuleReplaceProcessor(ModuleProcessorBase):
         self.module_base.delete()
 
 
+class WidthModuleProcessorMixin:
+    """Migrate old_content.width to section.max_width_choice."""
+
+    def process(self):
+        super().process()
+        section = self.module.section
+        section.max_width_choice = self.WIDTH_TRANS.get(
+            getattr(self.old_content, "width", "full"), "full"
+        )
+        section.save()
+
+
+class BoxModuleProcessorMixin:
+    """Migrate old_content.box to config background and padding."""
+
+    def finalize(self, module):
+        super().finalize(module)
+        if getattr(self.old_content, "box", False):
+            self.config.background = True
+            self.config.padding_left_choice = "medium"
+            self.config.padding_right_choice = "medium"
+            self.config.padding_top_choice = "medium"
+            self.config.padding_bottom_choice = "medium"
+            self.config.save()
+
+
 # ---------------------------------------------------------------------------
 # RunPython callables
 # ---------------------------------------------------------------------------
@@ -397,23 +423,13 @@ def rename_content_types(apps, schema_editor):
 # ---------------------------------------------------------------------------
 
 
-class TextModuleProcessorBase(ModuleReplaceProcessor):
+class TextModuleProcessorBase(BoxModuleProcessorMixin, ModuleReplaceProcessor):
     def get_config_class(self, module):
         return "xprez.TextConfig"
 
     def prepare_new_modules(self):
         TextModule = self.apps.get_model("xprez", "TextModule")
         return [TextModule(text=self.old_content.text)]
-
-    def finalize(self, module):
-        super().finalize(module)
-        if getattr(self.old_content, "box", False):
-            self.config.background = True
-            self.config.padding_left_choice = "medium"
-            self.config.padding_right_choice = "medium"
-            self.config.padding_top_choice = "medium"
-            self.config.padding_bottom_choice = "medium"
-            self.config.save()
 
 
 class CkEditorProcessor(TextModuleProcessorBase):
@@ -489,7 +505,7 @@ class GridboxesProcessor(TextModuleProcessorBase):
         self.config.save()
 
 
-class QuotesProcessor(ModuleReplaceProcessor):
+class QuotesProcessor(BoxModuleProcessorMixin, ModuleReplaceProcessor):
     def prepare_new_modules(self):
         QuoteModule = self.apps.get_model("xprez", "QuoteModule")
         quotes = self.old_content.quotes.all()
@@ -557,16 +573,6 @@ class QuotesProcessor(ModuleReplaceProcessor):
             ]
         return new_modules
 
-    def finalize(self, module):
-        super().finalize(module)
-        if getattr(self.old_content, "box", False):
-            self.config.background = True
-            self.config.padding_left_choice = "medium"
-            self.config.padding_right_choice = "medium"
-            self.config.padding_top_choice = "medium"
-            self.config.padding_bottom_choice = "medium"
-            self.config.save()
-
 
 class TextImageProcessor(ModuleReplaceProcessor):
     def get_config_class(self, module):
@@ -606,14 +612,8 @@ class TextImageProcessor(ModuleReplaceProcessor):
         section_config.save()
 
 
-class VideoProcessor(SimpleModuleProcessor):
-    def process(self):
-        super().process()
-        section = self.module.section
-        section.max_width_choice = self.WIDTH_TRANS.get(
-            getattr(self.old_content, "width", "full"), "full"
-        )
-        section.save()
+class VideoProcessor(WidthModuleProcessorMixin, SimpleModuleProcessor):
+    pass
 
 
 class MultiModuleProcessor(SimpleModuleProcessor):

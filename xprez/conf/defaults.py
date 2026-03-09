@@ -71,7 +71,7 @@ XPREZ_VIDEO_PROVIDERS = (
 
 XPREZ_ADMIN_MEDIA_JS = (
     "xprez/admin/libs/sortablejs/sortable-1.15.6.min.js",
-    ("xprez/admin/js/xprez.js", "module"),
+    "xprez/admin/js/xprez.min.js",
 )
 XPREZ_ADMIN_MEDIA_CSS = {"all": ("xprez/styles/xprez_backend.css",)}
 XPREZ_FRONT_MEDIA_JS = ()

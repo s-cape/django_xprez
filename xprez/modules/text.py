@@ -94,7 +94,7 @@ class TextModule(ResponsiveImageSourcesMixin, ResponsiveImageMixin, TextModuleBa
         css = {"css": CkEditorWidget.Media.css["all"]}
 
     class FrontMedia:
-        js = ("xprez/js/observer_autoplay.js",)
+        js = ("xprez/js/observer_autoplay.min.js",)
 
     class Meta:
         verbose_name = _("Text")

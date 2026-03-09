@@ -4,25 +4,12 @@ from xprez.conf import settings
 
 
 class FrontCacheMixin:
-    """Version-bump-based frontend render caching."""
+    """Frontend render caching by fixed key per object; invalidate via delete."""
 
     front_cacheable = False
 
-    def get_front_version_cache_key(self):
-        return f"xprez:v:{self.KEY}:{self.pk}"
-
-    def get_front_cache_version(self):
-        return cache.get(self.get_front_version_cache_key()) or 0
-
-    def bump_front_cache_version(self):
-        key = self.get_front_version_cache_key()
-        try:
-            cache.incr(key)
-        except ValueError:
-            cache.set(key, 1, timeout=None)
-
     def front_cache_key(self):
-        return f"xprez:r:{self.KEY}:{self.pk}:{self.get_front_cache_version()}"
+        return f"xprez:f:{self.KEY}:{self.pk}"
 
     @staticmethod
     def _front_cache_set(key, value):
@@ -33,22 +20,29 @@ class FrontCacheMixin:
         else:
             cache.set(key, value)
 
-    def render_front_cached(self, context):
+    def _get_front_cached(self, key, render_fn, store=True):
+        """Return cache hit or render via render_fn(), optionally storing. Bypasses cache when disabled."""
         if settings.XPREZ_FRONT_CACHE_ENABLED is False:
-            return self.render_front(context)
+            return render_fn()
         else:
-            key = self.front_cache_key()
-            result = cache.get(key)
-            if result is not None:
-                return result
+            cached = cache.get(key)
+            if cached is not None:
+                return cached
             else:
-                result = self.render_front(context)
-                if self.front_cacheable:
+                result = render_fn()
+                if store:
                     self._front_cache_set(key, result)
                 return result
 
+    def render_front_cached(self, context):
+        return self._get_front_cached(
+            self.front_cache_key(),
+            lambda: self.render_front(context),
+            store=self.front_cacheable,
+        )
+
     def invalidate_front_cache(self):
-        self.bump_front_cache_version()
+        cache.delete(self.front_cache_key())
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -59,33 +53,25 @@ class FrontCacheMixin:
 class ContentFrontCacheMixin(FrontCacheMixin):
     """Adds CSS cached methods and cache invalidation for Section/Module."""
 
+    def _front_css_vars_cache_key(self):
+        return f"xprez:css:vars:{self.KEY}:{self.pk}"
+
+    def _front_css_classes_cache_key(self):
+        return f"xprez:css:classes:{self.KEY}:{self.pk}"
+
     def front_css_variables_cached(self):
-        if settings.XPREZ_FRONT_CACHE_ENABLED is False:
-            return self.render_css_variables()
-        else:
-            key = f"xprez:css:vars:{self.KEY}:{self.pk}"
-            result = cache.get(key)
-            if result is not None:
-                return result
-            else:
-                result = self.render_css_variables()
-                self._front_cache_set(key, result)
-                return result
+        return self._get_front_cached(
+            self._front_css_vars_cache_key(),
+            self.render_css_variables,
+        )
 
     def front_css_classes_cached(self):
-        if settings.XPREZ_FRONT_CACHE_ENABLED is False:
-            return self.render_css_classes()
-        else:
-            key = f"xprez:css:classes:{self.KEY}:{self.pk}"
-            result = cache.get(key)
-            if result is not None:
-                return result
-            else:
-                result = self.render_css_classes()
-                self._front_cache_set(key, result)
-                return result
+        return self._get_front_cached(
+            self._front_css_classes_cache_key(),
+            self.render_css_classes,
+        )
 
     def invalidate_front_cache(self):
-        cache.delete(f"xprez:css:vars:{self.KEY}:{self.pk}")
-        cache.delete(f"xprez:css:classes:{self.KEY}:{self.pk}")
+        cache.delete(self._front_css_vars_cache_key())
+        cache.delete(self._front_css_classes_cache_key())
         super().invalidate_front_cache()
