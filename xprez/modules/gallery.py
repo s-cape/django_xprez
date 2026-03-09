@@ -96,7 +96,7 @@ class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):
     def get_image_field(self):
         return self.file
 
-    def get_aspect_ratio(self):
+    def get_image_aspect_ratio(self):
         crop_ratio = self.module.get_crop_ratio()
         return crop_ratio if crop_ratio else (1, 1)
 
