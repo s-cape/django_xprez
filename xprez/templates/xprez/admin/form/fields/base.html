@@ -15,7 +15,7 @@
             <label for="{{ field.id_for_label }}">
                 {% if icon %}<i class="{{ icon }}"></i>{% endif %}
                 {% if icon2 %}<i class="{{ icon2 }}"></i>{% endif %}
-                {% if label is not False %}<span>{{ label|default:field.label }}</span>{% endif %}
+                {% if label is not False %}<span>{% if label %}{{ label }}{% else %}{{ field.label }}{% endif %}</span>{% endif %}
             </label>
         {% endif %}
 

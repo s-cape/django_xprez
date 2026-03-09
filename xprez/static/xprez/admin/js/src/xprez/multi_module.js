@@ -59,8 +59,7 @@ export class XprezMultiModuleBase extends XprezModule {
     initAdder() {
         const { adderSelector } = this.constructor;
         if (adderSelector) {
-            const el = this.el.querySelector(adderSelector);
-            if (el) this.mountChild(el);
+            this.adder = this.mountChild(this.el.querySelector(adderSelector), { allowNull: true });
         }
     }
 }
