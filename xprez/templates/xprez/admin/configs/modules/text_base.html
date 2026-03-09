@@ -1,7 +1,8 @@
 {% extends "xprez/admin/configs/module_base.html" %}
+{% load i18n %}
 
 {% block extra_fields %}
-    <div class="xprez-option-group__subtitle">Typography</div>
+    <div class="xprez-option-group__subtitle">{% trans "Typography" %}</div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.text_align size="flex-1" %}
     </div>

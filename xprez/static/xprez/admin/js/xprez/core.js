@@ -21,6 +21,10 @@ export class Xprez extends WithSignals(XprezControllerBase) {
             this.el.querySelector("[data-controller='XprezAllSectionsCollapseExpand']"),
             {allowNull: true}
         );
+        this.clipboardClipContainer = this.mountChild(
+            this.el.querySelector("[data-controller='XprezClipboardClipContainer']"),
+            {allowNull: true}
+        );
         this.initSectionsSortable();
     }
 

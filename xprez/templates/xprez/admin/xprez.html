@@ -6,7 +6,7 @@
         <div class="xprez-option" data-active="true" data-text-label="true">
             <label for="view">
                 <i class="xprez-icon-view"></i>
-                <span>View</span>
+                <span>{% trans "View" %}</span>
             </label>
             <span class="xprez-option__dropdown">
                 <select id="view" data-xprez-view-select>
@@ -21,23 +21,17 @@
         <div data-controller="XprezAllSectionsCollapseExpand">
             <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-xprez-all-sections-collapser>
                 <i class="xprez-icon-vertical"></i>
-                Collapse all
+                {% trans "Collapse all" %}
             </span>
             <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-xprez-all-sections-expander>
                 <i class="xprez-icon-vertical"></i>
-                Expand all
+                {% trans "Expand all" %}
             </span>
         </div>
-        <span class="xprez-btn xprez-btn-transparent xprez-btn--sm {# success #}">
-            <span class="xprez-btn__inner xprez-btn__success">
-                {% include "xprez/shared/icons/checkmark.html" %}
-                Copied
-            </span>
-            <span class="xprez-btn__inner xprez-btn__default">
-                <i class="xprez-icon-copy"></i>
-                Copy all
-            </span>
-        </span>
+        
+        {% url form.xprez_admin.xprez_clipboard_clip_url_name form.xprez_admin.constants.CONTAINER_KEY form.instance.pk as clip_url %}
+        {% trans "Copy all" as clip_text %}
+        {% include "xprez/admin/includes/clipboard_clip.html" with clip_url=clip_url controller="XprezClipboardClipContainer" clip_text=clip_text %}
     </div>
 
     <div data-xprez-sections-container>

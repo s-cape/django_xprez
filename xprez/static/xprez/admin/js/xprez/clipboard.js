@@ -73,7 +73,7 @@ export class XprezClipboardList extends XprezControllerBase {
             .then(items => {
                 items.forEach(({ html }) => this.adder.addFromHtml(html));
                 this.hide();
-                this.adder.hide();
+                this.adder.hide?.();
             });
     }
 

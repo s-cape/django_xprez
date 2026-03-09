@@ -1,3 +1,4 @@
+{% load i18n %}
 <div
     class="xprez-option-group xprez-option-group--config"
     data-controller="{% block controller_class %}{% endblock %}"
@@ -9,7 +10,7 @@
             <label for="{{ config.admin_form.visible.id_for_label }}">
                 <i class="xprez-icon-eye x-variant-checked"></i>
                 <i class="xprez-icon-eye_slash x-variant-unchecked x-color-danger"></i>
-                <span>Visible</span>
+                <span>{% trans "Visible" %}</span>
             </label>
             {{ config.admin_form.visible }}
         </div>

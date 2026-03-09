@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="xprez-clipboard-list" data-xprez-clipboard-list>
     {% for item in clipboard %}
         <div class="xprez-clipboard-list__item">
@@ -15,7 +16,7 @@
                 <i>{{ item.obj.clipboard_text_preview }}</i>
                 {% if item.allowed == "partial" %}
                     <div class="xprez-warning">
-                        Some modules are not available here
+                        {% trans "Some modules are not available here" %}
                     </div>
                 {% endif %}
             </div>
@@ -36,17 +37,17 @@
                         data-xprez-clipboard-paste
                         data-url="{{ item.symlink_url }}"
                     >
-                        {% include "xprez/shared/icons/link.html" %} Link
+                        {% include "xprez/shared/icons/link.html" %} {% trans "Link" %}
                     </span>
                 {% else %}
-                    <span class="xprez-warning">cannot paste here</span>
+                    <span class="xprez-warning">{% trans "cannot paste here" %}</span>
                 {% endif %}
                 <span
                     class="xprez-btn xprez-btn--danger"
                     data-xprez-clipboard-remove
                     data-url="{{ item.remove_url }}"
                 >
-                    {% include "xprez/shared/icons/cross.html" %} Remove
+                    {% include "xprez/shared/icons/cross.html" %} {% trans "Remove" %}
                 </span>
             </div>
         </div>
@@ -54,5 +55,5 @@
     <p
         data-xprez-clipboard-empty
         {% if clipboard %}data-hidden{% endif %}
-    >clipboard empty</p>
+    >{% trans "clipboard empty" %}</p>
 </div>

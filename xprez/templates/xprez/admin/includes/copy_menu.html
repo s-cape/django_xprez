@@ -7,16 +7,8 @@
             data-controller="{{ duplicate_controller }}"
             data-url="{{ duplicate_url }}"
         >
-            {% include "xprez/shared/icons/repeat.html" %} Duplicate
+            {% include "xprez/shared/icons/repeat.html" %} {% trans "Duplicate" %}
         </div>
-        <div
-            class="xprez-clipboard-clip"
-            data-controller="XprezClipboardClip"
-            data-url="{{ clipboard_url }}"
-        >
-            {% include "xprez/shared/icons/paste.html" %}
-            <span class="xprez-inline-success-message">{% include "xprez/shared/icons/checkmark.html" %} Clipped</span>
-            <span class="default">Clip</span>
-        </div>
+        {% include "xprez/admin/includes/clipboard_clip.html" with clip_url=clip_url controller="XprezClipboardClipContent" %}
     </div>
 </div>

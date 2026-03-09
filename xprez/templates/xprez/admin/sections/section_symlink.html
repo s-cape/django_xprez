@@ -28,7 +28,7 @@
         <div class="xprez-module__content-info">
             {% include "xprez/shared/icons/page.html" %} <strong>{{ section_symlink.symlink.container.polymorph }}</strong>
             <span class="xprez-module__content-info-arr">&#x203A;</span>
-            {% include "xprez/shared/icons/link.html" %} <strong>Section ({{ section_symlink.symlink.modules.count }} modules)</strong>
+            {% include "xprez/shared/icons/link.html" %} <strong>{% blocktrans with count=section_symlink.symlink.modules.count %}Section ({{ count }} modules){% endblocktrans %}</strong>
         </div>
     </div>
 {% endblock %}

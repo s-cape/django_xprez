@@ -48,6 +48,15 @@ class ConfigParentMixin(CssParentMixin):
                 new_config._state.adding = False
             new_config.save()
 
+    def _prune_redundant_configs(self):
+        """Delete configs identical to their previous breakpoint (after all saves)."""
+        configs = list(self.get_saved_configs().order_by("css_breakpoint"))
+        for i in range(len(configs) - 1, 0, -1):
+            config = configs[i]
+            previous_config = configs[i - 1]
+            if config._is_redundant_with(previous_config):
+                config.delete()
+
 
 class ConfigBase(CssMixin, models.Model):
     constants = constants
@@ -58,6 +67,9 @@ class ConfigBase(CssMixin, models.Model):
         editable=False,
     )
     saved = models.BooleanField(default=False, editable=False)
+
+    class Meta:
+        abstract = True
 
     def save(self, *args, **kwargs):
         if self.is_default():
@@ -96,8 +108,24 @@ class ConfigBase(CssMixin, models.Model):
         context["config"] = self
         return render_to_string(self.admin_template_name, context)
 
-    class Meta:
-        abstract = True
+    def _is_redundant_with(self, other):
+        return all(
+            (
+                getattr(self, field.name) == getattr(other, field.name)
+                or self._is_redundant_exclude(field)
+            )
+            for field in self._meta.fields
+        )
+
+    def _is_redundant_exclude(self, field):
+        if field.primary_key:
+            return True
+        if field.name in {self.parent_attr, "css_breakpoint", "saved"}:
+            return True
+        remote = getattr(field, "remote_field", None)
+        if remote is not None and getattr(remote, "parent_link", False):
+            return True
+        return False
 
 
 class SectionConfig(ConfigBase):

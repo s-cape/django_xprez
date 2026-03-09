@@ -41,7 +41,14 @@ import { XprezShortcutFieldController, XprezShortcutParentMixin } from './xprez/
 import { XprezMultiModuleItem, XprezMultiModule, XprezUploadMultiModule } from './xprez/multi_module.js';
 import { XprezTextModule } from './xprez/text_module.js';
 import { xprezExecuteScripts, xprezGetCsrfToken } from './xprez/utils.js';
-import { XprezCopyMenu, XprezSectionCopyMenu, XprezModuleCopyMenu, XprezClipboardClip } from './xprez/copy.js';
+import {
+    XprezCopyMenu,
+    XprezSectionCopyMenu,
+    XprezModuleCopyMenu,
+    XprezClipboardClipBase,
+    XprezClipboardClipContent,
+    XprezClipboardClipContainer,
+} from './xprez/copy.js';
 import { XprezFileInputFieldController } from './xprez/file_input.js';
 import { XprezClipboardList } from './xprez/clipboard.js';
 import { XprezControllerBase } from './xprez/controller_base.js';
@@ -66,7 +73,9 @@ window.XprezModulePopover = XprezModulePopover;
 window.XprezModuleConfigAdder = XprezModuleConfigAdder;
 window.XprezModuleConfig = XprezModuleConfig;
 window.XprezModuleCopyMenu = XprezModuleCopyMenu;
-window.XprezClipboardClip = XprezClipboardClip;
+window.XprezClipboardClipBase = XprezClipboardClipBase;
+window.XprezClipboardClipContent = XprezClipboardClipContent;
+window.XprezClipboardClipContainer = XprezClipboardClipContainer;
 window.XprezClipboardList = XprezClipboardList;
 window.XprezTextModule = XprezTextModule;
 window.XprezMultiModule = XprezMultiModule;
@@ -123,7 +132,9 @@ export {
     XprezMultiModule,
     XprezUploadMultiModule,
     XprezTextModule,
-    XprezClipboardClip,
+    XprezClipboardClipBase,
+    XprezClipboardClipContent,
+    XprezClipboardClipContainer,
     XprezClipboardList,
     XprezCopyMenu,
     XprezSectionCopyMenu,

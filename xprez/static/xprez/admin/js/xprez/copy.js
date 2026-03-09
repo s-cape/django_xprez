@@ -1,25 +1,50 @@
 import { xprezGetCsrfToken } from './utils.js';
 import { XprezControllerBase } from './controller_base.js';
 
-export class XprezClipboardClip extends XprezControllerBase {
+export class XprezClipboardClipBase extends XprezControllerBase {
     constructor(parent, el) {
         super(parent, el);
         this.el.addEventListener('click', this.onClick.bind(this));
     }
 
+    getClipUrls() {
+        return [];
+    }
+
+    onClipDone() {
+        this.xprez.emit('clipboard-clipped');
+        this.el.classList.add('success');
+        setTimeout(() => {
+            this.el.classList.remove('success');
+            if (this.parent && this.parent.el) {
+                this.parent.el.removeAttribute('data-open');
+            }
+        }, 2000);
+    }
+
     onClick(e) {
         e.stopPropagation();
-        fetch(this.el.dataset.url, {
-            method: 'POST',
-            headers: { 'X-CSRFToken': xprezGetCsrfToken() },
-        }).then(() => {
-            this.xprez.emit('clipboard-clipped');
-            this.el.classList.add('success');
-            setTimeout(() => {
-                this.el.classList.remove('success');
-                this.parent.el.removeAttribute('data-open');
-            }, 2000);
-        });
+        const urls = this.getClipUrls();
+        if (urls.length === 0) return;
+        const clipRequests = urls.map((url) =>
+            fetch(url, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': xprezGetCsrfToken() },
+            })
+        );
+        Promise.all(clipRequests).then(() => this.onClipDone());
+    }
+}
+
+export class XprezClipboardClipContent extends XprezClipboardClipBase {
+    getClipUrls() {
+        return this.el.dataset.url ? [this.el.dataset.url] : [];
+    }
+}
+
+export class XprezClipboardClipContainer extends XprezClipboardClipBase {
+    getClipUrls() {
+        return this.el.dataset.url ? [this.el.dataset.url] : [];
     }
 }
 
@@ -54,7 +79,7 @@ export class XprezCopyMenu extends XprezControllerBase {
     }
 
     initClipboard() {
-        const clipEl = this.el.querySelector('[data-controller="XprezClipboardClip"]');
+        const clipEl = this.el.querySelector('[data-controller="XprezClipboardClipContent"]');
         this.mountChild(clipEl);
     }
 }

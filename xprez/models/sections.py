@@ -169,6 +169,7 @@ class Section(ConfigParentMixin, SectionBase):
 
         for config in self.admin_form.xprez_configs:
             config.save_admin_form(request)
+        self._prune_redundant_configs()
 
     def render_admin(self, context):
         context["section"] = self

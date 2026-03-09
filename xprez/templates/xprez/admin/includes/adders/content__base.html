@@ -1,4 +1,4 @@
-{% load xprez_admin %}
+{% load i18n xprez_admin %}
 {% xprez_clipboard_is_empty xprez_admin request as clipboard_is_empty %}
 
 <div
@@ -25,7 +25,7 @@
             {% if clipboard_is_empty %}data-hidden{% endif %}
         >
             <span class="xprez-icon">{% include "xprez/shared/icons/paste.html" %}</span>
-            <span>Paste from clipboard</span>
+            <span>{% trans "Paste from clipboard" %}</span>
         </li>
 
         {% for module in available_modules %}

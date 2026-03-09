@@ -26,15 +26,15 @@
         <label for="{{ section.admin_form.visible.id_for_label }}">
             <i class="xprez-icon-eye x-variant-checked"></i>
             <i class="xprez-icon-eye_slash x-variant-unchecked x-color-alert"></i>
-            <span>Visibility on/off</span>
+            <span>{% trans "Visibility on/off" %}</span>
         </label>
         {{ section.admin_form.visible }}
     </span>
 
     {% with xprez_admin=section.admin_form.xprez_admin %}
         {% url xprez_admin.xprez_duplicate_url_name section_pk=section.pk as duplicate_url %}
-        {% url xprez_admin.xprez_clipboard_clip_url_name xprez_admin.constants.SECTION_KEY section.pk as clipboard_url %}
-        {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clipboard_url=clipboard_url copy_menu_controller="XprezSectionCopyMenu" duplicate_controller="XprezSectionDuplicateAdder" %}
+        {% url xprez_admin.xprez_clipboard_clip_url_name xprez_admin.constants.SECTION_KEY section.pk as clip_url %}
+        {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clip_url=clip_url copy_menu_controller="XprezSectionCopyMenu" duplicate_controller="XprezSectionDuplicateAdder" %}
     {% endwith %}
     {% trans "Remove" as title_remove %}
     {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title=title_remove delete_field=section.admin_form.delete %}
@@ -51,7 +51,7 @@
 
     <div class="xprez-section__footer">
         <span class="xprez-btn xprez-btn-transparent" data-xprez-adder-section-end-trigger>
-            <i class="xprez-icon-plus_square_20"></i>Add content
+            <i class="xprez-icon-plus_square_20"></i>{% trans "Add content" %}
         </span>
         {% include "xprez/admin/includes/adders/content_section_end.html" with xprez_admin=section.admin_form.xprez_admin adder_container=section.container adder_section=section %}
     </div>
@@ -62,7 +62,7 @@
             <div class="xprez-option-group">
                 <div class="xprez-option-group__heading">
                     <i class="xprez-icon-grid_3_3"></i>
-                    <span class="xprez-option-group__title-text">Section</span>
+                    <span class="xprez-option-group__title-text">{% trans "Section" %}</span>
                 </div>
                 <div class="xprez-option-row">
                     {% include "xprez/admin/form/field.html" with field=section.admin_form.max_width_choice size="flex-1" %}
