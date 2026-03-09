@@ -137,7 +137,7 @@ class Section(ConfigParentMixin, SectionBase):
                 self.configs.filter(pk__in=ids).order_by("css_breakpoint")
             )
         else:
-            self.admin_form.xprez_configs = list(self.get_saved_configs())
+            self.admin_form.xprez_configs = list(self.get_configs().filter(saved=True))
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)
@@ -175,10 +175,10 @@ class Section(ConfigParentMixin, SectionBase):
         context["section"] = self
         return super().render_admin(context)
 
-    def get_modules(self):
-        if not hasattr(self, "_modules"):
-            self._modules = self.modules.filter(saved=True).polymorphs()
-        return self._modules
+    def get_modules_front(self):
+        if not hasattr(self, "_modules_front"):
+            self._modules_front = self.modules.filter(saved=True).polymorphs()
+        return self._modules_front
 
     def duplicate_to(self, target_container, saved=False):
         new_section = self.__class__.objects.create(

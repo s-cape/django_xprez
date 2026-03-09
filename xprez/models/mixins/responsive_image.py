@@ -138,7 +138,7 @@ class ResponsiveImageSourcesMixin:
         the final entry (max_width=None) is always the <img> fallback.
         """
         breakpoints = settings.XPREZ_BREAKPOINTS
-        saved = {c.css_breakpoint: c for c in self.get_saved_configs()}
+        saved = {c.css_breakpoint: c for c in self.get_configs_front()}
 
         base_config = saved.get(0)
         base_crop_str = self.get_config_crop(base_config) if base_config else None

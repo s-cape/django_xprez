@@ -60,10 +60,10 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
         result = []
         breakpoints = settings.XPREZ_BREAKPOINTS
         section_configs = {
-            config.css_breakpoint: config for config in self.section.get_saved_configs()
+            config.css_breakpoint: config for config in self.section.get_configs_front()
         }
         gallery_configs = {
-            config.css_breakpoint: config for config in self.get_saved_configs()
+            config.css_breakpoint: config for config in self.get_configs_front()
         }
         current_section_cols = 1
         current_gallery_cols = 1

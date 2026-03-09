@@ -121,9 +121,6 @@ class Module(ConfigParentMixin, models.Model):
             .order_by("css_breakpoint")
         )
 
-    def get_saved_configs(self):
-        return self.get_configs().filter(saved=True)
-
     @classmethod
     def build(cls):
         content_type = cls.class_content_type()
@@ -174,7 +171,7 @@ class Module(ConfigParentMixin, models.Model):
                 .order_by("css_breakpoint")
             )
         else:
-            self.admin_form.xprez_configs = list(self.get_saved_configs())
+            self.admin_form.xprez_configs = list(self.get_configs().filter(saved=True))
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)

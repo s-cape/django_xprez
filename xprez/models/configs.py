@@ -22,8 +22,10 @@ class ConfigParentMixin(CssParentMixin):
     def get_configs(self):
         return self.configs.all().order_by("css_breakpoint")
 
-    def get_saved_configs(self):
-        return self.get_configs().filter(saved=True)
+    def get_configs_front(self):
+        if not hasattr(self, "_configs_front"):
+            self._configs_front = list(self.get_configs().filter(saved=True))
+        return self._configs_front
 
     def get_or_create_config(self, css_breakpoint):
         try:
@@ -34,7 +36,7 @@ class ConfigParentMixin(CssParentMixin):
             return config, True
 
     def duplicate_configs_to(self, target, saved=False):
-        for config in self.get_saved_configs():
+        for config in self.get_configs_front():
             existing_config = (
                 target.get_configs()
                 .filter(css_breakpoint=config.css_breakpoint)
@@ -50,7 +52,7 @@ class ConfigParentMixin(CssParentMixin):
 
     def _prune_redundant_configs(self):
         """Delete configs identical to their previous breakpoint (after all saves)."""
-        configs = list(self.get_saved_configs().order_by("css_breakpoint"))
+        configs = list(self.get_configs().filter(saved=True).order_by("css_breakpoint"))
         for i in range(len(configs) - 1, 0, -1):
             config = configs[i]
             previous_config = configs[i - 1]
