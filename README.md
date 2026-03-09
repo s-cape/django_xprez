@@ -22,7 +22,7 @@ Features
   - Responsive images (srcset, breakpoint-aware sizes).
 - **Styles**
   - Ready-made frontend CSS included.
-  - Or import xprez SCSS into your build; link `/xprez/variables.css` for breakpoint variables.
+  - Or import xprez SCSS into your build; link `{% url 'xprez:css_variables_global' %}` for breakpoint variables.
 - **Clipboard and symlinks** — Copy modules or sections; paste into another page or paste as symlink to reuse the same content.
 
 Quick start
@@ -100,6 +100,7 @@ class PageAdmin(XprezAdmin):
 
 ```django-html
 {% load xprez %}
+<link rel="stylesheet" href="{% url 'xprez:css_variables_global' %}">
 {% xprez_front_media page %}
 {% include 'xprez/container.html' with container=page %}
 ```
