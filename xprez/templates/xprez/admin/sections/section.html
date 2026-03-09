@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block header_settings %}
-    <span class="xprez-icon-btn" title="Advanced settings" data-xprez-section-popover-trigger>
+    <span class="xprez-icon-btn" title='{% trans "Advanced settings" %}' data-xprez-section-popover-trigger>
         <i class="xprez-icon-settings"></i>
     </span>
 
@@ -36,7 +36,8 @@
         {% url xprez_admin.xprez_clipboard_clip_url_name xprez_admin.constants.SECTION_KEY section.pk as clipboard_url %}
         {% include "xprez/admin/includes/copy_menu.html" with duplicate_url=duplicate_url clipboard_url=clipboard_url copy_menu_controller="XprezSectionCopyMenu" duplicate_controller="XprezSectionDuplicateAdder" %}
     {% endwith %}
-    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title="Remove" delete_field=section.admin_form.delete %}
+    {% trans "Remove" as title_remove %}
+    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title=title_remove delete_field=section.admin_form.delete %}
 {% endblock %}
 
 {% block section_body %}

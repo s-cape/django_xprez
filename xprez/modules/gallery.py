@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm
@@ -38,7 +39,7 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
     )
 
     class Meta:
-        verbose_name = "Gallery / Image"
+        verbose_name = _("Gallery / Image")
 
     class FrontMedia:
         js = PHOTOSWIPE_JS

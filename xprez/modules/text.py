@@ -4,6 +4,7 @@ from os import makedirs, path
 from django import forms
 from django.conf import settings as django_settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django.http import JsonResponse
 from django.urls import re_path
 from django.utils.decorators import method_decorator
@@ -85,7 +86,7 @@ class TextModule(ResponsiveImageSourcesMixin, ResponsiveImageMixin, TextModuleBa
     admin_js_controller_class = "XprezTextModule"
 
     media = models.FileField(upload_to="images", null=True, blank=True)
-    url = models.CharField("Target URL", max_length=255, null=True, blank=True)
+    url = models.CharField(_("Target URL"), max_length=255, null=True, blank=True)
 
     class AdminMedia:
         js = CkEditorWidget.Media.js
@@ -95,7 +96,7 @@ class TextModule(ResponsiveImageSourcesMixin, ResponsiveImageMixin, TextModuleBa
         js = ("xprez/js/observer_autoplay.js",)
 
     class Meta:
-        verbose_name = "Text"
+        verbose_name = _("Text")
 
     def get_media_extension(self):
         name = self.media.name or ""
@@ -170,7 +171,7 @@ class TextConfig(TextBaseConfig):
     admin_template_name = "xprez/admin/configs/modules/text.html"
 
     media_role = models.CharField(
-        "Media role",
+        _("Media role"),
         max_length=20,
         choices=constants.MEDIA_ROLE_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][

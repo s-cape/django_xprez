@@ -1,5 +1,6 @@
 from django import forms
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from xprez.admin.forms import ModuleForm
 from xprez.models.mixins.font_size import FontSizeModuleMixin
@@ -19,7 +20,7 @@ class QuoteModule(FontSizeModuleMixin, Module):
     quote = models.TextField()
 
     class Meta:
-        verbose_name = "Quote"
+        verbose_name = _("Quote")
 
 
 class QuoteModuleForm(ModuleForm):

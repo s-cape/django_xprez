@@ -1,4 +1,5 @@
 {% extends "xprez/admin/sections/section_base.html" %}
+{% load i18n %}
 
 {% block extra_css_classes %} xprez-section--symlink{% endblock %}
 {% block data_controller %}XprezSectionSymlink{% endblock %}
@@ -18,7 +19,8 @@
 
 {% block header_actions %}
     {{ block.super }}
-    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title="Remove" delete_field=section_symlink.admin_form.delete %}
+    {% trans "Remove" as title_remove %}
+    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title=title_remove delete_field=section_symlink.admin_form.delete %}
 {% endblock %}
 
 {% block section_body %}

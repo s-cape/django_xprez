@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from xprez.admin.forms import ModuleForm
 from xprez.models.mixins.font_size import FontSizeModuleMixin
@@ -15,7 +16,7 @@ class FilesModule(FontSizeModuleMixin, UploadMultiModule):
     title = models.CharField(max_length=255, blank=True)
 
     class Meta:
-        verbose_name = "Files"
+        verbose_name = _("Files")
 
 
 class FilesItem(MultiModuleItem):

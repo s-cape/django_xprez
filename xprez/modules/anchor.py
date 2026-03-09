@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 
 from xprez.models import Module
 
@@ -16,4 +17,4 @@ class AnchorModule(Module):
         super().save(*args, **kwargs)
 
     class Meta:
-        verbose_name = "Anchor"
+        verbose_name = _("Anchor")

@@ -1,8 +1,10 @@
 {% extends "xprez/admin/configs/base.html" %}
+{% load i18n %}
 
 {% block controller_class %}XprezModuleConfig{% endblock %}
 {% block delete_trigger %}
-    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-module-config-delete-trigger" title="Remove breakpoint" delete_field=config.admin_form.delete %}
+    {% trans "Remove breakpoint" as title_remove_breakpoint %}
+    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-module-config-delete-trigger" title=title_remove_breakpoint delete_field=config.admin_form.delete %}
 {% endblock %}
 {% block delete_info %}
     {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-module-config" message_subject="breakpoint" %}

@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import pluralize
 from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
 from xprez.conf import defaults, settings
@@ -59,7 +60,7 @@ class Section(ConfigParentMixin, SectionBase):
     admin_template_name = "xprez/admin/sections/section.html"
 
     max_width_choice = models.CharField(
-        verbose_name="Max width",
+        verbose_name=_("Max width"),
         max_length=16,
         choices=constants.MAX_WIDTH_CHOICES,
         default=defaults.XPREZ_DEFAULTS["section"]["max_width_choice"],
@@ -211,7 +212,7 @@ class SectionSymlink(SectionBase):
     )
 
     class Meta:
-        verbose_name = "Linked section"
+        verbose_name = _("Linked section")
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class("xprez.admin.forms.SectionSymlinkForm")

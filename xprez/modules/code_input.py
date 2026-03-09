@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from xprez.admin.forms import ModuleForm
 from xprez.models.modules import Module
@@ -13,7 +14,7 @@ class CodeInputModule(Module):
     code = models.TextField()
 
     class Meta:
-        verbose_name = "Code Input"
+        verbose_name = _("Code Input")
 
     def show_front(self):
         return self.code

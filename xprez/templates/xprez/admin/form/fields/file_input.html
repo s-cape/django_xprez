@@ -9,7 +9,7 @@
         <div class="xprez-option__file-input">
             <label
                 class="xprez-icon-btn xprez-option__file-input-upload-btn"
-                title="Add file"
+                title='{% trans "Add file" %}'
                 data-xprez-file-input-add-btn
                 {% if widget.is_initial %}data-hidden{% endif %}
             >
@@ -49,14 +49,14 @@
                     {% endwith %}
                 </div>
                 <div class="xprez-admin-file-input__media-actions">
-                    <label class="xprez-icon-btn" title="Replace" data-xprez-file-input-replace-btn>
+                    <label class="xprez-icon-btn" title='{% trans "Replace" %}' data-xprez-file-input-replace-btn>
                         {% include "xprez/shared/icons/repeat.html" %}
                         {% if widget.is_initial %}
                             <input type="{{ widget.type }}" name="{{ widget.name }}"{% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
                         {% endif %}
                     </label>
                     {% if not widget.required %}
-                        <span class="xprez-icon-btn" title="Remove" data-xprez-file-input-delete-trigger>
+                        <span class="xprez-icon-btn" title='{% trans "Remove" %}' data-xprez-file-input-delete-trigger>
                             <i class="xprez-icon-delete"></i>
                             <span data-hidden>
                                 <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>

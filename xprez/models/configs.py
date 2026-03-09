@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
 from xprez.conf import defaults, settings
@@ -113,7 +114,7 @@ class SectionConfig(ConfigBase):
     visible = models.BooleanField(default=True)
 
     margin_bottom_choice = models.CharField(
-        "Margin bottom",
+        _("Margin bottom"),
         max_length=20,
         choices=constants.MARGIN_CHOICES,
         default=defaults.XPREZ_DEFAULTS["section_config"]["margin_bottom_choice"],
@@ -134,7 +135,7 @@ class SectionConfig(ConfigBase):
     )
     padding_left_custom = models.PositiveIntegerField(null=True, blank=True)
     padding_right_choice = models.CharField(
-        "Padding right",
+        _("Padding right"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=defaults.XPREZ_DEFAULTS["section_config"]["padding_right_choice"],
@@ -142,7 +143,7 @@ class SectionConfig(ConfigBase):
     )
     padding_right_custom = models.PositiveIntegerField(null=True, blank=True)
     padding_top_choice = models.CharField(
-        "Padding top",
+        _("Padding top"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=defaults.XPREZ_DEFAULTS["section_config"]["padding_top_choice"],
@@ -150,7 +151,7 @@ class SectionConfig(ConfigBase):
     )
     padding_top_custom = models.PositiveIntegerField(null=True, blank=True)
     padding_bottom_choice = models.CharField(
-        "Padding bottom",
+        _("Padding bottom"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=defaults.XPREZ_DEFAULTS["section_config"]["padding_bottom_choice"],
@@ -165,7 +166,7 @@ class SectionConfig(ConfigBase):
     )
 
     gap_choice = models.CharField(
-        "Gap",
+        _("Gap"),
         max_length=20,
         choices=constants.GAP_CHOICES,
         default=defaults.XPREZ_DEFAULTS["section_config"]["gap_choice"],
@@ -214,8 +215,8 @@ class SectionConfig(ConfigBase):
         return f"section-config-{self.pk}"
 
     class Meta:
-        verbose_name = "Section Config"
-        verbose_name_plural = "Section Configs"
+        verbose_name = _("Section Config")
+        verbose_name_plural = _("Section Configs")
         unique_together = ("section", "css_breakpoint")
         ordering = ("css_breakpoint",)
 
@@ -234,17 +235,17 @@ class ModuleConfig(ConfigBase):
     visible = models.BooleanField(default=True)
 
     colspan = models.PositiveSmallIntegerField(
-        "Column span",
+        _("Column span"),
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["colspan"],
     )
     rowspan = models.PositiveSmallIntegerField(
-        "Row span",
+        _("Row span"),
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["rowspan"],
     )
     order = models.IntegerField(blank=True, null=True)
 
     vertical_align_grid = models.CharField(
-        "Vertical align (grid)",
+        _("Vertical align (grid)"),
         max_length=20,
         choices=constants.VERTICAL_ALIGN_GRID_MODULE_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
@@ -252,7 +253,7 @@ class ModuleConfig(ConfigBase):
         ],
     )
     horizontal_align_grid = models.CharField(
-        "Horizontal align (grid)",
+        _("Horizontal align (grid)"),
         max_length=20,
         choices=constants.HORIZONTAL_ALIGN_GRID_MODULE_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
@@ -261,7 +262,7 @@ class ModuleConfig(ConfigBase):
     )
 
     vertical_align_flex = models.CharField(
-        "Vertical align (flex)",
+        _("Vertical align (flex)"),
         max_length=20,
         choices=constants.VERTICAL_ALIGN_FLEX_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
@@ -269,7 +270,7 @@ class ModuleConfig(ConfigBase):
         ],
     )
     horizontal_align_flex = models.CharField(
-        "Horizontal align (flex)",
+        _("Horizontal align (flex)"),
         max_length=20,
         choices=constants.HORIZONTAL_ALIGN_FLEX_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
@@ -290,7 +291,7 @@ class ModuleConfig(ConfigBase):
     )
 
     padding_left_choice = models.CharField(
-        "Padding left",
+        _("Padding left"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
@@ -299,7 +300,7 @@ class ModuleConfig(ConfigBase):
         blank=True,
     )
     padding_right_choice = models.CharField(
-        "Padding right",
+        _("Padding right"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
@@ -308,7 +309,7 @@ class ModuleConfig(ConfigBase):
         blank=True,
     )
     padding_top_choice = models.CharField(
-        "Padding top",
+        _("Padding top"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
@@ -359,7 +360,7 @@ class ModuleConfig(ConfigBase):
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["aspect_ratio"],
     )
     border_radius_choice = models.CharField(
-        "Border radius",
+        _("Border radius"),
         max_length=20,
         choices=constants.BORDER_RADIUS_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"][
@@ -434,7 +435,7 @@ class ModuleConfig(ConfigBase):
         return f"module-config-{self.pk}"
 
     class Meta:
-        verbose_name = "Module Config"
-        verbose_name_plural = "Module Configs"
+        verbose_name = _("Module Config")
+        verbose_name_plural = _("Module Configs")
         unique_together = ("module", "css_breakpoint")
         ordering = ("css_breakpoint",)

@@ -1,5 +1,6 @@
 from django import forms
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm
@@ -55,7 +56,7 @@ class NumbersConfig(ModuleConfig):
     admin_template_name = "xprez/admin/configs/modules/numbers.html"
 
     COLUMNS_CHOICES = (
-        (constants.COLUMNS_AUTO, "Auto"),
+        (constants.COLUMNS_AUTO, _("Auto")),
         (1, "1"),
         (2, "2"),
         (3, "3"),
@@ -75,7 +76,7 @@ class NumbersConfig(ModuleConfig):
     )
 
     gap_choice = models.CharField(
-        "Gap",
+        _("Gap"),
         max_length=20,
         choices=constants.GAP_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.NumbersModule"][

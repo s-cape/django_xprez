@@ -73,7 +73,7 @@ class VideoModule(ResponsiveImageMixin, Module):
     video_id = models.CharField(max_length=200, editable=False)
 
     class Meta:
-        verbose_name = "Video"
+        verbose_name = _("Video")
 
     def get_image_field(self):
         return self.poster_image

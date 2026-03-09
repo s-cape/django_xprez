@@ -1,6 +1,7 @@
+{% load i18n %}
 <div class="xprez-delete-info" data-{{ component_prefix }}-delete-info>
-    <span class="xprez-delete-info__text">This {{ message_subject|default:"item" }} will be deleted when you save the changes.</span>
-    <span class="xprez-delete-info__btn" data-{{ component_prefix }}-undelete title="Undo delete">
+    <span class="xprez-delete-info__text">{% blocktrans with subject=message_subject|default:"item" %}This {{ subject }} will be deleted when you save the changes.{% endblocktrans %}</span>
+    <span class="xprez-delete-info__btn" data-{{ component_prefix }}-undelete title='{% trans "Undo delete" %}'>
         {% include "xprez/shared/icons/cross.html" %}
     </span>
 </div>
