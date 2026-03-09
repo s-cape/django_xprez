@@ -11,8 +11,8 @@ export class XprezFieldController extends XprezControllerBase {
         if (this.inputEl) {
             this._previousValue = this.getValue();
             this.refreshActive();
-            this.inputEl.addEventListener('input', this._onInputChange.bind(this));
-            this.inputEl.addEventListener('change', this._onInputChange.bind(this));
+            this.inputEl.addEventListener('input', (e) => this._onInputChange(e));
+            this.inputEl.addEventListener('change', (e) => this._onInputChange(e));
         }
     }
 
@@ -142,10 +142,28 @@ export class XprezFieldController extends XprezControllerBase {
         this.parent?.parent?.checkShortcuts?.();
     }
 
-    _onInputChange() {
+    _tryLiveSync() {
+        const module = this.module;
+        const fieldIsInModulePopover = module?.popover?.el?.contains(this.el);
+        if (!fieldIsInModulePopover || !this.syncAllowed()) return;
+
+        const prefix = module.el.dataset.prefix;
+        const liveSyncInput = module.el.querySelector(`[name="${prefix}-live_sync"]`);
+        if (!liveSyncInput?.checked) return;
+
+        const sync = this.xprez.sync;
+        const hasSelectedModules = sync.getSelectedCount() >= 1;
+        if (!hasSelectedModules) return;
+
+        sync.syncField(this);
+        sync.processQueue();
+    }
+
+    _onInputChange(e) {
         const newValue = this.getValue();
         if (newValue === this._previousValue) return;
         this._propagateChange(this._previousValue, newValue);
+        if (e?.isTrusted) this._tryLiveSync();
     }
 
     _cascadeField(field, oldValue, newValue, affected) {

@@ -100,7 +100,7 @@ Include the xprez editor and output admin media in the head:
 {% endblock %}
 
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         {{ form.as_p }}
         {% include "xprez/admin/xprez.html" with form=form %}

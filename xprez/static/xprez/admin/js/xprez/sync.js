@@ -102,10 +102,10 @@ export class XprezSyncManager {
     }
 
     async _stopProcessing() {
-        this._processing = false;
-        const remaining = XprezSyncManager.VISUAL_FEEDBACK_MIN_DURATION_MS - (Date.now() - this._processingStartedAt);
-        if (remaining > 0) await new Promise(resolve => setTimeout(resolve, remaining));
+        const waitMs = XprezSyncManager.VISUAL_FEEDBACK_MIN_DURATION_MS - (Date.now() - this._processingStartedAt);
+        if (waitMs > 0) await new Promise(resolve => setTimeout(resolve, waitMs));
         this.xprez.el.toggleAttribute("data-sync-processing", false);
+        this._processing = false;
     }
 
     getEffectiveValue(parent, breakpoint, fieldName) {

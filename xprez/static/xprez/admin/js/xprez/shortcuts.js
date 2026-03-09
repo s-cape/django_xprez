@@ -6,7 +6,7 @@ export class XprezShortcutFieldController extends XprezControllerBase {
     constructor(parent, el) {
         super(parent, el);
         this.inputEl = el.querySelector('select');
-        this.config = JSON.parse(this.inputEl.dataset.shortcut);
+        this.shortcutConfig = JSON.parse(this.inputEl.dataset.shortcut);
         this.el.addEventListener("click", (e) => e.stopPropagation());
         this.inputEl.addEventListener("focus", (e) => this._onSelectActivate(e));
         this.inputEl.addEventListener("change", () => this._onChange());
@@ -16,14 +16,14 @@ export class XprezShortcutFieldController extends XprezControllerBase {
     getValue() { return this.inputEl.value; }
 
     check() {
-        if (this.config.clone) {
+        if (this.shortcutConfig.clone) {
             const field = this.parent.fields?.find(
-                (f) => f.fieldName === this.config.clone
+                (f) => f.fieldName === this.shortcutConfig.clone
             );
             this.inputEl.value = field ? field.getValue() : "";
         } else {
             const sync = this.parent.xprez.sync;
-            for (const [fieldName, breakpointMap] of Object.entries(this.config)) {
+            for (const [fieldName, breakpointMap] of Object.entries(this.shortcutConfig)) {
                 const presetKeys = Object.keys(breakpointMap).filter((k) => k !== ADVANCED);
                 const breakpoints = Object.keys(breakpointMap[presetKeys[0]] || {}).map(Number);
                 const matched = presetKeys.find((key) =>
@@ -50,7 +50,7 @@ export class XprezShortcutFieldController extends XprezControllerBase {
         const value = this.getValue();
         if (value === ADVANCED) {
             this.parent.popover.show();
-            if (this.config.clone) {
+            if (this.shortcutConfig.clone) {
                 this._apply(value);
             }
         } else {
@@ -60,10 +60,10 @@ export class XprezShortcutFieldController extends XprezControllerBase {
 
     _apply(value) {
         const sync = this.parent.xprez.sync;
-        if (this.config.clone) {
-            sync.queueItem(this.parent, null, this.config.clone, String(value));
+        if (this.shortcutConfig.clone) {
+            sync.queueItem(this.parent, null, this.shortcutConfig.clone, String(value));
         } else {
-            for (const [fieldName, breakpointMap] of Object.entries(this.config)) {
+            for (const [fieldName, breakpointMap] of Object.entries(this.shortcutConfig)) {
                 const desiredValues = breakpointMap[value];
                 if (!desiredValues) continue;
                 for (const [breakpoint, desiredValue] of Object.entries(desiredValues)) {

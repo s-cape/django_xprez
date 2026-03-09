@@ -5,19 +5,21 @@ import { XprezControllerBase } from './controller_base.js';
 import { WithSignals } from './signals.js';
 
 export class Xprez extends WithSignals(XprezControllerBase) {
-    constructor(parent, el) {
-        super(parent, el);
+    constructor() {
+        super(null, document.querySelector("[data-controller='Xprez']"));
         this.sectionsContainerEl = this.el.querySelector("[data-xprez-sections-container]");
         this.viewSelectEl = this.el.querySelector("[data-xprez-view-select]");
         this.viewSelectEl.addEventListener("change", this.updateView.bind(this));
         this.sync = new XprezSyncManager(this);
         this.initSections();
         this.updateView();
-        this.adder = this.mountChildOrNull(
-            this.el.querySelector("[data-controller='XprezSectionAdderContainerEnd']")
+        this.adder = this.mountChild(
+            this.el.querySelector("[data-controller='XprezSectionAdderContainerEnd']"),
+            {allowNull: true}
         );
-        this.allSectionsCollapseExpand = this.mountChildOrNull(
-            this.el.querySelector("[data-controller='XprezAllSectionsCollapseExpand']")
+        this.allSectionsCollapseExpand = this.mountChild(
+            this.el.querySelector("[data-controller='XprezAllSectionsCollapseExpand']"),
+            {allowNull: true}
         );
         this.initSectionsSortable();
     }

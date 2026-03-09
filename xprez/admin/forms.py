@@ -27,7 +27,7 @@ class PositionFormMixin:
 
 class SyncFieldsMixin:
     SYNC_UNSAFE_WIDGETS = (forms.FileInput, forms.ClearableFileInput)
-    sync_exclude = ()
+    sync_exclude = ("live_sync",)
 
     def sync_candidate_fields(self):
         """Return iterable of field names to consider for syncing."""

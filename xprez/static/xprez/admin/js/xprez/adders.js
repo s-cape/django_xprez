@@ -127,7 +127,6 @@ export class XprezSectionAdderContainerEnd extends XprezContentAdderBase {
 export class XprezContentAdderSectionBase extends XprezContentAdderBase {
     constructor(parent, el) {
         super(parent, el);
-        this.section = this.parent;
         this.setTriggerEl();
         if (this.triggerEl) {
             this.triggerEl.addEventListener("click", this.toggle.bind(this));
@@ -226,11 +225,6 @@ export class XprezSectionConfigAdder extends XprezConfigAdderBase {}
 export class XprezModuleConfigAdder extends XprezConfigAdderBase {}
 
 export class XprezMultiModuleAdderBase extends XprezAdderBase {
-    constructor(parent, el) {
-        super(parent, el);
-        this.module = this.parent;
-    }
-
     placeNewElement(el) {
         this.module.itemsContainer.appendChild(el);
         this.module.setItemPositionsToInputs();

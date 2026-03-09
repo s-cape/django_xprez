@@ -6,7 +6,6 @@ import { XprezControllerBase } from './controller_base.js';
 export class XprezMultiModuleItem extends XprezControllerBase {
     constructor(module, itemEl) {
         super(module, itemEl);
-        this.module = module;
         this.deleter = new XprezMultiModuleItemDeleter(this);
     }
 }

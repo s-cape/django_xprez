@@ -8,7 +8,6 @@ import { XprezShortcutParentMixin } from './shortcuts.js';
 export class XprezModule extends XprezContentBase {
     constructor(section, moduleEl) {
         super(section, moduleEl);
-        this.section = section;
         this.popover = this.mountChild(this.el.querySelector("[data-controller='XprezModulePopover']"));
         this.deleter = new XprezModuleDeleter(this);
         this.initFields();
