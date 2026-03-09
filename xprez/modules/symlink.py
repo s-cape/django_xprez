@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from xprez.models.modules import Module
 
@@ -15,7 +16,7 @@ class ModuleSymlink(Module):
     )
 
     class Meta:
-        verbose_name = "Linked module"
+        verbose_name = _("Linked module")
 
     def render_front(self, *args, **kwargs):
         if self.symlink:

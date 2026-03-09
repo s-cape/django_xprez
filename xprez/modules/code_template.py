@@ -1,6 +1,7 @@
 from django.db import models
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
+from django.utils.translation import gettext_lazy as _
 
 from xprez.admin.fields import TemplatePathField
 from xprez.admin.forms import ModuleForm
@@ -35,7 +36,7 @@ class CodeTemplateModule(FontSizeModuleMixin, Module):
     )
 
     class Meta:
-        verbose_name = "Code Template"
+        verbose_name = _("Code Template")
 
     def render_front(self, context):
         if self.template_name:

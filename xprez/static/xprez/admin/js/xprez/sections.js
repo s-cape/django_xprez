@@ -1,19 +1,16 @@
 import { XprezContentBase } from './contents_base.js';
-import { XprezSectionPopover } from './popovers.js';
-import { XprezSectionAdderSectionBefore, XprezModuleAdderSectionEnd, XprezSectionConfigAdder } from './adders.js';
-import { XprezSectionCopyMenu } from './copy.js';
 import { XprezSectionDeleter } from './deleters.js';
-import { XprezSectionConfig, XprezConfigParentMixin } from './configs.js';
+import { XprezConfigParentMixin } from './configs.js';
 import { XprezSortable } from './sortable.js';
 import { XprezShortcutParentMixin } from './shortcuts.js';
 import { XprezCollapserMixin } from './collapser.js';
+import { XprezControllerBase } from './controller_base.js';
 
-export class XprezSectionSymlink {
+export class XprezSectionSymlink extends XprezControllerBase {
     constructor(xprez, el) {
-        this.xprez = xprez;
-        this.el = el;
+        super(xprez, el);
         this.deleter = new XprezSectionDeleter(this);
-        this.adderBefore = new XprezSectionAdderSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-before']"), this);
+        this.adderBefore = this.mountChild(this.el.querySelector("[data-controller='XprezSectionAdderSectionBefore']"));
         this.initCollapser();
     }
 
@@ -27,12 +24,11 @@ Object.assign(XprezSectionSymlink.prototype, XprezCollapserMixin);
 
 export class XprezSection extends XprezContentBase {
     constructor(xprez, sectionEl) {
-        super(sectionEl);
-        this.xprez = xprez;
+        super(xprez, sectionEl);
         this.deleter = new XprezSectionDeleter(this);
-        this.popover = new XprezSectionPopover(this);
-        this.adderBefore = new XprezSectionAdderSectionBefore(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-before']"), this);
-        this.adderEnd = new XprezModuleAdderSectionEnd(this.xprez, this.el.querySelector("[data-component='xprez-adder-section-end']"), this);
+        this.popover = this.mountChild(this.el.querySelector("[data-controller='XprezSectionPopover']"));
+        this.adderBefore = this.mountChild(this.el.querySelector("[data-controller='XprezSectionAdderSectionBefore']"));
+        this.adderEnd = this.mountChild(this.el.querySelector("[data-controller='XprezModuleAdderSectionEnd']"));
         this.initModules();
         this.initFields();
         this.initCollapser();
@@ -47,36 +43,36 @@ export class XprezSection extends XprezContentBase {
         return [...super.unmanagedContainers, this.gridEl];
     }
 
-    get configsContainerSelector() { return "[data-component='xprez-section-configs']"; }
-    get configSelector() { return "[data-component='xprez-section-config']"; }
-    createConfig(configEl) { return new XprezSectionConfig(this, configEl); }
-    createConfigAdder() { return new XprezSectionConfigAdder(this.xprez, this); }
+    get configsContainerSelector() { return "[data-xprez-section-configs]"; }
+    get configSelector() { return "[data-controller='XprezSectionConfig']"; }
+    createConfig(configEl) { return this.mountChild(configEl); }
+    createConfigAdder() { return this.mountChild(this.el.querySelector("[data-controller='XprezSectionConfigAdder']")); }
 
     id() { return this.el.querySelector("[name='section-id']").value; }
     get collapsedStorageKey() { return "xprez-sections-collapsed"; }
 
     initModules() {
-        this.gridEl = this.el.querySelector("[data-component='xprez-section-grid']");
+        this.gridEl = this.el.querySelector("[data-xprez-section-grid]");
         this.modules = [];
-        this.el.querySelectorAll("[data-component='xprez-module']").forEach(
-            this.initModule.bind(this)
-        );
+        Array.from(this.gridEl.children).forEach(this.initModule.bind(this));
     }
+
     initModule(moduleEl) {
-        const ControllerClass = window[moduleEl.dataset.jsControllerClass];
-        if (!ControllerClass) {
-            console.error(`Controller class ${moduleEl.dataset.jsControllerClass} not found`);
-            return;
-        }
-        const module = new ControllerClass(this, moduleEl);
+        const module = this.mountChild(moduleEl);
         this.modules.push(module);
         return module;
     }
 
+    initNewModule(moduleEl) {
+        const module = this.initModule(moduleEl);
+        module.assignSyncGroupForNew();
+        return module;
+    }
+
     initCopyMenus() {
-        this.el.querySelectorAll('[data-component="xprez-copy-menu"]').forEach(el => {
+        this.el.querySelectorAll('[data-controller="XprezSectionCopyMenu"]').forEach(el => {
             if (this.isUnmanaged(el)) return;
-            new XprezSectionCopyMenu(el, this);
+            this.mountChild(el);
         });
     }
 

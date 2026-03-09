@@ -1,4 +1,6 @@
-<span class="xprez-icon-btn" title="{{ title|default:'Remove' }}" data-component="{{ component_name }}">
+{% load i18n %}
+{% trans "Remove" as default_title %}
+<span class="xprez-icon-btn" title="{{ title|default:default_title }}" data-{{ component_name }}>
     <i class="xprez-icon-delete"></i>
     <span data-hidden>{{ delete_field }}</span>
 </span>

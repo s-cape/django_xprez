@@ -4,22 +4,22 @@ import { WithMediaPreview } from './media_preview.js';
 export class XprezFileInputFieldController extends WithMediaPreview(XprezFieldController) {
     constructor(parent, fieldEl) {
         super(parent, fieldEl);
-        this.containerEl = fieldEl.querySelector("[data-component='xprez-file-input']");
+        this.containerEl = fieldEl.querySelector("[data-xprez-file-input]");
         if (!this.containerEl) return;
 
         this._initMediaPreviewEls(this.containerEl);
-        this.addBtnEl = fieldEl.querySelector("[data-component='xprez-file-input-add-btn']");
+        this.addBtnEl = fieldEl.querySelector("[data-xprez-file-input-add-btn]");
         this.replaceBtnEl = this.containerEl.querySelector(
-            "[data-component='xprez-file-input-replace-btn']"
+            "[data-xprez-file-input-replace-btn]"
         );
         this.deleteTriggerEl = this.containerEl.querySelector(
-            "[data-component='xprez-file-input-delete-trigger']"
+            "[data-xprez-file-input-delete-trigger]"
         );
         this.clearInputEl = this.deleteTriggerEl
             ? this.deleteTriggerEl.querySelector("input[type='checkbox']")
             : null;
         this.undeleteEl = this.containerEl.querySelector(
-            "[data-component='xprez-file-input-undelete']"
+            "[data-xprez-file-input-undelete]"
         );
 
         // On load with a saved file the input is already inside replaceBtnEl (from template).

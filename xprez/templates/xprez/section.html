@@ -3,7 +3,7 @@
 <div id="{{ section.instance_key }}" class="{{ section.front_css_classes_cached }}">
     {{ section.front_css_variables_cached|safe }}
     <div class="xprez-section-inner">
-        {% for module in section.get_modules %}
+        {% for module in section.get_modules_front %}
             {% xprez_module_render_front module %}
         {% endfor %}
     </div>

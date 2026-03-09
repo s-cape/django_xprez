@@ -1,7 +1,7 @@
-from django import forms
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-from xprez.admin.forms import ModuleForm, MultiModuleItemForm
+from xprez.admin.forms import ModuleForm
 from xprez.models.mixins.font_size import FontSizeModuleMixin
 from xprez.models.multi_module import MultiModuleItem, UploadMultiModule
 
@@ -12,18 +12,20 @@ class FilesModule(FontSizeModuleMixin, UploadMultiModule):
     admin_template_name = "xprez/admin/modules/files/files.html"
     admin_item_template_name = "xprez/admin/modules/files/files_item.html"
     admin_form_class = "xprez.modules.files.FilesModuleForm"
-    admin_item_form_class = "xprez.modules.files.FilesItemForm"
     admin_icon_template_name = "xprez/shared/icons/modules/files.html"
 
     title = models.CharField(max_length=255, blank=True)
 
     class Meta:
-        verbose_name = "Files"
+        verbose_name = _("Files")
 
 
 class FilesItem(MultiModuleItem):
     module = models.ForeignKey(
-        FilesModule, related_name="items", on_delete=models.CASCADE
+        FilesModule,
+        related_name="items",
+        on_delete=models.CASCADE,
+        editable=False,
     )
     file = models.FileField(upload_to="files", max_length=300)
     description = models.CharField(max_length=255, blank=True)
@@ -61,13 +63,3 @@ class FilesItem(MultiModuleItem):
 
 class FilesModuleForm(ModuleForm):
     options_fields = ModuleForm.options_fields + ("font_size",)
-
-    # class Meta:
-    #     model = FilesModule
-    #     fields = "__all__"
-
-
-class FilesItemForm(MultiModuleItemForm):
-    class Meta:
-        model = FilesItem
-        fields = ("description",)

@@ -84,7 +84,7 @@ class ResponsiveImageItemMixin:
         """Return the ImageField instance for this item (e.g. self.file)."""
         raise NotImplementedError
 
-    def get_aspect_ratio(self):
+    def get_image_aspect_ratio(self):
         """Return (numerator, denominator) for the image aspect ratio."""
         raise NotImplementedError
 
@@ -95,7 +95,7 @@ class ResponsiveImageItemMixin:
             cap_width = self.get_image_field().width or None
         except (AttributeError, OSError):
             cap_width = None
-        numerator, denominator = self.get_aspect_ratio()
+        numerator, denominator = self.get_image_aspect_ratio()
         return self.build_srcset_geometries(
             settings.XPREZ_SRCSET_WIDTHS, numerator, denominator, cap_width
         )
@@ -138,7 +138,7 @@ class ResponsiveImageSourcesMixin:
         the final entry (max_width=None) is always the <img> fallback.
         """
         breakpoints = settings.XPREZ_BREAKPOINTS
-        saved = {c.css_breakpoint: c for c in self.get_saved_configs()}
+        saved = {c.css_breakpoint: c for c in self.get_configs_front()}
 
         base_config = saved.get(0)
         base_crop_str = self.get_config_crop(base_config) if base_config else None

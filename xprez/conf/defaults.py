@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 from xprez import constants
 
 XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
@@ -41,12 +43,12 @@ XPREZ_STAFF_MEMBER_REQUIRED = (
 )
 
 XPREZ_BREAKPOINTS = {
-    0: {"name": "Base style (all sizes &lt; ∞)", "max_width": None},
-    1: {"name": "Desktops (&lt; 1500px)", "max_width": 1499},
-    2: {"name": "Large devices (&lt; 1200px)", "max_width": 1199},
-    3: {"name": "Tablets (&lt; 992px)", "max_width": 991},
-    4: {"name": "Small devices (&lt; 768px)", "max_width": 767},
-    5: {"name": "Mobile (&lt; 500px)", "max_width": 499},
+    0: {"name": _("Base style (all sizes &lt; ∞)"), "max_width": None},
+    1: {"name": _("Desktops (&lt; 1500px)"), "max_width": 1499},
+    2: {"name": _("Large devices (&lt; 1200px)"), "max_width": 1199},
+    3: {"name": _("Tablets (&lt; 992px)"), "max_width": 991},
+    4: {"name": _("Small devices (&lt; 768px)"), "max_width": 767},
+    5: {"name": _("Mobile (&lt; 500px)"), "max_width": 499},
 }
 XPREZ_SRCSET_WIDTHS = (160, 320, 480, 640, 960, 1280, 1920, 2560)
 XPREZ_IMAGE_EXTENSIONS = (

@@ -1,6 +1,7 @@
+{% load i18n %}
 <div
     class="xprez-section{% block extra_css_classes %}{% endblock %}"
-    data-component="{% block data_component %}xprez-section{% endblock %}"
+    data-controller="{% block data_controller %}XprezSection{% endblock %}"
     data-mode="{% block data_mode %}{# (empty)/edit/delete #}{% endblock %}"
     data-prefix="{% block data_prefix %}{% endblock %}"
 >
@@ -8,7 +9,7 @@
 
     <div class="xprez-section__header" data-draggable-section-handle>
         {% block header_before_settings %}
-            <span class="xprez-icon-btn" title="Collapse" data-component="xprez-section-collapser">
+            <span class="xprez-icon-btn" title='{% trans "Collapse" %}' data-xprez-section-collapser>
                 <i class="xprez-icon-chevron-small-down"></i>
             </span>
         {% endblock %}
@@ -19,7 +20,7 @@
 
         <div class="xprez-section__actions">
             {% block header_actions %}
-                <span class="xprez-icon-btn" title="Add section" data-component="xprez-adder-section-before-trigger">
+                <span class="xprez-icon-btn" title='{% trans "Add section" %}' data-xprez-adder-section-before-trigger>
                     <i class="xprez-icon-plus-circle"></i>
                 </span>
             {% endblock %}

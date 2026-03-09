@@ -1,20 +1,30 @@
-import { XprezSection, XprezSectionSymlink } from './sections.js';
-import { XprezSectionAdderContainerEnd } from './adders.js';
+import { XprezSectionSymlink } from './sections.js';
 import { XprezSortable } from './sortable.js';
 import { XprezSyncManager } from './sync.js';
+import { XprezControllerBase } from './controller_base.js';
+import { WithSignals } from './signals.js';
 
-export class Xprez {
+export class Xprez extends WithSignals(XprezControllerBase) {
     constructor() {
-        this.el = document.querySelector("[data-component='xprez']");
-        this.sectionsContainerEl = this.el.querySelector("[data-component='xprez-sections-container']");
-        this.viewSelectEl = this.el.querySelector("[data-component='xprez-view-select']");
+        super(null, document.querySelector("[data-controller='Xprez']"));
+        this.sectionsContainerEl = this.el.querySelector("[data-xprez-sections-container]");
+        this.viewSelectEl = this.el.querySelector("[data-xprez-view-select]");
         this.viewSelectEl.addEventListener("change", this.updateView.bind(this));
         this.sync = new XprezSyncManager(this);
         this.initSections();
         this.updateView();
-        const adderEl = this.el.querySelector("[data-component='xprez-adder-container-end']");
-        this.adder = adderEl ? new XprezSectionAdderContainerEnd(this, adderEl) : null;
-        this.initAllSectionsCollapser();
+        this.adder = this.mountChild(
+            this.el.querySelector("[data-controller='XprezSectionAdderContainerEnd']"),
+            {allowNull: true}
+        );
+        this.allSectionsCollapseExpand = this.mountChild(
+            this.el.querySelector("[data-controller='XprezAllSectionsCollapseExpand']"),
+            {allowNull: true}
+        );
+        this.clipboardClipContainer = this.mountChild(
+            this.el.querySelector("[data-controller='XprezClipboardClipContainer']"),
+            {allowNull: true}
+        );
         this.initSectionsSortable();
     }
 
@@ -22,20 +32,18 @@ export class Xprez {
         this.sections = [];
         this.sectionSymlinks = [];
         this.sectionsContainerEl.querySelectorAll(
-            "[data-component='xprez-section'], [data-component='xprez-section-symlink']"
+            "[data-controller='XprezSection'], [data-controller='XprezSectionSymlink']"
         ).forEach(this.initSection.bind(this));
     }
 
     initSection(el) {
-        if (el.dataset.component === "xprez-section") {
-            const section = new XprezSection(this, el);
-            this.sections.push(section);
-            return section;
-        } else if (el.dataset.component === "xprez-section-symlink") {
-            const sectionSymlink = new XprezSectionSymlink(this, el);
-            this.sectionSymlinks.push(sectionSymlink);
-            return sectionSymlink;
-        } else throw new Error(el.dataset.component);
+        const controller = this.mountChild(el);
+        if (controller instanceof XprezSectionSymlink) {
+            this.sectionSymlinks.push(controller);
+        } else {
+            this.sections.push(controller);
+        }
+        return controller;
     }
 
     updateView() {
@@ -54,27 +62,18 @@ export class Xprez {
 
     setPlacementToInputs() {
         this.sectionsContainerEl.querySelectorAll(
-            "[data-component='xprez-section'], [data-component='xprez-section-symlink']"
+            "[data-controller='XprezSection'], [data-controller='XprezSectionSymlink']"
         ).forEach((sectionEl, sectionIndex) => {
             sectionEl.querySelector(`input[name="${sectionEl.dataset.prefix}-position"]`).value = sectionIndex;
         });
 
         this.sections.forEach(section => {
             const sectionId = section.el.querySelector('input[name="section-id"]').value;
-            section.el.querySelectorAll("[data-component='xprez-module']").forEach(
-                (moduleEl, moduleIndex) => {
-                    moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-position"]`).value = moduleIndex;
-                    moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-section"]`).value = sectionId;
-                }
-            );
+            Array.from(section.gridEl.children).forEach((moduleEl, moduleIndex) => {
+                moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-position"]`).value = moduleIndex;
+                moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-section"]`).value = sectionId;
+            });
         });
-    }
-
-    initAllSectionsCollapser() {
-        this.allSectionsCollapserEl = this.el.querySelector("[data-component='xprez-all-sections-collapser']");
-        this.allSectionsCollapserEl.addEventListener("click", function() {
-            for (const section of Object.values(this.sections)) { section.collapse(); }
-        }.bind(this));
     }
 
     initSectionsSortable() {

@@ -72,8 +72,9 @@ class MultiModule(Module):
 
     def save_admin_form(self, request):
         super().save_admin_form(request)
-        for item in self.admin_form.xprez_items:
-            item.save_admin_form(request)
+        if not getattr(self.admin_form, "deleted", False):
+            for item in self.admin_form.xprez_items:
+                item.save_admin_form(request)
 
     def admin_has_errors(self):
         if getattr(self.admin_form, "deleted", False):
@@ -93,9 +94,9 @@ class MultiModule(Module):
         item.save()
         return item
 
-    def duplicate_to(self, target_section, saved=False):
-        new_module = super().duplicate_to(target_section, saved=saved)
-        self.duplicate_items(new_module, saved=saved)
+    def duplicate_to(self, target_section, saved=False, **kwargs):
+        new_module = super().duplicate_to(target_section, saved=saved, **kwargs)
+        self.duplicate_items(new_module, saved=True)
         return new_module
 
     def duplicate_items(self, new_module, saved=False):
@@ -147,7 +148,7 @@ class MultiModuleItem(models.Model):
 
     module_foreign_key = "module"
     saved = models.BooleanField(default=False, editable=False)
-    position = models.PositiveSmallIntegerField(default=0)
+    position = models.PositiveSmallIntegerField(default=0, blank=True)
 
     @property
     def instance_key(self):

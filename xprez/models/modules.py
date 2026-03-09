@@ -7,6 +7,7 @@ from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
 from xprez.models.mixins.cache import ContentFrontCacheMixin
+from xprez.models.querysets.modules import ModuleQuerySet
 from xprez.utils import class_content_type, copy_model, import_class
 
 
@@ -27,7 +28,7 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
     )
     saved = models.BooleanField(default=False, editable=False)
 
-    position = models.PositiveSmallIntegerField(default=0)
+    position = models.PositiveSmallIntegerField(default=0, blank=True)
     content_type = models.CharField(max_length=100, editable=False)
     css_class = models.CharField(max_length=100, null=True, blank=True)
     alternate_color = models.BooleanField(
@@ -39,6 +40,8 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     changed = models.DateTimeField(auto_now=True, editable=False)
+
+    objects = ModuleQuerySet.as_manager()
 
     class Meta:
         ordering = ("position",)
@@ -111,11 +114,11 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
         else:
             return model.objects.get(pk=self.pk)
 
-    def duplicate_to(self, target_section, saved=False):
+    def duplicate_to(self, target_section, saved=False, **kwargs):
         new_module = copy_model(self)
         new_module.section = target_section
         new_module.saved = saved
-        new_module.save()
+        new_module.save(**kwargs)
         self.duplicate_configs_to(new_module, saved=saved)
         return new_module
 
@@ -129,9 +132,6 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
             .objects.filter(module=self)
             .order_by("css_breakpoint")
         )
-
-    def get_saved_configs(self):
-        return self.get_configs().filter(saved=True)
 
     @classmethod
     def build(cls):
@@ -183,7 +183,7 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
                 .order_by("css_breakpoint")
             )
         else:
-            self.admin_form.xprez_configs = list(self.get_saved_configs())
+            self.admin_form.xprez_configs = list(self.get_configs().filter(saved=True))
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)
@@ -211,6 +211,7 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
 
             for config in self.admin_form.xprez_configs:
                 config.save_admin_form(request)
+            self._prune_redundant_configs()
 
     def render_admin(self, context):
         xprez_admin = self.admin_form.xprez_admin

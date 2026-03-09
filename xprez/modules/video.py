@@ -74,12 +74,12 @@ class VideoModule(ResponsiveImageMixin, Module):
     video_id = models.CharField(max_length=200, editable=False)
 
     class Meta:
-        verbose_name = "Video"
+        verbose_name = _("Video")
 
     def get_image_field(self):
         return self.poster_image
 
-    def get_aspect_ratio(self):
+    def get_image_aspect_ratio(self):
         num, den = constants.ASPECT_RATIO_16_9.split("/")
         return int(num), int(den)
 

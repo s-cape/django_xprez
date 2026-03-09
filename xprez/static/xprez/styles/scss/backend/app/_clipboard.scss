@@ -1,31 +1,16 @@
 .xprez-clipboard-clip {
-	.xprez-inline-success-message {
+	cursor: pointer;
+	.xprez-btn__success {
 		display: none;
 	}
 
 	&.success {
-		.xprez-inline-success-message {
+		.xprez-btn__success {
 			display: flex;
 		}
-
-		.default {
+		.xprez-btn__default {
 			display: none;
 		}
-	}
-
-	.check {
-		color: green;
-	}
-}
-
-.xprez-inline-success-message {
-	display: flex;
-	align-items: center;
-
-	svg {
-		width: 24px;
-		height: 24px;
-		margin: -4px 0;
 	}
 }
 

@@ -1,5 +1,6 @@
 import { XprezSectionConfigDeleter, XprezModuleConfigDeleter } from './deleters.js';
 import { resolveFieldControllerClass, XprezFieldLink, XprezShowWhen } from './fields.js';
+import { XprezControllerBase } from './controller_base.js';
 
 /** Mixin for Section/Module that own configs. Apply via Object.assign(Class.prototype, XprezConfigParentMixin) */
 export const XprezConfigParentMixin = {
@@ -17,10 +18,9 @@ export const XprezConfigParentMixin = {
     }
 };
 
-export class XprezConfigBase {
+export class XprezConfigBase extends XprezControllerBase {
     constructor(parent, el) {
-        this.parent = parent;
-        this.el = el;
+        super(parent, el);
         this.initFields();
         this.initShowWhens();
         this.initFieldLinks();
@@ -34,7 +34,7 @@ export class XprezConfigBase {
 
     initFields() {
         this.fields = [];
-        this.el.querySelectorAll('[data-component="field"]').forEach(fieldEl => this.initField(fieldEl));
+        this.el.querySelectorAll('[data-xprez-field]').forEach(fieldEl => this.initField(fieldEl));
     }
 
     initShowWhens() {
@@ -88,17 +88,15 @@ export class XprezConfigBase {
 }
 
 export class XprezSectionConfig extends XprezConfigBase {
-    constructor(section, el) {
-        super(section, el);
-        this.section = section;
+    constructor(parent, el) {
+        super(parent, el);
         this.deleter = new XprezSectionConfigDeleter(this);
     }
 }
 
 export class XprezModuleConfig extends XprezConfigBase {
-    constructor(module, el) {
-        super(module, el);
-        this.module = module;
+    constructor(parent, el) {
+        super(parent, el);
         this.deleter = new XprezModuleConfigDeleter(this);
     }
 }

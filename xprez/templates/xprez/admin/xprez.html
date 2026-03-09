@@ -1,15 +1,15 @@
 {% load i18n %}
 {% load xprez_admin %}
 
-<div class="xprez" data-component="xprez">
+<div class="xprez" data-controller="Xprez">
     <div class="xprez-top">
         <div class="xprez-option" data-active="true" data-text-label="true">
             <label for="view">
                 <i class="xprez-icon-view"></i>
-                <span>View</span>
+                <span>{% trans "View" %}</span>
             </label>
             <span class="xprez-option__dropdown">
-                <select id="view" data-component="xprez-view-select">
+                <select id="view" data-xprez-view-select>
                     <option value="sm">Default edit view</option>
                     {% for id, data in form.xprez_admin.xprez_breakpoints.items %}
                         <option value="{{ id }}">{{ data.name|safe }}</option>
@@ -18,23 +18,23 @@
             </span>
         </div>
 
-        <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-component="xprez-all-sections-collapser">
-            <i class="xprez-icon-vertical"></i>
-            Collapse all
-        </span>
-        <span class="xprez-btn xprez-btn-transparent xprez-btn--sm {# success #}">
-            <span class="xprez-btn__inner xprez-btn__success">
-                {% include "xprez/shared/icons/checkmark.html" %}
-                Copied
+        <div data-controller="XprezAllSectionsCollapseExpand">
+            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-xprez-all-sections-collapser>
+                <i class="xprez-icon-vertical"></i>
+                {% trans "Collapse all" %}
             </span>
-            <span class="xprez-btn__inner xprez-btn__default">
-                <i class="xprez-icon-copy"></i>
-                Copy all
+            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-xprez-all-sections-expander>
+                <i class="xprez-icon-vertical"></i>
+                {% trans "Expand all" %}
             </span>
-        </span>
+        </div>
+        
+        {% url form.xprez_admin.xprez_clipboard_clip_url_name form.xprez_admin.constants.CONTAINER_KEY form.instance.pk as clip_url %}
+        {% trans "Copy all" as clip_text %}
+        {% include "xprez/admin/includes/clipboard_clip.html" with clip_url=clip_url controller="XprezClipboardClipContainer" clip_text=clip_text %}
     </div>
 
-    <div data-component="xprez-sections-container">
+    <div data-xprez-sections-container>
         {% for section in form.xprez_sections %}
             {% xprez_section_render_admin section %}
         {% endfor %}
@@ -42,7 +42,7 @@
 
     {% with available_modules=form.xprez_add_menu_module_classes %}
         {% if available_modules %}
-            {% include "./includes/adders/section.html" with component_name="xprez-adder-container-end" xprez_admin=form.xprez_admin adder_container=form.instance %}
+            {% include "./includes/adders/content_container_end.html" with xprez_admin=form.xprez_admin adder_container=form.instance %}
         {% endif %}
     {% endwith %}
 </div>

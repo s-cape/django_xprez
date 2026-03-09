@@ -1,8 +1,9 @@
 from django import forms
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
-from xprez.admin.forms import ModuleForm, MultiModuleItemForm
+from xprez.admin.forms import ModuleForm
 from xprez.conf import defaults
 from xprez.models.configs import ModuleConfig
 from xprez.models.mixins.font_size import FontSizeModuleMixin
@@ -16,7 +17,6 @@ class NumbersModule(FontSizeModuleMixin, MultiModule):
     admin_template_name = "xprez/admin/modules/numbers/numbers.html"
     admin_item_template_name = "xprez/admin/modules/numbers/numbers_item.html"
     admin_form_class = "xprez.modules.numbers.NumbersModuleForm"
-    admin_item_form_class = "xprez.modules.numbers.NumbersItemForm"
     admin_icon_template_name = "xprez/shared/icons/modules/numbers.html"
 
     class Meta:
@@ -26,15 +26,23 @@ class NumbersModule(FontSizeModuleMixin, MultiModule):
         js = ("xprez/js/numbers.js",)
 
     def save(self, *args, **kwargs):
+        no_initial_item = kwargs.pop("no_initial_item", False)
         is_new = not self.pk
         super().save(*args, **kwargs)
-        if is_new:
+        if is_new and not no_initial_item:
             self.create_item(saved=True)
+
+    def duplicate_to(self, target_section, saved=False, **kwargs):
+        kwargs["no_initial_item"] = True
+        return super().duplicate_to(target_section, saved=saved, **kwargs)
 
 
 class NumbersItem(MultiModuleItem):
     module = models.ForeignKey(
-        NumbersModule, related_name="items", on_delete=models.CASCADE
+        NumbersModule,
+        related_name="items",
+        on_delete=models.CASCADE,
+        editable=False,
     )
     number = models.IntegerField(null=True, blank=True)
     suffix = models.CharField(max_length=10, null=True, blank=True)
@@ -49,7 +57,7 @@ class NumbersConfig(ModuleConfig):
     admin_template_name = "xprez/admin/configs/modules/numbers.html"
 
     COLUMNS_CHOICES = (
-        (constants.COLUMNS_AUTO, "Auto"),
+        (constants.COLUMNS_AUTO, _("Auto")),
         (1, "1"),
         (2, "2"),
         (3, "3"),
@@ -69,7 +77,7 @@ class NumbersConfig(ModuleConfig):
     )
 
     gap_choice = models.CharField(
-        "Gap",
+        _("Gap"),
         max_length=20,
         choices=constants.GAP_CHOICES,
         default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.NumbersModule"][
@@ -94,9 +102,3 @@ class NumbersConfig(ModuleConfig):
 
 class NumbersModuleForm(ModuleForm):
     options_fields = ModuleForm.options_fields + ("font_size",)
-
-
-class NumbersItemForm(MultiModuleItemForm):
-    class Meta:
-        model = NumbersItem
-        fields = ("number", "suffix", "caption")

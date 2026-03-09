@@ -27,7 +27,7 @@ class PositionFormMixin:
 
 class SyncFieldsMixin:
     SYNC_UNSAFE_WIDGETS = (forms.FileInput, forms.ClearableFileInput)
-    sync_exclude = ()
+    sync_exclude = ("live_sync",)
 
     def sync_candidate_fields(self):
         """Return iterable of field names to consider for syncing."""
@@ -145,9 +145,7 @@ class MultiModuleItemForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm
             self.fields.pop(fk_name)
 
     def get_main_fields(self):
-        for name in self.fields:
-            if name not in self.system_fields:
-                yield self[name]
+        return [self[field] for field in self.fields if field not in self.system_fields]
 
     class Meta:
         fields = "__all__"
@@ -180,6 +178,8 @@ class ModuleConfigForm(SyncFieldsMixin, DeletableFormMixin, forms.ModelForm):
         "border_radius_choice",
         "border_radius_custom",
     )
+
+    sync_exclude = ("order",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -2,13 +2,13 @@
 {% load i18n %}
 
 {% block add_item %}
-    <div class="xprez-admin-adder" data-component="xprez-adder-upload-multi-module">
+    <div class="xprez-admin-adder" data-controller="XprezUploadMultiModuleAdder">
         <div
             class="xprez-admin-adder__inner"
-            data-component="xprez-multi-module-dropzone"
+            data-xprez-multi-module-dropzone
             data-upload-url="{% url module.xprez_upload_item_url_name module.pk %}"
         >
-            <input type="file" multiple {% block upload_attrs %}{% endblock %} data-component="xprez-multi-module-file-input">
+            <input type="file" multiple {% block upload_attrs %}{% endblock %} data-xprez-multi-module-file-input>
             <span class="xprez-admin-adder__upload-text">
                 {% block dropzone_text %}
                 {% include "xprez/shared/icons/cloud_arrow_up.html" %}

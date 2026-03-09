@@ -1,18 +1,14 @@
 import { XprezContentBase } from './contents_base.js';
-import { XprezModulePopover } from './popovers.js';
 import { XprezModuleDeleter } from './deleters.js';
-import { XprezModuleConfig, XprezConfigParentMixin } from './configs.js';
-import { XprezModuleConfigAdder } from './adders.js';
-import { XprezModuleCopyMenu } from './copy.js';
+import { XprezConfigParentMixin } from './configs.js';
 import { resolveFieldControllerClass } from './fields.js';
 import { XprezModuleSyncMixin } from './sync.js';
 import { XprezShortcutParentMixin } from './shortcuts.js';
 
 export class XprezModule extends XprezContentBase {
     constructor(section, moduleEl) {
-        super(moduleEl);
-        this.section = section;
-        this.popover = new XprezModulePopover(this);
+        super(section, moduleEl);
+        this.popover = this.mountChild(this.el.querySelector("[data-controller='XprezModulePopover']"));
         this.deleter = new XprezModuleDeleter(this);
         this.initFields();
         this.initConfigs();
@@ -24,7 +20,7 @@ export class XprezModule extends XprezContentBase {
 
     initFields() {
         this.fields = [];
-        this.el.querySelectorAll('[data-component="field"]').forEach((fieldEl) => {
+        this.el.querySelectorAll('[data-xprez-field]').forEach((fieldEl) => {
             if (this.isUnmanaged(fieldEl)) return;
             this.initField(fieldEl);
         });
@@ -36,17 +32,15 @@ export class XprezModule extends XprezContentBase {
         return field;
     }
 
-    get configsContainerSelector() { return "[data-component='xprez-module-configs']"; }
-    get configSelector() { return "[data-component='xprez-module-config']"; }
-    createConfig(configEl) { return new XprezModuleConfig(this, configEl); }
-    createConfigAdder() { return new XprezModuleConfigAdder(this.section.xprez, this); }
-
-    get xprez() { return this.section.xprez; }
+    get configsContainerSelector() { return "[data-xprez-module-configs]"; }
+    get configSelector() { return "[data-controller='XprezModuleConfig']"; }
+    createConfig(configEl) { return this.mountChild(configEl); }
+    createConfigAdder() { return this.mountChild(this.el.querySelector("[data-controller='XprezModuleConfigAdder']")); }
 
     initCopyMenus() {
-        this.el.querySelectorAll('[data-component="xprez-copy-menu"]').forEach(el => {
+        this.el.querySelectorAll('[data-controller="XprezModuleCopyMenu"]').forEach(el => {
             if (this.isUnmanaged(el)) return;
-            new XprezModuleCopyMenu(el, this);
+            this.mountChild(el);
         });
     }
 

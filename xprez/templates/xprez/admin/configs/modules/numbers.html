@@ -1,7 +1,8 @@
 {% extends "xprez/admin/configs/module_base.html" %}
+{% load i18n %}
 
 {% block extra_fields %}
-    <div class="xprez-option-group__subtitle">Inner grid</div>
+    <div class="xprez-option-group__subtitle">{% trans "Inner grid" %}</div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.columns size="flex-1" %}
     </div>

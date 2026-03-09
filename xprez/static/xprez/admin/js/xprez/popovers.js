@@ -1,11 +1,16 @@
-export class XprezPopoverBase {
-    constructor(...args) {
-        this.bindElements(...args);
+import { XprezControllerBase } from './controller_base.js';
+
+export class XprezPopoverBase extends XprezControllerBase {
+    constructor(parent, el) {
+        super(parent, el);
         this.bindEvents();
         queueMicrotask(() => this.openOnErrors());
     }
 
     bindEvents() {
+        this.xprez.on('popover-show', (opening) => {
+            if (opening !== this) this.hide();
+        });
         document.addEventListener("click", (e) => {
             if (this.isOpen() && (!e.target.closest("[popover]"))) {
                 this.hide();
@@ -29,25 +34,22 @@ export class XprezPopoverBase {
 
     isOpen() { return this.el.matches(":popover-open"); }
     show() {
+        this.xprez.emit('popover-show', this);
         this.el.showPopover();
     }
     hide() {
         this.el.hidePopover();
         this.parent.checkShortcuts?.();
     }
-    hideOthers() {
-        this.parent.xprez.getPopovers().filter(p => p !== this).forEach(p => p.hide());
-    }
 }
 
 export class XprezSectionPopover extends XprezPopoverBase {
-    bindElements(section) {
-        this.parent = section;
-        this.el = this.parent.el.querySelector("[data-component='xprez-section-popover']");
-        this.triggerEl = this.parent.el.querySelector("[data-component='xprez-section-popover-trigger']");
+    constructor(section, el) {
+        super(section, el);
+        this.triggerEl = section.el.querySelector("[data-xprez-section-popover-trigger]");
     }
+
     show() {
-        this.hideOthers();
         super.show();
         this.parent.el.dataset.mode = "edit";
     }
@@ -58,20 +60,19 @@ export class XprezSectionPopover extends XprezPopoverBase {
 }
 
 export class XprezModulePopover extends XprezPopoverBase {
-    bindElements(module) {
-        this.parent = module;
-        this.el = this.parent.el.querySelector("[data-component='xprez-module-popover']");
-        this.triggerEl = this.parent.el.querySelector("[data-component='xprez-module-popover-trigger']");
+    constructor(module, el) {
+        super(module, el);
+        this.triggerEl = module.el.querySelector("[data-xprez-module-popover-trigger]");
     }
+
     show() {
-        this.hideOthers();
         super.show();
         this.parent.el.dataset.mode = "edit";
         this.parent.section.xprez.sync.selectRelated(this.parent);
     }
     hide() {
-        this.parent.section.xprez.sync.clearSelection();
         super.hide();
         this.parent.el.dataset.mode = "";
+        this.parent.section.xprez.sync.clearSelection();
     }
 }

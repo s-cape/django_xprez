@@ -1,13 +1,14 @@
 {% extends "xprez/admin/sections/section_base.html" %}
+{% load i18n %}
 
 {% block extra_css_classes %} xprez-section--symlink{% endblock %}
-{% block data_component %}xprez-section-symlink{% endblock %}
+{% block data_controller %}XprezSectionSymlink{% endblock %}
 {% block data_prefix %}{{ section_symlink.admin_form.prefix }}{% endblock %}
 
 {% block data_mode %}{# (empty)/delete #}{% endblock %}
 
 {% block before_header %}
-    {% include "xprez/admin/includes/adders/section.html" with class_name="xprez-add-before" component_name="xprez-adder-section-before" xprez_admin=section_symlink.admin_form.xprez_admin adder_container=section_symlink.container attributes="data-hidden" %}
+    {% include "xprez/admin/includes/adders/content_section_before.html" with xprez_admin=section_symlink.admin_form.xprez_admin adder_container=section_symlink.container %}
 {% endblock %}
 
 {% block header_settings %}
@@ -18,7 +19,8 @@
 
 {% block header_actions %}
     {{ block.super }}
-    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title="Remove" delete_field=section_symlink.admin_form.delete %}
+    {% trans "Remove" as title_remove %}
+    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title=title_remove delete_field=section_symlink.admin_form.delete %}
 {% endblock %}
 
 {% block section_body %}
@@ -26,7 +28,7 @@
         <div class="xprez-module__content-info">
             {% include "xprez/shared/icons/page.html" %} <strong>{{ section_symlink.symlink.container.polymorph }}</strong>
             <span class="xprez-module__content-info-arr">&#x203A;</span>
-            {% include "xprez/shared/icons/link.html" %} <strong>Section ({{ section_symlink.symlink.modules.count }} modules)</strong>
+            {% include "xprez/shared/icons/link.html" %} <strong>{% blocktrans with count=section_symlink.symlink.modules.count %}Section ({{ count }} modules){% endblocktrans %}</strong>
         </div>
     </div>
 {% endblock %}

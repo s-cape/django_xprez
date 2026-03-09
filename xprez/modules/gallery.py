@@ -1,7 +1,8 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
-from xprez.admin.forms import ModuleForm, MultiModuleItemForm
+from xprez.admin.forms import ModuleForm
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
 from xprez.models.mixins.font_size import FontSizeModuleMixin
@@ -29,7 +30,6 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
     admin_template_name = "xprez/admin/modules/gallery/gallery.html"
     admin_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"
     admin_form_class = "xprez.modules.gallery.GalleryModuleForm"
-    admin_item_form_class = "xprez.modules.gallery.GalleryItemForm"
     admin_icon_template_name = "xprez/shared/icons/modules/gallery.html"
 
     crop = models.CharField(
@@ -40,7 +40,7 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
     )
 
     class Meta:
-        verbose_name = "Gallery / Image"
+        verbose_name = _("Gallery / Image")
 
     class FrontMedia:
         js = PHOTOSWIPE_JS
@@ -61,10 +61,10 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
         result = []
         breakpoints = settings.XPREZ_BREAKPOINTS
         section_configs = {
-            config.css_breakpoint: config for config in self.section.get_saved_configs()
+            config.css_breakpoint: config for config in self.section.get_configs_front()
         }
         gallery_configs = {
-            config.css_breakpoint: config for config in self.get_saved_configs()
+            config.css_breakpoint: config for config in self.get_configs_front()
         }
         current_section_cols = 1
         current_gallery_cols = 1
@@ -85,7 +85,10 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
 
 class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):
     module = models.ForeignKey(
-        GalleryModule, related_name="items", on_delete=models.CASCADE
+        GalleryModule,
+        related_name="items",
+        on_delete=models.CASCADE,
+        editable=False,
     )
     file = models.ImageField(upload_to="gallery")
     description = models.CharField(max_length=255, blank=True, null=True)
@@ -94,7 +97,7 @@ class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):
     def get_image_field(self):
         return self.file
 
-    def get_aspect_ratio(self):
+    def get_image_aspect_ratio(self):
         crop_ratio = self.module.get_crop_ratio()
         return crop_ratio if crop_ratio else (1, 1)
 
@@ -156,10 +159,4 @@ class GalleryModuleForm(ModuleForm):
 
     class Meta:
         model = GalleryModule
-        fields = "__all__"
-
-
-class GalleryItemForm(MultiModuleItemForm):
-    class Meta:
-        model = GalleryItem
         fields = "__all__"

@@ -40,6 +40,7 @@ class Migration(migrations.Migration):
             model_name="GalleryItem",
             name="module",
             field=models.ForeignKey(
+                editable=False,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="items",
                 to="xprez.GalleryModule",
@@ -53,7 +54,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="galleryitem",
             name="position",
-            field=models.PositiveSmallIntegerField(default=0),
+            field=models.PositiveSmallIntegerField(blank=True, default=0),
         ),
         migrations.RenameField(
             model_name="GalleryModule",
@@ -131,6 +132,7 @@ class Migration(migrations.Migration):
             model_name="numbersitem",
             name="module",
             field=models.ForeignKey(
+                editable=False,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="items",
                 to="xprez.numbersmodule",
@@ -143,7 +145,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="numbersitem",
             name="position",
-            field=models.PositiveSmallIntegerField(default=0),
+            field=models.PositiveSmallIntegerField(blank=True, default=0),
         ),
         migrations.AddField(
             model_name="numbersitem",
@@ -207,6 +209,7 @@ class Migration(migrations.Migration):
             model_name="FilesItem",
             name="module",
             field=models.ForeignKey(
+                editable=False,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="items",
                 to="xprez.FilesModule",
@@ -230,7 +233,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="filesitem",
             name="position",
-            field=models.PositiveSmallIntegerField(default=0),
+            field=models.PositiveSmallIntegerField(blank=True, default=0),
         ),
         migrations.AddField(
             model_name="filesmodule",

@@ -1,15 +1,11 @@
 import { XprezModule } from './modules.js';
 import { XprezSortable } from './sortable.js';
 import { XprezMultiModuleItemDeleter } from './deleters.js';
-import {
-    XprezMultiModuleAdder,
-    XprezUploadMultiModuleAdder,
-} from './adders.js';
+import { XprezControllerBase } from './controller_base.js';
 
-export class XprezMultiModuleItem {
+export class XprezMultiModuleItem extends XprezControllerBase {
     constructor(module, itemEl) {
-        this.module = module;
-        this.el = itemEl;
+        super(module, itemEl);
         this.deleter = new XprezMultiModuleItemDeleter(this);
     }
 }
@@ -19,7 +15,7 @@ export class XprezMultiModuleBase extends XprezModule {
         super(section, moduleEl);
         this.items = [];
         this.itemsContainer = this.el.querySelector(
-            "[data-component='xprez-multi-module-items']"
+            "[data-xprez-multi-module-items]"
         );
         if (!this.itemsContainer) return;
 
@@ -34,56 +30,45 @@ export class XprezMultiModuleBase extends XprezModule {
             this.itemsContainer.querySelector(handleSelector) !== null;
         this.sortable = new XprezSortable(this.itemsContainer, {
             handle: hasHandles ? handleSelector : undefined,
-            draggable: '[data-component="xprez-multi-module-item"]',
+            draggable: '[data-controller]',
             onEnd: () => this.setItemPositionsToInputs(),
         });
     }
 
     setItemPositionsToInputs() {
-        this.itemsContainer
-            .querySelectorAll("[data-component='xprez-multi-module-item']")
-            .forEach((itemEl, itemIndex) => {
-                const input = itemEl.querySelector(
-                    `input[name="${itemEl.dataset.prefix}-position"]`
-                );
-                if (input) input.value = itemIndex;
-            });
+        Array.from(this.itemsContainer.children).forEach((itemEl, itemIndex) => {
+            const input = itemEl.querySelector(
+                `input[name="${itemEl.dataset.prefix}-position"]`
+            );
+            if (input) input.value = itemIndex;
+        });
     }
 
     initItem(itemEl) {
-        const ControllerClass = window[itemEl.dataset.jsControllerClass];
-        if (!ControllerClass) {
-            console.error(
-                `Controller class ${itemEl.dataset.jsControllerClass} not found`
-            );
-            return;
-        }
-        const item = new ControllerClass(this, itemEl);
+        const item = this.mountChild(itemEl);
         this.items.push(item);
         return item;
     }
 
     initItems() {
-        this.itemsContainer
-            .querySelectorAll('[data-component="xprez-multi-module-item"]')
-            .forEach((itemEl) => this.initItem(itemEl));
+        Array.from(this.itemsContainer.children).forEach(
+            (itemEl) => this.initItem(itemEl)
+        );
     }
 
     initAdder() {
-        const { adderSelector, adderClass } = this.constructor;
-        if (adderSelector && adderClass) {
+        const { adderSelector } = this.constructor;
+        if (adderSelector) {
             const el = this.el.querySelector(adderSelector);
-            if (el) new adderClass(this.section.xprez, el, this);
+            if (el) this.mountChild(el);
         }
     }
 }
 
 export class XprezMultiModule extends XprezMultiModuleBase {
-    static adderSelector = "[data-component='xprez-adder-multi-module']";
-    static adderClass = XprezMultiModuleAdder;
+    static adderSelector = "[data-controller='XprezMultiModuleAdder']";
 }
 
 export class XprezUploadMultiModule extends XprezMultiModuleBase {
-    static adderSelector = "[data-component='xprez-adder-upload-multi-module']";
-    static adderClass = XprezUploadMultiModuleAdder;
+    static adderSelector = "[data-controller='XprezUploadMultiModuleAdder']";
 }

@@ -1,9 +1,10 @@
+{% load i18n %}
 <div
     class="xprez-admin-multi-item"
-    data-component="xprez-multi-module-item"
-    data-js-controller-class="{{ module.admin_item_js_controller_class }}"
+    data-controller="{{ module.admin_item_js_controller_class }}"
     data-prefix="{{ item.admin_form.prefix }}"
     data-mode=""
+    {% if item.admin_has_errors %}data-has-errors{% endif %}
 >
     {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-multi-module-item" %}
     {% block header %}
@@ -11,7 +12,8 @@
             <span class="xprez-admin-multi-item__header-handle" data-draggable-multi-module-item-handle>{% include "xprez/shared/icons/grip.html" %}</span>
             <div class="xprez-admin-multi-item__header-content">{% block header_content %}{% endblock %}</div>
             {% block delete_trigger %}
-                {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-multi-module-item-delete" title="Remove" delete_field=item.admin_form.delete %}
+                {% trans "Remove" as title_remove %}
+                {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-multi-module-item-delete" title=title_remove delete_field=item.admin_form.delete %}
             {% endblock %}
         </div>
     {% endblock %}

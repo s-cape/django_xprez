@@ -115,7 +115,7 @@ class ClipboardListViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         # empty-message element is always in DOM; data-hidden hides it when non-empty
         self.assertContains(response, "data-hidden\n    >clipboard empty")
-        self.assertContains(response, 'data-component="xprez-clipboard-paste"')
+        self.assertContains(response, "data-xprez-clipboard-paste")
 
     def test_list_shows_section_when_in_clipboard(self):
         session = self.client.session
@@ -125,7 +125,7 @@ class ClipboardListViewTest(TestCase):
         response = self.client.get(self._list_url())
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "data-hidden\n    >clipboard empty")
-        self.assertContains(response, 'data-component="xprez-clipboard-paste"')
+        self.assertContains(response, "data-xprez-clipboard-paste")
 
     def test_list_shows_container_when_in_clipboard(self):
         session = self.client.session
@@ -135,7 +135,7 @@ class ClipboardListViewTest(TestCase):
         response = self.client.get(self._list_url())
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "data-hidden\n    >clipboard empty")
-        self.assertContains(response, 'data-component="xprez-clipboard-paste"')
+        self.assertContains(response, "data-xprez-clipboard-paste")
 
     def test_list_container_level_shows_container_paste_button(self):
         session = self.client.session
@@ -143,7 +143,7 @@ class ClipboardListViewTest(TestCase):
         session.save()
         response = self.client.get(self._list_url())
         self.assertContains(response, "data-hidden\n    >clipboard empty")
-        self.assertContains(response, 'data-component="xprez-clipboard-paste"')
+        self.assertContains(response, "data-xprez-clipboard-paste")
 
     def test_list_container_level_module_shows_paste_button(self):
         session = self.client.session
@@ -152,7 +152,7 @@ class ClipboardListViewTest(TestCase):
         response = self.client.get(self._list_url())
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "data-hidden\n    >clipboard empty")
-        self.assertContains(response, 'data-component="xprez-clipboard-paste"')
+        self.assertContains(response, "data-xprez-clipboard-paste")
 
     def test_list_shows_unavailable_when_module_not_in_available_modules(self):
         from unittest.mock import patch

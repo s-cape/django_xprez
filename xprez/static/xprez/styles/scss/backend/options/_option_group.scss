@@ -82,7 +82,7 @@
             background-color: var(--x-admin-popover-bg);
         }
 
-        &[data-component="xprez-section-config"], &[data-component="xprez-module-config"] {
+        &.xprez-option-group--config {
             border-top: var(--x-admin-option-group-border);
             padding-top: var(--x-admin-padding-md);
         }

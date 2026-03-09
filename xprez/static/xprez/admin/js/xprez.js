@@ -1,6 +1,6 @@
 import { Xprez } from './xprez/core.js';
 import { XprezModule } from './xprez/modules.js';
-import { XprezSection } from './xprez/sections.js';
+import { XprezSection, XprezSectionSymlink } from './xprez/sections.js';
 import { XprezFieldController } from './xprez/fields.js';
 import {
     XprezAdderBase,
@@ -12,7 +12,12 @@ import {
     XprezContentAdderSectionBase,
     XprezSectionAdderSectionBefore,
     XprezModuleAdderSectionEnd,
-    XprezSectionConfigAdder
+    XprezSectionConfigAdder,
+    XprezModuleConfigAdder,
+    XprezMultiModuleAdder,
+    XprezUploadMultiModuleAdder,
+    XprezSectionDuplicateAdder,
+    XprezModuleDuplicateAdder,
 } from './xprez/adders.js';
 import {
     XprezDeleterBase,
@@ -36,27 +41,63 @@ import { XprezShortcutFieldController, XprezShortcutParentMixin } from './xprez/
 import { XprezMultiModuleItem, XprezMultiModule, XprezUploadMultiModule } from './xprez/multi_module.js';
 import { XprezTextModule } from './xprez/text_module.js';
 import { xprezExecuteScripts, xprezGetCsrfToken } from './xprez/utils.js';
-import { XprezCopyMenu, XprezClipboardClip } from './xprez/copy.js';
+import {
+    XprezCopyMenu,
+    XprezSectionCopyMenu,
+    XprezModuleCopyMenu,
+    XprezClipboardClipBase,
+    XprezClipboardClipContent,
+    XprezClipboardClipContainer,
+} from './xprez/copy.js';
 import { XprezFileInputFieldController } from './xprez/file_input.js';
 import { XprezClipboardList } from './xprez/clipboard.js';
+import { XprezControllerBase } from './xprez/controller_base.js';
+import { XprezAllSectionsCollapseExpand } from './xprez/collapser.js';
 
+// Root controllers resolvable by name from data-controller attributes
 window.Xprez = Xprez;
+window.XprezAllSectionsCollapseExpand = XprezAllSectionsCollapseExpand;
+window.XprezSection = XprezSection;
+window.XprezSectionSymlink = XprezSectionSymlink;
+window.XprezSectionPopover = XprezSectionPopover;
+window.XprezSectionAdderContainerEnd = XprezSectionAdderContainerEnd;
+window.XprezSectionAdderSectionBefore = XprezSectionAdderSectionBefore;
+window.XprezSectionConfigAdder = XprezSectionConfigAdder;
+window.XprezSectionConfig = XprezSectionConfig;
+window.XprezSectionCopyMenu = XprezSectionCopyMenu;
+window.XprezSectionDuplicateAdder = XprezSectionDuplicateAdder;
+window.XprezModuleDuplicateAdder = XprezModuleDuplicateAdder;
+window.XprezModuleAdderSectionEnd = XprezModuleAdderSectionEnd;
 window.XprezModule = XprezModule;
+window.XprezModulePopover = XprezModulePopover;
+window.XprezModuleConfigAdder = XprezModuleConfigAdder;
+window.XprezModuleConfig = XprezModuleConfig;
+window.XprezModuleCopyMenu = XprezModuleCopyMenu;
+window.XprezClipboardClipBase = XprezClipboardClipBase;
+window.XprezClipboardClipContent = XprezClipboardClipContent;
+window.XprezClipboardClipContainer = XprezClipboardClipContainer;
+window.XprezClipboardList = XprezClipboardList;
 window.XprezTextModule = XprezTextModule;
+window.XprezMultiModule = XprezMultiModule;
+window.XprezUploadMultiModule = XprezUploadMultiModule;
+window.XprezMultiModuleAdder = XprezMultiModuleAdder;
+window.XprezUploadMultiModuleAdder = XprezUploadMultiModuleAdder;
+window.XprezMultiModuleItem = XprezMultiModuleItem;
 window.XprezFieldController = XprezFieldController;
-window.XprezShortcutFieldController = XprezShortcutFieldController;
 window.XprezFileInputFieldController = XprezFileInputFieldController;
+window.XprezShortcutFieldController = XprezShortcutFieldController;
+// Public utilities
 window.xprezGetCsrfToken = xprezGetCsrfToken;
 window.xprezExecuteScripts = xprezExecuteScripts;
 window.XprezMultiModuleAdderBase = XprezMultiModuleAdderBase;
-window.XprezMultiModuleItem = XprezMultiModuleItem;
-window.XprezMultiModule = XprezMultiModule;
-window.XprezUploadMultiModule = XprezUploadMultiModule;
 
 export {
+    XprezControllerBase,
     Xprez,
+    XprezAllSectionsCollapseExpand,
     XprezModule,
     XprezSection,
+    XprezSectionSymlink,
     XprezFieldController,
     XprezFileInputFieldController,
     XprezAdderBase,
@@ -69,6 +110,9 @@ export {
     XprezSectionAdderSectionBefore,
     XprezModuleAdderSectionEnd,
     XprezSectionConfigAdder,
+    XprezModuleConfigAdder,
+    XprezMultiModuleAdder,
+    XprezUploadMultiModuleAdder,
     XprezDeleterBase,
     XprezSectionDeleter,
     XprezModuleDeleter,
@@ -88,9 +132,13 @@ export {
     XprezMultiModule,
     XprezUploadMultiModule,
     XprezTextModule,
-    XprezClipboardClip,
+    XprezClipboardClipBase,
+    XprezClipboardClipContent,
+    XprezClipboardClipContainer,
     XprezClipboardList,
     XprezCopyMenu,
+    XprezSectionCopyMenu,
+    XprezModuleCopyMenu,
     xprezExecuteScripts,
     xprezGetCsrfToken
 };

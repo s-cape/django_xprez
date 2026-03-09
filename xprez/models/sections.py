@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import pluralize
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
 from xprez.conf import defaults, settings
@@ -19,7 +20,7 @@ class SectionBase(models.Model):
         editable=False,
         null=True,
     )
-    position = models.PositiveSmallIntegerField(default=0)
+    position = models.PositiveSmallIntegerField(default=0, blank=True)
     visible = models.BooleanField(default=True)
     saved = models.BooleanField(default=False, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
@@ -63,7 +64,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
     admin_template_name = "xprez/admin/sections/section.html"
 
     max_width_choice = models.CharField(
-        verbose_name="Max width",
+        verbose_name=_("Max width"),
         max_length=16,
         choices=constants.MAX_WIDTH_CHOICES,
         default=defaults.XPREZ_DEFAULTS["section"]["max_width_choice"],
@@ -134,7 +135,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         )
         self.admin_form.xprez_admin = admin
         self.admin_form.xprez_modules_all_valid = None
-        self.admin_form.xprez_modules = [m.polymorph for m in self.modules.all()]
+        self.admin_form.xprez_modules = self.modules.all().polymorphs()
 
         for module in self.admin_form.xprez_modules:
             module.build_admin_form(admin, data, files)
@@ -151,7 +152,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
                 self.configs.filter(pk__in=ids).order_by("css_breakpoint")
             )
         else:
-            self.admin_form.xprez_configs = list(self.get_saved_configs())
+            self.admin_form.xprez_configs = list(self.get_configs().filter(saved=True))
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)
@@ -183,23 +184,24 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
 
         for config in self.admin_form.xprez_configs:
             config.save_admin_form(request)
+        self._prune_redundant_configs()
 
     def render_admin(self, context):
         context["section"] = self
         return super().render_admin(context)
 
-    def get_modules(self):
-        if not hasattr(self, "_modules"):
-            self._modules = list(self.modules.filter(saved=True))
-        return self._modules
+    def get_modules_front(self):
+        if not hasattr(self, "_modules_front"):
+            self._modules_front = self.modules.filter(saved=True).polymorphs()
+        return self._modules_front
 
     def duplicate_to(self, target_container, saved=False):
         new_section = self.__class__.objects.create(
             container=target_container, saved=saved
         )
         self.duplicate_configs_to(new_section, saved=saved)
-        for module in self.modules.filter(saved=True):
-            module.polymorph.duplicate_to(new_section, saved=saved)
+        for module in self.modules.filter(saved=True).polymorphs():
+            module.duplicate_to(new_section, saved=saved)
         return new_section
 
     def clipboard_verbose_name(self):
@@ -228,7 +230,7 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
     )
 
     class Meta:
-        verbose_name = "Linked section"
+        verbose_name = _("Linked section")
 
     def invalidate_front_cache(self):
         super().invalidate_front_cache()

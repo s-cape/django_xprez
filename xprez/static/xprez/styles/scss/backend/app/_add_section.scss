@@ -6,10 +6,6 @@
         padding-bottom: 1rem;
         margin-top: 1.5rem;
 
-        &:has(> *[data-hidden]) {
-            display: none;
-        }
-
         h2 {
             @include type-b(13px, 2, 2, 1);
             color: $b-gray-7;
