@@ -31,14 +31,11 @@ export class XprezAdderBase extends XprezControllerBase {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    console.log("TODO: show error message");
-                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                    throw new Error( `Server returned ${response.status}: ${response.statusText}`);
                 }
             })
             .then(items => items.forEach(({ html }) => this.addFromHtml(html)))
-            .catch(error => {
-                console.error('Error adding:', error);
-            })
+            .catch((error) => this.xprez.reportError(error, "Error adding"))
             .finally(() => this.setAddingEnd());
     }
 

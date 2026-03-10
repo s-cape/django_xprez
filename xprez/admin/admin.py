@@ -2,8 +2,10 @@ from django.apps import apps
 from django.contrib import admin
 
 from xprez import constants, module_registry, settings
+from xprez.admin.views.ckeditor_upload import XprezAdminViewsCkEditorUploadMixin
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
 from xprez.admin.views.content import XprezAdminViewsContentMixin
+from xprez.ck_editor.forms import CkEditorFileUploadXprezAdminFormMixin
 from xprez.media import AdminMediaCollector
 
 
@@ -62,6 +64,7 @@ class XprezModelFormMixin(object):
 class XprezAdminMixin(
     XprezAdminViewsContentMixin,
     XprezAdminViewsClipboardMixin,
+    XprezAdminViewsCkEditorUploadMixin,
 ):
     constants = constants
     xprez_breakpoints = settings.XPREZ_BREAKPOINTS
@@ -70,7 +73,9 @@ class XprezAdminMixin(
     def xprez_get_form(self, ModelForm=None):
         ModelForm = ModelForm or self.model_form
 
-        class Form(XprezModelFormMixin, ModelForm):
+        class Form(
+            XprezModelFormMixin, CkEditorFileUploadXprezAdminFormMixin, ModelForm
+        ):
             xprez_admin = self
 
         return Form
@@ -110,6 +115,7 @@ class XprezAdminMixin(
         urls = []
         urls += XprezAdminViewsContentMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
+        urls += XprezAdminViewsCkEditorUploadMixin.xprez_admin_urls(self)
         urls += module_registry.get_admin_urls()
         return urls
 

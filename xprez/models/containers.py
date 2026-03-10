@@ -37,11 +37,31 @@ class Container(FrontCacheMixin, models.Model):
         else:
             return model.objects.get(pk=self.pk)
 
-    def duplicate_to(self, target_container, saved=False):
-        for section in self.sections.filter(saved=True):
-            section.duplicate_to(target_container, saved=saved)
-        for symlink in self.sectionsymlinks.filter(saved=True):
-            symlink.duplicate_to(target_container, saved=saved)
+    def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
+        """Duplicate this container into target_container. Returns list of created sections and section symlinks (sections first, then symlinks, each ordered by position)."""
+        result = []
+        for section in self.sections.filter(saved=True).order_by("position"):
+            new_section = section.duplicate_to(
+                target_container,
+                saved=saved,
+                allowed_module_classes=allowed_module_classes,
+            )
+            result += [new_section]
+        for symlink in self.sectionsymlinks.filter(saved=True).order_by("position"):
+            new_symlink = symlink.duplicate_to(target_container, saved=saved)
+            result += [new_symlink]
+        return result
+
+    def symlink_to(self, target_container, saved=False):
+        """Create SectionSymlinks in target_container; returns them (sections then symlinks, by position)."""
+        result = []
+        for section in self.sections.filter(saved=True).order_by("position"):
+            new_symlink = section.symlink_to(target_container, saved=saved)
+            result += [new_symlink]
+        for symlink in self.sectionsymlinks.filter(saved=True).order_by("position"):
+            new_symlink = symlink.symlink_to(target_container, saved=saved)
+            result += [new_symlink]
+        return result
 
     def clipboard_verbose_name(self):
         return self.polymorph._meta.verbose_name

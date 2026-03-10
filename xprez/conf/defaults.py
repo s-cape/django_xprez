@@ -7,7 +7,8 @@ XPREZ_GRID_BOXES_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
 XPREZ_TEXT_IMAGE_MODULE_WIDGET = (
     "xprez.ck_editor.widgets.CkEditorWidgetFullNoInsertPlugin"
 )
-XPREZ_CK_EDITOR_FILE_UPLOAD_VIEW_NAME = "admin:textmodule_file_upload"
+XPREZ_CK_EDITOR_FILE_UPLOAD_URL_NAME = None
+XPREZ_CK_EDITOR_FILE_UPLOAD_DIR = "xprez_ckeditor_uploads"
 
 XPREZ_MODULES_AUTOREGISTER = True
 XPREZ_MODULES_AUTOREGISTER_BUILTINS = [

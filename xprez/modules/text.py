@@ -1,20 +1,14 @@
 import mimetypes
-from os import makedirs, path
 
 from django import forms
-from django.conf import settings as django_settings
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-from django.http import JsonResponse
-from django.urls import re_path
-from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
-from django.views.decorators.csrf import csrf_exempt
+from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm
-from xprez.admin.permissions import xprez_staff_member_required
 from xprez.ck_editor import parse_text as ckeditor_parse_text
+from xprez.ck_editor.forms import CkEditorFileUploadXprezAdminFormMixin
 from xprez.ck_editor.widgets import CkEditorWidget
 from xprez.conf import defaults, settings
 from xprez.models.configs import ModuleConfig
@@ -24,47 +18,12 @@ from xprez.models.mixins.responsive_image import (
     ResponsiveImageSourcesMixin,
 )
 from xprez.models.modules import Module
-from xprez.utils import import_class, random_string, truncate_with_ellipsis
+from xprez.utils import import_class, truncate_with_ellipsis
 
 CLIPBOARD_TEXT_MAX_LENGTH = 100
 
 
-class CkEditorFileUploadMixin:
-    @classmethod
-    @method_decorator(xprez_staff_member_required)
-    @method_decorator(csrf_exempt)
-    def file_upload_view(cls, request, directory):
-        if request.method == "POST":
-            file_data = request.FILES["upload"]
-            name = file_data.name
-            random_dir_name = random_string(16)
-            full_directory = path.join(
-                django_settings.MEDIA_ROOT, directory, random_dir_name
-            )
-            if not path.isdir(full_directory):
-                makedirs(full_directory)
-
-            with open(path.join(full_directory, name), "wb+") as destination:
-                for chunk in file_data.chunks():
-                    destination.write(chunk)
-
-            filename = path.join(directory, random_dir_name, name)
-
-            return JsonResponse({"url": django_settings.MEDIA_URL + filename})
-
-    @classmethod
-    def get_admin_urls(cls):
-        cls_name = cls.__name__.lower()
-        return [
-            re_path(
-                r"^{}/file-upload/(?P<directory>[/\w-]+)/$".format(cls_name),
-                cls.file_upload_view,
-                name="{}_file_upload".format(cls_name),
-            ),
-        ]
-
-
-class TextModuleBase(FontSizeModuleMixin, CkEditorFileUploadMixin, Module):
+class TextModuleBase(FontSizeModuleMixin, Module):
     config_model = "xprez.TextBaseConfig"
     front_template_name = "xprez/modules/text_base.html"
     admin_template_name = "xprez/admin/modules/text_base.html"
@@ -232,17 +191,15 @@ class TextConfig(TextBaseConfig):
         return variables
 
 
-class TextModuleBaseForm(ModuleForm):
+class TextModuleBaseForm(CkEditorFileUploadXprezAdminFormMixin, ModuleForm):
     options_fields = ModuleForm.options_fields + ("font_size",)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        widget_class = import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET)
-        self.fields["text"].widget = widget_class(file_upload_dir="ck_editor_uploads")
 
     class Meta:
         model = TextModuleBase
         fields = "__all__"
+        widgets = {
+            "text": import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET),
+        }
 
 
 class TextModuleForm(TextModuleBaseForm):

@@ -1,5 +1,5 @@
 {% extends "xprez/admin/sections/section_base.html" %}
-{% load i18n %}
+{% load i18n xprez_admin %}
 
 {% block extra_css_classes %} xprez-section--symlink{% endblock %}
 {% block data_controller %}XprezSectionSymlink{% endblock %}
@@ -26,9 +26,18 @@
 {% block section_body %}
     <div class="xprez-admin-module__body xprez-section__body">
         <div class="xprez-module__content-info">
-            {% include "xprez/shared/icons/page.html" %} <strong>{{ section_symlink.symlink.container.polymorph }}</strong>
-            <span class="xprez-module__content-info-arr">&#x203A;</span>
-            {% include "xprez/shared/icons/link.html" %} <strong>{% blocktrans with count=section_symlink.symlink.modules.count %}Section ({{ count }} modules){% endblocktrans %}</strong>
+            {% if section_symlink.symlink %}
+                {% with symlinked_container=section_symlink.symlink.container.polymorph %}
+                    {% include "xprez/shared/icons/page.html" %}
+                    <a href="{% xprez_admin_change_url section_symlink.admin_form.xprez_admin symlinked_container %}">
+                        <strong>{{ symlinked_container }}</strong>
+                    </a>
+                {% endwith %}
+                <span class="xprez-module__content-info-arr">&#x203A;</span>
+                {% include "xprez/shared/icons/link.html" %} <strong>{% blocktrans with count=section_symlink.symlink.modules.count %}Section ({{ count }} modules){% endblocktrans %}</strong>
+            {% else %}
+                <div class="xprez-warning">{% trans "Linked section not found." %}</div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

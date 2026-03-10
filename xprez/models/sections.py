@@ -195,14 +195,24 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
             self._modules_front = self.modules.filter(saved=True).polymorphs()
         return self._modules_front
 
-    def duplicate_to(self, target_container, saved=False):
+    def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
         new_section = self.__class__.objects.create(
             container=target_container, saved=saved
         )
         self.duplicate_configs_to(new_section, saved=saved)
         for module in self.modules.filter(saved=True).polymorphs():
+            if (
+                allowed_module_classes is not None
+                and module.__class__ not in allowed_module_classes
+            ):
+                continue
             module.duplicate_to(new_section, saved=saved)
         return new_section
+
+    def symlink_to(self, target_container, saved=False):
+        return SectionSymlink.objects.create(
+            container=target_container, symlink=self, saved=saved
+        )
 
     def clipboard_verbose_name(self):
         return self._meta.verbose_name
@@ -249,6 +259,14 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
         return super().render_admin(context)
 
     def duplicate_to(self, target_container, saved=False):
+        return SectionSymlink.objects.create(
+            container=target_container, symlink=self.symlink, saved=saved
+        )
+
+    def symlink_to(self, target_container, saved=False):
+        """Create SectionSymlink in target_container pointing at self.symlink.
+        Symlinking a symlink never builds a chain; new symlink points at the section.
+        """
         return SectionSymlink.objects.create(
             container=target_container, symlink=self.symlink, saved=saved
         )

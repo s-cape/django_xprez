@@ -86,12 +86,6 @@ class ClipboardItemBase:
             args=[self.key, self.obj.pk],
         )
 
-    def _duplicate_modules_to(self, source_section, target_section):
-        for source_module in source_section.modules.filter(saved=True).polymorphs():
-            if source_module.__class__ not in self.allowed_module_classes:
-                continue
-            source_module.duplicate_to(target_section)
-
     def duplicate(self, request, target_section=None):
         raise NotImplementedError
 
@@ -148,15 +142,14 @@ class ClipboardItemSection(ClipboardItemBase):
         return self.obj.modules.filter(saved=True).polymorphs()
 
     def duplicate(self, request, target_section=None):
-        new_section = models.Section.objects.create(container=self.target_container)
-        self.obj.duplicate_configs_to(new_section)
-        self._duplicate_modules_to(self.obj, new_section)
+        new_section = self.obj.duplicate_to(
+            self.target_container,
+            allowed_module_classes=self.allowed_module_classes,
+        )
         return [self._render(request, self.xprez_admin, new_section)]
 
     def symlink(self, request, target_section=None):
-        new_symlink = models.SectionSymlink.objects.create(
-            container=self.target_container, symlink=self.obj
-        )
+        new_symlink = self.obj.symlink_to(self.target_container)
         return [self._render(request, self.xprez_admin, new_symlink)]
 
 
@@ -182,24 +175,15 @@ class ClipboardItemContainer(ClipboardItemBase):
         ).polymorphs()
 
     def duplicate(self, request, target_section=None):
-        items = []
-        for source_section in self.obj.sections.filter(saved=True):
-            new_section = source_section.__class__.objects.create(
-                container=self.target_container
-            )
-            source_section.duplicate_configs_to(new_section)
-            self._duplicate_modules_to(source_section, new_section)
-            items += [self._render(request, self.xprez_admin, new_section)]
-        return items
+        created = self.obj.duplicate_to(
+            self.target_container,
+            allowed_module_classes=self.allowed_module_classes,
+        )
+        return [self._render(request, self.xprez_admin, item) for item in created]
 
     def symlink(self, request, target_section=None):
-        items = []
-        for source_section in self.obj.sections.filter(saved=True):
-            new_symlink = models.SectionSymlink.objects.create(
-                container=self.target_container, symlink=source_section
-            )
-            items += [self._render(request, self.xprez_admin, new_symlink)]
-        return items
+        created = self.obj.symlink_to(self.target_container)
+        return [self._render(request, self.xprez_admin, item) for item in created]
 
 
 class XprezAdminViewsClipboardMixin(object):

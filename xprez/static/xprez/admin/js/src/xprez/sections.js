@@ -7,6 +7,7 @@ import { XprezCollapserMixin } from './collapser.js';
 import { XprezControllerBase } from './controller_base.js';
 
 export class XprezSectionSymlink extends XprezControllerBase {
+    static KEY = "section_symlink";
     constructor(xprez, el) {
         super(xprez, el);
         this.deleter = new XprezSectionDeleter(this);

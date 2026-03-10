@@ -5,11 +5,21 @@ function initializeCkEditors(scope) {
     });
 }
 
+function getCsrfToken() {
+    const cookie = document.cookie.split(';')
+        .map(c => c.trim())
+        .find(c => c.startsWith('csrftoken='));
+    return cookie ? decodeURIComponent(cookie.split('=')[1]) : '';
+}
+
 function initializeCkEditor(textarea, editorRoot) {
     var form = editorRoot.closest('form');
 
     var config = JSON.parse(textarea.getAttribute('data-ck-editor-config'));
     config.initialData = textarea.value;
+    if (config.simpleUpload) {
+        config.simpleUpload.headers = { 'X-CSRFToken': getCsrfToken() };
+    }
 
     BalloonBlockEditor
         .create(editorRoot, config)

@@ -97,6 +97,10 @@ class ModuleForm(
     ShortcutsMixin,
     forms.ModelForm,
 ):
+    def __init__(self, xprez_admin, *args, **kwargs):
+        self.xprez_admin = xprez_admin
+        super().__init__(*args, **kwargs)
+
     base_module_fields = (
         "position",
         "section",

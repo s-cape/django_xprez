@@ -6,9 +6,11 @@ export class XprezControllerBase {
     }
 
     get xprez() { return this._findAncestor("xprez"); }
-    get config() { return this._findAncestor("config"); }
+    get section() {
+        return this._findAncestor("section") ?? this._findAncestor("section_symlink");
+    }
     get module() { return this._findAncestor("module"); }
-    get section() { return this._findAncestor("section"); }
+    get config() { return this._findAncestor("config"); }
 
     mountChild(el, options={}) {
         if (el == null && options.allowNull) return null;

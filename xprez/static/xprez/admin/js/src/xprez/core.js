@@ -83,4 +83,20 @@ export class Xprez extends WithSignals(XprezControllerBase) {
             onEnd: () => this.setPlacementToInputs()
         });
     }
+
+    /* Levels: debug, info, success, warning, error. */
+    message(level, message) {
+        /* TODO: Implement message display. */
+        alert(`${String(level)}: ${message}`);
+    }
+
+    /** Log error to console and show it via message("error", ...). */
+    reportError(error, context) {
+        if (context) {
+            console.error(context, error);
+        } else {
+            console.error(error);
+        }
+        this.message("error", error?.message || "Something went wrong.");
+    }
 }

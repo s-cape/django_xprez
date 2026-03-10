@@ -167,12 +167,15 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
 
             return ModuleForm
 
-    def build_admin_form(self, admin, data=None, files=None):
+    def build_admin_form(self, xprez_admin, data=None, files=None):
         form_class = self.get_admin_form_class()
         self.admin_form = form_class(
-            instance=self, prefix=self.instance_key, data=data, files=files
+            xprez_admin,
+            instance=self,
+            prefix=self.instance_key,
+            data=data,
+            files=files,
         )
-        self.admin_form.xprez_admin = admin
 
         self.admin_form.xprez_configs_all_valid = None
         if data:
@@ -186,9 +189,9 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
             self.admin_form.xprez_configs = list(self.get_configs().filter(saved=True))
 
         for config in self.admin_form.xprez_configs:
-            config.build_admin_form(admin, data, files)
-        if getattr(admin, "xprez_url_namespace", None):
-            self._xprez_admin_namespace = admin.xprez_url_namespace
+            config.build_admin_form(xprez_admin, data, files)
+        if getattr(xprez_admin, "xprez_url_namespace", None):
+            self._xprez_admin_namespace = xprez_admin.xprez_url_namespace
 
     def is_admin_form_valid(self):
         is_valid = self.admin_form.is_valid()

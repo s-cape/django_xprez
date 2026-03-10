@@ -1,9 +1,9 @@
 from pathlib import Path
 
 from django import template
+from django.urls import reverse
 from PIL import Image
 from sorl.thumbnail import get_thumbnail
-
 
 register = template.Library()
 
@@ -31,6 +31,18 @@ def xprez_module_config_render_admin(context, config):
 @register.simple_tag()
 def xprez_clipboard_is_empty(xprez_admin, request):
     return xprez_admin.xprez_clipboard_is_empty(request)
+
+
+@register.simple_tag()
+def xprez_admin_change_url(xprez_admin, obj):
+    return reverse(
+        "{namespace}:{app_label}_{model_name}_change".format(
+            namespace=xprez_admin.xprez_url_namespace,
+            app_label=obj._meta.app_label,
+            model_name=obj._meta.model_name,
+        ),
+        args=[obj.pk],
+    )
 
 
 @register.filter
