@@ -7,6 +7,16 @@ from xprez.models import Section
 from xprez.modules.video import VimeoVideoProvider, VideoForm, YouTubeVideoProvider
 
 
+class _FakeXprezAdmin:
+    """Minimal stand-in for ModuleForm.xprez_admin in tests that only assert URL validation."""
+
+
+def _video_form(data, xprez_admin=None):
+    if xprez_admin is None:
+        xprez_admin = _FakeXprezAdmin()
+    return VideoForm(xprez_admin, data=data)
+
+
 class VideoProviderExampleUrlsTest(TestCase):
     """Example URLs from each provider must match and return correct video_id."""
 
@@ -50,7 +60,7 @@ class VideoFormExampleUrlsTest(TestCase):
         page = Page.objects.create(title="P", slug="p")
         section = Section.objects.create(container=page, position=0, saved=True)
         url = "https://www.youtube.com/watch?v=nNGBxXN7QC0"
-        form = VideoForm(data=self._form_data(url, section))
+        form = _video_form(self._form_data(url, section))
         self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(form.video_type, "youtube")
         self.assertEqual(form.video_id, "nNGBxXN7QC0")
@@ -59,7 +69,7 @@ class VideoFormExampleUrlsTest(TestCase):
         page = Page.objects.create(title="P", slug="p")
         section = Section.objects.create(container=page, position=0, saved=True)
         url = "https://vimeo.com/210073083"
-        form = VideoForm(data=self._form_data(url, section))
+        form = _video_form(self._form_data(url, section))
         self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(form.video_type, "vimeo")
         self.assertEqual(form.video_id, "210073083")
@@ -67,17 +77,15 @@ class VideoFormExampleUrlsTest(TestCase):
     def test_unsupported_url_raises_validation_error(self):
         page = Page.objects.create(title="P", slug="p")
         section = Section.objects.create(container=page, position=0, saved=True)
-        form = VideoForm(
-            data=self._form_data("https://example.com/not-a-video", section)
-        )
+        form = _video_form(self._form_data("https://example.com/not-a-video", section))
         self.assertFalse(form.is_valid())
         self.assertIn("url", form.errors)
 
     def test_youtube_substring_in_foreign_host_raises_validation_error(self):
         page = Page.objects.create(title="P", slug="p")
         section = Section.objects.create(container=page, position=0, saved=True)
-        form = VideoForm(
-            data=self._form_data(
+        form = _video_form(
+            self._form_data(
                 "https://example.com/?next=youtube.com/watch?v=nNGBxXN7QC0", section
             )
         )
