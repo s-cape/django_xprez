@@ -1,10 +1,13 @@
 from django import forms
 from django.db import models
+from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 
+from xprez import constants
 from xprez.admin.forms import ModuleForm
 from xprez.models.mixins.font_size import FontSizeModuleMixin
 from xprez.models.modules import Module
+from xprez.utils import truncate_with_ellipsis
 
 
 class QuoteModule(FontSizeModuleMixin, Module):
@@ -22,6 +25,15 @@ class QuoteModule(FontSizeModuleMixin, Module):
 
     class Meta:
         verbose_name = _("Quote")
+
+    def preview_text(self):
+        truncated_quote = truncate_with_ellipsis(
+            strip_tags(self.quote), constants.PREVIEW_TEXT_MAX_LENGTH
+        )
+        if self.name:
+            return f"{self.name}: {truncated_quote}"
+        else:
+            return truncated_quote
 
 
 class QuoteModuleForm(ModuleForm):

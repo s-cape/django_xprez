@@ -64,6 +64,10 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
         if self.pk:
             self.get_or_create_config(0)
 
+    def delete(self, *args, **kwargs):
+        self.invalidate_front_cache()
+        super().delete(*args, **kwargs)
+
     def invalidate_front_cache(self):
         super().invalidate_front_cache()
         self.section.invalidate_front_cache()
@@ -251,8 +255,8 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
     def clipboard_verbose_name(self):
         return self.polymorph._meta.verbose_name
 
-    def clipboard_text_preview(self):
-        return ""
+    def preview_text(self):
+        return None
 
     def get_css_config_keys(self):
         return ("module",)

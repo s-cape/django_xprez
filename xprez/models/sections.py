@@ -1,8 +1,7 @@
 from django.db import models
-from django.template.defaultfilters import pluralize
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from xprez import constants
 from xprez.conf import defaults, settings
@@ -15,10 +14,9 @@ class SectionBase(models.Model):
     front_cacheable = False
     container = models.ForeignKey(
         "xprez.Container",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="%(class)ss",
         editable=False,
-        null=True,
     )
     position = models.PositiveSmallIntegerField(default=0, blank=True)
     visible = models.BooleanField(default=True)
@@ -92,6 +90,10 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         super().save(*args, **kwargs)
         if self.pk:
             self.get_or_create_config(0)
+
+    def delete(self, *args, **kwargs):
+        self.invalidate_front_cache()
+        super().delete(*args, **kwargs)
 
     def invalidate_front_cache(self):
         super().invalidate_front_cache()
@@ -217,9 +219,11 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
     def clipboard_verbose_name(self):
         return self._meta.verbose_name
 
-    def clipboard_text_preview(self):
+    def preview_text(self):
         count = self.modules.filter(saved=True).count()
-        return f"{count} module{pluralize(count)}"
+        return ngettext("%(count)s module", "%(count)s modules", count) % {
+            "count": count
+        }
 
     def render_front(self, context):
         context["section"] = self
@@ -241,6 +245,10 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
 
     class Meta:
         verbose_name = _("Linked section")
+
+    def delete(self, *args, **kwargs):
+        self.invalidate_front_cache()
+        super().delete(*args, **kwargs)
 
     def invalidate_front_cache(self):
         super().invalidate_front_cache()

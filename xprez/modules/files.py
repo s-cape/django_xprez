@@ -1,9 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext
 
+from xprez import constants
 from xprez.admin.forms import ModuleForm
 from xprez.models.mixins.font_size import FontSizeModuleMixin
 from xprez.models.multi_module import MultiModuleItem, UploadMultiModule
+from xprez.utils import truncate_with_ellipsis
 
 
 class FilesModule(FontSizeModuleMixin, UploadMultiModule):
@@ -18,6 +21,15 @@ class FilesModule(FontSizeModuleMixin, UploadMultiModule):
 
     class Meta:
         verbose_name = _("Files")
+
+    def preview_text(self):
+        if self.title:
+            return truncate_with_ellipsis(self.title, constants.PREVIEW_TEXT_MAX_LENGTH)
+        else:
+            count = self.items.count()
+            return ngettext("%(count)s file", "%(count)s files", count) % {
+                "count": count
+            }
 
 
 class FilesItem(MultiModuleItem):

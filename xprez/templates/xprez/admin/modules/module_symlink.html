@@ -13,7 +13,11 @@
                 </a>
             {% endwith %}
             <span class="xprez-module__content-info-arr">&#x203A;</span>
-            {{ module.symlink.polymorph.admin_icon }} <strong>{{ module.symlink.polymorph.verbose_name }}</strong>
+            {{ module.symlink.polymorph.admin_icon }}
+            <strong>{{ module.symlink.polymorph.verbose_name }}</strong>
+            {% with preview=module.symlink.polymorph.preview_text %}{% if preview %}
+                <i>({{ preview }})</i>
+            {% endif %}{% endwith %}
         {% else %}
             <div class="xprez-warning">{% trans "Linked content not found." %}</div>
         {% endif %}

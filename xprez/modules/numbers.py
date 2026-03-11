@@ -1,6 +1,6 @@
 from django import forms
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm
@@ -35,6 +35,10 @@ class NumbersModule(FontSizeModuleMixin, MultiModule):
     def duplicate_to(self, target_section, saved=False, **kwargs):
         kwargs["no_initial_item"] = True
         return super().duplicate_to(target_section, saved=saved, **kwargs)
+
+    def preview_text(self):
+        count = self.items.count()
+        return ngettext("%(count)s item", "%(count)s items", count) % {"count": count}
 
 
 class NumbersItem(MultiModuleItem):

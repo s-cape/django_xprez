@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm
@@ -41,6 +41,10 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
 
     class Meta:
         verbose_name = _("Gallery / Image")
+
+    def preview_text(self):
+        count = self.items.count()
+        return ngettext("%(count)s image", "%(count)s images", count) % {"count": count}
 
     class FrontMedia:
         js = PHOTOSWIPE_JS

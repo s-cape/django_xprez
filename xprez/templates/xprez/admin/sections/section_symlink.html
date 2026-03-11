@@ -34,7 +34,14 @@
                     </a>
                 {% endwith %}
                 <span class="xprez-module__content-info-arr">&#x203A;</span>
-                {% include "xprez/shared/icons/link.html" %} <strong>{% blocktrans with count=section_symlink.symlink.modules.count %}Section ({{ count }} modules){% endblocktrans %}</strong>
+                {% include "xprez/shared/icons/link.html" %}
+                <strong>
+                    {% blocktrans count counter=section_symlink.symlink.modules.count %}
+                        Section ({{ counter }} module)
+                    {% plural %}
+                        Section ({{ counter }} modules)
+                    {% endblocktrans %}
+                </strong>
             {% else %}
                 <div class="xprez-warning">{% trans "Linked section not found." %}</div>
             {% endif %}

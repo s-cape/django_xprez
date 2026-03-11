@@ -38,6 +38,9 @@ class CodeTemplateModule(FontSizeModuleMixin, Module):
     class Meta:
         verbose_name = _("Code Template")
 
+    def preview_text(self):
+        return self.template_name
+
     def render_front(self, context):
         if self.template_name:
             context["module"] = self

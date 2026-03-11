@@ -68,8 +68,7 @@ class Migration(migrations.Migration):
                     "container",
                     models.ForeignKey(
                         editable=False,
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
+                        on_delete=django.db.models.deletion.CASCADE,
                         related_name="%(class)ss",
                         to="xprez.container",
                     ),
@@ -246,8 +245,7 @@ class Migration(migrations.Migration):
                     "container",
                     models.ForeignKey(
                         editable=False,
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
+                        on_delete=django.db.models.deletion.CASCADE,
                         related_name="%(class)ss",
                         to="xprez.container",
                     ),

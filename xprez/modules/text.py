@@ -20,8 +20,6 @@ from xprez.models.mixins.responsive_image import (
 from xprez.models.modules import Module
 from xprez.utils import import_class, truncate_with_ellipsis
 
-CLIPBOARD_TEXT_MAX_LENGTH = 100
-
 
 class TextModuleBase(FontSizeModuleMixin, Module):
     config_model = "xprez.TextBaseConfig"
@@ -102,8 +100,10 @@ class TextModule(ResponsiveImageSourcesMixin, ResponsiveImageMixin, TextModuleBa
         )
         return super().render_front(context)
 
-    def clipboard_text_preview(self):
-        return truncate_with_ellipsis(strip_tags(self.text), CLIPBOARD_TEXT_MAX_LENGTH)
+    def preview_text(self):
+        return truncate_with_ellipsis(
+            strip_tags(self.text), constants.PREVIEW_TEXT_MAX_LENGTH
+        )
 
 
 class TextBaseConfig(ModuleConfig):

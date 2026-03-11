@@ -13,7 +13,7 @@
             </div>
             <div class="xprez-clipboard-list__info">
                 <div class="xprez-clipboard-list__module">{{ item.obj.clipboard_verbose_name }}</div>
-                <i>{{ item.obj.clipboard_text_preview }}</i>
+                {% if item.obj.preview_text %}<i>{{ item.obj.preview_text }}</i>{% endif %}
                 {% if item.allowed == "partial" %}
                     <div class="xprez-warning">
                         {% trans "Some modules are not available here" %}

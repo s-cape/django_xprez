@@ -24,6 +24,10 @@ class Container(FrontCacheMixin, models.Model):
             self.content_type = class_content_type(self.__class__)
         super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        self.invalidate_front_cache()
+        super().delete(*args, **kwargs)
+
     @cached_property
     def front_cacheable(self):
         return all(s.front_cacheable for s in self.get_sections_front())
@@ -66,7 +70,7 @@ class Container(FrontCacheMixin, models.Model):
     def clipboard_verbose_name(self):
         return self.polymorph._meta.verbose_name
 
-    def clipboard_text_preview(self):
+    def preview_text(self):
         return self.polymorph.__str__()
 
     def render_front(self, context):

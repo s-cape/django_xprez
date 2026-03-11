@@ -17,5 +17,8 @@ class AnchorModule(Module):
             self.key = slugify(self.title)
         super().save(*args, **kwargs)
 
+    def preview_text(self):
+        return self.title
+
     class Meta:
         verbose_name = _("Anchor")

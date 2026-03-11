@@ -11,7 +11,7 @@ from xprez.admin.forms import ModuleForm
 from xprez.conf import settings
 from xprez.models.mixins.responsive_image import ResponsiveImageMixin
 from xprez.models.modules import Module
-from xprez.utils import import_class
+from xprez.utils import import_class, truncate_with_ellipsis
 
 
 class VideoProviderBase:
@@ -92,6 +92,9 @@ class VideoModule(ResponsiveImageMixin, Module):
     def get_embed_template_name(self):
         provider = self.get_video_provider()
         return provider.embed_template_name if provider else None
+
+    def preview_text(self):
+        return truncate_with_ellipsis(self.url, constants.PREVIEW_TEXT_MAX_LENGTH)
 
     def render_front(self, context):
         if self.url:
