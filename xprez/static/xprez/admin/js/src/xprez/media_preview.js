@@ -1,5 +1,5 @@
 export const WithMediaPreview = (Base) => class extends Base {
-    static _setPreviewSrc(el, file) {
+    static _setMediaPreviewSrc(el, file) {
         if (el.dataset.previewObjectUrl) {
             URL.revokeObjectURL(el.dataset.previewObjectUrl);
         }
@@ -9,7 +9,7 @@ export const WithMediaPreview = (Base) => class extends Base {
         if (el.tagName === "VIDEO") { el.load(); }
     }
 
-    static _clearPreviewSrc(el) {
+    static _clearMediaPreviewSrc(el) {
         if (el.dataset.previewObjectUrl) {
             URL.revokeObjectURL(el.dataset.previewObjectUrl);
             delete el.dataset.previewObjectUrl;
@@ -30,11 +30,11 @@ export const WithMediaPreview = (Base) => class extends Base {
                 return;
             }
             if (file.type.startsWith(el.dataset.mediaPreview + "/")) {
-                this.constructor._setPreviewSrc(el, file);
+                this.constructor._setMediaPreviewSrc(el, file);
                 el.removeAttribute("data-hidden");
                 matched = true;
             } else {
-                this.constructor._clearPreviewSrc(el);
+                this.constructor._clearMediaPreviewSrc(el);
                 el.setAttribute("data-hidden", "");
             }
         });
@@ -53,7 +53,7 @@ export const WithMediaPreview = (Base) => class extends Base {
             if (el.dataset.mediaPreview === "fallback") {
                 el.setAttribute("data-hidden", "");
             } else {
-                this.constructor._clearPreviewSrc(el);
+                this.constructor._clearMediaPreviewSrc(el);
                 el.removeAttribute("data-hidden");
             }
         });

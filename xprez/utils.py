@@ -30,12 +30,6 @@ def class_content_type(cls):
     )
 
 
-def remove_duplicates(list_):
-    seen = set()
-    seen_add = seen.add
-    return [x for x in list_ if not (x in seen or seen_add(x))]
-
-
 def build_absolute_uri(location, request=None):
     if settings.XPREZ_USE_ABSOLUTE_URI:
         if location.lower().startswith(("http://", "https://", "//")):

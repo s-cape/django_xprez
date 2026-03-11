@@ -8,6 +8,7 @@ export class XprezFileInputFieldController extends WithMediaPreview(XprezFieldCo
         if (!this.containerEl) return;
 
         this._initMediaPreviewEls(this.containerEl);
+        this._storeInitialPreview();
         this.addBtnEl = fieldEl.querySelector("[data-xprez-file-input-add-btn]");
         this.replaceBtnEl = this.containerEl.querySelector(
             "[data-xprez-file-input-replace-btn]"
@@ -21,9 +22,6 @@ export class XprezFileInputFieldController extends WithMediaPreview(XprezFieldCo
         this.undeleteEl = this.containerEl.querySelector(
             "[data-xprez-file-input-undelete]"
         );
-
-        // On load with a saved file the input is already inside replaceBtnEl (from template).
-        // On load with no file the input is inside addBtnEl (from template).
 
         if (this.deleteTriggerEl) {
             this.deleteTriggerEl.addEventListener("click", () => this.delete());
@@ -44,28 +42,55 @@ export class XprezFileInputFieldController extends WithMediaPreview(XprezFieldCo
         if (this.mediaPreviewFallbackEl) {
             this.mediaPreviewFallbackEl.textContent = file.name;
         }
-        this.replaceBtnEl.append(this.inputEl);
         this.containerEl.removeAttribute("data-hidden");
         this.addBtnEl.setAttribute("data-hidden", "");
     }
 
-    _clearPreview() {
-        this.inputEl.value = "";
-        this._previousValue = "";
+    _resetToEmpty() {
+        this.setValue("");
         this._clearMediaPreview();
-        this.addBtnEl.append(this.inputEl);
         this.containerEl.setAttribute("data-hidden", "");
         this.addBtnEl.removeAttribute("data-hidden");
     }
 
+    _storeInitialPreview() {
+        this.mediaPreviewEls.forEach((el) => {
+            if (el.dataset.mediaPreview === "fallback") {
+                this._initialFallbackText = el.textContent;
+                this._initialFallbackHidden = el.hasAttribute("data-hidden");
+            } else {
+                this._initialImgSrc = el.getAttribute("src");
+                this._initialImgHidden = el.hasAttribute("data-hidden");
+            }
+        });
+    }
+
+    _restoreInitialPreview() {
+        this.mediaPreviewEls.forEach((el) => {
+            if (el.dataset.mediaPreview === "fallback") {
+                el.textContent = this._initialFallbackText;
+                el.toggleAttribute("data-hidden", this._initialFallbackHidden);
+            } else {
+                if (this._initialImgSrc !== null) {
+                    el.setAttribute("src", this._initialImgSrc);
+                } else {
+                    el.removeAttribute("src");
+                }
+                el.toggleAttribute("data-hidden", this._initialImgHidden);
+            }
+        });
+    }
+
     delete() {
         if ("hasSavedFile" in this.containerEl.dataset) {
+            this.setValue("");
+            this._restoreInitialPreview();
             this.containerEl.dataset.mode = "delete";
             if (this.clearInputEl) {
                 this.clearInputEl.checked = true;
             }
         } else {
-            this._clearPreview();
+            this._resetToEmpty();
         }
     }
 
