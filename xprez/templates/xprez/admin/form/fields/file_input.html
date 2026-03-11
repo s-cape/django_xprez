@@ -46,11 +46,11 @@
                     {% endwith %}
                 </div>
                 <div class="xprez-admin-file-input__media-actions">
-                    <label class="xprez-icon-btn" title='{% trans "Replace" %}' data-xprez-file-input-replace-btn for="{{ field.html_name }}">
+                    <label class="xprez-icon-btn" title="{% trans "Replace" %}" data-xprez-file-input-replace-btn for="{{ field.html_name }}">
                         {% include "xprez/shared/icons/repeat.html" %}
                     </label>
                     {% if not widget.required %}
-                        <span class="xprez-icon-btn" title='{% trans "Remove" %}' data-xprez-file-input-delete-trigger>
+                        <span class="xprez-icon-btn" title="{% trans "Remove" %}" data-xprez-file-input-delete-trigger>
                             <i class="xprez-icon-delete"></i>
                             <span data-hidden>
                                 <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
