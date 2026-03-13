@@ -10,24 +10,22 @@ from xprez.models.mixins.font_size import FontSizeModuleMixin
 from xprez.models.modules import Module
 
 
+def _code_template_dir():
+    if settings.XPREZ_CODE_TEMPLATES_DIR:
+        return settings.XPREZ_CODE_TEMPLATES_DIR
+    for engine in settings.TEMPLATES:
+        if engine.get("DIRS"):
+            return engine["DIRS"][0]
+    return ""
+
+
 class CodeTemplateModule(FontSizeModuleMixin, Module):
     admin_form_class = "xprez.modules.code_template.CodeTemplateModuleForm"
     admin_template_name = "xprez/admin/modules/code_template.html"
     admin_icon_template_name = "xprez/shared/icons/modules/code_template.html"
 
-    @staticmethod
-    def get_template_dir():
-        if settings.XPREZ_CODE_TEMPLATES_DIR:
-            return settings.XPREZ_CODE_TEMPLATES_DIR
-
-        for engine in settings.TEMPLATES:
-            if engine.get("DIRS"):
-                return engine["DIRS"][0]
-
-        return ""
-
     template_name = TemplatePathField(
-        template_dir=get_template_dir(),
+        template_dir=_code_template_dir(),
         prefix=settings.XPREZ_CODE_TEMPLATES_PREFIX,
         match=r"^(?!\.).+",
         max_length=255,
