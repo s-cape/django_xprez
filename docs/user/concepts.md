@@ -7,6 +7,6 @@ Xprez content is built from these core concepts:
 - **Section** — Rows within a container.
   - **SectionConfig** — Breakpoint-specific section settings.
 - **Module** — Content blocks inside sections (text, gallery, video, etc.). Built-in modules are provided; you can add custom ones by subclassing `Module`.
-    - **ModuleConfig** — Breakpoint-specific module settings.
+    - **ModuleConfig** — Base for breakpoint-specific module settings; default when a module has no custom config.
 
 Containers contain sections; sections contain modules.

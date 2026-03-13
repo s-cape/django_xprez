@@ -142,7 +142,7 @@ class MultiModule(Module):
 
 class MultiModuleItem(models.Model):
     """
-    Base class for items within MultiModule modules.
+    Abstract base class for items within MultiModule modules.
     Expected to add `module` as a FK to the MultiModule descendant.
     """
 

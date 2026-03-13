@@ -47,7 +47,7 @@ Template `myapp/templates/myapp/modules/my.html`:
 
 ### Module with custom config class
 
-Use `config_model` and a `ModuleConfig` subclass for breakpoint-specific layout. Override `get_css_variables` for CSS custom properties and `get_css_classes` for conditional classes:
+Use `config_model` and a `ModuleConfig` subclass for breakpoint-specific layout. `ModuleConfig` is the base for all module configs and is concrete, so modules that omit `config_model` use it as the default. CSS variables and classes come from the config model via `CssMixin` (`xprez.models.mixins.css`). Override `get_css_variables` and `get_css_classes` in your config subclass:
 
 ```python
 from django.db import models

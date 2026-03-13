@@ -14,7 +14,7 @@ BREAKPOINT_CHOICES = tuple(
 
 
 class ConfigParentMixin(CssParentMixin):
-    """Mixin for Section and Module to handle CSS configuration logic."""
+    """Mixin for Section and Module to own and manage configs."""
 
     def build_config(self, css_breakpoint):
         raise NotImplementedError()
@@ -254,6 +254,11 @@ class SectionConfig(ConfigBase):
 
 
 class ModuleConfig(ConfigBase):
+    """
+    Base for all module configs;
+    Also serves as config_model for modules without a custom config.
+    """
+
     parent_attr = "module"
     admin_template_name = "xprez/admin/configs/module_base.html"
     form_class = "xprez.admin.forms.ModuleConfigForm"
