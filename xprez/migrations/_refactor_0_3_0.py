@@ -488,12 +488,33 @@ class GridboxesProcessor(TextModuleProcessorBase):
         )
         section.save()
 
-        section_config = section.configs.get(css_breakpoint=0)
-        section_config.columns = self.old_content.columns
-        section_config.gap_choice = self.MARGIN_TRANS.get(
-            self.old_content.margin, "medium"
+        columns_by_breakpoint = self._get_columns_by_breakpoint(
+            self.old_content.columns
         )
-        section_config.save()
+        gap_choice = self.MARGIN_TRANS.get(self.old_content.margin, "medium")
+
+        config_0 = section.configs.get(css_breakpoint=0)
+        config_0.columns = columns_by_breakpoint.get(0, self.old_content.columns)
+        config_0.gap_choice = gap_choice
+        config_0.save()
+
+        SectionConfig = section.configs.model
+        for breakpoint, columns in columns_by_breakpoint.items():
+            if breakpoint == 0:
+                continue
+            SectionConfig.objects.create(
+                section=section,
+                css_breakpoint=breakpoint,
+                columns=columns,
+                saved=True,
+            )
+
+    def _get_columns_by_breakpoint(self, num_columns):
+        shortcuts = _get_settings("XPREZ_DEFAULTS")["section_shortcuts"]["columns"]
+        for choice in shortcuts["choices"]:
+            if choice["value"] == num_columns:
+                return choice["config"]["columns"]
+        return {0: num_columns}
 
     def finalize(self, module):
         super().finalize(module)
@@ -655,21 +676,47 @@ class MultiModuleProcessor(SimpleModuleProcessor):
 
 
 class GalleryProcessor(MultiModuleProcessor):
-    GAP_TRANS = {True: "small", False: ""}
+    GAP_TRANS = {True: "", False: "small"}
     CROP_TRANS = {True: "3/2", False: ""}
 
     def process(self):
         super().process()
-        section_config = self.module.section.configs.get(css_breakpoint=0)
-        section_config.max_width_choice = self.WIDTH_TRANS[self.old_content.width]
-        section_config.gap_choice = self.GAP_TRANS[self.old_content.divided]
-        section_config.save()
+        section = self.module.section
+        section.max_width_choice = self.WIDTH_TRANS[self.old_content.width]
+        section.save()
 
         self.module.crop = self.CROP_TRANS[self.old_content.crop_old]
         self.module.save()
 
-        self.config.gap_choice = self.GAP_TRANS[self.old_content.divided]
-        self.config.save()
+        gap_choice = self.GAP_TRANS[self.old_content.divided]
+        columns_by_breakpoint = self._get_columns_by_breakpoint(
+            self.old_content.columns
+        )
+        GalleryConfig = self.apps.get_model("xprez", "GalleryConfig")
+
+        config_0 = GalleryConfig.objects.get(module=self.module, css_breakpoint=0)
+        config_0.columns = columns_by_breakpoint.get(0, self.old_content.columns)
+        config_0.gap_choice = gap_choice
+        config_0.save()
+
+        for breakpoint, columns in columns_by_breakpoint.items():
+            if breakpoint == 0:
+                continue
+            GalleryConfig.objects.create(
+                module=self.module,
+                css_breakpoint=breakpoint,
+                columns=columns,
+                saved=True,
+            )
+
+    def _get_columns_by_breakpoint(self, num_columns):
+        """Return {breakpoint: columns} from module_shortcuts for the given count."""
+        shortcuts = _get_settings("XPREZ_DEFAULTS")["module_shortcuts"]
+        gallery_shortcuts = shortcuts.get("xprez.GalleryModule", {})
+        for choice in gallery_shortcuts.get("columns", {}).get("choices", []):
+            if choice["value"] == num_columns:
+                return choice["config"]["columns"]
+        return {0: num_columns}
 
     def get_config_class(self, module):
         return "xprez.GalleryConfig"
