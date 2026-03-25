@@ -11,12 +11,14 @@ MARGIN_NONE = ""
 MARGIN_SMALL = "small"
 MARGIN_MEDIUM = "medium"
 MARGIN_LARGE = "large"
+MARGIN_EXTRA_LARGE = "extra_large"
 MARGIN_CUSTOM = CUSTOM
 MARGIN_CHOICES = (
     (MARGIN_NONE, _("None")),
     (MARGIN_SMALL, _("Small")),
     (MARGIN_MEDIUM, _("Medium")),
     (MARGIN_LARGE, _("Large")),
+    (MARGIN_EXTRA_LARGE, _("Extra Large")),
     (MARGIN_CUSTOM, _("Custom")),
 )
 
@@ -35,12 +37,14 @@ PADDING_NONE = ""
 PADDING_SMALL = "small"
 PADDING_MEDIUM = "medium"
 PADDING_LARGE = "large"
+PADDING_EXTRA_LARGE = "extra_large"
 PADDING_CUSTOM = CUSTOM
 PADDING_CHOICES = (
     (PADDING_NONE, _("None")),
     (PADDING_SMALL, _("Small")),
     (PADDING_MEDIUM, _("Medium")),
     (PADDING_LARGE, _("Large")),
+    (PADDING_EXTRA_LARGE, _("Extra Large")),
     (PADDING_CUSTOM, _("Custom")),
 )
 

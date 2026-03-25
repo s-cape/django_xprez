@@ -417,13 +417,15 @@ XPREZ_CSS = {
                 constants.MARGIN_SMALL: "rem",
                 constants.MARGIN_MEDIUM: "rem",
                 constants.MARGIN_LARGE: "rem",
+                constants.MARGIN_EXTRA_LARGE: "rem",
                 constants.MARGIN_CUSTOM: "px",
             },
             "values": {
                 constants.MARGIN_NONE: {0: 0},
                 constants.MARGIN_SMALL: {0: 2, 2: 1.5, 4: 1},
                 constants.MARGIN_MEDIUM: {0: 5, 2: 3, 4: 2},
-                constants.MARGIN_LARGE: {0: 10, 2: 6, 4: 4},
+                constants.MARGIN_LARGE: {0: 8, 2: 4.5, 4: 3},
+                constants.MARGIN_EXTRA_LARGE: {0: 11, 2: 6, 4: 4},
             },
         },
         "padding_left": {
@@ -462,13 +464,15 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: "rem",
                 constants.PADDING_MEDIUM: "rem",
                 constants.PADDING_LARGE: "rem",
+                constants.PADDING_EXTRA_LARGE: "rem",
                 constants.PADDING_CUSTOM: "px",
             },
             "values": {
                 constants.PADDING_NONE: {0: 0},
                 constants.PADDING_SMALL: {0: 2, 2: 1.5, 4: 1},
                 constants.PADDING_MEDIUM: {0: 5, 2: 3, 4: 2},
-                constants.PADDING_LARGE: {0: 10, 2: 6, 4: 4},
+                constants.PADDING_LARGE: {0: 8, 2: 4.5, 4: 3},
+                constants.PADDING_EXTRA_LARGE: {0: 11, 2: 6, 4: 4},
             },
         },
         "padding_bottom": {
@@ -483,7 +487,8 @@ XPREZ_CSS = {
                 constants.PADDING_NONE: {0: 0},
                 constants.PADDING_SMALL: {0: 2, 2: 1.5, 4: 1},
                 constants.PADDING_MEDIUM: {0: 5, 2: 3, 4: 2},
-                constants.PADDING_LARGE: {0: 10, 2: 6, 4: 4},
+                constants.PADDING_LARGE: {0: 8, 2: 4.5, 4: 3},
+                constants.PADDING_EXTRA_LARGE: {0: 11, 2: 6, 4: 4},
             },
         },
         "gap": {

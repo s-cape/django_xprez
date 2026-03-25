@@ -329,6 +329,15 @@ def migrate_containers_sections_modules(apps, schema_editor):
     Module = apps.get_model("xprez", "Module")
     Section = apps.get_model("xprez", "Section")
 
+    # Old Content integer spacing fields → new SectionConfig string values.
+    spacing_trans = {
+        0: "",
+        1: "small",
+        2: "medium",
+        3: "large",
+        4: "extra_large",
+    }
+
     for old_container in ContentsContainer.objects.all():
         old_container_polymorph = getattr(
             old_container, old_container.content_type.lower()
@@ -357,9 +366,10 @@ def migrate_containers_sections_modules(apps, schema_editor):
                 defaults={
                     "saved": True,
                     "columns": section_config_defaults["columns"],
-                    "margin_bottom_choice": section_config_defaults[
-                        "margin_bottom_choice"
-                    ],
+                    "margin_bottom_choice": spacing_trans.get(
+                        old_content_base.margin_bottom,
+                        section_config_defaults["margin_bottom_choice"],
+                    ),
                     "margin_bottom_custom": section_config_defaults[
                         "margin_bottom_custom"
                     ],
@@ -375,11 +385,15 @@ def migrate_containers_sections_modules(apps, schema_editor):
                     "padding_right_custom": section_config_defaults[
                         "padding_right_custom"
                     ],
-                    "padding_top_choice": section_config_defaults["padding_top_choice"],
+                    "padding_top_choice": spacing_trans.get(
+                        old_content_base.padding_top,
+                        section_config_defaults["padding_top_choice"],
+                    ),
                     "padding_top_custom": section_config_defaults["padding_top_custom"],
-                    "padding_bottom_choice": section_config_defaults[
-                        "padding_bottom_choice"
-                    ],
+                    "padding_bottom_choice": spacing_trans.get(
+                        old_content_base.padding_bottom,
+                        section_config_defaults["padding_bottom_choice"],
+                    ),
                     "padding_bottom_custom": section_config_defaults[
                         "padding_bottom_custom"
                     ],
@@ -431,9 +445,24 @@ class TextModuleProcessorBase(BoxModuleProcessorMixin, ModuleReplaceProcessor):
         TextModule = self.apps.get_model("xprez", "TextModule")
         return [TextModule(text=self.old_content.text)]
 
+    def finalize_new_modules(self):
+        super().finalize_new_modules()
+        section = self.module_base.section
+        section.max_width_choice = self.WIDTH_TRANS.get(
+            getattr(self.old_content, "width", "full"), "full"
+        )
+        section.save()
+
 
 class CkEditorProcessor(TextModuleProcessorBase):
-    pass
+    def finalize(self, module):
+        super().finalize(module)
+        if getattr(self.old_content, "content_centered", False):
+            self.config.text_align = "center"
+            self.config.save()
+        if getattr(self.old_content, "alternate_color", False):
+            module.alternate_color = True
+            module.save()
 
 
 class MediumEditorProcessor(TextModuleProcessorBase):
@@ -459,8 +488,7 @@ class GridboxesProcessor(TextModuleProcessorBase):
         )
         section.save()
 
-        default_breakpoint = 0
-        section_config = section.configs.get(css_breakpoint=default_breakpoint)
+        section_config = section.configs.get(css_breakpoint=0)
         section_config.columns = self.old_content.columns
         section_config.gap_choice = self.MARGIN_TRANS.get(
             self.old_content.margin, "medium"
