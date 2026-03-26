@@ -372,7 +372,7 @@ export class XprezShowWhen {
     constructor(parent, el) {
         this.el = el;
         const [fieldName, targetValue] = this.el.getAttribute("data-show-when").split(":");
-        this.targetValue = targetValue;
+        this.targetValues = new Set(targetValue.split("|"));
         this.controller = parent.getFieldByInputName(fieldName);
         this.controller.showWhens.push(this);
         this.updateVisibility();
@@ -380,7 +380,7 @@ export class XprezShowWhen {
 
     updateVisibility() {
         const wasHidden = this.el.hasAttribute("data-hidden");
-        if (this.controller.getValue() === this.targetValue) {
+        if (this.targetValues.has(this.controller.getValue())) {
             this.el.removeAttribute("data-hidden");
         } else {
             this.el.setAttribute("data-hidden", "");

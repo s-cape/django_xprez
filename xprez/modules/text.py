@@ -163,6 +163,22 @@ class TextConfig(TextBaseConfig):
         ],
         blank=True,
     )
+    media_border_radius_choice = models.CharField(
+        _("Media border radius"),
+        max_length=20,
+        choices=constants.BORDER_RADIUS_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
+            "media_border_radius_choice"
+        ],
+        blank=True,
+    )
+    media_border_radius_custom = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.TextModule"][
+            "media_border_radius_custom"
+        ],
+    )
 
     def get_css_classes(self):
         classes = super().get_css_classes()
@@ -181,8 +197,18 @@ class TextConfig(TextBaseConfig):
                 variables["media-icon-max-size"] = self._format_css_field(
                     "media_icon_max_size"
                 )
+
+            if self.media_role in [
+                constants.MEDIA_ROLE_LEAD,
+                constants.MEDIA_ROLE_ICON,
+            ]:
+                variables["media-border-radius"] = self._get_choice_or_custom(
+                    "media_border_radius"
+                )
+
             if self.media_role == constants.MEDIA_ROLE_BACKGROUND:
                 variables["background-position"] = self.media_background_position
+
             if self.media_lead_to_edge:
                 variables["padding-top"] = self._get_choice_or_custom("padding_top")
                 variables["padding-right"] = self._get_choice_or_custom("padding_right")

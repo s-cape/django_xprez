@@ -787,6 +787,26 @@ class Migration(migrations.Migration):
                         max_length=5,
                     ),
                 ),
+                (
+                    "media_border_radius_choice",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="",
+                        max_length=20,
+                        verbose_name="Media border radius",
+                    ),
+                ),
+                (
+                    "media_border_radius_custom",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
             ],
             options={
                 "abstract": False,

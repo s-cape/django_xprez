@@ -268,6 +268,8 @@ XPREZ_DEFAULTS = {
             "media_lead_to_edge": True,
             "media_icon_max_size": 100,
             "media_crop": constants.CROP_NONE,
+            "media_border_radius_choice": constants.BORDER_RADIUS_NONE,
+            "media_border_radius_custom": 0,
         },
         "xprez.GalleryModule": {
             "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_CENTER,
@@ -588,6 +590,21 @@ XPREZ_CSS = {
         },
         "xprez.TextModule": {
             "media_icon_max_size": {"units": "px"},
+            "media_border_radius": {
+                "units": {
+                    constants.BORDER_RADIUS_NONE: "",
+                    constants.BORDER_RADIUS_SMALL: "px",
+                    constants.BORDER_RADIUS_MEDIUM: "px",
+                    constants.BORDER_RADIUS_LARGE: "px",
+                    constants.BORDER_RADIUS_CUSTOM: "px",
+                },
+                "values": {
+                    constants.BORDER_RADIUS_NONE: {0: 0},
+                    constants.BORDER_RADIUS_SMALL: {0: 4},
+                    constants.BORDER_RADIUS_MEDIUM: {0: 16},
+                    constants.BORDER_RADIUS_LARGE: {0: 32},
+                },
+            },
             "font_size": {
                 "values": {
                     constants.FONT_SIZE_SMALLEST: {0: 14, 3: 12},
