@@ -288,6 +288,33 @@ class WidthModuleProcessorMixin:
         section.save()
 
 
+class BreakpointColumnsMixin:
+    def _columns_shortcut_choices(self):
+        raise NotImplementedError()
+
+    def _get_columns_by_breakpoint(self, num_columns):
+        for choice in self._columns_shortcut_choices():
+            if choice["value"] == num_columns:
+                return choice["config"]["columns"]
+        return {0: num_columns}
+
+    def _create_breakpoint_configs(self, config_0, columns_by_breakpoint):
+        """Clone config_0 for each non-zero breakpoint with a distinct column count."""
+        from xprez.utils import copy_model
+
+        previous_columns = None
+        for breakpoint, columns in columns_by_breakpoint.items():
+            if breakpoint == 0:
+                continue
+            if previous_columns == columns:
+                continue
+            previous_columns = columns
+            bp_config = copy_model(config_0)
+            bp_config.css_breakpoint = breakpoint
+            bp_config.columns = columns
+            bp_config.save()
+
+
 class BoxModuleProcessorMixin:
     """Migrate old_content.box to config background and padding."""
 
@@ -469,7 +496,7 @@ class MediumEditorProcessor(TextModuleProcessorBase):
     pass
 
 
-class GridboxesProcessor(TextModuleProcessorBase):
+class GridboxesProcessor(BreakpointColumnsMixin, TextModuleProcessorBase):
     MARGIN_TRANS = {"none": "", "m": "medium", "l": "large"}
     TEXT_SIZE_TRANS = {"xs": "smallest", "s": "small", "m": "normal"}
 
@@ -498,23 +525,12 @@ class GridboxesProcessor(TextModuleProcessorBase):
         config_0.gap_choice = gap_choice
         config_0.save()
 
-        SectionConfig = section.configs.model
-        for breakpoint, columns in columns_by_breakpoint.items():
-            if breakpoint == 0:
-                continue
-            SectionConfig.objects.create(
-                section=section,
-                css_breakpoint=breakpoint,
-                columns=columns,
-                saved=True,
-            )
+        self._create_breakpoint_configs(config_0, columns_by_breakpoint)
 
-    def _get_columns_by_breakpoint(self, num_columns):
-        shortcuts = _get_settings("XPREZ_DEFAULTS")["section_shortcuts"]["columns"]
-        for choice in shortcuts["choices"]:
-            if choice["value"] == num_columns:
-                return choice["config"]["columns"]
-        return {0: num_columns}
+    def _columns_shortcut_choices(self):
+        return _get_settings("XPREZ_DEFAULTS")["section_shortcuts"]["columns"][
+            "choices"
+        ]
 
     def finalize(self, module):
         super().finalize(module)
@@ -675,7 +691,7 @@ class MultiModuleProcessor(SimpleModuleProcessor):
         getattr(self.module, self.items_attribute).all().update(saved=True)
 
 
-class GalleryProcessor(MultiModuleProcessor):
+class GalleryProcessor(BreakpointColumnsMixin, MultiModuleProcessor):
     GAP_TRANS = {True: "", False: "small"}
     CROP_TRANS = {True: "3/2", False: ""}
 
@@ -699,24 +715,15 @@ class GalleryProcessor(MultiModuleProcessor):
         config_0.gap_choice = gap_choice
         config_0.save()
 
-        for breakpoint, columns in columns_by_breakpoint.items():
-            if breakpoint == 0:
-                continue
-            GalleryConfig.objects.create(
-                module=self.module,
-                css_breakpoint=breakpoint,
-                columns=columns,
-                saved=True,
-            )
+        self._create_breakpoint_configs(config_0, columns_by_breakpoint)
 
-    def _get_columns_by_breakpoint(self, num_columns):
-        """Return {breakpoint: columns} from module_shortcuts for the given count."""
+    def _columns_shortcut_choices(self):
         shortcuts = _get_settings("XPREZ_DEFAULTS")["module_shortcuts"]
-        gallery_shortcuts = shortcuts.get("xprez.GalleryModule", {})
-        for choice in gallery_shortcuts.get("columns", {}).get("choices", []):
-            if choice["value"] == num_columns:
-                return choice["config"]["columns"]
-        return {0: num_columns}
+        return (
+            shortcuts.get("xprez.GalleryModule", {})
+            .get("columns", {})
+            .get("choices", [])
+        )
 
     def get_config_class(self, module):
         return "xprez.GalleryConfig"
