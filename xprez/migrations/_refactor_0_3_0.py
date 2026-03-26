@@ -520,7 +520,8 @@ class GridboxesProcessor(BreakpointColumnsMixin, TextModuleProcessorBase):
         )
         gap_choice = self.MARGIN_TRANS.get(self.old_content.margin, "medium")
 
-        config_0 = section.configs.get(css_breakpoint=0)
+        SectionConfig = self.apps.get_model("xprez", "SectionConfig")
+        config_0 = SectionConfig.objects.get(section=section, css_breakpoint=0)
         config_0.columns = columns_by_breakpoint.get(0, self.old_content.columns)
         config_0.gap_choice = gap_choice
         config_0.save()
