@@ -6,7 +6,8 @@
 	--x-base-line-color: #{$x-base-line-color};
 	--x-heading-color: #{$x-heading-color};
 	--x-heading-emphasis-color: #{$x-heading-emphasis-color};
-
+	--x-display-color: #{$x-display-color};
+	
 	@if ($x-h2-color) {
 		--x-h2-color: #{$x-h2-color};
 	} @else {
@@ -73,7 +74,8 @@
 	--x-base-line-color: #{$x-alt-base-line-color};
     --x-heading-color: #{$x-alt-heading-color};
     --x-heading-emphasis-color: #{$x-alt-heading-emphasis-color}; 
-   
+    --x-display-color: #{$x-alt-display-color};
+	
     @if ($x-alt-h2-color) {
 		--x-h2-color: #{$x-alt-h2-color};
 	} @else {
