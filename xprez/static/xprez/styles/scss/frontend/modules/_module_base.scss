@@ -6,7 +6,6 @@
     grid-row: span var(--x-rowspan, 1);
     grid-column: span var(--x-colspan, 1);
     border-radius: var(--x-border-radius, 0);
-    overflow: hidden;
     display: var(--x-module-display);
     justify-content: center;
     align-items: var(--x-vertical-align-flex, stretch);
@@ -17,7 +16,6 @@
     order: var(--x-order, 1);
 
     &-inner {
-        // position: relative;
         padding: var(--x-padding, 0);  
 
         & > :last-child {

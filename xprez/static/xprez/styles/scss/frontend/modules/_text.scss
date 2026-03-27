@@ -100,4 +100,9 @@
             }
         }
     }
+
+    .xprez-#{$number}-media-role-background,
+    .xprez-#{$number}-media-role-lead {
+        overflow: hidden;
+    }
 }
