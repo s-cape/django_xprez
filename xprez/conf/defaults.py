@@ -483,6 +483,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: "rem",
                 constants.PADDING_MEDIUM: "rem",
                 constants.PADDING_LARGE: "rem",
+                constants.PADDING_EXTRA_LARGE: "rem",
                 constants.PADDING_CUSTOM: "px",
             },
             "values": {
