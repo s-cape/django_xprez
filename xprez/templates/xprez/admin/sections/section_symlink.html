@@ -29,7 +29,8 @@
             {% if section_symlink.symlink %}
                 {% with symlinked_container=section_symlink.symlink.container.polymorph %}
                     {% include "xprez/shared/icons/page.html" %}
-                    <a href="{% xprez_admin_change_url section_symlink.admin_form.xprez_admin symlinked_container %}">
+                    {% xprez_admin_change_url section_symlink.admin_form.xprez_admin symlinked_container as symlinked_container_url %}
+                    <a {% if symlinked_container_url %}href="{{ symlinked_container_url }}"{% endif %}>
                         <strong>{{ symlinked_container }}</strong>
                     </a>
                 {% endwith %}
