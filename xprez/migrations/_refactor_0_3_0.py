@@ -9,6 +9,8 @@ Reference:
 `https://stackoverflow.com/questions/61665607/renaming-a-django-superclass-model-and-updating-the-subclass-pointers-correctly`
 """
 
+import re
+
 from django.core.management.color import no_style
 from django.db import migrations, models
 from django.db.migrations.operations.base import Operation
@@ -329,6 +331,111 @@ class BoxModuleProcessorMixin:
             self.config.save()
 
 
+class ExtractImageMixin:
+    IMG_BLOCK_RE = re.compile(
+        r"^\s*<(?:p|figure)[^>]*>\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)\s*(?:</a>\s*)?</(?:p|figure)>\s*",
+        re.I | re.S,
+    )
+    IMG_RE = re.compile(r"^\s*(<img\s[^>]*?/?>)\s*", re.I | re.S)
+    # <hN>…<img>…rest…</hN> (image first inside heading; keep rest inside the heading)
+    IMG_HEADING_RE = re.compile(
+        r"^\s*(<h([1-6])[^>]*>)\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)\s*(?:</a>\s*)?(.*?)</h\2>\s*",
+        re.I | re.S,
+    )
+    # <p>…<img>…rest…</p>
+    IMG_PARAGRAPH_RE = re.compile(
+        r"^\s*(<p[^>]*>)\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)\s*(?:</a>\s*)?(.*?)</p>\s*",
+        re.I | re.S,
+    )
+    _EMPTY_P_RE = re.compile(
+        r"^\s*<p[^>]*>\s*(?:&nbsp;|&#160;|&#xa0;|\s)*</p>\s*",
+        re.I | re.S,
+    )
+    SRC_RE = re.compile(r'\bsrc=["\']([^"\']+)["\']', re.I)
+    HREF_RE = re.compile(r'\bhref=["\']([^"\']+)["\']', re.I)
+
+    @staticmethod
+    def extract_image(text):
+        """-> (relative_media_path, url, remaining_text) or (None, None, text)"""
+        from django.conf import settings as django_settings
+
+        E = ExtractImageMixin
+        media_url = django_settings.MEDIA_URL
+
+        def _local_media(anchor_attrs, img_tag):
+            src_m = E.SRC_RE.search(img_tag)
+            if src_m:
+                src = src_m.group(1)
+                if src.startswith(media_url):
+                    url = None
+                    if anchor_attrs:
+                        href_m = E.HREF_RE.search(anchor_attrs)
+                        if href_m:
+                            url = href_m.group(1)
+                    return src[len(media_url) :], url
+                else:
+                    return None, None
+            else:
+                return None, None
+
+        # Strip leading empty <p> tags (e.g. <p>&nbsp;</p>)
+        prefix = ""
+        work = text
+        while True:
+            empty_p = E._EMPTY_P_RE.match(work)
+            if empty_p:
+                prefix += work[: empty_p.end()]
+                work = work[empty_p.end() :]
+            else:
+                break
+
+        path = url = None
+        remaining = text
+
+        # Standalone image block: <figure> or <p> containing only <img>
+        m = E.IMG_BLOCK_RE.match(work)
+        if m:
+            path, url = _local_media(m.group(1), m.group(2))
+            if path is not None:
+                remaining = prefix + work[m.end() :]
+
+        # Bare <img> at start
+        if path is None:
+            m = E.IMG_RE.match(work)
+            if m:
+                path, url = _local_media(None, m.group(1))
+                if path is not None:
+                    remaining = prefix + work[m.end() :]
+
+        # <hN><img …>rest…</hN> — extract image, keep rest in the heading
+        if path is None:
+            m = E.IMG_HEADING_RE.match(work)
+            if m:
+                path, url = _local_media(m.group(3), m.group(4))
+                if path is not None:
+                    remaining = (
+                        prefix
+                        + m.group(1)
+                        + m.group(5)
+                        + "</h"
+                        + m.group(2)
+                        + ">"
+                        + work[m.end() :]
+                    )
+
+        # <p><img …>rest…</p> — extract image, keep rest in the paragraph
+        if path is None:
+            m = E.IMG_PARAGRAPH_RE.match(work)
+            if m:
+                path, url = _local_media(m.group(2), m.group(3))
+                if path is not None:
+                    remaining = (
+                        prefix + m.group(1) + m.group(4) + "</p>" + work[m.end() :]
+                    )
+
+        return path, url, remaining
+
+
 # ---------------------------------------------------------------------------
 # RunPython callables
 # ---------------------------------------------------------------------------
@@ -464,13 +571,33 @@ def rename_content_types(apps, schema_editor):
 # ---------------------------------------------------------------------------
 
 
-class TextModuleProcessorBase(BoxModuleProcessorMixin, ModuleReplaceProcessor):
+class TextModuleProcessorBase(
+    ExtractImageMixin, BoxModuleProcessorMixin, ModuleReplaceProcessor
+):
     def get_config_class(self, module):
         return "xprez.TextConfig"
 
-    def prepare_new_modules(self):
+    def _prepare_text_module(self, text):
+        """Create an unsaved TextModule, extracting a leading local image if present."""
         TextModule = self.apps.get_model("xprez", "TextModule")
-        return [TextModule(text=self.old_content.text)]
+        media_path, url, cleaned_text = self.extract_image(text)
+        module = TextModule(text=cleaned_text)
+        if media_path:
+            module.media = media_path
+            module.url = url
+            module._media_role = "lead"
+        else:
+            module._media_role = None
+        return module
+
+    def prepare_new_modules(self):
+        return [self._prepare_text_module(self.old_content.text)]
+
+    def finalize(self, module):
+        super().finalize(module)
+        if module._media_role:
+            self.config.media_role = module._media_role
+            self.config.save()
 
     def finalize_new_modules(self):
         super().finalize_new_modules()
@@ -501,10 +628,11 @@ class GridboxesProcessor(BreakpointColumnsMixin, TextModuleProcessorBase):
     TEXT_SIZE_TRANS = {"xs": "smallest", "s": "small", "m": "normal"}
 
     def prepare_new_modules(self):
-        TextModule = self.apps.get_model("xprez", "TextModule")
         new_modules = []
         for index, box in enumerate(self.old_content.boxes or []):
-            new_modules += [TextModule(position=index, text=box)]
+            module = self._prepare_text_module(box)
+            module.position = index
+            new_modules += [module]
         return new_modules
 
     def finalize_new_modules(self):
