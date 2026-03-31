@@ -1,5 +1,7 @@
 from django.apps import apps
 from django.contrib import admin
+from django.urls import reverse
+from django.urls.exceptions import NoReverseMatch
 
 from xprez import constants, module_registry, settings
 from xprez.admin.views.ckeditor_upload import XprezAdminViewsCkEditorUploadMixin
@@ -118,6 +120,20 @@ class XprezAdminMixin(
         urls += XprezAdminViewsCkEditorUploadMixin.xprez_admin_urls(self)
         urls += module_registry.get_admin_urls()
         return urls
+
+    def xprez_admin_change_url(self, obj):
+        """Change URL for `obj` in this admin site, or None if not registered."""
+        try:
+            return reverse(
+                "{namespace}:{app_label}_{model_name}_change".format(
+                    namespace=self.xprez_url_namespace,
+                    app_label=obj._meta.app_label,
+                    model_name=obj._meta.model_name,
+                ),
+                args=[obj.pk],
+            )
+        except NoReverseMatch:
+            return None
 
     def _get_container_instance(self, request, object_pk):
         cls = apps.get_model("xprez", "Container")

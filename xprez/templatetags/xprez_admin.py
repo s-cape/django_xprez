@@ -1,8 +1,6 @@
 from pathlib import Path
 
 from django import template
-from django.urls import reverse
-from django.urls.exceptions import NoReverseMatch
 from PIL import Image
 from sorl.thumbnail import get_thumbnail
 
@@ -36,17 +34,7 @@ def xprez_clipboard_is_empty(xprez_admin, request):
 
 @register.simple_tag()
 def xprez_admin_change_url(xprez_admin, obj):
-    try:
-        return reverse(
-            "{namespace}:{app_label}_{model_name}_change".format(
-                namespace=xprez_admin.xprez_url_namespace,
-                app_label=obj._meta.app_label,
-                model_name=obj._meta.model_name,
-            ),
-            args=[obj.pk],
-        )
-    except NoReverseMatch:
-        return None
+    return xprez_admin.xprez_admin_change_url(obj)
 
 
 @register.filter
