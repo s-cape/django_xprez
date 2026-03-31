@@ -706,52 +706,15 @@ class QuotesProcessor(BoxModuleProcessorMixin, ModuleReplaceProcessor):
         if not self.old_content.display_two:
             quotes = quotes[:1]
 
+        section = self.module_base.section
         if len(quotes) > 1:
-            default_breakpoint = 0
-            section_config_defaults = _get_settings("XPREZ_DEFAULTS")["section_config"]
-            section_config = self.module_base.section.configs.get_or_create(
-                css_breakpoint=default_breakpoint,
-                defaults={
-                    "saved": True,
-                    "columns": section_config_defaults["columns"],
-                    "margin_bottom_choice": section_config_defaults[
-                        "margin_bottom_choice"
-                    ],
-                    "margin_bottom_custom": section_config_defaults[
-                        "margin_bottom_custom"
-                    ],
-                    "padding_left_choice": section_config_defaults[
-                        "padding_left_choice"
-                    ],
-                    "padding_left_custom": section_config_defaults[
-                        "padding_left_custom"
-                    ],
-                    "padding_right_choice": section_config_defaults[
-                        "padding_right_choice"
-                    ],
-                    "padding_right_custom": section_config_defaults[
-                        "padding_right_custom"
-                    ],
-                    "padding_top_choice": section_config_defaults["padding_top_choice"],
-                    "padding_top_custom": section_config_defaults["padding_top_custom"],
-                    "padding_bottom_choice": section_config_defaults[
-                        "padding_bottom_choice"
-                    ],
-                    "padding_bottom_custom": section_config_defaults[
-                        "padding_bottom_custom"
-                    ],
-                    "gap_choice": section_config_defaults["gap_choice"],
-                    "gap_custom": section_config_defaults["gap_custom"],
-                    "vertical_align_grid": section_config_defaults[
-                        "vertical_align_grid"
-                    ],
-                    "horizontal_align_grid": section_config_defaults[
-                        "horizontal_align_grid"
-                    ],
-                },
-            )[0]
+            section.max_width_choice = "medium"
+            section_config = section.configs.get(css_breakpoint=0)
             section_config.columns = 2
             section_config.save()
+        else:
+            section.max_width_choice = "small"
+        section.save()
 
         new_modules = []
         for index, quote in enumerate(quotes):
