@@ -8,7 +8,8 @@
         {% if module.symlink %}
             {% with symlinked_container=module.symlink.section.container.polymorph %}
                 {% include "xprez/shared/icons/page.html" %}
-                <a href="{% xprez_admin_change_url module.admin_form.xprez_admin symlinked_container %}">
+                {% xprez_admin_change_url module.admin_form.xprez_admin symlinked_container as symlinked_container_url %}
+                <a {% if symlinked_container_url %}href="{{ symlinked_container_url }}"{% endif %}>
                     <strong>{{ symlinked_container }}</strong>
                 </a>
             {% endwith %}
