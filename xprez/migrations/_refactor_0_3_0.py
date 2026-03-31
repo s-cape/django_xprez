@@ -302,7 +302,7 @@ class BreakpointColumnsMixin:
         """Clone config_0 for each non-zero breakpoint with a distinct column count."""
         from xprez.utils import copy_model
 
-        previous_columns = None
+        previous_columns = config_0.columns
         for breakpoint, columns in columns_by_breakpoint.items():
             if breakpoint == 0:
                 continue
@@ -710,6 +710,12 @@ class GalleryProcessor(BreakpointColumnsMixin, MultiModuleProcessor):
             self.old_content.columns
         )
         GalleryConfig = self.apps.get_model("xprez", "GalleryConfig")
+
+        if self.old_content.divided:
+            section_config = section.configs.get(css_breakpoint=0)
+            section_config.padding_left_choice = ""
+            section_config.padding_right_choice = ""
+            section_config.save()
 
         config_0 = GalleryConfig.objects.get(module=self.module, css_breakpoint=0)
         config_0.columns = columns_by_breakpoint.get(0, self.old_content.columns)

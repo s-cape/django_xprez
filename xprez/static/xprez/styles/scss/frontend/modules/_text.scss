@@ -46,6 +46,7 @@
         max-width: 100%;
         display: inline-block;
         height: auto;
+        border-radius: var(--x-media-border-radius, 0);
     }
 
     figure {
@@ -98,5 +99,10 @@
                 }
             }
         }
+    }
+
+    .xprez-#{$number}-media-role-background,
+    .xprez-#{$number}-media-role-lead {
+        overflow: hidden;
     }
 }

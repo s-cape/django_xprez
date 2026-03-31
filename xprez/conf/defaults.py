@@ -483,6 +483,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: "rem",
                 constants.PADDING_MEDIUM: "rem",
                 constants.PADDING_LARGE: "rem",
+                constants.PADDING_EXTRA_LARGE: "rem",
                 constants.PADDING_CUSTOM: "px",
             },
             "values": {
@@ -582,7 +583,7 @@ XPREZ_CSS = {
                 },
                 "values": {
                     constants.BORDER_RADIUS_NONE: {0: 0},
-                    constants.BORDER_RADIUS_SMALL: {0: 4},
+                    constants.BORDER_RADIUS_SMALL: {0: 6},
                     constants.BORDER_RADIUS_MEDIUM: {0: 16},
                     constants.BORDER_RADIUS_LARGE: {0: 32},
                 },
@@ -600,7 +601,7 @@ XPREZ_CSS = {
                 },
                 "values": {
                     constants.BORDER_RADIUS_NONE: {0: 0},
-                    constants.BORDER_RADIUS_SMALL: {0: 4},
+                    constants.BORDER_RADIUS_SMALL: {0: 6},
                     constants.BORDER_RADIUS_MEDIUM: {0: 16},
                     constants.BORDER_RADIUS_LARGE: {0: 32},
                 },

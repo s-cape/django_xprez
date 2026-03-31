@@ -2,13 +2,14 @@
 
 .xprez-numbers {
 	text-align: center;
+	overflow: hidden;
 
 	.xprez-module-inner {
 		flex: 1;
 		flex-wrap: wrap;
 		gap: var(--x-gap);
-		justify-content: flex-start;
-		align-items: flex-start;
+		justify-content: var(--x-horizontal-align-flex, center);
+		align-items: var(--x-vertical-align-flex, stretch);
 		display: var(--x-numbers-display);
 		grid-template-columns: repeat(var(--x-columns), 1fr);
 	}
@@ -30,7 +31,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: #{$x-numbers-item-text-gap};
-		align-items: center;
 		justify-content: center;
 		background-color: var(--x-numbers-item-bg);
 		align-items: #{$x-numbers-item-align-items};

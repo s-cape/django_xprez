@@ -1,6 +1,8 @@
 @use "../../library/rfs" as rfs;
 
 .xprez-video {
+    overflow: hidden;
+    
     .xprez-module-inner {
         flex: 1;
     }

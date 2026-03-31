@@ -1,9 +1,9 @@
 /* Error: Undefined mixin.
  *    ,
- * 52 |         @include margin-bottom(1.25rem);
+ * 53 |         @include margin-bottom(1.25rem);
  *    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  *    '
- *   styles/scss/frontend/modules/_text.scss 52:9   @import
+ *   styles/scss/frontend/modules/_text.scss 53:9   @import
  *   styles/scss/frontend/xprez_frontend.scss 12:9  root stylesheet */
 
 body::before {
@@ -14,5 +14,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Undefined mixin.\a    \2577 \a 52 \2502          @include margin-bottom(1.25rem);\a    \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles/scss/frontend/modules/_text.scss 52:9   @import\a   styles/scss/frontend/xprez_frontend.scss 12:9  root stylesheet";
+  content: "Error: Undefined mixin.\a    \2577 \a 53 \2502          @include margin-bottom(1.25rem);\a    \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles/scss/frontend/modules/_text.scss 53:9   @import\a   styles/scss/frontend/xprez_frontend.scss 12:9  root stylesheet";
 }
