@@ -171,6 +171,9 @@ export class XprezSyncManager {
 
 export const XprezModuleSyncMixin = {
     initSync() {
+        this.liveSyncWrapper = this.el.querySelector("[data-xprez-live-sync]");
+        this.liveSyncInput = this.liveSyncWrapper.querySelector(`[name="${this.el.dataset.prefix}-live_sync"]`);
+
         this.syncSelectTrigger = this.el.querySelector("[data-xprez-select-trigger]");
         this.syncSelectedBtn = this.popover.el.querySelector("[data-xprez-module-sync-selected]");
         this.syncSelectedCountEl = this.popover.el.querySelector("[data-xprez-module-sync-selected-count]");
@@ -249,6 +252,8 @@ export const XprezModuleSyncMixin = {
 
     updateSyncSelectedUI() {
         const count = this.section.xprez.sync.getSelectedCount();
+        this.liveSyncWrapper.toggleAttribute("data-hidden", count < 1);
+
         this.syncSelectedBtn.toggleAttribute("data-hidden", count < 1);
         this.syncSelectedCountEl.textContent = count;
     },

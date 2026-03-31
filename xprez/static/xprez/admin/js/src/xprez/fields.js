@@ -144,12 +144,11 @@ export class XprezFieldController extends XprezControllerBase {
 
     _tryLiveSync() {
         const module = this.module;
-        const fieldIsInModulePopover = module?.popover?.el?.contains(this.el);
-        if (!fieldIsInModulePopover || !this.syncAllowed()) return;
-
-        const prefix = module.el.dataset.prefix;
-        const liveSyncInput = module.el.querySelector(`[name="${prefix}-live_sync"]`);
-        if (!liveSyncInput?.checked) return;
+        if (
+            !module?.liveSyncInput.checked
+            || !this.syncAllowed()
+            || !module.popover?.el?.contains(this.el)
+        ) return;
 
         const sync = this.xprez.sync;
         const hasSelectedModules = sync.getSelectedCount() >= 1;
