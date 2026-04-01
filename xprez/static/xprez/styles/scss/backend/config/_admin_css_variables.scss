@@ -30,6 +30,14 @@
 		#{$b-gray-2} 20px
 	);
 
+	--x-admin-btn-bg: #{$b-gray-8};
+	--x-admin-btn-color: #{$white};
+	--x-admin-btn-border-radius: .25rem;
+
+	--x-admin-btn-secondary-bg: #{$b-gray-4};
+	--x-admin-btn-secondary-color: #{$b-gray-8};
+
+
 	// Specific
 	--x-admin-section-grid-gap: 16px;
 	--x-admin-section-grid-default: repeat(auto-fill, minmax(500px, 1fr));

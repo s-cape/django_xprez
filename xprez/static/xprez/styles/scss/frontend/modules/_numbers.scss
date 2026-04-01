@@ -24,7 +24,6 @@
 	}
 
 	&__item {
-		// flex: 1;
 		border-radius: #{$x-numbers-item-border-radius};
 		min-width: var(--x-numbers-item-auto-min-width, 0);
 		// max-width: var(--x-numbers-item-auto-max-width, 100%);
