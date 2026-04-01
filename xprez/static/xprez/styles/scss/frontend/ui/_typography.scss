@@ -26,7 +26,7 @@
                         }
                         
                         @if map-get($properties, "margin-top") {
-                            @include rfs.margin-top(map-get($properties, "margin-top"));
+                            @include rfs.margin-top(map-get($properties, "margin-top")); 
                         }
 
                         @if map-get($properties, "margin-bottom") {
@@ -41,7 +41,7 @@
                                 @include rfs.margin-bottom(map-get($properties, "before-heading-margin-bottom")); 
                             }
                         }
-                    }
+                    } 
                 }
             } 
         }
@@ -109,11 +109,13 @@
         }
     }
 
-    a:not(#{x-button-class}) {
+    a:not(.#{$x-button-class}) {
         color: var(--x-link-color);
+        text-decoration: $x-link-text-decoration; 
 
         &:hover {
             color: var(--x-link-hover-color);
+            text-decoration: $x-link-text-decoration-hover;
         }
     }
 }
