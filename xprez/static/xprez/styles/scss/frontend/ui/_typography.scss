@@ -111,11 +111,10 @@
 
     a:not(.#{$x-button-class}) {
         color: var(--x-link-color);
-        text-decoration: $x-link-text-decoration; 
 
         &:hover {
             color: var(--x-link-hover-color);
-            text-decoration: $x-link-text-decoration-hover;
         }
     }
+
 }
