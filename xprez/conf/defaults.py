@@ -2,13 +2,90 @@ from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
 
-XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
-XPREZ_GRID_BOXES_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFull"
-XPREZ_TEXT_IMAGE_MODULE_WIDGET = (
-    "xprez.ck_editor.widgets.CkEditorWidgetFullNoInsertPlugin"
-)
+XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidget"
 XPREZ_CK_EDITOR_FILE_UPLOAD_URL_NAME = None
 XPREZ_CK_EDITOR_FILE_UPLOAD_DIR = "xprez_ckeditor_uploads"
+XPREZ_CK_EDITOR_SIMPLE_CONFIG = {
+    "toolbar": ("bold", "italic", "link"),
+    "blockToolbar": (),
+}
+XPREZ_CK_EDITOR_FULL_CONFIG = {
+    "blockToolbar": (
+        "heading",
+        "|",
+        "blockQuote",
+        "bulletedList",
+        "numberedList",
+    ),
+    "toolbar": (
+        "bold",
+        "italic",
+        "link",
+        "|",
+        "heading",
+        "|",
+        "blockQuote",
+        "bulletedList",
+        "numberedList",
+    ),
+    "placeholder": "Type your text",
+    "link": {
+        "decorators": {
+            "toggleButtonPrimary": {
+                "mode": "manual",
+                "label": "Primary button",
+                "classes": ["btn", "btn-primary"],
+            },
+            "toggleButtonSecondary": {
+                "mode": "manual",
+                "label": "Secondary button",
+                "classes": ["btn", "btn-secondary"],
+            },
+            "openInNewTab": {
+                "mode": "manual",
+                "label": "Open in a new tab",
+                "defaultValue": False,
+                "attributes": {
+                    "target": "_blank",
+                },
+            },
+        }
+    },
+    "heading": {
+        "options": (
+            {
+                "model": "paragraph",
+                "title": "Paragraph",
+                "class": "ck-heading_paragraph",
+            },
+            {
+                "model": "heading2",
+                "view": "h2",
+                "title": "Heading 2",
+                "class": "ck-heading_heading2",
+            },
+            {
+                "model": "heading3",
+                "view": "h3",
+                "title": "Heading 3",
+                "class": "ck-heading_heading3",
+            },
+            {
+                "model": "heading4",
+                "view": "h4",
+                "title": "Heading 4",
+                "class": "ck-heading_heading4",
+            },
+        ),
+    },
+    "fontSize": {
+        "options": (
+            "tiny",
+            "default",
+            "big",
+        )
+    },
+}
 
 XPREZ_MODULES_AUTOREGISTER = True
 XPREZ_MODULES_AUTOREGISTER_BUILTINS = [

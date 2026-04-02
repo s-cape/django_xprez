@@ -1,3 +1,4 @@
+import copy
 import json
 
 from django import forms
@@ -34,98 +35,12 @@ class CkEditorWidgetBase(forms.widgets.Textarea):
 
 class CkEditorWidgetSimple(CkEditorWidgetBase):
     def get_config(self, *args, **kwargs):
-        return {
-            "toolbar": ("bold", "italic", "link"),
-            "blockToolbar": (),
-        }
+        return copy.deepcopy(settings.XPREZ_CK_EDITOR_SIMPLE_CONFIG)
 
 
-class CkEditorWidgetFullBase(CkEditorWidgetBase):
+class CkEditorWidgetFull(CkEditorWidgetBase):
     def get_config(self, *args, **kwargs):
-        return {
-            "blockToolbar": (
-                "heading",
-                "|",
-                "blockQuote",
-                "bulletedList",
-                "numberedList",
-            ),
-            "toolbar": (
-                "bold",
-                "italic",
-                "link",
-                "|",
-                "heading",
-                "|",
-                "blockQuote",
-                "bulletedList",
-                "numberedList",
-            ),
-            "placeholder": "Type your text",
-            "link": {
-                "decorators": {
-                    "toggleButtonPrimary": {
-                        "mode": "manual",
-                        "label": "Primary button",
-                        "classes": ["btn", "btn-primary"],
-                    },
-                    "toggleButtonSecondary": {
-                        "mode": "manual",
-                        "label": "Secondary button",
-                        "classes": ["btn", "btn-secondary"],
-                    },
-                    "openInNewTab": {
-                        "mode": "manual",
-                        "label": "Open in a new tab",
-                        "defaultValue": False,
-                        "attributes": {
-                            "target": "_blank",
-                        },
-                    },
-                }
-            },
-            "heading": {
-                "options": (
-                    {
-                        "model": "paragraph",
-                        "title": "Paragraph",
-                        "class": "ck-heading_paragraph",
-                    },
-                    {
-                        "model": "heading2",
-                        "view": "h2",
-                        "title": "Heading 2",
-                        "class": "ck-heading_heading2",
-                    },
-                    {
-                        "model": "heading3",
-                        "view": "h3",
-                        "title": "Heading 3",
-                        "class": "ck-heading_heading3",
-                    },
-                    {
-                        "model": "heading4",
-                        "view": "h4",
-                        "title": "Heading 4",
-                        "class": "ck-heading_heading4",
-                    },
-                ),
-            },
-            "fontSize": {
-                "options": (
-                    "tiny",
-                    "default",
-                    "big",
-                )
-            },
-        }
-
-
-class CkEditorWidgetFullNoInsertPlugin(CkEditorWidgetFullBase):
-    def get_config(self, *args, **kwargs):
-        config = super().get_config(*args, **kwargs)
-        config["image"] = {"toolbar": ("|",)}
-        return config
+        return copy.deepcopy(settings.XPREZ_CK_EDITOR_FULL_CONFIG)
 
 
 class CkEditorFileUploadWidgetMixin:
@@ -181,16 +96,9 @@ class CkEditorFileUploadWidgetMixin:
         return config
 
 
-class CkEditorWidgetFull(CkEditorFileUploadWidgetMixin, CkEditorWidgetFullBase):
-    def get_config(self, *args, **kwargs):
-        config = super().get_config(*args, **kwargs)
-        config["blockToolbar"] += ("MediaEmbed",)
-        config["toolbar"] += ("MediaEmbed",)
-        config["mediaEmbed"] = {"previewsInData": True}
-        return config
+class CkEditorTableMixin:
+    """Adds table toolbar and config to any CKEditor widget."""
 
-
-class CkEditorWidgetFullWithTable(CkEditorWidgetFull):
     def get_config(self, *args, **kwargs):
         config = super().get_config(*args, **kwargs)
         config["toolbar"] += ("|", "insertTable")
@@ -203,6 +111,31 @@ class CkEditorWidgetFullWithTable(CkEditorWidgetFull):
             ),
         }
         return config
+
+
+class CkEditorWidgetFullWithUpload(CkEditorFileUploadWidgetMixin, CkEditorWidgetFull):
+    """Full editor with image upload and MediaEmbed."""
+
+    def get_config(self, *args, **kwargs):
+        config = super().get_config(*args, **kwargs)
+        config["blockToolbar"] += ("MediaEmbed",)
+        config["toolbar"] += ("MediaEmbed",)
+        config["mediaEmbed"] = {"previewsInData": True}
+        return config
+
+
+class CkEditorWidgetFullWithTable(CkEditorTableMixin, CkEditorWidgetFull):
+    """Full editor with table support, without image insert."""
+
+    pass
+
+
+class CkEditorWidgetFullWithUploadAndTable(
+    CkEditorTableMixin, CkEditorWidgetFullWithUpload
+):
+    """Full editor with image upload, MediaEmbed, and table support."""
+
+    pass
 
 
 CkEditorWidget = CkEditorWidgetFull

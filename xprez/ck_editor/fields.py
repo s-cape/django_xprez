@@ -19,12 +19,6 @@ class CkEditorFieldSimple(HtmlField):
         return super().formfield(**kwargs)
 
 
-class CkEditorFieldFullNoInsertPlugin(HtmlField):
-    def formfield(self, **kwargs):
-        kwargs["widget"] = widgets.CkEditorWidgetNoInsertPlugin
-        return super().formfield(**kwargs)
-
-
 class CkEditorFileUploadFieldMixin:
     """Provide file_upload_url_name and file_upload_dir for CKEditor widget."""
 
@@ -49,12 +43,32 @@ class CkEditorFileUploadFieldMixin:
         return super().formfield(**kwargs)
 
 
-class CkEditorFieldFull(CkEditorFileUploadFieldMixin, HtmlField):
-    file_upload_widget_class = widgets.CkEditorWidgetFull
+class CkEditorFieldFull(HtmlField):
+    """Full editor without image insert (default)."""
+
+    def formfield(self, **kwargs):
+        kwargs["widget"] = widgets.CkEditorWidgetFull
+        return super().formfield(**kwargs)
 
 
-class CkEditorFieldFullWithTable(CkEditorFieldFull):
-    file_upload_widget_class = widgets.CkEditorWidgetFullWithTable
+class CkEditorFieldFullWithUpload(CkEditorFileUploadFieldMixin, HtmlField):
+    """Full editor with image upload and MediaEmbed."""
+
+    file_upload_widget_class = widgets.CkEditorWidgetFullWithUpload
+
+
+class CkEditorFieldFullWithTable(HtmlField):
+    """Full editor with table support, without image insert."""
+
+    def formfield(self, **kwargs):
+        kwargs["widget"] = widgets.CkEditorWidgetFullWithTable
+        return super().formfield(**kwargs)
+
+
+class CkEditorFieldFullWithUploadAndTable(CkEditorFileUploadFieldMixin, HtmlField):
+    """Full editor with image upload, MediaEmbed, and table support."""
+
+    file_upload_widget_class = widgets.CkEditorWidgetFullWithUploadAndTable
 
 
 CkEditorField = CkEditorFieldFull
