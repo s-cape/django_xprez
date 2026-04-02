@@ -18,6 +18,14 @@
         & > :last-child {
             margin-bottom: 0;
         }
+
+        a:not(.#{$x-button-class}) {
+            text-decoration: $x-link-text-decoration;
+
+            &:hover {
+                text-decoration: $x-link-text-decoration-hover;
+            }
+        }
     }
 
     &__image-wrapper {
@@ -50,7 +58,7 @@
     }
 
     figure {
-        @include margin-bottom(1.25rem);
+        @include rfs.margin-bottom(1.25rem);
     }
 }
 

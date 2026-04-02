@@ -324,10 +324,10 @@ class BoxModuleProcessorMixin:
         super().finalize(module)
         if getattr(self.old_content, "box", False):
             self.config.background = True
-            self.config.padding_left_choice = "medium"
-            self.config.padding_right_choice = "medium"
-            self.config.padding_top_choice = "medium"
-            self.config.padding_bottom_choice = "medium"
+            self.config.padding_left_choice = "large"
+            self.config.padding_right_choice = "large"
+            self.config.padding_top_choice = "large"
+            self.config.padding_bottom_choice = "large"
             self.config.save()
 
 
@@ -731,7 +731,7 @@ class QuotesProcessor(BoxModuleProcessorMixin, ModuleReplaceProcessor):
         return new_modules
 
 
-class TextImageProcessor(ModuleReplaceProcessor):
+class TextImageProcessor(BreakpointColumnsMixin, ModuleReplaceProcessor):
     def get_config_class(self, module):
         return {
             "xprez.GalleryModule": "xprez.GalleryConfig",
@@ -762,11 +762,18 @@ class TextImageProcessor(ModuleReplaceProcessor):
     def finalize_new_modules(self):
         super().finalize_new_modules()
         section = self.module_base.section
-        default_breakpoint = 0
-        section_config = section.configs.get(css_breakpoint=default_breakpoint)
+
+        SectionConfig = self.apps.get_model("xprez", "SectionConfig")
+        section_config = SectionConfig.objects.get(section=section, css_breakpoint=0)
         section_config.columns = 2
+        section_config.vertical_align_grid = "center"
         section_config.gap_choice = "large"
         section_config.save()
+
+        self._create_breakpoint_configs(section_config, {4: 1})
+
+    def _columns_shortcut_choices(self):
+        return []
 
 
 class VideoProcessor(WidthModuleProcessorMixin, SimpleModuleProcessor):

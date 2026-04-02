@@ -10,10 +10,10 @@
 		color: $b-gray-7;
 	}
 
-	& + & {
+	& + &,
+	& + .xprez-admin-multi-items {
 		border-top: 1px solid $b-gray-4;
 		padding-top: .5rem;
-
 	}
 
 	&.ui-sortable-helper {
@@ -46,6 +46,7 @@
 		& > label {
 			flex-basis: 6rem;
     		min-width: 6rem;
+			width: min-content;
 			border-right: 1px solid $b-gray-3;
 			margin-right: .5rem;
 			padding-right: .5rem;

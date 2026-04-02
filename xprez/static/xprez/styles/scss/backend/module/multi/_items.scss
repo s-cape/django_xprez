@@ -55,12 +55,16 @@
             margin-top: .5rem;
         }
 
+        &-row {
+            flex-wrap: nowrap;
+        }
+
         label {
             border-right: 1px solid $b-gray-3;
             min-width: 4rem;
         }
 
-        input {
+        input, textarea {
             text-align: left !important;
         }
     }
