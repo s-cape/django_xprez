@@ -154,7 +154,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
                 self.configs.filter(pk__in=ids).order_by("css_breakpoint")
             )
         else:
-            self.admin_form.xprez_configs = list(self.get_configs().filter(saved=True))
+            self.admin_form.xprez_configs = list(self.get_configs())
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(admin, data, files)
@@ -202,7 +202,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
             container=target_container, saved=saved
         )
         self.duplicate_configs_to(new_section, saved=saved)
-        for module in self.modules.filter(saved=True).polymorphs():
+        for module in self.modules.all().polymorphs():
             if (
                 allowed_module_classes is not None
                 and module.__class__ not in allowed_module_classes

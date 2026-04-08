@@ -121,6 +121,7 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
     def duplicate_to(self, target_section, saved=False, **kwargs):
         new_module = copy_model(self)
         new_module.section = target_section
+        new_module.sync_group = None
         new_module.saved = saved
         new_module.save(**kwargs)
         self.duplicate_configs_to(new_module, saved=saved)
@@ -190,7 +191,7 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
                 .order_by("css_breakpoint")
             )
         else:
-            self.admin_form.xprez_configs = list(self.get_configs().filter(saved=True))
+            self.admin_form.xprez_configs = list(self.get_configs())
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(xprez_admin, data, files)

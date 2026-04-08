@@ -1,5 +1,5 @@
 import { Xprez } from './xprez/core.js';
-import { XprezModule } from './xprez/modules.js';
+import { XprezModule, XprezModuleSyncMixin } from './xprez/modules.js';
 import { XprezSection, XprezSectionSymlink } from './xprez/sections.js';
 import { XprezFieldController } from './xprez/fields.js';
 import {
@@ -36,7 +36,7 @@ import {
     XprezConfigParentMixin
 } from './xprez/configs.js';
 import { XprezSortable } from './xprez/sortable.js';
-import { XprezSyncManager, XprezModuleSyncMixin } from './xprez/sync.js';
+import { XprezSyncManager } from './xprez/sync.js';
 import { XprezShortcutFieldController, XprezShortcutParentMixin } from './xprez/shortcuts.js';
 import { XprezMultiModuleItem, XprezMultiModule, XprezUploadMultiModule } from './xprez/multi_module.js';
 import { XprezTextModule } from './xprez/text_module.js';

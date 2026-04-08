@@ -9,7 +9,7 @@ class ShortcutsMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.shortcuts_config:
-            self.shortcuts = ShortcutsForm(self)
+            self.shortcuts = ShortcutsForm(self, prefix=f"{self.prefix}-shortcuts")
         else:
             self.shortcuts = None
 

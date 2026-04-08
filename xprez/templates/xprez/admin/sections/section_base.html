@@ -4,6 +4,7 @@
     data-controller="{% block data_controller %}XprezSection{% endblock %}"
     data-mode="{% block data_mode %}{# (empty)/edit/delete #}{% endblock %}"
     data-prefix="{% block data_prefix %}{% endblock %}"
+    {% block data_unsaved %}{% endblock %}
 >
     {% block before_header %}{% endblock %}
 

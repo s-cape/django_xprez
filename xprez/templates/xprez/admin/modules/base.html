@@ -2,6 +2,7 @@
 <div
     class="xprez-admin-module xprez-admin-{{ module.module_css_class }}"
     {% if module.admin_has_errors %}data-has-errors{% endif %} 
+    {% if not module.saved %}data-unsaved{% endif %}
     data-controller="{{ module.admin_js_controller_class }}"
     data-content-type="{{ module.content_type }}"
     data-mode="{# (empty)/edit/selectable/selected/delete #}"

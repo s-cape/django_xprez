@@ -3,6 +3,7 @@
 {% load xprez_admin %}
 
 {% block data_prefix %}{{ section.admin_form.prefix }}{% endblock %}
+{% block data_unsaved %}{% if not section.saved %}data-unsaved{% endif %}{% endblock %}
 
 {% block before_header %}
     {% include "xprez/admin/includes/adders/content_section_before.html" with xprez_admin=section.admin_form.xprez_admin adder_container=section.container %}

@@ -5,6 +5,8 @@ import { resolveFieldControllerClass } from './fields.js';
 import { XprezModuleSyncMixin } from './sync.js';
 import { XprezShortcutParentMixin } from './shortcuts.js';
 
+export { XprezModuleSyncMixin };
+
 export class XprezModule extends XprezContentBase {
     static KEY = "module";
     constructor(section, moduleEl) {

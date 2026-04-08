@@ -44,14 +44,14 @@ class Container(FrontCacheMixin, models.Model):
     def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
         """Duplicate this container into target_container. Returns list of created sections and section symlinks (sections first, then symlinks, each ordered by position)."""
         result = []
-        for section in self.sections.filter(saved=True).order_by("position"):
+        for section in self.sections.all().order_by("position"):
             new_section = section.duplicate_to(
                 target_container,
                 saved=saved,
                 allowed_module_classes=allowed_module_classes,
             )
             result += [new_section]
-        for symlink in self.sectionsymlinks.filter(saved=True).order_by("position"):
+        for symlink in self.sectionsymlinks.all().order_by("position"):
             new_symlink = symlink.duplicate_to(target_container, saved=saved)
             result += [new_symlink]
         return result

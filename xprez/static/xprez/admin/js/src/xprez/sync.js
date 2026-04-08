@@ -8,22 +8,24 @@ export class XprezSyncManager {
     }
 
     selectRelated(module) {
-        const contentType = module.contentType();
-        const sectionModules = module.section.modules;
-        const group = module.getSyncGroup();
+        const sourceContentType = module.contentType();
+        const sourceSectionModules = new Set(module.section.modules);
+        const sourceGroup = module.getSyncGroup();
+        const sourceHasGroup = sourceGroup !== "";
         const modules = this.xprez.getModules();
         for (const m of modules) {
             if (m === module || m.el.dataset.mode === "delete") continue;
 
-            const inSameSection = sectionModules.includes(m);
             const mGroup = m.getSyncGroup();
-            const hasSameGroup = group !== "" && mGroup === group;
-            const sameSectionAndTypeAndInGroup =
-                inSameSection &&
-                m.contentType() === contentType &&
-                (group === "" || mGroup === group);
-
-            const selected = hasSameGroup || sameSectionAndTypeAndInGroup;
+            let selected = false;
+            if (sourceHasGroup) {
+                selected = mGroup === sourceGroup;
+            } else {
+                const inSameSection = sourceSectionModules.has(m);
+                const hasSameType = m.contentType() === sourceContentType;
+                const isUngrouped = mGroup === "";
+                selected = inSameSection && hasSameType && isUngrouped;
+            }
             m.setSyncMode(selected ? "selected" : "selectable", {updateUI: false});
         }
         module.updateSyncSelectedUI();
@@ -202,13 +204,19 @@ export const XprezModuleSyncMixin = {
     },
 
     assignSyncGroupForNew() {
-        const contentType = this.contentType();
-        const peers = this.section.modules.filter(
-            (m) => m !== this && m.el.dataset.mode !== "delete" && m.contentType() === contentType
+        const sameTypePeers = this.section.modules.filter(
+            (m) => m !== this && m.el.dataset.mode !== "delete" && m.contentType() === this.contentType()
         );
-        const groups = new Set(peers.map((m) => m.getSyncGroup()).filter((g) => g !== ""));
-        const assigned = groups.size === 1 ? [...groups][0] : "";
-        this.setSyncGroup(assigned);
+        let assignedGroup = "";
+        if (sameTypePeers.length > 0) {
+            const uniquePeerGroups = [...new Set(sameTypePeers.map((m) => m.getSyncGroup()))];
+            if (uniquePeerGroups.length === 1) {
+                assignedGroup = uniquePeerGroups[0];
+            } else {
+                assignedGroup = this.syncModuleId();
+            }
+        }
+        this.setSyncGroup(assignedGroup);
     },
 
     setSyncMode(mode, options = {}) {

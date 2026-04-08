@@ -2,6 +2,7 @@
 <div
     class="xprez-option-group xprez-option-group--config"
     data-controller="{% block controller_class %}{% endblock %}"
+    {% if not config.saved %}data-unsaved{% endif %}
     {% if config.is_default %}data-is-default{% endif %}
     data-css-breakpoint="{{ config.css_breakpoint }}"
 >

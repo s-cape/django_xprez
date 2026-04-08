@@ -36,7 +36,7 @@ class ConfigParentMixin(CssParentMixin):
             return config, True
 
     def duplicate_configs_to(self, target, saved=False):
-        for config in self.get_configs_front():
+        for config in self.get_configs():
             existing_config = (
                 target.get_configs()
                 .filter(css_breakpoint=config.css_breakpoint)
