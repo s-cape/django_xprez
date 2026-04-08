@@ -1,5 +1,6 @@
 {% load i18n xprez_admin %}
 {% xprez_clipboard_is_empty xprez_admin request as clipboard_is_empty %}
+{% xprez_templatecontainer_is_empty xprez_admin adder_container as templatecontainer_is_empty %}
 
 <div
     class="{% block wrapper_css_class %}xprez-add-section{% endblock %}"
@@ -12,6 +13,9 @@
         </div>
     {% endblock %}
     <div data-controller="XprezClipboardList" data-xprez-clipboard-list-container data-hidden></div>
+    {% if not adder_section and not templatecontainer_is_empty %}
+        <div data-controller="XprezTemplateContainerList" data-xprez-templatecontainer-list-container data-hidden></div>
+    {% endif %}
 
     <ul class="xprez-add-list">
         {% if adder_section %}
@@ -27,6 +31,17 @@
             <span class="xprez-icon">{% include "xprez/shared/icons/paste.html" %}</span>
             <span>{% trans "Paste from clipboard" %}</span>
         </li>
+
+        {% if not adder_section and not templatecontainer_is_empty %}
+            {% url xprez_admin.xprez_templatecontainer_list_url_name adder_container.pk as templatecontainer_list_url %}
+            <li
+                data-xprez-templatecontainer-list-trigger
+                data-url="{{ templatecontainer_list_url }}"
+            >
+                <span class="xprez-icon">{% include "xprez/shared/icons/clipboard_item.html" %}</span>
+                <span>{% trans "Insert from template" %}</span>
+            </li>
+        {% endif %}
 
         {% for module in available_modules %}
             {% if adder_section %}

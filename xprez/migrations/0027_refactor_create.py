@@ -24,6 +24,35 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name="TemplateContainer",
+            fields=[
+                (
+                    "container_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.container",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="xprez/templates/"
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Template",
+                "verbose_name_plural": "Templates",
+                "ordering": ("name",),
+            },
+            bases=("xprez.container",),
+        ),
+        migrations.CreateModel(
             name="Section",
             fields=[
                 (

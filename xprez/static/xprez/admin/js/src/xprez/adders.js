@@ -110,9 +110,24 @@ export class XprezAdderSelectBase extends XprezAdderBase {
 export class XprezContentAdderBase extends XprezAdderItemsBase {
     constructor(parent, el) {
         super(parent, el);
+        this.templateContainerList = this.mountChild(
+            this.el.querySelector('[data-controller="XprezTemplateContainerList"]'),
+            {allowNull: true}
+        );
         this.clipboardList = this.mountChild(
             this.el.querySelector('[data-controller="XprezClipboardList"]')
         );
+    }
+
+    toggleSublist(sublist) {
+        if (sublist.isOpen()) {
+            sublist.hide();
+        } else {
+            [this.templateContainerList, this.clipboardList].forEach(s => {
+                if (s && s !== sublist) s.hide();
+            });
+            sublist.loadList();
+        }
     }
 }
 

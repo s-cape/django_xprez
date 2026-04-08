@@ -3,10 +3,11 @@ from django.contrib import admin
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
-from xprez import constants, module_registry, settings
+from xprez import constants, models, module_registry, settings
 from xprez.admin.views.ckeditor_upload import XprezAdminViewsCkEditorUploadMixin
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
 from xprez.admin.views.content import XprezAdminViewsContentMixin
+from xprez.admin.views.template_container import XprezAdminViewsTemplateContainerMixin
 from xprez.ck_editor.forms import CkEditorFileUploadXprezAdminFormMixin
 from xprez.media import AdminMediaCollector
 
@@ -63,6 +64,7 @@ class XprezModelFormMixin(object):
 class XprezAdminMixin(
     XprezAdminViewsContentMixin,
     XprezAdminViewsClipboardMixin,
+    XprezAdminViewsTemplateContainerMixin,
     XprezAdminViewsCkEditorUploadMixin,
 ):
     constants = constants
@@ -114,6 +116,7 @@ class XprezAdminMixin(
         urls = []
         urls += XprezAdminViewsContentMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
+        urls += XprezAdminViewsTemplateContainerMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsCkEditorUploadMixin.xprez_admin_urls(self)
         urls += module_registry.get_admin_urls()
         return urls
@@ -174,3 +177,9 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
 
     def get_urls(self):
         return self.xprez_admin_urls() + super().get_urls()
+
+
+@admin.register(models.TemplateContainer)
+class TemplateContainerAdmin(XprezAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)

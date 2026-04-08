@@ -33,6 +33,11 @@ def xprez_clipboard_is_empty(xprez_admin, request):
 
 
 @register.simple_tag()
+def xprez_templatecontainer_is_empty(xprez_admin, container):
+    return not xprez_admin.xprez_templatecontainers(container).exists()
+
+
+@register.simple_tag()
 def xprez_admin_change_url(xprez_admin, obj):
     return xprez_admin.xprez_admin_change_url(obj)
 

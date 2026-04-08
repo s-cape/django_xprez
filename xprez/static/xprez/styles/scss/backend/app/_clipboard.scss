@@ -14,7 +14,7 @@
 	}
 }
 
-.xprez-clipboard-list {
+@mixin xprez-panel-list {
 	border: 1px solid $b-gray-6;
 	border-radius: 2px;
 	background: lighten($b-gray-3, 2%);
@@ -61,4 +61,12 @@
 			margin-top: 4px;
 		}
 	}
+}
+
+.xprez-clipboard-list {
+	@include xprez-panel-list;
+}
+
+.xprez-templatecontainer-list {
+	@include xprez-panel-list;
 }

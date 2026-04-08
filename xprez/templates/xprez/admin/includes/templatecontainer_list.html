@@ -1,0 +1,42 @@
+{% load i18n %}
+{% load thumbnail %}
+<div class="xprez-templatecontainer-list" data-xprez-templatecontainer-list>
+    {% for item in items %}
+        <div class="xprez-templatecontainer-list__item">
+            <div class="xprez-templatecontainer-list__icon">
+                {% if item.template.image %}
+                    {% thumbnail item.template.image "200x150" as thumb %}
+                        <img src="{{ thumb.url }}" alt="{{ item.template.name }}">
+                    {% endthumbnail %}
+                {% else %}
+                    <div>TODO NO IMAGE</div>
+                {% endif %}
+            </div>
+            <div class="xprez-templatecontainer-list__info">
+                <div class="xprez-templatecontainer-list__module">{{ item.template.name }}</div>
+                {% if item.allowed == "partial" %}
+                    <div class="xprez-warning">
+                        {% trans "Some modules are not available here" %}
+                    </div>
+                {% endif %}
+            </div>
+            <div
+                class="xprez-templatecontainer-list__actions"
+                {% if not item.allowed %}data-disabled{% endif %}
+            >
+                {% if item.allowed %}
+                    <span
+                        class="xprez-btn"
+                        data-xprez-templatecontainer-paste
+                        data-url="{{ item.paste_url }}"
+                    >
+                        {% include "xprez/shared/icons/paste.html" %} {% trans "Insert" %}
+                    </span>
+                {% else %}
+                    <span class="xprez-warning">{% trans "Cannot paste here" %}</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    <p {% if items %}data-hidden{% endif %}>{% trans "No templates available" %}</p>
+</div>

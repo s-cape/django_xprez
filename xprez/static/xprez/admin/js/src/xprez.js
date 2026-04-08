@@ -50,7 +50,9 @@ import {
     XprezClipboardClipContainer,
 } from './xprez/copy.js';
 import { XprezFileInputFieldController } from './xprez/file_input.js';
+import { XprezAdderSublistBase } from './xprez/adders_sublist_base.js';
 import { XprezClipboardList } from './xprez/clipboard.js';
+import { XprezTemplateContainerList } from './xprez/template_container.js';
 import { XprezControllerBase } from './xprez/controller_base.js';
 import { XprezAllSectionsCollapseExpand } from './xprez/collapser.js';
 
@@ -77,6 +79,7 @@ window.XprezClipboardClipBase = XprezClipboardClipBase;
 window.XprezClipboardClipContent = XprezClipboardClipContent;
 window.XprezClipboardClipContainer = XprezClipboardClipContainer;
 window.XprezClipboardList = XprezClipboardList;
+window.XprezTemplateContainerList = XprezTemplateContainerList;
 window.XprezTextModule = XprezTextModule;
 window.XprezMultiModule = XprezMultiModule;
 window.XprezUploadMultiModule = XprezUploadMultiModule;
@@ -135,7 +138,9 @@ export {
     XprezClipboardClipBase,
     XprezClipboardClipContent,
     XprezClipboardClipContainer,
+    XprezAdderSublistBase,
     XprezClipboardList,
+    XprezTemplateContainerList,
     XprezCopyMenu,
     XprezSectionCopyMenu,
     XprezModuleCopyMenu,
