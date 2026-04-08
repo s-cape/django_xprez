@@ -7,7 +7,7 @@ from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
 from xprez.models.mixins.cache import ContentFrontCacheMixin, FrontCacheMixin
-from xprez.utils import import_class
+from xprez.utils import copy_model, import_class
 
 
 class SectionBase(models.Model):
@@ -198,9 +198,10 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         return self._modules_front
 
     def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
-        new_section = self.__class__.objects.create(
-            container=target_container, saved=saved
-        )
+        new_section = copy_model(self)
+        new_section.container = target_container
+        new_section.saved = saved
+        new_section.save()
         self.duplicate_configs_to(new_section, saved=saved)
         for module in self.modules.all().polymorphs():
             if (
@@ -266,7 +267,7 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
         context["section_symlink"] = self
         return super().render_admin(context)
 
-    def duplicate_to(self, target_container, saved=False):
+    def duplicate_to(self, target_container, saved=False, **kwargs):
         return SectionSymlink.objects.create(
             container=target_container, symlink=self.symlink, saved=saved
         )

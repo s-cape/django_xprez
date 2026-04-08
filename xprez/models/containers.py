@@ -42,30 +42,27 @@ class Container(FrontCacheMixin, models.Model):
             return model.objects.get(pk=self.pk)
 
     def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
-        """Duplicate this container into target_container. Returns list of created sections and section symlinks (sections first, then symlinks, each ordered by position)."""
         result = []
-        for section in self.sections.all().order_by("position"):
-            new_section = section.duplicate_to(
+        for item in self._get_ordered_section_items():
+            new_item = item.duplicate_to(
                 target_container,
                 saved=saved,
                 allowed_module_classes=allowed_module_classes,
             )
-            result += [new_section]
-        for symlink in self.sectionsymlinks.all().order_by("position"):
-            new_symlink = symlink.duplicate_to(target_container, saved=saved)
-            result += [new_symlink]
+            result += [new_item]
         return result
 
     def symlink_to(self, target_container, saved=False):
-        """Create SectionSymlinks in target_container; returns them (sections then symlinks, by position)."""
         result = []
-        for section in self.sections.filter(saved=True).order_by("position"):
-            new_symlink = section.symlink_to(target_container, saved=saved)
-            result += [new_symlink]
-        for symlink in self.sectionsymlinks.filter(saved=True).order_by("position"):
-            new_symlink = symlink.symlink_to(target_container, saved=saved)
+        for item in self._get_ordered_section_items():
+            new_symlink = item.symlink_to(target_container, saved=saved)
             result += [new_symlink]
         return result
+
+    def _get_ordered_section_items(self):
+        sections = list(self.sections.all())
+        symlinks = list(self.sectionsymlinks.all())
+        return sorted(sections + symlinks, key=lambda item: item.position)
 
     def clipboard_verbose_name(self):
         return self.polymorph._meta.verbose_name
