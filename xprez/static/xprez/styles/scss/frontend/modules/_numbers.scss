@@ -17,10 +17,13 @@
 	&__digits {
 		display: inline;
 		text-align: right;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: $x-numbers-digits-letter-spacing;
 	}
 
 	&__number {
 		display: inline-flex;
+		gap: calc($x-numbers-digits-letter-spacing * -1);
 	}
 
 	&__item {
