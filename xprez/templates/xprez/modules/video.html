@@ -11,6 +11,7 @@
                     {% thumbnail module.poster_image geoms.0 crop="50%" format="WEBP" quality=70 as t_src %}
                     <img class="xprez-video__poster-img"
                          src="{{ t_src.url|build_absolute_uri }}"
+                         width="{{ t_src.width }}" height="{{ t_src.height }}"
                          {% endthumbnail %}
                          srcset="{% for geom in geoms %}{% thumbnail module.poster_image geom crop="50%" format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
                          sizes="{{ module.get_image_sizes }}"

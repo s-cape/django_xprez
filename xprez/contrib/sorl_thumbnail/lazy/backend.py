@@ -82,16 +82,16 @@ class LazyThumbnailBackendMixin:
             raise ValueError("falsey file_ argument in get_thumbnail()")
 
         source = ImageFile(file_)
-        options = self._normalize_options(source, options)
+        normalized = self._normalize_options(source, options)
 
-        name = self._get_thumbnail_filename(source, geometry_string, options)
+        name = self._get_thumbnail_filename(source, geometry_string, normalized)
         thumbnail = ImageFile(name, default.storage)
         cached = default.kvstore.get(thumbnail)
         if cached:
             return cached
 
-        size = self._predict_size(source, geometry_string, options)
-        url = self._build_lazy_url(source.name, geometry_string, options)
+        size = self._predict_size(source, geometry_string, normalized)
+        url = self._build_lazy_url(source.name, geometry_string, normalized)
         return LazyImageFile(url, size)
 
     def generate_thumbnail(self, file_, geometry_string, **options):
@@ -119,7 +119,7 @@ class LazyThumbnailBackendMixin:
     def _build_lazy_url(self, source_name, geometry_string, options):
         payload, sig = encode_thumbnail_payload(source_name, geometry_string, **options)
         return reverse(
-            "sorl_thumbnail_lazy:lazy_thumbnail",
+            "xprez:sorl_thumbnail_lazy:lazy_thumbnail",
             kwargs={"payload": payload, "sig": sig},
         )
 

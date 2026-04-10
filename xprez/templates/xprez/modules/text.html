@@ -24,6 +24,7 @@
                             {% thumbnail module.media source.geometries.0 crop=source.thumbnail_crop format="WEBP" quality=70 as t_src %}
                             <img class="xprez-text__image"
                                 src="{{ t_src.url|build_absolute_uri }}"
+                                width="{{ t_src.width }}" height="{{ t_src.height }}"
                                 {% endthumbnail %}
                                 srcset="{% for geom in source.geometries %}{% thumbnail module.media geom crop=source.thumbnail_crop format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
                                 sizes="{{ module.get_image_sizes }}"

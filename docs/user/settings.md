@@ -52,11 +52,11 @@ Thumbnails
 - `THUMBNAIL_BACKEND` — use xprez backend for SEO-friendly thumbnail filenames, or lazy generation (see below)
 
 ```python
-# SEO-friendly filenames only
-THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.naming.NamingThumbnailBackend"
+# SEO-friendly filenames only (see xprez/contrib/sorl_thumbnail/naming/backend.py)
+THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.NamingThumbnailBackend"
 
 # Lazy generation only (defer thumbnail creation until the browser requests the image)
-THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.lazy.backend.LazyThumbnailBackend"
+THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.LazyThumbnailBackend"
 
 # Lazy + SEO-friendly filenames
 THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.LazyNamingThumbnailBackend"

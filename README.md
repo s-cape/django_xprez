@@ -123,12 +123,11 @@ class MyModule(Module):
 
 See the [built-in modules](xprez/modules/) source for more examples.
 
-10. (optional) Change sorl thumbnail backend in settings — for seo-friendly thumbnail filenames:
+10. (optional) Change sorl thumbnail backend in settings — for SEO-friendly thumbnail filenames and deferred generation:
 
 ```python
-THUMBNAIL_BACKEND = 'xprez.contrib.sorl_thumbnail.thumbnail_backend.NamingThumbnailBackend'
+THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.LazyNamingThumbnailBackend"
 ```
-
 
 ---
 
