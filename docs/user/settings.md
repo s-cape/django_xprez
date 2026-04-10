@@ -49,11 +49,20 @@ XPREZ_FRONT_MEDIA_CSS = {"all": ("myapp/css/xprez-overrides.css",)}
 Thumbnails
 ----------
 
-- `THUMBNAIL_BACKEND` — use xprez backend for SEO-friendly thumbnail filenames
+- `THUMBNAIL_BACKEND` — use xprez backend for SEO-friendly thumbnail filenames, or lazy generation (see below)
 
 ```python
-THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.thumbnail_backend.NamingThumbnailBackend"
+# SEO-friendly filenames only
+THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.naming.NamingThumbnailBackend"
+
+# Lazy generation only (defer thumbnail creation until the browser requests the image)
+THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.lazy.backend.LazyThumbnailBackend"
+
+# Lazy + SEO-friendly filenames
+THUMBNAIL_BACKEND = "xprez.contrib.sorl_thumbnail.LazyNamingThumbnailBackend"
 ```
+
+The lazy backend returns a signed URL for missing thumbnails; the thumbnail is generated on first browser request and the browser is redirected to the real file. Include `xprez.urls` as usual so the lazy route (`xprez/thumbnail/lazy/...`) is registered. URLs are authenticated with an HMAC derived from Django `SECRET_KEY`.
 
 Video providers
 ---------------
