@@ -45,9 +45,13 @@ class CodeTemplateModule(FontSizeModuleMixin, Module):
             try:
                 return get_template(self.template_name).render(context=context)
             except TemplateDoesNotExist:
-                return "Invalid Template"
-        else:
-            return ""
+                import logging
+
+                logging.getLogger(__name__).warning(
+                    "Template not found: %s", self.template_name
+                )
+                return ""
+        return ""
 
 
 class CodeTemplateModuleForm(ModuleForm):

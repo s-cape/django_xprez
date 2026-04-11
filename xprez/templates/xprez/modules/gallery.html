@@ -6,7 +6,7 @@
 
 {% block content %}
     {% for item in items %}
-        {% with alt=item.alt_text|default:item.description geoms=item.get_srcset_geometries %}
+        {% with alt=item.alt_text|default:item.description geoms=item.srcset_geometries %}
         <figure class="xprez-gallery__item-cont js-photo"
             {% thumbnail item.file "2000x2000" upscale=false format="WEBP" quality=90 filename_stem=alt as thumb %}
             data-original_url="{{ thumb.url|build_absolute_uri }}"
@@ -21,7 +21,7 @@
                 src="{{ t_src.url|build_absolute_uri }}"
                 {% endthumbnail %}
                 srcset="{% for geom in geoms %}{% thumbnail item.file geom crop=module.thumbnail_crop format="WEBP" quality=70 filename_stem=alt as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
-                sizes="{{ module.get_image_sizes }}" />
+                sizes="{{ module.image_sizes }}" />
             {% if item.description %}
                 <figcaption class="xprez-gallery__item-caption">{{ item.description }}</figcaption>
             {% endif %}
