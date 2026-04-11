@@ -6,7 +6,7 @@ from sorl.thumbnail.conf import settings
 from sorl.thumbnail.helpers import serialize, tokey
 
 
-class NamingThumbnailBackendMixin(object):
+class NamingThumbnailBackendMixin:
     def _get_thumbnail_filename(self, source, geometry_string, options):
         """
         Computes the destination filename.
