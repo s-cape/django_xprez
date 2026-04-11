@@ -1,5 +1,6 @@
 import copy
-import random
+import secrets
+import string
 
 from .conf import settings
 
@@ -39,11 +40,9 @@ def build_absolute_uri(location, request=None):
     return location
 
 
-def random_string(length, include_special_chars=False):
-    chars = "abcdefghijklmnopqrstuvwxyz0123456789"
-    if include_special_chars:
-        chars += "!@#$%^&*(-_=+)"
-    return "".join([random.choice(chars) for i in range(length)])
+def random_string(length):
+    alphabet = string.ascii_lowercase + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 def truncate_with_ellipsis(string, length):
