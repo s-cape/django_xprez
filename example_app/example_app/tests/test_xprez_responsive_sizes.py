@@ -89,7 +89,7 @@ class ResponsiveImageHelpersTest(TestCase):
 
 
 class VideoModuleSizesTest(TestCase):
-    """VideoModule get_section_max_width_px and get_image_sizes."""
+    """VideoModule get_section_max_width_px and image_sizes."""
 
     def _video_module(self, section):
         return VideoModule.objects.create(
@@ -125,16 +125,16 @@ class VideoModuleSizesTest(TestCase):
             self.assertEqual(effective_columns, 1)
             self.assertTrue(max_width is None or isinstance(max_width, int))
 
-    def test_get_image_sizes_full_width_contains_100vw(self):
+    def test_image_sizes_full_width_contains_100vw(self):
         section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_FULL)
         module = self._video_module(section)
-        self.assertEqual(module.get_image_sizes, "100vw")
+        self.assertEqual(module.image_sizes, "100vw")
 
-    def test_get_image_sizes_medium_width_contains_1296px(self):
+    def test_image_sizes_medium_width_contains_1296px(self):
         section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_MEDIUM)
         module = self._video_module(section)
         self.assertEqual(
-            module.get_image_sizes,
+            module.image_sizes,
             "1296px",
         )
 
@@ -148,7 +148,7 @@ class VideoModuleSizesTest(TestCase):
 
 
 class GalleryModuleSizesTest(TestCase):
-    """GalleryModule get_image_sizes for section+config variants."""
+    """GalleryModule image_sizes for section+config variants."""
 
     def _gallery_module(self, section):
         return GalleryModule.objects.create(section=section, position=0, saved=True)
@@ -156,7 +156,7 @@ class GalleryModuleSizesTest(TestCase):
     def test_section_default_one_column_sizes_contains_vw_or_px(self):
         section = _create_page_and_section()
         module = self._gallery_module(section)
-        sizes = module.get_image_sizes
+        sizes = module.image_sizes
         self.assertIsInstance(sizes, str)
         self.assertTrue("vw" in sizes or "px" in sizes)
 
@@ -167,7 +167,7 @@ class GalleryModuleSizesTest(TestCase):
         config.columns = 1
         config.saved = True
         config.save()
-        self.assertEqual(module.get_image_sizes, "100vw")
+        self.assertEqual(module.image_sizes, "100vw")
 
     def test_gallery_sizes_reflect_section_two_columns_at_breakpoint(
         self,
@@ -185,7 +185,7 @@ class GalleryModuleSizesTest(TestCase):
         config.saved = True
         config.save()
         self.assertEqual(
-            module.get_image_sizes,
+            module.image_sizes,
             "1296px, (max-width: 1499px) 648px",
         )
 
@@ -197,7 +197,7 @@ class GalleryModuleSizesTest(TestCase):
         config.saved = True
         config.save()
         self.assertEqual(
-            gallery.get_image_sizes,
+            gallery.image_sizes,
             "648px",
         )
 
@@ -227,7 +227,7 @@ class GalleryModuleSizesTest(TestCase):
         )
         # Effective: bp0 4*4=16, bp2 2*2=4, bp4 1*1=1 → (None,16), (1199,4), (767,1)
         self.assertEqual(
-            gallery.get_image_sizes,
+            gallery.image_sizes,
             "81px, (max-width: 1199px) 25vw, (max-width: 767px) 100vw",
         )
 
@@ -258,6 +258,6 @@ class GalleryModuleSizesTest(TestCase):
         )
         # Effective: bp0 4*2//2=4, bp2 2*2=4, bp4 1*1=1 → (None,4), (767,1)
         self.assertEqual(
-            gallery.get_image_sizes,
+            gallery.image_sizes,
             "324px, (max-width: 767px) 100vw",
         )
