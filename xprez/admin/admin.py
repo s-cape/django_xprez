@@ -21,9 +21,9 @@ class XprezModelFormMixin:
             sections = instance.sections.all()
             section_symlinks = instance.sectionsymlinks.all()
             if data is not None:
-                section_ids = [int(id) for id in data.getlist("section-id")]
+                section_ids = [int(pk) for pk in data.getlist("section-id")]
                 section_symlink_ids = [
-                    int(id) for id in data.getlist("section-symlink-id")
+                    int(pk) for pk in data.getlist("section-symlink-id")
                 ]
                 sections = sections.filter(pk__in=section_ids)
                 section_symlinks = section_symlinks.filter(pk__in=section_symlink_ids)

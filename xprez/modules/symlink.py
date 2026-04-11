@@ -40,3 +40,4 @@ class ModuleSymlink(Module):
     def preview_text(self):
         if self.symlink:
             return self.symlink.polymorph.preview_text()
+        return None

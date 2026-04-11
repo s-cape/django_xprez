@@ -149,7 +149,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
 
         self.admin_form.xprez_configs_all_valid = None
         if data:
-            ids = [int(id) for id in data.getlist("section-config-id")]
+            ids = [int(pk) for pk in data.getlist("section-config-id")]
             self.admin_form.xprez_configs = list(
                 self.configs.filter(pk__in=ids).order_by("css_breakpoint")
             )
