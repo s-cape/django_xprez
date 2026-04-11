@@ -14,17 +14,12 @@ class NamingThumbnailBackendMixin:
         key = tokey(source.key, geometry_string, serialize(options))
 
         # make some subdirs
-        path = "{}/{}/{}".format(key[:2], key[2:4], key)
+        subpath = f"{key[:2]}/{key[2:4]}/{key}"
 
-        # get filename_stem from options or use source name
         filename_stem = slugify(options.get("filename_stem") or Path(source.name).stem)
+        ext = EXTENSIONS[options["format"]]
 
-        return "{}{}/{}.{}".format(
-            settings.THUMBNAIL_PREFIX,
-            path,
-            filename_stem,
-            EXTENSIONS[options["format"]],
-        )
+        return f"{settings.THUMBNAIL_PREFIX}{subpath}/{filename_stem}.{ext}"
 
 
 class NamingThumbnailBackend(NamingThumbnailBackendMixin, ThumbnailBackend):

@@ -106,9 +106,9 @@ class XprezAdminMixin(
         return view
 
     def xprez_admin_url_name(self, name, include_namespace=False):
-        name = "{}_{}".format(self.model._meta.model_name, name)
+        name = f"{self.model._meta.model_name}_{name}"
         if include_namespace and self.xprez_url_namespace:
-            name = "{}:{}".format(self.xprez_url_namespace, name)
+            name = f"{self.xprez_url_namespace}:{name}"
         return name
 
     def xprez_admin_urls(self):
@@ -123,11 +123,7 @@ class XprezAdminMixin(
         """Change URL for `obj` in this admin site, or None if not registered."""
         try:
             return reverse(
-                "{namespace}:{app_label}_{model_name}_change".format(
-                    namespace=self.xprez_url_namespace,
-                    app_label=obj._meta.app_label,
-                    model_name=obj._meta.model_name,
-                ),
+                f"{self.xprez_url_namespace}:{obj._meta.app_label}_{obj._meta.model_name}_change",
                 args=[obj.pk],
             )
         except NoReverseMatch:

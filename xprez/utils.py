@@ -14,28 +14,27 @@ def copy_model(instance):
 
 
 def import_class(cls):
+    """Import a class from a dotted path string, or return cls if already a class."""
     if isinstance(cls, str):
-        d = cls.rfind(".")
-        classname = cls[d + 1 : len(cls)]
-        m = __import__(cls[0:d], globals(), locals(), [classname])
+        dot = cls.rfind(".")
+        if dot == -1:
+            raise ImportError(f"import_class requires a dotted path, got: {cls!r}")
+        module_path, classname = cls[:dot], cls[dot + 1 :]
+        m = __import__(module_path, globals(), locals(), [classname])
         return getattr(m, classname)
-    else:
-        return cls
+    return cls
 
 
 def class_content_type(cls):
-    return "{}.{}".format(
-        cls._meta.app_label,
-        cls._meta.object_name,
-    )
+    return f"{cls._meta.app_label}.{cls._meta.object_name}"
 
 
 def build_absolute_uri(location, request=None):
     if settings.XPREZ_USE_ABSOLUTE_URI:
-        if location.lower().startswith(("http://", "https://", "//")):
+        if not location.lower().startswith(("http://", "https://", "//")):
             if request:
                 return request.build_absolute_uri(location)
-            return "{}{}".format(settings.XPREZ_BASE_URL, location)
+            return f"{settings.XPREZ_BASE_URL}{location}"
     return location
 
 

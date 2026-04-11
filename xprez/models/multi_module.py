@@ -1,7 +1,8 @@
 from django.db import models
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.urls import re_path
+from django.urls import path
 from django.utils.decorators import method_decorator
 
 from xprez.admin.permissions import xprez_staff_member_required
@@ -107,8 +108,8 @@ class MultiModule(Module):
     def get_admin_urls(cls):
         cls_name = cls.__name__.lower()
         return [
-            re_path(
-                r"^{}/add-item/(?P<module_pk>\d+)/".format(cls_name),
+            path(
+                f"{cls_name}/add-item/<int:module_pk>/",
                 cls.add_item_view,
                 name=cls.get_add_item_url_name(),
             ),
@@ -117,7 +118,7 @@ class MultiModule(Module):
     @classmethod
     @method_decorator(xprez_staff_member_required)
     def add_item_view(cls, request, module_pk):
-        module = cls.objects.get(pk=module_pk)
+        module = get_object_or_404(cls, pk=module_pk)
         item = module.create_item()
         form_class = module.get_admin_item_form_class(item)
         item.admin_form = form_class(instance=item, prefix=item.instance_key)
@@ -129,12 +130,12 @@ class MultiModule(Module):
 
     @classmethod
     def get_add_item_url_name(cls):
-        return "{}_ajax_add_item".format(cls.__name__.lower())
+        return f"{cls.__name__.lower()}_ajax_add_item"
 
     @property
     def xprez_add_item_url_name(self):
         ns = getattr(self, "_xprez_admin_namespace", None)
-        return "{}:{}".format(ns, self.get_add_item_url_name()) if ns else ""
+        return f"{ns}:{self.get_add_item_url_name()}" if ns else ""
 
     class Meta:
         abstract = True
@@ -201,7 +202,7 @@ class UploadMultiModule(MultiModule):
     @method_decorator(xprez_staff_member_required)
     def upload_item_view(cls, request, module_pk):
         """Handle one file per request; returns HTML for the new item row."""
-        module = cls.objects.get(pk=module_pk)
+        module = get_object_or_404(cls, pk=module_pk)
         file = request.FILES.get("file")
         if not file:
             return JsonResponse(status=400, data={"error": "No file uploaded"})
@@ -219,8 +220,8 @@ class UploadMultiModule(MultiModule):
     def get_admin_urls(cls):
         cls_name = cls.__name__.lower()
         return super().get_admin_urls() + [
-            re_path(
-                r"^{}/upload-item/(?P<module_pk>\d+)/".format(cls_name),
+            path(
+                f"{cls_name}/upload-item/<int:module_pk>/",
                 cls.upload_item_view,
                 name=cls.get_upload_url_name(),
             ),
@@ -228,9 +229,9 @@ class UploadMultiModule(MultiModule):
 
     @classmethod
     def get_upload_url_name(cls):
-        return "{}_ajax_upload_item".format(cls.__name__.lower())
+        return f"{cls.__name__.lower()}_ajax_upload_item"
 
     @property
     def xprez_upload_item_url_name(self):
         ns = getattr(self, "_xprez_admin_namespace", None)
-        return "{}:{}".format(ns, self.get_upload_url_name()) if ns else ""
+        return f"{ns}:{self.get_upload_url_name()}" if ns else ""
