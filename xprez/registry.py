@@ -14,7 +14,7 @@ class ModuleRegistry:
             raise LookupError(
                 f"Module type '{content_type}' is not registered. "
                 f"Available: {', '.join(self._registry.keys())}"
-            )
+            ) from None
 
     def register(self, module_class):
         keys = {m.module_key for m in self._registry.values()}

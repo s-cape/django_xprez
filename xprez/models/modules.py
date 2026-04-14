@@ -1,13 +1,13 @@
 from django.apps import apps
 from django.db import models
 from django.template.loader import render_to_string
-from django.utils.functional import cached_property, classproperty
+from django.utils.functional import classproperty
 
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
-from xprez.models.containers import PolymorphMixin
 from xprez.models.mixins.cache import ContentFrontCacheMixin
+from xprez.models.mixins.polymorph import PolymorphMixin
 from xprez.models.querysets.modules import ModuleQuerySet
 from xprez.utils import class_content_type, copy_model, import_class
 
@@ -175,10 +175,10 @@ class Module(PolymorphMixin, ContentFrontCacheMixin, ConfigParentMixin, models.M
 
         self.admin_form.xprez_configs_all_valid = None
         if data:
-            ids = [int(pk) for pk in data.getlist("module-config-id")]
+            pks = [int(pk) for pk in data.getlist("module-config-id")]
             self.admin_form.xprez_configs = list(
                 self.get_config_model()
-                .objects.filter(module=self, pk__in=ids)
+                .objects.filter(module=self, pk__in=pks)
                 .order_by("css_breakpoint")
             )
         else:

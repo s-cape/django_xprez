@@ -8,19 +8,8 @@ from django.utils.functional import cached_property
 
 from xprez import constants
 from xprez.models.mixins.cache import FrontCacheMixin
+from xprez.models.mixins.polymorph import PolymorphMixin
 from xprez.utils import class_content_type
-
-
-class PolymorphMixin:
-    """Shared polymorph resolution for models that store content_type as 'app.Model'."""
-
-    @cached_property
-    def polymorph(self):
-        app_label, object_name = self.content_type.split(".")
-        model = apps.get_model(app_label, object_name)
-        if isinstance(self, model):
-            return self
-        return model.objects.get(pk=self.pk)
 
 
 class Container(PolymorphMixin, FrontCacheMixin, models.Model):

@@ -21,12 +21,12 @@ class XprezModelFormMixin:
             sections = instance.sections.all()
             section_symlinks = instance.sectionsymlinks.all()
             if data is not None:
-                section_ids = [int(pk) for pk in data.getlist("section-id")]
-                section_symlink_ids = [
+                section_pks = [int(pk) for pk in data.getlist("section-id")]
+                section_symlink_pks = [
                     int(pk) for pk in data.getlist("section-symlink-id")
                 ]
-                sections = sections.filter(pk__in=section_ids)
-                section_symlinks = section_symlinks.filter(pk__in=section_symlink_ids)
+                sections = sections.filter(pk__in=section_pks)
+                section_symlinks = section_symlinks.filter(pk__in=section_symlink_pks)
 
             for section in sections:
                 section.build_admin_form(self.xprez_admin, data, files)
