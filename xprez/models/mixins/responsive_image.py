@@ -39,21 +39,21 @@ class ResponsiveImageParentMixin:
         return max_width, ranges
 
     @cached_property
-    def get_image_sizes(self):
-        """Build HTML sizes attribute string for responsive images."""
+    def image_sizes(self):
+        """HTML sizes attribute string for responsive images."""
         max_width, column_ranges = self.get_column_ranges()
         return self.build_image_sizes(max_width, column_ranges)
 
     @staticmethod
     def parse_crop_string(crop_str):
-        """
-        Parse a crop string like '3/2' into (3, 2), or return None if absent/invalid.
-        """
+        """Parse a crop string like '3/2' into (3, 2), or return None if absent/invalid."""
         if not crop_str or "/" not in crop_str:
             return None
-        else:
+        try:
             num, den = crop_str.split("/", 1)
             return (int(num.strip()), int(den.strip()))
+        except (ValueError, TypeError):
+            return None
 
     @staticmethod
     def build_image_sizes(max_width, column_ranges):
@@ -89,7 +89,7 @@ class ResponsiveImageItemMixin:
         raise NotImplementedError
 
     @cached_property
-    def get_srcset_geometries(self):
+    def srcset_geometries(self):
         """List of 'WxH' geometry strings for srcset, capped at image's natural width."""
         try:
             cap_width = self.get_image_field().width or None
@@ -128,7 +128,7 @@ class ResponsiveImageSourcesMixin:
         raise NotImplementedError
 
     @cached_property
-    def get_media_image_sources(self):
+    def media_image_sources(self):
         """
         Return a list of dicts for <picture> rendering, ordered for correct browser
         matching (smallest max_width first; base/fallback last with max_width=None).

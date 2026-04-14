@@ -1,5 +1,6 @@
 from django.apps import apps
 from django.contrib import admin
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
@@ -11,7 +12,7 @@ from xprez.ck_editor.forms import CkEditorFileUploadXprezAdminFormMixin
 from xprez.media import AdminMediaCollector
 
 
-class XprezModelFormMixin(object):
+class XprezModelFormMixin:
     def __init__(self, data=None, files=None, instance=None, **kwargs):
         super().__init__(data=data, files=files, instance=instance, **kwargs)
         self.xprez_sections = []
@@ -20,12 +21,12 @@ class XprezModelFormMixin(object):
             sections = instance.sections.all()
             section_symlinks = instance.sectionsymlinks.all()
             if data is not None:
-                section_ids = [int(id) for id in data.getlist("section-id")]
-                section_symlink_ids = [
-                    int(id) for id in data.getlist("section-symlink-id")
+                section_pks = [int(pk) for pk in data.getlist("section-id")]
+                section_symlink_pks = [
+                    int(pk) for pk in data.getlist("section-symlink-id")
                 ]
-                sections = sections.filter(pk__in=section_ids)
-                section_symlinks = section_symlinks.filter(pk__in=section_symlink_ids)
+                sections = sections.filter(pk__in=section_pks)
+                section_symlinks = section_symlinks.filter(pk__in=section_symlink_pks)
 
             for section in sections:
                 section.build_admin_form(self.xprez_admin, data, files)
@@ -105,9 +106,9 @@ class XprezAdminMixin(
         return view
 
     def xprez_admin_url_name(self, name, include_namespace=False):
-        name = "{}_{}".format(self.model._meta.model_name, name)
+        name = f"{self.model._meta.model_name}_{name}"
         if include_namespace and self.xprez_url_namespace:
-            name = "{}:{}".format(self.xprez_url_namespace, name)
+            name = f"{self.xprez_url_namespace}:{name}"
         return name
 
     def xprez_admin_urls(self):
@@ -122,11 +123,7 @@ class XprezAdminMixin(
         """Change URL for `obj` in this admin site, or None if not registered."""
         try:
             return reverse(
-                "{namespace}:{app_label}_{model_name}_change".format(
-                    namespace=self.xprez_url_namespace,
-                    app_label=obj._meta.app_label,
-                    model_name=obj._meta.model_name,
-                ),
+                f"{self.xprez_url_namespace}:{obj._meta.app_label}_{obj._meta.model_name}_change",
                 args=[obj.pk],
             )
         except NoReverseMatch:
@@ -134,7 +131,7 @@ class XprezAdminMixin(
 
     def _get_container_instance(self, request, object_pk):
         cls = apps.get_model("xprez", "Container")
-        return cls.objects.get(pk=object_pk)
+        return get_object_or_404(cls, pk=object_pk)
 
 
 class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
@@ -153,11 +150,7 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, *args, **kwargs):
         super().save_model(request, obj, form, *args, **kwargs)
-
-        """
-        admin's list_editable bypasses overrided get_form
-        so it does not have save_xprez
-        """
+        # admin's list_editable bypasses overridden get_form, so it may not have xprez_save
         if hasattr(form, "xprez_save"):
             form.xprez_save(request)
 

@@ -8,10 +8,11 @@ from django.utils.functional import cached_property
 
 from xprez import constants
 from xprez.models.mixins.cache import FrontCacheMixin
+from xprez.models.mixins.polymorph import PolymorphMixin
 from xprez.utils import class_content_type
 
 
-class Container(FrontCacheMixin, models.Model):
+class Container(PolymorphMixin, FrontCacheMixin, models.Model):
     """Base container class for pages/articles that contain modules."""
 
     KEY = constants.CONTAINER_KEY
@@ -31,15 +32,6 @@ class Container(FrontCacheMixin, models.Model):
     @cached_property
     def front_cacheable(self):
         return all(s.front_cacheable for s in self.get_sections_front())
-
-    @cached_property
-    def polymorph(self):
-        app_label, object_name = self.content_type.split(".")
-        model = apps.get_model(app_label, object_name)
-        if isinstance(self, model):
-            return self
-        else:
-            return model.objects.get(pk=self.pk)
 
     def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
         result = []

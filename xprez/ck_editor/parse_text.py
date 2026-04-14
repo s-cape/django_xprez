@@ -98,8 +98,9 @@ def parse_text(text_source, request):
     return str(soup)
 
 
-def render_text_parsed(text_parsed, extra_context={}):
+def render_text_parsed(text_parsed, extra_context=None):
     t = Template("{% load xprez %}" + text_parsed)
     c = Context({})
-    c.update(extra_context)
+    if extra_context:
+        c.update(extra_context)
     return mark_safe(t.render(c))
