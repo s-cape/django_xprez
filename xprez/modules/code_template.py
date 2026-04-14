@@ -50,7 +50,6 @@ class CodeTemplateModule(FontSizeModuleMixin, Module):
                 logging.getLogger(__name__).warning(
                     "Template not found: %s", self.template_name
                 )
-                return ""
         return ""
 
 
