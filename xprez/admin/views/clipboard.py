@@ -186,7 +186,7 @@ class ClipboardItemContainer(ClipboardItemBase):
         return [self._render(request, self.xprez_admin, item) for item in created]
 
 
-class XprezAdminViewsClipboardMixin(object):
+class XprezAdminViewsClipboardMixin:
     CLIPBOARD_SESSION_KEY = "xprez_clipboard"
     CLIPBOARD_MAX_LENGTH = 10
     CLIPBOARD_ITEM_REGISTRY = {
@@ -195,7 +195,7 @@ class XprezAdminViewsClipboardMixin(object):
     }
 
     def xprez_duplicate_section_view(self, request, section_pk):
-        section = models.Section.objects.get(pk=section_pk)
+        section = get_object_or_404(models.Section, pk=section_pk)
         new_section = section.duplicate_to(section.container)
         new_section.build_admin_form(self)
         return JsonResponse(
@@ -203,7 +203,7 @@ class XprezAdminViewsClipboardMixin(object):
         )
 
     def xprez_duplicate_module_view(self, request, module_pk):
-        module = models.Module.objects.get(pk=module_pk).polymorph
+        module = get_object_or_404(models.Module, pk=module_pk).polymorph
         new_module = module.duplicate_to(module.section)
         new_module.build_admin_form(self)
         return JsonResponse(

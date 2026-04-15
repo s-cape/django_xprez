@@ -1,7 +1,8 @@
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _, ngettext
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext
 
 from xprez import constants
 from xprez.conf import defaults, settings
@@ -149,9 +150,9 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
 
         self.admin_form.xprez_configs_all_valid = None
         if data:
-            ids = [int(id) for id in data.getlist("section-config-id")]
+            pks = [int(pk) for pk in data.getlist("section-config-id")]
             self.admin_form.xprez_configs = list(
-                self.configs.filter(pk__in=ids).order_by("css_breakpoint")
+                self.configs.filter(pk__in=pks).order_by("css_breakpoint")
             )
         else:
             self.admin_form.xprez_configs = list(self.get_configs())

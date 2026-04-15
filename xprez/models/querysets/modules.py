@@ -19,4 +19,8 @@ class ModuleQuerySet(models.QuerySet):
             for polymorph in model_class.objects.filter(pk__in=pks):
                 polymorph_by_pk[polymorph.pk] = polymorph
 
-        return [polymorph_by_pk[module.pk] for module in base_modules]
+        return [
+            polymorph_by_pk[module.pk]
+            for module in base_modules
+            if module.pk in polymorph_by_pk
+        ]

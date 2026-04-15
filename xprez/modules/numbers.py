@@ -1,6 +1,7 @@
 from django import forms
 from django.db import models
-from django.utils.translation import gettext_lazy as _, ngettext
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm
@@ -20,7 +21,7 @@ class NumbersModule(FontSizeModuleMixin, MultiModule):
     admin_icon_template_name = "xprez/shared/icons/modules/numbers.html"
 
     class Meta:
-        verbose_name = "Numbers"
+        verbose_name = _("Numbers")
 
     class FrontMedia:
         js = ("xprez/js/numbers.min.js",)

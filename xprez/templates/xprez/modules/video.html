@@ -6,14 +6,14 @@
 {% block content %}
     <div class="xprez-video__item"{% if module.poster_image %} data-video-with-poster{% endif %}>
         {% if module.poster_image %}
-            {% with geoms=module.get_srcset_geometries %}
+            {% with geoms=module.srcset_geometries %}
                 <div class="xprez-video__poster xprez-video-poster-{{ module.video_id }}" data-video-poster>
                     {% thumbnail module.poster_image geoms.0 crop="50%" format="WEBP" quality=70 as t_src %}
                     <img class="xprez-video__poster-img"
                          src="{{ t_src.url|build_absolute_uri }}"
                          {% endthumbnail %}
                          srcset="{% for geom in geoms %}{% thumbnail module.poster_image geom crop="50%" format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
-                         sizes="{{ module.get_image_sizes }}"
+                         sizes="{{ module.image_sizes }}"
                          alt="{{ module.video_type }} video poster" />
                     <div class="xprez-video__btn-cont">
                         {% include "xprez/shared/icons/video_play.html" %}

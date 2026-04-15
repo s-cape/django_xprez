@@ -56,9 +56,9 @@ def xprez_file_thumbnail(value, size="400x200"):
         return None
     try:
         with value.open("rb") as f:
-            Image.open(f)  # check if file is an image
+            Image.open(f)
         return get_thumbnail(value, size, format="WEBP", quality=80) or None
-    except Exception:
+    except (OSError, ValueError):
         return None
 
 

@@ -86,7 +86,7 @@ class TextModule(ResponsiveImageSourcesMixin, ResponsiveImageMixin, TextModuleBa
         return config.media_crop if config else None
 
     def get_image_aspect_ratio(self):
-        """Base-config crop ratio for get_srcset_geometries; falls back to (1, 1)."""
+        """Base-config crop ratio for srcset_geometries; falls back to (1, 1)."""
         config = self.configs.filter(css_breakpoint=0).first()
         crop = self.parse_crop_string(self.get_config_crop(config))
         if crop:

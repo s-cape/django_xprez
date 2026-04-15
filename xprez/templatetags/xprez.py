@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 from django import template
 
 from ..media import FrontendMediaCollector
@@ -92,7 +88,7 @@ def _editor_module_image(
         "width": width,
         "height": height,
         "lightbox": lightbox,
-        "max_size": "%sx%s" % (max_size["width"], max_size["height"]),
+        "max_size": f"{max_size['width']}x{max_size['height']}",
         "link_url": link_url,
         "link_new_window": link_new_window,
         "caption": caption,
