@@ -308,6 +308,7 @@ XPREZ_DEFAULTS = {
         "xprez.GalleryModule": {
             "crop": constants.CROP_NONE,
             "font_size": constants.FONT_SIZE_NORMAL,
+            "lightbox": True,
         },
         "xprez.FilesModule": {
             "font_size": constants.FONT_SIZE_NORMAL,

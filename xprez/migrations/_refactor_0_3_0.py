@@ -452,8 +452,8 @@ def _reset_sequences(schema_editor, models_list):
 
 def migrate_containers_sections_modules(apps, schema_editor):
     xprez_defaults = _get_settings("XPREZ_DEFAULTS")
-    section_defaults = xprez_defaults["section"]
-    section_config_defaults = xprez_defaults["section_config"]
+    section_defaults = xprez_defaults["section"]["default"]
+    section_config_defaults = xprez_defaults["section_config"]["default"]
     module_defaults = xprez_defaults["module"]["default"]
 
     ContentsContainer = apps.get_model("xprez", "ContentsContainer")

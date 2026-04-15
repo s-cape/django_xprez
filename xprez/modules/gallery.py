@@ -38,6 +38,10 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
         default=defaults.XPREZ_DEFAULTS["module"]["xprez.GalleryModule"]["crop"],
         blank=True,
     )
+    lightbox = models.BooleanField(
+        _("Lightbox"),
+        default=defaults.XPREZ_DEFAULTS["module"]["xprez.GalleryModule"]["lightbox"],
+    )
 
     class Meta:
         verbose_name = _("Gallery / Image")
@@ -159,6 +163,7 @@ class GalleryModuleForm(ModuleForm):
     options_fields = ModuleForm.options_fields + (
         "font_size",
         "crop",
+        "lightbox",
     )
 
     class Meta:

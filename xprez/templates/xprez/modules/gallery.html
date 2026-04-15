@@ -1,19 +1,20 @@
 {% extends "xprez/modules/base.html" %}
 {% load thumbnail xprez %}
 
-{% block css_class %}{{ block.super }} js-content-{{ module.pk }} js-gallery{% endblock %}
-{% block attrs %}data-photoswipe-url="{% url 'xprez:photoswipe' %}"{% endblock %}
+{% block attrs %}{% if module.lightbox %}data-photoswipe-url="{% url 'xprez:photoswipe' %}"{% endif %}{% endblock %}
 
 {% block content %}
     {% for item in items %}
         {% with alt=item.alt_text|default:item.description geoms=item.srcset_geometries %}
-        <figure class="xprez-gallery__item-cont js-photo"
-            {% thumbnail item.file "2000x2000" upscale=false format="WEBP" quality=90 filename_stem=alt as thumb %}
-            data-original_url="{{ thumb.url|build_absolute_uri }}"
-            data-original_width="{{ thumb.width }}"
-            data-original_height="{{ thumb.height }}"
-            {% endthumbnail %}
-            data-title="{{ item.description }}"
+        <figure class="xprez-gallery__item-cont{% if module.lightbox %} js-photo{% endif %}"
+            {% if module.lightbox %}
+                {% thumbnail item.file "2000x2000" upscale=false format="WEBP" quality=90 filename_stem=alt as thumb %}
+                data-original_url="{{ thumb.url|build_absolute_uri }}"
+                data-original_width="{{ thumb.width }}"
+                data-original_height="{{ thumb.height }}"
+                {% endthumbnail %}
+                data-title="{{ item.description }}"
+            {% endif %}
             data-alt="{{ alt }}"
         >
             {% thumbnail item.file geoms.0 crop=module.thumbnail_crop format="WEBP" quality=70 filename_stem=alt as t_src %}

@@ -97,6 +97,11 @@ class Migration(migrations.Migration):
                 verbose_name="Font size",
             ),
         ),
+        migrations.AddField(
+            model_name="gallerymodule",
+            name="lightbox",
+            field=models.BooleanField(default=True, verbose_name="Lightbox"),
+        ),
         migrations.RenameModel(old_name="Video", new_name="VideoModule"),
         ContentToModule(model_name="VideoModule"),
         migrations.AlterField(
