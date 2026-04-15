@@ -66,20 +66,20 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         verbose_name=_("Max width"),
         max_length=16,
         choices=constants.MAX_WIDTH_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section"]["max_width_choice"],
+        default=defaults.XPREZ_DEFAULTS["section"]["default"]["max_width_choice"],
     )
     max_width_custom = models.PositiveIntegerField(
         null=True,
         blank=True,
-        default=defaults.XPREZ_DEFAULTS["section"]["max_width_custom"],
+        default=defaults.XPREZ_DEFAULTS["section"]["default"]["max_width_custom"],
     )
     alternate_background = models.BooleanField(
-        default=defaults.XPREZ_DEFAULTS["section"]["alternate_background"]
+        default=defaults.XPREZ_DEFAULTS["section"]["default"]["alternate_background"]
     )
     background_color = models.CharField(
         max_length=30,
         blank=True,
-        default=defaults.XPREZ_DEFAULTS["section"]["background_color"],
+        default=defaults.XPREZ_DEFAULTS["section"]["default"]["background_color"],
     )
     css_class = models.CharField(max_length=100, null=True, blank=True)
 
@@ -111,7 +111,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         return self.configs.model(
             section=self,
             css_breakpoint=css_breakpoint,
-            **settings.XPREZ_DEFAULTS["section_config"],
+            **settings.XPREZ_DEFAULTS["section_config"]["default"],
         )
 
     def get_css_config_keys(self):

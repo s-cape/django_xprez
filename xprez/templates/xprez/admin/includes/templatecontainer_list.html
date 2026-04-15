@@ -2,18 +2,30 @@
 {% load thumbnail %}
 <div class="xprez-templatecontainer-list" data-xprez-templatecontainer-list>
     {% for item in items %}
-        <div class="xprez-templatecontainer-list__item">
+        <div
+            class="xprez-templatecontainer-list__item"
+            data-filter-id="{{ item.template.display_key }}"
+            data-filter-description="{{ item.template.description }}"
+            data-filter-keywords="{{ item.template.keywords }}"
+        >
             <div class="xprez-templatecontainer-list__icon">
                 {% if item.template.image %}
-                    {% thumbnail item.template.image "200x150" as thumb %}
-                        <img src="{{ thumb.url }}" alt="{{ item.template.name }}">
+                    {% thumbnail item.template.image "530x400" as thumb %}
+                        <img src="{{ thumb.url }}" alt="{{ item.template.display_key }}">
                     {% endthumbnail %}
                 {% else %}
                     <div>TODO NO IMAGE</div>
                 {% endif %}
             </div>
             <div class="xprez-templatecontainer-list__info">
-                <div class="xprez-templatecontainer-list__module">{{ item.template.name }}</div>
+                <div class="xprez-templatecontainer-list__module">
+                    {{ item.template.display_key }}
+                </div>
+                {% if item.template.description %}
+                    <div class="xprez-templatecontainer-list__description">
+                        {{ item.template.description|linebreaksbr }}
+                    </div>
+                {% endif %}
                 {% if item.allowed == "partial" %}
                     <div class="xprez-warning">
                         {% trans "Some modules are not available here" %}
@@ -31,6 +43,13 @@
                         data-url="{{ item.paste_url }}"
                     >
                         {% include "xprez/shared/icons/paste.html" %} {% trans "Insert" %}
+                    </span>
+                    <span
+                        class="xprez-btn"
+                        data-xprez-templatecontainer-paste
+                        data-url="{{ item.symlink_url }}"
+                    >
+                        {% include "xprez/shared/icons/link.html" %} {% trans "Link" %}
                     </span>
                 {% else %}
                     <span class="xprez-warning">{% trans "Cannot paste here" %}</span>

@@ -157,27 +157,34 @@ XPREZ_FRONT_MEDIA_CSS = {}
 
 XPREZ_DEFAULTS = {
     "section": {
-        "max_width_choice": constants.MAX_WIDTH_MEDIUM,
-        "max_width_custom": 0,
-        "alternate_background": False,
-        "background_color": "",
+        "default": {
+            "max_width_choice": constants.MAX_WIDTH_MEDIUM,
+            "max_width_custom": 0,
+            "alternate_background": False,
+            "background_color": "",
+        },
+        "xprez.TextModule": {
+            "max_width_choice": constants.MAX_WIDTH_SMALL,
+        },
     },
     "section_config": {
-        "columns": 1,
-        "margin_bottom_choice": constants.MARGIN_MEDIUM,
-        "margin_bottom_custom": 0,
-        "padding_left_choice": constants.PADDING_SMALL,
-        "padding_left_custom": 0,
-        "padding_right_choice": constants.PADDING_SMALL,
-        "padding_right_custom": 0,
-        "padding_top_choice": constants.PADDING_NONE,
-        "padding_top_custom": 0,
-        "padding_bottom_choice": constants.PADDING_NONE,
-        "padding_bottom_custom": 0,
-        "gap_choice": constants.GAP_MEDIUM,
-        "gap_custom": 0,
-        "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_STRETCH,
-        "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,
+        "default": {
+            "columns": 1,
+            "margin_bottom_choice": constants.MARGIN_MEDIUM,
+            "margin_bottom_custom": 0,
+            "padding_left_choice": constants.PADDING_SMALL,
+            "padding_left_custom": 0,
+            "padding_right_choice": constants.PADDING_SMALL,
+            "padding_right_custom": 0,
+            "padding_top_choice": constants.PADDING_NONE,
+            "padding_top_custom": 0,
+            "padding_bottom_choice": constants.PADDING_NONE,
+            "padding_bottom_custom": 0,
+            "gap_choice": constants.GAP_MEDIUM,
+            "gap_custom": 0,
+            "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_STRETCH,
+            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,
+        }
     },
     "section_shortcuts": {
         "columns": {

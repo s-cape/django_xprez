@@ -14,7 +14,19 @@
     {% endblock %}
     <div data-controller="XprezClipboardList" data-xprez-clipboard-list-container data-hidden></div>
     {% if not adder_section and not templatecontainer_is_empty %}
-        <div data-controller="XprezTemplateContainerList" data-xprez-templatecontainer-list-container data-hidden></div>
+        <div popover="manual" class="xprez-popover" data-controller="XprezTemplateContainerList">
+            <div class="xprez-popover__content">
+                <div class="xprez-option" data-active="true">
+                    <input
+                        type="text"
+                        data-xprez-templatecontainer-filter
+                        placeholder="{% trans "Filter templates..." %}"
+                        autocomplete="off"
+                    >
+                </div>
+                <div data-xprez-templatecontainer-list-container></div>
+            </div>
+        </div>
     {% endif %}
 
     <ul class="xprez-add-list">

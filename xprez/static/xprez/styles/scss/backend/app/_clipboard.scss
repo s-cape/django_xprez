@@ -14,7 +14,7 @@
 	}
 }
 
-@mixin xprez-panel-list {
+.xprez-clipboard-list {
 	border: 1px solid $b-gray-6;
 	border-radius: 2px;
 	background: lighten($b-gray-3, 2%);
@@ -63,10 +63,52 @@
 	}
 }
 
-.xprez-clipboard-list {
-	@include xprez-panel-list;
-}
-
 .xprez-templatecontainer-list {
-	@include xprez-panel-list;
+	font-size: .875rem;
+
+	&__item {
+		display: flex;
+		flex-direction: column;
+		gap: .5rem;
+		padding: .75rem 0;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid $b-gray-5;
+		}
+
+		&[data-hidden] {
+			display: none;
+		}
+	}
+
+	&__icon {
+		img {
+			width: 100%;
+			height: auto;
+			border-radius: var(--x-admin-border-radius-sm);
+			display: block;
+		}
+	}
+
+	&__info {
+		i {
+			opacity: .7;
+		}
+	}
+
+	&__module {
+		font-weight: 600;
+	}
+
+	&__description {
+		font-size: var(--x-admin-font-size-sm);
+		color: $b-gray-7;
+		margin-top: .25rem;
+	}
+
+	&__actions {
+		&[data-disabled] {
+			opacity: .5;
+		}
+	}
 }

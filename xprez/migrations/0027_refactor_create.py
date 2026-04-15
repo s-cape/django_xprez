@@ -37,18 +37,41 @@ class Migration(migrations.Migration):
                         to="xprez.container",
                     ),
                 ),
-                ("name", models.CharField(max_length=255)),
+                (
+                    "key",
+                    models.SlugField(
+                        blank=True, default="", unique=True, verbose_name="Key"
+                    ),
+                ),
                 (
                     "image",
                     models.ImageField(
-                        blank=True, null=True, upload_to="xprez/templates/"
+                        blank=True,
+                        null=True,
+                        upload_to="xprez/templates/",
+                        verbose_name="Image",
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True, default="", verbose_name="Description"
+                    ),
+                ),
+                (
+                    "keywords",
+                    models.TextField(
+                        blank=True,
+                        default="",
+                        verbose_name="Keywords",
+                        help_text="Comma-separated keywords",
                     ),
                 ),
             ],
             options={
                 "verbose_name": "Template",
                 "verbose_name_plural": "Templates",
-                "ordering": ("name",),
+                "ordering": ("key",),
             },
             bases=("xprez.container",),
         ),

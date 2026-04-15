@@ -50,7 +50,7 @@ import {
     XprezClipboardClipContainer,
 } from './xprez/copy.js';
 import { XprezFileInputFieldController } from './xprez/file_input.js';
-import { XprezAdderSublistBase } from './xprez/adders_sublist_base.js';
+import { WithAdderSublist } from './xprez/adders_sublist_base.js';
 import { XprezClipboardList } from './xprez/clipboard.js';
 import { XprezTemplateContainerList } from './xprez/template_container.js';
 import { XprezControllerBase } from './xprez/controller_base.js';
@@ -138,7 +138,7 @@ export {
     XprezClipboardClipBase,
     XprezClipboardClipContent,
     XprezClipboardClipContainer,
-    XprezAdderSublistBase,
+    WithAdderSublist,
     XprezClipboardList,
     XprezTemplateContainerList,
     XprezCopyMenu,

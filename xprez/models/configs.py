@@ -149,20 +149,26 @@ class SectionConfig(ConfigBase):
         _("Margin bottom"),
         max_length=20,
         choices=constants.MARGIN_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["margin_bottom_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "margin_bottom_choice"
+        ],
         blank=True,
     )
     margin_bottom_custom = models.PositiveIntegerField(
         null=True,
         blank=True,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["margin_bottom_custom"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "margin_bottom_custom"
+        ],
     )
 
     padding_left_choice = models.CharField(
         "Padding left",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_left_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "padding_left_choice"
+        ],
         blank=True,
     )
     padding_left_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -170,7 +176,9 @@ class SectionConfig(ConfigBase):
         _("Padding right"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_right_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "padding_right_choice"
+        ],
         blank=True,
     )
     padding_right_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -178,7 +186,9 @@ class SectionConfig(ConfigBase):
         _("Padding top"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_top_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "padding_top_choice"
+        ],
         blank=True,
     )
     padding_top_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -186,7 +196,9 @@ class SectionConfig(ConfigBase):
         _("Padding bottom"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_bottom_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "padding_bottom_choice"
+        ],
         blank=True,
     )
     padding_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -194,14 +206,14 @@ class SectionConfig(ConfigBase):
     COLUMN_CHOICES = [(i, str(i)) for i in range(1, 9)]
     columns = models.PositiveSmallIntegerField(
         choices=COLUMN_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["columns"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"]["columns"],
     )
 
     gap_choice = models.CharField(
         _("Gap"),
         max_length=20,
         choices=constants.GAP_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["gap_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"]["gap_choice"],
         blank=True,
     )
     gap_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -209,13 +221,17 @@ class SectionConfig(ConfigBase):
     vertical_align_grid = models.CharField(
         max_length=20,
         choices=constants.VERTICAL_ALIGN_GRID_SECTION_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["vertical_align_grid"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "vertical_align_grid"
+        ],
     )
 
     horizontal_align_grid = models.CharField(
         max_length=20,
         choices=constants.HORIZONTAL_ALIGN_GRID_SECTION_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["horizontal_align_grid"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "horizontal_align_grid"
+        ],
     )
 
     def get_css_classes(self):

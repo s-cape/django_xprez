@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.utils.html import format_html
 
 from xprez import constants, models, module_registry, settings
 from xprez.admin.views.ckeditor_upload import XprezAdminViewsCkEditorUploadMixin
@@ -174,5 +175,11 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
 
 @admin.register(models.TemplateContainer)
 class TemplateContainerAdmin(XprezAdmin):
-    list_display = ("name",)
-    search_fields = ("name",)
+    list_display = ("display_key", "image_preview", "description")
+    search_fields = ("key", "description", "keywords")
+
+    @admin.display(description="Image")
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="height:48px;">', obj.image.url)
+        return ""

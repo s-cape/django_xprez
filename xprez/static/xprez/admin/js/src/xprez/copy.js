@@ -12,7 +12,7 @@ export class XprezClipboardClipBase extends XprezControllerBase {
     }
 
     onClipDone() {
-        this.xprez.emit('clipboard-clipped');
+        this.xprez.emit('clipboard-item-clipped');
         this.el.classList.add('success');
         setTimeout(() => {
             this.el.classList.remove('success');

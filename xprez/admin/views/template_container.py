@@ -20,19 +20,28 @@ class XprezAdminViewsTemplateContainerMixin:
             "templatecontainer_paste", include_namespace=True
         )
 
+    def xprez_templatecontainer_symlink_url_name(self):
+        return self.xprez_admin_url_name(
+            "templatecontainer_symlink", include_namespace=True
+        )
+
     def xprez_templatecontainer_list_view(self, request, target_container_pk):
         target_container = get_object_or_404(models.Container, pk=target_container_pk)
         items = []
         for template in self.xprez_templatecontainers(target_container):
             clipboard_item = ClipboardItemContainer(template.pk, self, target_container)
-            paste_url = reverse(
-                self.xprez_templatecontainer_paste_url_name(),
-                args=[template.pk, target_container_pk],
-            )
+            url_args = [template.pk, target_container_pk]
             items += [
                 {
                     "template": template,
-                    "paste_url": paste_url,
+                    "paste_url": reverse(
+                        self.xprez_templatecontainer_paste_url_name(),
+                        args=url_args,
+                    ),
+                    "symlink_url": reverse(
+                        self.xprez_templatecontainer_symlink_url_name(),
+                        args=url_args,
+                    ),
                     "allowed": clipboard_item.allowed,
                 }
             ]
@@ -51,6 +60,15 @@ class XprezAdminViewsTemplateContainerMixin:
             return HttpResponseBadRequest()
         return JsonResponse(clipboard_item.duplicate(request), safe=False)
 
+    def xprez_templatecontainer_symlink_view(
+        self, request, template_pk, target_container_pk
+    ):
+        target_container = get_object_or_404(models.Container, pk=target_container_pk)
+        clipboard_item = ClipboardItemContainer(template_pk, self, target_container)
+        if not clipboard_item.allowed:
+            return HttpResponseBadRequest()
+        return JsonResponse(clipboard_item.symlink(request), safe=False)
+
     def xprez_admin_urls(self):
         return [
             path(
@@ -62,5 +80,10 @@ class XprezAdminViewsTemplateContainerMixin:
                 "xprez-templatecontainer-paste/<int:template_pk>/<int:target_container_pk>/",
                 self.xprez_admin_view(self.xprez_templatecontainer_paste_view),
                 name=self.xprez_admin_url_name("templatecontainer_paste"),
+            ),
+            path(
+                "xprez-templatecontainer-symlink/<int:template_pk>/<int:target_container_pk>/",
+                self.xprez_admin_view(self.xprez_templatecontainer_symlink_view),
+                name=self.xprez_admin_url_name("templatecontainer_symlink"),
             ),
         ]
