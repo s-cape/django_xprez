@@ -1,10 +1,74 @@
-import io
+import ipaddress
+import logging
+import socket
 import urllib
+from pathlib import Path
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
+from django.conf import settings as django_settings
 from django.template import Context, Template
 from django.utils.safestring import mark_safe
 from PIL import Image
+
+logger = logging.getLogger(__name__)
+
+MAX_REMOTE_IMAGE_BYTES = 10 * 1024 * 1024  # 10 MB
+REMOTE_FETCH_TIMEOUT = 5  # seconds
+
+
+def _is_private_ip(hostname):
+    """Return True if hostname resolves to a private/loopback/link-local address."""
+    try:
+        for info in socket.getaddrinfo(hostname, None):
+            addr = ipaddress.ip_address(info[4][0])
+            if addr.is_private or addr.is_loopback or addr.is_link_local:
+                return True
+    except socket.gaierror:
+        return True
+    return False
+
+
+def _open_image(src):
+    """Open image from local MEDIA_ROOT or remote URL with SSRF protections."""
+    media_url = django_settings.MEDIA_URL
+    media_root = Path(django_settings.MEDIA_ROOT)
+
+    if src.startswith(media_url):
+        relative_path = src[len(media_url) :]
+        local_path = media_root / relative_path
+        try:
+            resolved = local_path.resolve()
+            if not str(resolved).startswith(str(media_root.resolve())):
+                logger.warning("Image path traversal blocked: %s", src)
+                return None
+            return Image.open(resolved)
+        except (FileNotFoundError, OSError) as exc:
+            logger.warning("Could not open local image %s: %s", src, exc)
+            return None
+
+    parsed = urlparse(src)
+    if parsed.scheme not in ("http", "https"):
+        logger.warning("Unsupported image URL scheme: %s", src)
+        return None
+
+    if _is_private_ip(parsed.hostname):
+        logger.warning("SSRF blocked: %s resolves to private address", src)
+        return None
+
+    req = urllib.request.Request(src, headers={"User-agent": ""})
+    try:
+        resp = urllib.request.urlopen(req, timeout=REMOTE_FETCH_TIMEOUT)
+        data = resp.read(MAX_REMOTE_IMAGE_BYTES + 1)
+        if len(data) > MAX_REMOTE_IMAGE_BYTES:
+            logger.warning("Remote image too large: %s", src)
+            return None
+        import io
+
+        return Image.open(io.BytesIO(data))
+    except Exception:
+        logger.warning("Failed to fetch remote image: %s", src, exc_info=True)
+        return None
 
 
 def _replace_wrapper_with_templatetag(wrapper, img, request):
@@ -18,17 +82,10 @@ def _replace_wrapper_with_templatetag(wrapper, img, request):
     if not src.lower().startswith("http") and request:
         src = request.build_absolute_uri(src)
 
-    request = urllib.request.Request(
-        src,
-        headers={"User-agent": ""},  # needed for cloudflare
-    )
-
-    try:
-        file = io.BytesIO(urllib.request.urlopen(request).read())
-    except Exception as e:
+    im = _open_image(src)
+    if im is None:
         return
 
-    im = Image.open(file)
     width, height = im.size
     classes = list(img.get("class", [])) + list(wrapper.get("class", []))
     if "image-style-align-right" in classes:
