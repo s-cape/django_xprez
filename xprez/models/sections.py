@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -181,6 +181,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
             and self.admin_form.xprez_configs_all_valid
         )
 
+    @transaction.atomic
     def save_admin_form(self, request):
         super().save_admin_form(request)
         for module in self.admin_form.xprez_modules:
@@ -199,6 +200,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
             self._modules_front = self.modules.filter(saved=True).polymorphs()
         return self._modules_front
 
+    @transaction.atomic
     def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
         new_section = copy_model(self)
         new_section.container = target_container

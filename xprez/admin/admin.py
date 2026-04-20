@@ -1,5 +1,6 @@
 from django.apps import apps
 from django.contrib import admin
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
@@ -163,10 +164,11 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
         return self.xprez_get_form(super().get_form(*args, **kwargs))
 
     def save_model(self, request, obj, form, *args, **kwargs):
-        super().save_model(request, obj, form, *args, **kwargs)
-        # admin's list_editable bypasses overridden get_form, so it may not have xprez_save
-        if hasattr(form, "xprez_save"):
-            form.xprez_save(request)
+        with transaction.atomic():
+            super().save_model(request, obj, form, *args, **kwargs)
+            # admin's list_editable bypasses overridden get_form, so it may not have xprez_save
+            if hasattr(form, "xprez_save"):
+                form.xprez_save(request)
 
     @property
     def media(self, *args, **kwargs):

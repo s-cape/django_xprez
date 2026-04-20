@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from django.apps import apps
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Prefetch
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
@@ -38,6 +38,7 @@ class Container(PolymorphMixin, FrontCacheMixin, models.Model):
     def front_cacheable(self):
         return all(s.front_cacheable for s in self.get_sections_front())
 
+    @transaction.atomic
     def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
         result = []
         for item in self._get_ordered_section_items():

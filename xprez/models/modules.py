@@ -1,5 +1,5 @@
 from django.apps import apps
-from django.db import models
+from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.utils.functional import classproperty
 
@@ -110,6 +110,7 @@ class Module(PolymorphMixin, ContentFrontCacheMixin, ConfigParentMixin, models.M
     def front_template_name(self):
         return f"xprez/modules/{self.module_key}.html"
 
+    @transaction.atomic
     def duplicate_to(self, target_section, saved=False, **kwargs):
         new_module = copy_model(self)
         new_module.section = target_section
@@ -200,6 +201,7 @@ class Module(PolymorphMixin, ContentFrontCacheMixin, ConfigParentMixin, models.M
 
         return is_valid and self.admin_form.xprez_configs_all_valid
 
+    @transaction.atomic
     def save_admin_form(self, request):
         if getattr(self.admin_form, "deleted", False):
             self.delete()

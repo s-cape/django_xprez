@@ -14,6 +14,9 @@ class XprezConfig(AppConfig):
     @staticmethod
     def _register_builtin_admins():
         # Registered here (not via @admin.register) to avoid import-time cycles
+        if not apps.is_installed("django.contrib.admin"):
+            return
+
         from django.contrib import admin
 
         from xprez import models

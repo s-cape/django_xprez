@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import path
@@ -27,8 +28,9 @@ class XprezAdminViewsContentMixin:
             raise Http404 from e
         container = self._get_container_instance(request, container_pk)
         if section_pk is None:
-            section = self._xprez_create_section(content_type, container)
-            self._xprez_create_module(module_class, section)
+            with transaction.atomic():
+                section = self._xprez_create_section(content_type, container)
+                self._xprez_create_module(module_class, section)
             section.build_admin_form(self)
             html = section.render_admin({"request": request})
         else:

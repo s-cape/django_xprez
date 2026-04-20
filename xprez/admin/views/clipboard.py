@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
@@ -247,11 +248,15 @@ class XprezAdminViewsClipboardMixin:
         if not item.allowed:
             return HttpResponseBadRequest()
         elif action == CLIPBOARD_DUPLICATE_ACTION:
-            return JsonResponse(item.duplicate(request, target_section), safe=False)
+            with transaction.atomic():
+                result = item.duplicate(request, target_section)
+            return JsonResponse(result, safe=False)
         elif action == CLIPBOARD_SYMLINK_ACTION:
             if not item.symlink_allowed:
                 return HttpResponseBadRequest()
-            return JsonResponse(item.symlink(request, target_section), safe=False)
+            with transaction.atomic():
+                result = item.symlink(request, target_section)
+            return JsonResponse(result, safe=False)
         else:
             return HttpResponseBadRequest()
 

@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
@@ -71,6 +71,7 @@ class MultiModule(Module):
                 self.admin_form.xprez_items_all_valid = False
         return super_is_valid and self.admin_form.xprez_items_all_valid
 
+    @transaction.atomic
     def save_admin_form(self, request):
         super().save_admin_form(request)
         if not getattr(self.admin_form, "deleted", False):
@@ -95,6 +96,7 @@ class MultiModule(Module):
         item.save()
         return item
 
+    @transaction.atomic
     def duplicate_to(self, target_section, saved=False, **kwargs):
         new_module = super().duplicate_to(target_section, saved=saved, **kwargs)
         self.duplicate_items(new_module, saved=True)
