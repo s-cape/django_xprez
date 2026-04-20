@@ -185,9 +185,12 @@ class ClipboardItemContainer(ClipboardItemBase):
         ).polymorphs()
 
     def duplicate(self, request, target_section=None):
-        created = self.obj.duplicate_to(
-            self.target_container,
-            allowed_module_classes=self.allowed_module_classes,
+        created = (
+            self.obj.duplicate_to(
+                self.target_container,
+                allowed_module_classes=self.allowed_module_classes,
+            )
+            or []
         )
         return [self._render(request, self.xprez_admin, item) for item in created]
 

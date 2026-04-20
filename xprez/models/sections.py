@@ -54,7 +54,7 @@ class SectionBase(models.Model):
         inst.saved = True
         inst.save()
 
-    def duplicate_to(self, target_container, saved=False):
+    def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
         raise NotImplementedError
 
 
