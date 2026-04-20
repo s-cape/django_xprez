@@ -1,58 +1,39 @@
-{% extends "xprez/admin/sections/section_base.html" %}
+{% extends "xprez/admin/sections/section_symlink_base.html" %}
 {% load i18n xprez_admin %}
 
-{% block extra_css_classes %} xprez-section--symlink{% endblock %}
 {% block data_controller %}XprezSectionSymlink{% endblock %}
 {% block data_prefix %}{{ section_symlink.admin_form.prefix }}{% endblock %}
 {% block data_unsaved %}{% if not section_symlink.saved %}data-unsaved{% endif %}{% endblock %}
-
-{% block data_mode %}{# (empty)/delete #}{% endblock %}
 
 {% block before_header %}
     {% include "xprez/admin/includes/adders/content_section_before.html" with xprez_admin=section_symlink.admin_form.xprez_admin adder_container=section_symlink.container %}
 {% endblock %}
 
-{% block header_settings %}
-    <span class="xprez-admin-module__name-icon">
-        {% include "xprez/shared/icons/link.html" %}
-    </span>
-{% endblock %}
-
-{% block header_actions %}
-    {{ block.super }}
-    {% trans "Remove" as title_remove %}
+{% block delete_trigger %}
     {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title=title_remove delete_field=section_symlink.admin_form.delete %}
 {% endblock %}
 
-{% block section_body %}
-    <div class="xprez-admin-module__body xprez-section__body">
-        <div class="xprez-module__content-info">
-            {% if section_symlink.symlink %}
-                {% with symlinked_container=section_symlink.symlink.container.polymorph %}
-                    {% include "xprez/shared/icons/page.html" %}
-                    {% xprez_admin_change_url section_symlink.admin_form.xprez_admin symlinked_container as symlinked_container_url %}
-                    <a {% if symlinked_container_url %}href="{{ symlinked_container_url }}"{% endif %}>
-                        <strong>{{ symlinked_container }}</strong>
-                    </a>
-                {% endwith %}
-                <span class="xprez-module__content-info-arr">&#x203A;</span>
-                {% include "xprez/shared/icons/link.html" %}
-                <strong>
-                    {% blocktrans count counter=section_symlink.symlink.modules.count %}
-                        Section ({{ counter }} module)
-                    {% plural %}
-                        Section ({{ counter }} modules)
-                    {% endblocktrans %}
-                </strong>
-            {% else %}
-                <div class="xprez-warning">{% trans "Linked section not found." %}</div>
-            {% endif %}
-        </div>
-    </div>
-{% endblock %}
-
-{% block delete_info %}
-    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-section" message_subject="link" %}
+{% block symlink_content %}
+    {% if section_symlink.symlink %}
+        {% with symlinked_container=section_symlink.symlink.container.polymorph %}
+            {% include "xprez/shared/icons/page.html" %}
+            {% xprez_admin_change_url section_symlink.admin_form.xprez_admin symlinked_container as symlinked_container_url %}
+            <a {% if symlinked_container_url %}href="{{ symlinked_container_url }}"{% endif %}>
+                <strong>{{ symlinked_container }}</strong>
+            </a>
+        {% endwith %}
+        <span class="xprez-module__content-info-arr">&#x203A;</span>
+        {% include "xprez/shared/icons/link.html" %}
+        <strong>
+            {% blocktrans count counter=section_symlink.symlink.modules.count %}
+                Section ({{ counter }} module)
+            {% plural %}
+                Section ({{ counter }} modules)
+            {% endblocktrans %}
+        </strong>
+    {% else %}
+        <div class="xprez-warning">{% trans "Linked section not found." %}</div>
+    {% endif %}
 {% endblock %}
 
 {% block hidden_fields %}

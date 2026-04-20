@@ -72,6 +72,10 @@ class ClipboardItemBase:
         return reverse(self.xprez_admin.xprez_clipboard_paste_url_name(), args=args)
 
     @property
+    def symlink_allowed(self):
+        return True
+
+    @property
     def duplicate_url(self):
         return self._paste_url(CLIPBOARD_DUPLICATE_ACTION)
 
@@ -167,6 +171,12 @@ class ClipboardItemContainer(ClipboardItemBase):
             return super().allowed
 
     @property
+    def symlink_allowed(self):
+        return not models.ContainerSymlink.would_create_cycle(
+            self.target_container.pk, self.obj.pk
+        )
+
+    @property
     def contained_modules(self):
         return models.Module.objects.filter(
             section__container=self.obj,
@@ -182,8 +192,8 @@ class ClipboardItemContainer(ClipboardItemBase):
         return [self._render(request, self.xprez_admin, item) for item in created]
 
     def symlink(self, request, target_section=None):
-        created = self.obj.symlink_to(self.target_container)
-        return [self._render(request, self.xprez_admin, item) for item in created]
+        new_symlink = self.obj.symlink_to(self.target_container)
+        return [self._render(request, self.xprez_admin, new_symlink)]
 
 
 class XprezAdminViewsClipboardMixin:
@@ -236,6 +246,8 @@ class XprezAdminViewsClipboardMixin:
         elif action == CLIPBOARD_DUPLICATE_ACTION:
             return JsonResponse(item.duplicate(request, target_section), safe=False)
         elif action == CLIPBOARD_SYMLINK_ACTION:
+            if not item.symlink_allowed:
+                return HttpResponseBadRequest()
             return JsonResponse(item.symlink(request, target_section), safe=False)
         else:
             return HttpResponseBadRequest()

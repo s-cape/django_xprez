@@ -318,6 +318,47 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name="ContainerSymlink",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("position", models.PositiveSmallIntegerField(blank=True, default=0)),
+                ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("changed", models.DateTimeField(auto_now=True)),
+                (
+                    "container",
+                    models.ForeignKey(
+                        editable=False,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)ss",
+                        to="xprez.container",
+                    ),
+                ),
+                (
+                    "symlink",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="symlinked_container_set",
+                        to="xprez.container",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Linked container",
+            },
+        ),
+        migrations.CreateModel(
             name="SectionConfig",
             fields=[
                 (

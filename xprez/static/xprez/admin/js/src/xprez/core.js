@@ -1,4 +1,4 @@
-import { XprezSectionSymlink } from './sections.js';
+import { XprezSectionSymlink, XprezContainerSymlink } from './sections.js';
 import { XprezSortable } from './sortable.js';
 import { XprezSyncManager } from './sync.js';
 import { XprezControllerBase } from './controller_base.js';
@@ -33,13 +33,16 @@ export class Xprez extends WithSignals(XprezControllerBase) {
         this.sections = [];
         this.sectionSymlinks = [];
         this.sectionsContainerEl.querySelectorAll(
-            "[data-controller='XprezSection'], [data-controller='XprezSectionSymlink']"
+            "[data-controller='XprezSection'], [data-controller='XprezSectionSymlink'], [data-controller='XprezContainerSymlink']"
         ).forEach(this.initSection.bind(this));
     }
 
     initSection(el) {
         const controller = this.mountChild(el);
-        if (controller instanceof XprezSectionSymlink) {
+        if (
+            controller instanceof XprezSectionSymlink
+            || controller instanceof XprezContainerSymlink
+        ) {
             this.sectionSymlinks.push(controller);
         } else {
             this.sections.push(controller);
@@ -63,7 +66,7 @@ export class Xprez extends WithSignals(XprezControllerBase) {
 
     setPlacementToInputs() {
         this.sectionsContainerEl.querySelectorAll(
-            "[data-controller='XprezSection'], [data-controller='XprezSectionSymlink']"
+            "[data-controller='XprezSection'], [data-controller='XprezSectionSymlink'], [data-controller='XprezContainerSymlink']"
         ).forEach((sectionEl, sectionIndex) => {
             sectionEl.querySelector(`input[name="${sectionEl.dataset.prefix}-position"]`).value = sectionIndex;
         });

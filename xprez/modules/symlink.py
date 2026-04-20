@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from xprez.models.mixins.symlinks import SymlinkMixin
 from xprez.models.modules import Module
 
 
-class ModuleSymlink(Module):
+class ModuleSymlink(SymlinkMixin, Module):
     admin_template_name = "xprez/admin/modules/module_symlink.html"
     admin_icon_template_name = "xprez/shared/icons/modules/module_symlink.html"
     symlink = models.ForeignKey(
@@ -17,6 +18,12 @@ class ModuleSymlink(Module):
 
     class Meta:
         verbose_name = _("Linked module")
+
+    @classmethod
+    def _symlink_targets(cls, module_id):
+        return cls.objects.filter(pk=module_id, symlink__isnull=False).values_list(
+            "symlink_id", flat=True
+        )
 
     @property
     def front_cacheable(self):

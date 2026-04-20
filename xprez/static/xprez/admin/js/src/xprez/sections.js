@@ -6,23 +6,6 @@ import { XprezShortcutParentMixin } from './shortcuts.js';
 import { XprezCollapserMixin } from './collapser.js';
 import { XprezControllerBase } from './controller_base.js';
 
-export class XprezSectionSymlink extends XprezControllerBase {
-    static KEY = "section_symlink";
-    constructor(xprez, el) {
-        super(xprez, el);
-        this.deleter = new XprezSectionDeleter(this);
-        this.adderBefore = this.mountChild(this.el.querySelector("[data-controller='XprezSectionAdderSectionBefore']"));
-        this.initCollapser();
-    }
-
-    id() { return this.el.querySelector("[name='section-symlink-id']").value; }
-    get collapsedStorageKey() { return "xprez-section-symlinks-collapsed"; }
-    get modules() { return []; }
-    get popover() { return null; }
-}
-
-Object.assign(XprezSectionSymlink.prototype, XprezCollapserMixin);
-
 export class XprezSection extends XprezContentBase {
     static KEY = "section";
     constructor(xprez, sectionEl) {
@@ -88,3 +71,29 @@ export class XprezSection extends XprezContentBase {
 }
 
 Object.assign(XprezSection.prototype, XprezCollapserMixin, XprezConfigParentMixin, XprezShortcutParentMixin);
+
+class XprezSectionSymlinkBase extends XprezControllerBase {
+    constructor(xprez, el) {
+        super(xprez, el);
+        this.deleter = new XprezSectionDeleter(this);
+        this.adderBefore = this.mountChild(this.el.querySelector("[data-controller='XprezSectionAdderSectionBefore']"));
+        this.initCollapser();
+    }
+
+    get modules() { return []; }
+    get popover() { return null; }
+}
+
+Object.assign(XprezSectionSymlinkBase.prototype, XprezCollapserMixin);
+
+export class XprezSectionSymlink extends XprezSectionSymlinkBase {
+    static KEY = "section_symlink";
+    id() { return this.el.querySelector("[name='section-symlink-id']").value; }
+    get collapsedStorageKey() { return "xprez-section-symlinks-collapsed"; }
+}
+
+export class XprezContainerSymlink extends XprezSectionSymlinkBase {
+    static KEY = "container_symlink";
+    id() { return this.el.querySelector("[name='container-symlink-id']").value; }
+    get collapsedStorageKey() { return "xprez-container-symlinks-collapsed"; }
+}

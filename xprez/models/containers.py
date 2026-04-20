@@ -25,6 +25,11 @@ class Container(PolymorphMixin, FrontCacheMixin, models.Model):
             self.content_type = class_content_type(self.__class__)
         super().save(*args, **kwargs)
 
+    def invalidate_front_cache(self):
+        super().invalidate_front_cache()
+        for csl in self.symlinked_container_set.filter(saved=True):
+            csl.invalidate_front_cache()
+
     def delete(self, *args, **kwargs):
         self.invalidate_front_cache()
         super().delete(*args, **kwargs)
@@ -45,16 +50,16 @@ class Container(PolymorphMixin, FrontCacheMixin, models.Model):
         return result
 
     def symlink_to(self, target_container, saved=False):
-        result = []
-        for item in self._get_ordered_section_items():
-            new_symlink = item.symlink_to(target_container, saved=saved)
-            result += [new_symlink]
-        return result
+        return target_container.containersymlinks.create(symlink=self, saved=saved)
 
     def _get_ordered_section_items(self):
         sections = list(self.sections.all())
-        symlinks = list(self.sectionsymlinks.all())
-        return sorted(sections + symlinks, key=lambda item: item.position)
+        section_symlinks = list(self.sectionsymlinks.all())
+        container_symlinks = list(self.containersymlinks.all())
+        return sorted(
+            sections + section_symlinks + container_symlinks,
+            key=lambda item: item.position,
+        )
 
     def clipboard_verbose_name(self):
         return self.polymorph._meta.verbose_name
@@ -70,8 +75,16 @@ class Container(PolymorphMixin, FrontCacheMixin, models.Model):
     def get_sections_front(self):
         if not hasattr(self, "_sections_front"):
             sections = list(self.sections.filter(saved=True, visible=True))
-            symlinks = list(self.sectionsymlinks.filter(saved=True, visible=True))
-            self._sections_front = sorted(sections + symlinks, key=lambda s: s.position)
+            section_symlinks = list(
+                self.sectionsymlinks.filter(saved=True, visible=True)
+            )
+            container_symlinks = list(
+                self.containersymlinks.filter(saved=True, visible=True)
+            )
+            self._sections_front = sorted(
+                sections + section_symlinks + container_symlinks,
+                key=lambda s: s.position,
+            )
         return self._sections_front
 
     def preload_front_structure(self):
@@ -91,7 +104,7 @@ class Container(PolymorphMixin, FrontCacheMixin, models.Model):
                 Prefetch("modules", queryset=module_qs),
             )
         )
-        symlinks = list(
+        section_symlinks = list(
             self.sectionsymlinks.filter(saved=True, visible=True)
             .select_related("symlink")
             .prefetch_related(
@@ -99,11 +112,24 @@ class Container(PolymorphMixin, FrontCacheMixin, models.Model):
                 Prefetch("symlink__modules", queryset=module_qs),
             )
         )
+        container_symlinks = list(
+            self.containersymlinks.filter(saved=True, visible=True).select_related(
+                "symlink"
+            )
+        )
+
+        # Preload each unique target container independently; each calls its own
+        # preload_front_structure which populates _sections_front on the target.
+        seen_target_pks = set()
+        for csl in container_symlinks:
+            if csl.symlink and csl.symlink.pk not in seen_target_pks:
+                seen_target_pks.add(csl.symlink.pk)
+                csl.symlink.preload_front_structure()
 
         # Deduplicate symlinked sections against already-loaded sections
         seen_section_pks = {s.pk for s in sections}
         extra_sections = []
-        for sl in symlinks:
+        for sl in section_symlinks:
             if sl.symlink and sl.symlink.pk not in seen_section_pks:
                 seen_section_pks.add(sl.symlink.pk)
                 extra_sections += [sl.symlink]
@@ -150,4 +176,6 @@ class Container(PolymorphMixin, FrontCacheMixin, models.Model):
             for module in section._modules_front:
                 module._configs_front = configs_by_module_pk.get(module.pk, [])
 
-        self._sections_front = sorted(sections + symlinks, key=lambda s: s.position)
+        self._sections_front = sorted(
+            sections + section_symlinks + container_symlinks, key=lambda s: s.position
+        )

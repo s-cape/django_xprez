@@ -22,13 +22,20 @@ class XprezModelFormMixin:
         if instance:
             sections = instance.sections.all()
             section_symlinks = instance.sectionsymlinks.all()
+            container_symlinks = instance.containersymlinks.all()
             if data is not None:
                 section_pks = [int(pk) for pk in data.getlist("section-id")]
                 section_symlink_pks = [
                     int(pk) for pk in data.getlist("section-symlink-id")
                 ]
+                container_symlink_pks = [
+                    int(pk) for pk in data.getlist("container-symlink-id")
+                ]
                 sections = sections.filter(pk__in=section_pks)
                 section_symlinks = section_symlinks.filter(pk__in=section_symlink_pks)
+                container_symlinks = container_symlinks.filter(
+                    pk__in=container_symlink_pks
+                )
 
             for section in sections:
                 section.build_admin_form(self.xprez_admin, data, files)
@@ -36,6 +43,9 @@ class XprezModelFormMixin:
             for section_symlink in section_symlinks:
                 section_symlink.build_admin_form(self.xprez_admin, data, files)
                 self.xprez_sections.append(section_symlink)
+            for container_symlink in container_symlinks:
+                container_symlink.build_admin_form(self.xprez_admin, data, files)
+                self.xprez_sections.append(container_symlink)
         self.xprez_sections.sort(key=lambda s: s.admin_form.get_position())
 
     def is_valid(self):
@@ -173,7 +183,6 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
         return self.xprez_admin_urls() + super().get_urls()
 
 
-@admin.register(models.TemplateContainer)
 class TemplateContainerAdmin(XprezAdmin):
     list_display = ("display_key", "image_preview", "description")
     search_fields = ("key", "description", "keywords")

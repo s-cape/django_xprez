@@ -6,6 +6,7 @@ MODULE_KEY = "module"
 SECTION_KEY = "section"
 SECTION_SYMLINK_KEY = "section_symlink"
 CONTAINER_KEY = "container"
+CONTAINER_SYMLINK_KEY = "container_symlink"
 
 MARGIN_NONE = ""
 MARGIN_SMALL = "small"

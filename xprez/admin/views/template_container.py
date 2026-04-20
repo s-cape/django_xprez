@@ -43,6 +43,7 @@ class XprezAdminViewsTemplateContainerMixin:
                         args=url_args,
                     ),
                     "allowed": clipboard_item.allowed,
+                    "symlink_allowed": clipboard_item.symlink_allowed,
                 }
             ]
         return render(
@@ -65,7 +66,7 @@ class XprezAdminViewsTemplateContainerMixin:
     ):
         target_container = get_object_or_404(models.Container, pk=target_container_pk)
         clipboard_item = ClipboardItemContainer(template_pk, self, target_container)
-        if not clipboard_item.allowed:
+        if not clipboard_item.allowed or not clipboard_item.symlink_allowed:
             return HttpResponseBadRequest()
         return JsonResponse(clipboard_item.symlink(request), safe=False)
 

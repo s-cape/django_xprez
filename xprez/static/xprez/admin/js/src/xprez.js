@@ -1,6 +1,6 @@
 import { Xprez } from './xprez/core.js';
 import { XprezModule, XprezModuleSyncMixin } from './xprez/modules.js';
-import { XprezSection, XprezSectionSymlink } from './xprez/sections.js';
+import { XprezSection, XprezSectionSymlink, XprezContainerSymlink } from './xprez/sections.js';
 import { XprezFieldController } from './xprez/fields.js';
 import {
     XprezAdderBase,
@@ -61,6 +61,7 @@ window.Xprez = Xprez;
 window.XprezAllSectionsCollapseExpand = XprezAllSectionsCollapseExpand;
 window.XprezSection = XprezSection;
 window.XprezSectionSymlink = XprezSectionSymlink;
+window.XprezContainerSymlink = XprezContainerSymlink;
 window.XprezSectionPopover = XprezSectionPopover;
 window.XprezSectionAdderContainerEnd = XprezSectionAdderContainerEnd;
 window.XprezSectionAdderSectionBefore = XprezSectionAdderSectionBefore;
@@ -101,6 +102,7 @@ export {
     XprezModule,
     XprezSection,
     XprezSectionSymlink,
+    XprezContainerSymlink,
     XprezFieldController,
     XprezFileInputFieldController,
     XprezAdderBase,

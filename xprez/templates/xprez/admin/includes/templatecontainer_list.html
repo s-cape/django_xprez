@@ -44,13 +44,15 @@
                     >
                         {% include "xprez/shared/icons/paste.html" %} {% trans "Insert" %}
                     </span>
-                    <span
-                        class="xprez-btn"
-                        data-xprez-templatecontainer-paste
-                        data-url="{{ item.symlink_url }}"
-                    >
-                        {% include "xprez/shared/icons/link.html" %} {% trans "Link" %}
-                    </span>
+                    {% if item.symlink_allowed %}
+                        <span
+                            class="xprez-btn"
+                            data-xprez-templatecontainer-paste
+                            data-url="{{ item.symlink_url }}"
+                        >
+                            {% include "xprez/shared/icons/link.html" %} {% trans "Link" %}
+                        </span>
+                    {% endif %}
                 {% else %}
                     <span class="xprez-warning">{% trans "Cannot paste here" %}</span>
                 {% endif %}

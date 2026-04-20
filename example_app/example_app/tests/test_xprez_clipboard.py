@@ -1,11 +1,12 @@
 import json
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.core.exceptions import ValidationError
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from example_app.models import Page
-from xprez.models import Section, SectionSymlink, TextModule
+from xprez.models import ContainerSymlink, Section, SectionSymlink, TextModule
 from xprez.modules.symlink import ModuleSymlink
 
 
@@ -269,7 +270,7 @@ class ClipboardPasteViewTest(TestCase):
         self.assertEqual(len(data), 2)
         self.assertEqual(target_page.sections.count(), 3)  # original + 2 pasted
 
-    def test_paste_container_symlink_creates_section_symlinks(self):
+    def test_paste_container_symlink_creates_container_symlink(self):
         target_page = Page.objects.create(title="Target2", slug="target2")
         url = reverse(
             "admin:page_clipboard_paste",
@@ -279,8 +280,8 @@ class ClipboardPasteViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
         self.assertEqual(len(data), 1)
-        symlink = SectionSymlink.objects.get(container=target_page)
-        self.assertEqual(symlink.symlink_id, self.section.pk)
+        symlink = ContainerSymlink.objects.get(container=target_page)
+        self.assertEqual(symlink.symlink_id, self.page.pk)
 
     def test_paste_container_with_target_section_returns_400(self):
         target_page = Page.objects.create(title="Target3", slug="target3")
@@ -367,3 +368,158 @@ class ContainerCopyToTest(TestCase):
         new_module = target_section.modules.first().polymorph
         self.assertIsInstance(new_module, TextModule)
         self.assertNotEqual(new_module.pk, self.module.pk)
+
+
+class ContainerSymlinkTest(TestCase):
+    def setUp(self):
+        self.source_page, self.section, self.module = _setup_page_with_module()
+        self.target_page = Page.objects.create(title="Target", slug="target")
+        self.csl = ContainerSymlink.objects.create(
+            container=self.target_page,
+            symlink=self.source_page,
+            saved=True,
+        )
+
+    def test_symlink_to_creates_single_container_symlink(self):
+        other_target = Page.objects.create(title="Other", slug="other")
+        result = self.source_page.symlink_to(other_target, saved=True)
+        self.assertIsInstance(result, ContainerSymlink)
+        self.assertEqual(result.symlink_id, self.source_page.pk)
+        self.assertEqual(result.container_id, other_target.pk)
+
+    def test_get_sections_front_includes_container_symlink(self):
+        items = self.target_page.get_sections_front()
+        self.assertIn(self.csl, items)
+
+    def test_new_section_in_source_reflected_in_target(self):
+        second_section = Section.objects.create(
+            container=self.source_page, position=1, saved=True
+        )
+        source_items = self.source_page.get_sections_front()
+        self.assertIn(second_section, source_items)
+        self.csl.refresh_from_db()
+        self.assertEqual(self.csl.symlink_id, self.source_page.pk)
+        # Symlink row renders the source container; preload + template must see
+        # both sections (section.html uses id="{{ section.instance_key }}").
+        request = RequestFactory().get("/")
+        html = self.csl.render_front({"request": request})
+        self.assertIn(f'id="section-{self.section.pk}"', html)
+        self.assertIn(f'id="section-{second_section.pk}"', html)
+
+    def test_deleting_source_sets_symlink_null(self):
+        self.source_page.delete()
+        self.csl.refresh_from_db()
+        self.assertIsNone(self.csl.symlink)
+
+    def test_render_front_returns_empty_when_symlink_null(self):
+        self.csl.symlink = None
+        self.csl.save()
+        result = self.csl.render_front({})
+        self.assertEqual(result, "")
+
+
+class ContainerSymlinkCycleTest(TestCase):
+    def setUp(self):
+        self.page_a = Page.objects.create(title="A", slug="a")
+        self.page_b = Page.objects.create(title="B", slug="b")
+
+    def test_self_loop_raises(self):
+        with self.assertRaises(ValidationError):
+            ContainerSymlink.objects.create(
+                container=self.page_a, symlink=self.page_a, saved=True
+            )
+
+    def test_ping_pong_raises(self):
+        ContainerSymlink.objects.create(
+            container=self.page_a, symlink=self.page_b, saved=True
+        )
+        with self.assertRaises(ValidationError):
+            ContainerSymlink.objects.create(
+                container=self.page_b, symlink=self.page_a, saved=True
+            )
+
+    def test_three_node_cycle_raises(self):
+        page_c = Page.objects.create(title="C", slug="c")
+        ContainerSymlink.objects.create(
+            container=self.page_a, symlink=self.page_b, saved=True
+        )
+        ContainerSymlink.objects.create(
+            container=self.page_b, symlink=page_c, saved=True
+        )
+        with self.assertRaises(ValidationError):
+            ContainerSymlink.objects.create(
+                container=page_c, symlink=self.page_a, saved=True
+            )
+
+    def test_non_cycle_allowed(self):
+        page_c = Page.objects.create(title="C", slug="c")
+        ContainerSymlink.objects.create(
+            container=self.page_a, symlink=self.page_b, saved=True
+        )
+        # a->b and a->c is fine (no cycle)
+        ContainerSymlink.objects.create(
+            container=self.page_a, symlink=page_c, saved=True
+        )
+
+
+class ModuleSymlinkCycleTest(TestCase):
+    def setUp(self):
+        page, self.section, _ = _setup_page_with_module()
+        self.mod_a = TextModule.objects.create(
+            section=self.section, text="<p>A</p>", position=1, saved=True
+        )
+        self.mod_b = TextModule.objects.create(
+            section=self.section, text="<p>B</p>", position=2, saved=True
+        )
+
+    def test_self_loop_raises(self):
+        ms = ModuleSymlink(section=self.section, position=3, saved=True)
+        ms.symlink = self.mod_a
+        ms.save()  # saved OK; now point it at itself via pk
+        ms.symlink_id = ms.pk
+        with self.assertRaises(ValidationError):
+            ms.save()
+
+    def test_ping_pong_raises(self):
+        # ms_a -> mod_b (terminal); ms_b -> ms_a (chain, no cycle yet)
+        ms_a = ModuleSymlink.objects.create(
+            section=self.section, symlink=self.mod_b, position=3, saved=True
+        )
+        ms_b = ModuleSymlink.objects.create(
+            section=self.section, symlink=ms_a, position=4, saved=True
+        )
+        # Now close the cycle: ms_a -> ms_b -> ms_a
+        ms_a.symlink_id = ms_b.pk
+        with self.assertRaises(ValidationError):
+            ms_a.save()
+
+
+class ContainerSymlinkCycleClipboardTest(TestCase):
+    def setUp(self):
+        _setup_user_and_login(self.client)
+        self.page_a, _, _ = _setup_page_with_module()
+        self.page_b = Page.objects.create(title="B", slug="b")
+
+    def _paste_url(self, source_pk, action, target_pk):
+        return reverse(
+            "admin:page_clipboard_paste",
+            args=["container", source_pk, action, target_pk],
+        )
+
+    def test_symlink_self_loop_returns_400(self):
+        url = self._paste_url(self.page_a.pk, "symlink", self.page_a.pk)
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_symlink_ping_pong_returns_400(self):
+        ContainerSymlink.objects.create(
+            container=self.page_a, symlink=self.page_b, saved=True
+        )
+        url = self._paste_url(self.page_a.pk, "symlink", self.page_b.pk)
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_symlink_allowed_safe_case(self):
+        url = self._paste_url(self.page_a.pk, "symlink", self.page_b.pk)
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 200)

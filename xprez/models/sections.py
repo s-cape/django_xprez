@@ -8,6 +8,7 @@ from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
 from xprez.models.mixins.cache import ContentFrontCacheMixin, FrontCacheMixin
+from xprez.models.mixins.symlinks import SymlinkMixin
 from xprez.utils import copy_model, import_class
 
 
@@ -232,7 +233,30 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         return render_to_string(self.front_template_name, context)
 
 
-class SectionSymlink(FrontCacheMixin, SectionBase):
+class SymlinkSectionMixin:
+    """Shared behaviour for section-like rows that delegate rendering to `symlink`."""
+
+    def delete(self, *args, **kwargs):
+        self.invalidate_front_cache()
+        super().delete(*args, **kwargs)
+
+    def invalidate_front_cache(self):
+        super().invalidate_front_cache()
+        if self.container_id:
+            self.container.invalidate_front_cache()
+
+    def render_front(self, context):
+        if self.symlink:
+            return self.symlink.render_front_cached(context)
+        return ""
+
+    def render_front_cached(self, context):
+        if self.symlink:
+            return self.symlink.render_front_cached(context)
+        return ""
+
+
+class SectionSymlink(SymlinkSectionMixin, FrontCacheMixin, SectionBase):
     KEY = constants.SECTION_SYMLINK_KEY
     front_cacheable = False
     admin_template_name = "xprez/admin/sections/section_symlink.html"
@@ -247,15 +271,6 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
 
     class Meta:
         verbose_name = _("Linked section")
-
-    def delete(self, *args, **kwargs):
-        self.invalidate_front_cache()
-        super().delete(*args, **kwargs)
-
-    def invalidate_front_cache(self):
-        super().invalidate_front_cache()
-        if self.container_id:
-            self.container.invalidate_front_cache()
 
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class("xprez.admin.forms.SectionSymlinkForm")
@@ -281,14 +296,50 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
             container=target_container, symlink=self.symlink, saved=saved
         )
 
-    def render_front(self, context):
-        if self.symlink:
-            return self.symlink.render_front_cached(context)
-        else:
-            return ""
 
-    def render_front_cached(self, context):
-        if self.symlink:
-            return self.symlink.render_front_cached(context)
-        else:
-            return ""
+class ContainerSymlink(SymlinkMixin, SymlinkSectionMixin, FrontCacheMixin, SectionBase):
+    KEY = constants.CONTAINER_SYMLINK_KEY
+    front_cacheable = False
+    admin_template_name = "xprez/admin/sections/container_symlink.html"
+
+    symlink = models.ForeignKey(
+        "xprez.Container",
+        on_delete=models.SET_NULL,
+        null=True,
+        editable=False,
+        related_name="symlinked_container_set",
+    )
+
+    class Meta:
+        verbose_name = _("Linked container")
+
+    @classmethod
+    def _symlink_targets(cls, container_id):
+        return cls.objects.filter(
+            container_id=container_id, symlink__isnull=False
+        ).values_list("symlink_id", flat=True)
+
+    def _symlink_from_id(self):
+        return self.container_id
+
+    def build_admin_form(self, admin, data=None, files=None):
+        form_class = import_class("xprez.admin.forms.ContainerSymlinkForm")
+        self.admin_form = form_class(
+            instance=self, prefix=self.instance_key, data=data, files=files
+        )
+        self.admin_form.xprez_admin = admin
+
+    def render_admin(self, context):
+        context["container_symlink"] = self
+        return super().render_admin(context)
+
+    def duplicate_to(self, target_container, saved=False, **kwargs):
+        return ContainerSymlink.objects.create(
+            container=target_container, symlink=self.symlink, saved=saved
+        )
+
+    def symlink_to(self, target_container, saved=False):
+        """Symlinking a ContainerSymlink points at the same source container."""
+        return ContainerSymlink.objects.create(
+            container=target_container, symlink=self.symlink, saved=saved
+        )
