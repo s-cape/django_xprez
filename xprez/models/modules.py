@@ -9,7 +9,7 @@ from xprez.models.configs import ConfigParentMixin
 from xprez.models.mixins.cache import ContentFrontCacheMixin
 from xprez.models.mixins.polymorph import PolymorphMixin
 from xprez.models.querysets.modules import ModuleQuerySet
-from xprez.utils import class_content_type, copy_model, import_class
+from xprez.utils import class_content_type, copy_model, import_class, resolve_saved
 
 
 class Module(PolymorphMixin, ContentFrontCacheMixin, ConfigParentMixin, models.Model):
@@ -111,11 +111,11 @@ class Module(PolymorphMixin, ContentFrontCacheMixin, ConfigParentMixin, models.M
         return f"xprez/modules/{self.module_key}.html"
 
     @transaction.atomic
-    def duplicate_to(self, target_section, saved=False, **kwargs):
+    def duplicate_to(self, target_section, saved=constants.SAVED_FORCE_FALSE, **kwargs):
         new_module = copy_model(self)
         new_module.section = target_section
         new_module.sync_group = None
-        new_module.saved = saved
+        new_module.saved = resolve_saved(saved, self.saved)
         new_module.save(**kwargs)
         self.duplicate_configs_to(new_module, saved=saved)
         return new_module

@@ -1,6 +1,7 @@
 import copy
 import random
 
+from . import constants
 from .conf import settings
 
 
@@ -43,6 +44,14 @@ def random_string(length, include_special_chars=False):
     if include_special_chars:
         chars += "!@#$%^&*(-_=+)"
     return "".join([random.choice(chars) for i in range(length)])
+
+
+def resolve_saved(mode, source_saved):
+    """Compute the saved flag for a duplicated object given a save mode."""
+    if mode == constants.SAVED_PRESERVE:
+        return source_saved
+    else:
+        return mode is True or mode == constants.SAVED_FORCE_TRUE
 
 
 def truncate_with_ellipsis(string, length):

@@ -9,7 +9,7 @@ from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
 from xprez.models.mixins.cache import ContentFrontCacheMixin, FrontCacheMixin
 from xprez.models.mixins.symlinks import SymlinkMixin
-from xprez.utils import copy_model, import_class
+from xprez.utils import copy_model, import_class, resolve_saved
 
 
 class SectionBase(models.Model):
@@ -201,10 +201,15 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         return self._modules_front
 
     @transaction.atomic
-    def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
+    def duplicate_to(
+        self,
+        target_container,
+        saved=constants.SAVED_FORCE_FALSE,
+        allowed_module_classes=None,
+    ):
         new_section = copy_model(self)
         new_section.container = target_container
-        new_section.saved = saved
+        new_section.saved = resolve_saved(saved, self.saved)
         new_section.save()
         self.duplicate_configs_to(new_section, saved=saved)
         for module in self.modules.all().polymorphs():
@@ -285,9 +290,13 @@ class SectionSymlink(SymlinkSectionMixin, FrontCacheMixin, SectionBase):
         context["section_symlink"] = self
         return super().render_admin(context)
 
-    def duplicate_to(self, target_container, saved=False, **kwargs):
+    def duplicate_to(
+        self, target_container, saved=constants.SAVED_FORCE_FALSE, **kwargs
+    ):
         return SectionSymlink.objects.create(
-            container=target_container, symlink=self.symlink, saved=saved
+            container=target_container,
+            symlink=self.symlink,
+            saved=resolve_saved(saved, self.saved),
         )
 
     def symlink_to(self, target_container, saved=False):
@@ -335,9 +344,13 @@ class ContainerSymlink(SymlinkMixin, SymlinkSectionMixin, FrontCacheMixin, Secti
         context["container_symlink"] = self
         return super().render_admin(context)
 
-    def duplicate_to(self, target_container, saved=False, **kwargs):
+    def duplicate_to(
+        self, target_container, saved=constants.SAVED_FORCE_FALSE, **kwargs
+    ):
         return ContainerSymlink.objects.create(
-            container=target_container, symlink=self.symlink, saved=saved
+            container=target_container,
+            symlink=self.symlink,
+            saved=resolve_saved(saved, self.saved),
         )
 
     def symlink_to(self, target_container, saved=False):

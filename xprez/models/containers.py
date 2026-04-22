@@ -39,7 +39,12 @@ class Container(PolymorphMixin, FrontCacheMixin, models.Model):
         return all(s.front_cacheable for s in self.get_sections_front())
 
     @transaction.atomic
-    def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
+    def duplicate_to(
+        self,
+        target_container,
+        saved=constants.SAVED_FORCE_FALSE,
+        allowed_module_classes=None,
+    ):
         result = []
         for item in self._get_ordered_section_items():
             new_item = item.duplicate_to(

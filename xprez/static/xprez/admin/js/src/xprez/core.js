@@ -8,6 +8,7 @@ export class Xprez extends WithSignals(XprezControllerBase) {
     static KEY = "xprez";
     constructor() {
         super(null, document.querySelector("[data-controller='Xprez']"));
+        this.ready = false;
         this.sectionsContainerEl = this.el.querySelector("[data-xprez-sections-container]");
         this.viewSelectEl = this.el.querySelector("[data-xprez-view-select]");
         this.viewSelectEl.addEventListener("change", this.updateView.bind(this));
@@ -27,6 +28,8 @@ export class Xprez extends WithSignals(XprezControllerBase) {
             {allowNull: true}
         );
         this.initSectionsSortable();
+        this.ready = true;
+        this.emit("ready");
     }
 
     initSections() {
@@ -47,6 +50,7 @@ export class Xprez extends WithSignals(XprezControllerBase) {
         } else {
             this.sections.push(controller);
         }
+        if (this.ready) { this.emit("section-rows-changed"); }
         return controller;
     }
 

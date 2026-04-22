@@ -33,7 +33,7 @@ class NumbersModule(FontSizeModuleMixin, MultiModule):
         if is_new and not no_initial_item:
             self.create_item(saved=True)
 
-    def duplicate_to(self, target_section, saved=False, **kwargs):
+    def duplicate_to(self, target_section, saved=constants.SAVED_FORCE_FALSE, **kwargs):
         kwargs["no_initial_item"] = True
         return super().duplicate_to(target_section, saved=saved, **kwargs)
 

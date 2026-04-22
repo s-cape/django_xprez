@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.mixins.css import CssMixin, CssParentMixin
-from xprez.utils import copy_model, import_class
+from xprez.utils import copy_model, import_class, resolve_saved
 
 BREAKPOINT_CHOICES = tuple(
     [(k, v["name"]) for k, v in settings.XPREZ_BREAKPOINTS.items()]
@@ -35,7 +35,7 @@ class ConfigParentMixin(CssParentMixin):
             config.save()
             return config, True
 
-    def duplicate_configs_to(self, target, saved=False):
+    def duplicate_configs_to(self, target, saved=constants.SAVED_FORCE_FALSE):
         for config in self.get_configs():
             existing_config = (
                 target.get_configs()
@@ -44,7 +44,7 @@ class ConfigParentMixin(CssParentMixin):
             )
             new_config = copy_model(config)
             setattr(new_config, config.parent_attr, target)
-            new_config.saved = saved
+            new_config.saved = resolve_saved(saved, config.saved)
             if existing_config:
                 new_config.pk = existing_config.pk
                 new_config._state.adding = False

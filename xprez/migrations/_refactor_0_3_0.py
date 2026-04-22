@@ -332,8 +332,18 @@ class BoxModuleProcessorMixin:
 
 
 class ExtractImageMixin:
+    # Standalone leading image block. Alternatives (anchor_attrs, img_tag):
+    #  1) <p>[<a>]<img>[</a>]</p>                    — strict
+    #  2) <figure>[<a>]<img>[</a>]…</figure>         — figcaption allowed inside
+    #  3) <div class="medium-insert-images …"><figure>…</figure></div>
+    #     — Medium Editor Insert Plugin wrapper
     IMG_BLOCK_RE = re.compile(
-        r"^\s*<(?:p|figure)[^>]*>\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)\s*(?:</a>\s*)?</(?:p|figure)>\s*",
+        r"^\s*(?:"
+        r"<p[^>]*>\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)\s*(?:</a>\s*)?</p>"
+        r"|<figure[^>]*>\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)[\s\S]*?</figure>"
+        r"|<div\s[^>]*class=[\"'][^\"']*medium-insert-images[^\"']*[\"'][^>]*>\s*"
+        r"<figure[^>]*>\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)[\s\S]*?</figure>\s*</div>"
+        r")\s*",
         re.I | re.S,
     )
     IMG_RE = re.compile(r"^\s*(<img\s[^>]*?/?>)\s*", re.I | re.S)
@@ -395,7 +405,9 @@ class ExtractImageMixin:
         # Standalone image block: <figure> or <p> containing only <img>
         m = E.IMG_BLOCK_RE.match(work)
         if m:
-            path, url = _local_media(m.group(1), m.group(2))
+            anchor_attrs = m.group(1) or m.group(3) or m.group(5)
+            img_tag = m.group(2) or m.group(4) or m.group(6)
+            path, url = _local_media(anchor_attrs, img_tag)
             if path is not None:
                 remaining = prefix + work[m.end() :]
 

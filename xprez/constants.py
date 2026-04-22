@@ -228,3 +228,8 @@ BORDER_RADIUS_CHOICES = (
 )
 
 PREVIEW_TEXT_MAX_LENGTH = 60
+
+# Saved mode for duplicate_to / duplicate_configs_to
+SAVED_FORCE_FALSE = "force_false"  # every copy is a draft (default / clipboard)
+SAVED_FORCE_TRUE = "force_true"  # every copy is marked saved
+SAVED_PRESERVE = "preserve"  # each copy inherits its source's saved flag

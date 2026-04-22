@@ -5,9 +5,10 @@ from django.template.loader import render_to_string
 from django.urls import path
 from django.utils.decorators import method_decorator
 
+from xprez import constants
 from xprez.admin.permissions import xprez_staff_member_required
 from xprez.models.modules import Module
-from xprez.utils import copy_model, import_class
+from xprez.utils import copy_model, import_class, resolve_saved
 
 
 class MultiModule(Module):
@@ -97,13 +98,15 @@ class MultiModule(Module):
         return item
 
     @transaction.atomic
-    def duplicate_to(self, target_section, saved=False, **kwargs):
+    def duplicate_to(self, target_section, saved=constants.SAVED_FORCE_FALSE, **kwargs):
         new_module = super().duplicate_to(target_section, saved=saved, **kwargs)
-        self.duplicate_items(new_module, saved=True)
+        self.duplicate_items(new_module, saved=saved)
         return new_module
 
-    def duplicate_items(self, new_module, saved=False):
-        for item in getattr(self, self.items_attribute).filter(saved=True):
+    def duplicate_items(self, new_module, saved=constants.SAVED_FORCE_FALSE):
+        for item in (
+            getattr(self, self.items_attribute).all().order_by("position", "pk")
+        ):
             item.duplicate_to(new_module, saved=saved)
 
     @classmethod
@@ -174,10 +177,10 @@ class MultiModuleItem(models.Model):
             inst.saved = True
             inst.save()
 
-    def duplicate_to(self, target_module, saved=False):
+    def duplicate_to(self, target_module, saved=constants.SAVED_FORCE_FALSE):
         new_item = copy_model(self)
         setattr(new_item, self.module_foreign_key, target_module)
-        new_item.saved = saved
+        new_item.saved = resolve_saved(saved, self.saved)
         new_item.save()
         return new_item
 

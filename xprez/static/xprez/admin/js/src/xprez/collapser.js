@@ -38,14 +38,19 @@ export class XprezAllSectionsCollapseExpand extends XprezControllerBase {
         this.expanderEl = this.el.querySelector("[data-xprez-all-sections-expander]");
         this.collapserEl.addEventListener("click", this.collapseAll.bind(this));
         this.expanderEl.addEventListener("click", this.expandAll.bind(this));
-        this.xprez.on('section-collapse-changed', () => this.updateButtonState());
+        this.xprez.on("section-collapse-changed", () => this.updateButtonState());
+        this.xprez.on("section-rows-changed", () => this.updateButtonState());
         this.updateButtonState();
     }
 
+    _allSectionRows() {
+        return [...this.xprez.sections, ...this.xprez.sectionSymlinks];
+    }
+
     updateButtonState() {
-        const sections = this.xprez.sections;
-        const allCollapsed = sections.length > 0 && sections.every((s) => s.isCollapsed());
-        const allExpanded = sections.length === 0 || sections.every((s) => !s.isCollapsed());
+        const rows = this._allSectionRows();
+        const allCollapsed = rows.length > 0 && rows.every((s) => s.isCollapsed());
+        const allExpanded = rows.length === 0 || rows.every((s) => !s.isCollapsed());
         if (allCollapsed) {
             this.collapserEl.setAttribute("data-hidden", "");
         } else {
@@ -60,15 +65,15 @@ export class XprezAllSectionsCollapseExpand extends XprezControllerBase {
 
     collapseAll() {
         if (this.collapserEl.hasAttribute("data-hidden")) return;
-        for (const section of Object.values(this.xprez.sections)) {
-            section.collapse();
+        for (const row of this._allSectionRows()) {
+            row.collapse();
         }
     }
 
     expandAll() {
         if (this.expanderEl.hasAttribute("data-hidden")) return;
-        for (const section of Object.values(this.xprez.sections)) {
-            section.expand();
+        for (const row of this._allSectionRows()) {
+            row.expand();
         }
     }
 }
