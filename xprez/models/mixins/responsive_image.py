@@ -21,10 +21,40 @@ class ResponsiveImageParentMixin:
             max_width_values = settings.XPREZ_CSS["section"]["max_width"]["values"]
             return max_width_values.get(width_choice, {}).get(0)
 
+    def get_own_columns(self, config):
+        """
+        Number of image columns this module lays out within a single section cell
+        at the given module config. Default is 1 (single-image modules).
+        Multi-item modules like GalleryModule override to return config.columns.
+        """
+        return 1
+
     def get_breakpoint_ranges(self):
-        """Return (max_width, effective_columns) per breakpoint;"""
+        """
+        Return [(max_width, effective_columns), ...] per breakpoint, combining
+        section columns, module own columns, and module colspan.
+        """
         breakpoints = settings.XPREZ_BREAKPOINTS
-        return [(breakpoints[bp]["max_width"], 1) for bp in breakpoints]
+        section_configs = {
+            c.css_breakpoint: c for c in self.section.get_configs_front()
+        }
+        own_configs = {c.css_breakpoint: c for c in self.get_configs_front()}
+        current_section_cols = 1
+        current_own_cols = 1
+        current_colspan = 1
+        result = []
+        for bp_id in breakpoints:
+            if bp_id in section_configs:
+                current_section_cols = section_configs[bp_id].columns
+            if bp_id in own_configs:
+                current_own_cols = self.get_own_columns(own_configs[bp_id])
+                current_colspan = own_configs[bp_id].colspan
+            effective_columns = max(
+                1,
+                current_section_cols * current_own_cols // current_colspan,
+            )
+            result += [(breakpoints[bp_id]["max_width"], effective_columns)]
+        return result
 
     def get_column_ranges(self):
         """
@@ -58,20 +88,33 @@ class ResponsiveImageParentMixin:
     @staticmethod
     def build_image_sizes(max_width, column_ranges):
         """Build HTML sizes string from (max_width_px, [(max_width, cols), ...])."""
-        entries = []
-        for bp_max_width, effective_columns in column_ranges:
+
+        def slot_value(effective_columns, bp_max_width):
             pct = round(100 / effective_columns, 2)
             vw_size = f"{int(pct) if pct == int(pct) else pct}vw"
             if max_width is None:
-                value = vw_size
-            elif bp_max_width is None or bp_max_width >= max_width:
-                value = f"{round(max_width / effective_columns)}px"
+                return vw_size
+            if bp_max_width is None or bp_max_width >= max_width:
+                return f"{round(max_width / effective_columns)}px"
+            return vw_size
+
+        default_value = None
+        media = []
+        for bp_max_width, effective_columns in column_ranges:
+            v = slot_value(effective_columns, bp_max_width)
+            if bp_max_width is None:
+                default_value = v
             else:
-                value = vw_size
-            entries += [
-                f"(max-width: {bp_max_width}px) {value}" if bp_max_width else value
-            ]
-        return ", ".join(entries)
+                media += [(bp_max_width, v)]
+
+        # First matching media in the attribute wins. Sort (max-width: N) ascending
+        # so the tightest (smallest N) is checked first; otherwise 1199 matches
+        # before 767 and understates e.g. mobile width.
+        media.sort(key=lambda t: t[0])
+        parts = [f"(max-width: {bp}px) {v}" for bp, v in media]
+        if default_value is not None:
+            parts += [default_value]
+        return ", ".join(parts)
 
 
 class ResponsiveImageItemMixin:

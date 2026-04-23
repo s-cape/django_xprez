@@ -10,6 +10,7 @@ from xprez.models import (
     GalleryModule,
     Section,
     SectionConfig,
+    TextModule,
     VideoModule,
 )
 from xprez.models.mixins.responsive_image import (
@@ -66,7 +67,7 @@ class ResponsiveImageHelpersTest(TestCase):
         result = ResponsiveImageParentMixin.build_image_sizes(max_width, column_ranges)
         self.assertEqual(
             result,
-            "100vw, (max-width: 1499px) 100vw, (max-width: 1199px) 100vw",
+            "(max-width: 1199px) 100vw, (max-width: 1499px) 100vw, 100vw",
         )
 
     def test_build_image_sizes_single_column_capped(self):
@@ -79,7 +80,20 @@ class ResponsiveImageHelpersTest(TestCase):
         max_width = 1296
         column_ranges = [(None, 2), (991, 1)]
         result = ResponsiveImageParentMixin.build_image_sizes(max_width, column_ranges)
-        self.assertEqual(result, "648px, (max-width: 991px) 100vw")
+        self.assertEqual(result, "(max-width: 991px) 100vw, 648px")
+
+    def test_build_image_sizes_overlapping_max_width_narrowest_media_first(self):
+        """
+        Browsers use the first matching size. (max-width: 1199) matches at 500px,
+        so it must not appear before (max-width: 767), or mobile is half width.
+        """
+        max_width = 1296
+        column_ranges = [(None, 4), (1199, 4), (767, 1)]
+        result = ResponsiveImageParentMixin.build_image_sizes(max_width, column_ranges)
+        self.assertEqual(
+            result,
+            "(max-width: 767px) 100vw, (max-width: 1199px) 25vw, 324px",
+        )
 
     def test_xprez_srcset_widths_is_non_empty_and_sorted(self):
         """Default XPREZ_SRCSET_WIDTHS is non-empty and strictly ascending."""
@@ -186,7 +200,7 @@ class GalleryModuleSizesTest(TestCase):
         config.save()
         self.assertEqual(
             module.image_sizes,
-            "1296px, (max-width: 1499px) 648px",
+            "(max-width: 1499px) 648px, 1296px",
         )
 
     def test_section_medium_gallery_two_columns_sizes_has_half_max_width_px(self):
@@ -228,7 +242,7 @@ class GalleryModuleSizesTest(TestCase):
         # Effective: bp0 4*4=16, bp2 2*2=4, bp4 1*1=1 → (None,16), (1199,4), (767,1)
         self.assertEqual(
             gallery.image_sizes,
-            "81px, (max-width: 1199px) 25vw, (max-width: 767px) 100vw",
+            "(max-width: 767px) 100vw, (max-width: 1199px) 25vw, 81px",
         )
 
     def test_section_and_gallery_with_colspan_exact_sizes(self):
@@ -259,5 +273,77 @@ class GalleryModuleSizesTest(TestCase):
         # Effective: bp0 4*2//2=4, bp2 2*2=4, bp4 1*1=1 → (None,4), (767,1)
         self.assertEqual(
             gallery.image_sizes,
-            "324px, (max-width: 767px) 100vw",
+            "(max-width: 767px) 100vw, 324px",
         )
+
+
+class TextModuleSizesTest(TestCase):
+    """TextModule image_sizes reflects section columns and own colspan."""
+
+    def _text_module(self, section):
+        return TextModule.objects.create(section=section, position=0, saved=True)
+
+    def test_full_width_section_default_one_column_sizes_100vw(self):
+        section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_FULL)
+        module = self._text_module(section)
+        self.assertEqual(module.image_sizes, "100vw")
+
+    def test_medium_width_section_default_one_column_sizes_1296px(self):
+        section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_MEDIUM)
+        module = self._text_module(section)
+        self.assertEqual(module.image_sizes, "1296px")
+
+    def test_section_four_columns_desktop_one_column_mobile_sizes(self):
+        """Kestria overview layout: 4 columns on desktop, collapsing to 1 on mobile."""
+        section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_MEDIUM)
+        sc0 = section.get_configs().get(css_breakpoint=0)
+        sc0.columns = 4
+        sc0.saved = True
+        sc0.save()
+        SectionConfig.objects.create(
+            section=section, css_breakpoint=4, columns=1, saved=True
+        )
+        module = self._text_module(section)
+        # Effective: bp0..bp3 4 cols, bp4..bp5 1 col → collapses to [(None,4),(767,1)]
+        self.assertEqual(
+            module.image_sizes,
+            "(max-width: 767px) 100vw, 324px",
+        )
+
+    def test_full_width_section_with_colspan_two_halves_section(self):
+        """colspan=2 inside a 4-col section → image spans 2/4 = half section."""
+        section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_FULL)
+        sc0 = section.get_configs().get(css_breakpoint=0)
+        sc0.columns = 4
+        sc0.saved = True
+        sc0.save()
+        module = self._text_module(section)
+        mc0 = module.get_configs().get(css_breakpoint=0)
+        mc0.colspan = 2
+        mc0.saved = True
+        mc0.save()
+        # effective_columns = 4 // 2 = 2 → 50vw
+        self.assertEqual(module.image_sizes, "50vw")
+
+
+class VideoModuleMultiColumnSectionSizesTest(TestCase):
+    """VideoModule poster also respects section columns."""
+
+    def _video_module(self, section):
+        return VideoModule.objects.create(
+            section=section,
+            url="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            video_type="youtube",
+            video_id="dQw4w9WgXcQ",
+            position=0,
+            saved=True,
+        )
+
+    def test_medium_section_two_columns_video_sizes_half_max_width(self):
+        section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_MEDIUM)
+        sc0 = section.get_configs().get(css_breakpoint=0)
+        sc0.columns = 2
+        sc0.saved = True
+        sc0.save()
+        module = self._video_module(section)
+        self.assertEqual(module.image_sizes, "648px")
