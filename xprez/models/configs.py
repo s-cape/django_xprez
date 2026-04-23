@@ -32,6 +32,7 @@ class ConfigParentMixin(CssParentMixin):
             return self.get_configs().get(css_breakpoint=css_breakpoint), False
         except ObjectDoesNotExist:
             config = self.build_config(css_breakpoint)
+            config.saved = self.saved
             config.save()
             return config, True
 
@@ -74,8 +75,6 @@ class ConfigBase(CssMixin, models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        if self.is_default():
-            self.saved = True
         super().save(*args, **kwargs)
         if self.pk:
             getattr(self, self.parent_attr).invalidate_front_cache()
