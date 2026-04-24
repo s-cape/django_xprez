@@ -43,12 +43,13 @@ class MultiModule(Module):
     def get_items_queryset(self, data=None):
         qs = getattr(self, self.items_attribute)
         if data is None:
-            return qs.filter(saved=True).order_by("position")
+            return qs.all().order_by("position")
         else:
-            return list(qs.all())
+            pks = [int(pk) for pk in data.getlist(f"{self.instance_key}-item-id")]
+            return list(qs.filter(pk__in=pks))
 
-    def build_admin_form(self, admin, data=None, files=None):
-        super().build_admin_form(admin, data, files)
+    def build_admin_form(self, xprez_admin, data=None, files=None):
+        super().build_admin_form(xprez_admin, data, files)
         items = self.get_items_queryset(data)
         self.admin_form.xprez_items = []
         for item in items:

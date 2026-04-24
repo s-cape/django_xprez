@@ -2,11 +2,19 @@ import json
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.http import QueryDict
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from example_app.models import Page
-from xprez.models import ContainerSymlink, Section, SectionSymlink, TextModule
+from xprez.models import (
+    ContainerSymlink,
+    NumbersItem,
+    NumbersModule,
+    Section,
+    SectionSymlink,
+    TextModule,
+)
 from xprez.modules.symlink import ModuleSymlink
 
 
@@ -353,6 +361,52 @@ class ModuleCopyToTest(TestCase):
         )
         new_module = self.module.duplicate_to(target_section)
         self.assertEqual(new_module.section, target_section)
+
+
+class MultiModuleCopyToTest(TestCase):
+    def setUp(self):
+        self.page = Page.objects.create(title="P", slug="p")
+        self.section = Section.objects.create(
+            container=self.page, position=0, saved=True
+        )
+        self.module = NumbersModule.objects.create(
+            section=self.section,
+            position=0,
+            saved=True,
+        )
+        # NumbersModule creates one initial item on first save.
+        first_item = self.module.items.get()
+        first_item.number = 100
+        first_item.caption = "A"
+        first_item.saved = True
+        first_item.save()
+        NumbersItem.objects.create(
+            module=self.module,
+            number=200,
+            caption="B",
+            position=1,
+            saved=True,
+        )
+
+    def test_duplicate_to_keeps_items_visible_for_unsaved_module(self):
+        new_module = self.module.duplicate_to(self.section)
+        self.assertFalse(new_module.saved)
+        self.assertEqual(new_module.items.count(), self.module.items.count())
+
+        # Draft duplicated modules should still render their duplicated items in admin.
+        new_module.build_admin_form(None)
+        self.assertEqual(
+            len(new_module.admin_form.xprez_items), self.module.items.count()
+        )
+
+    def test_build_admin_form_with_data_scopes_items_to_posted_ids(self):
+        item_ids = list(self.module.items.values_list("pk", flat=True).order_by("pk"))
+        self.assertEqual(len(item_ids), 2)
+        data = QueryDict("", mutable=True)
+        data.setlist(f"{self.module.instance_key}-item-id", [str(item_ids[0])])
+        self.module.build_admin_form(None, data=data)
+        self.assertEqual(len(self.module.admin_form.xprez_items), 1)
+        self.assertEqual(self.module.admin_form.xprez_items[0].pk, item_ids[0])
 
 
 class ContainerCopyToTest(TestCase):
