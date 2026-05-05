@@ -8,9 +8,7 @@
     {% block wrapper_attributes %}{% endblock %}
 >
     {% block header_wrapper %}
-        <div class="xprez-section__header--centered">
-            {% block header %}{% endblock %}
-        </div>
+        {% block header %}{% endblock %}
     {% endblock %}
     <div data-controller="XprezClipboardList" data-xprez-clipboard-list-container data-hidden></div>
     {% if not adder_section and not templatecontainer_is_empty %}

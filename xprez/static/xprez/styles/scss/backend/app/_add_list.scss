@@ -1,7 +1,7 @@
 .xprez-add-list {
     display:grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: .25rem 1rem;
+    gap: .25rem 1.5rem;
     padding: 0;
     margin: 1rem auto;
     width: fit-content;
@@ -22,6 +22,10 @@
         .xprez-icon {
             display: flex;
             align-items: center;
+        }
+
+        span {
+            // font-size: $x-admin-font-size;
         }
     }
 

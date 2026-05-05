@@ -13,8 +13,11 @@
 	margin: 1rem auto 3rem;
 	line-height: 1.4;
 
-	// TODO: Draft / unsaved indicator
 	[data-unsaved] {
-		border: 2px solid #e67e22;
+		--x-admin-bg: #{$b-blue-purple-light};
+
+		border: 1px dashed $b-blue-purple;
+		padding: .5rem;
+		border-radius: .5rem;
 	}
 }
