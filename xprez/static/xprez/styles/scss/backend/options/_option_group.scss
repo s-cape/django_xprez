@@ -5,6 +5,7 @@
         gap: var(--x-admin-option-group-gap);
         margin-top: var(--x-admin-padding-lg);
         position: relative;
+        background: var(--x-option-group-bg);
 
         .xprez-popover__content > &:first-child {
             margin-top: 0;
