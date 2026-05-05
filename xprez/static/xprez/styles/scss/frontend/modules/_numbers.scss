@@ -23,13 +23,12 @@
 
 	&__number {
 		display: inline-flex;
-		gap: calc($x-numbers-digits-letter-spacing * -1);
+		gap: $x-numbers-suffix-gap;
 	}
 
 	&__item {
 		border-radius: #{$x-numbers-item-border-radius};
 		min-width: var(--x-numbers-item-auto-min-width, 0);
-		// max-width: var(--x-numbers-item-auto-max-width, 100%);
 		display: flex;
 		flex-direction: column;
 		gap: #{$x-numbers-item-text-gap};

@@ -521,6 +521,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: "rem",
                 constants.PADDING_MEDIUM: "rem",
                 constants.PADDING_LARGE: "rem",
+                constants.PADDING_EXTRA_LARGE: "rem",
                 constants.PADDING_CUSTOM: "px",
             },
             "values": {
@@ -528,6 +529,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: {0: 2, 4: 1},
                 constants.PADDING_MEDIUM: {0: 4, 4: 2},
                 constants.PADDING_LARGE: {0: 8, 4: 4},
+                constants.PADDING_EXTRA_LARGE: {0: 11, 2: 6, 4: 4},
             },
         },
         "padding_right": {
@@ -536,6 +538,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: "rem",
                 constants.PADDING_MEDIUM: "rem",
                 constants.PADDING_LARGE: "rem",
+                constants.PADDING_EXTRA_LARGE: "rem",
                 constants.PADDING_CUSTOM: "px",
             },
             "values": {
@@ -543,6 +546,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: {0: 2, 4: 1},
                 constants.PADDING_MEDIUM: {0: 4, 4: 2},
                 constants.PADDING_LARGE: {0: 8, 4: 4},
+                constants.PADDING_EXTRA_LARGE: {0: 11, 2: 6, 4: 4},
             },
         },
         "padding_top": {
@@ -604,6 +608,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: "rem",
                     constants.PADDING_MEDIUM: "rem",
                     constants.PADDING_LARGE: "rem",
+                    constants.PADDING_EXTRA_LARGE: "rem",
                     constants.PADDING_CUSTOM: "px",
                 },
                 "values": {
@@ -611,6 +616,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: {0: 1, 4: 0.5},
                     constants.PADDING_MEDIUM: {0: 2, 4: 1},
                     constants.PADDING_LARGE: {0: 4, 4: 2},
+                    constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
             "padding_right": {
@@ -619,6 +625,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: "rem",
                     constants.PADDING_MEDIUM: "rem",
                     constants.PADDING_LARGE: "rem",
+                    constants.PADDING_EXTRA_LARGE: "rem",
                     constants.PADDING_CUSTOM: "px",
                 },
                 "values": {
@@ -626,6 +633,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: {0: 1, 4: 0.5},
                     constants.PADDING_MEDIUM: {0: 2, 4: 1},
                     constants.PADDING_LARGE: {0: 4, 4: 2},
+                    constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
             "padding_top": {
@@ -634,6 +642,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: "rem",
                     constants.PADDING_MEDIUM: "rem",
                     constants.PADDING_LARGE: "rem",
+                    constants.PADDING_EXTRA_LARGE: "rem",
                     constants.PADDING_CUSTOM: "px",
                 },
                 "values": {
@@ -641,6 +650,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: {0: 1, 4: 0.5},
                     constants.PADDING_MEDIUM: {0: 2, 4: 1},
                     constants.PADDING_LARGE: {0: 4, 4: 2},
+                    constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
             "padding_bottom": {
@@ -649,6 +659,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: "rem",
                     constants.PADDING_MEDIUM: "rem",
                     constants.PADDING_LARGE: "rem",
+                    constants.PADDING_EXTRA_LARGE: "rem",
                     constants.PADDING_CUSTOM: "px",
                 },
                 "values": {
@@ -656,6 +667,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: {0: 1, 4: 0.5},
                     constants.PADDING_MEDIUM: {0: 2, 4: 1},
                     constants.PADDING_LARGE: {0: 4, 4: 2},
+                    constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
             "border_radius": {

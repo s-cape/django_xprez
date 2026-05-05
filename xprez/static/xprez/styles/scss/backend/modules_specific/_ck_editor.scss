@@ -16,6 +16,11 @@
         line-height: 1.2;
         margin-top: 0;
         letter-spacing: 0; 
+        color: var(--x-admin-color);
+
+        strong, b {
+            color: var(--x-admin-color-light);
+        }
     }
 
     p, ul, ol, figure {
