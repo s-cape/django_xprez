@@ -1,9 +1,9 @@
 // ACCORDION
 
-$x-accordion-item-border-bottom: 1px solid rgba(0, 0, 0, 0.15) !default;
-$x-accordion-title-padding: .75rem 0 !default;
-$x-accordion-title-font-weight: 600 !default;
-$x-accordion-title-gap: .5rem !default;
+$x-accordion-item-border-bottom: 1px solid var(--x-base-line-color) !default;
+$x-accordion-title-padding: 1.25rem 0 !default;
+$x-accordion-title-font-weight: 400 !default;
+$x-accordion-title-gap: 1.5rem !default;
 $x-accordion-body-padding-bottom: 1rem !default;
 
 // NUMBERS
