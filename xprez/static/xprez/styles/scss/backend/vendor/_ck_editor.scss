@@ -66,6 +66,12 @@
         background-color: var(--x-admin-btn-secondary-bg);
         color: var(--x-admin-btn-secondary-color);
     }
+
+    .image-style {
+        &-align-right, &-align-left {
+            max-width: 50%;
+        }
+    }
 }
  
 .ck-placeholder {
