@@ -1,0 +1,36 @@
+figure.image {
+    margin-top: .5rem;
+    margin-bottom: $x-text-content-float-image-margin-bottom;
+
+    &.image-style {
+        &-align-right, &-align-left {
+            width: 40%;
+            max-width: $x-text-content-float-image-max-width;
+            min-width: 50px;
+        }
+
+        &-align-right {
+            float: right;
+            margin-left: $x-text-content-float-image-spacing;
+        }
+
+        &-align-left {
+            float: left;
+            margin-right: $x-text-content-float-image-spacing;
+        }
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    figcaption {
+        font-style: italic;
+        text-align: center;
+        font-size: $x-text-content-image-figcaption-font-size;
+        line-height: $x-text-content-image-figcaption-line-height;
+        opacity: $x-text-content-image-figcaption-opacity;
+    }
+}

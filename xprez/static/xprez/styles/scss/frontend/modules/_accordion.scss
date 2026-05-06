@@ -3,8 +3,12 @@
 		flex: 1;
 	}
 
-	&__item:not(:last-child) {
-		border-bottom: $x-accordion-item-border-bottom;
+	&__item {
+		display: flow-root;
+		
+		&:not(:last-child) {
+			border-bottom: $x-accordion-item-border-bottom;
+		}
 	}
 
 	&__title {
