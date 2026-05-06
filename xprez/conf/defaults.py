@@ -167,6 +167,9 @@ XPREZ_DEFAULTS = {
         "xprez.TextModule": {
             "max_width_choice": constants.MAX_WIDTH_SMALL,
         },
+        "xprez.AccordionModule": {
+            "max_width_choice": constants.MAX_WIDTH_SMALL,
+        },
     },
     "section_config": {
         "default": {

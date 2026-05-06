@@ -1,9 +1,9 @@
 .xprez-accordion {
 	.xprez-module-inner {
-		flex-direction: column;
+		flex: 1;
 	}
 
-	&__item {
+	&__item:not(:last-child) {
 		border-bottom: $x-accordion-item-border-bottom;
 	}
 
@@ -14,21 +14,25 @@
 		gap: $x-accordion-title-gap;
 		width: 100%;
 		padding: $x-accordion-title-padding;
-		font-weight: $x-accordion-title-font-weight;
-		background: none;
-		border: 0;
-		color: inherit;
-		text-align: left;
+		text-wrap: balance;
 		cursor: pointer;
+		user-select: none;
 
-		&::after {
-			content: "+";
+		.svg-icon {
 			flex-shrink: 0;
 			transition: transform 0.2s ease;
+			width: 1.75rem;
+			height: 1.75rem;
 		}
 
-		&[aria-expanded="true"]::after {
+		&[aria-expanded="true"] .svg-icon {
 			transform: rotate(45deg);
+		}
+
+		h4 {
+			margin-bottom: 0;
+			color: var(--x-base-color);
+			font-weight: $x-accordion-title-font-weight;
 		}
 	}
 
