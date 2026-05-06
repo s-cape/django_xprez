@@ -1,3 +1,5 @@
+import functools
+
 from django.apps import apps
 from django.contrib import admin
 from django.db import transaction
@@ -119,6 +121,10 @@ class XprezAdminMixin(
     def xprez_admin_view(self, view):
         return view
 
+    def xprez_admin_module_view(self, view):
+        """Wrap a module classmethod view, pre-binding `xprez_admin` as first arg."""
+        return self.xprez_admin_view(functools.partial(view, self))
+
     def xprez_admin_url_name(self, name, include_namespace=False):
         name = f"{self.model._meta.model_name}_{name}"
         if include_namespace and self.xprez_url_namespace:
@@ -131,7 +137,7 @@ class XprezAdminMixin(
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsTemplateContainerMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsCkEditorUploadMixin.xprez_admin_urls(self)
-        urls += module_registry.get_admin_urls()
+        urls += module_registry.get_admin_urls(self)
         return urls
 
     def xprez_admin_change_url(self, obj):

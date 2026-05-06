@@ -232,7 +232,7 @@ class Module(PolymorphMixin, ContentFrontCacheMixin, ConfigParentMixin, models.M
         return bool(self.admin_form.errors)
 
     @classmethod
-    def get_admin_urls(cls):
+    def get_admin_urls(cls, xprez_admin):
         return []
 
     @classproperty

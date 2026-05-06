@@ -4,7 +4,7 @@ from django.utils.translation import ngettext
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm, MultiModuleItemForm
-from xprez.ck_editor.forms import CkEditorFileUploadFormMixin
+from xprez.ck_editor.forms import CkEditorFileUploadXprezAdminFormMixin
 from xprez.conf import settings as xprez_settings
 from xprez.models.mixins.font_size import FontSizeModuleMixin
 from xprez.models.multi_module import MultiModule, MultiModuleItem
@@ -52,18 +52,12 @@ class AccordionItem(MultiModuleItem):
     text = models.TextField(_("Text"), blank=True)
 
 
-class AccordionItemForm(CkEditorFileUploadFormMixin, MultiModuleItemForm):
-    def xprez_ckeditor_file_upload_url_name(self):
-        return xprez_settings.XPREZ_CK_EDITOR_FILE_UPLOAD_URL_NAME
-
-    def xprez_ckeditor_file_upload_dir(self):
-        return xprez_settings.XPREZ_CK_EDITOR_FILE_UPLOAD_DIR
-
+class AccordionItemForm(CkEditorFileUploadXprezAdminFormMixin, MultiModuleItemForm):
     class Meta(MultiModuleItemForm.Meta):
         model = AccordionItem
         fields = "__all__"
         widgets = {
-            "text": import_class(xprez_settings.XPREZ_CK_EDITOR_MODULE_WIDGET)(),
+            "text": import_class(xprez_settings.XPREZ_CK_EDITOR_MODULE_WIDGET),
         }
 
 

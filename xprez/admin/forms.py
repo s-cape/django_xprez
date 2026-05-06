@@ -148,7 +148,8 @@ class MultiModuleItemForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm
 
     system_fields = DeletableFormMixin.system_fields + ("position",)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, xprez_admin, *args, **kwargs):
+        self.xprez_admin = xprez_admin
         super().__init__(*args, **kwargs)
         fk_name = getattr(self.instance.__class__, "module_foreign_key", None)
         if fk_name and fk_name in self.fields:

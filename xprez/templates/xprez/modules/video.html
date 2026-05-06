@@ -1,5 +1,4 @@
 {% extends "xprez/modules/base.html" %}
-{% load thumbnail xprez %}
 
 {% block css_class %}{{ block.super }}{% if module.poster_image %} xprez-video--with-poster{% endif %}{% endblock %}
 
@@ -8,14 +7,7 @@
         {% if module.poster_image %}
             {% with geoms=module.srcset_geometries %}
                 <div class="xprez-video__poster xprez-video-poster-{{ module.video_id }}" data-video-poster>
-                    <img class="xprez-video__poster-img"
-                        {% thumbnail module.poster_image geoms.0 crop="50%" format="WEBP" quality=70 as t_src %}
-                            src="{{ t_src.url|build_absolute_uri }}"
-                            width="{{ t_src.width }}"
-                            height="{{ t_src.height }}"
-                        {% endthumbnail %}
-                        srcset="{% for geom in geoms %}{% thumbnail module.poster_image geom crop="50%" format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
-                        sizes="{{ module.image_sizes }}" />
+                    {% include "xprez/includes/responsive_image.html" with source=module.poster_image geometries=geoms sizes=module.image_sizes crop="50%" css_class="xprez-video__poster-img" %}
                     <div class="xprez-video__btn-cont">
                         {% include "xprez/shared/icons/video_play.html" %}
                     </div>

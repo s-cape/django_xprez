@@ -21,16 +21,7 @@
                                 srcset="{% for geom in source.geometries %}{% thumbnail module.media geom crop=source.thumbnail_crop format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
                                 sizes="{{ module.image_sizes }}">
                         {% else %}
-                            <img class="xprez-text__image"
-                                {% thumbnail module.media source.geometries.0 crop=source.thumbnail_crop format="WEBP" quality=70 as t_src %}
-                                    src="{{ t_src.url|build_absolute_uri }}"
-                                    width="{{ t_src.width }}"
-                                    height="{{ t_src.height }}"
-                                {% endthumbnail %}
-                                srcset="{% for geom in source.geometries %}{% thumbnail module.media geom crop=source.thumbnail_crop format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
-                                sizes="{{ module.image_sizes }}"
-                                alt="{{ module.media.name }}"
-                                loading="lazy">
+                            {% include "xprez/includes/responsive_image.html" with source=module.media geometries=source.geometries sizes=module.image_sizes alt=module.media.name crop=source.thumbnail_crop css_class="xprez-text__image" loading="lazy" %}
                         {% endif %}
                     {% endfor %}
                 </picture>

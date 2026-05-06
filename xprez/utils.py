@@ -1,6 +1,8 @@
 import copy
 import random
 
+from django.utils.module_loading import import_string
+
 from . import constants
 from .conf import settings
 
@@ -17,12 +19,7 @@ def copy_model(instance):
 def import_class(cls):
     """Import a class from a dotted path string, or return cls if already a class."""
     if isinstance(cls, str):
-        dot = cls.rfind(".")
-        if dot == -1:
-            raise ImportError(f"import_class requires a dotted path, got: {cls!r}")
-        module_path, classname = cls[:dot], cls[dot + 1 :]
-        m = __import__(module_path, globals(), locals(), [classname])
-        return getattr(m, classname)
+        return import_string(cls)
     return cls
 
 

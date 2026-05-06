@@ -1,6 +1,7 @@
 from django import template
 
 from ..media import FrontendMediaCollector
+from ..models.mixins.responsive_image import InlineResponsiveImage
 from ..utils import build_absolute_uri as _build_absolute_uri
 
 register = template.Library()
@@ -31,71 +32,21 @@ def ckeditor_image(
     context,
     url,
     align,
-    width,
-    height,
     caption=None,
     alt_text=None,
     link_url="",
     link_new_window=False,
 ):
-    return _editor_module_image(
-        context,
-        url,
-        align,
-        width,
-        height,
-        caption=caption,
-        alt_text=alt_text,
-        link_url=link_url,
-        link_new_window=link_new_window,
-    )
-
-
-def _editor_module_image(
-    context,
-    url,
-    align,
-    width,
-    height,
-    caption=None,
-    alt_text=None,
-    link_url="",
-    link_new_window=False,
-):
-    MAX_SIZE = {
-        "center": (1000, 1000),
-        "left": (450, 450),
-        "right": (450, 450),
-    }
-
-    LIGHTBOX_THRESHOLD_SIZE = {
-        "center": (1200, 1200),
-        "left": (550, 550),
-        "right": (550, 550),
-    }
-
-    threshold_size = {
-        "width": LIGHTBOX_THRESHOLD_SIZE[align][0],
-        "height": LIGHTBOX_THRESHOLD_SIZE[align][1],
-    }
-    max_size = {"width": MAX_SIZE[align][0], "height": MAX_SIZE[align][1]}
-
-    lightbox = threshold_size["width"] < width or threshold_size["height"] < height
-
-    image_context = {
+    image = InlineResponsiveImage(url, parent_module=context.get("module"))
+    return {
+        "image": image,
         "url": _build_absolute_uri(url),
         "align": align,
-        "width": width,
-        "height": height,
-        "lightbox": lightbox,
-        "max_size": f"{max_size['width']}x{max_size['height']}",
-        "link_url": link_url,
-        "link_new_window": link_new_window,
         "caption": caption,
         "alt_text": alt_text,
+        "link_url": link_url,
+        "link_new_window": link_new_window,
     }
-
-    return image_context
 
 
 @register.filter()

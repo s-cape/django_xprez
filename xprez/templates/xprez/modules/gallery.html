@@ -17,14 +17,7 @@
             {% endif %}
             data-alt="{{ alt }}"
         >
-            <img class="xprez-gallery__item-img" alt="{{ alt }}"
-                {% thumbnail item.file geoms.0 crop=module.thumbnail_crop format="WEBP" quality=70 filename_stem=alt as t_src %}
-                    src="{{ t_src.url|build_absolute_uri }}"
-                    width="{{ t_src.width }}"
-                    height="{{ t_src.height }}"
-                {% endthumbnail %}
-                srcset="{% for geom in geoms %}{% thumbnail item.file geom crop=module.thumbnail_crop format="WEBP" quality=70 filename_stem=alt as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
-                sizes="{{ module.image_sizes }}" />
+            {% include "xprez/includes/responsive_image.html" with source=item.file geometries=geoms sizes=module.image_sizes alt=alt crop=module.thumbnail_crop filename_stem=alt css_class="xprez-gallery__item-img" %}
             {% if item.description %}
                 <figcaption class="xprez-gallery__item-caption">{{ item.description }}</figcaption>
             {% endif %}

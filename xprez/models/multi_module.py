@@ -3,10 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import path
-from django.utils.decorators import method_decorator
 
 from xprez import constants
-from xprez.admin.permissions import xprez_staff_member_required
 from xprez.models.modules import Module
 from xprez.utils import copy_model, import_class, resolve_saved
 
@@ -55,7 +53,11 @@ class MultiModule(Module):
         for item in items:
             form_class = self.get_admin_item_form_class(item)
             item.admin_form = form_class(
-                instance=item, prefix=item.instance_key, data=data, files=files
+                xprez_admin=xprez_admin,
+                instance=item,
+                prefix=item.instance_key,
+                data=data,
+                files=files,
             )
             self.admin_form.xprez_items += [item]
         if data:
@@ -111,23 +113,24 @@ class MultiModule(Module):
             item.duplicate_to(new_module, saved=saved)
 
     @classmethod
-    def get_admin_urls(cls):
+    def get_admin_urls(cls, xprez_admin):
         cls_name = cls.__name__.lower()
         return [
             path(
                 f"{cls_name}/add-item/<int:module_pk>/",
-                cls.add_item_view,
+                xprez_admin.xprez_admin_module_view(cls.add_item_view),
                 name=cls.get_add_item_url_name(),
             ),
         ]
 
     @classmethod
-    @method_decorator(xprez_staff_member_required)
-    def add_item_view(cls, request, module_pk):
+    def add_item_view(cls, xprez_admin, request, module_pk):
         module = get_object_or_404(cls, pk=module_pk)
         item = module.create_item()
         form_class = module.get_admin_item_form_class(item)
-        item.admin_form = form_class(instance=item, prefix=item.instance_key)
+        item.admin_form = form_class(
+            xprez_admin=xprez_admin, instance=item, prefix=item.instance_key
+        )
         html = render_to_string(
             cls.admin_item_template_name,
             {"item": item, "module": module},
@@ -205,8 +208,7 @@ class UploadMultiModule(MultiModule):
         return item_model.create_from_file(file, self)
 
     @classmethod
-    @method_decorator(xprez_staff_member_required)
-    def upload_item_view(cls, request, module_pk):
+    def upload_item_view(cls, xprez_admin, request, module_pk):
         """Handle one file per request; returns HTML for the new item row."""
         module = get_object_or_404(cls, pk=module_pk)
         file = request.FILES.get("file")
@@ -214,7 +216,9 @@ class UploadMultiModule(MultiModule):
             return JsonResponse(status=400, data={"error": "No file uploaded"})
         item = module.create_item_from_file(file)
         form_class = module.get_admin_item_form_class(item)
-        item.admin_form = form_class(instance=item, prefix=item.instance_key)
+        item.admin_form = form_class(
+            xprez_admin=xprez_admin, instance=item, prefix=item.instance_key
+        )
         return HttpResponse(
             render_to_string(
                 cls.admin_item_template_name,
@@ -223,12 +227,12 @@ class UploadMultiModule(MultiModule):
         )
 
     @classmethod
-    def get_admin_urls(cls):
+    def get_admin_urls(cls, xprez_admin):
         cls_name = cls.__name__.lower()
-        return super().get_admin_urls() + [
+        return super().get_admin_urls(xprez_admin) + [
             path(
                 f"{cls_name}/upload-item/<int:module_pk>/",
-                cls.upload_item_view,
+                xprez_admin.xprez_admin_module_view(cls.upload_item_view),
                 name=cls.get_upload_url_name(),
             ),
         ]

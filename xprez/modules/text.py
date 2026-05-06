@@ -10,7 +10,8 @@ from xprez.admin.forms import ModuleForm
 from xprez.ck_editor import parse_text as ckeditor_parse_text
 from xprez.ck_editor.forms import CkEditorFileUploadXprezAdminFormMixin
 from xprez.ck_editor.widgets import CkEditorWidget
-from xprez.conf import defaults, settings
+from xprez.conf import defaults
+from xprez.conf import settings as xprez_settings
 from xprez.models.configs import ModuleConfig
 from xprez.models.mixins.font_size import FontSizeModuleMixin
 from xprez.models.mixins.responsive_image import (
@@ -63,8 +64,8 @@ class TextModule(ResponsiveImageSourcesMixin, ResponsiveImageMixin, TextModuleBa
         else:
             return ""
 
-    IMAGE_EXTENSIONS = settings.XPREZ_IMAGE_EXTENSIONS
-    VIDEO_EXTENSIONS = settings.XPREZ_VIDEO_EXTENSIONS
+    IMAGE_EXTENSIONS = xprez_settings.XPREZ_IMAGE_EXTENSIONS
+    VIDEO_EXTENSIONS = xprez_settings.XPREZ_VIDEO_EXTENSIONS
 
     @property
     def media_is_image(self):
@@ -96,7 +97,8 @@ class TextModule(ResponsiveImageSourcesMixin, ResponsiveImageMixin, TextModuleBa
 
     def render_front(self, context):
         context["parsed_text"] = ckeditor_parse_text.render_text_parsed(
-            ckeditor_parse_text.parse_text(self.text, context["request"])
+            ckeditor_parse_text.parse_text(self.text),
+            extra_context={"module": self},
         )
         return super().render_front(context)
 
@@ -224,7 +226,7 @@ class TextModuleBaseForm(CkEditorFileUploadXprezAdminFormMixin, ModuleForm):
         model = TextModuleBase
         fields = "__all__"
         widgets = {
-            "text": import_class(settings.XPREZ_CK_EDITOR_MODULE_WIDGET),
+            "text": import_class(xprez_settings.XPREZ_CK_EDITOR_MODULE_WIDGET),
         }
 
 

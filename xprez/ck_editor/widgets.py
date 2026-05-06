@@ -97,8 +97,6 @@ class CkEditorFileUploadWidgetMixin:
 
 
 class CkEditorTableMixin:
-    """Adds table toolbar and config to any CKEditor widget."""
-
     def get_config(self, *args, **kwargs):
         config = super().get_config(*args, **kwargs)
         config["toolbar"] += ("|", "insertTable")
@@ -114,27 +112,16 @@ class CkEditorTableMixin:
 
 
 class CkEditorWidgetFullWithUpload(CkEditorFileUploadWidgetMixin, CkEditorWidgetFull):
-    """Full editor with image upload and MediaEmbed."""
-
-    def get_config(self, *args, **kwargs):
-        config = super().get_config(*args, **kwargs)
-        config["blockToolbar"] += ("MediaEmbed",)
-        config["toolbar"] += ("MediaEmbed",)
-        config["mediaEmbed"] = {"previewsInData": True}
-        return config
+    pass
 
 
 class CkEditorWidgetFullWithTable(CkEditorTableMixin, CkEditorWidgetFull):
-    """Full editor with table support, without image insert."""
-
     pass
 
 
 class CkEditorWidgetFullWithUploadAndTable(
     CkEditorTableMixin, CkEditorWidgetFullWithUpload
 ):
-    """Full editor with image upload, MediaEmbed, and table support."""
-
     pass
 
 

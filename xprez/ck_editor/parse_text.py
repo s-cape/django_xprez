@@ -1,35 +1,15 @@
-import io
-import urllib
-
 from bs4 import BeautifulSoup
 from django.template import Context, Template
 from django.utils.safestring import mark_safe
-from PIL import Image
 
 
-def _replace_wrapper_with_templatetag(wrapper, img, request):
-    # wrapper and img may be the same tag - that is the case of inline images
+def _replace_wrapper_with_templatetag(wrapper, img):
+    # wrapper and img may be the same tag (inline images)
     src = img.get("src")
-
     if not src:
         wrapper.extract()
         return
 
-    if not src.lower().startswith("http") and request:
-        src = request.build_absolute_uri(src)
-
-    request = urllib.request.Request(
-        src,
-        headers={"User-agent": ""},  # needed for cloudflare
-    )
-
-    try:
-        file = io.BytesIO(urllib.request.urlopen(request).read())
-    except Exception as e:
-        return
-
-    im = Image.open(file)
-    width, height = im.size
     classes = list(img.get("class", [])) + list(wrapper.get("class", []))
     if "image-style-align-right" in classes:
         align = "right"
@@ -39,37 +19,22 @@ def _replace_wrapper_with_templatetag(wrapper, img, request):
         align = "center"
 
     caption_tag = wrapper.find("figcaption")
-    if caption_tag:
-        caption = caption_tag.text
-    else:
-        caption = ""
+    caption = caption_tag.text if caption_tag else ""
 
     alt_text = img.get("alt", "")
 
-    tag_link = wrapper.find("a")
-    if tag_link:
-        link_url = tag_link.get("href")
-        link_new_window = tag_link.get("target") == "_blank"
-    else:
-        link_url = ""
-        link_new_window = False
+    link_tag = wrapper.find("a")
+    link_url = link_tag.get("href") if link_tag else ""
+    link_new_window = bool(link_tag and link_tag.get("target") == "_blank")
 
     wrapper.replaceWith(
-        '{%% ckeditor_image "%s" "%s" %s %s caption="%s" alt_text="%s" link_url="%s" link_new_window=%s %%}'
-        % (
-            src,
-            align,
-            width,
-            height,
-            caption,
-            alt_text,
-            link_url,
-            "True" if link_new_window else "False",
-        )
+        f'{{% ckeditor_image "{src}" "{align}"'
+        f' caption="{caption}" alt_text="{alt_text}"'
+        f' link_url="{link_url}" link_new_window={link_new_window} %}}'
     )
 
 
-def parse_text(text_source, request):
+def parse_text(text_source):
     if not text_source:
         return ""
     soup = BeautifulSoup(text_source, "html5lib")
@@ -84,18 +49,22 @@ def parse_text(text_source, request):
     for wrapper in soup.find_all("figure", attrs={"class": "image"}):
         img = wrapper.find("img")
         if img:
-            _replace_wrapper_with_templatetag(wrapper, img, request)
+            _replace_wrapper_with_templatetag(wrapper, img)
 
-    inline_images = []
-    inline_images += soup.find_all("img", attrs={"class": "image-style-align-left"})
-    inline_images += soup.find_all("img", attrs={"class": "image-style-align-right"})
+    inline_images = soup.find_all(
+        "img", attrs={"class": "image-style-align-left"}
+    ) + soup.find_all("img", attrs={"class": "image-style-align-right"})
     for img in inline_images:
-        _replace_wrapper_with_templatetag(img, img, request)
+        _replace_wrapper_with_templatetag(img, img)
+
+    # Catch-all: plain <img> tags not wrapped in a figure and without alignment classes
+    for img in soup.find_all("img"):
+        _replace_wrapper_with_templatetag(img, img)
 
     for tag in soup.find_all(attrs={"contenteditable": True}):
         del tag["contenteditable"]
 
-    return str(soup)
+    return soup.body.decode_contents()
 
 
 def render_text_parsed(text_parsed, extra_context=None):

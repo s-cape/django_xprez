@@ -29,10 +29,10 @@ class ModuleRegistry:
     def unregister(self, module_class):
         del self._registry[module_class.class_content_type()]
 
-    def get_admin_urls(self):
+    def get_admin_urls(self, xprez_admin):
         urls = []
         for module in self._registry.values():
-            urls += module.get_admin_urls()
+            urls += module.get_admin_urls(xprez_admin)
         return urls
 
     def modules(self, include=None, exclude=None):

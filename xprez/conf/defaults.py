@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
 
-XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidget"
+XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFullWithUpload"
 XPREZ_CK_EDITOR_FILE_UPLOAD_URL_NAME = None
 XPREZ_CK_EDITOR_FILE_UPLOAD_DIR = "xprez_ckeditor_uploads"
 XPREZ_CK_EDITOR_SIMPLE_CONFIG = {

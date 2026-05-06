@@ -1,4 +1,12 @@
+import io
+import urllib.request
+from contextlib import ExitStack, contextmanager
+from urllib.parse import urlparse
+
+from django.conf import settings as django_settings
+from django.core.files.storage import default_storage
 from django.utils.functional import cached_property
+from PIL import Image
 
 from xprez import constants
 from xprez.conf import settings
@@ -227,3 +235,92 @@ class ResponsiveImageMixin(ResponsiveImageParentMixin, ResponsiveImageItemMixin)
     Combined mixin for when parent and item are the same object.
     (E.g. TextModule, VideoModule)
     """
+
+
+class _NaturalSize:
+    """Adapter exposing .width so InlineResponsiveImage fits ResponsiveImageItemMixin."""
+
+    def __init__(self, width):
+        self.width = width
+
+
+class InlineResponsiveImage(ResponsiveImageItemMixin):
+    """Responsive geometry for an image referenced by URL (e.g. a CKEditor inline
+    image). Borrows image_sizes from a parent ResponsiveImageParentMixin module.
+    """
+
+    def __init__(self, src, parent_module=None):
+        self.src = src
+        self.parent_module = parent_module
+
+    @cached_property
+    def local_storage_path(self):
+        """Relative storage path for local media URLs, or None for remote URLs."""
+        media_url = django_settings.MEDIA_URL
+        path = urlparse(self.src).path
+        if not media_url or not path.startswith(media_url):
+            return None
+        return path[len(media_url) :]
+
+    @property
+    def sorl_src(self):
+        """Source to pass to sorl-thumbnail: storage path for local, URL for remote."""
+        return self.local_storage_path or self.src
+
+    @cached_property
+    def natural_size(self):
+        """(width, height) of the source image, or (None, None) if unavailable."""
+        try:
+            with self.open_source() as f:
+                with Image.open(f) as im:
+                    return im.size
+        except Exception:
+            return (None, None)
+
+    @property
+    def image_sizes(self):
+        return self.parent_module.image_sizes if self.parent_module else ""
+
+    def get_image_field(self):
+        width, _ = self.natural_size
+        if width is None:
+            raise AttributeError("natural size unavailable")
+        return _NaturalSize(width)
+
+    def get_image_aspect_ratio(self):
+        width, height = self.natural_size
+        return (width or 1, height or 1)
+
+    @contextmanager
+    def open_source(self):
+        """Open the source image as a file-like, trying local storage then HTTP.
+        Raises FileNotFoundError if neither source can be opened.
+        """
+        with ExitStack() as stack:
+            for opener in (self._open_local, self._open_remote):
+                try:
+                    f = stack.enter_context(opener())
+                    break
+                except Exception:
+                    pass
+            else:
+                raise FileNotFoundError(f"Cannot open {self.src!r}")
+            yield f
+
+    @contextmanager
+    def _open_local(self):
+        """Open via Django storage. Raises if URL isn't local media."""
+        rel_path = self.local_storage_path
+        if rel_path is None:
+            raise ValueError(f"{self.src!r} is not a local media URL")
+        with default_storage.open(rel_path) as f:
+            yield f
+
+    @contextmanager
+    def _open_remote(self):
+        """Open via HTTP. Raises if URL isn't HTTP(S)."""
+        if not self.src.lower().startswith(("http://", "https://")):
+            raise ValueError(f"{self.src!r} is not an HTTP(S) URL")
+        req = urllib.request.Request(self.src, headers={"User-agent": ""})
+        with urllib.request.urlopen(req) as resp:
+            yield io.BytesIO(resp.read())
