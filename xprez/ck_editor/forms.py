@@ -16,6 +16,12 @@ class CkEditorFileUploadFormMixin:
         super().__init__(*args, **kwargs)
         self._bind_ckeditor_file_upload_widgets()
 
+    # def xprez_ckeditor_file_upload_url_name(self):
+    #     return xprez_settings.XPREZ_CK_EDITOR_FILE_UPLOAD_URL_NAME
+
+    # def xprez_ckeditor_file_upload_dir(self):
+    #     return xprez_settings.XPREZ_CK_EDITOR_FILE_UPLOAD_DIR
+
     def _bind_ckeditor_file_upload_widgets(self):
         url_name = self.xprez_ckeditor_file_upload_url_name()
         upload_dir = self.xprez_ckeditor_file_upload_dir()

@@ -1,3 +1,4 @@
+from .accordion import *  # noqa
 from .anchor import *  # noqa
 from .code_input import *  # noqa
 from .code_template import *  # noqa

@@ -1,0 +1,43 @@
+.xprez-accordion {
+	.xprez-module-inner {
+		flex-direction: column;
+	}
+
+	&__item {
+		border-bottom: $x-accordion-item-border-bottom;
+	}
+
+	&__title {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: $x-accordion-title-gap;
+		width: 100%;
+		padding: $x-accordion-title-padding;
+		font-weight: $x-accordion-title-font-weight;
+		background: none;
+		border: 0;
+		color: inherit;
+		text-align: left;
+		cursor: pointer;
+
+		&::after {
+			content: "+";
+			flex-shrink: 0;
+			transition: transform 0.2s ease;
+		}
+
+		&[aria-expanded="true"]::after {
+			transform: rotate(45deg);
+		}
+	}
+
+	&__body {
+		display: none;
+		padding-bottom: $x-accordion-body-padding-bottom;
+	}
+
+	&__item.is-open &__body {
+		display: block;
+	}
+}

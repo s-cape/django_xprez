@@ -92,6 +92,7 @@ XPREZ_MODULES_AUTOREGISTER_BUILTINS = [
     "xprez.TextModule",
     "xprez.QuoteModule",
     "xprez.GalleryModule",
+    "xprez.AccordionModule",
     "xprez.FilesModule",
     "xprez.VideoModule",
     "xprez.NumbersModule",
