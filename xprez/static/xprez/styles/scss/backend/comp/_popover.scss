@@ -20,7 +20,7 @@
         filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.05)) drop-shadow(0px 0px 34px rgba(0, 0, 0, 0.30));
         box-sizing: content-box;
         width: var(--x-admin-popover-width);
-        padding: var(--x-admin-padding-lg);
+        padding: 0 var(--x-admin-padding-lg) var(--x-admin-padding-lg);
         overflow-y: auto;
         
         &::-webkit-scrollbar {

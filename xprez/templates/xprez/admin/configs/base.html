@@ -20,7 +20,6 @@
             {% block delete_trigger %}{% endblock %}
         {% endif %}
     </div>
-
     {% include "xprez/admin/form/errors.html" with errors=config.admin_form.non_field_errors %}
     {% block fields %}{% endblock %}
 
