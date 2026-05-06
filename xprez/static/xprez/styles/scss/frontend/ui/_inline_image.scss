@@ -1,27 +1,33 @@
-figure.image {
-    margin-top: .5rem;
-    margin-bottom: $x-text-content-float-image-margin-bottom;
+.xprez-inline-image {
+    figure {
+        margin-top: .5rem;
+        margin-bottom: $x-text-content-float-image-margin-bottom;
+    }
 
-    &.image-style {
-        &-align-right, &-align-left {
+    &--right, &--left {
+        figure {
             width: 40%;
             max-width: $x-text-content-float-image-max-width;
             min-width: 50px;
         }
+    }
 
-        &-align-right {
+    &--right {
+        figure {
             float: right;
             margin-left: $x-text-content-float-image-spacing;
         }
+    }
 
-        &-align-left {
+    &--left {
+        figure {
             float: left;
             margin-right: $x-text-content-float-image-spacing;
         }
     }
 
     img {
-        max-width: 100%;
+        width: 100%;
         height: auto;
         display: block;
     }

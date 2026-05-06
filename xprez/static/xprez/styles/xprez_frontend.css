@@ -1,10 +1,10 @@
 /* Error: Undefined variable.
  *   ,
- * 3 |     margin-bottom: $x-text-content-float-image-margin-bottom;
- *   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ * 4 |         margin-bottom: $x-text-content-float-image-margin-bottom;
+ *   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  *   '
- *   styles/scss/frontend/vendor/_ck_editor.scss 3:20  @import
- *   styles/scss/frontend/xprez_frontend.scss 11:9     root stylesheet */
+ *   styles/scss/frontend/ui/_inline_image.scss 4:24  @import
+ *   styles/scss/frontend/xprez_frontend.scss 10:9    root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -14,5 +14,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a   \2577 \a 3 \2502      margin-bottom: $x-text-content-float-image-margin-bottom;\a   \2502                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   styles/scss/frontend/vendor/_ck_editor.scss 3:20  @import\a   styles/scss/frontend/xprez_frontend.scss 11:9     root stylesheet";
+  content: "Error: Undefined variable.\a   \2577 \a 4 \2502          margin-bottom: $x-text-content-float-image-margin-bottom;\a   \2502                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   styles/scss/frontend/ui/_inline_image.scss 4:24  @import\a   styles/scss/frontend/xprez_frontend.scss 10:9    root stylesheet";
 }
