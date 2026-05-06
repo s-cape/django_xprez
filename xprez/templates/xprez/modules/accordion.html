@@ -14,7 +14,7 @@
                 {% include "xprez/shared/icons/plus_simple.html" %}
             </div>
             <div class="xprez-accordion__body" data-accordion-body>
-                {{ item.text|safe }}
+                {{ item.render_text }}
             </div>
         </div>
     {% endfor %}

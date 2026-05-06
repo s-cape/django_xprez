@@ -238,7 +238,7 @@ class ResponsiveImageMixin(ResponsiveImageParentMixin, ResponsiveImageItemMixin)
 
 
 class _NaturalSize:
-    """Adapter exposing .width so InlineResponsiveImage fits ResponsiveImageItemMixin."""
+    """Adapter exposing .width for ResponsiveImageItemMixin."""
 
     def __init__(self, width):
         self.width = width
@@ -249,9 +249,9 @@ class InlineResponsiveImage(ResponsiveImageItemMixin):
     image). Borrows image_sizes from a parent ResponsiveImageParentMixin module.
     """
 
-    def __init__(self, src, parent_module=None):
+    def __init__(self, src, responsive_image_parent):
         self.src = src
-        self.parent_module = parent_module
+        self.responsive_image_parent = responsive_image_parent
 
     @cached_property
     def local_storage_path(self):
@@ -279,7 +279,7 @@ class InlineResponsiveImage(ResponsiveImageItemMixin):
 
     @property
     def image_sizes(self):
-        return self.parent_module.image_sizes if self.parent_module else ""
+        return self.responsive_image_parent.image_sizes
 
     def get_image_field(self):
         width, _ = self.natural_size

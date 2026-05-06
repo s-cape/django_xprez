@@ -37,7 +37,7 @@ def ckeditor_image(
     link_url="",
     link_new_window=False,
 ):
-    image = InlineResponsiveImage(url, parent_module=context.get("module"))
+    image = InlineResponsiveImage(url, responsive_image_parent=context["module"])
     return {
         "image": image,
         "url": _build_absolute_uri(url),

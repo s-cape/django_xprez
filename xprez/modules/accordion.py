@@ -4,14 +4,16 @@ from django.utils.translation import ngettext
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm, MultiModuleItemForm
+from xprez.ck_editor import parse_text as ckeditor_parse_text
 from xprez.ck_editor.forms import CkEditorFileUploadXprezAdminFormMixin
 from xprez.conf import settings as xprez_settings
 from xprez.models.mixins.font_size import FontSizeModuleMixin
+from xprez.models.mixins.responsive_image import ResponsiveImageParentMixin
 from xprez.models.multi_module import MultiModule, MultiModuleItem
 from xprez.utils import import_class
 
 
-class AccordionModule(FontSizeModuleMixin, MultiModule):
+class AccordionModule(ResponsiveImageParentMixin, FontSizeModuleMixin, MultiModule):
     front_template_name = "xprez/modules/accordion.html"
     admin_template_name = "xprez/admin/modules/accordion/accordion.html"
     admin_item_template_name = "xprez/admin/modules/accordion/accordion_item.html"
@@ -50,6 +52,12 @@ class AccordionItem(MultiModuleItem):
     )
     title = models.CharField(_("Title"), max_length=255, blank=True)
     text = models.TextField(_("Text"), blank=True)
+
+    def render_text(self):
+        return ckeditor_parse_text.render_text_parsed(
+            ckeditor_parse_text.parse_text(self.text),
+            extra_context={"module": self.module},
+        )
 
 
 class AccordionItemForm(CkEditorFileUploadXprezAdminFormMixin, MultiModuleItemForm):
