@@ -47,14 +47,17 @@
         height: auto;
     }
 
+    picture {
+        display: block;
+    }
+
     &__image {
         aspect-ratio: var(--x-media-crop, unset);
         object-fit: cover;
         object-position: var(--x-background-img-position);
-        max-width: 100%;
-        display: inline-block;
-        height: auto;
+        display: block !important;
         border-radius: var(--x-media-border-radius, 0);
+        
     }
 
     figure {
