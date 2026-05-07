@@ -187,8 +187,6 @@ class Module(PolymorphMixin, ContentFrontCacheMixin, ConfigParentMixin, models.M
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(xprez_admin, data, files)
-        if getattr(xprez_admin, "xprez_url_namespace", None):
-            self._xprez_admin_namespace = xprez_admin.xprez_url_namespace
 
     def is_admin_form_valid(self):
         is_valid = self.admin_form.is_valid()

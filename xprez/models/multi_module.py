@@ -119,7 +119,7 @@ class MultiModule(Module):
             path(
                 f"{cls_name}/add-item/<int:module_pk>/",
                 xprez_admin.xprez_admin_module_view(cls.add_item_view),
-                name=cls.get_add_item_url_name(),
+                name=xprez_admin.xprez_admin_url_name(cls._add_item_url_name()),
             ),
         ]
 
@@ -138,13 +138,14 @@ class MultiModule(Module):
         return JsonResponse([{"html": html}], safe=False)
 
     @classmethod
-    def get_add_item_url_name(cls):
+    def _add_item_url_name(cls):
         return f"{cls.__name__.lower()}_ajax_add_item"
 
     @property
     def xprez_add_item_url_name(self):
-        ns = getattr(self, "_xprez_admin_namespace", None)
-        return f"{ns}:{self.get_add_item_url_name()}" if ns else ""
+        return self.admin_form.xprez_admin.xprez_admin_url_name(
+            self._add_item_url_name(), include_namespace=True
+        )
 
     class Meta:
         abstract = True
@@ -233,15 +234,16 @@ class UploadMultiModule(MultiModule):
             path(
                 f"{cls_name}/upload-item/<int:module_pk>/",
                 xprez_admin.xprez_admin_module_view(cls.upload_item_view),
-                name=cls.get_upload_url_name(),
+                name=xprez_admin.xprez_admin_url_name(cls._upload_item_url_name()),
             ),
         ]
 
     @classmethod
-    def get_upload_url_name(cls):
+    def _upload_item_url_name(cls):
         return f"{cls.__name__.lower()}_ajax_upload_item"
 
     @property
     def xprez_upload_item_url_name(self):
-        ns = getattr(self, "_xprez_admin_namespace", None)
-        return f"{ns}:{self.get_upload_url_name()}" if ns else ""
+        return self.admin_form.xprez_admin.xprez_admin_url_name(
+            self._upload_item_url_name(), include_namespace=True
+        )
