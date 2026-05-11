@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 PACKAGE = "xprez"
 NAME = "django_xprez"
 DESCRIPTION = "Django CMS for presentation websites"
-AUTHOR = "Michal Májský, Martin Kappel, Jakub Dolejšek, Michal Tilsch - s-cape.cz & mimatik.com"
+AUTHOR = "Jakub Dolejšek, Martin Kappel, Michal Tilsch, Michal Májský - s-cape.cz & mimatik.com"
 AUTHOR_EMAIL = "jakub.dolejsek@s-cape.cz"
 URL = "https://github.com/s-cape/django_xprez"
 VERSION = "0.3.0"
