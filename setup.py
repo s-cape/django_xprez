@@ -9,7 +9,7 @@ DESCRIPTION = "Django CMS for presentation websites"
 AUTHOR = "Jakub Dolejšek, Martin Kappel, Michal Tilsch, Michal Májský - s-cape.cz & mimatik.com"
 AUTHOR_EMAIL = "jakub.dolejsek@s-cape.cz"
 URL = "https://github.com/s-cape/django_xprez"
-VERSION = "0.3.0"
+VERSION = "0.2.99"
 LICENSE = "Mozilla Public License 2.0 (MPL 2.0)"
 
 if __name__ == "__main__":
