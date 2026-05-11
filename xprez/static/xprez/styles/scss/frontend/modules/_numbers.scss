@@ -21,6 +21,10 @@
 		letter-spacing: $x-numbers-digits-letter-spacing;
 	}
 
+	&__suffix {
+		letter-spacing: $x-numbers-digits-letter-spacing;
+	}
+
 	&__number {
 		display: inline-flex;
 		gap: $x-numbers-suffix-gap;
