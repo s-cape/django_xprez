@@ -1,0 +1,36 @@
+{% load i18n %}
+<div
+    class="xprez-admin-multi-item"
+    data-controller="{{ module.admin_item_js_controller_class }}"
+    data-prefix="{{ item.admin_form.prefix }}"
+    data-mode=""
+    {% if item.admin_has_errors %}data-has-errors{% endif %}
+>
+    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-multi-module-item" %}
+    {% block header %}
+        <div class="xprez-admin-multi-item__header">
+            <span class="xprez-admin-multi-item__header-handle" data-draggable-multi-module-item-handle>{% include "xprez/shared/icons/grip.html" %}</span>
+            <div class="xprez-admin-multi-item__header-content">{% block header_content %}{% endblock %}</div>
+            {% block delete_trigger %}
+                {% trans "Remove" as title_remove %}
+                {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-multi-module-item-delete" title=title_remove delete_field=item.admin_form.delete %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+
+    {% block content %}
+        <div class="xprez-admin-multi-item__fields">
+            {% include "xprez/admin/form/errors.html" with errors=item.admin_form.non_field_errors %}
+            {% block main_fields %}
+                {% for field in item.admin_form.get_main_fields %}
+                    <div class="xprez-option-row">{% include "xprez/admin/form/field.html" with field=field %}</div>
+                {% endfor %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+
+    {% block hidden_fields %}
+        <input type="hidden" name="{{ module.instance_key }}-item-id" value="{{ item.pk }}">
+        {{ item.admin_form.position.as_hidden }}
+    {% endblock %}
+</div>

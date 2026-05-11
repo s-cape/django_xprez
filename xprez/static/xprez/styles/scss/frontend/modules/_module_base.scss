@@ -1,0 +1,61 @@
+.xprez-module {
+    --x-module-display: flex;
+    --x-box-bg: var(--x-background-color, var(--x-box-base-bg));
+    --x-box-border: var(--x-border-width, 1px) var(--x-border-style, solid) var(--x-border-color, var(--x-box-border-color));
+
+    grid-row: span var(--x-rowspan, 1);
+    grid-column: span var(--x-colspan, 1);
+    border-radius: var(--x-border-radius, 0);
+    display: var(--x-module-display);
+    justify-content: center;
+    align-items: var(--x-vertical-align-flex, stretch);
+    justify-content: var(--x-horizontal-align-flex, center);
+    color: var(--x-base-color);
+    text-align: var(--x-text-align, left);
+    aspect-ratio: var(--x-aspect-ratio, unset);
+    order: var(--x-order, 1);
+
+    &-inner {
+        padding: var(--x-padding, 0);  
+
+        & > :last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &[onclick*="window.location.href"] {
+        cursor: pointer;
+        transition: translate 0.2s ease-in-out;
+
+        &:hover {
+            translate: 0 -0.125em;
+        }
+    }
+}
+
+@each $number, $breakpoint in $x-breakpoints {
+    @media (max-width: $breakpoint) {
+        .xprez-#{$number}-background {
+            background: var(--x-box-bg);
+        }
+
+        .xprez-#{$number}-background-reset {
+            background: transparent;
+        }
+        .xprez-#{$number}-border {
+            border: var(--x-box-border);
+        }
+
+        .xprez-#{$number}-border-reset {
+            border: none;
+        }
+
+        .xprez-#{$number}-invisible {
+            display: none;
+        }
+
+        .xprez-#{$number}-invisible-reset {
+            display: var(--x-module-display);
+        }
+    }
+}

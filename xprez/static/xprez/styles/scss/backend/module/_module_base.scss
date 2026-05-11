@@ -1,0 +1,124 @@
+.xprez-admin-module {
+    border-radius: var(--x-admin-border-radius-md);
+    overflow: hidden;
+    position: relative;
+	border: 1px solid $b-gray-4;
+	margin: 1rem 0;
+	background: var(--x-admin-module-bg); 
+
+    &[data-mode="edit"],
+    &[data-mode="selected"],
+    &[data-mode="selectable"] {
+        --x-toggle-display: inline-flex;
+        --x-icon-display: none;
+    }
+
+    &[data-mode="edit"],
+    &[data-mode="selected"] {
+        [data-xprez-select-trigger] {
+            .x-variant-checked { display: inline; }
+            .x-variant-unchecked { display: none; }
+        }
+    }
+
+    &[data-mode="selectable"] {
+        [data-xprez-select-trigger] {
+            .x-variant-checked { display: none; }
+            .x-variant-unchecked { display: inline; }
+        }
+    }
+
+    &__header {
+        padding: var(--x-admin-padding-sm) var(--x-admin-padding-md);
+        background-color: var(--x-admin-content-header-bg);
+        display: flex;
+        align-items: center;
+        gap: var(--x-admin-padding-md);
+
+        .xprez-admin-module[data-mode="edit"] & {
+            --x-admin-content-header-bg: var(--x-admin-marker-checked-text-bg);
+            --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
+            --x-admin-option-button-hover-bg: var(--x-admin-marker-checked-hover-text-bg);  
+            --x-admin-option-bg: var(--x-admin-marker-checked-bg);
+            --x-admin-option-color: var(--x-admin-marker-checked-color);
+        }
+
+        .xprez-admin-module[data-mode="edit"] &,
+        .xprez-admin-module[data-mode="selected"] &,
+        .xprez-admin-module[data-mode="selectable"] & {
+            .xprez-option {
+                opacity: 1;
+            }
+        }
+
+        .xprez-admin-module[data-mode="selectable"] & {
+            --x-admin-option-bg: transparent;
+        }
+        
+        .xprez-admin-module[data-mode="selected"] & {
+            --x-admin-option-bg: var(--x-admin-marker-checked-bg);
+            --x-admin-option-color: var(--x-admin-marker-checked-color);
+        }
+    }
+
+    &__name {
+        --x-admin-option-icon-size: 28px;
+        --x-admin-checkbox-checked-color:  var(--x-admin-marker-checked-bg);
+
+        font-size: var(--x-admin-font-size-sm);
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        &-icon {
+            height: var(--x-admin-option-height);
+            width: var(--x-admin-option-height);
+            display: var(--x-icon-display, inline-flex);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .xprez-option {
+            display: var(--x-toggle-display, none);
+        }
+    }
+
+    &__actions {
+        display: inline-flex;
+
+        &--right {
+            margin-left: auto;
+        }
+    }
+
+    &__body {
+        padding: var(--x-admin-padding-lg);
+        background-color: var(--x-admin-content-bg);
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        align-items: stretch;
+    }
+}
+
+.xprez[data-sync-processing] {
+    .xprez-admin-module[data-mode="selected"] [data-xprez-select-trigger],
+    [data-xprez-module-sync-selected] {
+        background-color: $b-green;
+        color: $white;
+    }
+
+    .xprez-icon-sync {
+        animation: xprez-admin-module-sync-spin 1s linear infinite;
+
+        @keyframes xprez-admin-module-sync-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    }
+}

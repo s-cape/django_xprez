@@ -1,0 +1,6 @@
+{% extends "xprez/includes/video_embeds/_base.html" %}
+
+{% block video_provider %}vimeo{% endblock %}
+{% block js_controller_class %}XprezVideoVimeo{% endblock %}
+
+{% block embed_src %}https://player.vimeo.com/video/{{ video_id }}?color=ffffff&portrait=0&badge=0&api=1{% endblock %}

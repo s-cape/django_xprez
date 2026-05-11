@@ -1,0 +1,26 @@
+.xprez-section {
+    background-color:  var(--x-section-background-color, #{$x-section-bg});
+    margin-bottom: var(--x-margin-bottom);
+
+    &-inner {
+        display: grid;
+        gap: var(--x-gap);
+        grid-template-columns: repeat(var(--x-columns), 1fr);
+        align-content: var(--x-vertical-align-grid);
+        justify-items: var(--x-horizontal-align-grid);
+
+        padding: var(--x-padding);
+        max-width: var(--x-max-width);
+        margin-left: auto;
+        margin-right: auto;
+
+        & > .xprez-module {
+            align-self: var(--x-vertical-align-grid);
+            justify-self: var(--x-horizontal-align-grid);
+        }
+    }
+
+    &.xprez-alternate-background {
+        background-color:  var(--x-section-background-color, #{$x-alt-section-bg});
+    }
+}

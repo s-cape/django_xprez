@@ -1,0 +1,86 @@
+.xprez-section {
+    --x-admin-section-main-divider-bg: var(--x-admin-section-divider-bg);
+    --x-admin-section-main-divider-height: var(--x-admin-section-divider-height);
+
+    margin: 1rem 0;
+    position: relative;
+    background: var(--x-admin-bg);
+
+    &[data-mode="edit"] {
+        --x-admin-section-main-divider-bg: #{$b-pink};
+        --x-admin-section-main-divider-height: 3px;
+
+        .xprez-section__header [data-xprez-section-popover-trigger] {
+            --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
+            --x-admin-option-button-bg: var(--x-admin-marker-checked-text-bg);
+        }
+    }
+
+    &[data-collapsed] {
+        .xprez-section__footer, .xprez-section-grid, .xprez-section__body {
+            display: none;
+        }
+
+        [data-xprez-section-collapser] {
+            transform: rotate(-90deg);
+        }
+    }
+
+    &__header {
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        position: relative;
+
+        > * {
+            --x-admin-option-button-bg: var(--x-admin-bg, #{$admin-bg});
+
+            z-index: 2;
+            background: var(--x-admin-bg, $admin-bg);
+        }
+
+        &::before {
+            content: "";
+            height: var(--x-admin-section-main-divider-height);
+            width: 100%;
+            background: var(--x-admin-section-main-divider-bg);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-1px);
+            transition: all 0.3s ease-in-out;
+        }
+    }
+
+    &__settings {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 $g-b;
+
+        @media screen and (min-width: 1000px) {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            height: 100%;
+            transform: translateX(-50%);
+        }
+
+        & > * {
+            flex-wrap: wrap;
+        }
+    }
+
+    &__actions {
+        position: relative;
+        padding-left: $g-b;
+        display: flex;
+        align-items: center;
+    }
+	
+    &__footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+}

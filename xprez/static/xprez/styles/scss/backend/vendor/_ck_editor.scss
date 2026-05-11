@@ -1,0 +1,80 @@
+.ck-editor {
+    --ck-focus-ring: 1px solid transparent;
+    --ck-inner-shadow: none;
+    --ck-spacing-standard: 0;
+
+    color: var(--x-admin-option-input-color);
+    flex: 1;
+
+    .xprez-option & {
+        --ck-spacing-large: 1rem;
+    }
+
+    h2, h3, h4, h5, h6 {
+        font-weight: 600;
+        margin-bottom: .5rem;
+        line-height: 1.2;
+        margin-top: 0;
+        letter-spacing: 0; 
+        color: var(--x-admin-color);
+
+        strong, b {
+            color: var(--x-admin-color-light);
+        }
+    }
+
+    p, ul, ol, figure {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+        letter-spacing: -0.04em;
+    }
+
+    h3 {
+        font-size: 1.8rem;
+    }
+
+    h4 {
+        font-size: 1.5rem;
+    }
+
+    h5 {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        --ck-color-link-selected-background: #{$b-blue-high};
+
+        padding: .75rem 1.5rem;
+        border-radius: var(--x-admin-btn-border-radius);
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: var(--x-admin-btn-color);
+        background-color: var(--x-admin-btn-bg);
+        display: inline-block;
+
+        &.ck-link_selected {
+            color: #FFF;
+        }
+    }
+
+    .btn-secondary {
+        background-color: var(--x-admin-btn-secondary-bg);
+        color: var(--x-admin-btn-secondary-color);
+    }
+
+    .image-style {
+        &-align-right, &-align-left {
+            max-width: 50%;
+        }
+    }
+}
+ 
+.ck-placeholder {
+    font-style: italic;
+    opacity: 0.7;
+}

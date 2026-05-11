@@ -1,0 +1,10 @@
+<iframe
+    class="xprez-video__iframe"
+    data-video-provider="{% block video_provider %}{% endblock %}"
+    data-js-controller-class="{% block js_controller_class %}{% endblock %}"
+    width="560" height="315"
+    frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
+    allow="autoplay"
+    referrerpolicy="strict-origin-when-cross-origin"
+    src="{% block embed_src %}{% endblock %}"
+></iframe>

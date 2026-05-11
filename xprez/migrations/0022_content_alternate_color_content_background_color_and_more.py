@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("xprez", "0021_alter_ckeditor_options_alter_downloadcontent_options_and_more"),
     ]

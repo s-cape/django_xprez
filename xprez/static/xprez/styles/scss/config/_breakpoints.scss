@@ -1,0 +1,17 @@
+// Breakpoints - mapped from XPREZ_BREAKPOINTS in defaults.py
+// Desktop-first approach using max-width
+$x-breakpoint-base: 9999px !default; // Extra large devices (no limit) - we use 9999px, because we can't use infinite
+$x-breakpoint-xl: 1499px !default; // Desktops (< 1500px)
+$x-breakpoint-lg: 1199px !default; // Large devices (< 1200px)
+$x-breakpoint-md: 991px !default; // Tablets (< 992px)
+$x-breakpoint-sm: 767px !default; // Small devices (< 768px)
+$x-breakpoint-xs: 499px !default; // Mobile (< 500px)
+
+$x-breakpoints: (
+    0: $x-breakpoint-base,
+    1: $x-breakpoint-xl,
+    2: $x-breakpoint-lg,
+    3: $x-breakpoint-md,
+    4: $x-breakpoint-sm,
+    5: $x-breakpoint-xs
+);

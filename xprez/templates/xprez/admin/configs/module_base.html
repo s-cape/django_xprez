@@ -1,0 +1,78 @@
+{% extends "xprez/admin/configs/base.html" %}
+{% load i18n %}
+
+{% block controller_class %}XprezModuleConfig{% endblock %}
+{% block delete_trigger %}
+    {% trans "Remove breakpoint" as title_remove_breakpoint %}
+    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-module-config-delete-trigger" title=title_remove_breakpoint delete_field=config.admin_form.delete %}
+{% endblock %}
+{% block delete_info %}
+    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-module-config" message_subject="breakpoint" %}
+{% endblock %}
+
+{% block fields %}
+    <div class="xprez-option-group__subtitle">{% trans "Grid" %}</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.colspan size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.rowspan size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.order size="flex-1" %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align_grid label=False icon="xprez-icon-vertical" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align_grid label=False icon="xprez-icon-horizontal" size="flex-1" %}
+    </div>
+
+    <div class="xprez-option-group__subtitle">{% trans "Padding" %}</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_choice label=False icon="xprez-icon-padding_t" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_top_custom label=False suffix=config.units.padding_top.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_top_choice.html_name|add:":custom\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field_link.html" with field_link=config.admin_form.padding_top_choice.html_name|add:":"|add:config.admin_form.padding_bottom_choice.html_name|add:","|add:config.admin_form.padding_top_custom.html_name|add:":"|add:config.admin_form.padding_bottom_custom.html_name field_link_icon="xprez-icon-padding_v"%}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_bottom_choice label=False icon="xprez-icon-padding_b" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_bottom_custom label=False suffix=config.units.padding_bottom.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_bottom_choice.html_name|add:":custom\""|safe size="flex-0" %}
+        <div class="xprez-option__btn-spacer"></div>
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_left_choice label=False icon="xprez-icon-padding_l" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_left_custom label=False suffix=config.units.padding_left.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_left_choice.html_name|add:":custom\""|safe size="flex-0" %}
+        {% include "xprez/admin/form/field_link.html" with field_link=config.admin_form.padding_left_choice.html_name|add:":"|add:config.admin_form.padding_right_choice.html_name|add:","|add:config.admin_form.padding_left_custom.html_name|add:":"|add:config.admin_form.padding_right_custom.html_name field_link_icon="xprez-icon-padding_h"%}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_right_choice label=False icon="xprez-icon-padding_r" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.padding_right_custom label=False suffix=config.units.padding_right.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.padding_right_choice.html_name|add:":custom\""|safe size="flex-0" %}
+        <div class="xprez-option__btn-spacer"></div>
+    </div>
+
+    <div class="xprez-option-group__subtitle">{% trans "Box" %}</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.background size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.border size="flex-1" %}
+    </div>
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.background.html_name }}:true">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.background_color size="flex-1" %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.vertical_align_flex label=False icon="xprez-icon-vertical" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align_flex label=False icon="xprez-icon-horizontal" size="flex-1" %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.aspect_ratio size="flex-1" %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_choice size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_custom label=False suffix=config.units.border_radius.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.border_radius_choice.html_name|add:":custom\""|safe size="flex-0" %}
+    </div>
+
+    {% block extra_fields %}
+        {% for field in config.admin_form.get_extra_fields %}
+            <div class="xprez-option-row">
+                {% include "xprez/admin/form/field.html" with field=field %}
+            </div>
+        {% endfor %}
+    {% endblock %}
+{% endblock %}
+
+{% block config_hidden_fields %}
+    <input type="hidden" name="module-config-id" value="{{ config.pk }}">
+{% endblock %}

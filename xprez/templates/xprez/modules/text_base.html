@@ -1,0 +1,7 @@
+{% extends "xprez/modules/base.html" %}
+
+{% block content %}
+    {% if module.box %}<div class="xprez-text-content-boxed__content">{% endif %}
+        {{ parsed_text }}
+    {% if module.box %}</div>{% endif %}
+{% endblock %}

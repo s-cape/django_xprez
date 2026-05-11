@@ -1,0 +1,1027 @@
+import django.db.models.deletion
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+    dependencies = [
+        ("xprez", "0026_alter_contentsymlink_options"),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name="Container",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("content_type", models.CharField(editable=False, max_length=100)),
+            ],
+        ),
+        migrations.CreateModel(
+            name="TemplateContainer",
+            fields=[
+                (
+                    "container_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.container",
+                    ),
+                ),
+                (
+                    "key",
+                    models.SlugField(
+                        blank=True, default="", unique=True, verbose_name="Key"
+                    ),
+                ),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="xprez/templates/",
+                        verbose_name="Image",
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True, default="", verbose_name="Description"
+                    ),
+                ),
+                (
+                    "keywords",
+                    models.TextField(
+                        blank=True,
+                        default="",
+                        verbose_name="Keywords",
+                        help_text="Comma-separated keywords",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Template",
+                "verbose_name_plural": "Templates",
+                "ordering": ("key",),
+            },
+            bases=("xprez.container",),
+        ),
+        migrations.CreateModel(
+            name="Section",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("position", models.PositiveSmallIntegerField(blank=True, default=0)),
+                ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("changed", models.DateTimeField(auto_now=True)),
+                (
+                    "max_width_choice",
+                    models.CharField(
+                        choices=[
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("full", "Full"),
+                            ("custom", "Custom"),
+                        ],
+                        default="medium",
+                        max_length=16,
+                        verbose_name="Max width",
+                    ),
+                ),
+                (
+                    "max_width_custom",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+                ("alternate_background", models.BooleanField(default=False)),
+                (
+                    "background_color",
+                    models.CharField(blank=True, default="", max_length=30),
+                ),
+                ("css_class", models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    "container",
+                    models.ForeignKey(
+                        editable=False,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)ss",
+                        to="xprez.container",
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ("position",),
+            },
+        ),
+        migrations.CreateModel(
+            name="Module",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("saved", models.BooleanField(default=False, editable=False)),
+                ("position", models.PositiveSmallIntegerField(blank=True, default=0)),
+                ("content_type", models.CharField(editable=False, max_length=100)),
+                ("css_class", models.CharField(blank=True, max_length=100, null=True)),
+                ("alternate_color", models.BooleanField(default=False)),
+                (
+                    "live_sync",
+                    models.BooleanField(
+                        default=True, verbose_name="Change style for selected modules"
+                    ),
+                ),
+                ("sync_group", models.PositiveIntegerField(blank=True, null=True)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("changed", models.DateTimeField(auto_now=True)),
+                (
+                    "section",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="modules",
+                        to="xprez.section",
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ("position",),
+            },
+        ),
+        migrations.CreateModel(
+            name="TextModule",
+            fields=[
+                (
+                    "module_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.module",
+                    ),
+                ),
+                (
+                    "font_size",
+                    models.CharField(
+                        choices=[
+                            ("unset", "Unset"),
+                            ("smallest", "Extra Small"),
+                            ("small", "Small"),
+                            ("normal", "Normal"),
+                            ("large", "Large"),
+                            ("largest", "Extra Large"),
+                        ],
+                        default="normal",
+                        max_length=20,
+                        verbose_name="Font size",
+                    ),
+                ),
+                ("text", models.TextField(blank=True)),
+                ("media", models.FileField(upload_to="images", null=True, blank=True)),
+                (
+                    "url",
+                    models.CharField(
+                        blank=True, max_length=255, null=True, verbose_name="Target URL"
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Text",
+            },
+            bases=("xprez.module",),
+        ),
+        migrations.CreateModel(
+            name="QuoteModule",
+            fields=[
+                (
+                    "module_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.module",
+                    ),
+                ),
+                (
+                    "font_size",
+                    models.CharField(
+                        choices=[
+                            ("unset", "Unset"),
+                            ("smallest", "Extra Small"),
+                            ("small", "Small"),
+                            ("normal", "Normal"),
+                            ("large", "Large"),
+                            ("largest", "Extra Large"),
+                        ],
+                        default="normal",
+                        max_length=20,
+                        verbose_name="Font size",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("subtitle", models.CharField(blank=True, max_length=255, null=True)),
+                ("image", models.ImageField(blank=True, null=True, upload_to="quotes")),
+                ("title", models.CharField(blank=True, max_length=255, null=True)),
+                ("quote", models.TextField()),
+            ],
+            options={
+                "verbose_name": "Quote",
+            },
+            bases=("xprez.module",),
+        ),
+        migrations.CreateModel(
+            name="AnchorModule",
+            fields=[
+                (
+                    "module_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.module",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                ("key", models.SlugField(blank=True, max_length=100)),
+            ],
+            options={
+                "verbose_name": "Anchor",
+            },
+            bases=("xprez.module",),
+        ),
+        migrations.CreateModel(
+            name="SectionSymlink",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("position", models.PositiveSmallIntegerField(blank=True, default=0)),
+                ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("changed", models.DateTimeField(auto_now=True)),
+                (
+                    "container",
+                    models.ForeignKey(
+                        editable=False,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)ss",
+                        to="xprez.container",
+                    ),
+                ),
+                (
+                    "symlink",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="symlinked_section_set",
+                        to="xprez.section",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Linked section",
+            },
+        ),
+        migrations.CreateModel(
+            name="ContainerSymlink",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("position", models.PositiveSmallIntegerField(blank=True, default=0)),
+                ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("changed", models.DateTimeField(auto_now=True)),
+                (
+                    "container",
+                    models.ForeignKey(
+                        editable=False,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)ss",
+                        to="xprez.container",
+                    ),
+                ),
+                (
+                    "symlink",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="symlinked_container_set",
+                        to="xprez.container",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Linked container",
+            },
+        ),
+        migrations.CreateModel(
+            name="SectionConfig",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "css_breakpoint",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (0, "Base style (all sizes &lt; ∞)"),
+                            (1, "Desktops (&lt; 1500px)"),
+                            (2, "Large devices (&lt; 1200px)"),
+                            (3, "Tablets (&lt; 992px)"),
+                            (4, "Small devices (&lt; 768px)"),
+                            (5, "Mobile (&lt; 500px)"),
+                        ],
+                        default=0,
+                        editable=False,
+                    ),
+                ),
+                ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
+                (
+                    "margin_bottom_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("extra_large", "Extra Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="medium",
+                        blank=True,
+                        max_length=20,
+                        verbose_name="Margin bottom",
+                    ),
+                ),
+                (
+                    "margin_bottom_custom",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+                (
+                    "padding_left_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("extra_large", "Extra Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="small",
+                        max_length=20,
+                        verbose_name="Padding left",
+                    ),
+                ),
+                (
+                    "padding_right_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("extra_large", "Extra Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="small",
+                        max_length=20,
+                        verbose_name="Padding right",
+                    ),
+                ),
+                (
+                    "padding_top_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("extra_large", "Extra Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding top",
+                    ),
+                ),
+                (
+                    "padding_bottom_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("extra_large", "Extra Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding bottom",
+                    ),
+                ),
+                (
+                    "padding_left_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "padding_right_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "padding_top_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "padding_bottom_custom",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "columns",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (1, "1"),
+                            (2, "2"),
+                            (3, "3"),
+                            (4, "4"),
+                            (5, "5"),
+                            (6, "6"),
+                            (7, "7"),
+                            (8, "8"),
+                        ],
+                        default=1,
+                    ),
+                ),
+                (
+                    "gap_choice",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="medium",
+                        max_length=20,
+                        verbose_name="Gap",
+                    ),
+                ),
+                ("gap_custom", models.PositiveIntegerField(blank=True, null=True)),
+                (
+                    "vertical_align_grid",
+                    models.CharField(
+                        choices=[
+                            ("start", "Start"),
+                            ("center", "Center"),
+                            ("end", "End"),
+                            ("stretch", "Stretch"),
+                            ("baseline", "Baseline"),
+                        ],
+                        default="stretch",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "horizontal_align_grid",
+                    models.CharField(
+                        choices=[
+                            ("start", "Start"),
+                            ("center", "Center"),
+                            ("end", "End"),
+                            ("stretch", "Stretch"),
+                        ],
+                        default="stretch",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "section",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="configs",
+                        to="xprez.section",
+                        editable=False,
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Section Config",
+                "verbose_name_plural": "Section Configs",
+                "unique_together": {("section", "css_breakpoint")},
+                "ordering": ("css_breakpoint",),
+            },
+        ),
+        migrations.CreateModel(
+            name="ModuleConfig",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "css_breakpoint",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (0, "Base style (all sizes &lt; ∞)"),
+                            (1, "Desktops (&lt; 1500px)"),
+                            (2, "Large devices (&lt; 1200px)"),
+                            (3, "Tablets (&lt; 992px)"),
+                            (4, "Small devices (&lt; 768px)"),
+                            (5, "Mobile (&lt; 500px)"),
+                        ],
+                        default=0,
+                        editable=False,
+                    ),
+                ),
+                ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
+                (
+                    "module",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="configs",
+                        to="xprez.module",
+                        editable=False,
+                    ),
+                ),
+                (
+                    "colspan",
+                    models.PositiveSmallIntegerField(
+                        default=1, verbose_name="Column span"
+                    ),
+                ),
+                (
+                    "rowspan",
+                    models.PositiveSmallIntegerField(
+                        default=1, verbose_name="Row span"
+                    ),
+                ),
+                ("order", models.IntegerField(blank=True, null=True)),
+                (
+                    "vertical_align_grid",
+                    models.CharField(
+                        choices=[
+                            ("start", "Start"),
+                            ("center", "Center"),
+                            ("end", "End"),
+                            ("stretch", "Stretch"),
+                            ("baseline", "Baseline"),
+                            ("initial", "Unset"),
+                        ],
+                        default="initial",
+                        max_length=20,
+                        verbose_name="Vertical align (grid)",
+                    ),
+                ),
+                (
+                    "horizontal_align_grid",
+                    models.CharField(
+                        choices=[
+                            ("start", "Start"),
+                            ("center", "Center"),
+                            ("end", "End"),
+                            ("stretch", "Stretch"),
+                            ("initial", "Unset"),
+                        ],
+                        default="initial",
+                        max_length=20,
+                        verbose_name="Horizontal align (grid)",
+                    ),
+                ),
+                (
+                    "vertical_align_flex",
+                    models.CharField(
+                        choices=[
+                            ("flex-start", "Flex Start"),
+                            ("center", "Center"),
+                            ("flex-end", "Flex End"),
+                            ("stretch", "Stretch"),
+                            ("baseline", "Baseline"),
+                        ],
+                        default="flex-start",
+                        max_length=20,
+                        verbose_name="Vertical align (flex)",
+                    ),
+                ),
+                (
+                    "horizontal_align_flex",
+                    models.CharField(
+                        choices=[
+                            ("flex-start", "Flex Start"),
+                            ("center", "Center"),
+                            ("flex-end", "Flex End"),
+                        ],
+                        default="center",
+                        max_length=20,
+                        verbose_name="Horizontal align (flex)",
+                    ),
+                ),
+                ("background", models.BooleanField(default=False)),
+                ("border", models.BooleanField(default=False)),
+                (
+                    "background_color",
+                    models.CharField(blank=True, default="", max_length=30),
+                ),
+                (
+                    "padding_left_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("extra_large", "Extra Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding left",
+                    ),
+                ),
+                (
+                    "padding_left_custom",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+                (
+                    "padding_right_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("extra_large", "Extra Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding right",
+                    ),
+                ),
+                (
+                    "padding_right_custom",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+                (
+                    "padding_top_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("extra_large", "Extra Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding top",
+                    ),
+                ),
+                (
+                    "padding_top_custom",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+                (
+                    "padding_bottom_choice",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("extra_large", "Extra Large"),
+                            ("custom", "Custom"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=20,
+                        verbose_name="Padding bottom",
+                    ),
+                ),
+                (
+                    "padding_bottom_custom",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+                (
+                    "aspect_ratio",
+                    models.CharField(blank=True, default="", max_length=20),
+                ),
+                (
+                    "border_radius_choice",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="",
+                        max_length=20,
+                        verbose_name="Border radius",
+                    ),
+                ),
+                (
+                    "border_radius_custom",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+            ],
+            options={
+                "verbose_name": "Module Config",
+                "verbose_name_plural": "Module Configs",
+                "unique_together": {("module", "css_breakpoint")},
+                "ordering": ("css_breakpoint",),
+            },
+        ),
+        migrations.CreateModel(
+            name="TextConfig",
+            fields=[
+                (
+                    "moduleconfig_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.moduleconfig",
+                    ),
+                ),
+                (
+                    "font_size",
+                    models.CharField(
+                        choices=[
+                            ("unset", "Unset"),
+                            ("smallest", "Smallest"),
+                            ("small", "Small"),
+                            ("normal", "Normal"),
+                            ("large", "Large"),
+                            ("largest", "Largest"),
+                        ],
+                        default="normal",
+                        max_length=20,
+                        verbose_name="Font size",
+                    ),
+                ),
+                (
+                    "text_align",
+                    models.CharField(
+                        choices=[
+                            ("left", "Left"),
+                            ("center", "Center"),
+                            ("right", "Right"),
+                        ],
+                        default="left",
+                        max_length=20,
+                        verbose_name="Text align",
+                    ),
+                ),
+                (
+                    "media_role",
+                    models.CharField(
+                        choices=[
+                            ("background", "Background"),
+                            ("lead", "Lead"),
+                            ("icon", "Icon"),
+                        ],
+                        default="lead",
+                        max_length=20,
+                        verbose_name="Media role",
+                    ),
+                ),
+                (
+                    "media_background_position",
+                    models.CharField(
+                        choices=[
+                            ("top", "Top"),
+                            ("center", "Center"),
+                            ("bottom", "Bottom"),
+                        ],
+                        default="center",
+                        max_length=10,
+                    ),
+                ),
+                ("media_lead_to_edge", models.BooleanField(default=True)),
+                ("media_icon_max_size", models.PositiveIntegerField(default=100)),
+                (
+                    "media_crop",
+                    models.CharField(
+                        choices=[
+                            ("", "None"),
+                            ("1/1", "1:1"),
+                            ("3/2", "3:2"),
+                            ("4/3", "4:3"),
+                            ("16/9", "16:9"),
+                            ("2/3", "2:3"),
+                            ("3/4", "3:4"),
+                            ("9/16", "9:16"),
+                        ],
+                        blank=True,
+                        default="",
+                        max_length=5,
+                    ),
+                ),
+                (
+                    "media_border_radius_choice",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="",
+                        max_length=20,
+                        verbose_name="Media border radius",
+                    ),
+                ),
+                (
+                    "media_border_radius_custom",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+            ],
+            options={
+                "abstract": False,
+            },
+            bases=("xprez.moduleconfig",),
+        ),
+        migrations.CreateModel(
+            name="GalleryConfig",
+            fields=[
+                (
+                    "moduleconfig_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.moduleconfig",
+                    ),
+                ),
+                (
+                    "columns",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (1, "1"),
+                            (2, "2"),
+                            (3, "3"),
+                            (4, "4"),
+                            (5, "5"),
+                            (6, "6"),
+                            (7, "7"),
+                            (8, "8"),
+                        ],
+                        default=1,
+                    ),
+                ),
+                (
+                    "gap_choice",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="small",
+                        max_length=20,
+                        verbose_name="Gap",
+                    ),
+                ),
+                ("gap_custom", models.PositiveIntegerField(blank=True, null=True)),
+            ],
+            options={
+                "abstract": False,
+            },
+            bases=("xprez.moduleconfig",),
+        ),
+        migrations.CreateModel(
+            name="NumbersConfig",
+            fields=[
+                (
+                    "moduleconfig_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.moduleconfig",
+                    ),
+                ),
+                (
+                    "columns",
+                    models.PositiveSmallIntegerField(
+                        blank=True,
+                        choices=[
+                            (None, "Auto"),
+                            (1, "1"),
+                            (2, "2"),
+                            (3, "3"),
+                            (4, "4"),
+                            (5, "5"),
+                            (6, "6"),
+                            (7, "7"),
+                            (8, "8"),
+                        ],
+                        default=None,
+                        null=True,
+                    ),
+                ),
+                (
+                    "gap_choice",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("", "None"),
+                            ("small", "Small"),
+                            ("medium", "Medium"),
+                            ("large", "Large"),
+                            ("custom", "Custom"),
+                        ],
+                        default="medium",
+                        max_length=20,
+                        verbose_name="Gap",
+                    ),
+                ),
+                ("gap_custom", models.PositiveIntegerField(blank=True, null=True)),
+            ],
+            options={
+                "abstract": False,
+            },
+            bases=("xprez.moduleconfig",),
+        ),
+    ]

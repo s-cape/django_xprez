@@ -1,0 +1,7 @@
+{% if field.field.widget.input_type == "select" %}
+    {% include "xprez/admin/form/fields/select.html" %}
+{% elif field.field.widget.input_type == "file" %}
+    {% include "xprez/admin/form/fields/file_input.html" %}
+{% else %}
+    {% include "xprez/admin/form/fields/base.html" %}
+{% endif %}

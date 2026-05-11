@@ -1,0 +1,73 @@
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext
+
+from xprez import constants
+from xprez.admin.forms import ModuleForm, MultiModuleItemForm
+from xprez.ck_editor import parse_text as ckeditor_parse_text
+from xprez.ck_editor.forms import CkEditorFileUploadXprezAdminFormMixin
+from xprez.conf import settings as xprez_settings
+from xprez.models.mixins.font_size import FontSizeModuleMixin
+from xprez.models.mixins.responsive_image import ResponsiveImageParentMixin
+from xprez.models.multi_module import MultiModule, MultiModuleItem
+from xprez.utils import import_class
+
+
+class AccordionModule(ResponsiveImageParentMixin, FontSizeModuleMixin, MultiModule):
+    front_template_name = "xprez/modules/accordion.html"
+    admin_template_name = "xprez/admin/modules/accordion/accordion.html"
+    admin_item_template_name = "xprez/admin/modules/accordion/accordion_item.html"
+    admin_item_form_class = "xprez.modules.accordion.AccordionItemForm"
+    admin_form_class = "xprez.modules.files.FilesModuleForm"
+    admin_icon_template_name = "xprez/shared/icons/modules/accordion.html"
+
+    class Meta:
+        verbose_name = _("Accordion")
+
+    class FrontMedia:
+        js = ("xprez/js/accordion.min.js",)
+
+    def save(self, *args, **kwargs):
+        no_initial_item = kwargs.pop("no_initial_item", False)
+        is_new = not self.pk
+        super().save(*args, **kwargs)
+        if is_new and not no_initial_item:
+            self.create_item(saved=True)
+
+    def duplicate_to(self, target_section, saved=constants.SAVED_FORCE_FALSE, **kwargs):
+        kwargs["no_initial_item"] = True
+        return super().duplicate_to(target_section, saved=saved, **kwargs)
+
+    def preview_text(self):
+        count = self.items.count()
+        return ngettext("%(count)s item", "%(count)s items", count) % {"count": count}
+
+
+class AccordionItem(MultiModuleItem):
+    module = models.ForeignKey(
+        AccordionModule,
+        related_name="items",
+        on_delete=models.CASCADE,
+        editable=False,
+    )
+    title = models.CharField(_("Title"), max_length=255, blank=True)
+    text = models.TextField(_("Text"), blank=True)
+
+    def render_text(self):
+        return ckeditor_parse_text.render_text_parsed(
+            ckeditor_parse_text.parse_text(self.text),
+            extra_context={"module": self.module},
+        )
+
+
+class AccordionItemForm(CkEditorFileUploadXprezAdminFormMixin, MultiModuleItemForm):
+    class Meta(MultiModuleItemForm.Meta):
+        model = AccordionItem
+        fields = "__all__"
+        widgets = {
+            "text": import_class(xprez_settings.XPREZ_CK_EDITOR_MODULE_WIDGET),
+        }
+
+
+class AccordionModuleForm(ModuleForm):
+    options_fields = ModuleForm.options_fields + ("font_size",)

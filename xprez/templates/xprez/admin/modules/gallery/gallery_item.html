@@ -1,0 +1,16 @@
+{% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
+{% load thumbnail %}
+
+{% block content %}
+    {% block thumb %}
+        <div class="xprez-admin-gallery__image-cont">
+            {% thumbnail item.file "400x400" format="WEBP" quality=80 as thumb %}
+                <img src="{{ thumb.url }}" class="xprez-admin-gallery__image" data-draggable-multi-module-item-handle />
+            {% endthumbnail %}
+        </div>
+    {% endblock %}
+    <div class="xprez-option-group">
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.description %}
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.alt_text %}
+    </div>
+{% endblock %}

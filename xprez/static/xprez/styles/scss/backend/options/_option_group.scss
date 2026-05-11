@@ -1,0 +1,109 @@
+.xprez-option {
+    &-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--x-admin-option-group-gap);
+        margin-top: var(--x-admin-padding-lg);
+        position: relative;
+        background: var(--x-option-group-bg);
+
+        .xprez-popover__content > &:first-child {
+            margin-top: 0;
+        }
+
+        &--panel {
+            width: 265px;
+            background: var(--x-admin-option-group-panel-bg);
+            padding: var(--x-admin-padding-lg);
+            border-radius: var(--x-admin-border-radius-lg);
+        }
+
+        &__subtitle {
+            font-size: var(--x-admin-option-font-size);
+            color: var(--x-admin-option-color);
+            text-align: left; 
+            line-height: 1.25;
+            margin: var(--x-admin-padding-md) 0 var(--x-admin-padding-sm);
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+
+        &__title {
+            --x-admin-icon-button-size: 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: var(--x-admin-padding-sm);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: var(--x-admin-option-font-size);
+            margin-bottom: var(--x-admin-padding-sm);
+
+            &:not(:first-child) {
+                margin-top: var(--x-admin-padding-lg);
+            }
+
+            & + .xprez-option-group__subtitle {
+                margin-top: 0;
+            }
+
+            &-text {
+                flex: 1;
+                text-align: left;
+            }
+            
+            .xprez-option {
+                --x-admin-option-bg: transparent;
+            }
+        }
+
+        &__heading {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background-color: var(--x-admin-popover-bg);
+            display: flex;
+            flex-direction: column;
+            font-weight: 500;
+            gap: var(--x-admin-padding-md);
+            font-size: var(--x-admin-option-group-title-font-size);
+            padding: var(--x-admin-padding-lg) 0;
+
+            [class^="xprez-icon-"] {
+                font-size: var(--x-admin-option-icon-size);
+            }
+
+            &-line {
+                display: flex;
+                align-items: center;
+                gap: var(--x-admin-padding-md);
+            }
+        }
+
+        &__footer {
+            margin-top: var(--x-admin-padding-xl);
+            padding-top: var(--x-admin-padding-md);
+            padding-bottom: var(--x-admin-padding-md);
+            border-top: var(--x-admin-option-group-border);
+            position: sticky;
+            bottom:  calc(var(--x-admin-padding-lg) * -1);
+            background-color: var(--x-admin-popover-bg);
+        }
+
+        &.xprez-option-group--config {
+            border-top: var(--x-admin-option-group-border);
+            padding-top: var(--x-admin-padding-md);
+        }
+    }
+
+    &-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: var(--x-admin-option-group-gap);
+    }
+
+}

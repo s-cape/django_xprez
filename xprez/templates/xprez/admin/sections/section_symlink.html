@@ -1,0 +1,42 @@
+{% extends "xprez/admin/sections/section_symlink_base.html" %}
+{% load i18n xprez_admin %}
+
+{% block data_controller %}XprezSectionSymlink{% endblock %}
+{% block data_prefix %}{{ section_symlink.admin_form.prefix }}{% endblock %}
+{% block data_unsaved %}{% if not section_symlink.saved %}data-unsaved{% endif %}{% endblock %}
+
+{% block before_header %}
+    {% include "xprez/admin/includes/adders/content_section_before.html" with xprez_admin=section_symlink.admin_form.xprez_admin adder_container=section_symlink.container %}
+{% endblock %}
+
+{% block delete_trigger %}
+    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title=title_remove delete_field=section_symlink.admin_form.delete %}
+{% endblock %}
+
+{% block symlink_content %}
+    {% if section_symlink.symlink %}
+        {% with symlinked_container=section_symlink.symlink.container.polymorph %}
+            {% include "xprez/shared/icons/page.html" %}
+            {% xprez_admin_change_url section_symlink.admin_form.xprez_admin symlinked_container as symlinked_container_url %}
+            <a {% if symlinked_container_url %}href="{{ symlinked_container_url }}"{% endif %}>
+                <strong>{{ symlinked_container }}</strong>
+            </a>
+        {% endwith %}
+        <span class="xprez-module__content-info-arr">&#x203A;</span>
+        {% include "xprez/shared/icons/link.html" %}
+        <strong>
+            {% blocktrans count counter=section_symlink.symlink.modules.count %}
+                Section ({{ counter }} module)
+            {% plural %}
+                Section ({{ counter }} modules)
+            {% endblocktrans %}
+        </strong>
+    {% else %}
+        <div class="xprez-warning">{% trans "Linked section not found." %}</div>
+    {% endif %}
+{% endblock %}
+
+{% block hidden_fields %}
+    <input type="hidden" name="section-symlink-id" value="{{ section_symlink.pk }}">
+    {{ section_symlink.admin_form.position.as_hidden }}
+{% endblock %}

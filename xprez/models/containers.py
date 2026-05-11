@@ -1,0 +1,187 @@
+from collections import defaultdict
+
+from django.apps import apps
+from django.db import models, transaction
+from django.db.models import Prefetch
+from django.template.loader import render_to_string
+from django.utils.functional import cached_property
+
+from xprez import constants
+from xprez.models.mixins.cache import FrontCacheMixin
+from xprez.models.mixins.polymorph import PolymorphMixin
+from xprez.utils import class_content_type
+
+
+class Container(PolymorphMixin, FrontCacheMixin, models.Model):
+    """Base container class for pages/articles that contain modules."""
+
+    KEY = constants.CONTAINER_KEY
+    front_template_name = "xprez/container.html"
+
+    content_type = models.CharField(max_length=100, editable=False)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.content_type = class_content_type(self.__class__)
+        super().save(*args, **kwargs)
+
+    def invalidate_front_cache(self):
+        super().invalidate_front_cache()
+        for csl in self.symlinked_container_set.filter(saved=True):
+            csl.invalidate_front_cache()
+
+    def delete(self, *args, **kwargs):
+        self.invalidate_front_cache()
+        super().delete(*args, **kwargs)
+
+    @cached_property
+    def front_cacheable(self):
+        return all(s.front_cacheable for s in self.get_sections_front())
+
+    @transaction.atomic
+    def duplicate_to(
+        self,
+        target_container,
+        saved=constants.SAVED_FORCE_FALSE,
+        allowed_module_classes=None,
+    ):
+        result = []
+        for item in self._get_ordered_section_items():
+            new_item = item.duplicate_to(
+                target_container,
+                saved=saved,
+                allowed_module_classes=allowed_module_classes,
+            )
+            result += [new_item]
+        return result
+
+    def symlink_to(self, target_container, saved=False):
+        return target_container.containersymlinks.create(symlink=self, saved=saved)
+
+    def _get_ordered_section_items(self):
+        sections = list(self.sections.all())
+        section_symlinks = list(self.sectionsymlinks.all())
+        container_symlinks = list(self.containersymlinks.all())
+        return sorted(
+            sections + section_symlinks + container_symlinks,
+            key=lambda item: item.position,
+        )
+
+    def clipboard_verbose_name(self):
+        return self.polymorph._meta.verbose_name
+
+    def preview_text(self):
+        return self.polymorph.__str__()
+
+    def render_front(self, context):
+        self.preload_front_structure()
+        context["container"] = self.polymorph
+        return render_to_string(self.front_template_name, context)
+
+    def get_sections_front(self):
+        if not hasattr(self, "_sections_front"):
+            sections = list(self.sections.filter(saved=True, visible=True))
+            section_symlinks = list(
+                self.sectionsymlinks.filter(saved=True, visible=True)
+            )
+            container_symlinks = list(
+                self.containersymlinks.filter(saved=True, visible=True)
+            )
+            self._sections_front = sorted(
+                sections + section_symlinks + container_symlinks,
+                key=lambda s: s.position,
+            )
+        return self._sections_front
+
+    def preload_front_structure(self):
+        """Bulk-load all frontend data, populating _*_front caches before rendering."""
+        from xprez.models.configs import SectionConfig
+        from xprez.models.modules import Module
+
+        section_config_qs = SectionConfig.objects.filter(saved=True).order_by(
+            "css_breakpoint"
+        )
+        module_qs = Module.objects.filter(saved=True).order_by("position")
+
+        # Phase 1: sections + SectionConfigs + base modules (3-4 queries)
+        sections = list(
+            self.sections.filter(saved=True, visible=True).prefetch_related(
+                Prefetch("configs", queryset=section_config_qs),
+                Prefetch("modules", queryset=module_qs),
+            )
+        )
+        section_symlinks = list(
+            self.sectionsymlinks.filter(saved=True, visible=True)
+            .select_related("symlink")
+            .prefetch_related(
+                Prefetch("symlink__configs", queryset=section_config_qs),
+                Prefetch("symlink__modules", queryset=module_qs),
+            )
+        )
+        container_symlinks = list(
+            self.containersymlinks.filter(saved=True, visible=True).select_related(
+                "symlink"
+            )
+        )
+
+        # Preload each unique target container independently; each calls its own
+        # preload_front_structure which populates _sections_front on the target.
+        seen_target_pks = set()
+        for csl in container_symlinks:
+            if csl.symlink and csl.symlink.pk not in seen_target_pks:
+                seen_target_pks.add(csl.symlink.pk)
+                csl.symlink.preload_front_structure()
+
+        # Deduplicate symlinked sections against already-loaded sections
+        seen_section_pks = {s.pk for s in sections}
+        extra_sections = []
+        for sl in section_symlinks:
+            if sl.symlink and sl.symlink.pk not in seen_section_pks:
+                seen_section_pks.add(sl.symlink.pk)
+                extra_sections += [sl.symlink]
+        all_sections = sections + extra_sections
+
+        # Phase 2: resolve polymorphic modules (1 query per content type)
+        all_base_modules = [
+            m for section in all_sections for m in section.modules.all()
+        ]
+
+        polymorph_by_pk = {}
+        if all_base_modules:
+            pks_by_content_type = defaultdict(list)
+            for m in all_base_modules:
+                pks_by_content_type[m.content_type] += [m.pk]
+            for content_type, pks in pks_by_content_type.items():
+                ct_app, ct_model = content_type.split(".")
+                model_class = apps.get_model(ct_app, ct_model)
+                for instance in model_class.objects.filter(pk__in=pks):
+                    polymorph_by_pk[instance.pk] = instance
+
+        # Phase 3: module configs, one query per config model
+        pks_by_config_model = defaultdict(list)
+        for module in polymorph_by_pk.values():
+            pks_by_config_model[module.config_model] += [module.pk]
+
+        configs_by_module_pk = defaultdict(list)
+        for config_model_path, pks in pks_by_config_model.items():
+            cfg_app, cfg_model = config_model_path.split(".")
+            config_model = apps.get_model(cfg_app, cfg_model)
+            for config in config_model.objects.filter(
+                module_id__in=pks, saved=True
+            ).order_by("css_breakpoint"):
+                configs_by_module_pk[config.module_id] += [config]
+
+        # Phase 4: populate _*_front caches on all sections and modules
+        for section in all_sections:
+            section._configs_front = list(section.configs.all())
+            section._modules_front = [
+                polymorph_by_pk[m.pk]
+                for m in section.modules.all()
+                if m.pk in polymorph_by_pk
+            ]
+            for module in section._modules_front:
+                module._configs_front = configs_by_module_pk.get(module.pk, [])
+
+        self._sections_front = sorted(
+            sections + section_symlinks + container_symlinks, key=lambda s: s.position
+        )

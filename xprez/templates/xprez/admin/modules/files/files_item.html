@@ -1,0 +1,11 @@
+{% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
+
+{% block header_content %}
+    <a href="{{ item.file.url }}" target="_blank">{{ item.get_file_name }}</a>
+{% endblock %}
+
+{% block content %}
+    <div class="xprez-admin-multi-item__fields">
+        {% include "xprez/admin/form/field.html" with field=item.admin_form.description %}
+    </div>
+{% endblock %}

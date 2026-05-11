@@ -1,0 +1,120 @@
+@use "../../config/typography";
+@use "../../library/rfs" as rfs;
+
+@if $use-xprez-typography {
+    @each $size-name, $size-config in $x-typography-config {
+        .xprez-font-size-#{$size-name} {
+            @each $element, $properties in $size-config {
+                @if $element == "ul" {
+                    ul, ol {
+                        margin-bottom: map-get($properties, "margin-bottom");
+                    }
+                } @else if $element == "display" {
+                    .xprez-display {
+                        line-height: map-get($properties, "line-height");
+                        font-weight: map-get($properties, "font-weight");
+                        font-size: map-get($properties, "font-size");   
+                    }
+                }
+                @else if $element != "button" {
+                    #{$element} {
+                        @include rfs.font-size(map-get($properties, "font-size"));
+                        line-height: map-get($properties, "line-height");
+
+                        @if map-get($properties, "font-weight") {
+                            font-weight: map-get($properties, "font-weight");
+                        }
+                        
+                        @if map-get($properties, "margin-top") {
+                            @include rfs.margin-top(map-get($properties, "margin-top")); 
+                        }
+
+                        @if map-get($properties, "margin-bottom") {
+                            @include rfs.margin-bottom(map-get($properties, "margin-bottom"));
+                        }
+
+                        @if map-get($properties, "before-heading-margin-bottom") and $element == "p" {
+                            &:has(+ h2),
+                            &:has(+ h3),
+                            &:has(+ h4),
+                            &:has(+ blockquote) {
+                                @include rfs.margin-bottom(map-get($properties, "before-heading-margin-bottom")); 
+                            }
+                        }
+                    } 
+                }
+            } 
+        }
+    }
+}
+
+.xprez-module {
+    .xprez-display {
+        color: var(--x-display-color, var(--x-heading-color));
+    }
+
+    h2 {
+        color: var(--x-h2-color, var(--x-heading-color));
+    }
+
+    h3 {
+        color: var(--x-h3-color, var(--x-heading-color));
+    }
+
+    h4 {
+        color: var(--x-h4-color, var(--x-heading-color));
+    }
+
+    p, li {
+        color: inherit;
+    }
+
+    figure {
+        margin: 0;
+    }
+
+    blockquote {
+        font-style: $x-blockquote-font-style;
+        font-weight: $x-blockquote-font-weight;
+        color: var(--x-blockquote-color, inherit);
+        letter-spacing: $x-blockquote-letter-spacing;
+
+        p {
+            font-size: inherit;
+            line-height: inherit;
+            font-weight: inherit;
+            letter-spacing: inherit;
+            margin: 0;
+
+            @if $x-blockquote-show-lines{
+                margin: $x-blocquote-divider-gap 0;
+            }
+        }
+
+        @if $x-blockquote-show-lines {
+            &::before, &::after {
+                content: "";
+                display: block;
+                height: $x-blockquote-divider-height;
+                background-color: var(--x-blockquote-line-color, var(--x-base-line-color));
+                width: $x-blockquote-divider-width;
+            }
+        }
+    }
+    
+    h2, h3, h4 {
+        strong {
+            color: var(--x-heading-emphasis-color, var(--x-heading-color));
+            font-weight: inherit;
+        }
+    }
+
+    a:not(.#{$x-button-class}) {
+        color: var(--x-link-color);
+
+        &:hover {
+            color: var(--x-link-hover-color);
+        }
+    }
+
+}

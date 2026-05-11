@@ -1,46 +1,61 @@
-<div class="xprez-clipboard-list js-xprez-clipboard-list">
-	{% for item in clipboard %}
-		<div class="xprez-clipboard-list__item">
-			<div class="xprez-clipboard-list__icon">
-				{% with icon=item.obj.icon %}
-					{% if icon %}
-						{{ item.obj.icon }}
-					{% else %}
-						{% include "../icons/clipboard_item.html" %}
-					{% endif %}
-				{% endwith %}
-			</div>
-			<div class="xprez-clipboard-list__info">
-				{# {{ item.key }} #}
-				<div class="xprez-clipboard-list__module">{{ item.obj.clipboard_verbose_name }}</div>
-				<i>{{ item.obj.clipboard_text_preview }}</i>
-				{% if item.allowed == "partial" %}
-					<div class="xprez-warning">
-						Some modules are not allowed here
-					</div>
-				{% endif %}
-			</div>
-			<div class="xprez-clipboard-list__actions">
-				{% if item.allowed %}
-					<span
-						class="js-clipboard-paste xprez-btn"
-						data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_PASTE_ACTION target_position target_pk %}"
-					>
-						{% include "../icons/paste.html" %} Paste
-					</span>
-					<span
-						class="js-clipboard-paste xprez-btn"
-						data-url="{% url xprez_admin.xprez_clipboard_paste_url_name item.key item.obj.pk xprez_admin.CLIPBOARD_SYMLINK_ACTION target_position target_pk %}"
-					>
-						{% include "../icons/link.html" %} Link
-					</span>
-
-				{% else %}
-					<span class="xprez-warning">not allowed</span>
-				{% endif %}
-			</div>
-		</div>
-	{% empty %}
-		<p>clipboard empty</p>
-	{% endfor %}
+{% load i18n %}
+<div class="xprez-clipboard-list" data-xprez-clipboard-list>
+    {% for item in clipboard %}
+        <div class="xprez-clipboard-list__item">
+            <div class="xprez-clipboard-list__icon">
+                {% with icon=item.obj.admin_icon %}
+                    {% if icon %}
+                        {{ item.obj.admin_icon }}
+                    {% else %}
+                        {% include "xprez/shared/icons/clipboard_item.html" %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="xprez-clipboard-list__info">
+                <div class="xprez-clipboard-list__module">{{ item.obj.clipboard_verbose_name }}</div>
+                {% if item.obj.preview_text %}<i>{{ item.obj.preview_text }}</i>{% endif %}
+                {% if item.allowed == "partial" %}
+                    <div class="xprez-warning">
+                        {% trans "Some modules are not available here" %}
+                    </div>
+                {% endif %}
+            </div>
+            <div
+                class="xprez-clipboard-list__actions"
+                {% if not item.allowed %}data-disabled{% endif %}
+            >
+                {% if item.allowed %}
+                    <span
+                        class="xprez-btn"
+                        data-xprez-clipboard-paste
+                        data-url="{{ item.duplicate_url }}"
+                    >
+                        {% include "xprez/shared/icons/paste.html" %} Paste
+                    </span>
+                    {% if item.symlink_allowed %}
+                        <span
+                            class="xprez-btn"
+                            data-xprez-clipboard-paste
+                            data-url="{{ item.symlink_url }}"
+                        >
+                            {% include "xprez/shared/icons/link.html" %} {% trans "Link" %}
+                        </span>
+                    {% endif %}
+                {% else %}
+                    <span class="xprez-warning">{% trans "cannot paste here" %}</span>
+                {% endif %}
+                <span
+                    class="xprez-btn xprez-btn--danger"
+                    data-xprez-clipboard-remove
+                    data-url="{{ item.remove_url }}"
+                >
+                    {% include "xprez/shared/icons/cross.html" %} {% trans "Remove" %}
+                </span>
+            </div>
+        </div>
+    {% endfor %}
+    <p
+        data-xprez-clipboard-empty
+        {% if clipboard %}data-hidden{% endif %}
+    >{% trans "clipboard empty" %}</p>
 </div>

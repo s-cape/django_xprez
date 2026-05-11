@@ -1,0 +1,113 @@
+export class XprezDeleterBase {
+    constructor(obj) {
+        this.obj = obj;
+        this.initElements();
+        if (this.inputEl) {
+            this.obj.el.dataset.mode = this.inputEl.checked ? "delete" : "";
+        }
+        if (this.triggerEl) {
+            this.triggerEl.addEventListener("click", this.delete.bind(this));
+        }
+        if (this.undeleteEl) {
+            this.undeleteEl.addEventListener("click", this.undelete.bind(this));
+        }
+    }
+    initElements() { throw new Error("Not implemented"); }
+    delete() { this.obj.el.dataset.mode = "delete"; this.inputEl.checked = true; }
+    undelete() { this.obj.el.dataset.mode = ""; this.inputEl.checked = false; }
+}
+
+export class XprezSectionDeleter extends XprezDeleterBase {
+    initElements() {
+        this.triggerEl = this.obj.el.querySelector("[data-xprez-section-delete-trigger]");
+        if (!this.triggerEl) { return; }
+        this.inputEl = this.triggerEl.querySelector("input");
+        this.undeleteEl = this.obj.el.querySelector("[data-xprez-section-undelete]");
+    }
+}
+
+export class XprezModuleDeleter extends XprezDeleterBase {
+    initElements() {
+        this.triggerEl = this.obj.el.querySelector("[data-xprez-module-delete-trigger]");
+        if (!this.triggerEl) { return; }
+        this.inputEl = this.triggerEl.querySelector("input");
+        this.undeleteEl = this.obj.el.querySelector("[data-xprez-module-undelete]");
+    }
+}
+
+export class XprezConfigDeleterBase extends XprezDeleterBase {
+    _initElements(dataComponentName) {
+        this.triggerEl = this.obj.el.querySelector(`[data-xprez-${dataComponentName}-delete-trigger]`);
+        if (!this.triggerEl) { return; }
+        this.inputEl = this.triggerEl.querySelector("input");
+        this.undeleteEl = this.obj.el.querySelector(`[data-xprez-${dataComponentName}-undelete]`);
+    }
+
+    _afterDeleteChange() {
+        this.obj.parent.configAdder.setOptionsDisabledState();
+        this.obj.parent.updateConfigFieldsActive();
+    }
+
+    delete() {
+        super.delete();
+        this._afterDeleteChange();
+    }
+
+    undelete() {
+        super.undelete();
+        this._afterDeleteChange();
+    }
+}
+
+export class XprezSectionConfigDeleter extends XprezConfigDeleterBase {
+    initElements() { this._initElements("section-config"); }
+}
+
+export class XprezModuleConfigDeleter extends XprezConfigDeleterBase {
+    initElements() { this._initElements("module-config"); }
+}
+
+export class XprezMultiModuleItemDeleter extends XprezDeleterBase {
+    initElements() {
+        this.triggerEl = this.obj.el.querySelector(
+            "[data-xprez-multi-module-item-delete]"
+        );
+        this.inputEl = this.obj.el.querySelector(
+            `input[name="${this.obj.el.dataset.prefix}-delete"]`
+        );
+        this.undeleteEl = this.obj.el.querySelector(
+            "[data-xprez-multi-module-item-undelete]"
+        );
+    }
+}
+
+export class XprezTextMediaDeleter extends XprezDeleterBase {
+    initElements() {
+        this.mediaEl = this.obj.el.querySelector("[data-xprez-text-media]");
+        if (!this.mediaEl) { return; }
+        this.triggerEl = this.mediaEl.querySelector(
+            "[data-xprez-text-media-delete-trigger]"
+        );
+        if (!this.triggerEl) { return; }
+        this.inputEl = this.triggerEl.querySelector("input");
+        this.undeleteEl = this.mediaEl.querySelector(
+            "[data-xprez-text-media-undelete]"
+        );
+    }
+
+    delete() {
+        if ("hasSavedMedia" in this.mediaEl.dataset) {
+            this.mediaEl.dataset.mode = "delete";
+            this.inputEl.checked = true;
+        } else {
+            this.mediaEl.setAttribute("data-hidden", "");
+            this.obj.mediaFileInput.value = "";
+            this.obj._clearMediaPreview();
+        }
+    }
+
+    undelete() {
+        this.mediaEl.dataset.mode = "";
+        this.inputEl.checked = false;
+    }
+}

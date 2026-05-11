@@ -1,0 +1,10 @@
+<div style="display: none">
+    {% include "django/forms/widgets/textarea.html" %}
+</div>
+<div class="ck-editor" data-xprez-ck-editor data-id="{{ widget.name }}"></div>
+<script>
+    initializeCkEditor(
+        document.getElementById('id_{{ widget.name }}'),
+        document.querySelector('[data-xprez-ck-editor][data-id="{{ widget.name }}"]')
+    );
+</script>

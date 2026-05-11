@@ -1,0 +1,19 @@
+{% extends "xprez/modules/base.html" %}
+
+{% block css_class %}{{ block.super }}{% if module.poster_image %} xprez-video--with-poster{% endif %}{% endblock %}
+
+{% block content %}
+    <div class="xprez-video__item"{% if module.poster_image %} data-video-with-poster{% endif %}>
+        {% if module.poster_image %}
+            {% with geoms=module.srcset_geometries %}
+                <div class="xprez-video__poster xprez-video-poster-{{ module.video_id }}" data-video-poster>
+                    {% include "xprez/includes/responsive_image.html" with source=module.poster_image geometries=geoms sizes=module.image_sizes crop="50%" css_class="xprez-video__poster-img" %}
+                    <div class="xprez-video__btn-cont">
+                        {% include "xprez/shared/icons/video_play.html" %}
+                    </div>
+                </div>
+            {% endwith %}
+        {% endif %}
+        {% include module.get_embed_template_name with video_id=module.video_id %}
+    </div>
+{% endblock %}

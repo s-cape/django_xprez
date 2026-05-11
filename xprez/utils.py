@@ -1,27 +1,38 @@
+import copy
 import random
 
+from django.utils.module_loading import import_string
+
+from . import constants
 from .conf import settings
 
 
-def import_class(cl):
-    d = cl.rfind(".")
-    classname = cl[d + 1 : len(cl)]
-    m = __import__(cl[0:d], globals(), locals(), [classname])
-    return getattr(m, classname)
+def copy_model(instance):
+    """Return an unsaved shallow copy of a model instance, ready for insert."""
+    inst = copy.copy(instance)
+    inst.pk = None
+    inst.id = None
+    inst._state.adding = True
+    return inst
 
 
-def remove_duplicates(list_):
-    seen = set()
-    seen_add = seen.add
-    return [x for x in list_ if not (x in seen or seen_add(x))]
+def import_class(cls):
+    """Import a class from a dotted path string, or return cls if already a class."""
+    if isinstance(cls, str):
+        return import_string(cls)
+    return cls
+
+
+def class_content_type(cls):
+    return f"{cls._meta.app_label}.{cls._meta.object_name}"
 
 
 def build_absolute_uri(location, request=None):
     if settings.XPREZ_USE_ABSOLUTE_URI:
-        if "http" not in location:
+        if not location.lower().startswith(("http://", "https://", "//")):
             if request:
                 return request.build_absolute_uri(location)
-            return "{}{}".format(settings.XPREZ_BASE_URL, location)
+            return f"{settings.XPREZ_BASE_URL}{location}"
     return location
 
 
@@ -30,6 +41,14 @@ def random_string(length, include_special_chars=False):
     if include_special_chars:
         chars += "!@#$%^&*(-_=+)"
     return "".join([random.choice(chars) for i in range(length)])
+
+
+def resolve_saved(mode, source_saved):
+    """Compute the saved flag for a duplicated object given a save mode."""
+    if mode == constants.SAVED_PRESERVE:
+        return source_saved
+    else:
+        return mode is True or mode == constants.SAVED_FORCE_TRUE
 
 
 def truncate_with_ellipsis(string, length):

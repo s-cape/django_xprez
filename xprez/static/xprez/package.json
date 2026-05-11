@@ -6,16 +6,21 @@
     "devDependencies": {
         "@popperjs/core": "^2.6.0",
         "autoprefixer": "^10.2.4",
+        "esbuild": "^0.27.3",
         "npm-run-all": "^4.1.5",
         "postcss": "^8.2.5",
         "postcss-cli": "^8.3.1",
-        "sass": "^1.32.8"
+        "sass": "~1.66.0"
     },
     "scripts": {
         "css-prefix": "postcss styles/*.css --verbose --use autoprefixer --no-map --replace",
         "css-compile-build": "sass --style compressed --no-error-css --no-source-map  styles/scss/frontend:styles styles/scss/backend:styles",
         "css-compile-watch": "sass --watch --style compressed --source-map --error-css  styles/scss/frontend:styles styles/scss/backend:styles",
-        "watch": "npm-run-all css-compile-watch",
-        "build": "npm-run-all css-compile-build css-prefix"
+        "js-admin-build": "esbuild admin/js/src/xprez.js --bundle --minify --format=iife --outfile=admin/js/xprez.min.js",
+        "js-admin-watch": "esbuild admin/js/src/xprez.js --bundle --minify --format=iife --outfile=admin/js/xprez.min.js --watch",
+        "js-front-build": "esbuild js/src/*.js --minify --outdir=js --out-extension:.js=.min.js",
+        "js-front-watch": "esbuild js/src/*.js --minify --outdir=js --out-extension:.js=.min.js --watch",
+        "watch": "npm-run-all --parallel css-compile-watch js-admin-watch js-front-watch",
+        "build": "npm-run-all css-compile-build css-prefix js-admin-build js-front-build"
     }
 }

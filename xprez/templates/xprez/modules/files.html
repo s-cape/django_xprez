@@ -1,0 +1,17 @@
+{% extends "xprez/modules/base.html" %}
+{% load i18n %}
+
+{% block content %}
+    {% if module.title %}
+        <h4>{{ module.title }}</h4>
+    {% endif %}
+    {% for item in items %}
+        <p class="xprez-files__item">
+            <a href="{{ item.file.url }}" class="xprez-files__link" download="{{ item.get_description }}{% if item.get_file_extension %}.{{ item.get_file_extension }}{% endif %}">
+                {% include "xprez/shared/icons/download.html" %}
+                <span class="xprez-files__description">{{ item.get_description }} </span>
+                <span class="xprez-files__extension">{% if item.get_file_extension %}{{ item.get_file_extension }}{% endif %}</span>
+            </a>
+        </p>
+    {% endfor %}
+{% endblock %}

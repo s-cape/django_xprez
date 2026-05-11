@@ -1,0 +1,13 @@
+.xprez-add {
+    &-section {
+        text-align: center;
+        border-top: var(--x-admin-section-divider-height) solid var(--x-admin-section-divider-bg);
+        padding-top: 2rem;
+        padding-bottom: 1.5rem;
+        margin-top: 1.5rem;
+
+        h3 {
+            font-size: $admin-ui-font-size;
+        }
+    }
+}

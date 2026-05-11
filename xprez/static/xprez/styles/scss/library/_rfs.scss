@@ -28,7 +28,7 @@ $rfs-breakpoint-unit: px !default;
 $rfs-two-dimensional: false !default;
 
 // Factor of decrease
-$rfs-factor: 10 !default;
+$rfs-factor: 8 !default;
 
 @if type-of($rfs-factor) != number or $rfs-factor <= 1 {
   @error "`#{$rfs-factor}` is not a valid  $rfs-factor, it must be greater than 1.";
@@ -345,4 +345,16 @@ $rfs-mq-property-height: if($rfs-mode == max-media-query, max-height, min-height
 
 @mixin margin-left($value) {
   @include rfs($value, margin-left);
+}
+
+@mixin gap($value) {
+  @include rfs($value, gap);
+}
+
+@mixin width($value) {
+  @include rfs($value, width);
+}
+
+@mixin height($value) {
+  @include rfs($value, height);
 }

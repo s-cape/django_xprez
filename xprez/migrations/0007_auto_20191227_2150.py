@@ -20,7 +20,6 @@ def fill_content_type(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("xprez", "0006_contentscontainer_content_type"),
     ]

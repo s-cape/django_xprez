@@ -4,26 +4,44 @@
 Django Xprez
 ============
 
-Xprez is CMS For Django
+A flexible Django CMS with built-in modules and easy custom modules.
+
+The backend works well with Django admin but can also be used standalone.
+
+Features
+--------
+
+- **Structure**
+  - **Containers** — apply or extend in your own models (e.g. Page, Article).
+  - **Sections** — rows with max-width, background (part of the structure).
+  - **Modules** (content blocks)
+    - Built-in: text, quote, gallery, files, video, numbers, code input, code template, anchor.
+    - Custom: simply subclass `Module` in your app; they auto-register and appear in the same admin UI and frontend.
+- **Responsive**
+  - Layout (visibility, columns, padding, margin, colspan) per breakpoint.
+  - Responsive images (srcset, breakpoint-aware sizes).
+- **Styles**
+  - Ready-made frontend CSS included.
+  - Or import xprez SCSS into your build; link `{% url 'xprez:css_variables_global' %}` for breakpoint variables.
+- **Clipboard and symlinks** — Copy modules or sections; paste into another page or paste as symlink to reuse the same content.
 
 Quick start
 -----------
 
 1. Install django-xprez:
-```
-    pip install django-xprez
+
+```bash
+pip install django-xprez
 ```
 
 
 2. Add following apps to your settings.INSTALLED_APPS:
 
-```
-    INSTALLED_APPS = [
+```python
+INSTALLED_APPS = [
         ...
-        'django.contrib.humanize',
         'sorl.thumbnail',
         'xprez',
-        'xprez.ck_editor',
         ...
     ]
 ```
@@ -33,8 +51,8 @@ Quick start
 
 4. Make sure request context processor is enabled in settings:
 
-```
-    TEMPLATES = [
+```python
+TEMPLATES = [
         ...
         'OPTIONS': {
             'context_processors': [
@@ -47,82 +65,75 @@ Quick start
     ]
 ```
 
-5. Include the xprez admin URLconf in your project urls.py like this:
+5. Include the xprez urls in your project urls.py like this:
 
-```
-    path('xprez/', include('xprez.urls')),
+```python
+path('xprez/', include('xprez.urls')),
 ```
 
 6. Create models:
-```
-    from xprez.models import ContentsContainer
 
-    class Page(ContentsContainer):
-        title = models.CharField(max_length=255)
-        slug = models.SlugField(max_length=255, unique=True)
+```python
+from xprez.models import Container
 
-        def __str__(self):
-            return self.title
+class Page(Container):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.title
 ```
 
 7. Register models in admin:
-```
-    from django.contrib import admin
-    from xprez.admin import XprezAdmin
-    from .models import Page
 
-    @admin.register(Page)
-    class PageAdmin(XprezAdmin):
-        pass
+```python
+from django.contrib import admin
+from xprez.admin import XprezAdmin
+from .models import Page
+
+@admin.register(Page)
+class PageAdmin(XprezAdmin):
+    pass
 ```
 
 8. Render page in template:
-```
-    {% load xprez %}
-    {% xprez_front_media %}
-    {% include 'xprez/includes/photoswipe.html' %}
-    {% include 'xprez/container.html' with contents=page.contents.all %}
-```
 
-9. (optional) Change sorl thumbnail backend in settings - for seo-friendly thumbnail filenames:
-
-```
-    THUMBNAIL_BACKEND = 'xprez.contrib.sorl_thumbnail.thumbnail_backend.NamingThumbnailBackend'
+```django-html
+{% load xprez %}
+<link rel="stylesheet" href="{% url 'xprez:css_variables_global' %}">
+{% xprez_front_media page %}
+{% include 'xprez/container.html' with container=page %}
 ```
 
-10. (optional) Look at example_app for more comprehensive example.
+9. (optional) Add a custom module:
 
-Development
------------
-To setup automated black formatting connected to git commits:
-- install [pre-commit](https://pre-commit.com/#installation)
-- run `pre-commit install`
+```python
+from xprez.models import Module
 
-To rebuild ckeditor:
+class MyModule(Module):
+    title = models.CharField(max_length=200)
+    count = models.PositiveIntegerField(default=0)
+    is_featured = models.BooleanField(default=False)
 
-    cd xprez/ck_editor/assets/ckeditor5
-    npm install
-    npm run build
+    front_template_name = "myapp/modules/my.html"
 
-To rebuild css styles
+    class Meta:
+        verbose_name = "My module"
+```
 
-    cd xprez/static/xprez
-    npm install
-    npm run build (or `watch` for developing)
+See the [built-in modules](xprez/modules/) source for more examples.
 
+10. (optional) Change sorl thumbnail backend in settings — for seo-friendly thumbnail filenames:
 
-Deploying new version
-----------------
-
-https://github.com/s-cape/django_xprez/actions/workflows/release.yml
+```python
+THUMBNAIL_BACKEND = 'xprez.contrib.sorl_thumbnail.thumbnail_backend.NamingThumbnailBackend'
+```
 
 
-TODO
--------
+---
 
-- add custom module tutorial to Readme
-- fix template content to save only relative path to database
-- check template content raising UnicodeDecodeError
-- create manual for various situations (ck_editor branch)
-  - using custom config and implement style sources into own building system (using get_module_path.py)
-  - how to implement `xprezanchor` functionality
+For user documentation, see [docs/user/README.md](docs/user/README.md).
+
+For an example, see the [example_app](example_app/) in this repository.
+
+For development and contributing, see [docs/development.md](docs/development.md).

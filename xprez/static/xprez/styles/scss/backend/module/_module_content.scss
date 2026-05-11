@@ -1,0 +1,30 @@
+.xprez-module__content {
+	--x-link-color: #{$b-blue-high};
+
+	background: var(--x-admin-content-bg);
+	// border-top: 1px solid $b-gray-4;
+	padding: 15px;
+	overflow: hidden;
+	font-size: 1rem;
+	border-radius: 0 0 var(--x-admin-border-radius-md) var(--x-admin-border-radius-md);
+	
+	&-info {
+		display: flex;
+		justify-content: center;
+		gap: 4px;
+		align-items: center;
+		margin: 1rem auto;
+
+		&-arr {
+			margin: 0 10px;
+			font-size: 16px;
+		}
+	}
+
+	&-buttons {
+		display: flex;
+		justify-content: center;
+		gap: 6px;
+		margin: 1rem auto;
+	}
+}

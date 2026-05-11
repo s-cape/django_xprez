@@ -1,0 +1,31 @@
+{% load i18n %}
+<div
+    class="xprez-option-group xprez-option-group--config"
+    data-controller="{% block controller_class %}{% endblock %}"
+    {% if not config.saved %}data-unsaved{% endif %}
+    {% if config.is_default %}data-is-default{% endif %}
+    data-css-breakpoint="{{ config.css_breakpoint }}"
+>
+    <div class="xprez-option-group__title">
+        <div class="xprez-option" data-active="true" data-text-label="false">
+            <label for="{{ config.admin_form.visible.id_for_label }}">
+                <i class="xprez-icon-eye x-variant-checked"></i>
+                <i class="xprez-icon-eye_slash x-variant-unchecked x-color-danger"></i>
+                <span>{% trans "Visible" %}</span>
+            </label>
+            {{ config.admin_form.visible }}
+        </div>
+        <span class="xprez-option-group__title-text">{{ config.get_css_breakpoint_display|safe }}</span>
+        {% if config.admin_form.delete %}
+            {% block delete_trigger %}{% endblock %}
+        {% endif %}
+    </div>
+    {% include "xprez/admin/form/errors.html" with errors=config.admin_form.non_field_errors %}
+    {% block fields %}{% endblock %}
+
+    {% if config.admin_form.delete %}
+        {% block delete_info %}{% endblock %}
+    {% endif %}
+
+    {% block config_hidden_fields %}{% endblock %}
+</div>

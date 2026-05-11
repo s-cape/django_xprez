@@ -44,11 +44,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django.contrib.humanize",
     "sorl.thumbnail",
     "xprez",
-    "xprez.ck_editor",
-    "xprez.code_snippet",
     "example_app",
 ]
 

@@ -1,0 +1,71 @@
+.xprez-form-table {
+	--x-admin-option-font-size: 14px;
+
+	max-width: var(--x-admin-form-width);
+	line-height: 1.25;
+	padding: 0 0;
+
+	label {
+		font-size: .857rem;
+		color: $b-gray-7;
+	}
+
+	& + &,
+	& + .xprez-admin-multi-items {
+		border-top: 1px solid $b-gray-4;
+		padding-top: .5rem;
+	}
+
+	&.ui-sortable-helper {
+		background: darken($b-gray-2, 5%);
+	}
+
+	&.ui-sortable-handle {
+		cursor: move;
+	}
+
+	.xprez-option-group:first-child {
+		margin-top: 0;
+	}
+
+	.xprez-option {
+		--x-admin-padding-md: .75rem;
+		--x-admin-option-input-font-weight: 400;
+		--x-admin-option-color: #{rgba($b-gray-7, 0.8)};
+
+		// border: 1px solid $b-gray-3;
+		
+		&:not(:has(> input[type="checkbox"])) {
+			flex: 1;
+		}
+
+		&:has(input[type="checkbox"]:last-child) {
+			padding-right: .25rem;
+		}
+
+		& > label {
+			flex-basis: 6rem;
+    		min-width: 6rem;
+			width: min-content;
+			border-right: 1px solid $b-gray-3;
+			margin-right: .5rem;
+			padding-right: .5rem;
+
+			&:has(+.xprez-option__dropdown) {
+				margin-right: 0;
+			}
+		}
+
+		input, textarea {
+			text-align: left !important;
+			align-self: center;
+		}
+
+		&:has(*[required]) {
+			label {
+				font-weight: 500;
+				color: $b-gray-8;
+			}
+		}
+	}
+}

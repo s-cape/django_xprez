@@ -1,0 +1,31 @@
+.xprez-gallery {
+    overflow: hidden;
+    
+    .xprez-module-inner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--x-gap);
+        align-items: flex-end;
+        width: 100%;
+    }
+
+    &__item {
+        &-cont {
+            --x-gallery-item-width: calc(100% / var(--x-columns) - var(--x-gap) * (var(--x-columns) - 1) / var(--x-columns));
+            flex-basis: var(--x-gallery-item-width);
+            width: var(--x-gallery-item-width);
+        }
+
+        &-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
+
+    figcaption {
+        font-style: #{$x-gallery-figcaption-font-style};
+        opacity: #{$x-gallery-figcaption-opacity};
+        text-align: #{$x-gallery-figcaption-text-align};   
+    }
+}

@@ -1,0 +1,74 @@
+@use "../../library/rfs" as rfs; 
+
+.xprez-numbers {
+	text-align: center;
+	overflow: hidden;
+
+	.xprez-module-inner {
+		flex: 1;
+		flex-wrap: wrap;
+		gap: var(--x-gap);
+		justify-content: var(--x-horizontal-align-flex, center);
+		align-items: var(--x-vertical-align-flex, stretch);
+		display: var(--x-numbers-display);
+		grid-template-columns: repeat(var(--x-columns), 1fr);
+	}
+
+	&__digits {
+		display: inline;
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: $x-numbers-digits-letter-spacing;
+	}
+
+	&__suffix {
+		letter-spacing: $x-numbers-digits-letter-spacing;
+	}
+
+	&__number {
+		display: inline-flex;
+		gap: $x-numbers-suffix-gap;
+	}
+
+	&__item {
+		border-radius: #{$x-numbers-item-border-radius};
+		min-width: var(--x-numbers-item-auto-min-width, 0);
+		display: flex;
+		flex-direction: column;
+		gap: #{$x-numbers-item-text-gap};
+		justify-content: center;
+		background-color: var(--x-numbers-item-bg);
+		align-items: #{$x-numbers-item-align-items};
+		@include rfs.padding(#{$x-numbers-item-padding});
+	}
+
+	figcaption {
+        font-style: #{$x-numbers-figcaption-font-style};
+        opacity: #{$x-numbers-figcaption-opacity};
+        text-align: #{$x-numbers-figcaption-text-align};  
+		text-transform: #{$x-numbers-figcaption-text-transform}; 
+		font-weight: #{$x-numbers-figcaption-font-weight};
+		letter-spacing: 0.05rem;;
+    }
+
+	&__number-cont {
+		margin-bottom: 0 !important;
+		line-height: 1 !important;
+		font-weight: #{$x-numbers-number-font-weight};
+		letter-spacing: 0.05rem;
+	}
+}
+
+@each $number, $breakpoint in $x-breakpoints {
+    @media (max-width: $breakpoint) {
+        .xprez-#{$number}-numbers-columns-auto {
+			--x-numbers-display: flex;
+			--x-numbers-item-auto-min-width: #{$x-numbers-item-auto-min-width};
+			--x-numbers-item-auto-max-width: #{$x-numbers-item-auto-max-width};
+        }
+
+        .xprez-#{$number}-numbers-columns-auto-reset {
+			--x-numbers-display: grid;
+        }
+    }
+}

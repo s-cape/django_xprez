@@ -1,0 +1,51 @@
+.xprez-accordion {
+	.xprez-module-inner {
+		flex: 1;
+	}
+
+	&__item {
+		display: flow-root;
+		
+		&:not(:last-child) {
+			border-bottom: $x-accordion-item-border-bottom;
+		}
+	}
+
+	&__title {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: $x-accordion-title-gap;
+		width: 100%;
+		padding: $x-accordion-title-padding;
+		text-wrap: balance;
+		cursor: pointer;
+		user-select: none;
+
+		.svg-icon {
+			flex-shrink: 0;
+			transition: transform 0.2s ease;
+			width: 1.75rem;
+			height: 1.75rem;
+		}
+
+		&[aria-expanded="true"] .svg-icon {
+			transform: rotate(45deg);
+		}
+
+		h4 {
+			margin-bottom: 0;
+			color: var(--x-base-color);
+			font-weight: $x-accordion-title-font-weight;
+		}
+	}
+
+	&__body {
+		display: none;
+		padding-bottom: $x-accordion-body-padding-bottom;
+	}
+
+	&__item.is-open &__body {
+		display: block;
+	}
+}

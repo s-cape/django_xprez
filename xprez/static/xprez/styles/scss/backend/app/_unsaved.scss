@@ -1,0 +1,9 @@
+.xprez-admin-module, .xprez-section {
+    &[data-unsaved] {
+		--x-admin-bg: #{$b-blue-purple-light};
+
+		border: 1px dashed $b-blue-purple;
+		padding: .5rem;
+		border-radius: .5rem;
+	}
+}

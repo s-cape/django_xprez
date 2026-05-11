@@ -1,0 +1,13 @@
+{% load i18n %}
+<div class="xprez-clipboard-clip" data-controller="{{ controller }}" data-url="{{ clip_url }}">
+    <span class="xprez-btn__inner xprez-btn__success xprez-btn--sm">
+        {% include "xprez/shared/icons/checkmark.html" %}
+        {% trans "Copied" %}
+    </span>
+    <span class="xprez-btn__inner xprez-btn__default xprez-btn--sm">
+        {% comment %} <i class="xprez-icon-copy"></i> {% endcomment %}
+        {% include "xprez/shared/icons/paste.html" %}
+        {% trans "Copy" as default_clip_text %}
+        {{ clip_text|default:default_clip_text }}
+    </span>
+</div>

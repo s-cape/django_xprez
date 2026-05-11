@@ -1,0 +1,42 @@
+.xprez-module__title {
+	font-family: var(--x-admin-ui-font-family);
+	font-weight: var(--x-admin-ui-font-weight);
+	position: relative;
+	margin: var(--x-admin-padding-sm);
+	display: flex;
+	align-items: center;
+	gap: 4px;
+
+	&-heading{
+		font-size: var(--x-admin-font-size-base);
+		color: darken($b-gray-7, 15%);
+		cursor: move;
+		margin: 0;
+		font-weight: normal;
+		flex: 1;
+
+		> * {
+			vertical-align: middle;
+		}
+
+		i {
+			font-style: normal;
+			opacity: 0.9;
+			margin-left: .5rem;
+		}
+
+		svg {
+			margin-right: .25em;
+			width: 16px; 
+			height: 16px;
+		}
+	}
+}
+
+.xprez-icon-chevron-small-down {
+	transition: transform 0.2s ease-in-out;
+
+	.collapsed  & {
+		transform: rotate(-90deg);
+	}
+}

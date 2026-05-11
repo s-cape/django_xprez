@@ -1,0 +1,14 @@
+{% load i18n %}
+<div class="xprez-icon-btn xprez-submenu__toggle" title='{% trans "Copy" %}' data-controller="{{ copy_menu_controller }}">
+    <i class="xprez-icon-copy"></i>
+    <div class="xprez-submenu">
+        <div
+            data-xprez-duplicate-trigger
+            data-controller="{{ duplicate_controller }}"
+            data-url="{{ duplicate_url }}"
+        >
+            {% include "xprez/shared/icons/repeat.html" %} {% trans "Duplicate" %}
+        </div>
+        {% include "xprez/admin/includes/clipboard_clip.html" with clip_url=clip_url controller="XprezClipboardClipContent" %}
+    </div>
+</div>

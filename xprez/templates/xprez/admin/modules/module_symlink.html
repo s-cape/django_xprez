@@ -1,0 +1,26 @@
+{% extends "xprez/admin/modules/base.html" %}
+{% load i18n xprez_admin %}
+
+{% block actions %}{% endblock %}
+
+{% block content %}
+    <div class="xprez-module__content-info">
+        {% if module.symlink %}
+            {% with symlinked_container=module.symlink.section.container.polymorph %}
+                {% include "xprez/shared/icons/page.html" %}
+                {% xprez_admin_change_url module.admin_form.xprez_admin symlinked_container as symlinked_container_url %}
+                <a {% if symlinked_container_url %}href="{{ symlinked_container_url }}"{% endif %}>
+                    <strong>{{ symlinked_container }}</strong>
+                </a>
+            {% endwith %}
+            <span class="xprez-module__content-info-arr">&#x203A;</span>
+            {{ module.symlink.polymorph.admin_icon }}
+            <strong>{{ module.symlink.polymorph.verbose_name }}</strong>
+            {% with preview=module.symlink.polymorph.preview_text %}{% if preview %}
+                <i>({{ preview }})</i>
+            {% endif %}{% endwith %}
+        {% else %}
+            <div class="xprez-warning">{% trans "Linked content not found." %}</div>
+        {% endif %}
+    </div>
+{% endblock %}

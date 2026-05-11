@@ -1,0 +1,21 @@
+{% extends "xprez/admin/modules/multi_module/multi_module.html" %}
+{% load i18n %}
+
+{% block add_item %}
+    <div class="xprez-admin-adder" data-controller="XprezUploadMultiModuleAdder">
+        <div
+            class="xprez-admin-adder__inner"
+            data-xprez-multi-module-dropzone
+            data-upload-url="{% url module.xprez_upload_item_url_name module.pk %}"
+        >
+            <input type="file" multiple {% block upload_attrs %}{% endblock %} data-xprez-multi-module-file-input>
+            <span class="xprez-admin-adder__upload-text">
+                {% block dropzone_text %}
+                {% include "xprez/shared/icons/cloud_arrow_up.html" %}
+                    {% trans "Drop files here or click to choose files from disk" %}
+                {% endblock %}
+            </span>
+            <span class="xprez-admin-adder__upload-text adding">{% trans "Uploading..." %}</span>
+        </div>
+    </div>
+{% endblock %}

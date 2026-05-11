@@ -1,28 +1,55 @@
 {% load i18n %}
 {% load xprez_admin %}
 
-<div class="xprez {{ form.xprez_admin.xprez_ui_css_class }} js-xprez">
+<div class="xprez" data-controller="Xprez">
     <div class="xprez-top">
-        <span class="xprez-option-btn js-collapse_all">Collapse all</span>
-        <span
-            class="xprez-option-btn js-xprez-clipboard-copy-all xprez-clipboard-copy"
-            data-url="{% url form.xprez_admin.xprez_clipboard_copy_url_name form.xprez_admin.CLIPBOARD_CONTAINER_KEY form.instance.pk %}"
-        >
-            <span class="xprez-inline-success-message">{% include "xprez/admin/icons/checkmark.html" %} Copied</span>
-            <span class="default">Copy all</span>
-        </span>
+        
+        <div class="xprez-option" data-active="true" data-text-label="true" style="display: none;" {# temporarily hidden #}>
+            <label for="view">
+                <i class="xprez-icon-view"></i>
+                <span>{% trans "View" %}</span>
+            </label>
+            <span class="xprez-option__dropdown">
+                <select id="view" data-xprez-view-select>
+                    <option value="sm">Default edit view</option>
+                    {% for id, data in form.xprez_admin.xprez_breakpoints.items %}
+                        <option value="{{ id }}">{{ data.name|safe }}</option>
+                    {% endfor %}
+                </select>
+            </span>
+        </div>
+
+        <div data-controller="XprezAllSectionsCollapseExpand">
+            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-xprez-all-sections-collapser>
+                <i class="xprez-icon-vertical"></i>
+                {% trans "Collapse all" %}
+            </span>
+            <span class="xprez-btn xprez-btn-transparent xprez-btn--sm" data-xprez-all-sections-expander>
+                <i class="xprez-icon-vertical"></i>
+                {% trans "Expand all" %}
+            </span>
+        </div>
+        
+        {% url form.xprez_admin.xprez_clipboard_clip_url_name form.xprez_admin.constants.CONTAINER_KEY form.instance.pk as clip_url %}
+        {% trans "Copy all" as clip_text_all %}
+        {% include "xprez/admin/includes/clipboard_clip.html" with clip_url=clip_url controller="XprezClipboardClipContainer" clip_text=clip_text_all %}
     </div>
-    <div class="js-xprez-contents-container">
-        {% for content in form.xprez_contents %}
-            {% xprez_content_render_admin content %}
+
+    <div data-xprez-sections-container>
+        {% for section in form.xprez_sections %}
+            {% xprez_section_render_admin section %}
         {% endfor %}
     </div>
-    {% with allowed_contents=form.xprez_get_allowed_contents %}
-        {% if allowed_contents %}
-            <div class="js-xprez-add xprez-add-after">
-                <h2>+ Add new piece of content +</h2>
-                {% include "./includes/add_list.html" with xprez_admin=form.xprez_admin container=form.instance %}
-            </div>
+
+    {% with available_modules=form.xprez_add_menu_module_classes %}
+        {% if available_modules %}
+            {% include "./includes/adders/content_container_end.html" with xprez_admin=form.xprez_admin adder_container=form.instance %}
         {% endif %}
     {% endwith %}
 </div>
+
+<script>
+    window.addEventListener("DOMContentLoaded", function() {
+        window.xprez = new Xprez();
+    });
+</script>

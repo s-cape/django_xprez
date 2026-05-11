@@ -1,0 +1,98 @@
+:root {
+	// Colors
+	--x-admin-bg: #{$admin-bg};
+	--x-admin-color: #{$admin-color};
+	--x-admin-color-light: #{lighten($admin-color, 30%)};
+	--x-admin-color-selection-rgb: 18, 144, 247;
+
+	// Fonts
+	--x-admin-ui-font-family: #{$admin-ui-font-family};
+	--x-admin-ui-font-weight: 400;
+
+	// General
+	--x-admin-border-radius-sm: 4px;
+	--x-admin-border-radius-md: 8px;
+	--x-admin-border-radius-lg: 12px;
+	--x-admin-border-radius-xl: 24px;
+
+	--x-admin-padding-sm: 4px;
+	--x-admin-padding-md: 8px;
+	--x-admin-padding-lg: 16px;
+	--x-admin-padding-xl: 24px;
+
+	--x-admin-box-shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+
+	--x-admin-module-bg: #{$b-gray-2};
+	--x-admin-module-bg-stripes: repeating-linear-gradient( 
+		-45deg, 
+		#{darken($b-gray-2, 2%)},
+		#{darken($b-gray-2, 2%)} 10px, 
+		#{$b-gray-2} 10px,
+		#{$b-gray-2} 20px
+	);
+
+	--x-admin-btn-bg: #{$b-gray-8};
+	--x-admin-btn-color: #{$white};
+	--x-admin-btn-border-radius: .25rem;
+
+	--x-admin-btn-secondary-bg: #{$b-gray-4};
+	--x-admin-btn-secondary-color: #{$b-gray-8};
+
+
+	// Specific
+	--x-admin-section-grid-gap: 16px;
+	--x-admin-section-grid-default: repeat(auto-fill, minmax(500px, 1fr));
+	--x-admin-content-header-bg: #{$b-gray-3};
+	--x-admin-section-divider-bg: #{$b-gray-6};
+	--x-admin-section-divider-height: 0.5px;
+	--x-admin-section-max-width: 1400px;
+
+	--x-admin-font-size-base: #{$admin-ui-font-size};
+	--x-admin-font-size-sm: #{$admin-ui-font-size-sm};
+	--x-admin-content-bg: transparent;
+	--x-admin-module-box-bg: white;
+	--x-admin-form-width: 800px;
+
+	--x-admin-option-gap: 6px;
+	--x-admin-option-height: 28px;
+	--x-admin-option-bg: #FFF;
+	--x-admin-option-color: #{$b-gray-7};
+	--x-admin-option-input-color: #{$b-gray-8};
+	--x-admin-option-input-font-weight: 500;
+	--x-admin-option-font-size: 12px;
+	--x-admin-option-border-radius: 6px;
+	--x-admin-option-box-shadow: var(--x-admin-box-shadow-sm);
+	--x-admin-option-box-shadow-focus: 0 0 2px 1px rgba(var(--x-admin-color-selection-rgb), 0.5);
+	--x-admin-option-selection-bg: rgba(var(--x-admin-color-selection-rgb), 0.2);
+	--x-admin-option-button-size: var(--x-admin-option-height);
+	--x-admin-option-icon-size: 16px;
+	--x-admin-option-group-border: 2px solid #{$b-gray-6};
+
+	--x-admin-marker-checked-bg: #{$b-pink};
+	--x-admin-marker-checked-color: #FFF; 
+	--x-admin-marker-checked-text-bg: #EEDDEF; 
+	--x-admin-marker-checked-hover-text-bg: #{darken(#EEDDEF, 3%)}; 
+
+	--x-admin-option-group-title-font-size: 14px;
+	--x-admin-option-group-gap: 4px;
+	--x-admin-option-group-panel-bg: #{$b-gray-3};
+
+	--x-admin-option-button-color: #{$b-gray-7}; 
+	--x-admin-option-button-bg: transparent;
+	--x-admin-option-button-hover-bg: #{$b-gray-4};
+	--x-admin-option-button-active-bg: #{$b-gray-7};
+
+	--x-admin-icon-button-size: 32px;
+	--x-admin-icon-button-icon-size: 16px;
+
+	--x-admin-popover-bg: #{$b-gray-3};
+	--x-admin-popover-width: 265px;
+	--x-admin-animation-easing: cubic-bezier(0.32, 0.72, 0, 1);
+	--x-admin-animation-duration: .3s;
+}
+
+.xprez-module {
+	&--transparent {
+		--x-admin-content-bg: var(--x-admin-padding-sm);
+	}
+}

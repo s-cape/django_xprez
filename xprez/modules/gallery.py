@@ -1,0 +1,149 @@
+from django.db import models
+from django.utils.translation import gettext_lazy as _, ngettext
+
+from xprez import constants
+from xprez.admin.forms import ModuleForm
+from xprez.conf import defaults
+from xprez.models.configs import ModuleConfig
+from xprez.models.mixins.font_size import FontSizeModuleMixin
+from xprez.models.mixins.responsive_image import (
+    ResponsiveImageItemMixin,
+    ResponsiveImageParentMixin,
+)
+from xprez.models.multi_module import MultiModuleItem, UploadMultiModule
+
+PHOTOSWIPE_JS = (
+    "xprez/libs/photoswipe/dist/photoswipe.min.js",
+    "xprez/libs/photoswipe/dist/photoswipe-ui-default.min.js",
+    "xprez/js/photoswipe.min.js",
+)
+PHOTOSWIPE_CSS = (
+    "xprez/libs/photoswipe/dist/photoswipe.css",
+    "xprez/libs/photoswipe/dist/default-skin/default-skin.css",
+)
+
+
+class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMultiModule):
+    front_cacheable = True
+    config_model = "xprez.GalleryConfig"
+    front_template_name = "xprez/modules/gallery.html"
+    admin_template_name = "xprez/admin/modules/gallery/gallery.html"
+    admin_item_template_name = "xprez/admin/modules/gallery/gallery_item.html"
+    admin_form_class = "xprez.modules.gallery.GalleryModuleForm"
+    admin_icon_template_name = "xprez/shared/icons/modules/gallery.html"
+
+    crop = models.CharField(
+        max_length=5,
+        choices=constants.CROP_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["module"]["xprez.GalleryModule"]["crop"],
+        blank=True,
+    )
+    lightbox = models.BooleanField(
+        _("Lightbox"),
+        default=defaults.XPREZ_DEFAULTS["module"]["xprez.GalleryModule"]["lightbox"],
+    )
+
+    class Meta:
+        verbose_name = _("Gallery / Image")
+
+    def preview_text(self):
+        count = self.items.count()
+        return ngettext("%(count)s image", "%(count)s images", count) % {"count": count}
+
+    class FrontMedia:
+        js = PHOTOSWIPE_JS
+        css = {"all": PHOTOSWIPE_CSS}
+
+    def get_crop_ratio(self):
+        """Return (numerator, denominator) from self.crop (e.g. '3/4'), or None."""
+        return self.parse_crop_string(self.crop)
+
+    @property
+    def thumbnail_crop(self):
+        if self.get_crop_ratio():
+            return "center"
+        else:
+            return ""
+
+    def get_own_columns(self, config):
+        return config.columns
+
+
+class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):
+    module = models.ForeignKey(
+        GalleryModule,
+        related_name="items",
+        on_delete=models.CASCADE,
+        editable=False,
+    )
+    file = models.ImageField(upload_to="gallery")
+    description = models.CharField(max_length=255, blank=True, null=True)
+    alt_text = models.CharField(max_length=255, blank=True)
+
+    def get_image_field(self):
+        return self.file
+
+    def get_image_aspect_ratio(self):
+        crop_ratio = self.module.get_crop_ratio()
+        return crop_ratio if crop_ratio else (1, 1)
+
+    @classmethod
+    def create_from_file(cls, django_file, gallery):
+        item = cls(module=gallery, position=gallery.items.count())
+        item.file.save(django_file.name.split("/")[-1], django_file)
+        item.save()
+        return item
+
+
+class GalleryConfig(ModuleConfig):
+    admin_template_name = "xprez/admin/configs/modules/gallery.html"
+
+    COLUMNS_CHOICES = (
+        (1, "1"),
+        (2, "2"),
+        (3, "3"),
+        (4, "4"),
+        (5, "5"),
+        (6, "6"),
+        (7, "7"),
+        (8, "8"),
+    )
+    columns = models.PositiveSmallIntegerField(
+        choices=COLUMNS_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.GalleryModule"][
+            "columns"
+        ],
+    )
+
+    gap_choice = models.CharField(
+        "Gap",
+        max_length=20,
+        choices=constants.GAP_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.GalleryModule"][
+            "gap_choice"
+        ],
+        blank=True,
+    )
+    gap_custom = models.PositiveIntegerField(null=True, blank=True)
+
+    def get_css_variables(self):
+        css_variables = super().get_css_variables()
+        css_variables.update(
+            {
+                "columns": self.columns,
+                "gap": self._get_choice_or_custom("gap"),
+            }
+        )
+        return css_variables
+
+
+class GalleryModuleForm(ModuleForm):
+    options_fields = ModuleForm.options_fields + (
+        "font_size",
+        "crop",
+        "lightbox",
+    )
+
+    class Meta:
+        model = GalleryModule
+        fields = "__all__"

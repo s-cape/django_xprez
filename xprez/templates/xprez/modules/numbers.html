@@ -1,0 +1,19 @@
+{% extends "xprez/modules/base.html" %}
+{% load xprez %}
+
+{% block content %}
+    {% for item in items %}
+        {% if item.number %}
+            <figure class="xprez-numbers__item" data-numbers-item>
+                <div class="xprez-display">
+                    <span class="xprez-numbers__number">
+                        <span class="xprez-numbers__digits" data-numbers-counter>{{ item.number_intcomma }}</span>{% if item.suffix %}<span class="xprez-numbers__suffix">{{ item.suffix }}</span>{% endif %}
+                    </span>
+                </div>
+                {% if item.caption %}
+                    <figcaption class="xprez-numbers__caption">{{ item.caption }}</figcaption>
+                {% endif %}
+            </figure>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

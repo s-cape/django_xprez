@@ -1,0 +1,25 @@
+{% extends "xprez/admin/configs/modules/text_base.html" %}
+
+{% block extra_fields %}
+    {{ block.super }}
+    <div class="xprez-option-group__subtitle">Image / Video</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_role size="flex-1" %}
+    </div>
+    <div class="xprez-option-row" data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_LEAD }}|{{ config.constants.MEDIA_ROLE_ICON }}">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_border_radius_choice size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_border_radius_custom label=False suffix=config.units.media_border_radius.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.media_border_radius_choice.html_name|add:":custom\""|safe size="flex-0" %}
+    </div>
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_BACKGROUND }}">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_background_position size="flex-1" %}
+    </div>
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_LEAD }}">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_crop size="flex-1" %}
+    </div>
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_LEAD }}">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_lead_to_edge size="flex-1" %}
+    </div>
+    <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.media_role.html_name }}:{{ config.constants.MEDIA_ROLE_ICON }}">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.media_icon_max_size size="flex-1" suffix=config.units.media_icon_max_size %}
+    </div>
+{% endblock %}

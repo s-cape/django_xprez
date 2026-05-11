@@ -1,0 +1,65 @@
+{% extends "xprez/admin/form/fields/base.html" %}
+{% load i18n %}
+{% load xprez_admin %}
+
+{% block controller_class %}XprezFileInputFieldController{% endblock %}
+
+{% block field %}
+    {% with widget=field|xprez_widget_context %}
+        <div class="xprez-option__file-input">
+            <label
+                class="xprez-icon-btn xprez-option__file-input-upload-btn"
+                title='{% trans "Add file" %}'
+                data-xprez-file-input-add-btn
+                for="{{ field.html_name }}"
+                {% if widget.is_initial %}data-hidden{% endif %}
+            >
+                {% include "xprez/shared/icons/cloud_arrow_up.html" %}
+                <span class="xprez-option__file-input-upload-btn-text">{% trans "Add file" %}</span>
+                <input type="{{ widget.type }}" name="{{ widget.name }}" id="{{ field.html_name }}"{% for name, value in widget.attrs.items %}{% if name != "id" and value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:"s" }}"{% endif %}{% endif %}{% endfor %}>
+            </label>
+
+            <div
+                class="xprez-admin-file-input__media-cont"
+                data-xprez-file-input
+                data-mode=""
+                {% if not widget.is_initial %}data-hidden{% endif %}
+                {% if widget.is_initial %}data-has-saved-file{% endif %}
+            >
+                <div class="xprez-admin-file-input__img-cont">
+                    {% with thumb=widget.value|xprez_file_thumbnail %}
+                        <span class="xprez-admin-file-input__media-file-icon">
+                            {% include "xprez/shared/icons/paperclip.html" %}
+                        </span>
+                        <img
+                            class="xprez-admin-file-input__media-img"
+                            data-media-preview="image"
+                            {% if thumb %}src="{{ thumb.url }}"{% else %}data-hidden{% endif %}
+                        />
+                        <span
+                            class="xprez-admin-file-input__media-file-name"
+                            data-media-preview="fallback"
+                            {% if thumb or not widget.value %}data-hidden{% endif %}
+                        >
+                            {{ widget.value|xprez_file_name }}
+                        </span>
+                    {% endwith %}
+                </div>
+                <div class="xprez-admin-file-input__media-actions">
+                    <label class="xprez-icon-btn" title="{% trans "Replace" %}" data-xprez-file-input-replace-btn for="{{ field.html_name }}">
+                        {% include "xprez/shared/icons/repeat.html" %}
+                    </label>
+                    {% if not widget.required %}
+                        <span class="xprez-icon-btn" title="{% trans "Remove" %}" data-xprez-file-input-delete-trigger>
+                            <i class="xprez-icon-delete"></i>
+                            <span data-hidden>
+                                <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
+                            </span>
+                        </span>
+                    {% endif %}
+                </div>
+                {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-file-input" message_subject="file" %}
+            </div>
+        </div>
+    {% endwith %}
+{% endblock %}

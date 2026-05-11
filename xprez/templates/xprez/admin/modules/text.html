@@ -1,0 +1,38 @@
+{% extends "xprez/admin/modules/text_base.html" %}
+{% load i18n %}
+
+{% block actions %}
+    <span class="xprez-icon-btn" title='{% trans "Image" %}'>
+        <i class="xprez-icon-image"></i>
+        {{ module.admin_form.media }}
+    </span>
+    {{ block.super }}
+{% endblock %}
+
+{% block main_fields %}
+    {# TODO: pokud je  obrazek vyssi, nez data-crop-minimum-size, tak se prida trida crop #}
+    <div
+        class="xprez-admin-file-input__media-cont"
+        data-xprez-text-media
+        data-mode=""
+        data-media-input-name="{{ module.admin_form.media.html_name }}"
+        {% if not module.media %}data-hidden{% endif %}
+        {% if module.media %}data-has-saved-media{% endif %}
+    >
+        <div class="xprez-admin-file-input__img-cont crop" onclick="this.classList.toggle('crop')" data-crop-minimum-size="400">
+            <img class="xprez-admin-file-input__media-img"{% if module.media_is_image %} src="{{ module.media.url }}"{% endif %} data-media-preview="image" />
+            <video class="xprez-admin-file-input__media-video"{% if module.media_is_video %} src="{{ module.media.url }}"{% endif %} data-media-preview="video"></video>
+        </div>
+        <div class="xprez-admin-file-input__media-actions">
+            <label class="xprez-icon-btn" title="{% trans "Image" %}" for="{{ module.admin_form.media.id_for_label }}">
+                {% include "xprez/shared/icons/repeat.html" %}
+            </label>
+            <span class="xprez-icon-btn" title='{% trans "Remove" %}' data-xprez-text-media-delete-trigger>
+                <i class="xprez-icon-delete"></i>
+                <span data-hidden>{{ module.admin_form.media_clear }}</span>
+            </span>
+        </div>
+        {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-text-media" message_subject="image" %}
+    </div>
+    {{ block.super }}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "xprez/admin/sections/section_base.html" %}
+{% load i18n %}
+
+{% block extra_css_classes %} xprez-section--symlink{% endblock %}
+{% block data_mode %}{# (empty)/delete #}{% endblock %}
+
+{% block header_settings %}
+    <span class="xprez-admin-module__name-icon">
+        {% include "xprez/shared/icons/link.html" %}
+    </span>
+{% endblock %}
+
+{% block header_actions %}
+    {{ block.super }}
+    {% trans "Remove" as title_remove %}
+    {% block delete_trigger %}{% endblock %}
+{% endblock %}
+
+{% block section_body %}
+    <div class="xprez-admin-module__body xprez-section__body">
+        <div class="xprez-module__content-info">
+            {% block symlink_content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block delete_info %}
+    {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-section" message_subject="link" %}
+{% endblock %}

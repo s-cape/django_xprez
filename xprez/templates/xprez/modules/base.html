@@ -1,0 +1,11 @@
+{% block module %}
+<div
+    id="{{ module.instance_key }}"
+    class="{% block css_class %}{{ module.front_css_classes_cached }}{% endblock %}"
+    {% block attrs  %}{% endblock %} >
+        {{ module.front_css_variables_cached|safe }}
+        <div class="xprez-module-inner">
+            {% block content %} {% endblock %}
+        </div>
+</div>
+{% endblock %} {% block js %} {% endblock %}

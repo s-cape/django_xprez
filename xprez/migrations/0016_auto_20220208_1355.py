@@ -17,7 +17,6 @@ def noop(*args, **kwargs):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("xprez", "0015_ckeditor_content_centered"),
     ]

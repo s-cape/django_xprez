@@ -1,8 +1,10 @@
-from . import autodiscover, contents_manager
+from django.urls import path
 
-autodiscover()
-
+from xprez import views
 
 app_name = "xprez"
 
-urlpatterns = [] + contents_manager.get_urls()
+urlpatterns = [
+    path("variables.css", views.css.css_variables_global, name="css_variables_global"),
+    path("photoswipe/", views.photoswipe, name="photoswipe"),
+]
