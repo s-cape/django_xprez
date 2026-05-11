@@ -294,10 +294,10 @@ export class XprezUploadMultiModuleAdder extends XprezMultiModuleAdderBase {
             })
                 .then(response => {
                     if (!response.ok) throw new Error(`Upload error ${response.status}`);
-                    return response.text();
+                    return response.json();
                 })
-                .then((html) => this.addFromHtml(html))
-                .catch((error) => console.error('Error uploading file:', error))
+                .then((items) => items.forEach(({ html }) => this.addFromHtml(html)))
+                .catch((error) => this.xprez.reportError(error, "Error uploading"))
                 .finally(() => this.setAddingEnd());
         }
     }

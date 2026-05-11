@@ -1,5 +1,5 @@
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.urls import path, reverse
 
 from xprez import models
@@ -26,7 +26,7 @@ class XprezAdminViewsTemplateContainerMixin:
         )
 
     def xprez_templatecontainer_list_view(self, request, target_container_pk):
-        target_container = get_object_or_404(models.Container, pk=target_container_pk)
+        target_container = self._get_container_instance(request, target_container_pk)
         items = []
         for template in self.xprez_templatecontainers(target_container):
             clipboard_item = ClipboardItemContainer(template.pk, self, target_container)
@@ -55,7 +55,7 @@ class XprezAdminViewsTemplateContainerMixin:
     def xprez_templatecontainer_paste_view(
         self, request, template_pk, target_container_pk
     ):
-        target_container = get_object_or_404(models.Container, pk=target_container_pk)
+        target_container = self._get_container_instance(request, target_container_pk)
         clipboard_item = ClipboardItemContainer(template_pk, self, target_container)
         if not clipboard_item.allowed:
             return HttpResponseBadRequest()
@@ -64,7 +64,7 @@ class XprezAdminViewsTemplateContainerMixin:
     def xprez_templatecontainer_symlink_view(
         self, request, template_pk, target_container_pk
     ):
-        target_container = get_object_or_404(models.Container, pk=target_container_pk)
+        target_container = self._get_container_instance(request, target_container_pk)
         clipboard_item = ClipboardItemContainer(template_pk, self, target_container)
         if not clipboard_item.allowed or not clipboard_item.symlink_allowed:
             return HttpResponseBadRequest()

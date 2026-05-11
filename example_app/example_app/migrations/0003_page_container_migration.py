@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
         ("xprez", "0028_refactor_migrate"),
     ]
 
-    run_before = [("xprez", "0030_refactor_cleanup")]
+    run_before = [("xprez", "0029_refactor_process_modules")]
 
     operations = [
         ContentsContainerToContainer("Page"),

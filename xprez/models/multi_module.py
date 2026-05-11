@@ -1,6 +1,5 @@
 from django.db import models, transaction
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import path
 
@@ -124,17 +123,21 @@ class MultiModule(Module):
         ]
 
     @classmethod
-    def add_item_view(cls, xprez_admin, request, module_pk):
-        module = get_object_or_404(cls, pk=module_pk)
-        item = module.create_item()
+    def _render_item_html(cls, xprez_admin, module, item):
         form_class = module.get_admin_item_form_class(item)
         item.admin_form = form_class(
             xprez_admin=xprez_admin, instance=item, prefix=item.instance_key
         )
-        html = render_to_string(
+        return render_to_string(
             cls.admin_item_template_name,
             {"item": item, "module": module},
         )
+
+    @classmethod
+    def add_item_view(cls, xprez_admin, request, module_pk):
+        module = xprez_admin._get_module_instance(request, module_pk, model=cls)
+        item = module.create_item()
+        html = cls._render_item_html(xprez_admin, module, item)
         return JsonResponse([{"html": html}], safe=False)
 
     @classmethod
@@ -210,22 +213,14 @@ class UploadMultiModule(MultiModule):
 
     @classmethod
     def upload_item_view(cls, xprez_admin, request, module_pk):
-        """Handle one file per request; returns HTML for the new item row."""
-        module = get_object_or_404(cls, pk=module_pk)
+        """Handle one file per request; returns the standard `[{"html": ...}]` envelope."""
+        module = xprez_admin._get_module_instance(request, module_pk, model=cls)
         file = request.FILES.get("file")
         if not file:
-            return JsonResponse(status=400, data={"error": "No file uploaded"})
+            return JsonResponse({"error": "No file uploaded"}, status=400)
         item = module.create_item_from_file(file)
-        form_class = module.get_admin_item_form_class(item)
-        item.admin_form = form_class(
-            xprez_admin=xprez_admin, instance=item, prefix=item.instance_key
-        )
-        return HttpResponse(
-            render_to_string(
-                cls.admin_item_template_name,
-                {"item": item, "module": module},
-            )
-        )
+        html = cls._render_item_html(xprez_admin, module, item)
+        return JsonResponse([{"html": html}], safe=False)
 
     @classmethod
     def get_admin_urls(cls, xprez_admin):

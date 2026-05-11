@@ -41,7 +41,7 @@ class XprezAdminViewsContentMixin:
         return JsonResponse([{"html": html}], safe=False)
 
     def xprez_add_section_config_view(self, request, section_pk, css_breakpoint):
-        section = get_object_or_404(models.Section, pk=section_pk)
+        section = self._get_section_instance(request, section_pk)
         config, _created = section.get_or_create_config(css_breakpoint)
         config.build_admin_form(self)
         return JsonResponse(
@@ -49,7 +49,7 @@ class XprezAdminViewsContentMixin:
         )
 
     def xprez_add_module_config_view(self, request, module_pk, css_breakpoint):
-        module = get_object_or_404(models.Module, pk=module_pk).polymorph
+        module = self._get_module_instance(request, module_pk).polymorph
         config, _created = module.get_or_create_config(css_breakpoint)
         config.build_admin_form(self)
         return JsonResponse(

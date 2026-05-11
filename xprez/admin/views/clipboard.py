@@ -209,7 +209,7 @@ class XprezAdminViewsClipboardMixin:
     }
 
     def xprez_duplicate_section_view(self, request, section_pk):
-        section = get_object_or_404(models.Section, pk=section_pk)
+        section = self._get_section_instance(request, section_pk)
         new_section = section.duplicate_to(section.container)
         new_section.build_admin_form(self)
         return JsonResponse(
@@ -217,7 +217,7 @@ class XprezAdminViewsClipboardMixin:
         )
 
     def xprez_duplicate_module_view(self, request, module_pk):
-        module = get_object_or_404(models.Module, pk=module_pk).polymorph
+        module = self._get_module_instance(request, module_pk).polymorph
         new_module = module.duplicate_to(module.section)
         new_module.build_admin_form(self)
         return JsonResponse(
@@ -235,7 +235,7 @@ class XprezAdminViewsClipboardMixin:
     def xprez_clipboard_paste(
         self, request, key, pk, action, target_container_pk, target_section_pk=None
     ):
-        target_container = get_object_or_404(models.Container, pk=target_container_pk)
+        target_container = self._get_container_instance(request, target_container_pk)
         if target_section_pk is not None:
             target_section = get_object_or_404(
                 models.Section,
@@ -244,7 +244,13 @@ class XprezAdminViewsClipboardMixin:
             )
         else:
             target_section = None
-        item = self._clipboard_item(key, pk, target_container, target_section)
+        try:
+            item = self._clipboard_item(key, pk, target_container, target_section)
+            _ = item.obj  # raises ObjectDoesNotExist if the source row is gone
+        except (ObjectDoesNotExist, KeyError):
+            self._remove_clipboard_entry(request, (key, pk))
+            return HttpResponseBadRequest()
+
         if not item.allowed:
             return HttpResponseBadRequest()
         elif action == CLIPBOARD_DUPLICATE_ACTION:
@@ -263,7 +269,7 @@ class XprezAdminViewsClipboardMixin:
     def xprez_clipboard_list(
         self, request, target_container_pk, target_section_pk=None
     ):
-        target_container = get_object_or_404(models.Container, pk=target_container_pk)
+        target_container = self._get_container_instance(request, target_container_pk)
         if target_section_pk is not None:
             target_section = get_object_or_404(
                 models.Section,
