@@ -189,7 +189,7 @@ XPREZ_DEFAULTS = {
             "gap_choice": constants.GAP_MEDIUM,
             "gap_custom": 0,
             "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_STRETCH,
-            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,
+            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_START,
         }
     },
     "section_shortcuts": {
