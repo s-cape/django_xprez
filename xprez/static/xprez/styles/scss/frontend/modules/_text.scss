@@ -55,7 +55,6 @@
         aspect-ratio: var(--x-media-crop, unset);
         object-fit: cover;
         object-position: var(--x-background-img-position);
-        display: block !important;
         border-radius: var(--x-media-border-radius, 0);
         
     }
@@ -115,5 +114,15 @@
     .xprez-#{$number}-media-role-background,
     .xprez-#{$number}-media-role-lead {
         overflow: hidden;
+
+        .xprez-text__image {
+            display: block !important;
+        }
+    }
+
+    .xprez-#{$number}-media-role-icon {
+        .xprez-text__image {        
+            display: inline-block !important;
+        }
     }
 }
