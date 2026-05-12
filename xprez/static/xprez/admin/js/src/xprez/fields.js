@@ -124,7 +124,7 @@ export class XprezFieldController extends XprezControllerBase {
 
     // Single path: sync link, cascade, refresh, notify ShowWhens, dispatch
     _propagateChange(oldValue, newValue) {
-        if (oldValue === newValue) return;
+        if (oldValue === newValue) return [];
         this._previousValue = newValue;
 
         const linkResult = this.fieldLink?.syncFrom(this, oldValue, newValue)
@@ -140,9 +140,10 @@ export class XprezFieldController extends XprezControllerBase {
             f.inputEl.dispatchEvent(new Event("change", { bubbles: true }))
         );
         this.parent?.parent?.checkShortcuts?.();
+        return affected;
     }
 
-    _tryLiveSync() {
+    _tryLiveSync(affectedFields = [this]) {
         const module = this.module;
         if (
             !module?.liveSyncInput.checked
@@ -151,18 +152,20 @@ export class XprezFieldController extends XprezControllerBase {
         ) return;
 
         const sync = this.xprez.sync;
-        const hasSelectedModules = sync.getSelectedCount() >= 1;
-        if (!hasSelectedModules) return;
+        if (sync.getSelectedCount() < 1) return;
 
-        sync.syncField(this);
+        // Sync linked siblings and cascades too, not just the source field.
+        for (const field of affectedFields) {
+            if (field.syncAllowed()) sync.syncField(field);
+        }
         sync.processQueue();
     }
 
     _onInputChange(e) {
         const newValue = this.getValue();
         if (newValue === this._previousValue) return;
-        this._propagateChange(this._previousValue, newValue);
-        if (e?.isTrusted) this._tryLiveSync();
+        const affected = this._propagateChange(this._previousValue, newValue);
+        if (e?.isTrusted) this._tryLiveSync(affected);
     }
 
     _cascadeField(field, oldValue, newValue, affected) {

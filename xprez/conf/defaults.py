@@ -189,7 +189,7 @@ XPREZ_DEFAULTS = {
             "gap_choice": constants.GAP_MEDIUM,
             "gap_custom": 0,
             "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_STRETCH,
-            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,
+            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_START,
         }
     },
     "section_shortcuts": {
@@ -336,7 +336,7 @@ XPREZ_DEFAULTS = {
             "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_UNSET,
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_UNSET,
             "vertical_align_flex": constants.VERTICAL_ALIGN_FLEX_START,
-            "horizontal_align_flex": constants.HORIZONTAL_ALIGN_FLEX_CENTER,
+            "horizontal_align_flex": constants.HORIZONTAL_ALIGN_FLEX_START,
             "border_radius_choice": constants.BORDER_RADIUS_NONE,
             "border_radius_custom": 0,
             "background": False,
