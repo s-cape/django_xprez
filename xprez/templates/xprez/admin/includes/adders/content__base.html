@@ -14,13 +14,19 @@
     {% if not adder_section and not templatecontainer_is_empty %}
         <div popover="manual" class="xprez-popover" data-controller="XprezTemplateContainerList">
             <div class="xprez-popover__content">
-                <div class="xprez-option" data-active="true">
-                    <input
-                        type="text"
-                        data-xprez-templatecontainer-filter
-                        placeholder="{% trans "Filter templates..." %}"
-                        autocomplete="off"
-                    >
+                <div class="xprez-option-group__heading">
+                    <div class="xprez-option" data-active="true" data-size="flex-1">
+                        <label for="xprez-templatecontainer-filter">
+                            <i class="xprez-icon-search"></i>
+                            <span>{% trans "Filter templates" %}</span>
+                        </label>
+                        <input
+                            type="text"
+                            data-xprez-templatecontainer-filter
+                            autocomplete="off"
+                            id="xprez-templatecontainer-filter"
+                        >
+                    </div>
                 </div>
                 <div data-xprez-templatecontainer-list-container></div>
             </div>
