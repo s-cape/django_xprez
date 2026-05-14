@@ -692,6 +692,7 @@ XPREZ_CSS = {
                     constants.BORDER_RADIUS_LARGE: {0: 32},
                 },
             },
+            "max_width": {"units": "px"},
         },
         "xprez.TextModule": {
             "media_icon_max_size": {"units": "px"},

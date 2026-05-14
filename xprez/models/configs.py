@@ -468,7 +468,7 @@ class ModuleConfig(ConfigBase):
         if self.order is not None:
             variables["order"] = self.order
         if self.max_width:
-            variables["module-max-width"] = f"{self.max_width}px"
+            variables["module-max-width"] = self._format_css_field("max_width")
         return variables
 
     def get_css_config_keys(self):
