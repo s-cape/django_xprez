@@ -186,6 +186,7 @@ class ModuleConfigForm(SyncFieldsMixin, DeletableFormMixin, forms.ModelForm):
         "vertical_align_flex",
         "horizontal_align_flex",
         "aspect_ratio",
+        "max_width",
         "border_radius_choice",
         "border_radius_custom",
     )
