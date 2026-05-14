@@ -411,6 +411,12 @@ class ModuleConfig(ConfigBase):
         blank=True,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["aspect_ratio"],
     )
+    max_width = models.PositiveIntegerField(
+        _("Max width"),
+        null=True,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["max_width"],
+    )
     border_radius_choice = models.CharField(
         _("Border radius"),
         max_length=20,
@@ -461,6 +467,8 @@ class ModuleConfig(ConfigBase):
             variables["horizontal-align-grid"] = self.horizontal_align_grid
         if self.order is not None:
             variables["order"] = self.order
+        if self.max_width:
+            variables["module-max-width"] = self._format_css_field("max_width")
         return variables
 
     def get_css_config_keys(self):

@@ -13,6 +13,7 @@
     color: var(--x-base-color);
     text-align: var(--x-text-align, left);
     aspect-ratio: var(--x-aspect-ratio, unset);
+    max-width: var(--x-module-max-width, 100%);
     order: var(--x-order, 1);
     min-width: 0; // Prevent flex items from growing beyond their content
 

@@ -351,6 +351,7 @@ XPREZ_DEFAULTS = {
             "padding_bottom_choice": constants.PADDING_NONE,
             "padding_bottom_custom": 0,
             "aspect_ratio": "",
+            "max_width": None,
         },
         "xprez.TextModule": {
             "text_align": constants.TEXT_ALIGN_LEFT,
@@ -691,6 +692,7 @@ XPREZ_CSS = {
                     constants.BORDER_RADIUS_LARGE: {0: 32},
                 },
             },
+            "max_width": {"units": "px"},
         },
         "xprez.TextModule": {
             "media_icon_max_size": {"units": "px"},

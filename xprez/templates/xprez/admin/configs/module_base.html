@@ -58,6 +58,7 @@
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.aspect_ratio size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.max_width size="flex-1" suffix=config.units.max_width %}
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_choice size="flex-1" %}
