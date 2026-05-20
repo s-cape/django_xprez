@@ -14,14 +14,17 @@ export class XprezMultiModuleBase extends XprezModule {
     constructor(section, moduleEl) {
         super(section, moduleEl);
         this.items = [];
-        this.itemsContainer = this.el.querySelector(
-            "[data-xprez-multi-module-items]"
-        );
-        if (!this.itemsContainer) return;
-
         this.initSortable();
         this.initItems();
         this.initAdder();
+    }
+
+    get itemsContainer() {
+        return (this._itemsContainer ??= this.el.querySelector("[data-xprez-multi-module-items]"));
+    }
+
+    get unmanagedContainers() {
+        return [...super.unmanagedContainers, this.itemsContainer];
     }
 
     initSortable() {
@@ -47,6 +50,9 @@ export class XprezMultiModuleBase extends XprezModule {
     initItem(itemEl) {
         const item = this.mountChild(itemEl);
         this.items.push(item);
+        itemEl.querySelectorAll("[data-xprez-field]").forEach(
+            (fieldEl) => this.initField(fieldEl)
+        );
         return item;
     }
 
