@@ -38,9 +38,10 @@ class SectionBase(models.Model):
         raise NotImplementedError
 
     def render_admin(self, context):
-        context["available_modules"] = (
-            self.admin_form.xprez_admin.xprez_add_menu_module_classes(self.container)
-        )
+        context[
+            "available_modules"
+        ] = self.admin_form.xprez_admin.xprez_add_menu_module_classes(self.container)
+
         return render_to_string(self.admin_template_name, context)
 
     def build_admin_form(self, admin, data=None, files=None):
