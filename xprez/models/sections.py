@@ -38,9 +38,9 @@ class SectionBase(models.Model):
         raise NotImplementedError
 
     def render_admin(self, context):
-        context[
-            "available_modules"
-        ] = self.admin_form.xprez_admin.xprez_add_menu_module_classes(self.container)
+        context["available_modules"] = (
+            self.admin_form.xprez_admin.xprez_add_menu_module_classes(self.container)
+        )
         return render_to_string(self.admin_template_name, context)
 
     def build_admin_form(self, admin, data=None, files=None):
@@ -122,6 +122,8 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         classes = {"section": True}
         if self.alternate_background:
             classes["alternate-background"] = True
+        if self.max_width_choice:
+            classes[f"section--max-width-{self.max_width_choice}"] = True
         return classes
 
     def get_css_variables(self):
