@@ -1,6 +1,6 @@
 import { Xprez } from './xprez/core.js';
 import { XprezModule, XprezModuleSyncMixin } from './xprez/modules.js';
-import { XprezSection, XprezSectionSymlink } from './xprez/sections.js';
+import { XprezSection, XprezSectionSymlink, XprezContainerSymlink } from './xprez/sections.js';
 import { XprezFieldController } from './xprez/fields.js';
 import {
     XprezAdderBase,
@@ -50,7 +50,9 @@ import {
     XprezClipboardClipContainer,
 } from './xprez/copy.js';
 import { XprezFileInputFieldController } from './xprez/file_input.js';
+import { WithAdderSublist } from './xprez/adders_sublist_base.js';
 import { XprezClipboardList } from './xprez/clipboard.js';
+import { XprezTemplateContainerList } from './xprez/template_container.js';
 import { XprezControllerBase } from './xprez/controller_base.js';
 import { XprezAllSectionsCollapseExpand } from './xprez/collapser.js';
 
@@ -59,6 +61,7 @@ window.Xprez = Xprez;
 window.XprezAllSectionsCollapseExpand = XprezAllSectionsCollapseExpand;
 window.XprezSection = XprezSection;
 window.XprezSectionSymlink = XprezSectionSymlink;
+window.XprezContainerSymlink = XprezContainerSymlink;
 window.XprezSectionPopover = XprezSectionPopover;
 window.XprezSectionAdderContainerEnd = XprezSectionAdderContainerEnd;
 window.XprezSectionAdderSectionBefore = XprezSectionAdderSectionBefore;
@@ -77,6 +80,7 @@ window.XprezClipboardClipBase = XprezClipboardClipBase;
 window.XprezClipboardClipContent = XprezClipboardClipContent;
 window.XprezClipboardClipContainer = XprezClipboardClipContainer;
 window.XprezClipboardList = XprezClipboardList;
+window.XprezTemplateContainerList = XprezTemplateContainerList;
 window.XprezTextModule = XprezTextModule;
 window.XprezMultiModule = XprezMultiModule;
 window.XprezUploadMultiModule = XprezUploadMultiModule;
@@ -98,6 +102,7 @@ export {
     XprezModule,
     XprezSection,
     XprezSectionSymlink,
+    XprezContainerSymlink,
     XprezFieldController,
     XprezFileInputFieldController,
     XprezAdderBase,
@@ -135,7 +140,9 @@ export {
     XprezClipboardClipBase,
     XprezClipboardClipContent,
     XprezClipboardClipContainer,
+    WithAdderSublist,
     XprezClipboardList,
+    XprezTemplateContainerList,
     XprezCopyMenu,
     XprezSectionCopyMenu,
     XprezModuleCopyMenu,

@@ -1,0 +1,11 @@
+{% load thumbnail xprez %}
+<img{% if css_class %} class="{{ css_class }}"{% endif %}
+     {% thumbnail source geometries.0 crop=crop|default:"" format="WEBP" quality=70 filename_stem=filename_stem|default:"" as t_src %}
+         src="{{ t_src.url|build_absolute_uri }}"
+         width="{{ t_src.width }}"
+         height="{{ t_src.height }}"
+     {% endthumbnail %}
+     srcset="{% for geom in geometries %}{% thumbnail source geom crop=crop|default:"" format="WEBP" quality=70 filename_stem=filename_stem|default:"" as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
+     sizes="{{ sizes }}"
+     alt="{{ alt|default:"" }}"
+     {% if loading %}loading="{{ loading }}"{% endif %}>

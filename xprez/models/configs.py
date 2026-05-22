@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.mixins.css import CssMixin, CssParentMixin
-from xprez.utils import copy_model, import_class
+from xprez.utils import copy_model, import_class, resolve_saved
 
 BREAKPOINT_CHOICES = tuple(
     [(k, v["name"]) for k, v in settings.XPREZ_BREAKPOINTS.items()]
@@ -32,10 +32,11 @@ class ConfigParentMixin(CssParentMixin):
             return self.get_configs().get(css_breakpoint=css_breakpoint), False
         except ObjectDoesNotExist:
             config = self.build_config(css_breakpoint)
+            config.saved = self.saved
             config.save()
             return config, True
 
-    def duplicate_configs_to(self, target, saved=False):
+    def duplicate_configs_to(self, target, saved=constants.SAVED_FORCE_FALSE):
         for config in self.get_configs():
             existing_config = (
                 target.get_configs()
@@ -44,7 +45,7 @@ class ConfigParentMixin(CssParentMixin):
             )
             new_config = copy_model(config)
             setattr(new_config, config.parent_attr, target)
-            new_config.saved = saved
+            new_config.saved = resolve_saved(saved, config.saved)
             if existing_config:
                 new_config.pk = existing_config.pk
                 new_config._state.adding = False
@@ -74,8 +75,6 @@ class ConfigBase(CssMixin, models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        if self.is_default():
-            self.saved = True
         super().save(*args, **kwargs)
         if self.pk:
             getattr(self, self.parent_attr).invalidate_front_cache()
@@ -149,20 +148,26 @@ class SectionConfig(ConfigBase):
         _("Margin bottom"),
         max_length=20,
         choices=constants.MARGIN_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["margin_bottom_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "margin_bottom_choice"
+        ],
         blank=True,
     )
     margin_bottom_custom = models.PositiveIntegerField(
         null=True,
         blank=True,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["margin_bottom_custom"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "margin_bottom_custom"
+        ],
     )
 
     padding_left_choice = models.CharField(
         "Padding left",
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_left_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "padding_left_choice"
+        ],
         blank=True,
     )
     padding_left_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -170,7 +175,9 @@ class SectionConfig(ConfigBase):
         _("Padding right"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_right_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "padding_right_choice"
+        ],
         blank=True,
     )
     padding_right_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -178,7 +185,9 @@ class SectionConfig(ConfigBase):
         _("Padding top"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_top_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "padding_top_choice"
+        ],
         blank=True,
     )
     padding_top_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -186,7 +195,9 @@ class SectionConfig(ConfigBase):
         _("Padding bottom"),
         max_length=20,
         choices=constants.PADDING_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["padding_bottom_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "padding_bottom_choice"
+        ],
         blank=True,
     )
     padding_bottom_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -194,14 +205,14 @@ class SectionConfig(ConfigBase):
     COLUMN_CHOICES = [(i, str(i)) for i in range(1, 9)]
     columns = models.PositiveSmallIntegerField(
         choices=COLUMN_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["columns"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"]["columns"],
     )
 
     gap_choice = models.CharField(
         _("Gap"),
         max_length=20,
         choices=constants.GAP_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["gap_choice"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"]["gap_choice"],
         blank=True,
     )
     gap_custom = models.PositiveIntegerField(null=True, blank=True)
@@ -209,13 +220,17 @@ class SectionConfig(ConfigBase):
     vertical_align_grid = models.CharField(
         max_length=20,
         choices=constants.VERTICAL_ALIGN_GRID_SECTION_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["vertical_align_grid"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "vertical_align_grid"
+        ],
     )
 
     horizontal_align_grid = models.CharField(
         max_length=20,
         choices=constants.HORIZONTAL_ALIGN_GRID_SECTION_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section_config"]["horizontal_align_grid"],
+        default=defaults.XPREZ_DEFAULTS["section_config"]["default"][
+            "horizontal_align_grid"
+        ],
     )
 
     def get_css_classes(self):
@@ -396,6 +411,12 @@ class ModuleConfig(ConfigBase):
         blank=True,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["aspect_ratio"],
     )
+    max_width = models.PositiveIntegerField(
+        _("Max width"),
+        null=True,
+        blank=True,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["max_width"],
+    )
     border_radius_choice = models.CharField(
         _("Border radius"),
         max_length=20,
@@ -446,6 +467,8 @@ class ModuleConfig(ConfigBase):
             variables["horizontal-align-grid"] = self.horizontal_align_grid
         if self.order is not None:
             variables["order"] = self.order
+        if self.max_width:
+            variables["module-max-width"] = self._format_css_field("max_width")
         return variables
 
     def get_css_config_keys(self):

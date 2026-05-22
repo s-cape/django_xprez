@@ -7,7 +7,7 @@ export class XprezControllerBase {
 
     get xprez() { return this._findAncestor("xprez"); }
     get section() {
-        return this._findAncestor("section") ?? this._findAncestor("section_symlink");
+        return this._findAncestor("section") ?? this._findAncestor("section_symlink") ?? this._findAncestor("container_symlink");
     }
     get module() { return this._findAncestor("module"); }
     get config() { return this._findAncestor("config"); }

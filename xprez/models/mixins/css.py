@@ -1,8 +1,6 @@
 from xprez import constants
 from xprez.conf import settings
 
-"TODO: this file need cleanup"
-
 
 def _get_unit_string(css_config, choice=None):
     """Extract unit string from config, handling dict or string units."""

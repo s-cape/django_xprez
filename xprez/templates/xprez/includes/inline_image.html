@@ -1,0 +1,12 @@
+<div class="xprez-inline-image xprez-inline-image--{{ align }}">
+    <figure>
+        {% if link_url %}
+            <a href="{{ link_url }}"{% if link_new_window %} target="_blank"{% endif %}>
+        {% endif %}
+        {% include "xprez/includes/responsive_image.html" with source=image.sorl_src geometries=image.srcset_geometries sizes=image.image_sizes alt=alt_text|default:caption loading="lazy" %}
+        {% if link_url %}</a>{% endif %}
+        {% if caption %}
+            <figcaption>{{ caption }}</figcaption>
+        {% endif %}
+    </figure>
+</div>

@@ -84,22 +84,25 @@
             {% block popover %}
                 <div class="xprez-option-group">
                     <div class="xprez-option-group__heading">
-                        <i class="xprez-icon-grid_3_3"></i>
-                        <span class="xprez-option-group__title-text">{{ module.verbose_name }}</span>
-                        <span
-                            class="xprez-btn xprez-btn--sm"
-                            title='{% trans "All settings of selected modules will be overwritten with current settings" %}'
-                            data-xprez-module-sync-selected
-                            data-hidden
-                        >
-                            <span>Sync selected (<span data-xprez-module-sync-selected-count></span>)</span>
-                            <i class="xprez-icon-sync"></i>
-                        </span>
+                        <div class="xprez-option-group__heading-line">
+                            <i class="xprez-icon-grid_3_3"></i>
+                            <span class="xprez-option-group__title-text">{{ module.verbose_name }}</span>
+                            <span
+                                class="xprez-btn xprez-btn--sm"
+                                title='{% trans "All settings of selected modules will be overwritten with current settings" %}'
+                                data-xprez-module-sync-selected
+                                data-hidden
+                            >
+                                <span>Sync selected (<span data-xprez-module-sync-selected-count></span>)</span>
+                                <i class="xprez-icon-sync"></i>
+                            </span>
+                        </div>
+                        <div class="xprez-option-group__heading-line" data-xprez-live-sync>
+                            {% include "xprez/admin/form/field.html" with field=module.admin_form.live_sync size="flex-1" wrapper_class="xprez-option--marker" %}
+                        </div>
                     </div>
 
-                    <div class="xprez-option-row" data-xprez-live-sync>
-                        {% include "xprez/admin/form/field.html" with field=module.admin_form.live_sync size="flex-1" wrapper_class="xprez-option--marker" %}
-                    </div>
+                    
 
                     <div class="xprez-option-group__subtitle">{% trans "Attributes" %}</div>
 

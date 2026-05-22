@@ -33,6 +33,11 @@ def xprez_clipboard_is_empty(xprez_admin, request):
 
 
 @register.simple_tag()
+def xprez_templatecontainer_is_empty(xprez_admin, container):
+    return not xprez_admin.xprez_templatecontainers(container).exists()
+
+
+@register.simple_tag()
 def xprez_admin_change_url(xprez_admin, obj):
     return xprez_admin.xprez_admin_change_url(obj)
 
@@ -51,9 +56,9 @@ def xprez_file_thumbnail(value, size="400x200"):
         return None
     try:
         with value.open("rb") as f:
-            Image.open(f)  # check if file is an image
+            Image.open(f)
         return get_thumbnail(value, size, format="WEBP", quality=80) or None
-    except Exception:
+    except (OSError, ValueError):
         return None
 
 

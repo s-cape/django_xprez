@@ -2,8 +2,10 @@ from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
 
-XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidget"
-XPREZ_CK_EDITOR_FILE_UPLOAD_URL_NAME = None
+XPREZ_CK_EDITOR_MODULE_WIDGET = "xprez.ck_editor.widgets.CkEditorWidgetFullWithUpload"
+XPREZ_CK_EDITOR_FILE_UPLOAD_URL_NAME = (
+    None  # only needed when using ck_editor outside of xprez admin
+)
 XPREZ_CK_EDITOR_FILE_UPLOAD_DIR = "xprez_ckeditor_uploads"
 XPREZ_CK_EDITOR_SIMPLE_CONFIG = {
     "toolbar": ("bold", "italic", "link"),
@@ -92,6 +94,7 @@ XPREZ_MODULES_AUTOREGISTER_BUILTINS = [
     "xprez.TextModule",
     "xprez.QuoteModule",
     "xprez.GalleryModule",
+    "xprez.AccordionModule",
     "xprez.FilesModule",
     "xprez.VideoModule",
     "xprez.NumbersModule",
@@ -157,27 +160,37 @@ XPREZ_FRONT_MEDIA_CSS = {}
 
 XPREZ_DEFAULTS = {
     "section": {
-        "max_width_choice": constants.MAX_WIDTH_MEDIUM,
-        "max_width_custom": 0,
-        "alternate_background": False,
-        "background_color": "",
+        "default": {
+            "max_width_choice": constants.MAX_WIDTH_MEDIUM,
+            "max_width_custom": 0,
+            "alternate_background": False,
+            "background_color": "",
+        },
+        "xprez.TextModule": {
+            "max_width_choice": constants.MAX_WIDTH_SMALL,
+        },
+        "xprez.AccordionModule": {
+            "max_width_choice": constants.MAX_WIDTH_SMALL,
+        },
     },
     "section_config": {
-        "columns": 1,
-        "margin_bottom_choice": constants.MARGIN_MEDIUM,
-        "margin_bottom_custom": 0,
-        "padding_left_choice": constants.PADDING_SMALL,
-        "padding_left_custom": 0,
-        "padding_right_choice": constants.PADDING_SMALL,
-        "padding_right_custom": 0,
-        "padding_top_choice": constants.PADDING_NONE,
-        "padding_top_custom": 0,
-        "padding_bottom_choice": constants.PADDING_NONE,
-        "padding_bottom_custom": 0,
-        "gap_choice": constants.GAP_MEDIUM,
-        "gap_custom": 0,
-        "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_STRETCH,
-        "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,
+        "default": {
+            "columns": 1,
+            "margin_bottom_choice": constants.MARGIN_MEDIUM,
+            "margin_bottom_custom": 0,
+            "padding_left_choice": constants.PADDING_SMALL,
+            "padding_left_custom": 0,
+            "padding_right_choice": constants.PADDING_SMALL,
+            "padding_right_custom": 0,
+            "padding_top_choice": constants.PADDING_NONE,
+            "padding_top_custom": 0,
+            "padding_bottom_choice": constants.PADDING_NONE,
+            "padding_bottom_custom": 0,
+            "gap_choice": constants.GAP_MEDIUM,
+            "gap_custom": 0,
+            "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_STRETCH,
+            "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_START,
+        }
     },
     "section_shortcuts": {
         "columns": {
@@ -301,6 +314,7 @@ XPREZ_DEFAULTS = {
         "xprez.GalleryModule": {
             "crop": constants.CROP_NONE,
             "font_size": constants.FONT_SIZE_NORMAL,
+            "lightbox": True,
         },
         "xprez.FilesModule": {
             "font_size": constants.FONT_SIZE_NORMAL,
@@ -322,7 +336,7 @@ XPREZ_DEFAULTS = {
             "vertical_align_grid": constants.VERTICAL_ALIGN_GRID_UNSET,
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_UNSET,
             "vertical_align_flex": constants.VERTICAL_ALIGN_FLEX_START,
-            "horizontal_align_flex": constants.HORIZONTAL_ALIGN_FLEX_CENTER,
+            "horizontal_align_flex": constants.HORIZONTAL_ALIGN_FLEX_START,
             "border_radius_choice": constants.BORDER_RADIUS_NONE,
             "border_radius_custom": 0,
             "background": False,
@@ -337,6 +351,7 @@ XPREZ_DEFAULTS = {
             "padding_bottom_choice": constants.PADDING_NONE,
             "padding_bottom_custom": 0,
             "aspect_ratio": "",
+            "max_width": None,
         },
         "xprez.TextModule": {
             "text_align": constants.TEXT_ALIGN_LEFT,
@@ -513,6 +528,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: "rem",
                 constants.PADDING_MEDIUM: "rem",
                 constants.PADDING_LARGE: "rem",
+                constants.PADDING_EXTRA_LARGE: "rem",
                 constants.PADDING_CUSTOM: "px",
             },
             "values": {
@@ -520,6 +536,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: {0: 2, 4: 1},
                 constants.PADDING_MEDIUM: {0: 4, 4: 2},
                 constants.PADDING_LARGE: {0: 8, 4: 4},
+                constants.PADDING_EXTRA_LARGE: {0: 11, 2: 6, 4: 4},
             },
         },
         "padding_right": {
@@ -528,6 +545,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: "rem",
                 constants.PADDING_MEDIUM: "rem",
                 constants.PADDING_LARGE: "rem",
+                constants.PADDING_EXTRA_LARGE: "rem",
                 constants.PADDING_CUSTOM: "px",
             },
             "values": {
@@ -535,6 +553,7 @@ XPREZ_CSS = {
                 constants.PADDING_SMALL: {0: 2, 4: 1},
                 constants.PADDING_MEDIUM: {0: 4, 4: 2},
                 constants.PADDING_LARGE: {0: 8, 4: 4},
+                constants.PADDING_EXTRA_LARGE: {0: 11, 2: 6, 4: 4},
             },
         },
         "padding_top": {
@@ -596,6 +615,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: "rem",
                     constants.PADDING_MEDIUM: "rem",
                     constants.PADDING_LARGE: "rem",
+                    constants.PADDING_EXTRA_LARGE: "rem",
                     constants.PADDING_CUSTOM: "px",
                 },
                 "values": {
@@ -603,6 +623,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: {0: 1, 4: 0.5},
                     constants.PADDING_MEDIUM: {0: 2, 4: 1},
                     constants.PADDING_LARGE: {0: 4, 4: 2},
+                    constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
             "padding_right": {
@@ -611,6 +632,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: "rem",
                     constants.PADDING_MEDIUM: "rem",
                     constants.PADDING_LARGE: "rem",
+                    constants.PADDING_EXTRA_LARGE: "rem",
                     constants.PADDING_CUSTOM: "px",
                 },
                 "values": {
@@ -618,6 +640,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: {0: 1, 4: 0.5},
                     constants.PADDING_MEDIUM: {0: 2, 4: 1},
                     constants.PADDING_LARGE: {0: 4, 4: 2},
+                    constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
             "padding_top": {
@@ -626,6 +649,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: "rem",
                     constants.PADDING_MEDIUM: "rem",
                     constants.PADDING_LARGE: "rem",
+                    constants.PADDING_EXTRA_LARGE: "rem",
                     constants.PADDING_CUSTOM: "px",
                 },
                 "values": {
@@ -633,6 +657,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: {0: 1, 4: 0.5},
                     constants.PADDING_MEDIUM: {0: 2, 4: 1},
                     constants.PADDING_LARGE: {0: 4, 4: 2},
+                    constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
             "padding_bottom": {
@@ -641,6 +666,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: "rem",
                     constants.PADDING_MEDIUM: "rem",
                     constants.PADDING_LARGE: "rem",
+                    constants.PADDING_EXTRA_LARGE: "rem",
                     constants.PADDING_CUSTOM: "px",
                 },
                 "values": {
@@ -648,6 +674,7 @@ XPREZ_CSS = {
                     constants.PADDING_SMALL: {0: 1, 4: 0.5},
                     constants.PADDING_MEDIUM: {0: 2, 4: 1},
                     constants.PADDING_LARGE: {0: 4, 4: 2},
+                    constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
             "border_radius": {
@@ -665,6 +692,7 @@ XPREZ_CSS = {
                     constants.BORDER_RADIUS_LARGE: {0: 32},
                 },
             },
+            "max_width": {"units": "px"},
         },
         "xprez.TextModule": {
             "media_icon_max_size": {"units": "px"},

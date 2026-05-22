@@ -1,17 +1,18 @@
 from django.apps import apps
-from django.db import models
+from django.db import models, transaction
 from django.template.loader import render_to_string
-from django.utils.functional import cached_property, classproperty
+from django.utils.functional import classproperty
 
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
 from xprez.models.mixins.cache import ContentFrontCacheMixin
+from xprez.models.mixins.polymorph import PolymorphMixin
 from xprez.models.querysets.modules import ModuleQuerySet
-from xprez.utils import class_content_type, copy_model, import_class
+from xprez.utils import class_content_type, copy_model, import_class, resolve_saved
 
 
-class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
+class Module(PolymorphMixin, ContentFrontCacheMixin, ConfigParentMixin, models.Model):
     """Base module class for content blocks within sections."""
 
     KEY = constants.MODULE_KEY
@@ -109,20 +110,12 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
     def front_template_name(self):
         return f"xprez/modules/{self.module_key}.html"
 
-    @cached_property
-    def polymorph(self):
-        app_label, object_name = self.content_type.split(".")
-        model = apps.get_model(app_label, object_name)
-        if isinstance(self, model):
-            return self
-        else:
-            return model.objects.get(pk=self.pk)
-
-    def duplicate_to(self, target_section, saved=False, **kwargs):
+    @transaction.atomic
+    def duplicate_to(self, target_section, saved=constants.SAVED_FORCE_FALSE, **kwargs):
         new_module = copy_model(self)
         new_module.section = target_section
         new_module.sync_group = None
-        new_module.saved = saved
+        new_module.saved = resolve_saved(saved, self.saved)
         new_module.save(**kwargs)
         self.duplicate_configs_to(new_module, saved=saved)
         return new_module
@@ -161,16 +154,15 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
         )
 
     def get_admin_form_class(self):
-        cls = import_class(self.admin_form_class)
-        if cls._meta.model:
-            return cls
-        else:
+        form_cls = import_class(self.admin_form_class)
+        if form_cls._meta.model:
+            return form_cls
 
-            class ModuleForm(cls):
-                class Meta(cls.Meta):
-                    model = self.__class__
+        class ModuleForm(form_cls):
+            class Meta(form_cls.Meta):
+                model = self.__class__
 
-            return ModuleForm
+        return ModuleForm
 
     def build_admin_form(self, xprez_admin, data=None, files=None):
         form_class = self.get_admin_form_class()
@@ -184,10 +176,10 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
 
         self.admin_form.xprez_configs_all_valid = None
         if data:
-            ids = [int(id) for id in data.getlist("module-config-id")]
+            pks = [int(pk) for pk in data.getlist("module-config-id")]
             self.admin_form.xprez_configs = list(
                 self.get_config_model()
-                .objects.filter(module=self, pk__in=ids)
+                .objects.filter(module=self, pk__in=pks)
                 .order_by("css_breakpoint")
             )
         else:
@@ -195,8 +187,6 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
 
         for config in self.admin_form.xprez_configs:
             config.build_admin_form(xprez_admin, data, files)
-        if getattr(xprez_admin, "xprez_url_namespace", None):
-            self._xprez_admin_namespace = xprez_admin.xprez_url_namespace
 
     def is_admin_form_valid(self):
         is_valid = self.admin_form.is_valid()
@@ -209,6 +199,7 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
 
         return is_valid and self.admin_form.xprez_configs_all_valid
 
+    @transaction.atomic
     def save_admin_form(self, request):
         if getattr(self.admin_form, "deleted", False):
             self.delete()
@@ -239,7 +230,7 @@ class Module(ContentFrontCacheMixin, ConfigParentMixin, models.Model):
         return bool(self.admin_form.errors)
 
     @classmethod
-    def get_admin_urls(cls):
+    def get_admin_urls(cls, xprez_admin):
         return []
 
     @classproperty

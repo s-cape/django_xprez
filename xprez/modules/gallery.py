@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _, ngettext
 
 from xprez import constants
 from xprez.admin.forms import ModuleForm
-from xprez.conf import defaults, settings
+from xprez.conf import defaults
 from xprez.models.configs import ModuleConfig
 from xprez.models.mixins.font_size import FontSizeModuleMixin
 from xprez.models.mixins.responsive_image import (
@@ -38,6 +38,10 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
         default=defaults.XPREZ_DEFAULTS["module"]["xprez.GalleryModule"]["crop"],
         blank=True,
     )
+    lightbox = models.BooleanField(
+        _("Lightbox"),
+        default=defaults.XPREZ_DEFAULTS["module"]["xprez.GalleryModule"]["lightbox"],
+    )
 
     class Meta:
         verbose_name = _("Gallery / Image")
@@ -61,30 +65,8 @@ class GalleryModule(FontSizeModuleMixin, ResponsiveImageParentMixin, UploadMulti
         else:
             return ""
 
-    def get_breakpoint_ranges(self):
-        result = []
-        breakpoints = settings.XPREZ_BREAKPOINTS
-        section_configs = {
-            config.css_breakpoint: config for config in self.section.get_configs_front()
-        }
-        gallery_configs = {
-            config.css_breakpoint: config for config in self.get_configs_front()
-        }
-        current_section_cols = 1
-        current_gallery_cols = 1
-        current_colspan = 1
-        for bp_id in breakpoints:
-            if bp_id in section_configs:
-                current_section_cols = section_configs[bp_id].columns
-            if bp_id in gallery_configs:
-                current_gallery_cols = gallery_configs[bp_id].columns
-                current_colspan = gallery_configs[bp_id].colspan
-            effective_columns = max(
-                1,
-                current_section_cols * current_gallery_cols // current_colspan,
-            )
-            result += [(breakpoints[bp_id]["max_width"], effective_columns)]
-        return result
+    def get_own_columns(self, config):
+        return config.columns
 
 
 class GalleryItem(ResponsiveImageItemMixin, MultiModuleItem):
@@ -159,6 +141,7 @@ class GalleryModuleForm(ModuleForm):
     options_fields = ModuleForm.options_fields + (
         "font_size",
         "crop",
+        "lightbox",
     )
 
     class Meta:

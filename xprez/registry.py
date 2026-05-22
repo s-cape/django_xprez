@@ -8,7 +8,13 @@ class ModuleRegistry:
         self._registry = OrderedDict()
 
     def get(self, content_type):
-        return self._registry[content_type]
+        try:
+            return self._registry[content_type]
+        except KeyError:
+            raise LookupError(
+                f"Module type '{content_type}' is not registered. "
+                f"Available: {', '.join(self._registry.keys())}"
+            ) from None
 
     def register(self, module_class):
         keys = {m.module_key for m in self._registry.values()}
@@ -23,10 +29,10 @@ class ModuleRegistry:
     def unregister(self, module_class):
         del self._registry[module_class.class_content_type()]
 
-    def get_admin_urls(self):
+    def get_admin_urls(self, xprez_admin):
         urls = []
         for module in self._registry.values():
-            urls += module.get_admin_urls()
+            urls += module.get_admin_urls(xprez_admin)
         return urls
 
     def modules(self, include=None, exclude=None):

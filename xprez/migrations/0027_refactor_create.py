@@ -24,6 +24,58 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name="TemplateContainer",
+            fields=[
+                (
+                    "container_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="xprez.container",
+                    ),
+                ),
+                (
+                    "key",
+                    models.SlugField(
+                        blank=True, default="", unique=True, verbose_name="Key"
+                    ),
+                ),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="xprez/templates/",
+                        verbose_name="Image",
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True, default="", verbose_name="Description"
+                    ),
+                ),
+                (
+                    "keywords",
+                    models.TextField(
+                        blank=True,
+                        default="",
+                        verbose_name="Keywords",
+                        help_text="Comma-separated keywords",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Template",
+                "verbose_name_plural": "Templates",
+                "ordering": ("key",),
+            },
+            bases=("xprez.container",),
+        ),
+        migrations.CreateModel(
             name="Section",
             fields=[
                 (
@@ -263,6 +315,47 @@ class Migration(migrations.Migration):
             ],
             options={
                 "verbose_name": "Linked section",
+            },
+        ),
+        migrations.CreateModel(
+            name="ContainerSymlink",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("position", models.PositiveSmallIntegerField(blank=True, default=0)),
+                ("visible", models.BooleanField(default=True)),
+                ("saved", models.BooleanField(default=False, editable=False)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("changed", models.DateTimeField(auto_now=True)),
+                (
+                    "container",
+                    models.ForeignKey(
+                        editable=False,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)ss",
+                        to="xprez.container",
+                    ),
+                ),
+                (
+                    "symlink",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="symlinked_container_set",
+                        to="xprez.container",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Linked container",
             },
         ),
         migrations.CreateModel(

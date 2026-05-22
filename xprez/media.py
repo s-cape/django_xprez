@@ -18,9 +18,8 @@ class PrefixableMedia(Media):
         if settings.XPREZ_USE_ABSOLUTE_URI and not path.startswith(
             ("http://", "https://", "//")
         ):
-            return "{}{}".format(settings.XPREZ_BASE_URL, absolute_path)
-        else:
-            return absolute_path
+            return f"{settings.XPREZ_BASE_URL}{absolute_path}"
+        return absolute_path
 
 
 class MediaCollectorBase:

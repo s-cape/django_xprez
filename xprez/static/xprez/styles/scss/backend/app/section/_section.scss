@@ -4,6 +4,7 @@
 
     margin: 1rem 0;
     position: relative;
+    background: var(--x-admin-bg);
 
     &[data-mode="edit"] {
         --x-admin-section-main-divider-bg: #{$b-pink};
@@ -47,18 +48,6 @@
             top: 50%;
             transform: translateY(-1px);
             transition: all 0.3s ease-in-out;
-        }
-
-        &.--centered {
-            justify-content: center;
-        }
-
-        h3 {
-            font-size: $admin-ui-font-size-sm;
-            text-transform: uppercase;
-            background: var(--x-admin-bg);
-            padding: 1rem;
-            margin-bottom: 1rem;
         }
     }
 

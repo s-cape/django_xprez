@@ -15,7 +15,12 @@
         margin-bottom: .5rem;
         line-height: 1.2;
         margin-top: 0;
-        letter-spacing: 0;
+        letter-spacing: 0; 
+        color: var(--x-admin-color);
+
+        strong, b {
+            color: var(--x-admin-color-light);
+        }
     }
 
     p, ul, ol, figure {
@@ -26,7 +31,6 @@
     h2 {
         font-size: 2.5rem;
         letter-spacing: -0.04em;
-        line-height: 1;
     }
 
     h3 {
@@ -61,6 +65,12 @@
     .btn-secondary {
         background-color: var(--x-admin-btn-secondary-bg);
         color: var(--x-admin-btn-secondary-color);
+    }
+
+    .image-style {
+        &-align-right, &-align-left {
+            max-width: 50%;
+        }
     }
 }
  

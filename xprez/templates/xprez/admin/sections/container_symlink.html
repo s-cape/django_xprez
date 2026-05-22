@@ -1,0 +1,33 @@
+{% extends "xprez/admin/sections/section_symlink_base.html" %}
+{% load i18n xprez_admin %}
+
+{% block data_controller %}XprezContainerSymlink{% endblock %}
+{% block data_prefix %}{{ container_symlink.admin_form.prefix }}{% endblock %}
+{% block data_unsaved %}{% if not container_symlink.saved %}data-unsaved{% endif %}{% endblock %}
+
+{% block before_header %}
+    {% include "xprez/admin/includes/adders/content_section_before.html" with xprez_admin=container_symlink.admin_form.xprez_admin adder_container=container_symlink.container %}
+{% endblock %}
+
+{% block delete_trigger %}
+    {% include "xprez/admin/includes/delete_trigger.html" with component_name="xprez-section-delete-trigger" title=title_remove delete_field=container_symlink.admin_form.delete %}
+{% endblock %}
+
+{% block symlink_content %}
+    {% if container_symlink.symlink %}
+        {% with symlinked_container=container_symlink.symlink.polymorph %}
+            {% include "xprez/shared/icons/page.html" %}
+            {% xprez_admin_change_url container_symlink.admin_form.xprez_admin symlinked_container as symlinked_container_url %}
+            <a {% if symlinked_container_url %}href="{{ symlinked_container_url }}"{% endif %}>
+                <strong>{{ symlinked_container }}</strong>
+            </a>
+        {% endwith %}
+    {% else %}
+        <div class="xprez-warning">{% trans "Linked container not found." %}</div>
+    {% endif %}
+{% endblock %}
+
+{% block hidden_fields %}
+    <input type="hidden" name="container-symlink-id" value="{{ container_symlink.pk }}">
+    {{ container_symlink.admin_form.position.as_hidden }}
+{% endblock %}

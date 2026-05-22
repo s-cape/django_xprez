@@ -1,13 +1,15 @@
-from django.db import models
+from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _, ngettext
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext
 
 from xprez import constants
 from xprez.conf import defaults, settings
 from xprez.models.configs import ConfigParentMixin
 from xprez.models.mixins.cache import ContentFrontCacheMixin, FrontCacheMixin
-from xprez.utils import copy_model, import_class
+from xprez.models.mixins.symlinks import SymlinkMixin
+from xprez.utils import copy_model, import_class, resolve_saved
 
 
 class SectionBase(models.Model):
@@ -36,9 +38,10 @@ class SectionBase(models.Model):
         raise NotImplementedError
 
     def render_admin(self, context):
-        context[
-            "available_modules"
-        ] = self.admin_form.xprez_admin.xprez_add_menu_module_classes(self.container)
+        context["available_modules"] = (
+            self.admin_form.xprez_admin.xprez_add_menu_module_classes(self.container)
+        )
+
         return render_to_string(self.admin_template_name, context)
 
     def build_admin_form(self, admin, data=None, files=None):
@@ -52,7 +55,7 @@ class SectionBase(models.Model):
         inst.saved = True
         inst.save()
 
-    def duplicate_to(self, target_container, saved=False):
+    def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
         raise NotImplementedError
 
 
@@ -65,20 +68,20 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         verbose_name=_("Max width"),
         max_length=16,
         choices=constants.MAX_WIDTH_CHOICES,
-        default=defaults.XPREZ_DEFAULTS["section"]["max_width_choice"],
+        default=defaults.XPREZ_DEFAULTS["section"]["default"]["max_width_choice"],
     )
     max_width_custom = models.PositiveIntegerField(
         null=True,
         blank=True,
-        default=defaults.XPREZ_DEFAULTS["section"]["max_width_custom"],
+        default=defaults.XPREZ_DEFAULTS["section"]["default"]["max_width_custom"],
     )
     alternate_background = models.BooleanField(
-        default=defaults.XPREZ_DEFAULTS["section"]["alternate_background"]
+        default=defaults.XPREZ_DEFAULTS["section"]["default"]["alternate_background"]
     )
     background_color = models.CharField(
         max_length=30,
         blank=True,
-        default=defaults.XPREZ_DEFAULTS["section"]["background_color"],
+        default=defaults.XPREZ_DEFAULTS["section"]["default"]["background_color"],
     )
     css_class = models.CharField(max_length=100, null=True, blank=True)
 
@@ -110,7 +113,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         return self.configs.model(
             section=self,
             css_breakpoint=css_breakpoint,
-            **settings.XPREZ_DEFAULTS["section_config"],
+            **settings.XPREZ_DEFAULTS["section_config"]["default"],
         )
 
     def get_css_config_keys(self):
@@ -120,6 +123,8 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         classes = {"section": True}
         if self.alternate_background:
             classes["alternate-background"] = True
+        if self.max_width_choice:
+            classes[f"section--max-width-{self.max_width_choice}"] = True
         return classes
 
     def get_css_variables(self):
@@ -149,9 +154,9 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
 
         self.admin_form.xprez_configs_all_valid = None
         if data:
-            ids = [int(id) for id in data.getlist("section-config-id")]
+            pks = [int(pk) for pk in data.getlist("section-config-id")]
             self.admin_form.xprez_configs = list(
-                self.configs.filter(pk__in=ids).order_by("css_breakpoint")
+                self.configs.filter(pk__in=pks).order_by("css_breakpoint")
             )
         else:
             self.admin_form.xprez_configs = list(self.get_configs())
@@ -179,6 +184,7 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
             and self.admin_form.xprez_configs_all_valid
         )
 
+    @transaction.atomic
     def save_admin_form(self, request):
         super().save_admin_form(request)
         for module in self.admin_form.xprez_modules:
@@ -197,10 +203,16 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
             self._modules_front = self.modules.filter(saved=True).polymorphs()
         return self._modules_front
 
-    def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
+    @transaction.atomic
+    def duplicate_to(
+        self,
+        target_container,
+        saved=constants.SAVED_FORCE_FALSE,
+        allowed_module_classes=None,
+    ):
         new_section = copy_model(self)
         new_section.container = target_container
-        new_section.saved = saved
+        new_section.saved = resolve_saved(saved, self.saved)
         new_section.save()
         self.duplicate_configs_to(new_section, saved=saved)
         for module in self.modules.all().polymorphs():
@@ -231,7 +243,30 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         return render_to_string(self.front_template_name, context)
 
 
-class SectionSymlink(FrontCacheMixin, SectionBase):
+class SymlinkSectionMixin:
+    """Shared behaviour for section-like rows that delegate rendering to `symlink`."""
+
+    def delete(self, *args, **kwargs):
+        self.invalidate_front_cache()
+        super().delete(*args, **kwargs)
+
+    def invalidate_front_cache(self):
+        super().invalidate_front_cache()
+        if self.container_id:
+            self.container.invalidate_front_cache()
+
+    def render_front(self, context):
+        if self.symlink:
+            return self.symlink.render_front_cached(context)
+        return ""
+
+    def render_front_cached(self, context):
+        if self.symlink:
+            return self.symlink.render_front_cached(context)
+        return ""
+
+
+class SectionSymlink(SymlinkSectionMixin, FrontCacheMixin, SectionBase):
     KEY = constants.SECTION_SYMLINK_KEY
     front_cacheable = False
     admin_template_name = "xprez/admin/sections/section_symlink.html"
@@ -247,15 +282,6 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
     class Meta:
         verbose_name = _("Linked section")
 
-    def delete(self, *args, **kwargs):
-        self.invalidate_front_cache()
-        super().delete(*args, **kwargs)
-
-    def invalidate_front_cache(self):
-        super().invalidate_front_cache()
-        if self.container_id:
-            self.container.invalidate_front_cache()
-
     def build_admin_form(self, admin, data=None, files=None):
         form_class = import_class("xprez.admin.forms.SectionSymlinkForm")
         self.admin_form = form_class(
@@ -267,9 +293,13 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
         context["section_symlink"] = self
         return super().render_admin(context)
 
-    def duplicate_to(self, target_container, saved=False, **kwargs):
+    def duplicate_to(
+        self, target_container, saved=constants.SAVED_FORCE_FALSE, **kwargs
+    ):
         return SectionSymlink.objects.create(
-            container=target_container, symlink=self.symlink, saved=saved
+            container=target_container,
+            symlink=self.symlink,
+            saved=resolve_saved(saved, self.saved),
         )
 
     def symlink_to(self, target_container, saved=False):
@@ -280,14 +310,54 @@ class SectionSymlink(FrontCacheMixin, SectionBase):
             container=target_container, symlink=self.symlink, saved=saved
         )
 
-    def render_front(self, context):
-        if self.symlink:
-            return self.symlink.render_front_cached(context)
-        else:
-            return ""
 
-    def render_front_cached(self, context):
-        if self.symlink:
-            return self.symlink.render_front_cached(context)
-        else:
-            return ""
+class ContainerSymlink(SymlinkMixin, SymlinkSectionMixin, FrontCacheMixin, SectionBase):
+    KEY = constants.CONTAINER_SYMLINK_KEY
+    front_cacheable = False
+    admin_template_name = "xprez/admin/sections/container_symlink.html"
+
+    symlink = models.ForeignKey(
+        "xprez.Container",
+        on_delete=models.SET_NULL,
+        null=True,
+        editable=False,
+        related_name="symlinked_container_set",
+    )
+
+    class Meta:
+        verbose_name = _("Linked container")
+
+    @classmethod
+    def _symlink_targets(cls, container_id):
+        return cls.objects.filter(
+            container_id=container_id, symlink__isnull=False
+        ).values_list("symlink_id", flat=True)
+
+    def _symlink_from_id(self):
+        return self.container_id
+
+    def build_admin_form(self, admin, data=None, files=None):
+        form_class = import_class("xprez.admin.forms.ContainerSymlinkForm")
+        self.admin_form = form_class(
+            instance=self, prefix=self.instance_key, data=data, files=files
+        )
+        self.admin_form.xprez_admin = admin
+
+    def render_admin(self, context):
+        context["container_symlink"] = self
+        return super().render_admin(context)
+
+    def duplicate_to(
+        self, target_container, saved=constants.SAVED_FORCE_FALSE, **kwargs
+    ):
+        return ContainerSymlink.objects.create(
+            container=target_container,
+            symlink=self.symlink,
+            saved=resolve_saved(saved, self.saved),
+        )
+
+    def symlink_to(self, target_container, saved=False):
+        """Symlinking a ContainerSymlink points at the same source container."""
+        return ContainerSymlink.objects.create(
+            container=target_container, symlink=self.symlink, saved=saved
+        )

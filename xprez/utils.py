@@ -1,12 +1,25 @@
 import copy
 import random
 
+from django.utils.module_loading import import_string
+
+from . import constants
 from .conf import settings
 
 
 def copy_model(instance):
-    """Return an unsaved shallow copy of a model instance, ready for insert."""
+    """Return an unsaved shallow copy of a model instance, ready for insert.
+
+    Preserves ``instance.__class__``: ``copy.copy`` routes through
+    ``Model.__reduce__``, which re-fetches the class from the live app registry
+    via ``apps.get_model``. For historical ``__fake__`` models used in data
+    migrations that swaps the class to the live one, exposing any new live
+    fields as "deferred" and triggering an erroneous ``update_fields`` path in
+    ``Model.save`` that fails on multi-table-inherited copies.
+    """
+    cls = instance.__class__
     inst = copy.copy(instance)
+    inst.__class__ = cls
     inst.pk = None
     inst.id = None
     inst._state.adding = True
@@ -14,28 +27,22 @@ def copy_model(instance):
 
 
 def import_class(cls):
+    """Import a class from a dotted path string, or return cls if already a class."""
     if isinstance(cls, str):
-        d = cls.rfind(".")
-        classname = cls[d + 1 : len(cls)]
-        m = __import__(cls[0:d], globals(), locals(), [classname])
-        return getattr(m, classname)
-    else:
-        return cls
+        return import_string(cls)
+    return cls
 
 
 def class_content_type(cls):
-    return "{}.{}".format(
-        cls._meta.app_label,
-        cls._meta.object_name,
-    )
+    return f"{cls._meta.app_label}.{cls._meta.object_name}"
 
 
 def build_absolute_uri(location, request=None):
     if settings.XPREZ_USE_ABSOLUTE_URI:
-        if location.lower().startswith(("http://", "https://", "//")):
+        if not location.lower().startswith(("http://", "https://", "//")):
             if request:
                 return request.build_absolute_uri(location)
-            return "{}{}".format(settings.XPREZ_BASE_URL, location)
+            return f"{settings.XPREZ_BASE_URL}{location}"
     return location
 
 
@@ -44,6 +51,14 @@ def random_string(length, include_special_chars=False):
     if include_special_chars:
         chars += "!@#$%^&*(-_=+)"
     return "".join([random.choice(chars) for i in range(length)])
+
+
+def resolve_saved(mode, source_saved):
+    """Compute the saved flag for a duplicated object given a save mode."""
+    if mode == constants.SAVED_PRESERVE:
+        return source_saved
+    else:
+        return mode is True or mode == constants.SAVED_FORCE_TRUE
 
 
 def truncate_with_ellipsis(string, length):

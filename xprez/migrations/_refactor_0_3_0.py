@@ -10,6 +10,7 @@ Reference:
 """
 
 import re
+from html import unescape
 
 from django.core.management.color import no_style
 from django.db import migrations, models
@@ -256,6 +257,7 @@ class ModuleReplaceProcessor(ModuleProcessorBase):
     def process(self):
         self.new_modules = self.prepare_new_modules()
         self.finalize_new_modules()
+        self.retarget_symlinks()
         self.delete_replaced_module()
 
     def prepare_new_modules(self):
@@ -272,6 +274,14 @@ class ModuleReplaceProcessor(ModuleProcessorBase):
             new_module.changed = timezone.now()
             new_module.save()
             self.finalize(new_module)
+
+    def retarget_symlinks(self):
+        if not self.new_modules:
+            return
+        ModuleSymlink = self.apps.get_model("xprez", "ModuleSymlink")
+        ModuleSymlink.objects.filter(symlink=self.module_base).update(
+            symlink=self.new_modules[0]
+        )
 
     def delete_replaced_module(self):
         """Remove the original module that was replaced by new_modules."""
@@ -332,8 +342,18 @@ class BoxModuleProcessorMixin:
 
 
 class ExtractImageMixin:
+    # Standalone leading image block. Alternatives (anchor_attrs, img_tag):
+    #  1) <p>[<a>]<img>[</a>]</p>                    — strict
+    #  2) <figure>[<a>]<img>[</a>]…</figure>         — figcaption allowed inside
+    #  3) <div class="medium-insert-images …"><figure>…</figure></div>
+    #     — Medium Editor Insert Plugin wrapper
     IMG_BLOCK_RE = re.compile(
-        r"^\s*<(?:p|figure)[^>]*>\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)\s*(?:</a>\s*)?</(?:p|figure)>\s*",
+        r"^\s*(?:"
+        r"<p[^>]*>\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)\s*(?:</a>\s*)?</p>"
+        r"|<figure[^>]*>\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)[\s\S]*?</figure>"
+        r"|<div\s[^>]*class=[\"'][^\"']*medium-insert-images[^\"']*[\"'][^>]*>\s*"
+        r"<figure[^>]*>\s*(?:<a\s([^>]*)>\s*)?(<img\s[^>]*?/?>)[\s\S]*?</figure>\s*</div>"
+        r")\s*",
         re.I | re.S,
     )
     IMG_RE = re.compile(r"^\s*(<img\s[^>]*?/?>)\s*", re.I | re.S)
@@ -365,13 +385,13 @@ class ExtractImageMixin:
         def _local_media(anchor_attrs, img_tag):
             src_m = E.SRC_RE.search(img_tag)
             if src_m:
-                src = src_m.group(1)
+                src = unescape(src_m.group(1))
                 if src.startswith(media_url):
                     url = None
                     if anchor_attrs:
                         href_m = E.HREF_RE.search(anchor_attrs)
                         if href_m:
-                            url = href_m.group(1)
+                            url = unescape(href_m.group(1))
                     return src[len(media_url) :], url
                 else:
                     return None, None
@@ -395,7 +415,9 @@ class ExtractImageMixin:
         # Standalone image block: <figure> or <p> containing only <img>
         m = E.IMG_BLOCK_RE.match(work)
         if m:
-            path, url = _local_media(m.group(1), m.group(2))
+            anchor_attrs = m.group(1) or m.group(3) or m.group(5)
+            img_tag = m.group(2) or m.group(4) or m.group(6)
+            path, url = _local_media(anchor_attrs, img_tag)
             if path is not None:
                 remaining = prefix + work[m.end() :]
 
@@ -452,8 +474,8 @@ def _reset_sequences(schema_editor, models_list):
 
 def migrate_containers_sections_modules(apps, schema_editor):
     xprez_defaults = _get_settings("XPREZ_DEFAULTS")
-    section_defaults = xprez_defaults["section"]
-    section_config_defaults = xprez_defaults["section_config"]
+    section_defaults = xprez_defaults["section"]["default"]
+    section_config_defaults = xprez_defaults["section_config"]["default"]
     module_defaults = xprez_defaults["module"]["default"]
 
     ContentsContainer = apps.get_model("xprez", "ContentsContainer")

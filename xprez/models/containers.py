@@ -1,17 +1,18 @@
 from collections import defaultdict
 
 from django.apps import apps
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Prefetch
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
 
 from xprez import constants
 from xprez.models.mixins.cache import FrontCacheMixin
+from xprez.models.mixins.polymorph import PolymorphMixin
 from xprez.utils import class_content_type
 
 
-class Container(FrontCacheMixin, models.Model):
+class Container(PolymorphMixin, FrontCacheMixin, models.Model):
     """Base container class for pages/articles that contain modules."""
 
     KEY = constants.CONTAINER_KEY
@@ -24,6 +25,11 @@ class Container(FrontCacheMixin, models.Model):
             self.content_type = class_content_type(self.__class__)
         super().save(*args, **kwargs)
 
+    def invalidate_front_cache(self):
+        super().invalidate_front_cache()
+        for csl in self.symlinked_container_set.filter(saved=True):
+            csl.invalidate_front_cache()
+
     def delete(self, *args, **kwargs):
         self.invalidate_front_cache()
         super().delete(*args, **kwargs)
@@ -32,16 +38,13 @@ class Container(FrontCacheMixin, models.Model):
     def front_cacheable(self):
         return all(s.front_cacheable for s in self.get_sections_front())
 
-    @cached_property
-    def polymorph(self):
-        app_label, object_name = self.content_type.split(".")
-        model = apps.get_model(app_label, object_name)
-        if isinstance(self, model):
-            return self
-        else:
-            return model.objects.get(pk=self.pk)
-
-    def duplicate_to(self, target_container, saved=False, allowed_module_classes=None):
+    @transaction.atomic
+    def duplicate_to(
+        self,
+        target_container,
+        saved=constants.SAVED_FORCE_FALSE,
+        allowed_module_classes=None,
+    ):
         result = []
         for item in self._get_ordered_section_items():
             new_item = item.duplicate_to(
@@ -53,16 +56,16 @@ class Container(FrontCacheMixin, models.Model):
         return result
 
     def symlink_to(self, target_container, saved=False):
-        result = []
-        for item in self._get_ordered_section_items():
-            new_symlink = item.symlink_to(target_container, saved=saved)
-            result += [new_symlink]
-        return result
+        return target_container.containersymlinks.create(symlink=self, saved=saved)
 
     def _get_ordered_section_items(self):
         sections = list(self.sections.all())
-        symlinks = list(self.sectionsymlinks.all())
-        return sorted(sections + symlinks, key=lambda item: item.position)
+        section_symlinks = list(self.sectionsymlinks.all())
+        container_symlinks = list(self.containersymlinks.all())
+        return sorted(
+            sections + section_symlinks + container_symlinks,
+            key=lambda item: item.position,
+        )
 
     def clipboard_verbose_name(self):
         return self.polymorph._meta.verbose_name
@@ -78,8 +81,16 @@ class Container(FrontCacheMixin, models.Model):
     def get_sections_front(self):
         if not hasattr(self, "_sections_front"):
             sections = list(self.sections.filter(saved=True, visible=True))
-            symlinks = list(self.sectionsymlinks.filter(saved=True, visible=True))
-            self._sections_front = sorted(sections + symlinks, key=lambda s: s.position)
+            section_symlinks = list(
+                self.sectionsymlinks.filter(saved=True, visible=True)
+            )
+            container_symlinks = list(
+                self.containersymlinks.filter(saved=True, visible=True)
+            )
+            self._sections_front = sorted(
+                sections + section_symlinks + container_symlinks,
+                key=lambda s: s.position,
+            )
         return self._sections_front
 
     def preload_front_structure(self):
@@ -99,7 +110,7 @@ class Container(FrontCacheMixin, models.Model):
                 Prefetch("modules", queryset=module_qs),
             )
         )
-        symlinks = list(
+        section_symlinks = list(
             self.sectionsymlinks.filter(saved=True, visible=True)
             .select_related("symlink")
             .prefetch_related(
@@ -107,11 +118,24 @@ class Container(FrontCacheMixin, models.Model):
                 Prefetch("symlink__modules", queryset=module_qs),
             )
         )
+        container_symlinks = list(
+            self.containersymlinks.filter(saved=True, visible=True).select_related(
+                "symlink"
+            )
+        )
+
+        # Preload each unique target container independently; each calls its own
+        # preload_front_structure which populates _sections_front on the target.
+        seen_target_pks = set()
+        for csl in container_symlinks:
+            if csl.symlink and csl.symlink.pk not in seen_target_pks:
+                seen_target_pks.add(csl.symlink.pk)
+                csl.symlink.preload_front_structure()
 
         # Deduplicate symlinked sections against already-loaded sections
         seen_section_pks = {s.pk for s in sections}
         extra_sections = []
-        for sl in symlinks:
+        for sl in section_symlinks:
             if sl.symlink and sl.symlink.pk not in seen_section_pks:
                 seen_section_pks.add(sl.symlink.pk)
                 extra_sections += [sl.symlink]
@@ -158,4 +182,6 @@ class Container(FrontCacheMixin, models.Model):
             for module in section._modules_front:
                 module._configs_front = configs_by_module_pk.get(module.pk, [])
 
-        self._sections_front = sorted(sections + symlinks, key=lambda s: s.position)
+        self._sections_front = sorted(
+            sections + section_symlinks + container_symlinks, key=lambda s: s.position
+        )

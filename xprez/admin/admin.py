@@ -1,17 +1,23 @@
-from django.apps import apps
+import functools
+
 from django.contrib import admin
+from django.db import transaction
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.utils.html import format_html
 
-from xprez import constants, module_registry, settings
+from xprez import constants, models, module_registry, settings
+from xprez.admin.permissions import xprez_staff_member_required
 from xprez.admin.views.ckeditor_upload import XprezAdminViewsCkEditorUploadMixin
 from xprez.admin.views.clipboard import XprezAdminViewsClipboardMixin
 from xprez.admin.views.content import XprezAdminViewsContentMixin
+from xprez.admin.views.template_container import XprezAdminViewsTemplateContainerMixin
 from xprez.ck_editor.forms import CkEditorFileUploadXprezAdminFormMixin
 from xprez.media import AdminMediaCollector
 
 
-class XprezModelFormMixin(object):
+class XprezModelFormMixin:
     def __init__(self, data=None, files=None, instance=None, **kwargs):
         super().__init__(data=data, files=files, instance=instance, **kwargs)
         self.xprez_sections = []
@@ -19,13 +25,20 @@ class XprezModelFormMixin(object):
         if instance:
             sections = instance.sections.all()
             section_symlinks = instance.sectionsymlinks.all()
+            container_symlinks = instance.containersymlinks.all()
             if data is not None:
-                section_ids = [int(id) for id in data.getlist("section-id")]
-                section_symlink_ids = [
-                    int(id) for id in data.getlist("section-symlink-id")
+                section_pks = [int(pk) for pk in data.getlist("section-id")]
+                section_symlink_pks = [
+                    int(pk) for pk in data.getlist("section-symlink-id")
                 ]
-                sections = sections.filter(pk__in=section_ids)
-                section_symlinks = section_symlinks.filter(pk__in=section_symlink_ids)
+                container_symlink_pks = [
+                    int(pk) for pk in data.getlist("container-symlink-id")
+                ]
+                sections = sections.filter(pk__in=section_pks)
+                section_symlinks = section_symlinks.filter(pk__in=section_symlink_pks)
+                container_symlinks = container_symlinks.filter(
+                    pk__in=container_symlink_pks
+                )
 
             for section in sections:
                 section.build_admin_form(self.xprez_admin, data, files)
@@ -33,6 +46,9 @@ class XprezModelFormMixin(object):
             for section_symlink in section_symlinks:
                 section_symlink.build_admin_form(self.xprez_admin, data, files)
                 self.xprez_sections.append(section_symlink)
+            for container_symlink in container_symlinks:
+                container_symlink.build_admin_form(self.xprez_admin, data, files)
+                self.xprez_sections.append(container_symlink)
         self.xprez_sections.sort(key=lambda s: s.admin_form.get_position())
 
     def is_valid(self):
@@ -63,6 +79,7 @@ class XprezModelFormMixin(object):
 class XprezAdminMixin(
     XprezAdminViewsContentMixin,
     XprezAdminViewsClipboardMixin,
+    XprezAdminViewsTemplateContainerMixin,
     XprezAdminViewsCkEditorUploadMixin,
 ):
     constants = constants
@@ -102,39 +119,77 @@ class XprezAdminMixin(
     xprez_url_namespace = None
 
     def xprez_admin_view(self, view):
-        return view
+        """Default permission wrapper for xprez admin views.
+
+        `XprezAdmin` overrides this with `admin_site.admin_view` (which is
+        stricter). The default protects custom `XprezAdminMixin` consumers from
+        accidentally exposing mutating endpoints to anonymous users.
+        """
+        return xprez_staff_member_required(view)
+
+    def xprez_admin_module_view(self, view):
+        """Wrap a module classmethod view, pre-binding `xprez_admin` as first arg."""
+        return self.xprez_admin_view(functools.partial(view, self))
 
     def xprez_admin_url_name(self, name, include_namespace=False):
-        name = "{}_{}".format(self.model._meta.model_name, name)
+        name = f"{self.model._meta.model_name}_{name}"
         if include_namespace and self.xprez_url_namespace:
-            name = "{}:{}".format(self.xprez_url_namespace, name)
+            name = f"{self.xprez_url_namespace}:{name}"
         return name
 
     def xprez_admin_urls(self):
         urls = []
         urls += XprezAdminViewsContentMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsClipboardMixin.xprez_admin_urls(self)
+        urls += XprezAdminViewsTemplateContainerMixin.xprez_admin_urls(self)
         urls += XprezAdminViewsCkEditorUploadMixin.xprez_admin_urls(self)
-        urls += module_registry.get_admin_urls()
+        urls += module_registry.get_admin_urls(self)
         return urls
 
     def xprez_admin_change_url(self, obj):
         """Change URL for `obj` in this admin site, or None if not registered."""
         try:
             return reverse(
-                "{namespace}:{app_label}_{model_name}_change".format(
-                    namespace=self.xprez_url_namespace,
-                    app_label=obj._meta.app_label,
-                    model_name=obj._meta.model_name,
-                ),
+                f"{self.xprez_url_namespace}:{obj._meta.app_label}_{obj._meta.model_name}_change",
                 args=[obj.pk],
             )
         except NoReverseMatch:
             return None
 
+    def xprez_get_container_qs(self, request):
+        """Containers this admin is allowed to touch.
+
+        Override to restrict admin endpoints to a per-request subset (e.g.
+        when staff users only manage a subset of containers). All xprez admin
+        endpoints that resolve a `*_container_pk` / `*_section_pk` /
+        `*_module_pk` route through this queryset.
+        """
+        return self.model._default_manager.all()
+
     def _get_container_instance(self, request, object_pk):
-        cls = apps.get_model("xprez", "Container")
-        return cls.objects.get(pk=object_pk)
+        return get_object_or_404(self.xprez_get_container_qs(request), pk=object_pk)
+
+    def _get_section_instance(self, request, section_pk):
+        return get_object_or_404(
+            models.Section.objects.filter(
+                container__in=self.xprez_get_container_qs(request)
+            ),
+            pk=section_pk,
+        )
+
+    def _get_module_instance(self, request, module_pk, model=None):
+        """Resolve `module_pk` scoped to this admin's containers.
+
+        Pass `model` (a concrete `Module` subclass) to also constrain by type
+        and get the concrete instance back without a separate `polymorph` query.
+        """
+        model = model or models.Module
+        return get_object_or_404(
+            model.objects.filter(
+                section__container__in=self.xprez_get_container_qs(request)
+            ),
+            pk=module_pk,
+        )
 
 
 class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
@@ -152,14 +207,11 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
         return self.xprez_get_form(super().get_form(*args, **kwargs))
 
     def save_model(self, request, obj, form, *args, **kwargs):
-        super().save_model(request, obj, form, *args, **kwargs)
-
-        """
-        admin's list_editable bypasses overrided get_form
-        so it does not have save_xprez
-        """
-        if hasattr(form, "xprez_save"):
-            form.xprez_save(request)
+        with transaction.atomic():
+            super().save_model(request, obj, form, *args, **kwargs)
+            # admin's list_editable bypasses overridden get_form, so it may not have xprez_save
+            if hasattr(form, "xprez_save"):
+                form.xprez_save(request)
 
     @property
     def media(self, *args, **kwargs):
@@ -174,3 +226,14 @@ class XprezAdmin(XprezAdminMixin, admin.ModelAdmin):
 
     def get_urls(self):
         return self.xprez_admin_urls() + super().get_urls()
+
+
+class TemplateContainerAdmin(XprezAdmin):
+    list_display = ("display_key", "image_preview", "description")
+    search_fields = ("key", "description", "keywords")
+
+    @admin.display(description="Image")
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="height:48px;">', obj.image.url)
+        return ""

@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
@@ -70,6 +71,10 @@ class ClipboardItemBase:
         if self.target_section:
             args += [self.target_section.pk]
         return reverse(self.xprez_admin.xprez_clipboard_paste_url_name(), args=args)
+
+    @property
+    def symlink_allowed(self):
+        return True
 
     @property
     def duplicate_url(self):
@@ -167,6 +172,12 @@ class ClipboardItemContainer(ClipboardItemBase):
             return super().allowed
 
     @property
+    def symlink_allowed(self):
+        return not models.ContainerSymlink.would_create_cycle(
+            self.target_container.pk, self.obj.pk
+        )
+
+    @property
     def contained_modules(self):
         return models.Module.objects.filter(
             section__container=self.obj,
@@ -175,18 +186,21 @@ class ClipboardItemContainer(ClipboardItemBase):
         ).polymorphs()
 
     def duplicate(self, request, target_section=None):
-        created = self.obj.duplicate_to(
-            self.target_container,
-            allowed_module_classes=self.allowed_module_classes,
+        created = (
+            self.obj.duplicate_to(
+                self.target_container,
+                allowed_module_classes=self.allowed_module_classes,
+            )
+            or []
         )
         return [self._render(request, self.xprez_admin, item) for item in created]
 
     def symlink(self, request, target_section=None):
-        created = self.obj.symlink_to(self.target_container)
-        return [self._render(request, self.xprez_admin, item) for item in created]
+        new_symlink = self.obj.symlink_to(self.target_container)
+        return [self._render(request, self.xprez_admin, new_symlink)]
 
 
-class XprezAdminViewsClipboardMixin(object):
+class XprezAdminViewsClipboardMixin:
     CLIPBOARD_SESSION_KEY = "xprez_clipboard"
     CLIPBOARD_MAX_LENGTH = 10
     CLIPBOARD_ITEM_REGISTRY = {
@@ -195,7 +209,7 @@ class XprezAdminViewsClipboardMixin(object):
     }
 
     def xprez_duplicate_section_view(self, request, section_pk):
-        section = models.Section.objects.get(pk=section_pk)
+        section = self._get_section_instance(request, section_pk)
         new_section = section.duplicate_to(section.container)
         new_section.build_admin_form(self)
         return JsonResponse(
@@ -203,7 +217,7 @@ class XprezAdminViewsClipboardMixin(object):
         )
 
     def xprez_duplicate_module_view(self, request, module_pk):
-        module = models.Module.objects.get(pk=module_pk).polymorph
+        module = self._get_module_instance(request, module_pk).polymorph
         new_module = module.duplicate_to(module.section)
         new_module.build_admin_form(self)
         return JsonResponse(
@@ -221,7 +235,7 @@ class XprezAdminViewsClipboardMixin(object):
     def xprez_clipboard_paste(
         self, request, key, pk, action, target_container_pk, target_section_pk=None
     ):
-        target_container = get_object_or_404(models.Container, pk=target_container_pk)
+        target_container = self._get_container_instance(request, target_container_pk)
         if target_section_pk is not None:
             target_section = get_object_or_404(
                 models.Section,
@@ -230,20 +244,32 @@ class XprezAdminViewsClipboardMixin(object):
             )
         else:
             target_section = None
-        item = self._clipboard_item(key, pk, target_container, target_section)
+        try:
+            item = self._clipboard_item(key, pk, target_container, target_section)
+            _ = item.obj  # raises ObjectDoesNotExist if the source row is gone
+        except (ObjectDoesNotExist, KeyError):
+            self._remove_clipboard_entry(request, (key, pk))
+            return HttpResponseBadRequest()
+
         if not item.allowed:
             return HttpResponseBadRequest()
         elif action == CLIPBOARD_DUPLICATE_ACTION:
-            return JsonResponse(item.duplicate(request, target_section), safe=False)
+            with transaction.atomic():
+                result = item.duplicate(request, target_section)
+            return JsonResponse(result, safe=False)
         elif action == CLIPBOARD_SYMLINK_ACTION:
-            return JsonResponse(item.symlink(request, target_section), safe=False)
+            if not item.symlink_allowed:
+                return HttpResponseBadRequest()
+            with transaction.atomic():
+                result = item.symlink(request, target_section)
+            return JsonResponse(result, safe=False)
         else:
             return HttpResponseBadRequest()
 
     def xprez_clipboard_list(
         self, request, target_container_pk, target_section_pk=None
     ):
-        target_container = get_object_or_404(models.Container, pk=target_container_pk)
+        target_container = self._get_container_instance(request, target_container_pk)
         if target_section_pk is not None:
             target_section = get_object_or_404(
                 models.Section,

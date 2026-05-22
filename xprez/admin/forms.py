@@ -3,7 +3,7 @@ from django import forms
 from xprez.admin.shortcuts import ShortcutsMixin
 from xprez.conf import settings
 from xprez.models.configs import SectionConfig
-from xprez.models.sections import Section, SectionSymlink
+from xprez.models.sections import ContainerSymlink, Section, SectionSymlink
 
 
 class PositionFormMixin:
@@ -79,6 +79,12 @@ class SectionSymlinkForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm)
         fields = ("position",)
 
 
+class ContainerSymlinkForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm):
+    class Meta:
+        model = ContainerSymlink
+        fields = ("position",)
+
+
 class SectionConfigForm(DeletableFormMixin, forms.ModelForm):
     class Meta:
         model = SectionConfig
@@ -142,7 +148,8 @@ class MultiModuleItemForm(DeletableFormMixin, PositionFormMixin, forms.ModelForm
 
     system_fields = DeletableFormMixin.system_fields + ("position",)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, xprez_admin, *args, **kwargs):
+        self.xprez_admin = xprez_admin
         super().__init__(*args, **kwargs)
         fk_name = getattr(self.instance.__class__, "module_foreign_key", None)
         if fk_name and fk_name in self.fields:
@@ -179,6 +186,7 @@ class ModuleConfigForm(SyncFieldsMixin, DeletableFormMixin, forms.ModelForm):
         "vertical_align_flex",
         "horizontal_align_flex",
         "aspect_ratio",
+        "max_width",
         "border_radius_choice",
         "border_radius_custom",
     )

@@ -2,14 +2,12 @@
     &-section {
         text-align: center;
         border-top: var(--x-admin-section-divider-height) solid var(--x-admin-section-divider-bg);
-        padding-top: 1rem;
-        padding-bottom: 1rem;
+        padding-top: 2rem;
+        padding-bottom: 1.5rem;
         margin-top: 1.5rem;
 
-        h2 {
-            @include type-b(13px, 2, 2, 1);
-            color: $b-gray-7;
-            font-weight: normal;
+        h3 {
+            font-size: $admin-ui-font-size;
         }
     }
 }

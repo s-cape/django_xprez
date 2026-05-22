@@ -9,6 +9,20 @@ class XprezConfig(AppConfig):
 
     def ready(self):
         self.autoregister_modules()
+        self._register_builtin_admins()
+
+    @staticmethod
+    def _register_builtin_admins():
+        # Registered here (not via @admin.register) to avoid import-time cycles
+        if not apps.is_installed("django.contrib.admin"):
+            return
+
+        from django.contrib import admin
+
+        from xprez import models
+        from xprez.admin.admin import TemplateContainerAdmin
+
+        admin.site.register(models.TemplateContainer, TemplateContainerAdmin)
 
     def autoregister_modules(self):
         if settings.XPREZ_MODULES_AUTOREGISTER:
