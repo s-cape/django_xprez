@@ -10,6 +10,7 @@ Reference:
 """
 
 import re
+from html import unescape
 
 from django.core.management.color import no_style
 from django.db import migrations, models
@@ -256,6 +257,7 @@ class ModuleReplaceProcessor(ModuleProcessorBase):
     def process(self):
         self.new_modules = self.prepare_new_modules()
         self.finalize_new_modules()
+        self.retarget_symlinks()
         self.delete_replaced_module()
 
     def prepare_new_modules(self):
@@ -272,6 +274,14 @@ class ModuleReplaceProcessor(ModuleProcessorBase):
             new_module.changed = timezone.now()
             new_module.save()
             self.finalize(new_module)
+
+    def retarget_symlinks(self):
+        if not self.new_modules:
+            return
+        ModuleSymlink = self.apps.get_model("xprez", "ModuleSymlink")
+        ModuleSymlink.objects.filter(symlink=self.module_base).update(
+            symlink=self.new_modules[0]
+        )
 
     def delete_replaced_module(self):
         """Remove the original module that was replaced by new_modules."""
@@ -375,13 +385,13 @@ class ExtractImageMixin:
         def _local_media(anchor_attrs, img_tag):
             src_m = E.SRC_RE.search(img_tag)
             if src_m:
-                src = src_m.group(1)
+                src = unescape(src_m.group(1))
                 if src.startswith(media_url):
                     url = None
                     if anchor_attrs:
                         href_m = E.HREF_RE.search(anchor_attrs)
                         if href_m:
-                            url = href_m.group(1)
+                            url = unescape(href_m.group(1))
                     return src[len(media_url) :], url
                 else:
                     return None, None
