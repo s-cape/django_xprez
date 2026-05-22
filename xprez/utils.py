@@ -8,8 +8,18 @@ from .conf import settings
 
 
 def copy_model(instance):
-    """Return an unsaved shallow copy of a model instance, ready for insert."""
+    """Return an unsaved shallow copy of a model instance, ready for insert.
+
+    Preserves ``instance.__class__``: ``copy.copy`` routes through
+    ``Model.__reduce__``, which re-fetches the class from the live app registry
+    via ``apps.get_model``. For historical ``__fake__`` models used in data
+    migrations that swaps the class to the live one, exposing any new live
+    fields as "deferred" and triggering an erroneous ``update_fields`` path in
+    ``Model.save`` that fails on multi-table-inherited copies.
+    """
+    cls = instance.__class__
     inst = copy.copy(instance)
+    inst.__class__ = cls
     inst.pk = None
     inst.id = None
     inst._state.adding = True
