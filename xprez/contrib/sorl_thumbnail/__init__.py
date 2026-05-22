@@ -16,11 +16,10 @@ class LazyNamingThumbnailBackend(
     pass
 
 
-LazyNamingThumbnailBackend = LazyNamingThumbnailBackend
-
 __all__ = [
     "LazyNamingThumbnailBackend",
-    "LazyNamingThumbnailBackend",
     "LazyThumbnailBackend",
+    "LazyThumbnailBackendMixin",
     "NamingThumbnailBackend",
+    "NamingThumbnailBackendMixin",
 ]
