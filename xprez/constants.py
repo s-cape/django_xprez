@@ -25,11 +25,13 @@ MARGIN_CHOICES = (
 
 MAX_WIDTH_SMALL = "small"
 MAX_WIDTH_MEDIUM = "medium"
+MAX_WIDTH_LARGE = "large"
 MAX_WIDTH_FULL = "full"
 MAX_WIDTH_CUSTOM = CUSTOM
 MAX_WIDTH_CHOICES = (
     (MAX_WIDTH_SMALL, _("Small")),
     (MAX_WIDTH_MEDIUM, _("Medium")),
+    (MAX_WIDTH_LARGE, _("Large")),
     (MAX_WIDTH_FULL, _("Full")),
     (MAX_WIDTH_CUSTOM, _("Custom")),
 )

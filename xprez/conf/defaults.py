@@ -494,12 +494,14 @@ XPREZ_CSS = {
             "units": {
                 constants.MAX_WIDTH_SMALL: "px",
                 constants.MAX_WIDTH_MEDIUM: "px",
+                constants.MAX_WIDTH_LARGE: "px",
                 constants.MAX_WIDTH_FULL: "%",
                 constants.MAX_WIDTH_CUSTOM: "px",
             },
             "values": {
                 constants.MAX_WIDTH_SMALL: {0: 720},
                 constants.MAX_WIDTH_MEDIUM: {0: 1296},
+                constants.MAX_WIDTH_LARGE: {0: 1600},
                 constants.MAX_WIDTH_FULL: {0: 100},
             },
         },
