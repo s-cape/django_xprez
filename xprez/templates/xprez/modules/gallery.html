@@ -17,7 +17,7 @@
             {% endif %}
             data-alt="{{ alt }}"
         >
-            {% include "xprez/includes/responsive_image.html" with source=item.file geometries=geoms sizes=module.image_sizes alt=alt crop=module.thumbnail_crop filename_stem=alt css_class="xprez-gallery__item-img" %}
+            {% include "xprez/includes/responsive_image/image.html" with image=item.file geometries=geoms sizes=module.image_sizes alt=alt crop=module.thumbnail_crop filename_stem=alt css_class="xprez-gallery__item-img" %}
             {% if item.description %}
                 <figcaption class="xprez-gallery__item-caption">{{ item.description }}</figcaption>
             {% endif %}

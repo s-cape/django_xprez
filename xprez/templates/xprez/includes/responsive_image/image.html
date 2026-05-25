@@ -1,0 +1,6 @@
+{% load thumbnail xprez %}
+<img{% if css_class %} class="{{ css_class }}"{% endif %}
+     {% thumbnail image geometries.0 crop=crop|default:"" format="WEBP" quality=70 filename_stem=filename_stem|default:"" as t_src %}src="{{ t_src.url|build_absolute_uri }}"{% endthumbnail %}
+     {% include "xprez/includes/responsive_image/attrs.html" %}
+     alt="{{ alt|default:"" }}"
+     {% if loading %}loading="{{ loading }}"{% endif %}>

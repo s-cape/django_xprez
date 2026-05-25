@@ -1,0 +1,7 @@
+{% load thumbnail xprez %}
+srcset="{% for geom in geometries %}{% thumbnail image geom crop=crop|default:"" format="WEBP" quality=70 filename_stem=filename_stem|default:"" as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
+sizes="{{ sizes }}"
+{% thumbnail image geometries.0 crop=crop|default:"" format="WEBP" quality=70 filename_stem=filename_stem|default:"" as t_src %}
+    width="{{ t_src.width }}"
+    height="{{ t_src.height }}"
+{% endthumbnail %}
