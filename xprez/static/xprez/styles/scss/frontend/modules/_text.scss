@@ -11,6 +11,10 @@
 
     position: relative;
 
+    .xprez-module-inner {
+        flex: 1;
+    }
+
     &__text-wrapper {
         position: relative;
         z-index: 2;
