@@ -1,12 +1,12 @@
 {% load i18n %}
 <div class="xprez-option-row" >
     <div class="xprez-option xprez-option--transparent" data-size="flex-1" data-active="true" data-text-label="false">
-        <label for="h_align">
+        <label for="add-breakpoint-trigger">
             <i class="xprez-icon-plus_square_20"></i>
             <span>{% trans "Add breakpoint" %}</span>
         </label>
         <span class="xprez-option__dropdown">
-            <select class="xprez-option__select">
+            <select class="xprez-option__select" id="add-breakpoint-trigger">
                 <option value="">{% trans "Add breakpoint" %}</option>
                 {% for id, data in xprez_admin.xprez_breakpoints.items %}
                     <option value="{{ id }}" disabled data-url="{% block data_url %}{% endblock %}">{{ data.name|safe }}</option>

@@ -19,6 +19,10 @@
             margin-bottom: 0;
         }
 
+        a {
+            word-wrap: break-word;
+        }
+
         a:not(.#{$x-button-class}) {
             text-decoration: $x-link-text-decoration;
 

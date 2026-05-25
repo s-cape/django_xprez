@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block fields %}
-    <div class="xprez-option-group__subtitle">{% trans "Grid" %}</div>
+    <div class="xprez-option-group__subtitle">{% trans "Align in parent grid" %}</div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.colspan size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.rowspan size="flex-1" %}
@@ -44,7 +44,7 @@
         <div class="xprez-option__btn-spacer"></div>
     </div>
 
-    <div class="xprez-option-group__subtitle">{% trans "Box" %}</div>
+    <div class="xprez-option-group__subtitle">{% trans "Inner box" %}</div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.background size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.border size="flex-1" %}
