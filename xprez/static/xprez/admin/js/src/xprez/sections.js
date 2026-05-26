@@ -46,6 +46,10 @@ export class XprezSection extends XprezContentBase {
         return this.gridEl.querySelectorAll(":scope > [data-xprez-module]");
     }
 
+    get adderEndWrapperEl() {
+        return this.gridEl.querySelector(":scope > [data-xprez-adder-section-end-wrapper]");
+    }
+
     initModule(moduleEl) {
         const module = this.mountChild(moduleEl);
         this.modules.push(module);
@@ -70,7 +74,12 @@ export class XprezSection extends XprezContentBase {
             group: 'xprez-modules',
             draggable: '[data-xprez-module]',
             handle: '[data-draggable-module-handle]',
-            onEnd: () => this.xprez.setPlacementToInputs()
+            onChange: () => {
+                this.moduleEls.forEach(moduleEl => this.adderEndWrapperEl.before(moduleEl));
+            },
+            onEnd: () => {
+                this.xprez.setPlacementToInputs();
+            }
         });
     }
 }
