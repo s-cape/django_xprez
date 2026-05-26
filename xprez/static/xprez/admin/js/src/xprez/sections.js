@@ -39,7 +39,11 @@ export class XprezSection extends XprezContentBase {
     initModules() {
         this.gridEl = this.el.querySelector("[data-xprez-section-grid]");
         this.modules = [];
-        Array.from(this.gridEl.children).forEach(this.initModule.bind(this));
+        this.moduleEls.forEach(this.initModule.bind(this));
+    }
+
+    get moduleEls() {
+        return this.gridEl.querySelectorAll(":scope > [data-xprez-module]");
     }
 
     initModule(moduleEl) {
@@ -64,6 +68,7 @@ export class XprezSection extends XprezContentBase {
     initModulesSortable() {
         this.modulesSortable = new XprezSortable(this.gridEl, {
             group: 'xprez-modules',
+            draggable: '[data-xprez-module]',
             handle: '[data-draggable-module-handle]',
             onEnd: () => this.xprez.setPlacementToInputs()
         });

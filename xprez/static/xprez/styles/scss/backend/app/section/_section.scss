@@ -17,7 +17,7 @@
     }
 
     &[data-collapsed] {
-        .xprez-section__footer, .xprez-section-grid, .xprez-section__body {
+        .xprez-section__adder-trigger, .xprez-section-grid, .xprez-section__body {
             display: none;
         }
 
@@ -77,7 +77,7 @@
         align-items: center;
     }
 	
-    &__footer {
+    &__adder-trigger {
         display: flex;
         justify-content: center;
         align-items: center;

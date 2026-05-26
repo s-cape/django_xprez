@@ -2,6 +2,7 @@
 {% xprez_clipboard_is_empty xprez_admin request as clipboard_is_empty %}
 {% xprez_templatecontainer_is_empty xprez_admin adder_container as templatecontainer_is_empty %}
 
+{% block before_wrapper %}{% endblock %}
 <div
     class="{% block wrapper_css_class %}xprez-add-section{% endblock %}"
     data-controller="{% block controller_class %}{% endblock %}"
