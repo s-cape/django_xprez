@@ -3,7 +3,7 @@
     overflow: hidden;
     position: relative;
 	border: 1px solid $b-gray-4;
-	margin: 1rem 0;
+	margin: 0;
 	background: var(--x-admin-module-bg); 
 
     &[data-mode="edit"],
@@ -99,6 +99,32 @@
         flex-direction: column;
         gap: .5rem;
         align-items: stretch;
+    }
+
+    &--adder {
+        align-self: start;
+        border-style: none;
+        opacity: .2;
+        transition: opacity 0.2s ease-in-out;
+
+        .xprez-btn {
+            width: 100%;
+            text-align: center;
+            padding: .75rem 1rem;
+            
+
+            &:hover {
+                background: white;
+            }
+        }
+
+        .xprez-section-grid:hover & {
+            opacity: 1;
+        }
+
+        .xprez-add-section {
+            padding: .5rem 0;
+        }
     }
 }
 
