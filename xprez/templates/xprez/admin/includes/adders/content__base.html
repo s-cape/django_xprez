@@ -73,7 +73,7 @@
 
         {% if not adder_section %}
             <li data-xprez-add-item data-url="{% url xprez_admin.xprez_add_url_name adder_container.pk %}">
-                <span class="xprez-icon">{% include "xprez/shared/icons/section.html" %}</span>
+                <span class="xprez-icon">{% include "xprez/shared/icons/plus_square_dotted.html" %}</span>
                 <span>{% trans "Empty section" %}</span>
             </li>
         {% endif %}
