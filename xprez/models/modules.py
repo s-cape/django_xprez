@@ -91,6 +91,9 @@ class Module(PolymorphMixin, ContentFrontCacheMixin, ConfigParentMixin, models.M
     def module_key(cls):
         return cls._meta.model_name.lower().removesuffix("module")
 
+    def module_class(self, follow_symlink=False):
+        return self.__class__
+
     @classmethod
     def module_css_class(cls):
         return cls.module_key
