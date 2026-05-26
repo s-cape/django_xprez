@@ -1,14 +1,14 @@
 from django.db import transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.urls import path
+from django.urls import include, path
 
 from xprez import constants, models, module_registry
 from xprez.conf import settings
 
 
 class XprezAdminViewsContentMixin:
-    def _xprez_create_section(self, content_type, container):
+    def _xprez_create_section(self, container, content_type=None):
         section_defaults = settings.XPREZ_DEFAULTS["section"].get(content_type, {})
         section = models.Section(container=container, **section_defaults)
         section.save()
@@ -20,25 +20,36 @@ class XprezAdminViewsContentMixin:
         module.save()
         return module
 
-    def xprez_add_view(self, request, content_type, container_pk, section_pk=None):
-        """Adds a module. Create a section+module if section_pk is not provided."""
-        try:
-            module_class = module_registry.get(content_type)
-        except LookupError as e:
-            raise Http404 from e
+    @transaction.atomic
+    def xprez_add_view(self, request, container_pk, section_pk=None, content_type=None):
+        """Add content to a container.
+
+        Modes by URL kwargs:
+        - only `container_pk`: create an empty section
+        - `container_pk` + `content_type`: create a section containing the module
+        - `container_pk` + `section_pk` + `content_type`: add module to that section
+        """
         container = self._get_container_instance(request, container_pk)
-        if section_pk is None:
-            with transaction.atomic():
-                section = self._xprez_create_section(content_type, container)
-                self._xprez_create_module(module_class, section)
-            section.build_admin_form(self)
-            html = section.render_admin({"request": request})
+        module_class = None
+        if content_type is not None:
+            try:
+                module_class = module_registry.get(content_type)
+            except LookupError as e:
+                raise Http404 from e
+
+        if module_class is None:
+            renderable = self._xprez_create_section(container)
+        elif section_pk is None:
+            renderable = self._xprez_create_section(container, content_type)
+            self._xprez_create_module(module_class, renderable)
         else:
             section = get_object_or_404(container.sections, pk=section_pk)
-            module = self._xprez_create_module(module_class, section)
-            module.build_admin_form(self)
-            html = module.render_admin({"request": request})
-        return JsonResponse([{"html": html}], safe=False)
+            renderable = self._xprez_create_module(module_class, section)
+
+        renderable.build_admin_form(self)
+        return JsonResponse(
+            [{"html": renderable.render_admin({"request": request})}], safe=False
+        )
 
     def xprez_add_section_config_view(self, request, section_pk, css_breakpoint):
         section = self._get_section_instance(request, section_pk)
@@ -65,23 +76,42 @@ class XprezAdminViewsContentMixin:
     def xprez_admin_urls(self):
         return [
             path(
-                "xprez-add/<str:content_type>/<int:container_pk>/<int:section_pk>/",
-                self.xprez_admin_view(self.xprez_add_view),
-                name=self.xprez_admin_url_name("add"),
+                "xprez-add/<int:container_pk>/",
+                include(
+                    [
+                        path(
+                            "new-section/empty/",
+                            self.xprez_admin_view(self.xprez_add_view),
+                            name=self.xprez_admin_url_name("add"),
+                        ),
+                        path(
+                            "new-section/<str:content_type>/",
+                            self.xprez_admin_view(self.xprez_add_view),
+                            name=self.xprez_admin_url_name("add"),
+                        ),
+                        path(
+                            "<int:section_pk>/<str:content_type>/",
+                            self.xprez_admin_view(self.xprez_add_view),
+                            name=self.xprez_admin_url_name("add"),
+                        ),
+                    ]
+                ),
             ),
             path(
-                "xprez-add/<str:content_type>/<int:container_pk>/",
-                self.xprez_admin_view(self.xprez_add_view),
-                name=self.xprez_admin_url_name("add"),
-            ),
-            path(
-                f"xprez-config-add/{constants.SECTION_KEY}/<int:section_pk>/<int:css_breakpoint>/",
-                self.xprez_admin_view(self.xprez_add_section_config_view),
-                name=self.xprez_admin_url_name("add_config"),
-            ),
-            path(
-                f"xprez-config-add/{constants.MODULE_KEY}/<int:module_pk>/<int:css_breakpoint>/",
-                self.xprez_admin_view(self.xprez_add_module_config_view),
-                name=self.xprez_admin_url_name("add_config"),
+                "xprez-config-add/",
+                include(
+                    [
+                        path(
+                            f"{constants.SECTION_KEY}/<int:section_pk>/<int:css_breakpoint>/",
+                            self.xprez_admin_view(self.xprez_add_section_config_view),
+                            name=self.xprez_admin_url_name("add_config"),
+                        ),
+                        path(
+                            f"{constants.MODULE_KEY}/<int:module_pk>/<int:css_breakpoint>/",
+                            self.xprez_admin_view(self.xprez_add_module_config_view),
+                            name=self.xprez_admin_url_name("add_config"),
+                        ),
+                    ]
+                ),
             ),
         ]
