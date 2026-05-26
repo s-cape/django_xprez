@@ -61,14 +61,21 @@
 
         {% for module in available_modules %}
             {% if adder_section %}
-                {% url xprez_admin.xprez_add_url_name module.class_content_type adder_container.pk adder_section.pk as add_url %}
+                {% url xprez_admin.xprez_add_url_name adder_container.pk adder_section.pk module.class_content_type as add_url %}
             {% else %}
-                {% url xprez_admin.xprez_add_url_name module.class_content_type adder_container.pk as add_url %}
+                {% url xprez_admin.xprez_add_url_name adder_container.pk module.class_content_type as add_url %}
             {% endif %}
             <li data-xprez-add-item data-url="{{ add_url }}">
                 {{ module.admin_icon }}
                 <span>{{ module.verbose_name }}</span>
             </li>
         {% endfor %}
+
+        {% if not adder_section %}
+            <li data-xprez-add-item data-url="{% url xprez_admin.xprez_add_url_name adder_container.pk %}">
+                <span class="xprez-icon">{% include "xprez/shared/icons/plus_square_dotted.html" %}</span>
+                <span>{% trans "Empty section" %}</span>
+            </li>
+        {% endif %}
     </ul>
 </div>
