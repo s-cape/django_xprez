@@ -105,11 +105,11 @@ class MultiModule(Module):
         self.duplicate_items(new_module, saved=saved)
         return new_module
 
-    def duplicate_items(self, new_module, saved=constants.SAVED_FORCE_FALSE):
+    def duplicate_items(self, target_module, saved=constants.SAVED_FORCE_FALSE):
         for item in (
             getattr(self, self.items_attribute).all().order_by("position", "pk")
         ):
-            item.duplicate_to(new_module, saved=saved)
+            item.duplicate_to(target_module, saved=saved)
 
     @classmethod
     def get_admin_urls(cls, xprez_admin):
