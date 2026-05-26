@@ -103,7 +103,6 @@
 
     &--adder {
         align-self: start;
-        // justify-self: start;
         border-style: none;
         opacity: .2;
         transition: opacity 0.2s ease-in-out;
@@ -121,6 +120,10 @@
 
         .xprez-section-grid:hover & {
             opacity: 1;
+        }
+
+        .xprez-add-section {
+            padding: .5rem 0;
         }
     }
 }
