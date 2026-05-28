@@ -368,6 +368,9 @@ XPREZ_DEFAULTS = {
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,
             "columns": 1,
             "gap_choice": constants.GAP_SMALL,
+            "border_radius_choice": constants.BORDER_RADIUS_NONE,
+            "items_border_radius_choice": constants.BORDER_RADIUS_NONE,
+            "items_border_radius_custom": 0,
         },
         "xprez.NumbersModule": {
             "gap_choice": constants.GAP_MEDIUM,
@@ -485,6 +488,22 @@ XPREZ_DEFAULTS = {
                 ),
             },
         },
+    },
+}
+
+_BORDER_RADIUS_CSS_CONFIG = {
+    "units": {
+        constants.BORDER_RADIUS_NONE: "",
+        constants.BORDER_RADIUS_SMALL: "px",
+        constants.BORDER_RADIUS_MEDIUM: "px",
+        constants.BORDER_RADIUS_LARGE: "px",
+        constants.BORDER_RADIUS_CUSTOM: "px",
+    },
+    "values": {
+        constants.BORDER_RADIUS_NONE: {0: 0},
+        constants.BORDER_RADIUS_SMALL: {0: 6},
+        constants.BORDER_RADIUS_MEDIUM: {0: 16},
+        constants.BORDER_RADIUS_LARGE: {0: 32},
     },
 }
 
@@ -679,40 +698,12 @@ XPREZ_CSS = {
                     constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
-            "border_radius": {
-                "units": {
-                    constants.BORDER_RADIUS_NONE: "",
-                    constants.BORDER_RADIUS_SMALL: "px",
-                    constants.BORDER_RADIUS_MEDIUM: "px",
-                    constants.BORDER_RADIUS_LARGE: "px",
-                    constants.BORDER_RADIUS_CUSTOM: "px",
-                },
-                "values": {
-                    constants.BORDER_RADIUS_NONE: {0: 0},
-                    constants.BORDER_RADIUS_SMALL: {0: 6},
-                    constants.BORDER_RADIUS_MEDIUM: {0: 16},
-                    constants.BORDER_RADIUS_LARGE: {0: 32},
-                },
-            },
+            "border_radius": _BORDER_RADIUS_CSS_CONFIG,
             "max_width": {"units": "px"},
         },
         "xprez.TextModule": {
             "media_icon_max_size": {"units": "px"},
-            "media_border_radius": {
-                "units": {
-                    constants.BORDER_RADIUS_NONE: "",
-                    constants.BORDER_RADIUS_SMALL: "px",
-                    constants.BORDER_RADIUS_MEDIUM: "px",
-                    constants.BORDER_RADIUS_LARGE: "px",
-                    constants.BORDER_RADIUS_CUSTOM: "px",
-                },
-                "values": {
-                    constants.BORDER_RADIUS_NONE: {0: 0},
-                    constants.BORDER_RADIUS_SMALL: {0: 6},
-                    constants.BORDER_RADIUS_MEDIUM: {0: 16},
-                    constants.BORDER_RADIUS_LARGE: {0: 32},
-                },
-            },
+            "media_border_radius": _BORDER_RADIUS_CSS_CONFIG,
             "font_size": {
                 "values": {
                     constants.FONT_SIZE_SMALLEST: {0: 14, 3: 12},
@@ -739,6 +730,7 @@ XPREZ_CSS = {
                     constants.GAP_LARGE: {0: 80, 3: 60, 5: 40},
                 },
             },
+            "items_border_radius": _BORDER_RADIUS_CSS_CONFIG,
         },
         "xprez.NumbersModule": {
             "gap": {
