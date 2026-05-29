@@ -170,7 +170,9 @@ export class XprezModuleAdderSectionEnd extends XprezContentAdderSectionBase {
     setTriggerEl() {
         this.triggerEl = this.section.el.querySelector("[data-xprez-adder-section-end-trigger]");
     }
-    placeNewElement(el) { this.section.gridEl.appendChild(el); }
+    placeNewElement(el) {
+        this.section.el.querySelector("[data-xprez-adder-section-end-wrapper]").before(el);
+    }
     initNewElement(el) { this.section.initNewModule(el); }
 }
 

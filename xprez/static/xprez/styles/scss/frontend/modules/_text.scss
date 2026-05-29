@@ -55,8 +55,10 @@
         height: auto;
     }
 
-    picture {
+    picture, video {
+        max-width: 100%;
         display: block;
+        height: auto;
     }
 
     &__image {

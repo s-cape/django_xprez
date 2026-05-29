@@ -44,10 +44,14 @@
         <div class="xprez-option__btn-spacer"></div>
     </div>
 
-    <div class="xprez-option-group__subtitle">{% trans "Inner box" %}</div>
+    <div class="xprez-option-group__subtitle">{% trans "Module box" %}</div>
     <div class="xprez-option-row">
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.background size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.border size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_choice label=False icon="xprez-icon-border-radius" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_custom label=False suffix=config.units.border_radius.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.border_radius_choice.html_name|add:":custom\""|safe size="flex-0" %}
+    </div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.background icon="xprez-icon-background" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.border icon="xprez-icon-border" size="flex-1" %}
     </div>
     <div class="xprez-option-row" data-hidden data-show-when="{{ config.admin_form.background.html_name }}:true">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.background_color size="flex-1" %}
@@ -57,13 +61,10 @@
         {% include "xprez/admin/form/field.html" with field=config.admin_form.horizontal_align_flex label=False icon="xprez-icon-horizontal" size="flex-1" %}
     </div>
     <div class="xprez-option-row">
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.aspect_ratio size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.max_width size="flex-1" suffix=config.units.max_width %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.aspect_ratio label=False icon="xprez-icon-aspect-ratio" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.max_width size="flex-1" label=False icon="xprez-icon-max-width" suffix=config.units.max_width %}
     </div>
-    <div class="xprez-option-row">
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_choice size="flex-1" %}
-        {% include "xprez/admin/form/field.html" with field=config.admin_form.border_radius_custom label=False suffix=config.units.border_radius.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.border_radius_choice.html_name|add:":custom\""|safe size="flex-0" %}
-    </div>
+    
 
     {% block extra_fields %}
         {% for field in config.admin_form.get_extra_fields %}

@@ -124,14 +124,12 @@ VERTICAL_ALIGN_FLEX_START = "flex-start"
 VERTICAL_ALIGN_FLEX_CENTER = "center"
 VERTICAL_ALIGN_FLEX_END = "flex-end"
 VERTICAL_ALIGN_FLEX_STRETCH = "stretch"
-# VERTICAL_ALIGN_FLEX_BASELINE = "baseline"
 
 VERTICAL_ALIGN_FLEX_CHOICES = (
-    (VERTICAL_ALIGN_FLEX_START, _("Flex Start")),
+    (VERTICAL_ALIGN_FLEX_START, _("Start")),
     (VERTICAL_ALIGN_FLEX_CENTER, _("Center")),
-    (VERTICAL_ALIGN_FLEX_END, _("Flex End")),
+    (VERTICAL_ALIGN_FLEX_END, _("End")),
     (VERTICAL_ALIGN_FLEX_STRETCH, _("Stretch")),
-    # (VERTICAL_ALIGN_FLEX_BASELINE, _("Baseline")),
 )
 
 # Horizontal align - Flex (Flexbox values for content alignment inside modules)
@@ -140,9 +138,9 @@ HORIZONTAL_ALIGN_FLEX_CENTER = "center"
 HORIZONTAL_ALIGN_FLEX_END = "flex-end"
 
 HORIZONTAL_ALIGN_FLEX_CHOICES = (
-    (HORIZONTAL_ALIGN_FLEX_START, _("Flex Start")),
+    (HORIZONTAL_ALIGN_FLEX_START, _("Start")),
     (HORIZONTAL_ALIGN_FLEX_CENTER, _("Center")),
-    (HORIZONTAL_ALIGN_FLEX_END, _("Flex End")),
+    (HORIZONTAL_ALIGN_FLEX_END, _("End")),
 )
 
 # Legacy - kept for backward compatibility
