@@ -10,7 +10,9 @@
 
         <figure class="xprez-quote__avatar">
             {% if module.image %}
-                {% thumbnail module.image "210x210" format="WEBP" quality=80 crop="25%" as thumb %}
+                {% xprez_thumbnail_format "quote" as thumbnail_format %}
+                {% xprez_thumbnail_quality "quote" as thumbnail_quality %}
+                {% thumbnail module.image "210x210" format=thumbnail_format quality=thumbnail_quality crop="25%" as thumb %}
                     <img src="{{ thumb.url|build_absolute_uri }}" class="xprez-qoute__avatar-img" alt="{{ module.name }}"/>
                 {% endthumbnail %}
             {% else %}

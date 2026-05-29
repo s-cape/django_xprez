@@ -4,6 +4,8 @@ from django import template
 from PIL import Image
 from sorl.thumbnail import get_thumbnail
 
+from xprez.utils import get_thumbnail_options
+
 register = template.Library()
 
 
@@ -57,7 +59,11 @@ def xprez_file_thumbnail(value, size="400x200"):
     try:
         with value.open("rb") as f:
             Image.open(f)
-        return get_thumbnail(value, size, format="WEBP", quality=80) or None
+        opts = get_thumbnail_options("admin_file_preview")
+        return (
+            get_thumbnail(value, size, format=opts["format"], quality=opts["quality"])
+            or None
+        )
     except (OSError, ValueError):
         return None
 

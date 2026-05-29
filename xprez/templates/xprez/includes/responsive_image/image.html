@@ -1,6 +1,8 @@
 {% load thumbnail xprez %}
+{% xprez_thumbnail_format "responsive_image" as thumbnail_format %}
+{% xprez_thumbnail_quality "responsive_image" as thumbnail_quality %}
 <img{% if css_class %} class="{{ css_class }}"{% endif %}
-     {% thumbnail image geometries.0 crop=crop|default:"" format="WEBP" quality=70 filename_stem=filename_stem|default:"" as t_src %}src="{{ t_src.url|build_absolute_uri }}"{% endthumbnail %}
+     {% thumbnail image geometries.0 crop=crop|default:"" format=thumbnail_format quality=thumbnail_quality filename_stem=filename_stem|default:"" as t_src %}src="{{ t_src.url|build_absolute_uri }}"{% endthumbnail %}
      {% include "xprez/includes/responsive_image/attrs.html" %}
      alt="{{ alt|default:"" }}"
      {% if loading %}loading="{{ loading }}"{% endif %}>

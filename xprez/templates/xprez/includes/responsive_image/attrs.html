@@ -1,7 +1,9 @@
 {% load thumbnail xprez %}
-srcset="{% for geom in geometries %}{% thumbnail image geom crop=crop|default:"" format="WEBP" quality=70 filename_stem=filename_stem|default:"" as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
+{% xprez_thumbnail_format "responsive_image" as thumbnail_format %}
+{% xprez_thumbnail_quality "responsive_image" as thumbnail_quality %}
+srcset="{% for geom in geometries %}{% thumbnail image geom crop=crop|default:"" format=thumbnail_format quality=thumbnail_quality filename_stem=filename_stem|default:"" as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
 sizes="{{ sizes }}"
-{% thumbnail image geometries.0 crop=crop|default:"" format="WEBP" quality=70 filename_stem=filename_stem|default:"" as t_src %}
+{% thumbnail image geometries.0 crop=crop|default:"" format=thumbnail_format quality=thumbnail_quality filename_stem=filename_stem|default:"" as t_src %}
     width="{{ t_src.width }}"
     height="{{ t_src.height }}"
 {% endthumbnail %}
