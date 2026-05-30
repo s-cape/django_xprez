@@ -7,6 +7,7 @@ XPREZ_CK_EDITOR_FILE_UPLOAD_URL_NAME = (
     None  # only needed when using ck_editor outside of xprez admin
 )
 XPREZ_CK_EDITOR_FILE_UPLOAD_DIR = "xprez_ckeditor_uploads"
+XPREZ_CK_EDITOR_LICENSE_KEY = "GPL"
 XPREZ_CK_EDITOR_SIMPLE_CONFIG = {
     "toolbar": ("bold", "italic", "link"),
     "blockToolbar": (),

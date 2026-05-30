@@ -14,7 +14,7 @@ class CkEditorWidgetBase(forms.widgets.Textarea):
         raise NotImplementedError
 
     class Media:
-        css = {"all": ()}
+        css = {"all": ("ck_editor/libs/ck_editor/ckeditor.css",)}
         js = (
             "ck_editor/libs/ck_editor/ckeditor.js",
             "ck_editor/js/ck_editor_widget.js",
@@ -29,7 +29,9 @@ class CkEditorWidgetBase(forms.widgets.Textarea):
     def render(self, name, value, attrs=None, renderer=None):
         if attrs is None:
             attrs = {}
-        attrs["data-ck-editor-config"] = json.dumps(self.get_config())
+        config = self.get_config()
+        config.setdefault("licenseKey", settings.XPREZ_CK_EDITOR_LICENSE_KEY)
+        attrs["data-ck-editor-config"] = json.dumps(config)
         return super().render(name, value, attrs=attrs, renderer=renderer)
 
 

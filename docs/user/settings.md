@@ -95,4 +95,23 @@ XPREZ_CSS = {
 }
 ```
 
+CKEditor
+--------
+
+- `XPREZ_CK_EDITOR_MODULE_WIDGET` — widget class used by the text module
+- `XPREZ_CK_EDITOR_SIMPLE_CONFIG` / `XPREZ_CK_EDITOR_FULL_CONFIG` — editor toolbar/feature config
+- `XPREZ_CK_EDITOR_FILE_UPLOAD_URL_NAME` / `XPREZ_CK_EDITOR_FILE_UPLOAD_DIR` — image upload endpoint
+- `XPREZ_CK_EDITOR_LICENSE_KEY` — CKEditor license key (default: `"GPL"`)
+
+The bundled editor is CKEditor 5, which is dual-licensed under GPL 2+ or a
+commercial license. `XPREZ_CK_EDITOR_LICENSE_KEY` selects which: the default
+`"GPL"` is the sentinel value required (since CKEditor v44) to run under the
+open-source GPL license. This refers to CKEditor's own license, not xprez's.
+If you hold a commercial CKEditor license, set your key to opt out of GPL terms:
+
+```python
+XPREZ_CK_EDITOR_LICENSE_KEY = "your-commercial-key"
+```
+
 See `xprez/conf/defaults.py` for the full list and default values.
+
