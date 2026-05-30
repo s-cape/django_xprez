@@ -4,11 +4,13 @@
 {% block attrs %}{% if module.lightbox %}data-photoswipe-url="{% url 'xprez:photoswipe' %}"{% endif %}{% endblock %}
 
 {% block content %}
+    {% xprez_thumbnail_format "gallery_lightbox" as thumbnail_format %}
+    {% xprez_thumbnail_quality "gallery_lightbox" as thumbnail_quality %}
     {% for item in items %}
         {% with alt=item.alt_text|default:item.description geoms=item.srcset_geometries %}
         <figure class="xprez-gallery__item-cont{% if module.lightbox %} js-photo{% endif %}"
             {% if module.lightbox %}
-                {% thumbnail item.file "2000x2000" upscale=false format="WEBP" quality=90 filename_stem=alt as thumb %}
+                {% thumbnail item.file "2000x2000" upscale=false format=thumbnail_format quality=thumbnail_quality filename_stem=alt as thumb %}
                 data-original_url="{{ thumb.url|build_absolute_uri }}"
                 data-original_width="{{ thumb.width }}"
                 data-original_height="{{ thumb.height }}"
@@ -17,7 +19,7 @@
             {% endif %}
             data-alt="{{ alt }}"
         >
-            {% include "xprez/includes/responsive_image.html" with source=item.file geometries=geoms sizes=module.image_sizes alt=alt crop=module.thumbnail_crop filename_stem=alt css_class="xprez-gallery__item-img" %}
+            {% include "xprez/includes/responsive_image/image.html" with image=item.file geometries=geoms sizes=module.image_sizes alt=alt crop=module.thumbnail_crop filename_stem=alt css_class="xprez-gallery__item-img" %}
             {% if item.description %}
                 <figcaption class="xprez-gallery__item-caption">{{ item.description }}</figcaption>
             {% endif %}

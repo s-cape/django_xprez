@@ -129,7 +129,6 @@ See the [built-in modules](xprez/modules/) source for more examples.
 THUMBNAIL_BACKEND = 'xprez.contrib.sorl_thumbnail.thumbnail_backend.NamingThumbnailBackend'
 ```
 
-
 ---
 
 For user documentation, see [docs/user/README.md](docs/user/README.md).

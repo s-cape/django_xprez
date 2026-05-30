@@ -132,6 +132,15 @@ XPREZ_BREAKPOINTS = {
     5: {"name": _("Mobile (&lt; 500px)"), "max_width": 499},
 }
 XPREZ_SRCSET_WIDTHS = (160, 320, 480, 640, 960, 1280, 1920, 2560)
+XPREZ_THUMBNAIL = {
+    "default": {"quality": 70, "format": "WEBP"},
+    "responsive_image": {},
+    "gallery_lightbox": {"quality": 90},
+    "quote": {},
+    "admin_gallery_item": {},
+    "admin_file_preview": {},
+    "admin_template_container": {},
+}
 XPREZ_IMAGE_EXTENSIONS = (
     "avif",
     "bmp",

@@ -18,6 +18,7 @@ class SettingsLoader:
     MERGE_SETTINGS = {
         "XPREZ_DEFAULTS",
         "XPREZ_CSS",
+        "XPREZ_THUMBNAIL",
     }
 
     def __getattr__(self, name):

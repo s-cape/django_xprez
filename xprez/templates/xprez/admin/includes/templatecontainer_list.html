@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load thumbnail %}
+{% load thumbnail xprez %}
 <div class="xprez-templatecontainer-list" data-xprez-templatecontainer-list>
     {% for item in items %}
         <div
@@ -10,7 +10,9 @@
         >
             <div class="xprez-templatecontainer-list__icon">
                 {% if item.template.image %}
-                    {% thumbnail item.template.image "530x400" as thumb %}
+                    {% xprez_thumbnail_format "admin_template_container" as thumbnail_format %}
+                    {% xprez_thumbnail_quality "admin_template_container" as thumbnail_quality %}
+                    {% thumbnail item.template.image "530x400" format=thumbnail_format quality=thumbnail_quality as thumb %}
                         <img src="{{ thumb.url }}" alt="{{ item.template.display_key }}">
                     {% endthumbnail %}
                 {% else %}

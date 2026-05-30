@@ -3,6 +3,7 @@ from django import template
 from ..media import FrontendMediaCollector
 from ..models.mixins.responsive_image import InlineResponsiveImage
 from ..utils import build_absolute_uri as _build_absolute_uri
+from ..utils import get_thumbnail_options
 
 register = template.Library()
 
@@ -52,3 +53,13 @@ def ckeditor_image(
 @register.filter()
 def build_absolute_uri(url):
     return _build_absolute_uri(url)
+
+
+@register.simple_tag
+def xprez_thumbnail_format(use):
+    return get_thumbnail_options(use)["format"]
+
+
+@register.simple_tag
+def xprez_thumbnail_quality(use):
+    return get_thumbnail_options(use)["quality"]
