@@ -39,6 +39,9 @@ def parse_text(text_source):
         return ""
     soup = BeautifulSoup(text_source, "html5lib")
 
+    for link in soup.find_all("a", attrs={"data-link-button": True}):
+        del link["data-link-button"]
+
     # extract empty p elements from end of text
     for last_p in reversed(soup.find_all("p")):
         if last_p.text:

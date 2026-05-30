@@ -37,11 +37,13 @@ XPREZ_CK_EDITOR_FULL_CONFIG = {
             "toggleButtonPrimary": {
                 "mode": "manual",
                 "label": "Primary button",
+                "attributes": {"data-link-button": "primary"},
                 "classes": ["btn", "btn-primary"],
             },
             "toggleButtonSecondary": {
                 "mode": "manual",
                 "label": "Secondary button",
+                "attributes": {"data-link-button": "secondary"},
                 "classes": ["btn", "btn-secondary"],
             },
             "openInNewTab": {
