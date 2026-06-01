@@ -1,32 +1,15 @@
-import { XprezControllerBase } from './controller_base.js';
+import { XprezFieldControllerBase } from './fields.js';
 
 const ADVANCED = "advanced";
 
-export class XprezShortcutFieldController extends XprezControllerBase {
+export class XprezShortcutFieldController extends XprezFieldControllerBase {
     constructor(parent, el) {
         super(parent, el);
-        this.inputEl = el.querySelector("select, input");
         this.shortcutConfig = JSON.parse(this.inputEl.dataset.shortcut);
         this.el.addEventListener("click", (e) => e.stopPropagation());
         this.inputEl.addEventListener("focus", (e) => this._onSelectActivate(e));
         this.inputEl.addEventListener("change", () => this._onChange());
         this.check();
-    }
-
-    getValue() {
-        if (this.inputEl.type === "checkbox") {
-            return this.inputEl.checked ? "true" : "false";
-        } else {
-            return this.inputEl.value;
-        }
-    }
-
-    _setInputValue(value) {
-        if (this.inputEl.type === "checkbox") {
-            this.inputEl.checked = value === "true";
-        } else {
-            this.inputEl.value = value;
-        }
     }
 
     check() {
