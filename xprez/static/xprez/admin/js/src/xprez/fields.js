@@ -139,7 +139,7 @@ export class XprezFieldController extends XprezControllerBase {
         affected.filter(f => f !== this).forEach(f =>
             f.inputEl.dispatchEvent(new Event("change", { bubbles: true }))
         );
-        this.parent?.parent?.checkShortcuts?.();
+        this.parent?.checkShortcuts?.();
         return affected;
     }
 

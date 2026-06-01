@@ -203,7 +203,7 @@ XPREZ_DEFAULTS = {
     },
     "section_shortcuts": {
         "margin_bottom": {
-            "label": "Margin",
+            "label": "Margin bottom",
             "choices": (
                 {
                     "value": constants.MARGIN_NONE,
@@ -384,7 +384,6 @@ XPREZ_DEFAULTS = {
             ),
         },
         "max_width": {
-            "label": "Max width",
             "clone": "max_width_choice",
         },
     },

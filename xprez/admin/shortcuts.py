@@ -25,12 +25,18 @@ class ShortcutsForm(forms.Form):
         if "clone" in field_config:
             clone_field = field_config["clone"]
             model_field = self.parent.instance._meta.get_field(clone_field)
+            label = field_config.get("label") or model_field.verbose_name
             shortcut_attrs = {"clone": clone_field}
             if isinstance(model_field, models.BooleanField):
-                self._add_field_boolean(field_name, field_config, shortcut_attrs)
+                self._add_field_boolean(
+                    field_name, {**field_config, "label": label}, shortcut_attrs
+                )
             else:
                 self._add_field_choices(
-                    field_name, field_config, list(model_field.choices), shortcut_attrs
+                    field_name,
+                    {**field_config, "label": label},
+                    list(model_field.choices),
+                    shortcut_attrs,
                 )
         else:
             choices = []
