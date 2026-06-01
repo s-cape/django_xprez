@@ -5,7 +5,7 @@ const ADVANCED = "advanced";
 export class XprezShortcutFieldController extends XprezControllerBase {
     constructor(parent, el) {
         super(parent, el);
-        this.inputEl = el.querySelector('select');
+        this.inputEl = el.querySelector("select, input");
         this.shortcutConfig = JSON.parse(this.inputEl.dataset.shortcut);
         this.el.addEventListener("click", (e) => e.stopPropagation());
         this.inputEl.addEventListener("focus", (e) => this._onSelectActivate(e));
@@ -13,14 +13,28 @@ export class XprezShortcutFieldController extends XprezControllerBase {
         this.check();
     }
 
-    getValue() { return this.inputEl.value; }
+    getValue() {
+        if (this.inputEl.type === "checkbox") {
+            return this.inputEl.checked ? "true" : "false";
+        } else {
+            return this.inputEl.value;
+        }
+    }
+
+    _setInputValue(value) {
+        if (this.inputEl.type === "checkbox") {
+            this.inputEl.checked = value === "true";
+        } else {
+            this.inputEl.value = value;
+        }
+    }
 
     check() {
         if (this.shortcutConfig.clone) {
             const field = this.parent.fields?.find(
                 (f) => f.fieldName === this.shortcutConfig.clone
             );
-            this.inputEl.value = field ? field.getValue() : "";
+            this._setInputValue(field ? field.getValue() : "");
         } else {
             const sync = this.parent.xprez.sync;
             for (const [fieldName, breakpointMap] of Object.entries(this.shortcutConfig)) {
@@ -31,7 +45,7 @@ export class XprezShortcutFieldController extends XprezControllerBase {
                         (bp) => String(sync.getEffectiveValue(this.parent, bp, fieldName) ?? "") === String(breakpointMap[key][bp])
                     )
                 );
-                this.inputEl.value = matched ?? ADVANCED;
+                this._setInputValue(matched ?? ADVANCED);
             }
         }
     }
