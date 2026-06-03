@@ -14,7 +14,7 @@
             <span class="xprez-admin-module__name-icon">
                 {{ module.admin_icon|safe }}
             </span>
-            <div class="xprez-option" data-xprez-select-trigger>
+            <div class="xprez-option xprez-option--select-trigger" data-xprez-select-trigger>
                 <label>
                     <i class="xprez-icon-check_circle_outline_small x-variant-unchecked"></i>
                     <i class="xprez-icon-check_circle_small x-variant-checked"></i>
@@ -38,7 +38,7 @@
             {% endblock %}
             {% block shortcuts %}
                 {% if module.admin_form.shortcuts %}
-                    <div class="xprez-option-row" data-xprez-shortcuts data-hidden>
+                    <div class="xprez-option-row xprez-admin-module__shortcuts" data-xprez-shortcuts data-hidden>
                         {% block shortcut_fields %}
                             {% for field in module.admin_form.shortcuts %}
                                 {% include "xprez/admin/form/field.html" with field=field size="flex-auto" js_controller_class="XprezShortcutFieldController" %}

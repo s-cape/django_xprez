@@ -7,6 +7,14 @@
         h3 {
             font-size: $admin-ui-font-size;
         }
+
+        &--before {
+            margin-bottom: var(--x-admin-padding-lg);
+        }
+
+        &--end {
+            margin-top: var(--x-admin-padding-xl);
+        }
     }
 }
 
