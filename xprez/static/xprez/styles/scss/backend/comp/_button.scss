@@ -7,6 +7,7 @@
 	align-items: center;
 	color: $admin-color;
 	gap: 8px;
+	transition: all 0.2s ease-in-out;
 
 	&:hover {
 		background: darken($b-gray-5, 4%);

@@ -4,7 +4,11 @@
     gap: .25rem 1.5rem;
     padding: 0;
     margin: 1rem auto;
-    width: fit-content;
+    width: 600px;
+
+    &--top {
+        margin-bottom: 1rem;
+    }
 
     li {
         list-style: none !important;
@@ -25,7 +29,7 @@
         }
     }
 
-    &__paste {
+    &__emphasized {
         background: $b-gray-8;
         color: $white;
 

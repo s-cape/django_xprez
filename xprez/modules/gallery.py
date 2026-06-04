@@ -126,12 +126,24 @@ class GalleryConfig(ModuleConfig):
     )
     gap_custom = models.PositiveIntegerField(null=True, blank=True)
 
+    items_border_radius_choice = models.CharField(
+        _("Items border radius"),
+        max_length=20,
+        choices=constants.BORDER_RADIUS_CHOICES,
+        default=defaults.XPREZ_DEFAULTS["module_config"]["xprez.GalleryModule"][
+            "items_border_radius_choice"
+        ],
+        blank=True,
+    )
+    items_border_radius_custom = models.PositiveIntegerField(null=True, blank=True)
+
     def get_css_variables(self):
         css_variables = super().get_css_variables()
         css_variables.update(
             {
                 "columns": self.columns,
                 "gap": self._get_choice_or_custom("gap"),
+                "item-border-radius": self._get_choice_or_custom("items_border_radius"),
             }
         )
         return css_variables

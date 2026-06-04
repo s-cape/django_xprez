@@ -12,7 +12,7 @@
         {{ attributes|default:"" }}
     >
         {% if label is not False or icon %}
-            <label for="{{ field.id_for_label }}">
+            <label for="{{ field.id_for_label }}" {% if label is False %}aria-label="{{ field.label }}" title="{{ field.label }}"{% endif %}>
                 {% if icon %}<i class="{{ icon }}"></i>{% endif %}
                 {% if icon2 %}<i class="{{ icon2 }}"></i>{% endif %}
                 {% if label is not False %}<span>{% if label %}{{ label }}{% else %}{{ field.label }}{% endif %}</span>{% endif %}

@@ -44,16 +44,9 @@ class ClipboardItemBase:
     @property
     def contained_module_classes(self):
         """Set of module classes from contained_modules (for availability checks)."""
-        out = set()
-        for inst in self.contained_modules:
-            is_linked = (
-                isinstance(inst, models.ModuleSymlink) and inst.symlink_id is not None
-            )
-            if is_linked:
-                out.add(inst.symlink.polymorph.__class__)
-            else:
-                out.add(inst.__class__)
-        return out
+        return {
+            inst.module_class(follow_symlink=True) for inst in self.contained_modules
+        }
 
     @property
     def allowed(self):

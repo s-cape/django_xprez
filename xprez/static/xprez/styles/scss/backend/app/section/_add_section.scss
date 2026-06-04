@@ -2,12 +2,27 @@
     &-section {
         text-align: center;
         border-top: var(--x-admin-section-divider-height) solid var(--x-admin-section-divider-bg);
-        padding-top: 2rem;
-        padding-bottom: 1.5rem;
-        margin-top: 1.5rem;
+        padding: 1rem 0;
 
         h3 {
             font-size: $admin-ui-font-size;
         }
+
+        &--before {
+            margin-bottom: var(--x-admin-padding-lg);
+        }
+
+        &--end {
+            margin-top: var(--x-admin-padding-xl);
+        }
     }
 }
+
+.xprez-section__adder-trigger {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+

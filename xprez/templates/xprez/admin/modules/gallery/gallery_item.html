@@ -1,10 +1,12 @@
 {% extends "xprez/admin/modules/multi_module/multi_module_item.html" %}
-{% load thumbnail %}
+{% load thumbnail xprez %}
 
 {% block content %}
+    {% xprez_thumbnail_format "admin_gallery_item" as thumbnail_format %}
+    {% xprez_thumbnail_quality "admin_gallery_item" as thumbnail_quality %}
     {% block thumb %}
         <div class="xprez-admin-gallery__image-cont">
-            {% thumbnail item.file "400x400" format="WEBP" quality=80 as thumb %}
+            {% thumbnail item.file "400x400" format=thumbnail_format quality=thumbnail_quality as thumb %}
                 <img src="{{ thumb.url }}" class="xprez-admin-gallery__image" data-draggable-multi-module-item-handle />
             {% endthumbnail %}
         </div>

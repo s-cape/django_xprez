@@ -1,0 +1,9 @@
+<picture>
+    {% for source in sources %}
+        {% if source.max_width %}
+            {% include "xprez/includes/responsive_image/source.html" with image=image geometries=source.geometries crop=source.thumbnail_crop max_width=source.max_width sizes=sizes %}
+        {% else %} {# breakpoint 0 #}
+            {% include "xprez/includes/responsive_image/image.html" with image=image geometries=source.geometries crop=source.thumbnail_crop sizes=sizes alt=alt css_class=css_class loading=loading %}
+        {% endif %}
+    {% endfor %}
+</picture>

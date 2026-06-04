@@ -32,6 +32,12 @@ class ModuleSymlink(SymlinkMixin, Module):
         else:
             return False
 
+    def module_class(self, follow_symlink=False):
+        if follow_symlink and self.symlink_id is not None:
+            return self.symlink.polymorph.__class__
+        else:
+            return super().module_class(follow_symlink=follow_symlink)
+
     def render_front(self, *args, **kwargs):
         if self.symlink:
             return self.symlink.polymorph.render_front(*args, **kwargs)

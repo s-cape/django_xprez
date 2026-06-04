@@ -2,12 +2,17 @@
 {% load i18n %}
 
 {% block extra_fields %}
-    <div class="xprez-option-group__subtitle">{% trans "Inner grid" %}</div>
+    <div class="xprez-option-group__subtitle">{% trans "Gallery grid" %}</div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.columns size="flex-1" %}
     </div>
     <div class="xprez-option-row">
         {% include "xprez/admin/form/field.html" with field=config.admin_form.gap_choice size="flex-1" %}
         {% include "xprez/admin/form/field.html" with field=config.admin_form.gap_custom label=False suffix=config.units.gap.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.gap_choice.html_name|add:":custom\""|safe size="flex-0" %}
+    </div>
+    <div class="xprez-option-group__subtitle">{% trans "Items" %}</div>
+    <div class="xprez-option-row">
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.items_border_radius_choice label=False icon="xprez-icon-border-radius" size="flex-1" %}
+        {% include "xprez/admin/form/field.html" with field=config.admin_form.items_border_radius_custom label=False suffix=config.units.items_border_radius.custom attributes="data-hidden data-show-when=\""|add:config.admin_form.items_border_radius_choice.html_name|add:":custom\""|safe size="flex-0" %}
     </div>
 {% endblock %}

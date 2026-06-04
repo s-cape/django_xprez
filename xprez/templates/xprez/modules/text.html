@@ -13,18 +13,7 @@
     {% if module.media %}
         <div class="xprez-text__image-wrapper">
             {% if module.media_is_image %}
-                <picture>
-                    {% for source in module.media_image_sources %}
-                        {% if source.max_width %}
-                            <source
-                                media="(max-width: {{ source.max_width }}px)"
-                                srcset="{% for geom in source.geometries %}{% thumbnail module.media geom crop=source.thumbnail_crop format="WEBP" quality=70 as t %}{{ t.url|build_absolute_uri }} {{ t.width }}w{% if not forloop.last %}, {% endif %}{% endthumbnail %}{% endfor %}"
-                                sizes="{{ module.image_sizes }}">
-                        {% else %}
-                            {% include "xprez/includes/responsive_image.html" with source=module.media geometries=source.geometries sizes=module.image_sizes alt=module.media.name crop=source.thumbnail_crop css_class="xprez-text__image" loading="lazy" %}
-                        {% endif %}
-                    {% endfor %}
-                </picture>
+                {% include "xprez/includes/responsive_image/picture.html" with image=module.media sources=module.media_image_sources sizes=module.image_sizes alt=module.media.name css_class="xprez-text__image" loading="lazy" %}
             {% elif module.media_is_video %}
                 <video class="xprez-text__image" data-observer-autoplay muted loop playsinline preload="metadata">
                     <source src="{{ module.media.url }}" type="{{ module.media_mime_type }}">

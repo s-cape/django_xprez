@@ -12,6 +12,22 @@ def css_variables_global(request):
     result = []
     breakpoints = list(settings.XPREZ_BREAKPOINTS.keys())
 
+    # Generate :root CSS variables for max-width values
+    max_width_config = settings.XPREZ_CSS.get("section", {}).get("max_width", {})
+    units = max_width_config.get("units", {})
+    values = max_width_config.get("values", {})
+
+    root_vars = {}
+    for width_key, width_values in values.items():
+        unit = units.get(width_key, "")
+        if width_values and 0 in width_values:
+            root_vars[f"max-width-{width_key}"] = f"{width_values[0]}{unit}"
+
+    if root_vars:
+        result.append(
+            ":root{" + ConfigParentMixin._format_css_variables(root_vars) + ";}"
+        )
+
     # Section CSS - BP0
     section = Section()
     section_current_css_variables = section.get_css_variables()

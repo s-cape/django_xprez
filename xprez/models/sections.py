@@ -218,7 +218,8 @@ class Section(ContentFrontCacheMixin, ConfigParentMixin, SectionBase):
         for module in self.modules.all().polymorphs():
             if (
                 allowed_module_classes is not None
-                and module.__class__ not in allowed_module_classes
+                and module.module_class(follow_symlink=True)
+                not in allowed_module_classes
             ):
                 continue
             module.duplicate_to(new_section, saved=saved)

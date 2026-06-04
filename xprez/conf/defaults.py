@@ -132,6 +132,15 @@ XPREZ_BREAKPOINTS = {
     5: {"name": _("Mobile (&lt; 500px)"), "max_width": 499},
 }
 XPREZ_SRCSET_WIDTHS = (160, 320, 480, 640, 960, 1280, 1920, 2560)
+XPREZ_THUMBNAIL = {
+    "default": {"quality": 70, "format": "WEBP"},
+    "responsive_image": {},
+    "gallery_lightbox": {"quality": 90},
+    "quote": {},
+    "admin_gallery_item": {},
+    "admin_file_preview": {},
+    "admin_template_container": {},
+}
 XPREZ_IMAGE_EXTENSIONS = (
     "avif",
     "bmp",
@@ -193,6 +202,81 @@ XPREZ_DEFAULTS = {
         }
     },
     "section_shortcuts": {
+        "margin_bottom": {
+            "label": "Margin bottom",
+            "choices": (
+                {
+                    "value": constants.MARGIN_NONE,
+                    "label": "None",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_NONE,
+                            1: constants.MARGIN_NONE,
+                            2: constants.MARGIN_NONE,
+                            3: constants.MARGIN_NONE,
+                            4: constants.MARGIN_NONE,
+                            5: constants.MARGIN_NONE,
+                        },
+                    },
+                },
+                {
+                    "value": constants.MARGIN_SMALL,
+                    "label": "Small",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_SMALL,
+                            1: constants.MARGIN_SMALL,
+                            2: constants.MARGIN_SMALL,
+                            3: constants.MARGIN_SMALL,
+                            4: constants.MARGIN_SMALL,
+                            5: constants.MARGIN_SMALL,
+                        },
+                    },
+                },
+                {
+                    "value": constants.MARGIN_MEDIUM,
+                    "label": "Medium",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_MEDIUM,
+                            1: constants.MARGIN_MEDIUM,
+                            2: constants.MARGIN_MEDIUM,
+                            3: constants.MARGIN_MEDIUM,
+                            4: constants.MARGIN_MEDIUM,
+                            5: constants.MARGIN_MEDIUM,
+                        },
+                    },
+                },
+                {
+                    "value": constants.MARGIN_LARGE,
+                    "label": "Large",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_LARGE,
+                            1: constants.MARGIN_LARGE,
+                            2: constants.MARGIN_LARGE,
+                            3: constants.MARGIN_LARGE,
+                            4: constants.MARGIN_LARGE,
+                            5: constants.MARGIN_LARGE,
+                        },
+                    },
+                },
+                {
+                    "value": constants.MARGIN_EXTRA_LARGE,
+                    "label": "Extra Large",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_EXTRA_LARGE,
+                            1: constants.MARGIN_EXTRA_LARGE,
+                            2: constants.MARGIN_EXTRA_LARGE,
+                            3: constants.MARGIN_EXTRA_LARGE,
+                            4: constants.MARGIN_EXTRA_LARGE,
+                            5: constants.MARGIN_EXTRA_LARGE,
+                        },
+                    },
+                },
+            ),
+        },
         "columns": {
             "label": "Columns",
             "choices": (
@@ -300,7 +384,6 @@ XPREZ_DEFAULTS = {
             ),
         },
         "max_width": {
-            "label": "Max width",
             "clone": "max_width_choice",
         },
     },
@@ -368,6 +451,9 @@ XPREZ_DEFAULTS = {
             "horizontal_align_grid": constants.HORIZONTAL_ALIGN_GRID_STRETCH,
             "columns": 1,
             "gap_choice": constants.GAP_SMALL,
+            "border_radius_choice": constants.BORDER_RADIUS_NONE,
+            "items_border_radius_choice": constants.BORDER_RADIUS_NONE,
+            "items_border_radius_custom": 0,
         },
         "xprez.NumbersModule": {
             "gap_choice": constants.GAP_MEDIUM,
@@ -377,6 +463,55 @@ XPREZ_DEFAULTS = {
     },
     "module_shortcuts": {
         "default": {},
+        "xprez.TextModule": {
+            "text_align": {
+                "label": "Text align",
+                "choices": (
+                    {
+                        "value": constants.TEXT_ALIGN_LEFT,
+                        "label": "Left",
+                        "config": {
+                            "text_align": {
+                                0: constants.TEXT_ALIGN_LEFT,
+                                1: constants.TEXT_ALIGN_LEFT,
+                                2: constants.TEXT_ALIGN_LEFT,
+                                3: constants.TEXT_ALIGN_LEFT,
+                                4: constants.TEXT_ALIGN_LEFT,
+                                5: constants.TEXT_ALIGN_LEFT,
+                            },
+                        },
+                    },
+                    {
+                        "value": constants.TEXT_ALIGN_CENTER,
+                        "label": "Center",
+                        "config": {
+                            "text_align": {
+                                0: constants.TEXT_ALIGN_CENTER,
+                                1: constants.TEXT_ALIGN_CENTER,
+                                2: constants.TEXT_ALIGN_CENTER,
+                                3: constants.TEXT_ALIGN_CENTER,
+                                4: constants.TEXT_ALIGN_CENTER,
+                                5: constants.TEXT_ALIGN_CENTER,
+                            },
+                        },
+                    },
+                    {
+                        "value": constants.TEXT_ALIGN_RIGHT,
+                        "label": "Right",
+                        "config": {
+                            "text_align": {
+                                0: constants.TEXT_ALIGN_RIGHT,
+                                1: constants.TEXT_ALIGN_RIGHT,
+                                2: constants.TEXT_ALIGN_RIGHT,
+                                3: constants.TEXT_ALIGN_RIGHT,
+                                4: constants.TEXT_ALIGN_RIGHT,
+                                5: constants.TEXT_ALIGN_RIGHT,
+                            },
+                        },
+                    },
+                ),
+            },
+        },
         "xprez.GalleryModule": {
             "columns": {
                 "label": "Columns",
@@ -488,18 +623,36 @@ XPREZ_DEFAULTS = {
     },
 }
 
+_BORDER_RADIUS_CSS_CONFIG = {
+    "units": {
+        constants.BORDER_RADIUS_NONE: "",
+        constants.BORDER_RADIUS_SMALL: "px",
+        constants.BORDER_RADIUS_MEDIUM: "px",
+        constants.BORDER_RADIUS_LARGE: "px",
+        constants.BORDER_RADIUS_CUSTOM: "px",
+    },
+    "values": {
+        constants.BORDER_RADIUS_NONE: {0: 0},
+        constants.BORDER_RADIUS_SMALL: {0: 6},
+        constants.BORDER_RADIUS_MEDIUM: {0: 16},
+        constants.BORDER_RADIUS_LARGE: {0: 32},
+    },
+}
+
 XPREZ_CSS = {
     "section": {
         "max_width": {
             "units": {
                 constants.MAX_WIDTH_SMALL: "px",
                 constants.MAX_WIDTH_MEDIUM: "px",
+                constants.MAX_WIDTH_LARGE: "px",
                 constants.MAX_WIDTH_FULL: "%",
                 constants.MAX_WIDTH_CUSTOM: "px",
             },
             "values": {
                 constants.MAX_WIDTH_SMALL: {0: 720},
                 constants.MAX_WIDTH_MEDIUM: {0: 1296},
+                constants.MAX_WIDTH_LARGE: {0: 1600},
                 constants.MAX_WIDTH_FULL: {0: 100},
             },
         },
@@ -677,40 +830,12 @@ XPREZ_CSS = {
                     constants.PADDING_EXTRA_LARGE: {0: 8, 2: 5, 4: 3},
                 },
             },
-            "border_radius": {
-                "units": {
-                    constants.BORDER_RADIUS_NONE: "",
-                    constants.BORDER_RADIUS_SMALL: "px",
-                    constants.BORDER_RADIUS_MEDIUM: "px",
-                    constants.BORDER_RADIUS_LARGE: "px",
-                    constants.BORDER_RADIUS_CUSTOM: "px",
-                },
-                "values": {
-                    constants.BORDER_RADIUS_NONE: {0: 0},
-                    constants.BORDER_RADIUS_SMALL: {0: 6},
-                    constants.BORDER_RADIUS_MEDIUM: {0: 16},
-                    constants.BORDER_RADIUS_LARGE: {0: 32},
-                },
-            },
+            "border_radius": _BORDER_RADIUS_CSS_CONFIG,
             "max_width": {"units": "px"},
         },
         "xprez.TextModule": {
             "media_icon_max_size": {"units": "px"},
-            "media_border_radius": {
-                "units": {
-                    constants.BORDER_RADIUS_NONE: "",
-                    constants.BORDER_RADIUS_SMALL: "px",
-                    constants.BORDER_RADIUS_MEDIUM: "px",
-                    constants.BORDER_RADIUS_LARGE: "px",
-                    constants.BORDER_RADIUS_CUSTOM: "px",
-                },
-                "values": {
-                    constants.BORDER_RADIUS_NONE: {0: 0},
-                    constants.BORDER_RADIUS_SMALL: {0: 6},
-                    constants.BORDER_RADIUS_MEDIUM: {0: 16},
-                    constants.BORDER_RADIUS_LARGE: {0: 32},
-                },
-            },
+            "media_border_radius": _BORDER_RADIUS_CSS_CONFIG,
             "font_size": {
                 "values": {
                     constants.FONT_SIZE_SMALLEST: {0: 14, 3: 12},
@@ -737,6 +862,7 @@ XPREZ_CSS = {
                     constants.GAP_LARGE: {0: 80, 3: 60, 5: 40},
                 },
             },
+            "items_border_radius": _BORDER_RADIUS_CSS_CONFIG,
         },
         "xprez.NumbersModule": {
             "gap": {
