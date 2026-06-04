@@ -2,8 +2,9 @@ from django import forms
 from django.test import TestCase
 
 from example_app.models import Page
-from xprez.admin.forms import DeletableFormMixin, PositionFormMixin, SectionForm
-from xprez.models import Section
+from xprez.admin.fields import AspectRatioFormField
+from xprez.admin.forms import DeletableFormMixin, SectionForm
+from xprez.models import Section, TextModule
 
 
 class DeletableFormMixinTest(TestCase):
@@ -33,3 +34,25 @@ class PositionFormMixinTest(TestCase):
             data={"section-0-position": "7"},
         )
         self.assertEqual(form.get_position(), 7)
+
+
+class AspectRatioFieldTest(TestCase):
+    def test_form_field_normalizes_colons(self):
+        field = AspectRatioFormField(required=False)
+        self.assertEqual(field.to_python("16:9"), "16/9")
+        self.assertEqual(field.to_python("16/9"), "16/9")
+        self.assertEqual(field.to_python(""), "")
+
+    def test_model_field_normalizes_on_save(self):
+        page = Page.objects.create(title="P", slug="p")
+        section = Section.objects.create(container=page, position=0, saved=True)
+        module = TextModule.objects.create(
+            section=section, text="<p>Hello</p>", position=0, saved=True
+        )
+        config, _ = module.get_or_create_config(0)
+
+        config.aspect_ratio = "16:9"
+        config.save()
+        config.refresh_from_db()
+
+        self.assertEqual(config.aspect_ratio, "16/9")

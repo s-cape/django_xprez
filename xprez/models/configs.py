@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
 from xprez import constants
+from xprez.admin.fields import AspectRatioField
 from xprez.conf import defaults, settings
 from xprez.models.mixins.css import CssMixin, CssParentMixin
 from xprez.utils import copy_model, import_class, resolve_saved
@@ -406,7 +407,7 @@ class ModuleConfig(ConfigBase):
             "padding_bottom_custom"
         ],
     )
-    aspect_ratio = models.CharField(
+    aspect_ratio = AspectRatioField(
         max_length=20,
         blank=True,
         default=defaults.XPREZ_DEFAULTS["module_config"]["default"]["aspect_ratio"],

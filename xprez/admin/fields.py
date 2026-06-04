@@ -1,8 +1,27 @@
 import os
 import re
 
+from django import forms
 from django.db import models
 from django.forms.fields import ChoiceField
+
+
+class AspectRatioField(models.CharField):
+    @staticmethod
+    def normalize_aspect_ratio(value):
+        return value.replace(":", "/") if value else value
+
+    def formfield(self, **kwargs):
+        kwargs.setdefault("form_class", AspectRatioFormField)
+        return super().formfield(**kwargs)
+
+    def get_prep_value(self, value):
+        return self.normalize_aspect_ratio(super().get_prep_value(value))
+
+
+class AspectRatioFormField(forms.CharField):
+    def to_python(self, value):
+        return AspectRatioField.normalize_aspect_ratio(super().to_python(value))
 
 
 class TemplatePathField(models.FilePathField):
