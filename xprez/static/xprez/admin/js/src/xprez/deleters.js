@@ -24,6 +24,31 @@ export class XprezSectionDeleter extends XprezDeleterBase {
         this.inputEl = this.triggerEl.querySelector("input");
         this.undeleteEl = this.obj.el.querySelector("[data-xprez-section-undelete]");
     }
+
+    undelete() {
+        super.undelete();
+        this.undeleteSoleModule();
+    }
+
+    undeleteSoleModule() {
+        const modules = this.obj.modules;
+        const onlyModule = modules.length === 1 ? modules[0] : null;
+        if (onlyModule?.el.dataset.mode === "delete") {
+            onlyModule.deleter.undelete();
+        }
+    }
+
+    deleteIfEmpty() {
+        if (this.obj.constructor.KEY !== "section" || !this.inputEl) {
+            return;
+        }
+        const allModulesDeleted = [...this.obj.moduleEls].every(
+            (el) => el.dataset.mode === "delete"
+        );
+        if (allModulesDeleted && !this.inputEl.checked) {
+            this.delete();
+        }
+    }
 }
 
 export class XprezModuleDeleter extends XprezDeleterBase {
@@ -32,6 +57,11 @@ export class XprezModuleDeleter extends XprezDeleterBase {
         if (!this.triggerEl) { return; }
         this.inputEl = this.triggerEl.querySelector("input");
         this.undeleteEl = this.obj.el.querySelector("[data-xprez-module-undelete]");
+    }
+
+    delete() {
+        super.delete();
+        this.obj.section.deleter.deleteIfEmpty();
     }
 }
 

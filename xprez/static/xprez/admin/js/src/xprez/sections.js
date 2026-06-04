@@ -59,6 +59,9 @@ export class XprezSection extends XprezContentBase {
     initNewModule(moduleEl) {
         const module = this.initModule(moduleEl);
         module.assignSyncGroupForNew();
+        if (this.el.dataset.mode === "delete" && this.deleter?.inputEl) {
+            this.deleter.undelete();
+        }
         return module;
     }
 
