@@ -2,17 +2,22 @@
 
 from unittest.mock import Mock, patch
 
+from django.core.files.storage import FileSystemStorage
 from django.test import TestCase
 from django.urls import reverse
 from sorl.thumbnail import default
 from sorl.thumbnail.base import ThumbnailBackend
+
+from sorl.thumbnail.images import ImageFile
 
 from xprez.contrib.sorl_thumbnail.lazy.backend import (
     LazyImageFile,
     LazyThumbnailBackend,
     LazyThumbnailBackendMixin,
     decode_thumbnail_payload,
+    encode_source_ref,
     encode_thumbnail_payload,
+    rebuild_source,
 )
 
 
@@ -36,6 +41,26 @@ class PayloadRoundtripTests(TestCase):
         bad_sig = sig[:-1] + ("0" if sig[-1] != "0" else "1")
         with self.assertRaises(ValueError):
             decode_thumbnail_payload(payload, bad_sig)
+
+
+class _CustomStorage(FileSystemStorage):
+    """Module-level storage so its class path round-trips through the payload."""
+
+
+class SourceRefRoundtripTests(TestCase):
+    def test_rebuild_preserves_key_with_custom_storage(self):
+        source = ImageFile("images/photo.jpg", _CustomStorage())
+        rebuilt = rebuild_source(encode_source_ref(source))
+        self.assertIsInstance(rebuilt, ImageFile)
+        self.assertEqual(rebuilt.key, source.key)
+
+    def test_bare_string_loses_storage_key(self):
+        """Why the fix exists: a name-only ref keys to the default storage."""
+        source = ImageFile("images/photo.jpg", _CustomStorage())
+        self.assertNotEqual(ImageFile("images/photo.jpg").key, source.key)
+
+    def test_plain_string_ref_passthrough(self):
+        self.assertEqual(rebuild_source("images/photo.jpg"), "images/photo.jpg")
 
 
 class LazyThumbnailBackendGetThumbnailTests(TestCase):

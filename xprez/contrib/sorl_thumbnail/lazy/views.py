@@ -6,6 +6,7 @@ from sorl.thumbnail import default
 from xprez.contrib.sorl_thumbnail.lazy.backend import (
     LazyThumbnailBackendMixin,
     decode_thumbnail_payload,
+    rebuild_source,
 )
 
 logger = logging.getLogger(__name__)
@@ -16,6 +17,10 @@ def lazy_thumbnail(request, payload, sig):
         args, kwargs = decode_thumbnail_payload(payload, sig)
     except (TypeError, ValueError) as e:
         raise Http404 from e
+
+    args = list(args)
+    if args:
+        args[0] = rebuild_source(args[0])
 
     backend = default.backend
     try:

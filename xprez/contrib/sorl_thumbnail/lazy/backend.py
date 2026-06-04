@@ -11,7 +11,7 @@ from sorl.thumbnail import default
 from sorl.thumbnail.base import ThumbnailBackend
 from sorl.thumbnail.conf import defaults as default_settings
 from sorl.thumbnail.conf import settings
-from sorl.thumbnail.helpers import toint
+from sorl.thumbnail.helpers import get_module_class, toint
 from sorl.thumbnail.images import BaseImageFile, ImageFile
 from sorl.thumbnail.parsers import parse_geometry
 
@@ -61,6 +61,22 @@ def decode_thumbnail_payload(payload, sig):
         raise ValueError("Invalid thumbnail payload.") from e
 
 
+def encode_source_ref(source):
+    """Serialize an ImageFile to a (name, storage) ref that survives the URL."""
+    return {"name": source.name, "storage": source.serialize_storage()}
+
+
+def rebuild_source(source_ref):
+    """Reconstruct the source ImageFile (with its storage) from a URL payload.
+
+    Plain-string refs are returned unchanged so older URLs keep working.
+    """
+    if isinstance(source_ref, dict):
+        storage = get_module_class(source_ref["storage"])()
+        return ImageFile(source_ref["name"], storage)
+    return source_ref
+
+
 class LazyImageFile(BaseImageFile):
     """Placeholder for a not-yet-generated thumbnail; URL defers generation."""
 
@@ -91,7 +107,7 @@ class LazyThumbnailBackendMixin:
             return cached
 
         size = self._predict_size(source, geometry_string, normalized)
-        url = self._build_lazy_url(source.name, geometry_string, normalized)
+        url = self._build_lazy_url(source, geometry_string, normalized)
         return LazyImageFile(url, size)
 
     def generate_thumbnail(self, file_, geometry_string, **options):
@@ -116,8 +132,10 @@ class LazyThumbnailBackendMixin:
 
         return normalized_options
 
-    def _build_lazy_url(self, source_name, geometry_string, options):
-        payload, sig = encode_thumbnail_payload(source_name, geometry_string, **options)
+    def _build_lazy_url(self, source, geometry_string, options):
+        payload, sig = encode_thumbnail_payload(
+            encode_source_ref(source), geometry_string, **options
+        )
         return reverse(
             "xprez:sorl_thumbnail_lazy:lazy_thumbnail",
             kwargs={"payload": payload, "sig": sig},
