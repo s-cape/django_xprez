@@ -265,9 +265,7 @@ class ClipboardPasteViewTest(TestCase):
             section=second_section, text="<p>Other</p>", position=0, saved=True
         )
         target_page = Page.objects.create(title="Target", slug="target")
-        target_section = Section.objects.create(
-            container=target_page, position=0, saved=True
-        )
+        Section.objects.create(container=target_page, position=0, saved=True)
         url = reverse(
             "admin:page_clipboard_paste",
             args=["container", self.page.pk, "duplicate", target_page.pk],

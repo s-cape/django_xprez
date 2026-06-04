@@ -39,8 +39,11 @@
             --x-admin-content-header-bg: var(--x-admin-marker-checked-text-bg);
             --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
             --x-admin-option-button-hover-bg: var(--x-admin-marker-checked-hover-text-bg);  
-            --x-admin-option-bg: var(--x-admin-marker-checked-bg);
-            --x-admin-option-color: var(--x-admin-marker-checked-color);
+
+            .xprez-option--select-trigger {
+                --x-admin-option-bg: var(--x-admin-marker-checked-bg);
+                --x-admin-option-color: var(--x-admin-marker-checked-color);
+            }
         }
 
         .xprez-admin-module[data-mode="edit"] &,
@@ -56,8 +59,10 @@
         }
         
         .xprez-admin-module[data-mode="selected"] & {
-            --x-admin-option-bg: var(--x-admin-marker-checked-bg);
-            --x-admin-option-color: var(--x-admin-marker-checked-color);
+            .xprez-option--select-trigger {
+                --x-admin-option-bg: var(--x-admin-marker-checked-bg);
+                --x-admin-option-color: var(--x-admin-marker-checked-color);
+            }
         }
     }
 
@@ -86,10 +91,18 @@
 
     &__actions {
         display: inline-flex;
+        align-items: center;
 
         &--right {
             margin-left: auto;
         }
+    }
+
+    .xprez-option-row.xprez-admin-module__shortcuts {
+        --x-admin-option-bg: #{darken($b-gray-2, 1%)};
+
+        align-items: center;
+        margin-left: .5rem;
     }
 
     &__body {
@@ -124,6 +137,7 @@
 
         .xprez-add-section {
             padding: .5rem 0;
+            font-size: var(--x-admin-font-size-sm);
         }
     }
 }

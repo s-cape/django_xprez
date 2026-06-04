@@ -1,0 +1,18 @@
+---
+description: Running tests in this project
+alwaysApply: true
+---
+
+# Running Tests
+
+Always run tests with `--noinput` to suppress the "destroy existing test database?" prompt:
+
+```bash
+python manage.py test --settings=example_app.settings_ci --noinput
+```
+
+Run from `example_app/` using the project `.venv`:
+
+```bash
+cd example_app && ../.venv/bin/python manage.py test --settings=example_app.settings_ci --noinput
+```

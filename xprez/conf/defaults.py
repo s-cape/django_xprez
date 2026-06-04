@@ -205,6 +205,81 @@ XPREZ_DEFAULTS = {
         }
     },
     "section_shortcuts": {
+        "margin_bottom": {
+            "label": "Margin bottom",
+            "choices": (
+                {
+                    "value": constants.MARGIN_NONE,
+                    "label": "None",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_NONE,
+                            1: constants.MARGIN_NONE,
+                            2: constants.MARGIN_NONE,
+                            3: constants.MARGIN_NONE,
+                            4: constants.MARGIN_NONE,
+                            5: constants.MARGIN_NONE,
+                        },
+                    },
+                },
+                {
+                    "value": constants.MARGIN_SMALL,
+                    "label": "Small",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_SMALL,
+                            1: constants.MARGIN_SMALL,
+                            2: constants.MARGIN_SMALL,
+                            3: constants.MARGIN_SMALL,
+                            4: constants.MARGIN_SMALL,
+                            5: constants.MARGIN_SMALL,
+                        },
+                    },
+                },
+                {
+                    "value": constants.MARGIN_MEDIUM,
+                    "label": "Medium",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_MEDIUM,
+                            1: constants.MARGIN_MEDIUM,
+                            2: constants.MARGIN_MEDIUM,
+                            3: constants.MARGIN_MEDIUM,
+                            4: constants.MARGIN_MEDIUM,
+                            5: constants.MARGIN_MEDIUM,
+                        },
+                    },
+                },
+                {
+                    "value": constants.MARGIN_LARGE,
+                    "label": "Large",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_LARGE,
+                            1: constants.MARGIN_LARGE,
+                            2: constants.MARGIN_LARGE,
+                            3: constants.MARGIN_LARGE,
+                            4: constants.MARGIN_LARGE,
+                            5: constants.MARGIN_LARGE,
+                        },
+                    },
+                },
+                {
+                    "value": constants.MARGIN_EXTRA_LARGE,
+                    "label": "Extra Large",
+                    "config": {
+                        "margin_bottom_choice": {
+                            0: constants.MARGIN_EXTRA_LARGE,
+                            1: constants.MARGIN_EXTRA_LARGE,
+                            2: constants.MARGIN_EXTRA_LARGE,
+                            3: constants.MARGIN_EXTRA_LARGE,
+                            4: constants.MARGIN_EXTRA_LARGE,
+                            5: constants.MARGIN_EXTRA_LARGE,
+                        },
+                    },
+                },
+            ),
+        },
         "columns": {
             "label": "Columns",
             "choices": (
@@ -312,7 +387,6 @@ XPREZ_DEFAULTS = {
             ),
         },
         "max_width": {
-            "label": "Max width",
             "clone": "max_width_choice",
         },
     },
@@ -392,6 +466,55 @@ XPREZ_DEFAULTS = {
     },
     "module_shortcuts": {
         "default": {},
+        "xprez.TextModule": {
+            "text_align": {
+                "label": "Text align",
+                "choices": (
+                    {
+                        "value": constants.TEXT_ALIGN_LEFT,
+                        "label": "Left",
+                        "config": {
+                            "text_align": {
+                                0: constants.TEXT_ALIGN_LEFT,
+                                1: constants.TEXT_ALIGN_LEFT,
+                                2: constants.TEXT_ALIGN_LEFT,
+                                3: constants.TEXT_ALIGN_LEFT,
+                                4: constants.TEXT_ALIGN_LEFT,
+                                5: constants.TEXT_ALIGN_LEFT,
+                            },
+                        },
+                    },
+                    {
+                        "value": constants.TEXT_ALIGN_CENTER,
+                        "label": "Center",
+                        "config": {
+                            "text_align": {
+                                0: constants.TEXT_ALIGN_CENTER,
+                                1: constants.TEXT_ALIGN_CENTER,
+                                2: constants.TEXT_ALIGN_CENTER,
+                                3: constants.TEXT_ALIGN_CENTER,
+                                4: constants.TEXT_ALIGN_CENTER,
+                                5: constants.TEXT_ALIGN_CENTER,
+                            },
+                        },
+                    },
+                    {
+                        "value": constants.TEXT_ALIGN_RIGHT,
+                        "label": "Right",
+                        "config": {
+                            "text_align": {
+                                0: constants.TEXT_ALIGN_RIGHT,
+                                1: constants.TEXT_ALIGN_RIGHT,
+                                2: constants.TEXT_ALIGN_RIGHT,
+                                3: constants.TEXT_ALIGN_RIGHT,
+                                4: constants.TEXT_ALIGN_RIGHT,
+                                5: constants.TEXT_ALIGN_RIGHT,
+                            },
+                        },
+                    },
+                ),
+            },
+        },
         "xprez.GalleryModule": {
             "columns": {
                 "label": "Columns",

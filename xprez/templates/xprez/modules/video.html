@@ -7,7 +7,7 @@
         {% if module.poster_image %}
             {% with geoms=module.srcset_geometries %}
                 <div class="xprez-video__poster xprez-video-poster-{{ module.video_id }}" data-video-poster>
-                    {% include "xprez/includes/responsive_image/image.html" with image=module.poster_image geometries=geoms sizes=module.image_sizes crop="50%" css_class="xprez-video__poster-img" %}
+                    {% include "xprez/includes/responsive_image/image.html" with image=module.poster_image geometries=geoms sizes=module.image_sizes alt=module.video_type|add:" video poster" crop="50%" css_class="xprez-video__poster-img" %}
                     <div class="xprez-video__btn-cont">
                         {% include "xprez/shared/icons/video_play.html" %}
                     </div>

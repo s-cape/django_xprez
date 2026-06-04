@@ -34,6 +34,7 @@
         </div>
     {% endif %}
 
+
     <ul class="xprez-add-list">
         {% if adder_section %}
             {% url xprez_admin.xprez_clipboard_list_url_name adder_container.pk adder_section.pk as clipboard_list_url %}
@@ -41,6 +42,7 @@
             {% url xprez_admin.xprez_clipboard_list_url_name adder_container.pk as clipboard_list_url %}
         {% endif %}
         <li
+            class="xprez-add-list__emphasized"
             data-xprez-clipboard-list-trigger
             data-url="{{ clipboard_list_url }}"
             {% if clipboard_is_empty %}data-hidden{% endif %}
@@ -52,6 +54,7 @@
         {% if not adder_section and not templatecontainer_is_empty %}
             {% url xprez_admin.xprez_templatecontainer_list_url_name adder_container.pk as templatecontainer_list_url %}
             <li
+                class="xprez-add-list__emphasized"
                 data-xprez-templatecontainer-list-trigger
                 data-url="{{ templatecontainer_list_url }}"
             >

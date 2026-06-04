@@ -86,6 +86,10 @@ export class XprezConfigBase extends XprezControllerBase {
         const prev = this.getPreviousConfig();
         if (prev) this.copyValuesFrom(prev);
     }
+
+    checkShortcuts() {
+        this.parent?.checkShortcuts?.();
+    }
 }
 
 export class XprezSectionConfig extends XprezConfigBase {

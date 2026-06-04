@@ -17,7 +17,7 @@
                 {% endthumbnail %}
             {% else %}
                 {% static "xprez/img/avatar.svg" as avatar_url %}
-                <img src="{{ avatar_url|build_absolute_uri }}" class="xprez-qoute__avatar-img" alt="{{ module.name }}"/>
+                <img src="{{ avatar_url|build_absolute_uri }}" class="xprez-quote__avatar-img" alt="{{ module.name }}"/>
             {% endif %}
             <div class="xprez-quote__avatar-text">
                 <p class="xprez-quote__name">{{ module.name }}</p>
