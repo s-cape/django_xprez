@@ -37,7 +37,7 @@ def _replace_wrapper_with_templatetag(wrapper, img):
 def parse_text(text_source):
     if not text_source:
         return ""
-    soup = BeautifulSoup(text_source, "html5lib")
+    soup = BeautifulSoup(_escape_django_template(text_source), "html5lib")
 
     # extract empty p elements from end of text
     for last_p in reversed(soup.find_all("p")):
@@ -64,7 +64,7 @@ def parse_text(text_source):
     for tag in soup.find_all(attrs={"contenteditable": True}):
         del tag["contenteditable"]
 
-    return soup.body.decode_contents()
+    return _unescape_django_template(soup.body.decode_contents())
 
 
 def render_text_parsed(text_parsed, extra_context=None):
@@ -73,3 +73,17 @@ def render_text_parsed(text_parsed, extra_context=None):
     if extra_context:
         c.update(extra_context)
     return mark_safe(t.render(c))
+
+
+# Sentinel for "{" while inside html5lib: we can't pre-escape it as "&#123;"
+# (html5lib would decode it back to "{"), so swap it for a private-use char
+# that survives parsing, then emit the inert "&#123;" entity in the final HTML.
+_DJANGO_TEMPLATE_SENTINEL = "\uf8ff"
+
+
+def _escape_django_template(text):
+    return text.replace("{", _DJANGO_TEMPLATE_SENTINEL)
+
+
+def _unescape_django_template(html):
+    return html.replace(_DJANGO_TEMPLATE_SENTINEL, "&#123;")
