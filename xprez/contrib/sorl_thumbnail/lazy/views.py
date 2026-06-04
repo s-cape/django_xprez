@@ -18,7 +18,6 @@ def lazy_thumbnail(request, payload, sig):
     except (TypeError, ValueError) as e:
         raise Http404 from e
 
-    args = list(args)
     if args:
         args[0] = rebuild_source(args[0])
 

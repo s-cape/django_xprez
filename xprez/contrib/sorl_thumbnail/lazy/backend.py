@@ -67,10 +67,7 @@ def encode_source_ref(source):
 
 
 def rebuild_source(source_ref):
-    """Reconstruct the source ImageFile (with its storage) from a URL payload.
-
-    Plain-string refs are returned unchanged so older URLs keep working.
-    """
+    """Rebuild the source ImageFile with its storage; pass legacy string refs through."""
     if isinstance(source_ref, dict):
         storage = get_module_class(source_ref["storage"])()
         return ImageFile(source_ref["name"], storage)
