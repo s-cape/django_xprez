@@ -6,3 +6,21 @@
         top: 0; 
     }
 }
+
+.x-align-button {
+    .xprez-module-inner {
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .xprez-text__text-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        p:last-child:has(a:only-child) {
+            margin-top: auto;
+        }
+    }
+}
