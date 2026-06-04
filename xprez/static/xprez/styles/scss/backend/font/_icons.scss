@@ -23,6 +23,22 @@
   @include xprez-icon;
 }
 
+.xprez-icon-alternate-color:before {
+  content: "\e925";
+}
+
+.xprez-icon-border-radius:before {
+  content: "\e922";
+}
+
+.xprez-icon-aspect-ratio:before {
+  content: "\e923";
+}
+
+.xprez-icon-max-width:before {
+  content: "\e924";
+}
+
 .xprez-icon-padding_b:before {
   content: "\e91c";
 }

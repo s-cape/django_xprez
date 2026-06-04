@@ -46,16 +46,15 @@
         {% for module in section.admin_form.xprez_modules %}
             {% xprez_module_render_admin module %}
         {% endfor %}
+        <div class="xprez-admin-module xprez-admin-module--adder" data-xprez-adder-section-end-wrapper>
+            <span class="xprez-btn xprez-btn-transparent" data-xprez-adder-section-end-trigger>
+                <i class="xprez-icon-plus_square_20"></i>{% trans "Add module" %}
+            </span>
+            {% include "xprez/admin/includes/adders/content_section_end.html" with xprez_admin=section.admin_form.xprez_admin adder_container=section.container adder_section=section %}
+        </div>
     </div>
 
     {% include "xprez/admin/includes/delete_info.html" with component_prefix="xprez-section" message_subject="section" %}
-
-    <div class="xprez-section__footer">
-        <span class="xprez-btn xprez-btn-transparent" data-xprez-adder-section-end-trigger>
-            <i class="xprez-icon-plus_square_20"></i>{% trans "Add content" %}
-        </span>
-        {% include "xprez/admin/includes/adders/content_section_end.html" with xprez_admin=section.admin_form.xprez_admin adder_container=section.container adder_section=section %}
-    </div>
 
     <div popover="manual" class="xprez-popover" data-controller="XprezSectionPopover">
         <div class="xprez-popover__content">

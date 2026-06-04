@@ -265,9 +265,7 @@ class ClipboardPasteViewTest(TestCase):
             section=second_section, text="<p>Other</p>", position=0, saved=True
         )
         target_page = Page.objects.create(title="Target", slug="target")
-        target_section = Section.objects.create(
-            container=target_page, position=0, saved=True
-        )
+        Section.objects.create(container=target_page, position=0, saved=True)
         url = reverse(
             "admin:page_clipboard_paste",
             args=["container", self.page.pk, "duplicate", target_page.pk],
@@ -277,6 +275,29 @@ class ClipboardPasteViewTest(TestCase):
         data = json.loads(response.content)
         self.assertEqual(len(data), 2)
         self.assertEqual(target_page.sections.count(), 3)  # original + 2 pasted
+
+    def test_paste_container_duplicate_keeps_linked_modules(self):
+        """Container 'Copy all' must duplicate ModuleSymlink rows even when the
+        symlink class itself is not in XPREZ_MODULES_ALLOWED, as long as the
+        link's target class is allowed.
+        """
+        from unittest.mock import patch
+
+        ModuleSymlink.objects.create(
+            section=self.section, symlink=self.module, position=1, saved=True
+        )
+        target_page = Page.objects.create(title="Target", slug="target")
+        url = reverse(
+            "admin:page_clipboard_paste",
+            args=["container", self.page.pk, "duplicate", target_page.pk],
+        )
+        with patch("xprez.conf.settings.XPREZ_MODULES_ALLOWED", ["xprez.TextModule"]):
+            response = self.client.post(url)
+        self.assertEqual(response.status_code, 200)
+        new_section = target_page.sections.get()
+        self.assertEqual(new_section.modules.count(), 2)
+        new_symlink = ModuleSymlink.objects.get(section=new_section)
+        self.assertEqual(new_symlink.symlink_id, self.module.pk)
 
     def test_paste_container_symlink_creates_container_symlink(self):
         target_page = Page.objects.create(title="Target2", slug="target2")

@@ -65,3 +65,13 @@ def truncate_with_ellipsis(string, length):
     if len(string) > length:
         return string[: length - 3] + "..."
     return string
+
+
+def get_thumbnail_options(use):
+    """Resolve sorl format/quality for a thumbnail use key (see XPREZ_THUMBNAIL)."""
+    cfg = settings.XPREZ_THUMBNAIL
+    merged = dict(cfg.get("default", {}))
+    for key, value in cfg.get(use, {}).items():
+        if value is not None:
+            merged[key] = value
+    return merged

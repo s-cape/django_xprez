@@ -77,7 +77,7 @@ export class Xprez extends WithSignals(XprezControllerBase) {
 
         this.sections.forEach(section => {
             const sectionId = section.el.querySelector('input[name="section-id"]').value;
-            Array.from(section.gridEl.children).forEach((moduleEl, moduleIndex) => {
+            section.moduleEls.forEach((moduleEl, moduleIndex) => {
                 moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-position"]`).value = moduleIndex;
                 moduleEl.querySelector(`input[name="${moduleEl.dataset.prefix}-section"]`).value = sectionId;
             });

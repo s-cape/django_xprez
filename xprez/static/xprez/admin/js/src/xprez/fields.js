@@ -1,10 +1,45 @@
 import { XprezControllerBase } from './controller_base.js';
 
-export class XprezFieldController extends XprezControllerBase {
+export class XprezFieldControllerBase extends XprezControllerBase {
+    constructor(parent, el) {
+        super(parent, el);
+        this.inputEl = el.querySelector('select, input');
+        this._bindLabelClick();
+    }
+
+    getValue() {
+        if (this.inputEl.type === 'checkbox') {
+            return this.inputEl.checked ? 'true' : 'false';
+        } else {
+            return this.inputEl.value;
+        }
+    }
+
+    _setInputValue(value) {
+        if (this.inputEl.type === 'checkbox') {
+            this.inputEl.checked = value === 'true';
+        } else {
+            this.inputEl.value = value;
+        }
+    }
+
+    _bindLabelClick() {
+        if (this.inputEl?.tagName !== 'SELECT') return;
+        const labelEl = this.el.querySelector('label');
+        if (labelEl) {
+            labelEl.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.inputEl.focus();
+                try { this.inputEl.showPicker?.() ?? this.inputEl.click(); } catch {}
+            });
+        }
+    }
+}
+
+export class XprezFieldController extends XprezFieldControllerBase {
     constructor(parent, el) {
         super(parent, el);
         this.fieldName = el.dataset.fieldName;
-        this.inputEl = el.querySelector('select, input');
 
         this.showWhens = [];
 
@@ -20,38 +55,21 @@ export class XprezFieldController extends XprezControllerBase {
         return this.el.hasAttribute("data-sync-allowed");
     }
 
-    // Value
     // Public: setValue (set + propagate), setValuePrepare + setValueConfirm (batch: apply DOM then propagate)
     // Internal: _setValueSilent (set DOM + state, no propagation/notifications; used by sync/cascade)
-    getValue() {
-        if (this.inputEl.type === 'checkbox') {
-            return this.inputEl.checked ? 'true' : 'false';
-        } else {
-            return this.inputEl.value;
-        }
-    }
-
-    _applyValue(value) {
-        if (this.inputEl.type === 'checkbox') {
-            this.inputEl.checked = value === 'true';
-        } else {
-            this.inputEl.value = value;
-        }
-    }
-
     setValue(value) {
         if (this.getValue() === value) return;
         this.setValuePrepare(value);
         this.setValueConfirm();
     }
 
-    setValuePrepare(value) { this._applyValue(value); }
+    setValuePrepare(value) { this._setInputValue(value); }
     setValueConfirm() { this._propagateChange(this._previousValue, this.getValue()); }
 
     // Internal: set DOM + state only; no propagation, no notifications
     _setValueSilent(value) {
         if (this.getValue() === value) return false;
-        this._applyValue(value);
+        this._setInputValue(value);
         this._previousValue = value;
         return true;
     }
@@ -139,7 +157,7 @@ export class XprezFieldController extends XprezControllerBase {
         affected.filter(f => f !== this).forEach(f =>
             f.inputEl.dispatchEvent(new Event("change", { bubbles: true }))
         );
-        this.parent?.parent?.checkShortcuts?.();
+        this.parent?.checkShortcuts?.();
         return affected;
     }
 

@@ -77,7 +77,7 @@
 		flex: 1;
 		// line-height: inherit !important;
 		color: var(--x-admin-option-input-color) !important;
-		width: 100%;
+		width: 100% !important;
 		margin: 0 !important;
 		
 		&::selection {
@@ -232,6 +232,7 @@
 			line-height: 1 !important;
 			font-weight: var(--x-admin-option-input-font-weight) !important;
 			margin: 0 !important;
+			background: var(--x-admin-option-bg) !important;
 			// text-align: right;
 
 			

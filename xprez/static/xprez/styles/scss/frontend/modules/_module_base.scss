@@ -19,6 +19,7 @@
 
     &-inner {
         padding: var(--x-padding, 0);  
+        min-width: 0;
 
         & > :last-child {
             margin-bottom: 0;

@@ -1,7 +1,7 @@
 import { Xprez } from './xprez/core.js';
 import { XprezModule, XprezModuleSyncMixin } from './xprez/modules.js';
 import { XprezSection, XprezSectionSymlink, XprezContainerSymlink } from './xprez/sections.js';
-import { XprezFieldController } from './xprez/fields.js';
+import { XprezFieldControllerBase, XprezFieldController } from './xprez/fields.js';
 import {
     XprezAdderBase,
     XprezAdderItemsBase,
@@ -103,6 +103,7 @@ export {
     XprezSection,
     XprezSectionSymlink,
     XprezContainerSymlink,
+    XprezFieldControllerBase,
     XprezFieldController,
     XprezFileInputFieldController,
     XprezAdderBase,

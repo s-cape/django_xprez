@@ -3,7 +3,7 @@
     overflow: hidden;
     position: relative;
 	border: 1px solid $b-gray-4;
-	margin: 1rem 0;
+	margin: 0;
 	background: var(--x-admin-module-bg); 
 
     &[data-mode="edit"],
@@ -39,8 +39,11 @@
             --x-admin-content-header-bg: var(--x-admin-marker-checked-text-bg);
             --x-admin-option-button-color: var(--x-admin-marker-checked-bg);
             --x-admin-option-button-hover-bg: var(--x-admin-marker-checked-hover-text-bg);  
-            --x-admin-option-bg: var(--x-admin-marker-checked-bg);
-            --x-admin-option-color: var(--x-admin-marker-checked-color);
+
+            .xprez-option--select-trigger {
+                --x-admin-option-bg: var(--x-admin-marker-checked-bg);
+                --x-admin-option-color: var(--x-admin-marker-checked-color);
+            }
         }
 
         .xprez-admin-module[data-mode="edit"] &,
@@ -56,8 +59,10 @@
         }
         
         .xprez-admin-module[data-mode="selected"] & {
-            --x-admin-option-bg: var(--x-admin-marker-checked-bg);
-            --x-admin-option-color: var(--x-admin-marker-checked-color);
+            .xprez-option--select-trigger {
+                --x-admin-option-bg: var(--x-admin-marker-checked-bg);
+                --x-admin-option-color: var(--x-admin-marker-checked-color);
+            }
         }
     }
 
@@ -86,10 +91,18 @@
 
     &__actions {
         display: inline-flex;
+        align-items: center;
 
         &--right {
             margin-left: auto;
         }
+    }
+
+    .xprez-option-row.xprez-admin-module__shortcuts {
+        --x-admin-option-bg: #{darken($b-gray-2, 1%)};
+
+        align-items: center;
+        margin-left: .5rem;
     }
 
     &__body {
@@ -99,6 +112,33 @@
         flex-direction: column;
         gap: .5rem;
         align-items: stretch;
+    }
+
+    &--adder {
+        align-self: start;
+        border-style: none;
+        opacity: .2;
+        transition: opacity 0.2s ease-in-out;
+
+        .xprez-btn {
+            width: 100%;
+            text-align: center;
+            padding: .75rem 1rem;
+            
+
+            &:hover {
+                background: white;
+            }
+        }
+
+        .xprez-section-grid:hover & {
+            opacity: 1;
+        }
+
+        .xprez-add-section {
+            padding: .5rem 0;
+            font-size: var(--x-admin-font-size-sm);
+        }
     }
 }
 
