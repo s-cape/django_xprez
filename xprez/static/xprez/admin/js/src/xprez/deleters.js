@@ -27,15 +27,6 @@ export class XprezSectionDeleter extends XprezDeleterBase {
 
     undelete() {
         super.undelete();
-        this.undeleteSoleModule();
-    }
-
-    undeleteSoleModule() {
-        const modules = this.obj.modules;
-        const onlyModule = modules.length === 1 ? modules[0] : null;
-        if (onlyModule?.el.dataset.mode === "delete") {
-            onlyModule.deleter.undelete();
-        }
     }
 
     deleteIfEmpty() {
