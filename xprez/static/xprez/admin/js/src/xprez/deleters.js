@@ -25,18 +25,11 @@ export class XprezSectionDeleter extends XprezDeleterBase {
         this.undeleteEl = this.obj.el.querySelector("[data-xprez-section-undelete]");
     }
 
-    undelete() {
-        super.undelete();
-    }
-
     deleteIfEmpty() {
-        if (this.obj.constructor.KEY !== "section" || !this.inputEl) {
-            return;
-        }
         const allModulesDeleted = [...this.obj.moduleEls].every(
             (el) => el.dataset.mode === "delete"
         );
-        if (allModulesDeleted && !this.inputEl.checked) {
+        if (allModulesDeleted && this.inputEl?.checked === false) {
             this.delete();
         }
     }
