@@ -26,13 +26,10 @@ export class XprezSectionDeleter extends XprezDeleterBase {
     }
 
     deleteIfEmpty() {
-        if (this.obj.constructor.KEY !== "section" || !this.inputEl) {
-            return;
-        }
         const allModulesDeleted = [...this.obj.moduleEls].every(
             (el) => el.dataset.mode === "delete"
         );
-        if (allModulesDeleted && !this.inputEl.checked) {
+        if (allModulesDeleted && this.inputEl?.checked === false) {
             this.delete();
         }
     }
