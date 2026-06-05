@@ -25,10 +25,6 @@ export class XprezSectionDeleter extends XprezDeleterBase {
         this.undeleteEl = this.obj.el.querySelector("[data-xprez-section-undelete]");
     }
 
-    undelete() {
-        super.undelete();
-    }
-
     deleteIfEmpty() {
         if (this.obj.constructor.KEY !== "section" || !this.inputEl) {
             return;
