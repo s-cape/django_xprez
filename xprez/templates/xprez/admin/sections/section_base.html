@@ -8,25 +8,23 @@
 >
     {% block before_header %}{% endblock %}
 
-    <div class="xprez-section__header" data-draggable-section-handle>
-        {% block header_before_settings %}
-            <span class="xprez-icon-btn" title='{% trans "Collapse" %}' data-xprez-section-collapser>
-                <i class="xprez-icon-chevron-small-down"></i>
-            </span>
-        {% endblock %}
-
-        <div class="xprez-section__settings">
-            {% block header_settings %}{% endblock %}
+    <div class="xprez-section__content">
+        <div class="xprez-section__header" data-draggable-section-handle>
+            {% block header_before_settings %}
+                <span class="xprez-icon-btn" title='{% trans "Collapse" %}' data-xprez-section-collapser>
+                    <i class="xprez-icon-chevron-small-down"></i>
+                </span>
+            {% endblock %}
+            <div class="xprez-section__settings">
+                {% block header_settings %}{% endblock %}
+            </div>
+            <div class="xprez-section__actions">
+                {% block header_actions %}{% endblock %}
+            </div>
         </div>
-
-        <div class="xprez-section__actions">
-            {% block header_actions %}{% endblock %}
-        </div>
+        {% block section_body %}{% endblock %}
+        {% block delete_info %}{% endblock %}
     </div>
-
-    {% block section_body %}{% endblock %}
-
-    {% block delete_info %}{% endblock %}
 
     {% block hidden_fields %}{% endblock %}
 </div>
