@@ -60,23 +60,5 @@ class ModuleRegistry:
             exclude=settings.XPREZ_MODULES_ALLOWED_EXCLUDE,
         )
 
-    def _add_menu_include_exclude(self):
-        include = settings.XPREZ_MODULES_ADD_MENU
-        if include is None:
-            return settings.XPREZ_MODULES_ALLOWED, (
-                list(settings.XPREZ_MODULES_ALLOWED_EXCLUDE)
-                + list(settings.XPREZ_MODULES_ADD_MENU_EXCLUDE)
-            )
-        else:
-            return include, settings.XPREZ_MODULES_ADD_MENU_EXCLUDE
-
-    def add_menu_modules(self):
-        include, exclude = self._add_menu_include_exclude()
-        return self.modules(include=include, exclude=exclude)
-
-    def add_menu_module_classes(self):
-        include, exclude = self._add_menu_include_exclude()
-        return self.module_classes(include=include, exclude=exclude)
-
 
 module_registry = ModuleRegistry()

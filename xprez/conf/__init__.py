@@ -1,4 +1,6 @@
 from django.conf import settings as user_settings
+from django.core.signals import setting_changed
+from django.dispatch import receiver
 
 from . import defaults
 
@@ -45,6 +47,13 @@ class SettingsLoader:
         setattr(self, name, result)
         return result
 
+    def clear_cache(self, name=None):
+        """Drop cached setting(s) so they are re-read on next access."""
+        if name is None:
+            self.__dict__.clear()
+        else:
+            self.__dict__.pop(name, None)
+
     def _preprocess_xprez_css(self, css_config):
         """Pre-merge module-specific keys with module.default fallback."""
         for config_key in ["module", "module_config"]:
@@ -65,3 +74,9 @@ class SettingsLoader:
 
 
 settings = SettingsLoader()
+
+
+@receiver(setting_changed)
+def _clear_settings_cache(sender, setting, **kwargs):
+    """Invalidate cache when Django settings change (e.g. override_settings)."""
+    settings.clear_cache(setting)

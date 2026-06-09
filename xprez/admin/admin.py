@@ -102,14 +102,30 @@ class XprezAdminMixin(
     def xprez_allowed_modules(self, container=None):
         return module_registry.allowed_modules()
 
-    def xprez_add_menu_modules(self, container=None):
-        allowed = set(self.xprez_allowed_modules(container))
-        return [ct for ct in module_registry.add_menu_modules() if ct in allowed]
-
     def xprez_allowed_module_classes(self, container=None):
         return module_registry.module_classes(
             include=self.xprez_allowed_modules(container)
         )
+
+    def xprez_add_menu_modules(self, container=None):
+        allowed = self.xprez_allowed_modules(container)
+        explicit = settings.XPREZ_MODULES_ADD_MENU
+        if explicit is None:
+            # No explicit menu: use the allowed list/order, minus add-menu excludes.
+            add_menu = module_registry.modules(
+                include=settings.XPREZ_MODULES_ALLOWED,
+                exclude=list(settings.XPREZ_MODULES_ALLOWED_EXCLUDE)
+                + list(settings.XPREZ_MODULES_ADD_MENU_EXCLUDE),
+            )
+            ordered, included = allowed, set(add_menu)
+        else:
+            # Explicit menu controls contents and order, still filtered by allowed.
+            add_menu = module_registry.modules(
+                include=explicit,
+                exclude=settings.XPREZ_MODULES_ADD_MENU_EXCLUDE,
+            )
+            ordered, included = add_menu, set(allowed)
+        return [content_type for content_type in ordered if content_type in included]
 
     def xprez_add_menu_module_classes(self, container=None):
         return module_registry.module_classes(
