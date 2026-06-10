@@ -17,6 +17,11 @@
                     }
                 }
                 @else if $element != "button" {
+                    @if $element == "p" {
+                        .xprez-module-inner {
+                            font-size: map-get($properties, "font-size");
+                        }
+                    }
                     #{$element} {
                         @include rfs.font-size(map-get($properties, "font-size"));
                         line-height: map-get($properties, "line-height");
