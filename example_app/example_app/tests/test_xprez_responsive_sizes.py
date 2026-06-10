@@ -325,6 +325,30 @@ class TextModuleSizesTest(TestCase):
         # effective_columns = 4 // 2 = 2 → 50vw
         self.assertEqual(module.image_sizes, "50vw")
 
+    def test_colspan_full_width_unaffected_by_prior_css_render(self):
+        """Rendering CSS must not corrupt configs (css_breakpoint) for image_sizes.
+
+        Section columns and module colspan both live only at bp0; the section's
+        colspan equals its columns so the module spans the whole section. The
+        template renders CSS variables before image sizes, and that path used to
+        mutate the cached config's css_breakpoint, so colspan was read at the
+        wrong breakpoint and the image was sized for a single grid cell.
+        """
+        section = _create_page_and_section(max_width_choice=constants.MAX_WIDTH_FULL)
+        sc0 = section.get_configs().get(css_breakpoint=0)
+        sc0.columns = 3
+        sc0.saved = True
+        sc0.save()
+        module = self._text_module(section)
+        mc0 = module.get_configs().get(css_breakpoint=0)
+        mc0.colspan = 3
+        mc0.saved = True
+        mc0.save()
+
+        # Mimic the template order: CSS variables render first, then image_sizes.
+        module.render_css_variables()
+        self.assertEqual(module.image_sizes, "100vw")
+
 
 class VideoModuleMultiColumnSectionSizesTest(TestCase):
     """VideoModule poster also respects section columns."""

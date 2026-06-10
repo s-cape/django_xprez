@@ -1,3 +1,5 @@
+import copy
+
 from xprez import constants
 from xprez.conf import settings
 
@@ -173,9 +175,10 @@ class CssParentMixin(CssMixin):
                 config = db_configs[breakpoint]
                 last_config = config
             elif last_config:
-                # Reuse last DB config with updated breakpoint for _transform_css
-                last_config.css_breakpoint = breakpoint
-                config = last_config
+                # Shallow copy: don't mutate the shared cached config, other
+                # readers key it by css_breakpoint.
+                config = copy.copy(last_config)
+                config.css_breakpoint = breakpoint
             else:
                 config = self.build_config(breakpoint)
 
