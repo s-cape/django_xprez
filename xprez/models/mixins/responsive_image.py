@@ -58,8 +58,8 @@ class ResponsiveImageParentMixin:
                 current_own_cols = self.get_own_columns(own_configs[bp_id])
                 current_colspan = own_configs[bp_id].colspan
             effective_columns = max(
+                current_section_cols * current_own_cols / current_colspan,
                 1,
-                current_section_cols * current_own_cols // current_colspan,
             )
             result += [(breakpoints[bp_id]["max_width"], effective_columns)]
         return result
@@ -98,8 +98,7 @@ class ResponsiveImageParentMixin:
         """Build HTML sizes string from (max_width_px, [(max_width, cols), ...])."""
 
         def slot_value(effective_columns, bp_max_width):
-            pct = round(100 / effective_columns, 2)
-            vw_size = f"{int(pct) if pct == int(pct) else pct}vw"
+            vw_size = f"{round(100 / effective_columns, 2):g}vw"
             if max_width is None:
                 return vw_size
             if bp_max_width is None or bp_max_width >= max_width:
