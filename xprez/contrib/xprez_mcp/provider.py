@@ -7,13 +7,15 @@ container's admin change page: the container admin's ``get_queryset`` and
 view/change permissions which tools they get.
 """
 
-from typing import Annotated, Literal, Optional
+from typing import Annotated, Any, Literal, Optional
 
 from django.apps import apps
 from django.contrib import admin
+from django.db import transaction
 from django.db.models import Q
 
 from xprez_mcp import InvalidArguments, Provider, ToolError, resource, tool
+from xprez_mcp.core.items import Item
 from xprez_mcp.providers.admin.request import get_admin_request
 
 from xprez import models as xprez_models
@@ -24,9 +26,36 @@ from xprez.models.multi_module import MultiModule
 from xprez.modules.symlink import ModuleSymlink
 
 from . import guide
+from .forms import reorder, write_module, write_section
 from .serialize import form_field_names, form_schema, model_values
 
 GuideTopic = Literal[tuple(guide.TOPICS)]
+SectionKind = Literal["section", "section_symlink", "container_symlink"]
+Values = Annotated[
+    Optional[dict[str, Any]], "Field values to set; xprez_module_types lists them"
+]
+Configs = Annotated[
+    Optional[dict[str, Optional[dict[str, Any]]]],
+    'Config values per breakpoint, like {"0": {...}, "5": {...}}; '
+    "null removes a breakpoint's config",
+]
+
+SECTION_KINDS = {
+    "section": xprez_models.Section,
+    "section_symlink": xprez_models.SectionSymlink,
+    "container_symlink": xprez_models.ContainerSymlink,
+}
+
+
+class XprezItem(Item):
+    """Write tools need the change permission of some container admin."""
+
+    def is_allowed(self, ctx):
+        if not super().is_allowed(ctx):
+            return False
+        if self.kind != "tool" or self.spec.hints.get("readOnlyHint"):
+            return True
+        return self.provider.can_write(ctx)
 
 
 class XprezProvider(Provider):
@@ -69,6 +98,16 @@ class XprezProvider(Provider):
             self.visible_admins(ctx)
         )
 
+    def can_write(self, ctx):
+        request = self.admin_request(ctx, write=True)
+        return any(
+            model_admin.has_change_permission(request)
+            for model_admin in self.visible_admins(ctx).values()
+        )
+
+    def get_items(self):
+        return [XprezItem(spec, self) for spec in self.get_specs()]
+
     def container_queryset(self, ctx, model_admin, write=False):
         request = self.admin_request(ctx, write=write)
         allowed = model_admin.xprez_get_container_qs(request).values("pk")
@@ -104,6 +143,7 @@ class XprezProvider(Provider):
         return container, model_admin
 
     def get_module(self, ctx, module_id, write=False):
+        """The concrete module; with ``write``, ``(module, container, admin)``."""
         module = (
             xprez_models.Module.objects.filter(pk=module_id)
             .select_related("section")
@@ -112,10 +152,40 @@ class XprezProvider(Provider):
         if module is None:
             raise ToolError(f"Module {module_id} does not exist.")
         try:
-            self.get_container(ctx, module.section.container_id, write=write)
+            container, model_admin = self.get_container(
+                ctx, module.section.container_id, write=write
+            )
         except ToolError:
             raise ToolError(f"Module {module_id} does not exist.") from None
+        if write:
+            return module.polymorph, container, model_admin
         return module.polymorph
+
+    def get_section(self, ctx, section_id, kind="section"):
+        """``(section, container, admin)`` for a write."""
+        section = SECTION_KINDS[kind].objects.filter(pk=section_id).first()
+        if section is None:
+            raise ToolError(f"{kind} {section_id} does not exist.")
+        try:
+            container, model_admin = self.get_container(
+                ctx, section.container_id, write=True
+            )
+        except ToolError:
+            raise ToolError(f"{kind} {section_id} does not exist.") from None
+        return section, container, model_admin
+
+    def module_classes(self, model_admin, container):
+        """``{type: class}`` of the modules the admin's add menu offers."""
+        return {
+            module_class.module_key: module_class
+            for module_class in model_admin.xprez_add_menu_module_classes(container)
+        }
+
+    def log(self, ctx, model_admin, container, message):
+        """A change in the container's admin history."""
+        request = self.admin_request(ctx, write=True)
+        model_admin.log_change(request, container, f"{message} (MCP)")
+        container.invalidate_front_cache()
 
     # --- read tools ---------------------------------------------------------
 
@@ -224,10 +294,7 @@ class XprezProvider(Provider):
         """The module types this container allows. With `type`, the fields
         that type, its configs and its items take."""
         obj, model_admin = self.get_container(ctx, container)
-        classes = {
-            module_class.module_key: module_class
-            for module_class in model_admin.xprez_add_menu_module_classes(obj)
-        }
+        classes = self.module_classes(model_admin, obj)
         if type is None:
             return {
                 "types": [
@@ -243,6 +310,198 @@ class XprezProvider(Provider):
         if type not in classes:
             raise InvalidArguments(f"type must be one of {sorted(classes)}.")
         return module_type_schema(classes[type])
+
+    # --- write tools --------------------------------------------------------
+
+    @tool
+    @transaction.atomic
+    def section_add(
+        self,
+        ctx,
+        container: int,
+        position: Annotated[
+            Optional[int], "Index among the sections; default last"
+        ] = None,
+        fields: Values = None,
+        configs: Configs = None,
+    ):
+        """Add an empty section to a container. Changes are live at once.
+        Read xprez_guide (index, editing) before your first change."""
+        obj, model_admin = self.get_container(ctx, container, write=True)
+        section = model_admin._xprez_create_section(obj)
+        self.save_section(ctx, model_admin, section, fields, configs)
+        reorder(obj._get_ordered_section_items(), section, position)
+        self.log(ctx, model_admin, obj, f"Added section {section.pk}")
+        return self.section_result(section)
+
+    @tool(idempotent=True)
+    @transaction.atomic
+    def section_update(
+        self, ctx, section: int, fields: Values = None, configs: Configs = None
+    ):
+        """Change a section's fields and configs; leave out what stays. Changes
+        are live at once and show on every page linking to the section.
+        Read xprez_guide (index, editing) before your first change."""
+        obj, container, model_admin = self.get_section(ctx, section)
+        self.save_section(ctx, model_admin, obj, fields, configs)
+        self.log(ctx, model_admin, container, f"Changed section {obj.pk}")
+        return self.section_result(obj)
+
+    @tool(idempotent=True)
+    @transaction.atomic
+    def section_move(
+        self,
+        ctx,
+        section: int,
+        position: Annotated[int, "Index among the container's sections, from 0"],
+        kind: SectionKind = "section",
+    ):
+        """Move a section, or a link to a section or container, to another
+        position in its container."""
+        obj, container, model_admin = self.get_section(ctx, section, kind)
+        reorder(container._get_ordered_section_items(), obj, position)
+        self.log(ctx, model_admin, container, f"Moved {kind} {obj.pk}")
+        return self.container_get(ctx, container.pk)
+
+    @tool(destructive=True)
+    @transaction.atomic
+    def section_delete(self, ctx, section: int, kind: SectionKind = "section"):
+        """Delete a section with all its modules, or a link. Live at once and
+        cannot be undone; on other pages, links to the section show nothing."""
+        obj, container, model_admin = self.get_section(ctx, section, kind)
+        obj.delete()
+        reorder(container._get_ordered_section_items())
+        self.log(ctx, model_admin, container, f"Deleted {kind} {section}")
+        return {"deleted": True, "kind": kind, "id": section}
+
+    @tool
+    @transaction.atomic
+    def module_add(
+        self,
+        ctx,
+        type: Annotated[str, "Module type, from xprez_module_types"],
+        section: Annotated[Optional[int], "Add to this section"] = None,
+        container: Annotated[
+            Optional[int], "Or add a new section with the module to this container"
+        ] = None,
+        position: Annotated[
+            Optional[int], "Index in the section (or of the new section); default last"
+        ] = None,
+        fields: Values = None,
+        configs: Configs = None,
+    ):
+        """Add a module to a section, or a new section with the module to a
+        container. Changes are live at once.
+        Read xprez_guide (index, editing) before your first change."""
+        if (section is None) == (container is None):
+            raise InvalidArguments("Give either section or container.")
+        if section is not None:
+            target, obj, model_admin = self.get_section(ctx, section)
+        else:
+            obj, model_admin = self.get_container(ctx, container, write=True)
+        module_class = self.module_classes(model_admin, obj).get(type)
+        if module_class is None:
+            raise InvalidArguments(
+                f"type must be one of {sorted(self.module_classes(model_admin, obj))}."
+            )
+        request = self.admin_request(ctx, write=True)
+        if section is None:
+            content_type = module_class.class_content_type()
+            target = model_admin._xprez_create_section(obj, content_type)
+            write_section(model_admin, request, target, {}, {})
+            reorder(obj._get_ordered_section_items(), target, position)
+            position = None
+        module = model_admin._xprez_create_module(module_class, target)
+        self.save_module(ctx, model_admin, module, fields, configs)
+        reorder(target.modules.all(), module, position)
+        self.log(
+            ctx,
+            model_admin,
+            obj,
+            f"Added {module_class._meta.verbose_name} {module.pk}",
+        )
+        return self.module_get(ctx, module.pk)
+
+    @tool(idempotent=True)
+    @transaction.atomic
+    def module_update(
+        self, ctx, module: int, fields: Values = None, configs: Configs = None
+    ):
+        """Change a module's fields and configs; leave out what stays. Changes
+        are live at once and show wherever the module is linked.
+        Read xprez_guide (index, editing) before your first change."""
+        obj, container, model_admin = self.get_module(ctx, module, write=True)
+        self.save_module(ctx, model_admin, obj, fields, configs)
+        self.log(
+            ctx, model_admin, container, f"Changed {obj._meta.verbose_name} {obj.pk}"
+        )
+        return self.module_get(ctx, obj.pk)
+
+    @tool(idempotent=True)
+    @transaction.atomic
+    def module_move(
+        self,
+        ctx,
+        module: int,
+        position: Annotated[
+            Optional[int], "Index in the section, from 0; default last"
+        ] = None,
+        section: Annotated[
+            Optional[int], "Move to this section of the same container"
+        ] = None,
+    ):
+        """Move a module within its section or to another section of the same
+        container."""
+        obj, container, model_admin = self.get_module(ctx, module, write=True)
+        source = obj.section
+        if section is not None and section != source.pk:
+            target, target_container, _model_admin = self.get_section(ctx, section)
+            if target_container.pk != container.pk:
+                raise InvalidArguments("section must be in the module's container.")
+            xprez_models.Module.objects.filter(pk=obj.pk).update(section=target)
+            obj.section = target
+            reorder(source.modules.all())
+            source.invalidate_front_cache()
+        reorder(obj.section.modules.all(), obj, position)
+        obj.invalidate_front_cache()
+        self.log(
+            ctx, model_admin, container, f"Moved {obj._meta.verbose_name} {obj.pk}"
+        )
+        return self.module_get(ctx, obj.pk)
+
+    @tool(destructive=True)
+    @transaction.atomic
+    def module_delete(self, ctx, module: int):
+        """Delete a module. Live at once and cannot be undone; links to the
+        module on other pages show nothing."""
+        obj, container, model_admin = self.get_module(ctx, module, write=True)
+        name = obj._meta.verbose_name
+        section = obj.section
+        obj.delete()
+        reorder(section.modules.all())
+        self.log(ctx, model_admin, container, f"Deleted {name} {module}")
+        return {"deleted": True, "id": module}
+
+    def save_section(self, ctx, model_admin, section, fields, configs):
+        request = self.admin_request(ctx, write=True)
+        write_section(
+            model_admin, request, section, fields or {}, parse_configs(configs)
+        )
+
+    def save_module(self, ctx, model_admin, module, fields, configs):
+        request = self.admin_request(ctx, write=True)
+        write_module(model_admin, request, module, fields or {}, parse_configs(configs))
+
+    def section_result(self, section):
+        section.refresh_from_db()
+        return {
+            "kind": "section",
+            "id": section.pk,
+            "container": section.container_id,
+            "position": section.position,
+            "fields": model_values(section, form_field_names(SectionForm)),
+            "configs": serialize_configs(section, compact=False),
+        }
 
     # --- resources ----------------------------------------------------------
 
@@ -407,6 +666,19 @@ def module_type_schema(module_class):
     if issubclass(module_class, MultiModule):
         item = module.build_item()
         result["item_fields"] = form_schema(module.get_admin_item_form_class(item))
+    return result
+
+
+def parse_configs(configs):
+    """``{breakpoint number: values or None}`` from the JSON object."""
+    result = {}
+    for key, values in (configs or {}).items():
+        try:
+            result[int(key)] = values
+        except ValueError:
+            raise InvalidArguments(
+                f"configs: {key!r} is not a breakpoint number."
+            ) from None
     return result
 
 

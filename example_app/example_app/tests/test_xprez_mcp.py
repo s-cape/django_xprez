@@ -252,3 +252,198 @@ class ResourcesTest(McpTestCase):
         result = self.read(f"xprez://containers/{page.pk}")["result"]
         html = result["contents"][0]["text"]
         self.assertIn("<h2>Hello</h2>", html)
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class WriteAccessTest(McpTestCase):
+    def test_root_has_write_tools(self):
+        self.assertIn("xprez_module_update", self.tools())
+        self.assertEqual(len(self.tools()), 13)
+
+    def test_write_tools_hidden_from_viewer(self):
+        response = self.rpc(
+            "tools/call",
+            {"name": "xprez_module_delete", "arguments": {"module": self.text.pk}},
+            user=self.viewer,
+        ).json()
+        self.assertIn("error", response)
+        self.assertTrue(xprez_models.Module.objects.filter(pk=self.text.pk).exists())
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class ModuleWriteTest(McpTestCase):
+    def positions(self, section):
+        return list(
+            xprez_models.Module.objects.filter(section=section)
+            .order_by("position")
+            .values_list("pk", "position")
+        )
+
+    def test_update(self):
+        self.text.css_class = "intro"
+        self.text.save()
+        data = self.data(
+            "xprez_module_update",
+            {
+                "module": self.text.pk,
+                "fields": {"text": "<p>New</p>"},
+                "configs": {"0": {"text_align": "center"}},
+            },
+        )
+        self.assertEqual(data["fields"]["text"], "<p>New</p>")
+        self.assertEqual(data["fields"]["css_class"], "intro")  # kept
+        self.assertEqual(data["configs"]["0"]["text_align"], "center")
+        self.text.refresh_from_db()
+        self.assertEqual(self.text.text, "<p>New</p>")
+        from django.contrib.admin.models import LogEntry
+
+        entry = LogEntry.objects.get(object_id=str(self.page.pk))
+        self.assertIn("(MCP)", entry.get_change_message())
+
+    def test_update_breakpoint_config(self):
+        self.data(
+            "xprez_module_update",
+            {"module": self.text.pk, "configs": {"5": {"colspan": 2}}},
+        )
+        self.assertEqual(self.text.get_configs().get(css_breakpoint=5).colspan, 2)
+        self.data(
+            "xprez_module_update", {"module": self.text.pk, "configs": {"5": None}}
+        )
+        self.assertFalse(self.text.get_configs().filter(css_breakpoint=5).exists())
+
+    def test_update_errors(self):
+        message = self.error(
+            "xprez_module_update",
+            {"module": self.text.pk, "fields": {"nope": 1}},
+        )
+        self.assertIn("unknown nope; valid:", message)
+        message = self.error(
+            "xprez_module_update",
+            {"module": self.text.pk, "configs": {"0": {"text_align": "diagonal"}}},
+        )
+        self.assertIn("configs.0.text_align", message)
+        message = self.error(
+            "xprez_module_update", {"module": self.text.pk, "configs": {"0": None}}
+        )
+        self.assertIn("cannot be removed", message)
+        message = self.error(
+            "xprez_module_update",
+            {"module": self.text.pk, "fields": {"media": {"path": "images/a.jpg"}}},
+        )
+        self.assertIn("cannot be set over MCP yet", message)
+
+    def test_add_to_section(self):
+        data = self.data(
+            "xprez_module_add",
+            {
+                "type": "text",
+                "section": self.section.pk,
+                "position": 0,
+                "fields": {"text": "<p>First</p>"},
+            },
+        )
+        module = xprez_models.Module.objects.get(pk=data["id"])
+        self.assertTrue(module.saved)
+        self.assertTrue(module.get_configs().get(css_breakpoint=0).saved)
+        self.assertEqual(
+            self.positions(self.section),
+            [(module.pk, 0), (self.text.pk, 1), (self.gallery.pk, 2)],
+        )
+
+    def test_add_new_section(self):
+        data = self.data(
+            "xprez_module_add",
+            {
+                "type": "quote",
+                "container": self.page.pk,
+                "position": 0,
+                "fields": {"name": "Anna", "quote": "Hello"},
+            },
+        )
+        section = xprez_models.Section.objects.get(pk=data["section"])
+        self.assertTrue(section.saved)
+        self.assertEqual(section.position, 0)
+        self.section.refresh_from_db()
+        self.assertEqual(self.section.position, 1)
+
+    def test_add_invalid_rolls_back(self):
+        count = xprez_models.Module.objects.count()
+        message = self.error(
+            "xprez_module_add", {"type": "quote", "section": self.section.pk}
+        )
+        self.assertIn("quote:", message)
+        self.assertEqual(xprez_models.Module.objects.count(), count)
+
+    def test_add_unknown_type(self):
+        message = self.error(
+            "xprez_module_add", {"type": "symlink", "section": self.section.pk}
+        )
+        self.assertIn("type must be one of", message)
+
+    def test_move_within_section(self):
+        self.data("xprez_module_move", {"module": self.gallery.pk, "position": 0})
+        self.assertEqual(
+            self.positions(self.section), [(self.gallery.pk, 0), (self.text.pk, 1)]
+        )
+
+    def test_move_to_other_section(self):
+        target = xprez_models.Section(container=self.page, saved=True, position=1)
+        target.save()
+        self.data("xprez_module_move", {"module": self.text.pk, "section": target.pk})
+        self.assertEqual(self.positions(target), [(self.text.pk, 0)])
+        self.assertEqual(self.positions(self.section), [(self.gallery.pk, 0)])
+
+    def test_move_to_other_container(self):
+        message = self.error(
+            "xprez_module_move",
+            {"module": self.text.pk, "section": self.other_section.pk},
+        )
+        self.assertIn("must be in the module's container", message)
+
+    def test_delete(self):
+        self.data("xprez_module_delete", {"module": self.text.pk})
+        self.assertFalse(xprez_models.Module.objects.filter(pk=self.text.pk).exists())
+        self.assertEqual(self.positions(self.section), [(self.gallery.pk, 0)])
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class SectionWriteTest(McpTestCase):
+    def test_add(self):
+        data = self.data(
+            "xprez_section_add",
+            {
+                "container": self.page.pk,
+                "position": 0,
+                "configs": {"0": {"columns": 3}, "5": {"columns": 1}},
+            },
+        )
+        section = xprez_models.Section.objects.get(pk=data["id"])
+        self.assertTrue(section.saved)
+        self.assertEqual(section.position, 0)
+        self.assertEqual(data["configs"]["0"]["columns"], 3)
+        self.assertEqual(data["configs"]["5"]["columns"], 1)
+
+    def test_update_keeps_modules(self):
+        self.data(
+            "xprez_section_update",
+            {"section": self.section.pk, "fields": {"background_color": "#eee"}},
+        )
+        self.section.refresh_from_db()
+        self.assertEqual(self.section.background_color, "#eee")
+        self.text.refresh_from_db()
+        self.assertEqual(self.text.text, "<h2>Hello</h2><p>World</p>")
+
+    def test_move_link(self):
+        link = xprez_models.SectionSymlink.objects.get(container=self.other)
+        self.data(
+            "xprez_section_move",
+            {"section": link.pk, "kind": "section_symlink", "position": 0},
+        )
+        link.refresh_from_db()
+        self.assertEqual(link.position, 0)
+        self.other_section.refresh_from_db()
+        self.assertEqual(self.other_section.position, 1)
+
+    def test_delete(self):
+        self.data("xprez_section_delete", {"section": self.section.pk})
+        self.assertFalse(xprez_models.Module.objects.filter(pk=self.text.pk).exists())
