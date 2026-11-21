@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
+import importlib.util
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -48,6 +49,16 @@ INSTALLED_APPS = [
     "xprez",
     "example_app",
 ]
+
+# MCP server for xprez content, when django-xprez-mcp is installed
+# (pip install "django_xprez[mcp]"); without it the app runs without MCP.
+if importlib.util.find_spec("xprez_mcp"):
+    INSTALLED_APPS += ["xprez_mcp", "xprez_mcp.contrib.tokens"]
+    XPREZ_MCP = {
+        "PERMISSION": lambda ctx: ctx.user.is_staff,
+        "AUTHENTICATION": ["xprez_mcp.auth.bearer_token", "xprez_mcp.auth.session"],
+        "ALLOW_WRITES": ["xprez"],
+    }
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
