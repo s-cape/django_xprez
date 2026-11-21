@@ -3,9 +3,11 @@
 import datetime
 import decimal
 
-from django import forms
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
+from xprez_mcp.core.files import file_argument
+from xprez_mcp.core.schema import annotation_schema
+from xprez_mcp.providers.fields import field_annotation
 
 from xprez.admin.forms import ModuleForm, PositionFormMixin
 from xprez.ck_editor.widgets import CkEditorWidgetBase
@@ -49,83 +51,54 @@ def field_value(instance, field):
 
 
 def form_field_names(form_class):
-    """The fields of an admin form an MCP client may set: not the form's
-    ``system_fields``, nor what the move tools set (position, section)."""
+    """The fields of an admin form an MCP client may set: its model fields,
+    without the form's ``system_fields`` and what the move tools set
+    (position, section)."""
     excluded = set(getattr(form_class, "system_fields", ()))
     if issubclass(form_class, PositionFormMixin):
         excluded.add("position")
     if issubclass(form_class, ModuleForm):
         excluded.update(ModuleForm.base_module_fields)
-    return [name for name in form_class.base_fields if name not in excluded]
+    model = form_class._meta.model
+    return [
+        name
+        for name in form_class.base_fields
+        if name not in excluded and (model is None or has_field(model, name))
+    ]
 
 
 def form_schema(form_class):
-    """``{name: JSON schema}`` of the settable fields of ``form_class``."""
+    """``{name: JSON schema}`` of the settable fields of ``form_class``, from
+    their model fields as django-xprez-mcp types them."""
+    model = form_class._meta.model
     return {
-        name: field_schema(form_class.base_fields[name])
+        name: field_schema(form_class.base_fields[name], model._meta.get_field(name))
         for name in form_field_names(form_class)
     }
 
 
-def field_schema(field):
-    schema = _base_schema(field)
+def field_schema(form_field, model_field):
+    if isinstance(model_field, models.FileField):
+        annotation = file_argument(nullable=model_field.blank)
+    else:
+        annotation = field_annotation(model_field)
+    schema = dict(annotation_schema(annotation))
     description = " ".join(
-        str(text) for text in (field.label, field.help_text) if text
-    ).strip()
+        str(text) for text in (form_field.label, form_field.help_text) if text
+    )
     if description:
         schema["description"] = description
-    if not field.required:
+    if not form_field.required:
         schema["required"] = False
-    return schema
-
-
-def _base_schema(field):
-    if isinstance(field, forms.FileField):
-        return {"type": "file"}
-    if isinstance(field, forms.ModelMultipleChoiceField):
-        return {"type": "array", "items": {"type": "integer"}}
-    if isinstance(field, forms.ModelChoiceField):
-        return {"type": "integer", "description": "id"}
-    if isinstance(field, forms.ChoiceField):
-        values = [_choice_value(value) for value, _label in _flat_choices(field)]
-        return {"enum": values}
-    if isinstance(field, forms.BooleanField):
-        return {"type": "boolean"}
-    if isinstance(field, forms.IntegerField):
-        schema = {"type": "integer"}
-        _add_bounds(schema, field)
-        return schema
-    if isinstance(field, (forms.FloatField, forms.DecimalField)):
-        schema = {"type": "number"}
-        _add_bounds(schema, field)
-        return schema
-    if isinstance(field, forms.DateTimeField):
-        return {"type": "string", "format": "date-time"}
-    if isinstance(field, forms.DateField):
-        return {"type": "string", "format": "date"}
-    schema = {"type": "string"}
-    if isinstance(field.widget, CkEditorWidgetBase):
+    if isinstance(form_field.widget, CkEditorWidgetBase):
         schema["format"] = "html"
-        schema["html"] = text_rules(field.widget).as_dict()
-    if getattr(field, "max_length", None):
-        schema["maxLength"] = field.max_length
+        schema["html"] = text_rules(form_field.widget).as_dict()
     return schema
 
 
-def _flat_choices(field):
-    for value, label in field.choices:
-        if isinstance(label, (list, tuple)):  # optgroup
-            yield from label
-        else:
-            yield value, label
-
-
-def _choice_value(value):
-    return "" if value is None else value
-
-
-def _add_bounds(schema, field):
-    if field.min_value is not None:
-        schema["minimum"] = field.min_value
-    if field.max_value is not None:
-        schema["maximum"] = field.max_value
+def has_field(model, name):
+    try:
+        model._meta.get_field(name)
+    except FieldDoesNotExist:
+        return False
+    return True

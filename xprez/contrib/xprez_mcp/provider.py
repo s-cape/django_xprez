@@ -27,10 +27,11 @@ from xprez.admin.admin import XprezAdminMixin
 from xprez.admin.forms import SectionForm
 from xprez.conf import settings
 from xprez.models.multi_module import MultiModule
+from xprez.models.querysets.polymorph import PolymorphQuerySet
 from xprez.modules.symlink import ModuleSymlink
 
 from . import guide
-from .forms import reorder, write_module, write_section
+from .forms import reorder, write
 from .serialize import form_field_names, form_schema, model_values
 
 GuideTopic = Literal[tuple(guide.TOPICS)]
@@ -283,15 +284,17 @@ class XprezProvider(Provider):
                         raise InvalidArguments(f"{type} cannot be searched.")
                     continue
             condition |= Q(pk__in=queryset.values("pk"))
-        queryset = xprez_models.Container.objects.filter(condition).order_by("-pk")
+        queryset = (
+            PolymorphQuerySet(xprez_models.Container).filter(condition).order_by("-pk")
+        )
         offset = decode_cursor(cursor)
         limit = max(1, min(limit, self.max_page_size))
-        rows = list(queryset[offset : offset + limit])
+        rows = queryset[offset : offset + limit].polymorphs()
         count = queryset.count()
         return {
             "results": [
                 self.container_summary(container, models[container.__class__])
-                for container in polymorphs(rows)
+                for container in rows
             ],
             "count": count,
             "next_cursor": (str(offset + limit) if offset + limit < count else None),
@@ -387,10 +390,10 @@ class XprezProvider(Provider):
         Read xprez_guide (index, editing) before your first change."""
         obj, xprez_admin = self.get_container(ctx, container, write=True)
         section = xprez_admin._xprez_create_section(obj)
-        self.save_section(ctx, xprez_admin, section, fields, configs)
+        notes = self.save(ctx, xprez_admin, section, fields, configs)
         reorder(obj._get_ordered_section_items(), section, position)
         self.log(ctx, xprez_admin, obj, f"Added section {section.pk}")
-        return self.section_result(section)
+        return with_notes(self.section_result(section), notes)
 
     @tool(idempotent=True)
     @transaction.atomic
@@ -401,9 +404,9 @@ class XprezProvider(Provider):
         are live at once and show on every page linking to the section.
         Read xprez_guide (index, editing) before your first change."""
         obj, container, xprez_admin = self.get_section(ctx, section)
-        self.save_section(ctx, xprez_admin, obj, fields, configs)
+        notes = self.save(ctx, xprez_admin, obj, fields, configs)
         self.log(ctx, xprez_admin, container, f"Changed section {obj.pk}")
-        return self.section_result(obj)
+        return with_notes(self.section_result(obj), notes)
 
     @tool(idempotent=True)
     @transaction.atomic
@@ -462,15 +465,14 @@ class XprezProvider(Provider):
             raise InvalidArguments(
                 f"type must be one of {sorted(self.module_classes(xprez_admin, obj))}."
             )
-        request = self.admin_request(ctx, write=True)
         if section is None:
             content_type = module_class.class_content_type()
             target = xprez_admin._xprez_create_section(obj, content_type)
-            write_section(xprez_admin, request, target, {}, {})
+            self.save(ctx, xprez_admin, target, None, None)
             reorder(obj._get_ordered_section_items(), target, position)
             position = None
         module = xprez_admin._xprez_create_module(module_class, target)
-        self.save_module(ctx, xprez_admin, module, fields, configs)
+        notes = self.save(ctx, xprez_admin, module, fields, configs)
         reorder(target.modules.all(), module, position)
         self.log(
             ctx,
@@ -478,7 +480,7 @@ class XprezProvider(Provider):
             obj,
             f"Added {module_class._meta.verbose_name} {module.pk}",
         )
-        return self.module_get(ctx, module.pk)
+        return with_notes(self.module_get(ctx, module.pk), notes)
 
     @tool(idempotent=True)
     @transaction.atomic
@@ -489,11 +491,11 @@ class XprezProvider(Provider):
         are live at once and show wherever the module is linked.
         Read xprez_guide (index, editing) before your first change."""
         obj, container, xprez_admin = self.get_module(ctx, module, write=True)
-        self.save_module(ctx, xprez_admin, obj, fields, configs)
+        notes = self.save(ctx, xprez_admin, obj, fields, configs)
         self.log(
             ctx, xprez_admin, container, f"Changed {obj._meta.verbose_name} {obj.pk}"
         )
-        return self.module_get(ctx, obj.pk)
+        return with_notes(self.module_get(ctx, obj.pk), notes)
 
     @tool(idempotent=True)
     @transaction.atomic
@@ -540,15 +542,9 @@ class XprezProvider(Provider):
         self.log(ctx, xprez_admin, container, f"Deleted {name} {module}")
         return {"deleted": True, "id": module}
 
-    def save_section(self, ctx, xprez_admin, section, fields, configs):
+    def save(self, ctx, xprez_admin, obj, fields, configs):
         request = self.admin_request(ctx, write=True)
-        write_section(
-            xprez_admin, request, section, fields or {}, parse_configs(configs)
-        )
-
-    def save_module(self, ctx, xprez_admin, module, fields, configs):
-        request = self.admin_request(ctx, write=True)
-        write_module(xprez_admin, request, module, fields or {}, parse_configs(configs))
+        return write(xprez_admin, request, obj, fields or {}, parse_configs(configs))
 
     def section_result(self, section):
         section.refresh_from_db()
@@ -658,18 +654,6 @@ def container_type(model):
     return f"{model._meta.app_label}.{model._meta.model_name}"
 
 
-def polymorphs(containers):
-    """The concrete containers of ``containers``, one query per type, in order."""
-    by_type = {}
-    for container in containers:
-        by_type.setdefault(container.content_type, []).append(container.pk)
-    found = {}
-    for content_type, pks in by_type.items():
-        for obj in apps.get_model(content_type).objects.filter(pk__in=pks):
-            found[obj.pk] = obj
-    return [found[container.pk] for container in containers if container.pk in found]
-
-
 def breakpoints():
     return {
         str(number): guide.breakpoint_name(number)
@@ -724,6 +708,11 @@ def module_type_schema(module_class):
         item = module.build_item()
         result["item_fields"] = form_schema(module.get_admin_item_form_class(item))
     return result
+
+
+def with_notes(result, notes):
+    """``result`` with ``notes`` on what was changed in the values sent."""
+    return {**result, "notes": notes} if notes else result
 
 
 def parse_configs(configs):

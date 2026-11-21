@@ -221,7 +221,9 @@ class ReadToolsTest(McpTestCase):
         self.assertEqual(html["classes"]["a"], ["btn", "btn-primary", "btn-secondary"])
         self.assertNotIn("position", data["fields"])
         self.assertNotIn("section", data["fields"])
-        self.assertEqual(data["fields"]["media"]["type"], "file")
+        media = data["fields"]["media"]["anyOf"]  # django-xprez-mcp's file argument
+        self.assertEqual(media[0]["required"], ["data", "name"])
+        self.assertEqual(data["config_fields"]["text_align"]["enum"][0], "left")
         self.assertIn("text_align", data["config_fields"])
         gallery = self.data(
             "xprez_module_types", {"container": self.page.pk, "type": "gallery"}
@@ -514,3 +516,86 @@ class OwnRulesTest(McpTestCase):
         from django.contrib.admin.models import LogEntry
 
         self.assertFalse(LogEntry.objects.exists())  # no ModelAdmin, no history
+
+
+class CleanHtmlTest(SimpleTestCase):
+    """The cleaner needs no django-xprez-mcp."""
+
+    def clean(self, html):
+        from xprez.contrib.xprez_mcp.html import clean_html, module_text_rules
+
+        return clean_html(html, module_text_rules())
+
+    def test_allowed_kept(self):
+        html = (
+            '<h2>A</h2><p><strong>b</strong> <a href="/c/">c</a></p><ul><li>d</li></ul>'
+        )
+        self.assertEqual(self.clean(html), (html, []))
+
+    def test_unknown_tags_unwrapped(self):
+        self.assertEqual(
+            self.clean('<p>a <span style="x">b</span></p>'),
+            ("<p>a b</p>", ["removed tags: span"]),
+        )
+
+    def test_dangerous_content_dropped(self):
+        html, notes = self.clean(
+            "<script>alert(1)</script><p>a</p><style>p{}</style><!-- c -->"
+        )
+        self.assertEqual(html, "<p>a</p>")
+        self.assertEqual(notes, ["removed tags: script, style"])
+
+    def test_attributes(self):
+        html, _notes = self.clean(
+            '<p onclick="x()"><a href="/a/" class="btn btn-primary evil" '
+            'target="_top" rel="x">a</a></p>'
+        )
+        self.assertEqual(html, '<p><a class="btn btn-primary" href="/a/">a</a></p>')
+
+    def test_unsafe_urls(self):
+        for url in ("javascript:alert(1)", " JaVa\tscript:x", "data:text/html,x"):
+            html, _notes = self.clean(f'<p><a href="{url}">a</a></p>')
+            self.assertEqual(html, "<p><a>a</a></p>", url)
+        for url in ("https://example.com/", "/contact/", "#top", "mailto:a@b.cz"):
+            html, _notes = self.clean(f'<p><a href="{url}">a</a></p>')
+            self.assertIn(f'href="{url}"', html)
+
+    def test_renamed(self):
+        html, notes = self.clean("<h1>A</h1><p><b>b</b> <i>i</i></p><h6>c</h6>")
+        self.assertEqual(
+            html, "<h2>A</h2><p><strong>b</strong> <em>i</em></p><h4>c</h4>"
+        )
+        self.assertIn("h1 to h2", notes[0])
+
+    def test_top_level_text_wrapped(self):
+        self.assertEqual(
+            self.clean("a <strong>b</strong><ul><li>c</li></ul>d")[0],
+            "<p>a <strong>b</strong></p><ul><li>c</li></ul><p>d</p>",
+        )
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class CleanOnWriteTest(McpTestCase):
+    def test_module_update_cleans_text(self):
+        data = self.data(
+            "xprez_module_update",
+            {
+                "module": self.text.pk,
+                "fields": {"text": "<h1>Title</h1><div>a<script>x</script></div>"},
+            },
+        )
+        self.assertEqual(data["fields"]["text"], "<h2>Title</h2><p>a</p>")
+        self.assertEqual(
+            data["notes"],
+            [
+                "fields.text: changed tags: h1 to h2",
+                "fields.text: removed tags: div, script",
+            ],
+        )
+
+    def test_clean_text_has_no_notes(self):
+        data = self.data(
+            "xprez_module_update",
+            {"module": self.text.pk, "fields": {"text": "<p>Fine</p>"}},
+        )
+        self.assertNotIn("notes", data)

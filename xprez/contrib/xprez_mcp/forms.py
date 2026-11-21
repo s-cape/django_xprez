@@ -12,58 +12,36 @@ from django.db import models
 from django.http import QueryDict
 from django.utils.datastructures import MultiValueDict
 from xprez_mcp import InvalidArguments, ToolError
+from xprez_mcp.providers.model import form_error
 
+from xprez.ck_editor.widgets import CkEditorWidgetBase
 from xprez.conf import settings
-from xprez.utils import import_class
 
+from .html import clean_html, text_rules
 from .serialize import form_field_names
 
-SECTION_FORM = "xprez.admin.forms.SectionForm"
 
-
-def write_module(model_admin, request, module, fields, configs):
-    """Validate and save ``fields`` and ``configs`` on ``module``."""
-    prepare_configs(module, configs)
-    module.build_admin_form(model_admin)
+def write(xprez_admin, request, obj, fields, configs):
+    """Validate and save ``fields`` and ``configs`` on a section or module
+    through its own admin form; returns notes on what was changed in the
+    values sent (cleaned HTML). A section's modules and a module's items are
+    left as they are: they have their own tools."""
+    prepare_configs(obj, configs)
+    obj.build_admin_form(xprez_admin)
+    form = obj.admin_form
     data = QueryDict(mutable=True)
-    put_form(data, module.admin_form)
-    put_values(data, module.admin_form, fields)
-    put_configs(data, "module-config-id", module.admin_form.xprez_configs, configs)
-    if hasattr(module, "items_attribute"):  # items have their own tools
-        data.setlist(f"{module.instance_key}-item-id", [])
-    module.build_admin_form(model_admin, data=data, files=MultiValueDict())
-    if not module.is_admin_form_valid():
-        raise invalid(module.admin_form, module.admin_form.xprez_configs)
-    module.save_admin_form(request)
-
-
-def write_section(model_admin, request, section, fields, configs):
-    """Validate and save ``fields`` and ``configs`` on ``section``; its modules
-    are left as they are (``Section.save_admin_form`` would save them too)."""
-    prepare_configs(section, configs)
-    form_class = import_class(SECTION_FORM)
-    unbound = form_class(instance=section, prefix=section.instance_key)
-    section_configs = list(section.get_configs())
-    for config in section_configs:
-        config.build_admin_form(model_admin)
-    data = QueryDict(mutable=True)
-    put_form(data, unbound)
-    put_values(data, unbound, fields)
-    put_configs(data, "section-config-id", section_configs, configs)
-
-    form = form_class(instance=section, prefix=section.instance_key, data=data)
-    for config in section_configs:
-        config.build_admin_form(model_admin, data, MultiValueDict())
-    valid = form.is_valid()
-    valid = all([config.is_admin_form_valid() for config in section_configs]) and valid
-    if not valid:
-        raise invalid(form, section_configs)
-    instance = form.save(commit=False)
-    instance.saved = True
-    instance.save()
-    for config in section_configs:
-        config.save_admin_form(request)
-    section._prune_redundant_configs()
+    put_form(data, form)
+    notes = put_values(data, form, fields)
+    notes += put_configs(data, f"{obj.KEY}-config-id", form.xprez_configs, configs)
+    if hasattr(obj, "items_attribute"):
+        data.setlist(f"{obj.instance_key}-item-id", [])
+    obj.build_admin_form(xprez_admin, data=data, files=MultiValueDict())
+    if hasattr(obj.admin_form, "xprez_modules"):
+        obj.admin_form.xprez_modules = []
+    if not obj.is_admin_form_valid():
+        raise invalid(obj.admin_form)
+    obj.save_admin_form(request)
+    return notes
 
 
 def prepare_configs(parent, configs):
@@ -85,6 +63,7 @@ def prepare_configs(parent, configs):
 
 def put_configs(data, id_key, parent_configs, configs):
     data.setlist(id_key, [str(config.pk) for config in parent_configs])
+    notes = []
     for config in parent_configs:
         form = config.admin_form
         put_form(data, form)
@@ -92,7 +71,9 @@ def put_configs(data, id_key, parent_configs, configs):
         if values is None:
             data[form.add_prefix("delete")] = "on"
         else:
-            put_values(data, form, values, label=f"configs.{config.css_breakpoint}")
+            label = f"configs.{config.css_breakpoint}"
+            notes += put_values(data, form, values, label=label)
+    return notes
 
 
 def put_form(data, form):
@@ -110,10 +91,16 @@ def put_values(data, form, values, label="fields"):
         raise InvalidArguments(
             f"{label}: unknown {', '.join(unknown)}; valid: {', '.join(allowed)}."
         )
+    notes = []
     for name, value in values.items():
-        if isinstance(form.fields[name], forms.FileField):
+        field = form.fields[name]
+        if isinstance(field, forms.FileField):
             raise ToolError(f"{label}.{name}: files cannot be set over MCP yet.")
+        if isinstance(field.widget, CkEditorWidgetBase) and isinstance(value, str):
+            value, cleaned = clean_html(value, text_rules(field.widget))
+            notes += [f"{label}.{name}: {note}" for note in cleaned]
         put(data, form.add_prefix(name), value)
+    return notes
 
 
 def put(data, key, value):
@@ -137,14 +124,13 @@ def encode(value):
     return str(value)
 
 
-def invalid(form, configs):
-    """A ``ToolError`` with the errors of ``form`` and its configs' forms."""
-    errors = {}
-    for name, messages in form.errors.items():
-        errors[name] = list(messages)
-    for config in configs:
-        for name, messages in config.admin_form.errors.items():
-            errors[f"configs.{config.css_breakpoint}.{name}"] = list(messages)
+def invalid(form):
+    """``form_error`` for ``form`` and its configs' forms together."""
+    errors = form_error(form).data["fields"]
+    for config in form.xprez_configs:
+        if config.admin_form.errors:
+            for name, messages in form_error(config.admin_form).data["fields"].items():
+                errors[f"configs.{config.css_breakpoint}.{name}"] = messages
     summary = "; ".join(
         f"{name}: {' '.join(messages)}" for name, messages in errors.items()
     )
