@@ -1,10 +1,14 @@
-"""``XprezProvider``: xprez content as MCP tools, with the admin's permissions.
+"""``XprezProvider``: xprez content as MCP tools.
 
-Every container model registered on the admin site with an ``XprezAdmin`` is
-exposed. A user sees and changes through MCP what they see and change on that
-container's admin change page: the container admin's ``get_queryset`` and
-``xprez_get_container_qs`` decide which containers exist for them, its
-view/change permissions which tools they get.
+By default it follows the admin: every container model registered on the
+admin site with an ``XprezAdmin`` is exposed, and a user sees and changes
+through MCP what they see and change on that container's change page.
+
+Projects with other rules subclass it and override the hooks under
+"containers and permissions" (``get_container_models``,
+``get_container_queryset``, ``has_container_permission``,
+``search_containers``, ``log_change``). Writes always go through an
+``XprezAdminMixin``, which needs no ``ModelAdmin``.
 """
 
 from typing import Annotated, Any, Literal, Optional
@@ -47,8 +51,12 @@ SECTION_KINDS = {
 }
 
 
+class NotFound(ToolError):
+    """An object that does not exist, or that the user may not see."""
+
+
 class XprezItem(Item):
-    """Write tools need the change permission of some container admin."""
+    """Write tools need the change permission on some container model."""
 
     def is_allowed(self, ctx):
         if not super().is_allowed(ctx):
@@ -64,58 +72,109 @@ class XprezProvider(Provider):
     page_size = 20
     max_page_size = 100
 
-    # --- containers and permissions -----------------------------------------
+    # --- containers and permissions: the hooks --------------------------------
+
+    def get_container_models(self, ctx):
+        """``{model: xprez_admin}`` of the container models ``ctx``'s user may
+        use. ``xprez_admin`` is an ``XprezAdminMixin`` with ``model`` set (a
+        ``ModelAdmin`` or not): it builds the forms and decides the allowed
+        modules.
+
+        Default: the ``XprezAdmin``s on the admin site the user may view.
+        """
+        request = self.admin_request(ctx)
+        if not self.get_admin_site().has_permission(request):
+            return {}
+        return {
+            model: xprez_admin
+            for model, xprez_admin in self.get_admin_site()._registry.items()
+            if issubclass(model, xprez_models.Container)
+            and isinstance(xprez_admin, XprezAdminMixin)
+            and getattr(model, "mcp_exposed", True)
+            and getattr(xprez_admin, "mcp_exposed", True)
+            and xprez_admin.has_module_permission(request)
+        }
+
+    def get_container_queryset(self, ctx, model, xprez_admin, write=False):
+        """The containers of ``model`` that exist for ``ctx``'s user.
+
+        Default: the admin's ``get_queryset``, narrowed by
+        ``xprez_get_container_qs`` (only the latter without a ``ModelAdmin``).
+        """
+        request = self.admin_request(ctx, write=write)
+        allowed = xprez_admin.xprez_get_container_qs(request).values("pk")
+        if isinstance(xprez_admin, admin.ModelAdmin):
+            queryset = xprez_admin.get_queryset(request)
+        else:
+            queryset = model._default_manager.all()
+        return queryset.filter(pk__in=allowed)
+
+    def has_container_permission(
+        self, ctx, model, xprez_admin, container=None, write=False
+    ):
+        """Whether ``ctx``'s user may read (with ``write``: change)
+        ``container``, or with ``container=None`` some container of ``model``.
+
+        Default: the ``ModelAdmin``'s view/change permissions. Without a
+        ``ModelAdmin`` nothing is allowed until this is overridden.
+        """
+        if not isinstance(xprez_admin, admin.ModelAdmin):
+            return False
+        request = self.admin_request(ctx, write=write)
+        if write:
+            return xprez_admin.has_change_permission(request, container)
+        return xprez_admin.has_view_or_change_permission(request, container)
+
+    def search_containers(self, ctx, model, xprez_admin, queryset, query):
+        """``queryset`` narrowed by ``query``, or ``None`` when ``model`` cannot
+        be searched. Default: the ``ModelAdmin``'s search."""
+        if not isinstance(xprez_admin, admin.ModelAdmin):
+            return None
+        request = self.admin_request(ctx)
+        if not xprez_admin.get_search_fields(request):
+            return None
+        queryset, duplicates = xprez_admin.get_search_results(request, queryset, query)
+        return queryset.distinct() if duplicates else queryset
+
+    def log_change(self, ctx, model, xprez_admin, container, message):
+        """Record a change. Default: the ``ModelAdmin``'s history, if any."""
+        if isinstance(xprez_admin, admin.ModelAdmin):
+            request = self.admin_request(ctx, write=True)
+            xprez_admin.log_change(request, container, f"{message} (MCP)")
+
+    # --- containers and permissions: built on the hooks -----------------------
 
     def get_admin_site(self):
         return self.admin_site or admin.site
 
-    def container_admins(self):
-        """``{model: model_admin}`` of the containers on the admin site."""
-        return {
-            model: model_admin
-            for model, model_admin in self.get_admin_site()._registry.items()
-            if issubclass(model, xprez_models.Container)
-            and isinstance(model_admin, XprezAdminMixin)
-            and getattr(model, "mcp_exposed", True)
-            and getattr(model_admin, "mcp_exposed", True)
-        }
-
     def admin_request(self, ctx, write=False):
+        """The request admin and form code gets (``xprez_get_container_qs``,
+        ``save_admin_form``), one per call."""
         return get_admin_request(ctx, self.get_admin_site(), write=write)
 
-    def visible_admins(self, ctx):
-        request = self.admin_request(ctx)
+    def visible_models(self, ctx):
+        """``get_container_models`` limited to the models the user may read."""
         return {
-            model: model_admin
-            for model, model_admin in self.container_admins().items()
-            if model_admin.has_module_permission(request)
-            and model_admin.has_view_or_change_permission(request)
+            model: xprez_admin
+            for model, xprez_admin in self.get_container_models(ctx).items()
+            if self.has_container_permission(ctx, model, xprez_admin)
         }
 
     def has_permission(self, ctx):
-        request = self.admin_request(ctx)
-        return self.get_admin_site().has_permission(request) and bool(
-            self.visible_admins(ctx)
-        )
+        return bool(self.visible_models(ctx))
 
     def can_write(self, ctx):
-        request = self.admin_request(ctx, write=True)
         return any(
-            model_admin.has_change_permission(request)
-            for model_admin in self.visible_admins(ctx).values()
+            self.has_container_permission(ctx, model, xprez_admin, write=True)
+            for model, xprez_admin in self.visible_models(ctx).items()
         )
 
     def get_items(self):
         return [XprezItem(spec, self) for spec in self.get_specs()]
 
-    def container_queryset(self, ctx, model_admin, write=False):
-        request = self.admin_request(ctx, write=write)
-        allowed = model_admin.xprez_get_container_qs(request).values("pk")
-        return model_admin.get_queryset(request).filter(pk__in=allowed)
-
     def get_container(self, ctx, container_id, write=False):
-        """``(container, model_admin)``, or a ``ToolError`` as if it did not exist."""
-        not_found = ToolError(f"Container {container_id} does not exist.")
+        """``(container, xprez_admin)``, or a ``ToolError`` as if it did not exist."""
+        not_found = NotFound(f"Container {container_id} does not exist.")
         base = (
             xprez_models.Container.objects.filter(pk=container_id)
             .only("content_type")
@@ -123,24 +182,24 @@ class XprezProvider(Provider):
         )
         if base is None:
             raise not_found
-        model_admin = self.visible_admins(ctx).get(apps.get_model(base.content_type))
-        if model_admin is None:
+        model = apps.get_model(base.content_type)
+        xprez_admin = self.visible_models(ctx).get(model)
+        if xprez_admin is None:
             raise not_found
         container = (
-            self.container_queryset(ctx, model_admin, write=write)
+            self.get_container_queryset(ctx, model, xprez_admin, write=write)
             .filter(pk=container_id)
             .first()
         )
         if container is None:
             raise not_found
-        request = self.admin_request(ctx, write=write)
-        if write:
-            allowed = model_admin.has_change_permission(request, container)
-        else:
-            allowed = model_admin.has_view_or_change_permission(request, container)
-        if not allowed:
-            raise ToolError(f"You cannot change container {container_id}.")
-        return container, model_admin
+        if not self.has_container_permission(
+            ctx, model, xprez_admin, container, write=write
+        ):
+            if write:
+                raise ToolError(f"You cannot change container {container_id}.")
+            raise not_found
+        return container, xprez_admin
 
     def get_module(self, ctx, module_id, write=False):
         """The concrete module; with ``write``, ``(module, container, admin)``."""
@@ -150,41 +209,40 @@ class XprezProvider(Provider):
             .first()
         )
         if module is None:
-            raise ToolError(f"Module {module_id} does not exist.")
+            raise NotFound(f"Module {module_id} does not exist.")
         try:
-            container, model_admin = self.get_container(
+            container, xprez_admin = self.get_container(
                 ctx, module.section.container_id, write=write
             )
-        except ToolError:
-            raise ToolError(f"Module {module_id} does not exist.") from None
+        except NotFound:
+            raise NotFound(f"Module {module_id} does not exist.") from None
         if write:
-            return module.polymorph, container, model_admin
+            return module.polymorph, container, xprez_admin
         return module.polymorph
 
     def get_section(self, ctx, section_id, kind="section"):
         """``(section, container, admin)`` for a write."""
         section = SECTION_KINDS[kind].objects.filter(pk=section_id).first()
         if section is None:
-            raise ToolError(f"{kind} {section_id} does not exist.")
+            raise NotFound(f"{kind} {section_id} does not exist.")
         try:
-            container, model_admin = self.get_container(
+            container, xprez_admin = self.get_container(
                 ctx, section.container_id, write=True
             )
-        except ToolError:
-            raise ToolError(f"{kind} {section_id} does not exist.") from None
-        return section, container, model_admin
+        except NotFound:
+            raise NotFound(f"{kind} {section_id} does not exist.") from None
+        return section, container, xprez_admin
 
-    def module_classes(self, model_admin, container):
+    def module_classes(self, xprez_admin, container):
         """``{type: class}`` of the modules the admin's add menu offers."""
         return {
             module_class.module_key: module_class
-            for module_class in model_admin.xprez_add_menu_module_classes(container)
+            for module_class in xprez_admin.xprez_add_menu_module_classes(container)
         }
 
-    def log(self, ctx, model_admin, container, message):
-        """A change in the container's admin history."""
-        request = self.admin_request(ctx, write=True)
-        model_admin.log_change(request, container, f"{message} (MCP)")
+    def log(self, ctx, xprez_admin, container, message):
+        """Record a change and refresh the container's front cache."""
+        self.log_change(ctx, container.__class__, xprez_admin, container, message)
         container.invalidate_front_cache()
 
     # --- read tools ---------------------------------------------------------
@@ -207,24 +265,23 @@ class XprezProvider(Provider):
         cursor: Optional[str] = None,
     ):
         """Find pages and other containers with xprez content."""
-        admins = self.visible_admins(ctx)
-        types = {container_type(model): model for model in admins}
+        models = self.visible_models(ctx)
+        types = {container_type(model): model for model in models}
         if type is not None:
             if type not in types:
                 raise InvalidArguments(f"type must be one of {sorted(types)}.")
-            admins = {types[type]: admins[types[type]]}
-        request = self.admin_request(ctx)
+            models = {types[type]: models[types[type]]}
         condition = Q(pk__in=[])
-        for model, model_admin in admins.items():
-            queryset = self.container_queryset(ctx, model_admin)
+        for model, xprez_admin in models.items():
+            queryset = self.get_container_queryset(ctx, model, xprez_admin)
             if query:
-                if not model_admin.get_search_fields(request):
+                queryset = self.search_containers(
+                    ctx, model, xprez_admin, queryset, query
+                )
+                if queryset is None:
                     if type is not None:
                         raise InvalidArguments(f"{type} cannot be searched.")
                     continue
-                queryset, _duplicates = model_admin.get_search_results(
-                    request, queryset, query
-                )
             condition |= Q(pk__in=queryset.values("pk"))
         queryset = xprez_models.Container.objects.filter(condition).order_by("-pk")
         offset = decode_cursor(cursor)
@@ -233,7 +290,8 @@ class XprezProvider(Provider):
         count = queryset.count()
         return {
             "results": [
-                self.container_summary(ctx, container) for container in polymorphs(rows)
+                self.container_summary(container, models[container.__class__])
+                for container in polymorphs(rows)
             ],
             "count": count,
             "next_cursor": (str(offset + limit) if offset + limit < count else None),
@@ -244,9 +302,9 @@ class XprezProvider(Provider):
         """The content of a container: its sections and their modules, in
         order. Configs show only the values that differ from the defaults;
         xprez_module_get returns a module in full."""
-        obj, _model_admin = self.get_container(ctx, container)
+        obj, xprez_admin = self.get_container(ctx, container)
         return {
-            **self.container_summary(ctx, obj),
+            **self.container_summary(obj, xprez_admin),
             "breakpoints": breakpoints(),
             "linked_from": sorted(
                 set(
@@ -293,8 +351,8 @@ class XprezProvider(Provider):
     ):
         """The module types this container allows. With `type`, the fields
         that type, its configs and its items take."""
-        obj, model_admin = self.get_container(ctx, container)
-        classes = self.module_classes(model_admin, obj)
+        obj, xprez_admin = self.get_container(ctx, container)
+        classes = self.module_classes(xprez_admin, obj)
         if type is None:
             return {
                 "types": [
@@ -327,11 +385,11 @@ class XprezProvider(Provider):
     ):
         """Add an empty section to a container. Changes are live at once.
         Read xprez_guide (index, editing) before your first change."""
-        obj, model_admin = self.get_container(ctx, container, write=True)
-        section = model_admin._xprez_create_section(obj)
-        self.save_section(ctx, model_admin, section, fields, configs)
+        obj, xprez_admin = self.get_container(ctx, container, write=True)
+        section = xprez_admin._xprez_create_section(obj)
+        self.save_section(ctx, xprez_admin, section, fields, configs)
         reorder(obj._get_ordered_section_items(), section, position)
-        self.log(ctx, model_admin, obj, f"Added section {section.pk}")
+        self.log(ctx, xprez_admin, obj, f"Added section {section.pk}")
         return self.section_result(section)
 
     @tool(idempotent=True)
@@ -342,9 +400,9 @@ class XprezProvider(Provider):
         """Change a section's fields and configs; leave out what stays. Changes
         are live at once and show on every page linking to the section.
         Read xprez_guide (index, editing) before your first change."""
-        obj, container, model_admin = self.get_section(ctx, section)
-        self.save_section(ctx, model_admin, obj, fields, configs)
-        self.log(ctx, model_admin, container, f"Changed section {obj.pk}")
+        obj, container, xprez_admin = self.get_section(ctx, section)
+        self.save_section(ctx, xprez_admin, obj, fields, configs)
+        self.log(ctx, xprez_admin, container, f"Changed section {obj.pk}")
         return self.section_result(obj)
 
     @tool(idempotent=True)
@@ -358,9 +416,9 @@ class XprezProvider(Provider):
     ):
         """Move a section, or a link to a section or container, to another
         position in its container."""
-        obj, container, model_admin = self.get_section(ctx, section, kind)
+        obj, container, xprez_admin = self.get_section(ctx, section, kind)
         reorder(container._get_ordered_section_items(), obj, position)
-        self.log(ctx, model_admin, container, f"Moved {kind} {obj.pk}")
+        self.log(ctx, xprez_admin, container, f"Moved {kind} {obj.pk}")
         return self.container_get(ctx, container.pk)
 
     @tool(destructive=True)
@@ -368,10 +426,10 @@ class XprezProvider(Provider):
     def section_delete(self, ctx, section: int, kind: SectionKind = "section"):
         """Delete a section with all its modules, or a link. Live at once and
         cannot be undone; on other pages, links to the section show nothing."""
-        obj, container, model_admin = self.get_section(ctx, section, kind)
+        obj, container, xprez_admin = self.get_section(ctx, section, kind)
         obj.delete()
         reorder(container._get_ordered_section_items())
-        self.log(ctx, model_admin, container, f"Deleted {kind} {section}")
+        self.log(ctx, xprez_admin, container, f"Deleted {kind} {section}")
         return {"deleted": True, "kind": kind, "id": section}
 
     @tool
@@ -396,27 +454,27 @@ class XprezProvider(Provider):
         if (section is None) == (container is None):
             raise InvalidArguments("Give either section or container.")
         if section is not None:
-            target, obj, model_admin = self.get_section(ctx, section)
+            target, obj, xprez_admin = self.get_section(ctx, section)
         else:
-            obj, model_admin = self.get_container(ctx, container, write=True)
-        module_class = self.module_classes(model_admin, obj).get(type)
+            obj, xprez_admin = self.get_container(ctx, container, write=True)
+        module_class = self.module_classes(xprez_admin, obj).get(type)
         if module_class is None:
             raise InvalidArguments(
-                f"type must be one of {sorted(self.module_classes(model_admin, obj))}."
+                f"type must be one of {sorted(self.module_classes(xprez_admin, obj))}."
             )
         request = self.admin_request(ctx, write=True)
         if section is None:
             content_type = module_class.class_content_type()
-            target = model_admin._xprez_create_section(obj, content_type)
-            write_section(model_admin, request, target, {}, {})
+            target = xprez_admin._xprez_create_section(obj, content_type)
+            write_section(xprez_admin, request, target, {}, {})
             reorder(obj._get_ordered_section_items(), target, position)
             position = None
-        module = model_admin._xprez_create_module(module_class, target)
-        self.save_module(ctx, model_admin, module, fields, configs)
+        module = xprez_admin._xprez_create_module(module_class, target)
+        self.save_module(ctx, xprez_admin, module, fields, configs)
         reorder(target.modules.all(), module, position)
         self.log(
             ctx,
-            model_admin,
+            xprez_admin,
             obj,
             f"Added {module_class._meta.verbose_name} {module.pk}",
         )
@@ -430,10 +488,10 @@ class XprezProvider(Provider):
         """Change a module's fields and configs; leave out what stays. Changes
         are live at once and show wherever the module is linked.
         Read xprez_guide (index, editing) before your first change."""
-        obj, container, model_admin = self.get_module(ctx, module, write=True)
-        self.save_module(ctx, model_admin, obj, fields, configs)
+        obj, container, xprez_admin = self.get_module(ctx, module, write=True)
+        self.save_module(ctx, xprez_admin, obj, fields, configs)
         self.log(
-            ctx, model_admin, container, f"Changed {obj._meta.verbose_name} {obj.pk}"
+            ctx, xprez_admin, container, f"Changed {obj._meta.verbose_name} {obj.pk}"
         )
         return self.module_get(ctx, obj.pk)
 
@@ -452,10 +510,10 @@ class XprezProvider(Provider):
     ):
         """Move a module within its section or to another section of the same
         container."""
-        obj, container, model_admin = self.get_module(ctx, module, write=True)
+        obj, container, xprez_admin = self.get_module(ctx, module, write=True)
         source = obj.section
         if section is not None and section != source.pk:
-            target, target_container, _model_admin = self.get_section(ctx, section)
+            target, target_container, _xprez_admin = self.get_section(ctx, section)
             if target_container.pk != container.pk:
                 raise InvalidArguments("section must be in the module's container.")
             xprez_models.Module.objects.filter(pk=obj.pk).update(section=target)
@@ -465,7 +523,7 @@ class XprezProvider(Provider):
         reorder(obj.section.modules.all(), obj, position)
         obj.invalidate_front_cache()
         self.log(
-            ctx, model_admin, container, f"Moved {obj._meta.verbose_name} {obj.pk}"
+            ctx, xprez_admin, container, f"Moved {obj._meta.verbose_name} {obj.pk}"
         )
         return self.module_get(ctx, obj.pk)
 
@@ -474,23 +532,23 @@ class XprezProvider(Provider):
     def module_delete(self, ctx, module: int):
         """Delete a module. Live at once and cannot be undone; links to the
         module on other pages show nothing."""
-        obj, container, model_admin = self.get_module(ctx, module, write=True)
+        obj, container, xprez_admin = self.get_module(ctx, module, write=True)
         name = obj._meta.verbose_name
         section = obj.section
         obj.delete()
         reorder(section.modules.all())
-        self.log(ctx, model_admin, container, f"Deleted {name} {module}")
+        self.log(ctx, xprez_admin, container, f"Deleted {name} {module}")
         return {"deleted": True, "id": module}
 
-    def save_section(self, ctx, model_admin, section, fields, configs):
+    def save_section(self, ctx, xprez_admin, section, fields, configs):
         request = self.admin_request(ctx, write=True)
         write_section(
-            model_admin, request, section, fields or {}, parse_configs(configs)
+            xprez_admin, request, section, fields or {}, parse_configs(configs)
         )
 
-    def save_module(self, ctx, model_admin, module, fields, configs):
+    def save_module(self, ctx, xprez_admin, module, fields, configs):
         request = self.admin_request(ctx, write=True)
-        write_module(model_admin, request, module, fields or {}, parse_configs(configs))
+        write_module(xprez_admin, request, module, fields or {}, parse_configs(configs))
 
     def section_result(self, section):
         section.refresh_from_db()
@@ -522,18 +580,17 @@ class XprezProvider(Provider):
     @resource("xprez://containers/{id}", mime_type="text/html")
     def container_html(self, ctx, id: int):
         """A container's content rendered as on the site, to check changes."""
-        obj, _model_admin = self.get_container(ctx, id)
+        obj, _xprez_admin = self.get_container(ctx, id)
         return obj.render_front({"request": self.admin_request(ctx)})
 
     # --- serialization ------------------------------------------------------
 
-    def container_summary(self, ctx, container):
-        model_admin = self.container_admins()[type(container)]
+    def container_summary(self, container, xprez_admin):
         result = {
             "id": container.pk,
-            "type": container_type(type(container)),
+            "type": container_type(container.__class__),
             "display": str(container),
-            "admin_url": model_admin.xprez_admin_change_url(container),
+            "admin_url": xprez_admin.xprez_admin_change_url(container),
         }
         get_url = getattr(container, "get_absolute_url", None)
         if get_url is not None:

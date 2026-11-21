@@ -447,3 +447,70 @@ class SectionWriteTest(McpTestCase):
     def test_delete(self):
         self.data("xprez_section_delete", {"section": self.section.pk})
         self.assertFalse(xprez_models.Module.objects.filter(pk=self.text.pk).exists())
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class OwnRulesTest(McpTestCase):
+    """A provider with its own permissions and no ModelAdmin."""
+
+    def provider(self):
+        from xprez_mcp import MCPServer
+
+        from xprez.admin import XprezAdminMixin
+        from xprez.contrib.xprez_mcp.provider import XprezProvider
+
+        class PageXprez(XprezAdminMixin):
+            model = Page
+
+            def xprez_allowed_modules(self, container=None):
+                return ["xprez.TextModule"]
+
+        class OwnRules(XprezProvider):
+            def get_container_models(self, ctx):
+                return {Page: PageXprez()}
+
+            def get_container_queryset(self, ctx, model, xprez_admin, write=False):
+                return Page.objects.filter(slug="about")
+
+            def has_container_permission(
+                self, ctx, model, xprez_admin, container=None, write=False
+            ):
+                return ctx.user.username == "editor" if write else True
+
+        return OwnRules(MCPServer(name="own-rules"))
+
+    def ctx(self, provider, username):
+        from xprez_mcp.core.context import CallContext
+
+        user = User.objects.create_user(username)  # not staff
+        return CallContext(server=provider.server, user=user)
+
+    def test_reads_without_admin(self):
+        provider = self.provider()
+        ctx = self.ctx(provider, "reader")
+        self.assertTrue(provider.has_permission(ctx))
+        self.assertFalse(provider.can_write(ctx))
+        listed = provider.containers_list(ctx)
+        self.assertEqual([row["id"] for row in listed["results"]], [self.page.pk])
+        self.assertIsNone(listed["results"][0]["admin_url"])
+        with self.assertRaisesMessage(Exception, "does not exist"):
+            provider.container_get(ctx, container=self.other.pk)
+        types = provider.module_types(ctx, container=self.page.pk)["types"]
+        self.assertEqual([row["type"] for row in types], ["text"])
+
+    def test_writes_with_own_permission(self):
+        provider = self.provider()
+        with self.assertRaisesMessage(Exception, "cannot change"):
+            provider.module_update(
+                self.ctx(provider, "reader"),
+                module=self.text.pk,
+                fields={"text": "<p>No</p>"},
+            )
+        ctx = self.ctx(provider, "editor")
+        self.assertTrue(provider.can_write(ctx))
+        provider.module_update(ctx, module=self.text.pk, fields={"text": "<p>Yes</p>"})
+        self.text.refresh_from_db()
+        self.assertEqual(self.text.text, "<p>Yes</p>")
+        from django.contrib.admin.models import LogEntry
+
+        self.assertFalse(LogEntry.objects.exists())  # no ModelAdmin, no history
