@@ -5,7 +5,7 @@ from unittest import skipIf, skipUnless
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.auth.models import Permission, User
-from django.test import SimpleTestCase, TestCase
+from django.test import SimpleTestCase, TestCase, override_settings
 
 from xprez import models as xprez_models
 from xprez.admin import XprezAdmin
@@ -599,3 +599,35 @@ class CleanOnWriteTest(McpTestCase):
             {"module": self.text.pk, "fields": {"text": "<p>Fine</p>"}},
         )
         self.assertNotIn("notes", data)
+
+
+class GuideFollowsSettingsTest(SimpleTestCase):
+    """The guide states the project's configuration, not xprez's defaults."""
+
+    @override_settings(
+        XPREZ_CK_EDITOR_FULL_CONFIG={
+            "toolbar": ("bold", "heading"),
+            "blockToolbar": (),
+            "heading": {"options": ({"model": "h3", "view": "h3"},)},
+        }
+    )
+    def test_text_rules_from_editor_config(self):
+        from xprez.contrib.xprez_mcp.guide import render_topic
+
+        text = render_topic("text")
+        self.assertIn("Headings start at `h3`", text)
+        self.assertIn("- `strong`", text)
+        self.assertNotIn("- `ul`", text)
+
+    @override_settings(
+        XPREZ_BREAKPOINTS={
+            0: {"name": "All", "max_width": None},
+            1: {"name": "Phones", "max_width": 600},
+        }
+    )
+    def test_breakpoints_from_settings(self):
+        from xprez.contrib.xprez_mcp.guide import render_topic
+
+        layout = render_topic("layout")
+        self.assertIn("- `1`: Phones", layout)
+        self.assertNotIn("Tablets", layout)

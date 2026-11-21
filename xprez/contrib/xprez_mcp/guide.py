@@ -12,8 +12,9 @@ from django.template.loader import get_template
 
 from xprez import module_registry
 from xprez.conf import settings
+from xprez.models import SectionConfig
 
-from .html import module_text_rules
+from .html import HEADINGS, module_text_rules
 
 GUIDE_DIR = Path(__file__).parent / "guide"
 
@@ -53,6 +54,8 @@ def render_topic(topic):
 
 
 def guide_context():
+    text_rules = module_text_rules()
+    column_field = SectionConfig._meta.get_field("columns")
     return {
         "topics": [
             {"name": name, "summary": summary} for name, summary in TOPICS.items()
@@ -61,7 +64,9 @@ def guide_context():
             (number, {"name": breakpoint_name(number)})
             for number in settings.XPREZ_BREAKPOINTS
         ],
-        "text_rules": module_text_rules(),
+        "text_rules": text_rules,
+        "headings": [tag for tag in text_rules.tags if tag in HEADINGS],
+        "columns": [value for value, _label in column_field.choices],
         "modules": [
             {
                 "type": module_class.module_key,

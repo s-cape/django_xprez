@@ -3,7 +3,7 @@
 ## Sections are grids
 
 A section lays its modules out in a grid. The section's config sets the
-number of `columns` (1 to 8) and the `gap` between them; each module's config
+number of `columns` ({{ columns|first }} to {{ columns|last }}) and the `gap` between them; each module's config
 sets how many columns it spans (`colspan`) and rows (`rowspan`).
 
 Modules fill the grid in their `position` order. To put two modules side by

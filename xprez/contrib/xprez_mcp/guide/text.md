@@ -11,9 +11,9 @@ under `html`, in `xprez_module_types`):
 {% endfor %}
 ## Best practices
 
-- Headings start at `h2`: the page title is usually the `h1`. Do not skip
-  levels.
-- Use real lists (`ul`, `ol`) rather than lines starting with dashes.
+{% if headings %}- Headings start at `{{ headings.0 }}`{% if headings.0 != "h1" %}: the page title
+  is usually the `h1`{% endif %}. Do not skip levels.
+{% endif %}- Use real lists (`ul`, `ol`) rather than lines starting with dashes.
 - No inline styles, classes or fonts: the site's design styles the text.
   Only the classes listed above are kept (on links, typically button
   styles).
