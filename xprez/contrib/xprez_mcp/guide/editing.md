@@ -9,6 +9,8 @@ the container's admin history, but the history does not restore content.
 - Tell the user what you are about to change before larger edits (rewriting
   a page, deleting sections), and wait for their confirmation.
 - Prefer hiding (`visible: false`) to deleting when the user is not sure.
+- Do not edit a page someone is editing in the admin at the same time:
+  when they save, the admin writes back the values it loaded, over yours.
 
 ## Work in small steps
 
