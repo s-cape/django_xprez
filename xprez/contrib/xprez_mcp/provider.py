@@ -468,7 +468,7 @@ class XprezProvider(Provider):
         if section is None:
             content_type = module_class.class_content_type()
             target = xprez_admin._xprez_create_section(obj, content_type)
-            self.save(ctx, xprez_admin, target, None, None)
+            self.save(ctx, xprez_admin, target)
             reorder(obj._get_ordered_section_items(), target, position)
             position = None
         module = xprez_admin._xprez_create_module(module_class, target)
@@ -478,7 +478,7 @@ class XprezProvider(Provider):
             ctx,
             xprez_admin,
             obj,
-            f"Added {module_class._meta.verbose_name} {module.pk}",
+            f"Added {describe(module)}",
         )
         return with_notes(self.module_get(ctx, module.pk), notes)
 
@@ -492,9 +492,7 @@ class XprezProvider(Provider):
         Read xprez_guide (index, editing) before your first change."""
         obj, container, xprez_admin = self.get_module(ctx, module, write=True)
         notes = self.save(ctx, xprez_admin, obj, fields, configs)
-        self.log(
-            ctx, xprez_admin, container, f"Changed {obj._meta.verbose_name} {obj.pk}"
-        )
+        self.log(ctx, xprez_admin, container, f"Changed {describe(obj)}")
         return with_notes(self.module_get(ctx, obj.pk), notes)
 
     @tool(idempotent=True)
@@ -524,9 +522,7 @@ class XprezProvider(Provider):
             source.invalidate_front_cache()
         reorder(obj.section.modules.all(), obj, position)
         obj.invalidate_front_cache()
-        self.log(
-            ctx, xprez_admin, container, f"Moved {obj._meta.verbose_name} {obj.pk}"
-        )
+        self.log(ctx, xprez_admin, container, f"Moved {describe(obj)}")
         return self.module_get(ctx, obj.pk)
 
     @tool(destructive=True)
@@ -535,16 +531,104 @@ class XprezProvider(Provider):
         """Delete a module. Live at once and cannot be undone; links to the
         module on other pages show nothing."""
         obj, container, xprez_admin = self.get_module(ctx, module, write=True)
-        name = obj._meta.verbose_name
+        description = describe(obj)
         section = obj.section
         obj.delete()
         reorder(section.modules.all())
-        self.log(ctx, xprez_admin, container, f"Deleted {name} {module}")
+        self.log(ctx, xprez_admin, container, f"Deleted {description}")
         return {"deleted": True, "id": module}
 
-    def save(self, ctx, xprez_admin, obj, fields, configs):
+    @tool
+    @transaction.atomic
+    def item_add(
+        self,
+        ctx,
+        module: Annotated[int, "A module with items (gallery, files, ...)"],
+        position: Annotated[
+            Optional[int], "Index among the module's items; default last"
+        ] = None,
+        fields: Annotated[
+            Optional[dict[str, Any]],
+            "Item field values; xprez_module_types lists them as item_fields",
+        ] = None,
+    ):
+        """Add an item to a module with items: an image to a gallery, a file,
+        a question, a number. Changes are live at once.
+        Read xprez_guide (index, editing) before your first change."""
+        obj, container, xprez_admin = self.get_module_with_items(ctx, module)
+        item = obj.create_item()
+        notes = self.save(ctx, xprez_admin, obj, items={item: fields or {}})
+        reorder(self.items(obj), item, position)
+        self.log(
+            ctx, xprez_admin, container, f"Added item {item.pk} to {describe(obj)}"
+        )
+        return with_notes(self.module_get(ctx, obj.pk), notes)
+
+    @tool(idempotent=True)
+    @transaction.atomic
+    def item_update(
+        self,
+        ctx,
+        module: int,
+        item: int,
+        fields: Annotated[dict[str, Any], "Item field values to set"],
+    ):
+        """Change an item's fields; leave out what stays. Changes are live at
+        once. Read xprez_guide (index, editing) before your first change."""
+        obj, container, xprez_admin = self.get_module_with_items(ctx, module)
+        row = self.get_item(obj, item)
+        notes = self.save(ctx, xprez_admin, obj, items={row: fields})
+        self.log(ctx, xprez_admin, container, f"Changed item {item} of {describe(obj)}")
+        return with_notes(self.module_get(ctx, obj.pk), notes)
+
+    @tool(idempotent=True)
+    @transaction.atomic
+    def item_move(
+        self,
+        ctx,
+        module: int,
+        item: int,
+        position: Annotated[int, "Index among the module's items, from 0"],
+    ):
+        """Move an item to another position in its module."""
+        obj, container, xprez_admin = self.get_module_with_items(ctx, module)
+        reorder(self.items(obj), self.get_item(obj, item), position)
+        obj.invalidate_front_cache()
+        self.log(ctx, xprez_admin, container, f"Moved item {item} of {describe(obj)}")
+        return self.module_get(ctx, obj.pk)
+
+    @tool(destructive=True)
+    @transaction.atomic
+    def item_delete(self, ctx, module: int, item: int):
+        """Delete an item from its module. Live at once and cannot be undone."""
+        obj, container, xprez_admin = self.get_module_with_items(ctx, module)
+        self.save(ctx, xprez_admin, obj, items={self.get_item(obj, item): None})
+        reorder(self.items(obj))
+        self.log(ctx, xprez_admin, container, f"Deleted item {item} of {describe(obj)}")
+        return self.module_get(ctx, obj.pk)
+
+    def save(self, ctx, xprez_admin, obj, fields=None, configs=None, items=None):
         request = self.admin_request(ctx, write=True)
-        return write(xprez_admin, request, obj, fields or {}, parse_configs(configs))
+        return write(
+            xprez_admin, request, obj, fields or {}, parse_configs(configs), items
+        )
+
+    def get_module_with_items(self, ctx, module_id):
+        obj, container, xprez_admin = self.get_module(ctx, module_id, write=True)
+        if not isinstance(obj, MultiModule):
+            raise InvalidArguments(
+                f"Module {module_id} ({obj.module_key}) has no items."
+            )
+        return obj, container, xprez_admin
+
+    def items(self, module):
+        return getattr(module, module.items_attribute).all()
+
+    def get_item(self, module, item_id):
+        item = self.items(module).filter(pk=item_id).first()
+        if item is None:
+            raise NotFound(f"Module {module.pk} has no item {item_id}.")
+        return item
 
     def section_result(self, section):
         section.refresh_from_db()
@@ -708,6 +792,10 @@ def module_type_schema(module_class):
         item = module.build_item()
         result["item_fields"] = form_schema(module.get_admin_item_form_class(item))
     return result
+
+
+def describe(module):
+    return f"{module._meta.verbose_name} {module.pk}"
 
 
 def with_notes(result, notes):

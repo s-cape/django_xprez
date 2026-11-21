@@ -260,7 +260,7 @@ class ResourcesTest(McpTestCase):
 class WriteAccessTest(McpTestCase):
     def test_root_has_write_tools(self):
         self.assertIn("xprez_module_update", self.tools())
-        self.assertEqual(len(self.tools()), 13)
+        self.assertEqual(len(self.tools()), 17)
 
     def test_write_tools_hidden_from_viewer(self):
         response = self.rpc(
@@ -631,3 +631,124 @@ class GuideFollowsSettingsTest(SimpleTestCase):
         layout = render_topic("layout")
         self.assertIn("- `1`: Phones", layout)
         self.assertNotIn("Tablets", layout)
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class ItemWriteTest(McpTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.numbers = xprez_models.NumbersModule.build()
+        cls.numbers.section = cls.section
+        cls.numbers.saved = True
+        cls.numbers.position = 2
+        cls.numbers.save(no_initial_item=True)
+        cls.first = xprez_models.NumbersItem.objects.create(
+            module=cls.numbers, number=10, caption="Years", saved=True, position=0
+        )
+        cls.second = xprez_models.NumbersItem.objects.create(
+            module=cls.numbers, number=200, caption="Clients", saved=True, position=1
+        )
+
+    def items(self):
+        return list(
+            self.numbers.items.order_by("position").values_list(
+                "pk", "position", "caption"
+            )
+        )
+
+    def test_add(self):
+        data = self.data(
+            "xprez_item_add",
+            {
+                "module": self.numbers.pk,
+                "position": 0,
+                "fields": {"number": 5, "caption": "Offices"},
+            },
+        )
+        new = data["items"][0]
+        self.assertEqual((new["number"], new["caption"]), (5, "Offices"))
+        self.assertEqual(
+            self.items(),
+            [
+                (new["id"], 0, "Offices"),
+                (self.first.pk, 1, "Years"),
+                (self.second.pk, 2, "Clients"),
+            ],
+        )
+        self.assertTrue(xprez_models.NumbersItem.objects.get(pk=new["id"]).saved)
+
+    def test_update_keeps_other_items(self):
+        self.data(
+            "xprez_item_update",
+            {
+                "module": self.numbers.pk,
+                "item": self.first.pk,
+                "fields": {"caption": "Age"},
+            },
+        )
+        self.assertEqual(
+            self.items(),
+            [(self.first.pk, 0, "Age"), (self.second.pk, 1, "Clients")],
+        )
+        self.first.refresh_from_db()
+        self.assertEqual(self.first.number, 10)  # not sent, kept
+
+    def test_update_invalid(self):
+        message = self.error(
+            "xprez_item_update",
+            {
+                "module": self.numbers.pk,
+                "item": self.first.pk,
+                "fields": {"number": "x"},
+            },
+        )
+        self.assertIn(f"items.{self.first.pk}.number", message)
+
+    def test_move_and_delete(self):
+        self.data(
+            "xprez_item_move",
+            {"module": self.numbers.pk, "item": self.second.pk, "position": 0},
+        )
+        self.assertEqual(
+            [pk for pk, _position, _caption in self.items()],
+            [self.second.pk, self.first.pk],
+        )
+        self.data(
+            "xprez_item_delete", {"module": self.numbers.pk, "item": self.second.pk}
+        )
+        self.assertEqual(self.items(), [(self.first.pk, 0, "Years")])
+
+    def test_errors(self):
+        self.assertIn(
+            "has no items",
+            self.error("xprez_item_add", {"module": self.text.pk}),
+        )
+        self.assertIn(
+            "has no item 999999",
+            self.error(
+                "xprez_item_update",
+                {"module": self.numbers.pk, "item": 999999, "fields": {}},
+            ),
+        )
+
+    def test_rich_text_item_cleaned(self):
+        accordion = xprez_models.AccordionModule.build()
+        accordion.section = self.section
+        accordion.saved = True
+        accordion.save()  # starts with one empty item, as in the admin
+        initial = accordion.items.get()
+        data = self.data(
+            "xprez_item_update",
+            {
+                "module": accordion.pk,
+                "item": initial.pk,
+                "fields": {"title": "Why?", "text": "<p>Because<script>x</script></p>"},
+            },
+        )
+        self.assertEqual(data["items"][0]["text"], "<p>Because</p>")
+        self.assertIn("removed tags: script", data["notes"][0])
+
+    def test_gallery_item_needs_a_file(self):
+        message = self.error("xprez_item_add", {"module": self.gallery.pk})
+        self.assertIn(".file:", message)

@@ -18,6 +18,10 @@ This topic says what each one is for.
 ## Modules with items
 
 `gallery`, `files`, `accordion` and `numbers` hold items, edited one at a
-time with the `xprez_item_*` tools. The module's own fields (title, layout)
-are edited with `xprez_module_update`.
+time with the `xprez_item_*` tools (`item_fields` in `xprez_module_types`).
+The module's own fields (title, layout) are edited with
+`xprez_module_update`.
+
+A new `accordion` or `numbers` module starts with one empty item, as in the
+admin: fill it with `xprez_item_update` before adding more.
 {% endautoescape %}

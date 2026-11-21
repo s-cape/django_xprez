@@ -21,11 +21,15 @@ from .html import clean_html, text_rules
 from .serialize import form_field_names
 
 
-def write(xprez_admin, request, obj, fields, configs):
+def write(xprez_admin, request, obj, fields, configs, items=None):
     """Validate and save ``fields`` and ``configs`` on a section or module
     through its own admin form; returns notes on what was changed in the
-    values sent (cleaned HTML). A section's modules and a module's items are
-    left as they are: they have their own tools."""
+    values sent (cleaned HTML).
+
+    ``items`` (``{item: values, or None to delete it}``) writes items of a
+    module with items; the module's other items, like a section's modules,
+    are left out of the form and stay as they are."""
+    items = {item.pk: values for item, values in (items or {}).items()}
     prepare_configs(obj, configs)
     obj.build_admin_form(xprez_admin)
     form = obj.admin_form
@@ -34,7 +38,10 @@ def write(xprez_admin, request, obj, fields, configs):
     notes = put_values(data, form, fields)
     notes += put_configs(data, f"{obj.KEY}-config-id", form.xprez_configs, configs)
     if hasattr(obj, "items_attribute"):
-        data.setlist(f"{obj.instance_key}-item-id", [])
+        data.setlist(f"{obj.instance_key}-item-id", [str(pk) for pk in items])
+        for item in form.xprez_items:
+            if item.pk in items:
+                notes += put_item(data, item, items[item.pk])
     obj.build_admin_form(xprez_admin, data=data, files=MultiValueDict())
     if hasattr(obj.admin_form, "xprez_modules"):
         obj.admin_form.xprez_modules = []
@@ -42,6 +49,14 @@ def write(xprez_admin, request, obj, fields, configs):
         raise invalid(obj.admin_form)
     obj.save_admin_form(request)
     return notes
+
+
+def put_item(data, item, values):
+    put_form(data, item.admin_form)
+    if values is None:
+        data[item.admin_form.add_prefix("delete")] = "on"
+        return []
+    return put_values(data, item.admin_form, values, label=f"items.{item.pk}")
 
 
 def prepare_configs(parent, configs):
@@ -125,12 +140,19 @@ def encode(value):
 
 
 def invalid(form):
-    """``form_error`` for ``form`` and its configs' forms together."""
+    """``form_error`` for ``form`` and its configs' and items' forms together."""
     errors = form_error(form).data["fields"]
-    for config in form.xprez_configs:
-        if config.admin_form.errors:
-            for name, messages in form_error(config.admin_form).data["fields"].items():
-                errors[f"configs.{config.css_breakpoint}.{name}"] = messages
+    related = [
+        (f"configs.{config.css_breakpoint}", config.admin_form)
+        for config in form.xprez_configs
+    ] + [
+        (f"items.{item.pk}", item.admin_form)
+        for item in getattr(form, "xprez_items", ())
+    ]
+    for label, related_form in related:
+        if related_form.errors:
+            for name, messages in form_error(related_form).data["fields"].items():
+                errors[f"{label}.{name}"] = messages
     summary = "; ".join(
         f"{name}: {' '.join(messages)}" for name, messages in errors.items()
     )
