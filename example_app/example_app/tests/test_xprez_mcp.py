@@ -752,3 +752,112 @@ class ItemWriteTest(McpTestCase):
     def test_gallery_item_needs_a_file(self):
         message = self.error("xprez_item_add", {"module": self.gallery.pk})
         self.assertIn(".file:", message)
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class DraftsTest(McpTestCase):
+    """Unsaved additions from an admin page are not seen or counted."""
+
+    def visible_sections(self):
+        content = self.data("xprez_container_get", {"container": self.page.pk})
+        return [section["id"] for section in content["sections"]]
+
+    def draft_module(self):
+        draft = xprez_models.TextModule.build()
+        draft.section = self.section
+        draft.position = 0
+        draft.save()
+        return draft
+
+    def test_section_positions_skip_drafts(self):
+        xprez_models.Section.objects.filter(pk=self.section.pk).update(position=1)
+        draft = xprez_models.Section.objects.create(container=self.page, position=0)
+        last = xprez_models.Section.objects.create(
+            container=self.page, saved=True, position=2
+        )
+        self.data("xprez_section_move", {"section": self.section.pk, "position": 1})
+        self.assertEqual(self.visible_sections(), [last.pk, self.section.pk])
+        draft.refresh_from_db()
+        self.assertEqual(draft.position, 2)
+
+    def test_module_positions_skip_drafts(self):
+        self.draft_module()
+        self.data("xprez_module_move", {"module": self.text.pk, "position": 1})
+        modules = self.data("xprez_container_get", {"container": self.page.pk})[
+            "sections"
+        ][0]["modules"]
+        self.assertEqual(
+            [module["id"] for module in modules], [self.gallery.pk, self.text.pk]
+        )
+
+    def test_drafts_not_found(self):
+        draft = self.draft_module()
+        message = self.error(
+            "xprez_module_update", {"module": draft.pk, "fields": {"text": "<p>x</p>"}}
+        )
+        self.assertIn("does not exist", message)
+        draft.refresh_from_db()
+        self.assertFalse(draft.saved)
+        section = xprez_models.Section.objects.create(container=self.page)
+        self.error("xprez_section_update", {"section": section.pk, "fields": {}})
+        self.error(
+            "xprez_module_add", {"type": "text", "section": section.pk, "fields": {}}
+        )
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class ExcludedModulesTest(McpTestCase):
+    """XPREZ_MODULES_MCP_EXCLUDE keeps modules from agents."""
+
+    def types(self):
+        result = self.data("xprez_module_types", {"container": self.page.pk})
+        return {entry["type"] for entry in result["types"]}
+
+    def code_module(self):
+        module = xprez_models.CodeInputModule.build()
+        module.section = self.section
+        module.saved = True
+        module.position = 2
+        module.code = "<b>old</b>"
+        module.save()
+        return module
+
+    def test_offered_by_default(self):
+        self.assertIn("codeinput", self.types())
+        module = self.code_module()
+        self.data(
+            "xprez_module_update", {"module": module.pk, "fields": {"code": "<i>x</i>"}}
+        )
+        module.refresh_from_db()
+        self.assertEqual(module.code, "<i>x</i>")
+
+    @override_settings(XPREZ_MODULES_MCP_EXCLUDE=("xprez.CodeInputModule",))
+    def test_excluded(self):
+        self.assertNotIn("codeinput", self.types())
+        self.assertIn("text", self.types())
+        self.assertNotIn("codeinput", self.data("xprez_guide", {"topic": "modules"}))
+        message = self.error(
+            "xprez_module_add", {"type": "codeinput", "section": self.section.pk}
+        )
+        self.assertIn("type must be one of", message)
+        module = self.code_module()
+        self.assertEqual(
+            self.data("xprez_module_get", {"module": module.pk})["fields"]["code"],
+            "<b>old</b>",
+        )
+        message = self.error(
+            "xprez_module_update",
+            {"module": module.pk, "fields": {"code": "<script>x</script>"}},
+        )
+        self.assertIn("cannot be changed over MCP", message)
+        self.data("xprez_module_move", {"module": module.pk, "position": 0})
+        self.data("xprez_module_delete", {"module": module.pk})
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class TemplatesTest(McpTestCase):
+    def test_templates_are_containers(self):
+        template = xprez_models.TemplateContainer.objects.create()
+        result = self.data("xprez_containers_list", {"type": "xprez.templatecontainer"})
+        self.assertEqual([row["id"] for row in result["results"]], [template.pk])
+        self.data("xprez_section_add", {"container": template.pk})

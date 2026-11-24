@@ -74,6 +74,7 @@ def guide_context():
                 "summary": module_summary(module_class),
             }
             for module_class in module_registry.allowed_module_classes()
+            if is_exposed(module_class)
         ],
     }
 
@@ -88,3 +89,9 @@ def module_summary(module_class):
     if summary is None:
         summary = MODULE_SUMMARIES.get(module_class.class_content_type())
     return summary
+
+
+def is_exposed(module_class):
+    """Whether agents may add and change modules of ``module_class``
+    (``XPREZ_MODULES_MCP_EXCLUDE``)."""
+    return module_class.class_content_type() not in settings.XPREZ_MODULES_MCP_EXCLUDE

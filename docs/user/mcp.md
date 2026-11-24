@@ -119,9 +119,19 @@ site, for agents to check their changes.
   that field's editor config can produce (toolbar, heading options, link
   decorators); scripts and styles are removed. The tool result lists what was
   changed.
+- **Agents can use every module the admin offers**, including code input
+  (raw HTML, not cleaned). To keep some from agents, list them in
+  `XPREZ_MODULES_MCP_EXCLUDE`, for example `("xprez.CodeInputModule",)`:
+  they are then not offered, and existing ones are shown and can be moved
+  or deleted, not changed.
+- **Templates** (`xprez.templatecontainer`) are containers like pages: agents
+  can read and edit them, but not copy them into a page.
 - **Not yet:** file and image fields cannot be set over MCP, so gallery and
-  files items cannot be added. Clipboard, template containers and creating
-  links (symlinks) are not available; existing links are shown.
+  files items cannot be added. The clipboard and creating links (symlinks)
+  are not available; existing links are shown.
+- **Unsaved additions** in the admin (a section or module added to a page
+  that was not saved yet) are invisible to agents and not counted in
+  positions.
 
 An admin user who saves a page in the admin while an agent edits it
 overwrites the agent's changes to what was on their screen; the guide tells

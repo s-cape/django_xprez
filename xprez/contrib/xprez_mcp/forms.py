@@ -160,17 +160,22 @@ def invalid(form):
 
 
 def reorder(siblings, obj=None, index=None):
-    """Put ``obj`` at ``index`` among ``siblings`` (``None``: last) and number
-    them 0, 1, ... in that order; without ``obj``, only number them. Rows are
-    updated directly; the caller invalidates the front cache."""
+    """Put ``obj`` at ``index`` among the saved ``siblings`` (``None``: last)
+    and number them 0, 1, ... in that order; without ``obj``, only number
+    them. Unsaved siblings (added in an admin page not saved yet) do not
+    count and go after them. Rows are updated directly; the caller
+    invalidates the front cache."""
     siblings = sorted(siblings, key=lambda sibling: (sibling.position, sibling.pk))
     if obj is not None:
         siblings = [
             sibling for sibling in siblings if identity(sibling) != identity(obj)
         ]
-        if index is None or index > len(siblings):
-            index = len(siblings)
-        siblings.insert(max(index, 0), obj)
+    saved = [sibling for sibling in siblings if sibling.saved]
+    if obj is not None:
+        if index is None or index > len(saved):
+            index = len(saved)
+        saved.insert(max(index, 0), obj)
+    siblings = saved + [sibling for sibling in siblings if not sibling.saved]
     for position, sibling in enumerate(siblings):
         if sibling.position != position:
             type(sibling).objects.filter(pk=sibling.pk).update(position=position)

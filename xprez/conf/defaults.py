@@ -109,6 +109,8 @@ XPREZ_MODULES_ALLOWED = "__all__"
 XPREZ_MODULES_ALLOWED_EXCLUDE = ()
 XPREZ_MODULES_ADD_MENU = None
 XPREZ_MODULES_ADD_MENU_EXCLUDE = ("xprez.ModuleSymlink",)
+# modules agents cannot add or change over MCP (xprez.contrib.xprez_mcp)
+XPREZ_MODULES_MCP_EXCLUDE = ()
 
 
 XPREZ_CODE_TEMPLATES_DIR = None

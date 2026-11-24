@@ -8,6 +8,7 @@ Module selection
 - `XPREZ_MODULES_ALLOWED_EXCLUDE` — exclude specific modules from allowed list
 - `XPREZ_MODULES_ADD_MENU` — explicit list for the add menu (default: `None` = same as allowed)
 - `XPREZ_MODULES_ADD_MENU_EXCLUDE` — exclude from add menu (default: `("xprez.ModuleSymlink",)`)
+- `XPREZ_MODULES_MCP_EXCLUDE` — modules agents cannot add or change over [MCP](mcp.md) (default: `()`, e.g. `("xprez.CodeInputModule",)`)
 
 ```python
 # Only text, gallery, and your custom module

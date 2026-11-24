@@ -205,7 +205,7 @@ class XprezProvider(Provider):
     def get_module(self, ctx, module_id, write=False):
         """The concrete module; with ``write``, ``(module, container, admin)``."""
         module = (
-            xprez_models.Module.objects.filter(pk=module_id)
+            xprez_models.Module.objects.filter(pk=module_id, saved=True)
             .select_related("section")
             .first()
         )
@@ -223,7 +223,7 @@ class XprezProvider(Provider):
 
     def get_section(self, ctx, section_id, kind="section"):
         """``(section, container, admin)`` for a write."""
-        section = SECTION_KINDS[kind].objects.filter(pk=section_id).first()
+        section = SECTION_KINDS[kind].objects.filter(pk=section_id, saved=True).first()
         if section is None:
             raise NotFound(f"{kind} {section_id} does not exist.")
         try:
@@ -235,10 +235,12 @@ class XprezProvider(Provider):
         return section, container, xprez_admin
 
     def module_classes(self, xprez_admin, container):
-        """``{type: class}`` of the modules the admin's add menu offers."""
+        """``{type: class}`` of the modules the admin's add menu offers,
+        without ``XPREZ_MODULES_MCP_EXCLUDE``."""
         return {
             module_class.module_key: module_class
             for module_class in xprez_admin.xprez_add_menu_module_classes(container)
+            if guide.is_exposed(module_class)
         }
 
     def log(self, ctx, xprez_admin, container, message):
@@ -491,6 +493,11 @@ class XprezProvider(Provider):
         are live at once and show wherever the module is linked.
         Read xprez_guide (index, editing) before your first change."""
         obj, container, xprez_admin = self.get_module(ctx, module, write=True)
+        if not guide.is_exposed(type(obj)):
+            raise ToolError(
+                f"Module {module} ({obj.module_key}) cannot be changed over MCP; "
+                "it can be moved or deleted."
+            )
         notes = self.save(ctx, xprez_admin, obj, fields, configs)
         self.log(ctx, xprez_admin, container, f"Changed {describe(obj)}")
         return with_notes(self.module_get(ctx, obj.pk), notes)
@@ -625,7 +632,7 @@ class XprezProvider(Provider):
         return getattr(module, module.items_attribute).all()
 
     def get_item(self, module, item_id):
-        item = self.items(module).filter(pk=item_id).first()
+        item = self.items(module).filter(pk=item_id, saved=True).first()
         if item is None:
             raise NotFound(f"Module {module.pk} has no item {item_id}.")
         return item
