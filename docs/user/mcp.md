@@ -103,6 +103,7 @@ What agents get
 | `xprez_module_get` | One module in full: fields, configs, items |
 | `xprez_module_types` | The modules a container allows, and the fields each takes |
 | `xprez_section_add` / `_update` / `_move` / `_delete` | Sections |
+| `xprez_link_add` | Show a section or a whole container from another page as a link (moved and deleted with the section tools) |
 | `xprez_module_add` / `_update` / `_move` / `_delete` | Modules |
 | `xprez_item_add` / `_update` / `_move` / `_delete` | Items of gallery, files, accordion and numbers modules |
 
@@ -131,8 +132,10 @@ site, for agents to check their changes.
   `null` to clear an optional one. They go through the field's form like an
   upload in the admin; a failed write removes what it stored. See "Files"
   below to allow more sources or change the size limit.
-- **Not yet:** the clipboard and creating links (symlinks) are not
-  available; existing links are shown.
+- **Links** are checked as in the admin's clipboard: the linked modules
+  must be allowed in the target container, and a container link must not
+  make a container show itself.
+- **Not yet:** copying content (the clipboard's paste as a copy).
 - **Unsaved additions** in the admin (a section or module added to a page
   that was not saved yet) are invisible to agents and not counted in
   positions.

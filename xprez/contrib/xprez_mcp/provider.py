@@ -26,6 +26,7 @@ from xprez_mcp.providers.admin.request import get_admin_request
 from xprez import models as xprez_models
 from xprez.admin.admin import XprezAdminMixin
 from xprez.admin.forms import SectionForm
+from xprez.admin.views.clipboard import ClipboardItemContainer, ClipboardItemSection
 from xprez.conf import settings
 from xprez.models.multi_module import MultiModule
 from xprez.models.querysets.polymorph import PolymorphQuerySet
@@ -222,14 +223,14 @@ class XprezProvider(FileArgumentsMixin, Provider):
             return module.polymorph, container, xprez_admin
         return module.polymorph
 
-    def get_section(self, ctx, section_id, kind="section"):
-        """``(section, container, admin)`` for a write."""
+    def get_section(self, ctx, section_id, kind="section", write=True):
+        """``(section, container, admin)``, by default for a write."""
         section = SECTION_KINDS[kind].objects.filter(pk=section_id, saved=True).first()
         if section is None:
             raise NotFound(f"{kind} {section_id} does not exist.")
         try:
             container, xprez_admin = self.get_container(
-                ctx, section.container_id, write=True
+                ctx, section.container_id, write=write
             )
         except NotFound:
             raise NotFound(f"{kind} {section_id} does not exist.") from None
@@ -426,6 +427,49 @@ class XprezProvider(FileArgumentsMixin, Provider):
         reorder(container._get_ordered_section_items(), obj, position)
         self.log(ctx, xprez_admin, container, f"Moved {kind} {obj.pk}")
         return self.container_get(ctx, container.pk)
+
+    @tool
+    @transaction.atomic
+    def link_add(
+        self,
+        ctx,
+        container: Annotated[int, "The container to add the link to"],
+        section: Annotated[Optional[int], "Link this section"] = None,
+        linked_container: Annotated[
+            Optional[int], "Or link this whole container"
+        ] = None,
+        position: Annotated[
+            Optional[int], "Index among the sections; default last"
+        ] = None,
+    ):
+        """Show a section or a whole container from another page here, as a
+        link: it stays one piece of content, edited at its original. Changes
+        are live at once. Read xprez_guide (editing) before your first link."""
+        if (section is None) == (linked_container is None):
+            raise InvalidArguments("Give either section or linked_container.")
+        obj, xprez_admin = self.get_container(ctx, container, write=True)
+        if section is not None:
+            source, _container, _xprez_admin = self.get_section(
+                ctx, section, write=False
+            )
+            item = ClipboardItemSection(source.pk, xprez_admin, obj)
+        else:
+            source, _xprez_admin = self.get_container(ctx, linked_container)
+            item = ClipboardItemContainer(source.pk, xprez_admin, obj)
+        if not item.allowed:
+            raise ToolError(
+                "The linked content's modules are not allowed in this container."
+            )
+        if not item.symlink_allowed:
+            raise ToolError(
+                f"Container {source.pk} shows container {obj.pk}, directly or "
+                "through other links; linking it here would show it in itself."
+            )
+        link = source.symlink_to(obj, saved=True)
+        reorder(obj._get_ordered_section_items(), link, position)
+        link.refresh_from_db()
+        self.log(ctx, xprez_admin, obj, f"Added {link._meta.verbose_name} {link.pk}")
+        return self.serialize_section_item(link)
 
     @tool(destructive=True)
     @transaction.atomic

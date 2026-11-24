@@ -6,6 +6,7 @@ import sys
 import tempfile
 from pathlib import Path
 from unittest import skipIf, skipUnless
+from unittest.mock import patch
 
 from django.apps import apps
 from django.contrib import admin
@@ -265,7 +266,7 @@ class ResourcesTest(McpTestCase):
 class WriteAccessTest(McpTestCase):
     def test_root_has_write_tools(self):
         self.assertIn("xprez_module_update", self.tools())
-        self.assertEqual(len(self.tools()), 17)
+        self.assertEqual(len(self.tools()), 18)
 
     def test_write_tools_hidden_from_viewer(self):
         response = self.rpc(
@@ -984,3 +985,68 @@ class FilesTest(McpTestCase):
             },
         )
         self.assertIn("fields.media is read-only", message)
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class LinkAddTest(McpTestCase):
+    def sections(self, container):
+        content = self.data("xprez_container_get", {"container": container.pk})
+        return content["sections"]
+
+    def test_link_section(self):
+        data = self.data(
+            "xprez_link_add",
+            {
+                "container": self.page.pk,
+                "section": self.other_section.pk,
+                "position": 0,
+            },
+        )
+        self.assertEqual(data["kind"], "section_symlink")
+        self.assertEqual(
+            data["links_to"],
+            {"section": self.other_section.pk, "container": self.other.pk},
+        )
+        first, second = self.sections(self.page)
+        self.assertEqual((first["kind"], first["id"]), ("section_symlink", data["id"]))
+        self.assertEqual(second["id"], self.section.pk)
+        self.assertIn(self.page.pk, self.sections(self.other)[0]["linked_from"])
+
+    def test_link_container_and_cycle(self):
+        data = self.data(
+            "xprez_link_add",
+            {"container": self.page.pk, "linked_container": self.other.pk},
+        )
+        self.assertEqual(data["links_to"], {"container": self.other.pk})
+        self.assertEqual(self.sections(self.page)[-1]["kind"], "container_symlink")
+        message = self.error(
+            "xprez_link_add",
+            {"container": self.other.pk, "linked_container": self.page.pk},
+        )
+        self.assertIn("would show it in itself", message)
+        message = self.error(
+            "xprez_link_add",
+            {"container": self.page.pk, "linked_container": self.page.pk},
+        )
+        self.assertIn("would show it in itself", message)
+
+    def test_errors(self):
+        message = self.error("xprez_link_add", {"container": self.page.pk})
+        self.assertIn("either section or linked_container", message)
+        draft = xprez_models.Section.objects.create(container=self.other)
+        message = self.error(
+            "xprez_link_add", {"container": self.page.pk, "section": draft.pk}
+        )
+        self.assertIn("does not exist", message)
+        self.assertNotIn("xprez_link_add", self.tools(user=self.viewer))
+
+    def test_modules_not_allowed(self):
+        page_admin = admin.site._registry[Page]
+        with patch.object(
+            page_admin, "xprez_allowed_modules", return_value=["xprez.QuoteModule"]
+        ):
+            message = self.error(
+                "xprez_link_add",
+                {"container": self.page.pk, "section": self.other_section.pk},
+            )
+        self.assertIn("not allowed in this container", message)

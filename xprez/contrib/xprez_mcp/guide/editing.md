@@ -34,6 +34,10 @@ A section or container can be shown on several pages through links
   `linked_from` before editing, and ask the user when it is not empty.
 - A link itself has only a position; to change what it shows, edit the
   original.
+- To reuse content that already exists on another page (a contact
+  block, a footer section), add a link with `xprez_link_add` instead of
+  copying it: a section, or a whole container. Ask the user first; later
+  edits of the original then show on this page too.
 
 ## Errors
 
