@@ -20,6 +20,7 @@ from django.db.models import Q
 
 from xprez_mcp import InvalidArguments, Provider, ToolError, resource, tool
 from xprez_mcp.core.items import Item
+from xprez_mcp.providers import FileArgumentsMixin
 from xprez_mcp.providers.admin.request import get_admin_request
 
 from xprez import models as xprez_models
@@ -67,7 +68,7 @@ class XprezItem(Item):
         return self.provider.can_write(ctx)
 
 
-class XprezProvider(Provider):
+class XprezProvider(FileArgumentsMixin, Provider):
     namespace = "xprez"
     admin_site = None  # default: django.contrib.admin.site
     page_size = 20
@@ -372,7 +373,7 @@ class XprezProvider(Provider):
             }
         if type not in classes:
             raise InvalidArguments(f"type must be one of {sorted(classes)}.")
-        return module_type_schema(classes[type])
+        return module_type_schema(classes[type], self.file_sources)
 
     # --- write tools --------------------------------------------------------
 
@@ -615,9 +616,8 @@ class XprezProvider(Provider):
         return self.module_get(ctx, obj.pk)
 
     def save(self, ctx, xprez_admin, obj, fields=None, configs=None, items=None):
-        request = self.admin_request(ctx, write=True)
         return write(
-            xprez_admin, request, obj, fields or {}, parse_configs(configs), items
+            self, ctx, xprez_admin, obj, fields or {}, parse_configs(configs), items
         )
 
     def get_module_with_items(self, ctx, module_id):
@@ -785,19 +785,20 @@ def serialize_items(module):
     ]
 
 
-def module_type_schema(module_class):
+def module_type_schema(module_class, file_sources):
     module = module_class()
     config = module.get_config_model()(css_breakpoint=0)
     result = {
         "type": module_class.module_key,
         "name": str(module_class._meta.verbose_name),
         "summary": guide.module_summary(module_class),
-        "fields": form_schema(module.get_admin_form_class()),
-        "config_fields": form_schema(config.get_admin_form_class()),
+        "fields": form_schema(module.get_admin_form_class(), file_sources),
+        "config_fields": form_schema(config.get_admin_form_class(), file_sources),
     }
     if issubclass(module_class, MultiModule):
         item = module.build_item()
-        result["item_fields"] = form_schema(module.get_admin_item_form_class(item))
+        item_form = module.get_admin_item_form_class(item)
+        result["item_fields"] = form_schema(item_form, file_sources)
     return result
 
 

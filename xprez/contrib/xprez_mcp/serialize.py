@@ -67,19 +67,25 @@ def form_field_names(form_class):
     ]
 
 
-def form_schema(form_class):
+def form_schema(form_class, file_sources):
     """``{name: JSON schema}`` of the settable fields of ``form_class``, from
-    their model fields as django-xprez-mcp types them."""
+    their model fields as django-xprez-mcp types them. File fields take
+    ``file_sources``; without any they cannot be set and are left out."""
     model = form_class._meta.model
-    return {
-        name: field_schema(form_class.base_fields[name], model._meta.get_field(name))
-        for name in form_field_names(form_class)
-    }
+    schema = {}
+    for name in form_field_names(form_class):
+        model_field = model._meta.get_field(name)
+        if isinstance(model_field, models.FileField) and not file_sources:
+            continue
+        schema[name] = field_schema(
+            form_class.base_fields[name], model_field, file_sources
+        )
+    return schema
 
 
-def field_schema(form_field, model_field):
+def field_schema(form_field, model_field, file_sources):
     if isinstance(model_field, models.FileField):
-        annotation = file_argument(nullable=model_field.blank)
+        annotation = file_argument(file_sources, nullable=model_field.blank)
     else:
         annotation = field_annotation(model_field)
     schema = dict(annotation_schema(annotation))

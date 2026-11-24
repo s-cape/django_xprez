@@ -15,7 +15,7 @@ validation and permissions are the admin's.
 Setup
 -----
 
-Requires django-xprez-mcp 0.7.4 or later.
+Requires django-xprez-mcp 0.8.0 or later.
 
 1. Install the extra:
 
@@ -126,9 +126,13 @@ site, for agents to check their changes.
   or deleted, not changed.
 - **Templates** (`xprez.templatecontainer`) are containers like pages: agents
   can read and edit them, but not copy them into a page.
-- **Not yet:** file and image fields cannot be set over MCP, so gallery and
-  files items cannot be added. The clipboard and creating links (symlinks)
-  are not available; existing links are shown.
+- **Files** (gallery images, downloads, a text module's media) are sent as
+  django-xprez-mcp's file arguments: `{"data": <base64>, "name": "team.jpg"}`,
+  `null` to clear an optional one. They go through the field's form like an
+  upload in the admin; a failed write removes what it stored. See "Files"
+  below to allow more sources or change the size limit.
+- **Not yet:** the clipboard and creating links (symlinks) are not
+  available; existing links are shown.
 - **Unsaved additions** in the admin (a section or module added to a page
   that was not saved yet) are invisible to agents and not counted in
   positions.
@@ -205,6 +209,29 @@ come before the app that unregisters its provider.
 | `has_container_permission(ctx, model, xprez_admin, container, write)` | the admin's view/change permission; nothing without a `ModelAdmin` |
 | `search_containers(ctx, model, xprez_admin, queryset, query)` | the admin's `search_fields` |
 | `log_change(ctx, model, xprez_admin, container, message)` | the admin's history; nothing without a `ModelAdmin` |
+
+### Files
+
+`XprezProvider` takes file arguments through django-xprez-mcp's
+`FileArgumentsMixin`; its attributes set what agents may send:
+
+| Attribute | Default |
+|---|---|
+| `file_sources` | `("data",)`: base64 content. Add `"path"` for files already in the field's upload folder, `"url"` for the server to fetch public URLs; `()` makes file fields read-only |
+| `max_file_size` | 10 MB per file |
+| `file_fetch_timeout` | 10 seconds, for `"url"` |
+
+```python
+class SiteXprezProvider(XprezProvider):
+    file_sources = ("data", "path")
+
+
+mcp.unregister(XprezProvider)
+mcp.register(SiteXprezProvider)
+```
+
+`allows_file_path` and `fetch_file` can be overridden for stricter rules;
+see django-xprez-mcp's docs on file arguments.
 
 To drop xprez's tools from a server, `mcp.unregister(XprezProvider)` or
 `XPREZ_MCP["EXCLUDE_APPS"] = ["xprez"]`.

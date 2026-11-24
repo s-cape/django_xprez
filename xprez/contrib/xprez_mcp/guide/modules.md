@@ -24,4 +24,11 @@ The module's own fields (title, layout) are edited with
 
 A new `accordion` or `numbers` module starts with one empty item, as in the
 admin: fill it with `xprez_item_update` before adding more.
+
+## Images and files
+
+File fields (a gallery item's `file`, a files item's `file`, a text
+module's `media`) take a file as their schema describes, usually
+`{"data": "<base64>", "name": "team.jpg"}`; `null` removes an optional one.
+Give the file a short descriptive name, and an image its `alt_text`.
 {% endautoescape %}

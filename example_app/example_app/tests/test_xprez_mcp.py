@@ -1,5 +1,10 @@
+import base64
+import io
 import json
+import shutil
 import sys
+import tempfile
+from pathlib import Path
 from unittest import skipIf, skipUnless
 
 from django.apps import apps
@@ -332,7 +337,7 @@ class ModuleWriteTest(McpTestCase):
             "xprez_module_update",
             {"module": self.text.pk, "fields": {"media": {"path": "images/a.jpg"}}},
         )
-        self.assertIn("cannot be set over MCP yet", message)
+        self.assertIn("fields.media: path is not accepted here", message)
 
     def test_add_to_section(self):
         data = self.data(
@@ -861,3 +866,121 @@ class TemplatesTest(McpTestCase):
         result = self.data("xprez_containers_list", {"type": "xprez.templatecontainer"})
         self.assertEqual([row["id"] for row in result["results"]], [template.pk])
         self.data("xprez_section_add", {"container": template.pk})
+
+
+def png_base64():
+    from PIL import Image
+
+    buffer = io.BytesIO()
+    Image.new("RGB", (4, 3), "red").save(buffer, "PNG")
+    return base64.b64encode(buffer.getvalue()).decode()
+
+
+@skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
+class FilesTest(McpTestCase):
+    """File fields take django-xprez-mcp's file arguments."""
+
+    def setUp(self):
+        self.media_root = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.media_root)
+        override = override_settings(MEDIA_ROOT=self.media_root)
+        override.enable()
+        self.addCleanup(override.disable)
+
+    def stored(self):
+        return sorted(
+            str(path.relative_to(self.media_root))
+            for path in Path(self.media_root).rglob("*")
+            if path.is_file()
+        )
+
+    def test_gallery_item_with_image(self):
+        data = self.data(
+            "xprez_item_add",
+            {
+                "module": self.gallery.pk,
+                "fields": {
+                    "file": {"data": png_base64(), "name": "team.png"},
+                    "alt_text": "Team",
+                },
+            },
+        )
+        item = data["items"][-1]
+        self.assertEqual(item["alt_text"], "Team")
+        self.assertEqual(item["file"]["path"], "gallery/team.png")
+        self.assertEqual(self.stored(), ["gallery/team.png"])
+
+    def test_files_item(self):
+        files = xprez_models.FilesModule.build()
+        files.section = self.section
+        files.saved = True
+        files.save()
+        content = base64.b64encode(b"%PDF-1.4 price list").decode()
+        data = self.data(
+            "xprez_item_add",
+            {
+                "module": files.pk,
+                "fields": {"file": {"data": content, "name": "prices.pdf"}},
+            },
+        )
+        self.assertEqual(data["items"][0]["file"]["path"], "files/prices.pdf")
+
+    def test_text_media_set_and_cleared(self):
+        data = self.data(
+            "xprez_module_update",
+            {
+                "module": self.text.pk,
+                "fields": {"media": {"data": png_base64(), "name": "hero.png"}},
+            },
+        )
+        self.assertEqual(data["fields"]["media"]["path"], "images/hero.png")
+        self.assertEqual(data["fields"]["text"], "<h2>Hello</h2><p>World</p>")
+        data = self.data(
+            "xprez_module_update", {"module": self.text.pk, "fields": {"media": None}}
+        )
+        self.assertIsNone(data["fields"]["media"])
+
+    def test_invalid_image_stores_nothing(self):
+        message = self.error(
+            "xprez_item_add",
+            {
+                "module": self.gallery.pk,
+                "fields": {
+                    "file": {
+                        "data": base64.b64encode(b"not an image").decode(),
+                        "name": "fake.png",
+                    }
+                },
+            },
+        )
+        self.assertIn(".file:", message)
+        self.assertEqual(self.stored(), [])
+        self.assertEqual(self.gallery.items.count(), 1)
+
+    def test_required_file_cannot_be_cleared(self):
+        item = self.gallery.items.get()
+        message = self.error(
+            "xprez_item_update",
+            {"module": self.gallery.pk, "item": item.pk, "fields": {"file": None}},
+        )
+        self.assertIn("cannot be cleared", message)
+
+    def test_without_sources_files_are_read_only(self):
+        from xprez.contrib.xprez_mcp.provider import XprezProvider
+
+        self.addCleanup(
+            setattr, XprezProvider, "file_sources", XprezProvider.file_sources
+        )
+        XprezProvider.file_sources = ()
+        schema = self.data(
+            "xprez_module_types", {"container": self.page.pk, "type": "text"}
+        )
+        self.assertNotIn("media", schema["fields"])
+        message = self.error(
+            "xprez_module_update",
+            {
+                "module": self.text.pk,
+                "fields": {"media": {"data": "eA==", "name": "a"}},
+            },
+        )
+        self.assertIn("fields.media is read-only", message)

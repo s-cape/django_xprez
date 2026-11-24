@@ -4,14 +4,16 @@ Each write builds the data the admin change page would post for the object:
 the current value of every field, with the values sent over MCP on top (a
 ``ModelForm`` reads a missing field as empty). The objects' own
 ``build_admin_form`` / ``is_admin_form_valid`` / ``save_admin_form`` then
-validate and save it, so the admin's rules hold over MCP too.
+validate and save it, so the admin's rules hold over MCP too. Files sent
+for file fields go in the form's ``files``, resolved by the provider's
+``FileArgumentsMixin``.
 """
 
 from django import forms
 from django.db import models
 from django.http import QueryDict
-from django.utils.datastructures import MultiValueDict
 from xprez_mcp import InvalidArguments, ToolError
+from xprez_mcp.providers.files import closing_stored_files, form_files
 from xprez_mcp.providers.model import form_error
 
 from xprez.ck_editor.widgets import CkEditorWidgetBase
@@ -21,7 +23,7 @@ from .html import clean_html, text_rules
 from .serialize import form_field_names
 
 
-def write(xprez_admin, request, obj, fields, configs, items=None):
+def write(provider, ctx, xprez_admin, obj, fields, configs, items=None):
     """Validate and save ``fields`` and ``configs`` on a section or module
     through its own admin form; returns notes on what was changed in the
     values sent (cleaned HTML).
@@ -33,30 +35,52 @@ def write(xprez_admin, request, obj, fields, configs, items=None):
     prepare_configs(obj, configs)
     obj.build_admin_form(xprez_admin)
     form = obj.admin_form
-    data = QueryDict(mutable=True)
-    put_form(data, form)
-    notes = put_values(data, form, fields)
-    notes += put_configs(data, f"{obj.KEY}-config-id", form.xprez_configs, configs)
+    post = Post(provider, ctx)
+    put_form(post.data, form)
+    notes = put_values(post, form, fields)
+    notes += put_configs(post, f"{obj.KEY}-config-id", form.xprez_configs, configs)
     if hasattr(obj, "items_attribute"):
-        data.setlist(f"{obj.instance_key}-item-id", [str(pk) for pk in items])
+        post.data.setlist(f"{obj.instance_key}-item-id", [str(pk) for pk in items])
         for item in form.xprez_items:
             if item.pk in items:
-                notes += put_item(data, item, items[item.pk])
-    obj.build_admin_form(xprez_admin, data=data, files=MultiValueDict())
+                notes += put_item(post, item, items[item.pk])
+    obj.build_admin_form(xprez_admin, data=post.data, files=form_files(post.files))
     if hasattr(obj.admin_form, "xprez_modules"):
         obj.admin_form.xprez_modules = []
-    if not obj.is_admin_form_valid():
+    with closing_stored_files(post.files):
+        valid = obj.is_admin_form_valid()
+    if not valid:
         raise invalid(obj.admin_form)
-    obj.save_admin_form(request)
+    with provider.removing_uploads_on_error(post.files.values()):
+        obj.save_admin_form(provider.admin_request(ctx, write=True))
     return notes
 
 
-def put_item(data, item, values):
-    put_form(data, item.admin_form)
+class Post:
+    """What the admin page would post: ``data``, and ``files`` from the file
+    arguments (``False`` clears a file)."""
+
+    def __init__(self, provider, ctx):
+        self.provider, self.ctx = provider, ctx
+        self.data = QueryDict(mutable=True)
+        self.files = {}
+
+    def put_file(self, form, name, value, label):
+        field = form._meta.model._meta.get_field(name)
+        value = self.provider.file_value(value, field, label)
+        self.files[form.add_prefix(name)] = (
+            False
+            if value is None
+            else self.provider.resolve_file(self.ctx, field, value)
+        )
+
+
+def put_item(post, item, values):
+    put_form(post.data, item.admin_form)
     if values is None:
-        data[item.admin_form.add_prefix("delete")] = "on"
+        post.data[item.admin_form.add_prefix("delete")] = "on"
         return []
-    return put_values(data, item.admin_form, values, label=f"items.{item.pk}")
+    return put_values(post, item.admin_form, values, label=f"items.{item.pk}")
 
 
 def prepare_configs(parent, configs):
@@ -76,18 +100,18 @@ def prepare_configs(parent, configs):
             parent.get_or_create_config(breakpoint)
 
 
-def put_configs(data, id_key, parent_configs, configs):
-    data.setlist(id_key, [str(config.pk) for config in parent_configs])
+def put_configs(post, id_key, parent_configs, configs):
+    post.data.setlist(id_key, [str(config.pk) for config in parent_configs])
     notes = []
     for config in parent_configs:
         form = config.admin_form
-        put_form(data, form)
+        put_form(post.data, form)
         values = configs.get(config.css_breakpoint, {})
         if values is None:
-            data[form.add_prefix("delete")] = "on"
+            post.data[form.add_prefix("delete")] = "on"
         else:
             label = f"configs.{config.css_breakpoint}"
-            notes += put_values(data, form, values, label=label)
+            notes += put_values(post, form, values, label=label)
     return notes
 
 
@@ -99,7 +123,7 @@ def put_form(data, form):
         put(data, form.add_prefix(name), form[name].value())
 
 
-def put_values(data, form, values, label="fields"):
+def put_values(post, form, values, label="fields"):
     allowed = form_field_names(type(form))
     unknown = sorted(set(values) - set(allowed))
     if unknown:
@@ -110,11 +134,12 @@ def put_values(data, form, values, label="fields"):
     for name, value in values.items():
         field = form.fields[name]
         if isinstance(field, forms.FileField):
-            raise ToolError(f"{label}.{name}: files cannot be set over MCP yet.")
+            post.put_file(form, name, value, f"{label}.{name}")
+            continue
         if isinstance(field.widget, CkEditorWidgetBase) and isinstance(value, str):
             value, cleaned = clean_html(value, text_rules(field.widget))
             notes += [f"{label}.{name}: {note}" for note in cleaned]
-        put(data, form.add_prefix(name), value)
+        put(post.data, form.add_prefix(name), value)
     return notes
 
 
