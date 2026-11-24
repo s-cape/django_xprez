@@ -15,6 +15,8 @@ validation and permissions are the admin's.
 Setup
 -----
 
+Requires django-xprez-mcp 0.7.4 or later.
+
 1. Install the extra:
 
 ```bash
@@ -22,19 +24,21 @@ pip install "django_xprez[mcp]"
 ```
 
 2. Add the apps and the settings. `PERMISSION` decides who may use the server
-   at all; `ALLOW_WRITES` lets xprez's write tools through (without it agents
-   can only read):
+   at all (a dotted path to a function, the function itself, `True` or
+   `False`); `ALLOW_WRITES` lets xprez's write tools through (without it
+   agents can only read):
 
 ```python
 INSTALLED_APPS = [
     ...
     "xprez",
     "xprez_mcp",
-    "xprez_mcp.contrib.tokens",  # optional: MCP tokens managed in the admin
+    "xprez_mcp.contrib.oauth",  # sign-in for assistants, see below
 ]
 
 XPREZ_MCP = {
-    "PERMISSION": lambda ctx: ctx.user.is_staff,
+    "PERMISSION": "xprez_mcp.permissions.allow_staff",
+    "AUTHENTICATION": ["xprez_mcp.contrib.oauth.auth.access_token"],
     "ALLOW_WRITES": ["xprez"],
 }
 ```
@@ -42,10 +46,12 @@ XPREZ_MCP = {
 3. Mount the server in `urls.py` and run `python manage.py migrate`:
 
 ```python
+from django.urls import include, path
 from xprez_mcp import mcp
 
 urlpatterns = [
     ...
+    path("", include("xprez_mcp.contrib.oauth.well_known")),  # OAuth metadata
     path("mcp/", mcp.urls),
 ]
 ```
@@ -53,17 +59,30 @@ urlpatterns = [
 xprez's tools are registered on `mcp` automatically (django-xprez-mcp
 discovers `xprez/mcp.py`). `python manage.py mcp_inspect` lists them.
 
-4. Create a token under "MCP tokens" in the admin and connect a client, for
-   example Claude Code:
+4. Connect a client. With OAuth it only needs the URL; the user signs in with
+   the site's login and allows the client:
 
 ```bash
-claude mcp add --transport http mysite https://example.com/mcp/ \
-  --header "Authorization: Bearer mcp_..."
+claude mcp add --transport http mysite https://example.com/mcp/
 ```
 
-See django-xprez-mcp's
+   In claude.ai, add `https://example.com/mcp/` as a custom connector.
+
+### Signing in
+
+django-xprez-mcp offers two ways, each an optional app; enable one or both:
+
+| | `xprez_mcp.contrib.oauth` | `xprez_mcp.contrib.tokens` |
+|---|---|---|
+| The user | pastes the server URL, signs in, clicks "Allow" | creates a key under "MCP tokens" in the admin and pastes it into the client |
+| Suits | claude.ai and ChatGPT connectors, Claude Code, Cursor | scripts, CI, clients without OAuth |
+| `AUTHENTICATION` | `"xprez_mcp.contrib.oauth.auth.access_token"` | `"xprez_mcp.auth.bearer_token"` (the default) |
+
+With both, list the OAuth backend first. OAuth also needs the site's login
+(`LOGIN_URL`), a daily `python manage.py mcp_oauth_cleanup`, and
+`SECURE_PROXY_SSL_HEADER` behind an HTTPS proxy. See django-xprez-mcp's
 [getting started](https://github.com/s-cape/django_xprez_mcp/blob/main/docs/getting-started.md)
-for other clients and for using your own token model.
+for the details, other clients and your own token model.
 
 It helps to tell agents where to start, in the server's instructions (sent
 when a client connects):

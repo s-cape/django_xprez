@@ -45,7 +45,7 @@ jobs:
                     XPREZ_TEST_DB_HOST: localhost
 
             -   name: Install django-xprez-mcp
-                run: pip install "django-xprez-mcp>=0.6"
+                run: pip install "django-xprez-mcp>=0.7.4"
             -   name: Run python tests with django-xprez-mcp
                 run: python manage.py test --settings=example_app.settings_ci --keepdb --noinput
                 working-directory: ./example_app

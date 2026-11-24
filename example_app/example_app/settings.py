@@ -55,7 +55,7 @@ INSTALLED_APPS = [
 if importlib.util.find_spec("xprez_mcp"):
     INSTALLED_APPS += ["xprez_mcp", "xprez_mcp.contrib.tokens"]
     XPREZ_MCP = {
-        "PERMISSION": lambda ctx: ctx.user.is_staff,
+        "PERMISSION": "xprez_mcp.permissions.allow_staff",
         "AUTHENTICATION": ["xprez_mcp.auth.bearer_token", "xprez_mcp.auth.session"],
         "ALLOW_WRITES": ["xprez"],
     }

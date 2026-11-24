@@ -46,7 +46,7 @@ if __name__ == "__main__":
         ],
         extras_require={
             # MCP tools for xprez content (xprez.contrib.xprez_mcp)
-            "mcp": ["django-xprez-mcp>=0.6"],
+            "mcp": ["django-xprez-mcp>=0.7.4"],
         },
         # test_suite="runtests.run_tests",
     )
