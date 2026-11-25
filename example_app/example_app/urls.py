@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 
+from django.apps import apps
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -27,6 +28,11 @@ urlpatterns = [
     path("", views.page, name="page"),
     path("<slug:slug>/", views.page, name="page"),
 ]
+
+if apps.is_installed("xprez_mcp"):
+    from xprez_mcp import mcp
+
+    urlpatterns.insert(0, path("mcp/", mcp.urls))
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

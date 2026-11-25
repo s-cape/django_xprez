@@ -44,5 +44,9 @@ if __name__ == "__main__":
             "sorl-thumbnail",
             "django>=3.1",
         ],
+        extras_require={
+            # MCP tools for xprez content (xprez.contrib.xprez_mcp)
+            "mcp": ["django-xprez-mcp>=0.8.0"],
+        },
         # test_suite="runtests.run_tests",
     )

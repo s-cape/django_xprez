@@ -11,3 +11,4 @@ Documentation for using django-xprez in your project.
 - [Admin](admin.md)
 - [Standalone](standalone.md) — using xprez outside Django admin
 - [Settings](settings.md)
+- [MCP](mcp.md) — AI agents editing xprez content (optional)

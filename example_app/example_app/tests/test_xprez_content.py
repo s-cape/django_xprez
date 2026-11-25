@@ -57,3 +57,27 @@ class AddViewTest(TestCase):
         self.client.logout()
         url = reverse("admin:page_add", args=[self.page.pk])
         self.assertIn(self.client.get(url).status_code, (302, 403))
+
+
+class CssVariablesTest(TestCase):
+    def setUp(self):
+        self.page = Page.objects.create(title="Test Page", slug="test-page")
+
+    def test_background_color(self):
+        section = Section.objects.create(
+            container=self.page, saved=True, background_color="#eee"
+        )
+        self.assertIn(
+            "--x-section-background-color: #eee", section.render_css_variables()
+        )
+
+    def test_value_cannot_end_the_style_tag(self):
+        section = Section.objects.create(
+            container=self.page,
+            saved=True,
+            background_color="</style><script>x()</script>",
+        )
+        css = section.render_css_variables()
+        self.assertNotIn("script", css)
+        self.assertNotIn("background-color", css)
+        self.assertEqual(css.count("</style>"), 1)

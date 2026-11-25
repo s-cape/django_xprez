@@ -44,3 +44,14 @@ jobs:
                     XPREZ_TEST_DB_NAME: xprez_example_app
                     XPREZ_TEST_DB_HOST: localhost
 
+            -   name: Install django-xprez-mcp
+                run: pip install "django-xprez-mcp>=0.8.0"
+            -   name: Run python tests with django-xprez-mcp
+                run: python manage.py test --settings=example_app.settings_ci --keepdb --noinput
+                working-directory: ./example_app
+                env:
+                    XPREZ_TEST_DB_USER: postgres
+                    XPREZ_TEST_DB_PASSWORD: postgres
+                    XPREZ_TEST_DB_NAME: xprez_example_app
+                    XPREZ_TEST_DB_HOST: localhost
+

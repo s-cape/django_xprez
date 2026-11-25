@@ -64,6 +64,7 @@ docs/_build/
 # PyBuilder
 target/
 .idea/
+.vscode/
 .eggs/
 testdb
 /prepros-6.config

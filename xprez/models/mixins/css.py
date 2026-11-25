@@ -3,6 +3,8 @@ import copy
 from xprez import constants
 from xprez.conf import settings
 
+UNSAFE_CSS_CHARS = frozenset("<>{};")
+
 
 def _get_unit_string(css_config, choice=None):
     """Extract unit string from config, handling dict or string units."""
@@ -212,10 +214,13 @@ class CssParentMixin(CssMixin):
         Convert dict to CSS variables string.
 
         {"columns": 2, "gap": "1rem"} -> "--x-columns: 2;--x-gap: 1rem"
+
+        Values that could end the rule or the <style> tag (free text such as
+        background_color) are left out.
         """
         result = []
         for k, v in css_variables.items():
-            if v is not None:
+            if v is not None and not UNSAFE_CSS_CHARS.intersection(str(v)):
                 result += [f"--x-{k}: {v}"]
         return ";".join(result)
 
