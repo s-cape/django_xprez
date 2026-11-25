@@ -136,7 +136,9 @@ def put_values(post, form, values, label="fields"):
         if isinstance(field, forms.FileField):
             post.put_file(form, name, value, f"{label}.{name}")
             continue
-        if isinstance(field.widget, CkEditorWidgetBase) and isinstance(value, str):
+        if isinstance(field.widget, CkEditorWidgetBase) and value is not None:
+            if not isinstance(value, str):  # a list would be posted uncleaned
+                raise InvalidArguments(f"{label}.{name}: must be a string.")
             value, cleaned = clean_html(value, text_rules(field.widget))
             notes += [f"{label}.{name}: {note}" for note in cleaned]
         put(post.data, form.add_prefix(name), value)

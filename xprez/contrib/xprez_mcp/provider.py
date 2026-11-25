@@ -507,11 +507,10 @@ class XprezProvider(FileArgumentsMixin, Provider):
             target, obj, xprez_admin = self.get_section(ctx, section)
         else:
             obj, xprez_admin = self.get_container(ctx, container, write=True)
-        module_class = self.module_classes(xprez_admin, obj).get(type)
-        if module_class is None:
-            raise InvalidArguments(
-                f"type must be one of {sorted(self.module_classes(xprez_admin, obj))}."
-            )
+        classes = self.module_classes(xprez_admin, obj)
+        if type not in classes:
+            raise InvalidArguments(f"type must be one of {sorted(classes)}.")
+        module_class = classes[type]
         if section is None:
             content_type = module_class.class_content_type()
             target = xprez_admin._xprez_create_section(obj, content_type)
@@ -521,12 +520,7 @@ class XprezProvider(FileArgumentsMixin, Provider):
         module = xprez_admin._xprez_create_module(module_class, target)
         notes = self.save(ctx, xprez_admin, module, fields, configs)
         reorder(target.modules.all(), module, position)
-        self.log(
-            ctx,
-            xprez_admin,
-            obj,
-            f"Added {describe(module)}",
-        )
+        self.log(ctx, xprez_admin, obj, f"Added {describe(module)}")
         return with_notes(self.module_get(ctx, module.pk), notes)
 
     @tool(idempotent=True)

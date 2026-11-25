@@ -606,6 +606,16 @@ class CleanOnWriteTest(McpTestCase):
         )
         self.assertNotIn("notes", data)
 
+    def test_text_must_be_a_string(self):
+        # a list would be posted as is, past the cleaner
+        error = self.error(
+            "xprez_module_update",
+            {"module": self.text.pk, "fields": {"text": ["<script>x</script>"]}},
+        )
+        self.assertIn("fields.text: must be a string", error)
+        self.text.refresh_from_db()
+        self.assertNotIn("script", self.text.text)
+
 
 class GuideFollowsSettingsTest(SimpleTestCase):
     """The guide states the project's configuration, not xprez's defaults."""
