@@ -124,7 +124,7 @@ site, for agents to check their changes.
   (raw HTML, not cleaned). To keep some from agents, list them in
   `XPREZ_MODULES_MCP_EXCLUDE`, for example `("xprez.CodeInputModule",)`:
   they are then not offered, and existing ones are shown and can be moved
-  or deleted, not changed.
+  or deleted, but neither their fields nor their items changed.
 - **Templates** (`xprez.templatecontainer`) are containers like pages: agents
   can read and edit them, but not copy them into a page.
 - **Files** (gallery images, downloads, a text module's media) are sent as
@@ -221,7 +221,7 @@ come before the app that unregisters its provider.
 | Attribute | Default |
 |---|---|
 | `file_sources` | `("data",)`: base64 content. Add `"path"` for files already in the field's upload folder, `"url"` for the server to fetch public URLs; `()` makes file fields read-only |
-| `max_file_size` | 10 MB per file |
+| `max_file_size` | 10 MB per file; see the request limit below |
 | `file_fetch_timeout` | 10 seconds, for `"url"` |
 
 ```python
@@ -232,6 +232,13 @@ class SiteXprezProvider(XprezProvider):
 mcp.unregister(XprezProvider)
 mcp.register(SiteXprezProvider)
 ```
+
+A base64 file travels in the JSON request, which Django caps with
+`DATA_UPLOAD_MAX_MEMORY_SIZE` (2.5 MB by default). Base64 adds a third, so
+by default files over about 1.8 MB fail with "Request too large." Raise the
+setting for larger files, for example `DATA_UPLOAD_MAX_MEMORY_SIZE = 15 *
+1024 * 1024` for 10 MB files. The `"path"` and `"url"` sources are not
+limited by it.
 
 `allows_file_path` and `fetch_file` can be overridden for stricter rules;
 see django-xprez-mcp's docs on file arguments.

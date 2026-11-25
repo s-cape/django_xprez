@@ -32,8 +32,9 @@ A section or container can be shown on several pages through links
 
 - Editing the original changes every page that links to it. Check
   `linked_from` before editing, and ask the user when it is not empty.
-- A link itself has only a position; to change what it shows, edit the
-  original.
+- A link itself has only a position: move or delete it with
+  `xprez_section_move` / `xprez_section_delete` and its `kind`. To change
+  what it shows, edit the original.
 - To reuse content that already exists on another page (a contact
   block, a footer section), add a link with `xprez_link_add` instead of
   copying it: a section, or a whole container. Ask the user first; later

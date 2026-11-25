@@ -859,6 +859,29 @@ class ExcludedModulesTest(McpTestCase):
         self.data("xprez_module_move", {"module": module.pk, "position": 0})
         self.data("xprez_module_delete", {"module": module.pk})
 
+    @override_settings(XPREZ_MODULES_MCP_EXCLUDE=("xprez.GalleryModule",))
+    def test_excluded_items_not_changed(self):
+        item = self.gallery.items.get()
+        calls = [
+            ("xprez_item_add", {"module": self.gallery.pk}),
+            (
+                "xprez_item_update",
+                {
+                    "module": self.gallery.pk,
+                    "item": item.pk,
+                    "fields": {"alt_text": "x"},
+                },
+            ),
+            (
+                "xprez_item_move",
+                {"module": self.gallery.pk, "item": item.pk, "position": 0},
+            ),
+            ("xprez_item_delete", {"module": self.gallery.pk, "item": item.pk}),
+        ]
+        for name, arguments in calls:
+            self.assertIn("cannot be changed over MCP", self.error(name, arguments))
+        self.assertEqual(self.gallery.items.get().alt_text, "Office")
+
 
 @skipUnless(MCP_INSTALLED, "needs django-xprez-mcp")
 class TemplatesTest(McpTestCase):

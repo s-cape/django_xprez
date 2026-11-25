@@ -538,11 +538,7 @@ class XprezProvider(FileArgumentsMixin, Provider):
         are live at once and show wherever the module is linked.
         Read xprez_guide (index, editing) before your first change."""
         obj, container, xprez_admin = self.get_module(ctx, module, write=True)
-        if not guide.is_exposed(type(obj)):
-            raise ToolError(
-                f"Module {module} ({obj.module_key}) cannot be changed over MCP; "
-                "it can be moved or deleted."
-            )
+        check_exposed(obj)
         notes = self.save(ctx, xprez_admin, obj, fields, configs)
         self.log(ctx, xprez_admin, container, f"Changed {describe(obj)}")
         return with_notes(self.module_get(ctx, obj.pk), notes)
@@ -666,6 +662,7 @@ class XprezProvider(FileArgumentsMixin, Provider):
 
     def get_module_with_items(self, ctx, module_id):
         obj, container, xprez_admin = self.get_module(ctx, module_id, write=True)
+        check_exposed(obj)
         if not isinstance(obj, MultiModule):
             raise InvalidArguments(
                 f"Module {module_id} ({obj.module_key}) has no items."
@@ -844,6 +841,16 @@ def module_type_schema(module_class, file_sources):
         item_form = module.get_admin_item_form_class(item)
         result["item_fields"] = form_schema(item_form, file_sources)
     return result
+
+
+def check_exposed(module):
+    """Refuse changing a module of a type in ``XPREZ_MODULES_MCP_EXCLUDE``:
+    its fields and items; moving and deleting it stay allowed."""
+    if not guide.is_exposed(type(module)):
+        raise ToolError(
+            f"Module {module.pk} ({module.module_key}) cannot be changed over "
+            "MCP; it can be moved or deleted."
+        )
 
 
 def describe(module):
